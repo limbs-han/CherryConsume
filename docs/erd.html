@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>체리컨슘 ERD</title>
+<style>
+  body { margin: 0; padding: 20px; background: #fff; color: #222; font-family: system-ui, "Malgun Gothic", sans-serif; }
+  h1 { font-size: 18px; margin: 0 0 8px; }
+  p { font-size: 13px; color: #555; margin: 0 0 16px; }
+  .mermaid { background: #fafafa; border: 1px solid #e5e5e5; border-radius: 8px; padding: 12px; overflow: auto; }
+</style>
+</head>
+<body>
+<h1>체리컨슘 ERD</h1>
+<p>원본은 docs/erd.md 의 Mermaid 정의. 위쪽 카탈로그 영역은 파이프라인이 쓰고 앱은 읽기만, 아래 사용자 영역은 앱이 씁니다.</p>
+<pre class="mermaid">
+erDiagram
+    issuers {
+        text code PK "shinhan, samsung, ibk ..."
+        text name
+    }
+    categories {
+        text code PK "cafe, convenience, tax ..."
+        text name_ko
+        text kakao_group_code "CE7 등. 없으면 null"
+    }
+    cards {
+        text id PK "issuer-slug"
+        text issuer_code FK
+        text name
+        text kind "credit | check"
+        int annual_fee_domestic
+        int annual_fee_global
+        bool active
+        text source_url
+        date updated_at
+        text spend_basis "prev_calendar_month | unsupported"
+        int catalog_version
+    }
+    spend_tiers {
+        text card_id PK,FK
+        int tier_index PK "0부터"
+        int min_spend
+        int integrated_cap "null이면 통합 한도 없음"
+    }
+    spend_rules {
+        text card_id PK,FK
+        bool exclude_interest_free_installment
+        bool exclude_discounted
+        text installment_basis "full_at_purchase | per_installment_month"
+        text cancellation_basis "cancel_month | original_month"
+    }
+    spend_rule_excluded_categories {
+        text card_id PK,FK
+        text category_code PK,FK
+    }
+    benefits {
+        bigint id PK
+        text card_id FK
+        text key "카드 안에서 고유"
+        text title
+        text target_type "category | merchant | all"
+        text channel "online | offline | any"
+        text kind "discount | points | cashback"
+        numeric rate_pct "정률. fixed_amount와 둘 중 하나"
+        int fixed_amount
+        int min_txn_amount
+        int max_per_txn
+        int monthly_cap_amount
+        int monthly_cap_count
+        int daily_cap_count
+        int min_tier_index
+        bool counts_toward_integrated_cap
+        bool conditions_not_modeled "계산에 안 넣은 조건 있음"
+        bool active "카탈로그 교체로 사라지면 false"
+        text notes
+    }
+    benefit_targets {
+        bigint benefit_id PK,FK
+        text target_value PK "업종 코드 또는 가맹점 키"
+    }
+    merchants {
+        text key PK "starbucks, gs25 ..."
+        text name
+        text category_code FK
+    }
+    merchant_aliases {
+        text alias PK "공백·대소문자 정규화한 값"
+        text merchant_key FK
+    }
+
+    users {
+        uuid id PK
+        text email UK "소셜 로그인만 쓰면 null"
+        timestamptz created_at
+        timestamptz deleted_at "탈퇴 시각. 30일 뒤 물리 삭제"
+    }
+    auth_identities {
+        bigint id PK
+        uuid user_id FK
+        text provider "email | kakao | google"
+        text provider_uid UK "provider와 함께 고유"
+        text password_hash "email일 때만"
+        timestamptz created_at
+    }
+    user_cards {
+        uuid id PK
+        uuid user_id FK
+        text card_id FK
+        text nickname
+        int assumed_prev_month_spend "등록한 달의 전월 실적 추정"
+        timestamptz added_at
+        timestamptz removed_at
+    }
+    transactions {
+        uuid id PK
+        uuid user_id FK
+        uuid user_card_id FK
+        int amount
+        text merchant_name "사용자가 적은 이름"
+        text merchant_key FK "별칭표에 걸리면"
+        text category_code FK
+        timestamptz paid_at
+        int installment_months "일시불 1"
+        bool interest_free_installment
+        int cancelled_amount "기본 0"
+        timestamptz cancelled_at
+        text channel "online | offline"
+        bigint applied_benefit_id FK "입력 시점 계산값"
+        int estimated_benefit "입력 시점 계산값"
+        uuid recommendation_request_id FK "추천에서 바로 기록했으면"
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
+    }
+    recommendation_requests {
+        uuid id PK
+        uuid user_id FK
+        text merchant_name
+        text merchant_key FK
+        text category_code FK
+        int amount "없으면 null"
+        text channel
+        timestamptz requested_at
+    }
+    recommendation_results {
+        uuid request_id PK,FK
+        int rank PK "1부터"
+        uuid user_card_id FK
+        int expected_benefit
+        bigint applied_benefit_id FK
+        text[] warnings
+    }
+    card_requests {
+        bigint id PK
+        uuid user_id FK
+        text issuer_text "사용자가 적은 카드사"
+        text card_name_text "사용자가 적은 카드 이름"
+        timestamptz created_at
+    }
+    export_runs {
+        bigint id PK
+        date target_date UK "내보낸 날짜"
+        text status "running | done | failed"
+        text file_prefix "오브젝트 스토리지 경로"
+        int transaction_rows
+        int request_rows
+        timestamptz started_at
+        timestamptz finished_at
+    }
+
+    issuers ||--o{ cards : "발행"
+    cards ||--|{ spend_tiers : "실적 구간"
+    cards ||--|| spend_rules : "실적 규칙"
+    cards ||--o{ spend_rule_excluded_categories : "제외 업종"
+    categories ||--o{ spend_rule_excluded_categories : ""
+    cards ||--o{ benefits : "혜택"
+    benefits ||--o{ benefit_targets : "대상"
+    categories ||--o{ merchants : "업종"
+    merchants ||--o{ merchant_aliases : "별칭"
+
+    users ||--|{ auth_identities : "로그인 수단"
+    users ||--o{ user_cards : "보유"
+    cards ||--o{ user_cards : ""
+    users ||--o{ transactions : ""
+    user_cards ||--o{ transactions : "결제"
+    categories ||--o{ transactions : ""
+    merchants o|--o{ transactions : ""
+    benefits o|--o{ transactions : "적용 혜택"
+    users ||--o{ recommendation_requests : ""
+    recommendation_requests ||--|{ recommendation_results : "순위"
+    user_cards ||--o{ recommendation_results : ""
+    recommendation_requests o|--o{ transactions : "추천 따라 기록"
+    users ||--o{ card_requests : "카드 추가 요청"
+</pre>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral", er: { useMaxWidth: false } });
+</script>
+</body>
+</html>
