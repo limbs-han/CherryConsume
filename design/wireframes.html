@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>체리컨슘 와이어프레임</title>
+<style>
+  :root { --ink: #333; --line: #9a9a9a; --fill: #e9e9e9; --fill2: #d4d4d4; --paper: #fff; }
+  body { margin: 0; padding: 20px; background: #f3f3f3; color: var(--ink); font-family: system-ui, "Malgun Gothic", sans-serif; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p.note { font-size: 13px; color: #666; margin: 0 0 18px; line-height: 1.5; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; align-items: start; }
+  .frame { background: var(--paper); border: 2px solid var(--line); border-radius: 22px; width: 300px; height: 620px; position: relative; display: flex; flex-direction: column; overflow: hidden; font-size: 12px; }
+  .cap { margin: 8px 0 0; font-size: 13px; }
+  .cap b { display: block; margin-bottom: 2px; }
+  .cap span { color: #666; line-height: 1.45; }
+  .bar { height: 46px; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 12px; gap: 8px; font-weight: 600; font-size: 14px; }
+  .bar .back { width: 18px; height: 18px; border: 2px solid var(--ink); border-radius: 3px; }
+  .body { flex: 1; padding: 10px 12px; overflow: hidden; display: flex; flex-direction: column; gap: 8px; }
+  .nav { height: 52px; border-top: 1px solid var(--line); display: flex; }
+  .nav div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; color: #777; }
+  .nav div i { width: 18px; height: 18px; border: 1.5px solid #888; border-radius: 4px; display: block; }
+  .nav div.on { color: var(--ink); font-weight: 700; }
+  .nav div.on i { background: var(--ink); border-color: var(--ink); }
+  .box { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--paper); }
+  .box.ph { background: repeating-linear-gradient(135deg, #eee 0 6px, #f7f7f7 6px 12px); color: #777; text-align: center; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .muted { color: #777; font-size: 11px; }
+  .chip { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; font-size: 11px; margin: 2px 2px 0 0; background: var(--paper); }
+  .chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn { border: 2px solid var(--ink); border-radius: 8px; padding: 9px; text-align: center; font-weight: 700; background: var(--paper); }
+  .btn.pri { background: var(--ink); color: #fff; }
+  .btn.sm { padding: 5px 8px; font-size: 11px; border-width: 1.5px; }
+  .input { border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; color: #888; background: var(--paper); }
+  .input.big { font-size: 22px; text-align: right; color: var(--ink); }
+  .prog { height: 8px; background: var(--fill); border-radius: 4px; overflow: hidden; }
+  .prog i { display: block; height: 100%; background: var(--ink); }
+  .fab { position: absolute; right: 14px; bottom: 64px; width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; }
+  .badge { font-size: 10px; border: 1px solid var(--ink); border-radius: 4px; padding: 1px 5px; }
+  .rank { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }
+  .warn { color: #a33; font-size: 11px; }
+  .card-thumb { width: 44px; height: 28px; border-radius: 4px; background: var(--fill2); flex: none; }
+  .divider { border-top: 1px dashed var(--line); margin: 2px 0; }
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .keypad div { border: 1px solid var(--line); border-radius: 6px; text-align: center; padding: 7px 0; background: var(--paper); }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--paper); border-top: 2px solid var(--ink); border-radius: 18px 18px 0 0; padding: 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -8px 24px rgba(0,0,0,.15); }
+  .dim { position: absolute; inset: 0; background: rgba(0,0,0,.25); }
+  .cam { flex: 1; background: #666; border-radius: 8px; position: relative; }
+  .cam .guide { position: absolute; left: 8%; right: 8%; top: 30%; height: 34%; border: 2px dashed #fff; border-radius: 10px; }
+  .cam .hint { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; color: #fff; font-size: 11px; }
+  .flow { margin: 26px 0 0; font-size: 13px; color: #444; line-height: 1.7; }
+  .flow code { background: #e8e8e8; padding: 1px 6px; border-radius: 4px; font-family: inherit; }
+</style>
+</head>
+<body>
+<h1>체리컨슘 와이어프레임 v1. 저해상도, 흐름과 정보 배치만</h1>
+<p class="note">하단 탭은 홈, 추천, 기록, 설정 4개. 결제 기록은 어느 화면에서든 오른쪽 아래 + 버튼으로 시작. 색과 글꼴은 나중 단계에서 정하고 지금은 회색 상자로만 그림.</p>
+
+<div class="grid">
+
+  <!-- 0. 로그인 -->
+  <div>
+    <div class="frame">
+      <div class="body" style="justify-content:center; gap:14px">
+        <div class="box ph" style="height:90px; display:flex; align-items:center; justify-content:center; border-radius:20px">앱 아이콘</div>
+        <div style="text-align:center; font-size:18px; font-weight:700">체리컨슘</div>
+        <div class="muted" style="text-align:center">실적은 채우고 혜택은 골라 먹자</div>
+        <div style="height:30px"></div>
+        <div class="btn">카카오로 시작</div>
+        <div class="btn">Google로 시작</div>
+        <div class="muted" style="text-align:center">이메일로 시작</div>
+        <div class="muted" style="text-align:center; margin-top:auto">시작하면 이용약관과 개인정보처리방침에 동의한 것으로 봅니다</div>
+      </div>
+    </div>
+    <p class="cap"><b>0. 시작</b><span>소셜 로그인 2개와 이메일. 온보딩 화면은 두지 않고 첫 홈에서 카드 등록을 안내.</span></p>
+  </div>
+
+  <!-- 1. 홈 -->
+  <div>
+    <div class="frame">
+      <div class="bar">내 카드 <span class="muted" style="margin-left:auto; font-weight:400">9월</span></div>
+      <div class="body">
+        <div class="box">
+          <div class="row"><div><b>신한 Mr.Life</b> <span class="badge">2구간 적용 중</span></div><div class="card-thumb"></div></div>
+          <div class="muted" style="margin:6px 0 4px">이번 달 실적 18.2만 / 다음 구간 30만</div>
+          <div class="prog"><i style="width:61%"></i></div>
+          <div class="row" style="margin-top:4px"><span class="muted">11.8만 더 쓰면 다음 달 통합 한도 2만</span><span class="muted">할인 잔여 7,200</span></div>
+        </div>
+        <div class="box">
+          <div class="row"><div><b>IBK 나라사랑카드</b> <span class="badge">실적 충족</span></div><div class="card-thumb"></div></div>
+          <div class="muted" style="margin:6px 0 4px">이번 달 실적 24.0만 / 20만 달성</div>
+          <div class="prog"><i style="width:100%"></i></div>
+          <div class="row" style="margin-top:4px"><span class="muted">다음 달 혜택 확정</span><span class="muted">할인 잔여 3,000</span></div>
+        </div>
+        <div class="box">
+          <div class="row"><div><b>현대 ZERO Edition3</b> <span class="badge">실적 무관</span></div><div class="card-thumb"></div></div>
+          <div class="muted" style="margin:6px 0 0">기본 0.7% 할인. 이번 달 할인 4,120</div>
+        </div>
+        <div class="box ph" style="padding:12px">+ 카드 추가</div>
+        <div class="muted" style="margin-top:auto">실적은 결제일 기준 이번 달 1일부터 계산. 세금·공과금 등 제외.</div>
+      </div>
+      <div class="fab">+</div>
+      <div class="nav"><div class="on"><i></i>홈</div><div><i></i>추천</div><div><i></i>기록</div><div><i></i>설정</div></div>
+    </div>
+    <p class="cap"><b>1. 홈, 내 카드</b><span>카드마다 이번 달 실적 진행률, 다음 구간까지 남은 금액, 이번 달 남은 할인 한도. 카드 탭하면 6번 상세.</span></p>
+  </div>
+
+  <!-- 2. 카드 등록 -->
+  <div>
+    <div class="frame">
+      <div class="bar"><span class="back"></span>카드 추가</div>
+      <div class="body">
+        <div class="input">카드 이름 검색. 예: Mr.Life, 나라사랑</div>
+        <div><span class="chip on">전체</span><span class="chip">신한</span><span class="chip">삼성</span><span class="chip">현대</span><span class="chip">KB</span><span class="chip">롯데</span><span class="chip">하나</span><span class="chip">우리</span><span class="chip">NH</span><span class="chip">IBK</span></div>
+        <div><span class="chip on">신용+체크</span><span class="chip">신용</span><span class="chip">체크</span></div>
+        <div class="divider"></div>
+        <div class="box row"><div class="card-thumb"></div><div style="flex:1"><b>신한 Mr.Life</b><div class="muted">신용 · 연회비 1.5만 · 실적 30/60/90만</div></div><span class="muted">›</span></div>
+        <div class="box row"><div class="card-thumb"></div><div style="flex:1"><b>신한 처음</b><div class="muted">신용 · 연회비 1만 · 실적 30만</div></div><span class="muted">›</span></div>
+        <div class="box row"><div class="card-thumb"></div><div style="flex:1"><b>신한 Point Plan</b><div class="muted">신용 · 연회비 1.5만 · 실적 무관</div></div><span class="muted">›</span></div>
+        <div class="btn" style="margin-top:auto">카메라로 카드 인식</div>
+      </div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="row"><b>신한 Mr.Life 등록</b><span class="muted">✕</span></div>
+        <div class="muted">전월 실적을 대략 알려 주시면 이번 달 혜택 구간을 바로 계산합니다. 모르면 비워 두세요.</div>
+        <div class="input">지난달 이 카드로 쓴 금액. 예: 350000</div>
+        <div class="muted">지난달 결제를 나중에 입력하면 자동으로 다시 계산됩니다.</div>
+        <div class="btn pri">등록</div>
+      </div>
+    </div>
+    <p class="cap"><b>2. 카드 검색과 등록</b><span>카드사·종류 필터와 이름 검색. 선택하면 아래 시트에서 전월 실적 추정값을 받고 등록. 카메라 버튼은 3번으로.</span></p>
+  </div>
+
+  <!-- 3. 카메라 인식 -->
+  <div>
+    <div class="frame">
+      <div class="bar"><span class="back"></span>카메라로 인식</div>
+      <div class="body">
+        <div class="cam"><div class="guide"></div><div class="hint">카드 앞면을 테두리에 맞춰 주세요. 사진은 폰 밖으로 나가지 않습니다.</div></div>
+        <div class="muted" style="text-align:center">카드번호가 보여도 저장하지 않습니다</div>
+      </div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <div><b>이 카드가 맞나요?</b></div>
+        <div class="box row" style="border-width:2px; border-color:var(--ink)"><div class="card-thumb"></div><div style="flex:1"><b>신한 Mr.Life</b><div class="muted">유사도 0.91</div></div><span class="badge">1순위</span></div>
+        <div class="muted">비슷한 카드</div>
+        <div class="box row"><div class="card-thumb"></div><div style="flex:1">신한 Mr.Life 체크<div class="muted">0.74</div></div></div>
+        <div class="box row"><div class="card-thumb"></div><div style="flex:1">신한 처음<div class="muted">0.62</div></div></div>
+        <div class="row"><div class="btn" style="flex:1">다시 찍기</div><div class="btn pri" style="flex:1">이 카드로 등록</div></div>
+        <div class="muted" style="text-align:center">없으면 이름으로 검색</div>
+      </div>
+    </div>
+    <p class="cap"><b>3. 카메라 인식</b><span>카드 테두리 안내선. 기기 안에서 벡터 비교 후 1순위와 비슷한 후보 2개를 보여 주고 사용자가 확정. 확정하면 2번의 등록 시트로.</span></p>
+  </div>
+
+  <!-- 4. 결제 기록 -->
+  <div>
+    <div class="frame">
+      <div class="bar"><span class="back"></span>결제 기록</div>
+      <div class="body" style="gap:7px">
+        <div class="input big">12,500<span class="muted" style="font-size:12px"> 원</span></div>
+        <div class="input">가게 이름. 예: 스타벅스 역삼점</div>
+        <div><span class="muted">업종 </span><span class="chip on">카페</span><span class="chip">편의점</span><span class="chip">음식점</span><span class="chip">더보기</span></div>
+        <div class="muted">카카오 장소 검색으로 업종을 자동 채움. 틀리면 칩을 바꿔 주세요.</div>
+        <div><span class="muted">카드 </span><span class="chip on">신한 Mr.Life</span><span class="chip">IBK 나라사랑</span><span class="chip">현대 ZERO</span></div>
+        <div class="row"><div class="input" style="flex:1">오늘 14:20</div><span class="chip on">오프라인</span><span class="chip">온라인</span></div>
+        <div class="row"><span>무이자할부</span><span class="chip">끄기</span></div>
+        <div class="box" style="background:#f6f6f6"><div class="row"><span>예상 혜택</span><b>1,000원 할인</b></div><div class="row muted"><span>카페 10% 할인 · 건당 최대 1,000</span><span>실적 인정</span></div></div>
+        <div class="keypad"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>00</div><div>0</div><div>⌫</div></div>
+        <div class="btn pri">저장</div>
+      </div>
+    </div>
+    <p class="cap"><b>4. 결제 기록 입력</b><span>금액이 첫 칸이고 숫자 키패드 고정. 가게 이름을 치면 업종을 자동 채우고, 카드를 고르면 예상 혜택과 실적 인정 여부가 저장 전에 바로 보임.</span></p>
+  </div>
+
+  <!-- 5. 추천 -->
+  <div>
+    <div class="frame">
+      <div class="bar">어디서 결제하세요?</div>
+      <div class="body">
+        <div class="input">가게 이름 또는 업종. 예: GS25</div>
+        <div><span class="chip on">편의점</span><span class="chip">카페</span><span class="chip">음식점</span><span class="chip">주유</span><span class="chip">마트</span><span class="chip">온라인</span><span class="chip">더보기</span></div>
+        <div class="row"><div class="input" style="flex:1">금액. 비워도 됨</div><span class="chip on">오프라인</span><span class="chip">온라인</span></div>
+        <div class="divider"></div>
+        <div class="box" style="border-width:2px; border-color:var(--ink)">
+          <div class="row"><span class="rank">1</span><b style="flex:1">IBK 나라사랑카드</b><b>-1,000원</b></div>
+          <div class="muted">편의점 10% 할인 · 이번 달 잔여 3,000 · 실적 인정</div>
+          <div class="btn sm" style="margin-top:6px">이 카드로 결제 기록</div>
+        </div>
+        <div class="box">
+          <div class="row"><span class="rank">2</span><b style="flex:1">신한 Mr.Life</b><b>-500원</b></div>
+          <div class="muted">편의점 5% 할인 · 잔여 7,200</div>
+          <div class="muted">실적 11.8만 남음. 이 결제로 채우기 가능</div>
+        </div>
+        <div class="box">
+          <div class="row"><span class="rank">3</span><b style="flex:1">현대 ZERO Edition3</b><b>-70원</b></div>
+          <div class="muted">기본 0.7% 할인</div>
+        </div>
+        <div class="muted" style="margin-top:auto">혜택 금액은 카탈로그 기준 추정치이며 실제 청구와 다를 수 있습니다.</div>
+      </div>
+      <div class="fab">+</div>
+      <div class="nav"><div><i></i>홈</div><div class="on"><i></i>추천</div><div><i></i>기록</div><div><i></i>설정</div></div>
+    </div>
+    <p class="cap"><b>5. 추천</b><span>가게나 업종, 금액, 채널을 넣으면 보유 카드를 기대 혜택 순으로. 1순위 카드에서 바로 결제 기록으로 넘어가면 추천을 따랐는지 기록됨.</span></p>
+  </div>
+
+  <!-- 5b. 가게 혜택 상세 -->
+  <div>
+    <div class="frame">
+      <div class="bar"><span class="back"></span>스타벅스 <span class="muted" style="margin-left:auto; font-weight:400">카페</span></div>
+      <div class="body">
+        <div class="box" style="background:#f6f6f6">
+          <div class="row"><b>여기서 가장 좋은 카드</b><b>신한 Mr.Life</b></div>
+          <div class="row muted"><span>카페 10% 할인 · 1만 원 결제 시 1,000원</span><span>잔여 2,000</span></div>
+        </div>
+        <div class="muted"><b>내 카드별 받을 수 있는 혜택</b></div>
+        <div class="box">
+          <div class="row"><b>신한 Mr.Life</b><span class="badge">2구간 적용 중</span></div>
+          <div class="row"><span>카페 10% 할인</span><span>잔여 2,000 / 5,000</span></div>
+          <div class="muted">건당 최대 1,000 · 5천 원 이상 · 하루 1회 · 실적 인정</div>
+          <div class="row muted"><span>전가맹점 0.5% 적립</span><span>중복 불가, 할인이 더 큼</span></div>
+        </div>
+        <div class="box">
+          <div class="row"><b>IBK 나라사랑카드</b><span class="badge">실적 충족</span></div>
+          <div class="row"><span>카페 혜택 없음</span><span class="muted">-</span></div>
+          <div class="muted">전가맹점 0.2% 적립 · 이 결제도 실적 인정</div>
+        </div>
+        <div class="box" style="border-style:dashed">
+          <div class="row"><b>현대 ZERO Edition3</b><span class="badge">실적 무관</span></div>
+          <div class="row"><span>기본 0.7% 할인</span><span>1만 원에 70원</span></div>
+        </div>
+        <div class="box" style="border-style:dashed">
+          <div class="row"><b class="muted">신한 Mr.Life</b><span class="warn">3구간부터</span></div>
+          <div class="muted">스타벅스 20% 할인은 전월 90만 이상일 때. 현재 41만.</div>
+        </div>
+        <div class="btn pri" style="margin-top:auto">신한 Mr.Life로 결제 기록</div>
+      </div>
+    </div>
+    <p class="cap"><b>5b. 가게 혜택 상세</b><span>계산하기 전에 보는 화면. 5번에서 가게를 고르면 들어옴. 맨 위에 최선 카드 요약, 아래에 카드마다 받을 수 있는 혜택과 조건, 그리고 지금은 못 받는 혜택과 그 이유.</span></p>
+  </div>
+
+  <!-- 6. 카드 상세 -->
+  <div>
+    <div class="frame">
+      <div class="bar"><span class="back"></span>신한 Mr.Life <span class="muted" style="margin-left:auto; font-weight:400">⋯</span></div>
+      <div class="body">
+        <div class="box">
+          <div class="row"><b>이번 달 실적</b><b>182,000</b></div>
+          <div class="prog" style="margin:6px 0"><i style="width:61%"></i></div>
+          <div class="row muted"><span>30만</span><span>60만</span><span>90만</span></div>
+          <div class="muted" style="margin-top:4px">11.8만 더 쓰면 다음 달 2구간. 지금 적용 구간은 전월 실적 41만으로 2구간.</div>
+        </div>
+        <div class="box">
+          <div class="row"><b>이번 달 혜택</b><span class="muted">통합 한도 2만 중 12,800 사용</span></div>
+          <div class="divider"></div>
+          <div class="row"><span>카페 10% 할인</span><span class="muted">잔여 2,000 / 5,000</span></div>
+          <div class="row"><span>편의점 5% 할인</span><span class="muted">잔여 5,200 / 5,000</span></div>
+          <div class="row"><span>대중교통 10% 할인</span><span class="muted">2구간부터 · 잔여 5,000</span></div>
+          <div class="row muted"><span>주유 리터당 60원</span><span>3구간부터 · 미충족</span></div>
+        </div>
+        <div class="box">
+          <div><b>실적에서 빠지는 결제</b></div>
+          <div class="muted">세금, 공과금, 상품권, 보험료, 아파트관리비, 무이자할부</div>
+        </div>
+        <div class="muted">출처: 신한카드 상품 안내 · 갱신 2026-09-01</div>
+        <div class="muted" style="margin-top:auto; text-align:center">카드 삭제</div>
+      </div>
+    </div>
+    <p class="cap"><b>6. 카드 상세</b><span>실적 구간 눈금이 있는 진행률, 혜택별 잔여 한도와 구간 조건, 실적 제외 항목, 출처와 갱신일.</span></p>
+  </div>
+
+  <!-- 7. 기록 -->
+  <div>
+    <div class="frame">
+      <div class="bar">기록 <span class="muted" style="margin-left:auto; font-weight:400">‹ 9월 ›</span></div>
+      <div class="body">
+        <div><span class="chip on">모든 카드</span><span class="chip">신한 Mr.Life</span><span class="chip">IBK 나라사랑</span></div>
+        <div class="row muted"><span>이번 달 결제 42건 · 실적 인정 38.9만</span><span>혜택 17,920</span></div>
+        <div class="muted"><b>9월 19일 금</b></div>
+        <div class="box row"><div style="flex:1"><b>스타벅스 역삼점</b><div class="muted">카페 · 신한 Mr.Life · 14:20</div></div><div style="text-align:right">12,500<div class="muted">-1,000</div></div></div>
+        <div class="box row"><div style="flex:1"><b>GS25 테헤란점</b><div class="muted">편의점 · IBK 나라사랑 · 09:02</div></div><div style="text-align:right">4,300<div class="muted">-430</div></div></div>
+        <div class="muted"><b>9월 18일 목</b></div>
+        <div class="box row"><div style="flex:1"><b>서울시 자동차세</b><div class="muted">세금 · 현대 ZERO · <span class="warn">실적 제외</span></div></div><div style="text-align:right">128,000<div class="muted">0</div></div></div>
+        <div class="box row"><div style="flex:1"><b>쿠팡</b><div class="muted">온라인 쇼핑 · 신한 Mr.Life · 온라인</div></div><div style="text-align:right">36,900<div class="muted">-258</div></div></div>
+        <div class="muted" style="text-align:center; margin-top:auto">항목을 길게 누르면 수정·삭제</div>
+      </div>
+      <div class="fab">+</div>
+      <div class="nav"><div><i></i>홈</div><div><i></i>추천</div><div class="on"><i></i>기록</div><div><i></i>설정</div></div>
+    </div>
+    <p class="cap"><b>7. 기록</b><span>월 단위 결제 목록, 카드 필터, 건별 예상 혜택과 실적 제외 표시. 월 합계는 상단 한 줄.</span></p>
+  </div>
+
+</div>
+
+<div class="flow">
+  <b>화면 흐름</b><br>
+  <code>0 시작</code> → <code>1 홈</code> ⇄ <code>6 카드 상세</code><br>
+  <code>1 홈</code> → <code>2 카드 추가</code> → <code>3 카메라</code> → <code>2 등록 시트</code> → <code>1 홈</code><br>
+  어디서든 <code>+</code> → <code>4 결제 기록</code> → 저장 → 돌아오기<br>
+  <code>5 추천</code> → 가게 선택 → <code>5b 가게 혜택 상세</code> → "이 카드로 결제 기록" → <code>4 결제 기록</code> (카드·가게·업종 미리 채움)<br>
+  <code>5 추천</code> 순위에서 바로 "이 카드로 결제 기록" → <code>4 결제 기록</code><br>
+  <code>7 기록</code> 항목 길게 누름 → 수정·삭제<br>
+  설정 탭: 계정, 데이터 내보내기, 개인정보처리방침, 탈퇴. 별도 와이어프레임 없음.
+</div>
+</body>
+</html>
