@@ -4,7 +4,7 @@ Postgres 기준. 설계 문서 6.3절의 Pydantic 모델을 테이블로 옮기�
 
 두 영역으로 나뉜다.
 - 카탈로그 영역: 파이프라인이 쓰고 앱은 읽기만 한다. `cards`부터 `merchant_aliases`까지.
-- 사용자 영역: 앱이 쓴다. `users`부터 `export_runs`까지.
+- 사용자 영역: 앱이 쓴다. `users`부터 `export_runs`까지. 테이블 19개.
 
 ```mermaid
 erDiagram
@@ -119,6 +119,8 @@ erDiagram
         int cancelled_amount "기본 0"
         timestamptz cancelled_at
         text channel "online | offline"
+        text approval_no "카드사 승인번호. 중복 판정"
+        bigint import_batch_id FK "엑셀 가져오기 배치"
         bigint applied_benefit_id FK "입력 시점 계산값"
         int estimated_benefit "입력 시점 계산값"
         uuid recommendation_request_id FK "추천에서 바로 기록했으면"
@@ -143,6 +145,16 @@ erDiagram
         int expected_benefit
         bigint applied_benefit_id FK
         text[] warnings
+    }
+    import_batches {
+        bigint id PK
+        uuid user_id FK
+        text source "카드사 코드 또는 toss, banksalad"
+        text file_name
+        int row_count
+        int imported_count
+        int duplicate_count
+        timestamptz created_at
     }
     card_requests {
         bigint id PK
@@ -185,6 +197,8 @@ erDiagram
     user_cards ||--o{ recommendation_results : ""
     recommendation_requests o|--o{ transactions : "추천 따라 기록"
     users ||--o{ card_requests : "카드 추가 요청"
+    users ||--o{ import_batches : "엑셀 가져오기"
+    import_batches o|--o{ transactions : "가져온 결제"
 ```
 
 ## 설계 메모
@@ -197,4 +211,5 @@ erDiagram
 - 추천을 따랐는지는 `transactions.recommendation_request_id`로 연결한다. 추천 화면에서 "이 카드로 결제 기록"을 누르면 채워진다. 별도 선택 테이블은 두지 않는다.
 - 탈퇴는 `users.deleted_at`을 찍고 30일 뒤 사용자 영역 행을 물리 삭제한다. 그 사이 로그인은 막는다.
 - 내보내기는 `export_runs`로 하루 한 번 기록하고, 실패하면 다음 날 재실행이 전날 분까지 다시 내보낸다.
+- 엑셀 가져오기 중복 판정은 `approval_no`가 있으면 `(user_card_id, approval_no)` 유니크로, 없으면 `(user_card_id, paid_at, amount, merchant_name)` 일치로 본다. 승인번호 유니크는 부분 인덱스(`approval_no IS NOT NULL`)로 건다.
 - 카드 플레이트 임베딩 벡터는 DB에 넣지 않는다. 파이프라인이 오브젝트 스토리지에 파일로 발행하고 앱이 내려받는다.

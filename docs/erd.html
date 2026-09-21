@@ -126,6 +126,8 @@ erDiagram
         int cancelled_amount "기본 0"
         timestamptz cancelled_at
         text channel "online | offline"
+        text approval_no "카드사 승인번호. 중복 판정"
+        bigint import_batch_id FK "엑셀 가져오기 배치"
         bigint applied_benefit_id FK "입력 시점 계산값"
         int estimated_benefit "입력 시점 계산값"
         uuid recommendation_request_id FK "추천에서 바로 기록했으면"
@@ -150,6 +152,16 @@ erDiagram
         int expected_benefit
         bigint applied_benefit_id FK
         text[] warnings
+    }
+    import_batches {
+        bigint id PK
+        uuid user_id FK
+        text source "카드사 코드 또는 toss, banksalad"
+        text file_name
+        int row_count
+        int imported_count
+        int duplicate_count
+        timestamptz created_at
     }
     card_requests {
         bigint id PK
@@ -192,6 +204,8 @@ erDiagram
     user_cards ||--o{ recommendation_results : ""
     recommendation_requests o|--o{ transactions : "추천 따라 기록"
     users ||--o{ card_requests : "카드 추가 요청"
+    users ||--o{ import_batches : "엑셀 가져오기"
+    import_batches o|--o{ transactions : "가져온 결제"
 </pre>
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
