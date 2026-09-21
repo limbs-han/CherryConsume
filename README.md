@@ -37,7 +37,7 @@
 아직 구현 전이고 아래는 계획입니다.
 
 - **앱**: Flutter. Android 먼저
-- **서버**: FastAPI, Postgres
+- **서버**: FastAPI, Postgres. 처음엔 무료 구간이 있는 관리형 Postgres로, 뒤에 Databricks Lakebase로 옮기는 것을 검토
 - **데이터 파이프라인**: Python, Databricks
 - **카드 인식**: 기기 안에서 도는 임베딩 모델과 최근접 이웃 비교
 
