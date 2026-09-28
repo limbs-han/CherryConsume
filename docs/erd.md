@@ -120,6 +120,7 @@ erDiagram
         text channel "online | offline"
         text approval_no "카드사 승인번호. 중복 판정"
         bigint import_batch_id FK "엑셀 가져오기 배치"
+        text source "manual | excel | notification"
         bigint applied_benefit_id FK "입력 시점 계산값"
         int estimated_benefit "입력 시점 계산값"
         uuid recommendation_request_id FK "추천에서 바로 기록했으면"
@@ -210,6 +211,7 @@ erDiagram
 - 추천을 따랐는지는 `transactions.recommendation_request_id`로 연결한다. 추천 화면에서 "이 카드로 결제 기록"을 누르면 채워진다. 별도 선택 테이블은 두지 않는다.
 - 로그인은 카카오와 Google만 받는다. `(provider, provider_uid)`를 유니크로 건다. 1차는 사용자 한 명에 로그인 수단 하나지만, 나중에 수단을 여럿 붙일 수 있게 테이블은 나눠 둔다. `users.email`은 연락용이라 유니크로 걸지 않는다. 카카오와 Google이 같은 이메일을 줘도 1차는 별개 사용자다.
 - 탈퇴는 `users.deleted_at`을 찍고 30일 뒤 사용자 영역 행을 물리 삭제한다. 그 사이 로그인은 막는다.
+- `transactions.source`는 결제가 어디서 들어왔는지다. 결제 알림으로 들어온 결제는 승인번호가 없어 중복 판정을 같은 카드, 같은 금액, 시각 10분 이내로 한다. 알림 초안과 카드번호 끝 4자리 짝은 폰 안에만 두고 서버 테이블에 넣지 않는다. 설계 문서 9절
 - 내보내기는 `export_runs`로 하루 한 번 기록하고, 실패하면 다음 날 재실행이 전날 분까지 다시 내보낸다.
 - 엑셀 가져오기 중복 판정은 `approval_no`가 있으면 `(user_card_id, approval_no)` 유니크로, 없으면 `(user_card_id, paid_at, amount, merchant_name)` 일치로 본다. 승인번호 유니크는 부분 인덱스(`approval_no IS NOT NULL`)로 건다.
 - 카드 플레이트 임베딩 벡터는 DB에 넣지 않는다. 파이프라인이 오브젝트 스토리지에 파일로 발행하고 앱이 내려받는다.

@@ -127,6 +127,7 @@ erDiagram
         text channel "online | offline"
         text approval_no "카드사 승인번호. 중복 판정"
         bigint import_batch_id FK "엑셀 가져오기 배치"
+        text source "manual | excel | notification"
         bigint applied_benefit_id FK "입력 시점 계산값"
         int estimated_benefit "입력 시점 계산값"
         uuid recommendation_request_id FK "추천에서 바로 기록했으면"
