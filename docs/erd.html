@@ -91,14 +91,15 @@ erDiagram
 
     users {
         uuid id PK
-        text email UK "소셜 로그인만 쓰면 null"
+        text email UK "게스트와 소셜만 쓰면 null"
         timestamptz created_at
+        timestamptz last_seen_at "게스트 정리용"
         timestamptz deleted_at "탈퇴 시각. 30일 뒤 물리 삭제"
     }
     auth_identities {
         bigint id PK
         uuid user_id FK
-        text provider "email | kakao | google"
+        text provider "device | email | kakao | google"
         text provider_uid UK "provider와 함께 고유"
         text password_hash "email일 때만"
         timestamptz created_at
