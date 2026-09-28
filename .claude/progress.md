@@ -14,6 +14,7 @@
 - 기획 문서: 설계, ERD, 시나리오, 화면 시안 PDF
 - 작업 설정: `.claude/`, `.githooks/`, `tools/validate_catalog.py`
 - 카드 20장 1판 초안: `catalog/cards/*.yaml`, `catalog/categories.yaml`, `catalog/merchants.yaml`. 검증 오류 0개. 작업 001에서 2판으로 옮긴다
+- 결제 알림 읽기를 출시 뒤 Android 부가 기능으로 정했다. 설계 문서 9절, 하위 프로젝트 6, 시나리오 S12와 E38부터 E46. MVP 작업에서는 만들지 않는다
 
 ## 사용자 확인이 필요한 것
 
