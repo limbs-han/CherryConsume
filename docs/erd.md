@@ -84,17 +84,15 @@ erDiagram
 
     users {
         uuid id PK
-        text email UK "게스트와 소셜만 쓰면 null"
+        text email "카카오 이메일 동의를 안 하면 null"
         timestamptz created_at
-        timestamptz last_seen_at "게스트 정리용"
         timestamptz deleted_at "탈퇴 시각. 30일 뒤 물리 삭제"
     }
     auth_identities {
         bigint id PK
         uuid user_id FK
-        text provider "device | email | kakao | google"
+        text provider "kakao | google"
         text provider_uid UK "provider와 함께 고유"
-        text password_hash "email일 때만"
         timestamptz created_at
     }
     user_cards {
@@ -210,7 +208,7 @@ erDiagram
 - 실적 계산은 `transactions`를 `(user_card_id, paid_at)`으로 읽는다. 이 두 컬럼의 복합 인덱스가 핵심 인덱스다.
 - 월 한도 소진량은 `(user_card_id, applied_benefit_id, paid_at)`으로 집계한다. 같은 인덱스로 충분하다.
 - 추천을 따랐는지는 `transactions.recommendation_request_id`로 연결한다. 추천 화면에서 "이 카드로 결제 기록"을 누르면 채워진다. 별도 선택 테이블은 두지 않는다.
-- 게스트는 `auth_identities`에 provider `device` 신원 하나만 가진 사용자다. 계정을 연결하면 같은 사용자에 신원이 추가될 뿐 데이터는 옮기지 않는다. 180일 동안 `last_seen_at`이 갱신되지 않은 게스트는 지운다.
+- 로그인은 카카오와 Google만 받는다. `(provider, provider_uid)`를 유니크로 건다. 1차는 사용자 한 명에 로그인 수단 하나지만, 나중에 수단을 여럿 붙일 수 있게 테이블은 나눠 둔다. `users.email`은 연락용이라 유니크로 걸지 않는다. 카카오와 Google이 같은 이메일을 줘도 1차는 별개 사용자다.
 - 탈퇴는 `users.deleted_at`을 찍고 30일 뒤 사용자 영역 행을 물리 삭제한다. 그 사이 로그인은 막는다.
 - 내보내기는 `export_runs`로 하루 한 번 기록하고, 실패하면 다음 날 재실행이 전날 분까지 다시 내보낸다.
 - 엑셀 가져오기 중복 판정은 `approval_no`가 있으면 `(user_card_id, approval_no)` 유니크로, 없으면 `(user_card_id, paid_at, amount, merchant_name)` 일치로 본다. 승인번호 유니크는 부분 인덱스(`approval_no IS NOT NULL`)로 건다.
