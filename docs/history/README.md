@@ -60,3 +60,4 @@
 | [17](17-agent-setup.md) | 2026-09-28 | AI 작업 설정과 작업 단위 구조 |
 | [18](18-catalog-commit-start-icon.md) | 2026-09-28 | 카드 초안 커밋과 시작 화면 아이콘 |
 | [19](19-work-history.md) | 2026-09-28 | 작업 기록 폴더 |
+| [20](20-catalog-schema-v2-sections.md) | 2026-09-28 | 카탈로그 틀 2판 2절부터 4절과 전체 검토 |
