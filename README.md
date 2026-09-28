@@ -78,7 +78,8 @@
 ```
 cherryConsume/
 ├── docs/          기획 문서
-│   └── work/      작업 단위별 의도, 설계, 계획
+│   ├── work/      작업 단위별 의도, 설계, 계획
+│   └── history/   요청과 수정 요청, 결과를 작업마다 남긴 기록
 ├── design/        와이어프레임, 아이콘
 ├── backend/       예정. 계산 엔진과 API
 ├── app/           예정. Flutter
