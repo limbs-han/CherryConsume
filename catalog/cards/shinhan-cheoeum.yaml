@@ -1,0 +1,390 @@
+id: shinhan-cheoeum
+issuer: shinhan
+name: 신한카드 처음
+kind: credit
+annual_fee_domestic: 15000
+annual_fee_global: 18000
+active: true
+source_url: https://www.shinhancard.com/pconts/html/card/apply/credit/1227020_2207.html
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+  - { min_spend: 300000, integrated_cap: 5000 }     # 오늘도 5% 한도
+  - { min_spend: 500000, integrated_cap: 10000 }
+  - { min_spend: 1000000, integrated_cap: 20000 }
+spend_rule:
+  excluded_categories: [annual_fee, gift_card, tax, utility, apartment_fee]
+  exclude_interest_free_installment: false
+  exclude_discounted: false
+  installment_basis: full_at_purchase
+  cancellation_basis: cancel_month
+notes: >-
+  신한카드 상품 페이지(여신금융협회 심의필 제2025-C1h-16946호, 2025.11.21~2026.11.20)와 신한카드 상품 API(entryId 202404150001) 기준. 연회비는 API 값(국내전용 15,000원, Mastercard 18,000원).
+  공식 목록상 신용카드 이름은 "신한카드 처음". 같은 목록에 디자인판 "신한카드 처음 (ANNIVERSE)"와 체크카드 "신한카드 처음 체크"가 따로 있음.
+  모든 혜택은 마이신한포인트 적립(1P=1원). 서비스마다 월 통합 적립 한도가 따로 있음. integrated_cap은 오늘도 5% 한도(5천/1만/2만P). 일상 속 5%, 정기결제, 소비관리 보너스는 구간별 혜택으로 나누고 counts_toward_integrated_cap false. 네 서비스를 다 채우면 월 최대 1만8천/3만6천/7만P.
+  전월(1일~말일) 거래 시점 이용금액(일시불+할부) 기준. 해외는 매입일 기준, 교통카드는 전전월 이용금액 반영(모바일 후불교통은 전월).
+  실적 제외 중 업종 코드에 없는 것: 단기·장기 카드대출, 각종 수수료·이자, 선불카드·선불전자지급수단 구매·충전, 지방세외수입, 환경개선부담금, 4대보험, TV수신료, 유치원·초중고 납입금(스쿨뱅킹), 대학(원) 등록금, 거래 취소금액. 수도요금·도시가스·전기요금은 utility로 처리.
+  포인트 적립 제외: 위 실적 제외 항목, 무이자할부(부분 무이자 포함), 이 카드로 할인 서비스를 받은 거래 전체, 포인트 사용 금액. 간편결제 가맹점명이 페이 이름이면 적립 제외. 온라인은 해당 업체 사이트·앱 직접 접속만.
+  최초 신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 30만~50만원 구간 적용. 그 기간에 50만원 이상 쓰면 다음 달 해당 구간.
+  후불교통 기능 카드로만 신청 가능. 가족카드 불가.
+  모델 제외: 소비관리 보너스 계획소비 적립(매월 1~5일 목표 소비금액 설정 시 500P, 이번 달 이용금액이 목표 ±5만원이면 5천P, 30만~50만원 구간은 최대 3천P, 다음 달 25일 적립). 즉시결제 0.3%와 한도 공유.
+  공식 문구 미확인: 취소를 어느 달 실적에서 빼는지.
+benefits:
+  - id: today-food-cafe
+    title: 음식점·카페 5% 적립
+    target_type: category
+    target_values: [restaurant, cafe]
+    channel: offline
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 500
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: false
+    notes: 오늘도 5%. 음식점(한식·중식·일식·양식·일반대중음식·패스트푸드·뷔페), 카페(스타벅스·블루보틀·엔제리너스·이디야·폴바셋·투썸플레이스·빽다방·커피전문점 업종). 오프라인만(스타벅스·투썸 스마트오더는 인정). 백화점·할인점·면세점·공항·기차역 임대매장, 배달앱 거래 제외. 1회 1만원까지, 오늘도 5% 전체 일 최대 1천P
+  - id: today-convenience
+    title: 편의점 5% 적립
+    target_type: merchant
+    target_values: [cu, gs25, emart24, seven_eleven]
+    channel: offline
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 500
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: false
+    notes: 오늘도 5%. 오프라인 매장만, 임대매장 제외. 1회 1만원까지, 오늘도 5% 전체 일 최대 1천P
+  - id: today-online
+    title: 쿠팡·컬리 5% 적립
+    target_type: merchant
+    target_values: [coupang, kurly]
+    channel: online
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 500
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: false
+    notes: 오늘도 5%. 1회 1만원까지, 오늘도 5% 전체 일 최대 1천P. 쿠팡 와우 멤버십 요금은 제외(membership 혜택만 적용). 상품권·선불 구입 제외
+  - id: daily-shop-t1
+    title: 생활·패션·KTX 5% 적립
+    target_type: merchant
+    target_values: [olive_young, daiso, ohouse, korail, musinsa, zigzag, wconcept, twentynine_cm, ably]
+    channel: any
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 일상 속 5%. 올리브영(온·오프라인), 다이소(오프라인), 오늘의집(온라인), KTX, 패션(무신사·지그재그·W컨셉·29CM·에이블리 공식 홈페이지·앱만). 1회 5만원까지. 월 한도는 daily-travel과 공유
+  - id: daily-shop-t2
+    title: 생활·패션·KTX 5% 적립
+    target_type: merchant
+    target_values: [olive_young, daiso, ohouse, korail, musinsa, zigzag, wconcept, twentynine_cm, ably]
+    channel: any
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 전월 50만원 이상 구간. 조건은 daily-shop-t1과 같음
+  - id: daily-shop-t3
+    title: 생활·패션·KTX 5% 적립
+    target_type: merchant
+    target_values: [olive_young, daiso, ohouse, korail, musinsa, zigzag, wconcept, twentynine_cm, ably]
+    channel: any
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 20000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 3
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 전월 100만원 이상 구간. 조건은 daily-shop-t1과 같음
+  - id: daily-travel-t1
+    title: 택시·해외 일시불 5% 적립
+    target_type: category
+    target_values: [taxi, overseas]
+    channel: any
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 일상 속 5%. 해외는 일시불(해외이용·직구 포함)만, Mastercard 카드만, 최종 원화 청구금액 기준. 할부 전환·국내 PG 경유 결제·현금인출·가상화폐·사행성 제외. 1회 5만원까지. 월 한도는 daily-shop과 공유
+  - id: daily-travel-t2
+    title: 택시·해외 일시불 5% 적립
+    target_type: category
+    target_values: [taxi, overseas]
+    channel: any
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 전월 50만원 이상 구간. 조건은 daily-travel-t1과 같음
+  - id: daily-travel-t3
+    title: 택시·해외 일시불 5% 적립
+    target_type: category
+    target_values: [taxi, overseas]
+    channel: any
+    kind: points
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 20000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 3
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 전월 100만원 이상 구간. 조건은 daily-travel-t1과 같음
+  - id: sub-telecom-t1
+    title: 통신요금 10% 적립
+    target_type: merchant
+    target_values: [skt, kt, lg_uplus]
+    channel: any
+    kind: points
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 3000
+    monthly_cap_amount: 5000
+    monthly_cap_count: 1
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 정기결제 최대 20%. 순수 통신요금 자동납부만(약정금액 대납, 지점 월납 제외). 월 1회, 이용금액 3만원까지. 월 한도는 OTT·멤버십과 공유
+  - id: sub-telecom-t2
+    title: 통신요금 10% 적립
+    target_type: merchant
+    target_values: [skt, kt, lg_uplus]
+    channel: any
+    kind: points
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 3000
+    monthly_cap_amount: 10000
+    monthly_cap_count: 1
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 50만원 이상 구간. 조건은 sub-telecom-t1과 같음
+  - id: sub-telecom-t3
+    title: 통신요금 10% 적립
+    target_type: merchant
+    target_values: [skt, kt, lg_uplus]
+    channel: any
+    kind: points
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 3000
+    monthly_cap_amount: 20000
+    monthly_cap_count: 1
+    daily_cap_count: null
+    min_tier_index: 3
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 100만원 이상 구간. 조건은 sub-telecom-t1과 같음
+  - id: sub-ott-t1
+    title: OTT 15% 적립
+    target_type: merchant
+    target_values: [netflix, youtube_premium, tving, disney_plus, spotv_now]
+    channel: online
+    kind: points
+    rate_pct: 15
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 정기결제 최대 20%. 공식 홈페이지 정기결제(자동이체)만. 1회성 구매, 앱마켓 인앱결제, 통신요금 합산 결제 제외. 월 한도는 통신·멤버십과 공유
+  - id: sub-ott-t2
+    title: OTT 15% 적립
+    target_type: merchant
+    target_values: [netflix, youtube_premium, tving, disney_plus, spotv_now]
+    channel: online
+    kind: points
+    rate_pct: 15
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 50만원 이상 구간. 조건은 sub-ott-t1과 같음
+  - id: sub-ott-t3
+    title: OTT 15% 적립
+    target_type: merchant
+    target_values: [netflix, youtube_premium, tving, disney_plus, spotv_now]
+    channel: online
+    kind: points
+    rate_pct: 15
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 20000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 3
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 100만원 이상 구간. 조건은 sub-ott-t1과 같음
+  - id: sub-membership-t1
+    title: 쿠팡 와우·네이버플러스 멤버십 20% 적립
+    target_type: merchant
+    target_values: [coupang_wow, naver_plus_membership]
+    channel: online
+    kind: points
+    rate_pct: 20
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 정기결제 최대 20%. 쿠팡 와우 멤버십 요금은 오늘도 5%와 중복 안 됨. 월 한도는 통신·OTT와 공유
+  - id: sub-membership-t2
+    title: 쿠팡 와우·네이버플러스 멤버십 20% 적립
+    target_type: merchant
+    target_values: [coupang_wow, naver_plus_membership]
+    channel: online
+    kind: points
+    rate_pct: 20
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 전월 50만원 이상 구간. 조건은 sub-membership-t1과 같음
+  - id: sub-membership-t3
+    title: 쿠팡 와우·네이버플러스 멤버십 20% 적립
+    target_type: merchant
+    target_values: [coupang_wow, naver_plus_membership]
+    channel: online
+    kind: points
+    rate_pct: 20
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 20000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 3
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 전월 100만원 이상 구간. 조건은 sub-membership-t1과 같음
+  - id: instant-pay-t1
+    title: 즉시결제 0.3% 적립
+    target_type: all
+    target_values: []
+    channel: any
+    kind: points
+    rate_pct: 0.3
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 3000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 소비관리 보너스. 이번 달 일시불 이용금액을 이번 달 안에 즉시결제한 금액만. 포인트 적립 제외 거래 제외. 다음 달 25일 적립. 월 한도는 계획소비 적립과 공유(계획소비가 먼저)
+  - id: instant-pay-t2
+    title: 즉시결제 0.3% 적립
+    target_type: all
+    target_values: []
+    channel: any
+    kind: points
+    rate_pct: 0.3
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 6000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 50만원 이상 구간. 조건은 instant-pay-t1과 같음
+  - id: instant-pay-t3
+    title: 즉시결제 0.3% 적립
+    target_type: all
+    target_values: []
+    channel: any
+    kind: points
+    rate_pct: 0.3
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 3
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 100만원 이상 구간. 조건은 instant-pay-t1과 같음

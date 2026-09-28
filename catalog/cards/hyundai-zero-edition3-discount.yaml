@@ -1,0 +1,41 @@
+id: hyundai-zero-edition3-discount
+issuer: hyundai
+name: 현대카드ZERO Edition3(할인형)
+kind: credit
+annual_fee_domestic: 15000
+annual_fee_global: 15000
+active: true
+source_url: https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZROE3
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+spend_rule:
+  excluded_categories: []
+  exclude_interest_free_installment: false
+  exclude_discounted: false
+  installment_basis: full_at_purchase
+  cancellation_basis: cancel_month
+notes: >-
+  전월실적 조건이 없어 spend_basis와 spend_rule은 계산에 쓰이지 않음. spend_rule 값은 자리 채움용 기본값.
+  할인 제외(실적과 별개): 카드론, 현금서비스, 연회비, 수수료·이자, 국제브랜드·해외서비스 수수료, 공과금(국세·관세·지방세·상하수도·벌과금 등), 전기·도시가스 요금, 아파트관리비, 초·중·고 학교납입금, 사립유치원비, 대학·대학원 등록금, 상품권·선불카드, 4대 사회보험료, 고속도로 통행료, 후불하이패스, 고속버스, 다른 현대카드 할인·무이자할부 적용 건.
+  할부는 개월 수와 관계없이 1개월 차에 전액 할인.
+  결제 건 혜택 아님: 긴급할인(선지급 포인트 서비스), 메탈 플레이트, Visa/Amex 플래티넘 서비스.
+benefits:
+  - id: all-0-8
+    title: 국내외 가맹점 0.8% 할인
+    target_type: all
+    target_values: []
+    channel: any
+    kind: discount
+    rate_pct: 0.8
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 0
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 실적·한도·횟수 제한 없음. 청구 할인. 해외는 국내외겸용 카드만. 카드 notes의 할인 제외 항목은 할인 안 됨

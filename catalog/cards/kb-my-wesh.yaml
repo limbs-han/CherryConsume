@@ -1,0 +1,165 @@
+id: kb-my-wesh
+issuer: kb
+name: KB국민 My WE:SH 카드
+kind: credit
+annual_fee_domestic: 15000
+annual_fee_global: 15000
+active: true
+source_url: https://img2.kbcard.com/obj/card/download/09923__prdctOpmn_20241230.pdf
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+  - { min_spend: 400000, integrated_cap: null }
+spend_rule:
+  excluded_categories: [gift_card, apartment_fee, tax, utility, annual_fee, public_transit]
+  exclude_interest_free_installment: false
+  exclude_discounted: true
+  installment_basis: full_at_purchase
+  cancellation_basis: cancel_month
+notes: >-
+  승인시점 기준, 해외는 매입완료 기준. 실적 제외: 할인 받은 건 전액, 현금서비스, 카드론, 초·중·고 학교 납입금, 정부지원금, 대학 등록금, 4대 사회보험료, 수수료·이자, 연체료, 무승인전표(교통요금·자판기·터널통행료·기내), 취소금액.
+  public_transit는 무승인전표 교통요금으로 보고 뺐다.
+  할인 제외: 무이자할부, 상품권·선불카드, 아파트관리비, 학교 납입금·등록금, 세금·공과금, 4대 사회보험료, 신차구매 할인 전표 등.
+  더욱 진심 서비스는 3팩(먹는데·노는데·관리에 진심) 중 택1, 변경은 다음 달 1일부터.
+  생일 월에는 선택 팩 한도 2배(Happy Birth Month). 전월실적 35만~40만원이면 연 2회 실적 채워드림 신청 가능.
+  최초 사용등록일부터 다음 달 말까지 실적 무관. 월 한도는 본인 기준, 이월 없음.
+  KB Pay 할인과 다른 할인의 중복 여부는 공식 문구 미확인.
+  모바일단독카드 연회비 9,000원. 가족카드 발급 불가.
+benefits:
+  - id: kbpay-10
+    title: KB Pay 10% 할인
+    target_type: all
+    target_values: []
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 국내 가맹점에서 KB Pay로 결제한 건만. 해외 가맹점 제외
+  - id: dining-cvs-10
+    title: 음식점·편의점 10% 할인
+    target_type: category
+    target_values: [restaurant, convenience]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 음식점은 한식·일식·중식·양식·뷔페·패밀리레스토랑·일반음식점. 편의점은 GS25, CU만. 백화점·대형마트 입점 매장 제외
+  - id: telecom-10
+    title: 이동통신요금 10% 할인
+    target_type: merchant
+    target_values: [skt, kt, lg_uplus, liiv_m]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 자동납부 요금만. 인터넷·IPTV 결합상품 제외. OTT 30%와 월 5천원 한도를 함께 씀
+  - id: ott-30
+    title: OTT 30% 할인
+    target_type: merchant
+    target_values: [netflix, youtube_premium, wavve, tving, disney_plus]
+    channel: online
+    kind: discount
+    rate_pct: 30
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: 2500
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 공식 홈페이지 정기결제만. 간편결제·인앱결제 제외. 이동통신 10%와 월 5천원 한도를 함께 씀
+  - id: pack-eat-5
+    title: "[먹는데 진심] 배달·커피 5% 할인"
+    target_type: category
+    target_values: [delivery_app, cafe]
+    channel: any
+    kind: discount
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 선택 팩 3개 중 택1. 배달앱은 배달의민족·요기요·마켓컬리만, 배달 현장결제 제외. 커피는 커피/음료전문점 업종. 상품권·선불 충전, 백화점·마트 입점 매장 제외. 생일 월 한도 1만원
+  - id: pack-play-taxi-cafe-5
+    title: "[노는데 진심] 택시·커피 5% 할인"
+    target_type: category
+    target_values: [taxi, cafe]
+    channel: any
+    kind: discount
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 선택 팩 3개 중 택1. 영화관 30%와 월 5천원 한도를 함께 씀. 백화점·마트 입점 매장 제외. 생일 월 한도 1만원
+  - id: pack-play-movie-30
+    title: "[노는데 진심] 영화관 30% 할인"
+    target_type: merchant
+    target_values: [cgv, lotte_cinema, megabox]
+    channel: any
+    kind: discount
+    rate_pct: 30
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 선택 팩 3개 중 택1. 연 4회, 연 2만원 이내. 택시·커피 5%와 월 5천원 한도를 함께 씀. 매점, 관람권 구입, 예매대행사이트 제외
+  - id: pack-care-5
+    title: "[관리에 진심] 온라인서점·올리브영 5% 할인"
+    target_type: merchant
+    target_values: [olive_young, kyobo_book, yes24]
+    channel: any
+    kind: discount
+    rate_pct: 5
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 선택 팩 3개 중 택1. 같은 한도에 미용실·스포츠 업종도 포함되나 업종 코드가 없어 빠짐. 교보문고·YES24는 공식 홈페이지(앱)만. 올리브영은 매장·공식몰, 백화점·마트 입점 매장 제외. 생일 월 한도 2만원

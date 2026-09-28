@@ -1,0 +1,204 @@
+id: nh-zgm-discount
+issuer: nh
+name: NH농협카드 zgm 할인카드
+kind: credit
+annual_fee_domestic: 27000
+annual_fee_global: 30000
+active: true
+source_url: https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010515
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+  - { min_spend: 400000, integrated_cap: 40000 }
+spend_rule:
+  excluded_categories: [tax, utility, apartment_fee, gift_card, public_transit, taxi, annual_fee]
+  exclude_interest_free_installment: false
+  exclude_discounted: false
+  installment_basis: full_at_purchase
+  cancellation_basis: cancel_month
+notes: >-
+  맡은 이름 zgm.히어로는 NH농협카드 공식 사이트와 검색에서 찾지 못함. 이름이 비슷한 NH대한민국히어로카드는 소방공무원 전용이라 제외하고,
+  zgm 계열 대표 할인형인 이 카드로 작성. 2024년 4월 23일 출시, 심의필 2026년 7월 2일로 발급 중.
+  연회비는 실물카드 국내전용 2만7천원, 국내외겸용(VISA, Mastercard) 3만원. 모바일카드는 2만1천원, 2만4천원.
+  실적은 전월 1일~말일 승인일 기준 국내외 일시불·할부 합산. 해외 이용과 통신료 자동이체 같은 무승인 결제는 매출표 접수일 기준.
+  실적 제외 중 업종 코드가 없는 것: 대학(대학원) 등록금, 교육비(학부모부담금), 임대료, 사회보험(국민건강·국민연금·고용·산재),
+  가상화폐 거래소, 현금서비스, 카드론, 수수료·이자, 연체료, 거래 취소금액, 포인트 결제 사용분. 후불교통(버스·지하철)과 택시는 실적 제외.
+  할인 제외: 실적 제외 항목과 같고 무이자할부 이용금액도 할인 제외. 백화점·할인점·쇼핑몰 임대매장 할인 제외.
+  기본할인과 생활할인은 중복되지 않고 둘 중 큰 쪽만 제공. 생활할인 한도를 다 쓰면 기본할인 제공. NH카드 다른 청구할인 프로모션과도 중복 안 됨.
+  기본할인은 최초 카드사용등록일부터 다음 달 말일까지 실적 무관 제공. 생활할인은 카드 등록 월에는 없음.
+  모델에 못 담은 것: 기본할인 일 1만원 한도, 생활할인 월 통합한도 2만원.
+  결제 한 건의 혜택이 아닌 것: 국내외 공항라운지 연 2회(전월 40만원 이상), VISA·Mastercard Platinum 브랜드 서비스.
+benefits:
+  - id: domestic-1
+    title: 국내 전 가맹점 1% 할인
+    target_type: all
+    target_values: []
+    channel: any
+    kind: discount
+    rate_pct: 1
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: false
+    notes: >-
+      기본할인. 해외와 NH페이 온라인 결제는 아래 2% 혜택만 적용되고 1%와 더하지 않음.
+      일 1만원, 월 통합 4만원 한도. 별도 가맹점번호로 승인되는 간편결제는 제외될 수 있음
+  - id: nhpay-online-2
+    title: NH페이 온라인 결제 2% 할인
+    target_type: merchant
+    target_values: [nh_pay]
+    channel: online
+    kind: discount
+    rate_pct: 2
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 기본할인. NH페이로 국내 온라인 결제할 때만. NH페이 오프라인 결제는 국내 1% 적용. 일 1만원 한도
+  - id: overseas-2
+    title: 해외 전 가맹점 2% 할인
+    target_type: category
+    target_values: [overseas]
+    channel: any
+    kind: discount
+    rate_pct: 2
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: false
+    notes: 기본할인. 국내외겸용 카드만. 국제브랜드·해외서비스 수수료는 별도 청구. 일 1만원 한도
+  - id: life-utility-10
+    title: 관리비·전기·가스 10% 할인
+    target_type: category
+    target_values: [apartment_fee, utility]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 생활할인. 아파트관리비, 주택용 전기요금, 도시가스 업종의 월 자동납부만. 상하수도 등 다른 공과금은 대상 아님. 이 영역 이용금액은 실적 제외
+  - id: life-telecom-10
+    title: 이동통신 요금 10% 할인
+    target_type: merchant
+    target_values: [skt, kt, lg_uplus]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 생활할인. 통신 3사 이동통신요금 자동납부만. 알뜰폰, TV·인터넷 요금 제외
+  - id: life-dawn-delivery-10
+    title: 새벽배송 10% 할인
+    target_type: merchant
+    target_values: [coupang, kurly, oasis_market]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 생활할인. 원문은 쿠팡, 컬리, 오아시스마켓. 멤버십 요금 포함
+  - id: life-mart-10
+    title: 대형마트 10% 할인
+    target_type: merchant
+    target_values: [nh_hanaro_mart, emart, homeplus, lotte_mart]
+    channel: offline
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 생활할인. 하나로클럽·마트 포함. 대형마트 오프라인 매장 안 직접 결제만. 임대매장 제외
+  - id: life-insurance-10
+    title: 보험료 10% 할인
+    target_type: category
+    target_values: [insurance]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 생활할인. 생명보험·손해보험 업종. 자동납부와 일반결제 모두 포함
+  - id: life-pet-10
+    title: 반려동물 10% 할인
+    target_type: category
+    target_values: [other]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 생활할인. 원문은 동물병원, 애완동물 업종. 맞는 업종 코드가 없어 other로 둠. 기타 업종 전체에 적용하면 안 됨
+  - id: life-digital-30
+    title: 디지털 구독 30% 할인
+    target_type: merchant
+    target_values: [youtube_premium, netflix, tving, wavve]
+    channel: online
+    kind: discount
+    rate_pct: 30
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 생활할인. 공식 홈페이지·앱에서 이 카드로 월 이용권 정기결제할 때만. 1회성 결제, 인앱결제(구글플레이·앱스토어), 일부 페이 결제 제외

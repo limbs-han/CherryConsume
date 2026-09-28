@@ -1,0 +1,28 @@
+# 업종 목록. 설계 문서 6.4절
+# kakao: 카카오 로컬 API 업종 그룹 코드. 없으면 null이고 가게 별칭표로 정한다
+- { code: cafe, name: 카페, kakao: CE7 }
+- { code: convenience, name: 편의점, kakao: CS2 }
+- { code: restaurant, name: 음식점, kakao: FD6 }
+- { code: delivery_app, name: 배달앱, kakao: null }
+- { code: grocery_mart, name: 마트, kakao: MT1 }
+- { code: department_store, name: 백화점, kakao: null }
+- { code: online_shopping, name: 온라인 쇼핑, kakao: null }
+- { code: fuel, name: 주유, kakao: OL7 }
+- { code: public_transit, name: 대중교통, kakao: SW8 }
+- { code: taxi, name: 택시, kakao: null }
+- { code: telecom, name: 통신요금, kakao: null }
+- { code: streaming, name: 구독·스트리밍, kakao: null }
+- { code: movie, name: 영화, kakao: CT1 }
+- { code: hospital, name: 병원, kakao: HP8 }
+- { code: pharmacy, name: 약국, kakao: PM9 }
+- { code: education, name: 교육, kakao: AC5 }
+- { code: travel_airline, name: 항공, kakao: null }
+- { code: hotel, name: 숙박, kakao: AD5 }
+- { code: overseas, name: 해외, kakao: null }
+- { code: utility, name: 공과금, kakao: null }
+- { code: tax, name: 세금, kakao: null }
+- { code: insurance, name: 보험료, kakao: null }
+- { code: gift_card, name: 상품권, kakao: null }
+- { code: apartment_fee, name: 아파트관리비, kakao: null }
+- { code: annual_fee, name: 연회비, kakao: null }
+- { code: other, name: 기타, kakao: null }

@@ -1,0 +1,131 @@
+id: samsung-id-on
+issuer: samsung
+name: 삼성 iD ON 카드
+kind: credit
+annual_fee_domestic: 20000
+annual_fee_global: 20000
+active: true
+source_url: https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1731
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+  - { min_spend: 300000, integrated_cap: null }
+  - { min_spend: 600000, integrated_cap: null }
+spend_rule:
+  excluded_categories: [tax, utility, apartment_fee, public_transit, taxi, gift_card, annual_fee]
+  exclude_interest_free_installment: false
+  exclude_discounted: true
+  installment_basis: full_at_purchase
+  cancellation_basis: cancel_month
+notes: >-
+  연회비는 실물카드 기준. 모바일카드는 국내·해외 모두 15,000원.
+  실적은 매월 1일~말일 일시불·할부 이용금액. 할인 제외는 온라인 간편결제·해외 3%, 교통·이동통신·스트리밍 10% 할인이 적용된 건 전체금액만이고, 30% 맞춤할인과 1% 할인 건은 실적에 들어감.
+  실적 제외 중 업종 코드 없는 것: 초·중·고 학교납입금, 대학 등록금, 부동산 임대료, 선불카드·전자지급수단 구매·충전, 현금서비스, 카드론, 수수료·이자, 연체료. 건강보험 등 사회보험료는 삼성카드가 공과금으로 분류.
+  실적과 할인은 승인 시점 기준, 해외·무승인 건은 매출전표 접수 시점 기준. 취소는 매출취소전표 접수월에서 뺌.
+  공식 문구 미확인: 할부를 결제 달에 전액 인정하는지.
+  무이자할부, 다른 행사 할인 적용 건은 할인 대상 아님. 삼성카드 다른 결제일할인과 중복 시 큰 것만 적용. 본인·가족카드 실적과 한도 합산.
+  발급월+1개월까지는 실적 미달이어도 30만원 구간 혜택 제공.
+benefits:
+  - id: top-area-30
+    title: 많이 쓰는 영역 30% 자동 할인
+    target_type: merchant
+    target_values: [starbucks, ediya, coffee_bean, twosome, blue_bottle, baemin, yogiyo, shake_shack, subway, paris_baguette, baskin_robbins, dunkin]
+    channel: any
+    kind: discount
+    rate_pct: 30
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: "커피전문점(스타벅스·이디야·커피빈·투썸·블루보틀), 배달앱(배민·요기요), 델리(쉐이크쉑·써브웨이·파리바게뜨·배스킨라빈스·던킨) 중 그 달 이용금액이 가장 큰 1개 영역만 30%. 커피·델리는 오프라인만, 임대매장 제외, 스타벅스 사이렌오더 포함. 배달앱은 공식 앱·홈페이지 결제만. 가족카드 미제공. 간편결제·키오스크 등 자체 가맹점번호 건 제외. 3%·1% 할인과 중복 적용"
+  - id: transit-telecom-streaming-10-t1
+    title: 교통·이동통신·스트리밍 10% 할인(30만원 이상)
+    target_type: category
+    target_values: [public_transit, taxi, telecom, streaming]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: "전월 30만원 이상 60만원 미만 구간 전용, 통합 월 10,000원. 교통은 버스·지하철·택시 오프라인만, 시외·고속버스 제외. 이동통신은 SKT·KT·LG U+·알뜰폰(SK텔링크, KT스카이라이프, KT M모바일, 헬로모바일, 미디어로그) 정기결제만, 결합상품·단말기·대리점 제외. 스트리밍은 넷플릭스·웨이브·티빙·왓챠·멜론·FLO 정기결제만, 간편결제·인앱결제 제외"
+  - id: transit-telecom-streaming-10-t2
+    title: 교통·이동통신·스트리밍 10% 할인(60만원 이상)
+    target_type: category
+    target_values: [public_transit, taxi, telecom, streaming]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 20000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 60만원 이상 구간, 통합 월 20,000원. 대상과 제외 조건은 -t1과 같음
+  - id: easypay-overseas-1-t0
+    title: 온라인 간편결제·해외 1% 할인(30만원 미만)
+    target_type: category
+    target_values: [online_shopping, overseas]
+    channel: any
+    kind: discount
+    rate_pct: 1
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 0
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: "전월 30만원 미만일 때 한도 없이 1%. 30만원 이상 구간에서는 3% 한도를 넘긴 다음 결제부터 1%. 국내는 삼성페이·네이버페이·카카오페이·PAYCO·스마일페이·coupay·SSGPAY·L.PAY 온라인 결제만, 바코드·QR·NFC 오프라인 결제 제외. 해외는 해외겸용카드의 해외 가맹점·해외 직구"
+  - id: easypay-overseas-3-t1
+    title: 온라인 간편결제·해외 3% 할인(30만원 이상)
+    target_type: category
+    target_values: [online_shopping, overseas]
+    channel: any
+    kind: discount
+    rate_pct: 3
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 30만원 이상 60만원 미만 구간 전용, 통합 월 5,000원. 한도 초과 후 1%. 대상 조건은 -t0과 같음
+  - id: easypay-overseas-3-t2
+    title: 온라인 간편결제·해외 3% 할인(60만원 이상)
+    target_type: category
+    target_values: [online_shopping, overseas]
+    channel: any
+    kind: discount
+    rate_pct: 3
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 2
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 전월 60만원 이상 구간, 통합 월 10,000원. 한도 초과 후 1%. 대상 조건은 -t0과 같음

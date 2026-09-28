@@ -1,0 +1,60 @@
+id: hana-travelog-check
+issuer: hana
+name: 하나카드 트래블로그 체크카드
+kind: check
+annual_fee_domestic: 0
+annual_fee_global: 0
+active: true
+source_url: https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15414
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+spend_rule:
+  excluded_categories: []
+  exclude_interest_free_installment: false
+  exclude_discounted: false
+  installment_basis: full_at_purchase
+  cancellation_basis: cancel_month
+notes: >-
+  하나머니 잔액으로 결제하는 하나머니 전용 체크카드. 국내는 원화 하나머니, 해외는 외화 하나머니 잔액에서 출금. 연회비 없음.
+  모든 혜택이 지난달 실적과 무관해 spend_basis와 spend_rule은 계산에 쓰이지 않는 자리 채움 값.
+  국내 적립 제외: 국세, 지방세, 공과금, 4대보험료, 상품권·기프트카드, 선불카드·선불전자지급수단 충전, 수도·전기요금, 아파트관리비, 부동산임대료, 스쿨뱅킹, 도시가스요금, 대학·대학원 등록금, 초·중·고 납입금, 국내외 ATM 이용금액.
+  적립은 매출 접수된 국내 일시불 기준, 취소 접수 월에 차감.
+  결제 건 혜택 아님: 외화 하나머니 58종 통화 무료 환전(트래블로그 환전), 해외 ATM 인출 수수료 면제(해외인출수수료 건당 US$3, 국제브랜드수수료 1%).
+  해외원화결제(DCC) 불가. 국내 ATM 현금인출 불가. 신용·체크카드로 충전한 하나머니는 결제에 못 씀.
+benefits:
+  - id: overseas-fee-free
+    title: 해외 가맹점 이용수수료 면제
+    target_type: category
+    target_values: [overseas]
+    channel: any
+    kind: discount
+    rate_pct: 1
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 0
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 해외 가맹점 결제 시 국제브랜드수수료(이용금액의 1%)와 해외서비스수수료(건당 US$0.5) 면제. 1%만 정률로 넣고 건당 US$0.5는 못 담음. 외화 하나머니 잔액 결제 조건. 실적·한도 없음
+  - id: domestic-0-3p
+    title: 국내 가맹점 0.3% 하나머니 적립
+    target_type: all
+    target_values: []
+    channel: any
+    kind: points
+    rate_pct: 0.3
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: null
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 0
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 국내 가맹점만, 해외 결제는 적립 안 됨. 월 한도 없음, 실적 무관. 카드 notes의 적립 제외 항목은 적립 안 됨

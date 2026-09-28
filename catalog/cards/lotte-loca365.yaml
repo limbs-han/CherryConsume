@@ -1,0 +1,165 @@
+id: lotte-loca365
+issuer: lotte
+name: 롯데카드 LOCA 365
+kind: credit
+annual_fee_domestic: 20000
+annual_fee_global: 20000
+active: true
+source_url: https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14028-A14028
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+  - { min_spend: 500000, integrated_cap: 36500 }
+spend_rule:
+  excluded_categories: [tax, gift_card, taxi, annual_fee]
+  exclude_interest_free_installment: true
+  exclude_discounted: false
+  installment_basis: full_at_purchase
+  cancellation_basis: original_month
+notes: >-
+  지난달 1일~말일 50만원 이상(본인·가족카드 합산) 이용 시 생활업종 결제일 할인, 월 최대 36,500원.
+  건당 2만원 이상 결제만 할인(스트리밍은 금액 무관).
+  최초 발급 시 발급일~다음 달 말일은 실적 무관 할인.
+  실적 제외 중 업종 코드에 없는 것: 건강보험·국민연금·고용보험·산재보험, 초·중·고 납입금, 대학등록금, LH·SH 공공임대료, 부동산 임대료, 장애인 고용부담금, 오토·스마트 캐시백 신청 금액, 포인트 충전, 고속버스, 고속도로 통행료, 무승인전표(자판기·터널통행료·기내), 벌금·과태료, 민원 수수료, 관세·인지세·송달료, 현금서비스·카드론, 이자·수수료, LOCA 365가 아닌 롯데카드 이용금액.
+  할인 제외: 모든 무이자할부, 기프트·선불카드 충전·구매, 포인트 충전, 상품권 구매, 스마트 캐시백 신청 금액.
+  해외 이용은 현지 매출일자, 이동통신·대중교통처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 실적과 할인에 반영.
+  할부는 이용일 기준 전체 금액에 할인. 다른 롯데카드 결제일 할인과 겹치면 큰 쪽 하나만.
+  결제 건 혜택 아님: 국내 5만원 이상 2~3개월 무이자할부(적용 시 다른 할인 없음). 롯데카드 L.POINT 적립 없음.
+benefits:
+  - id: apartment-10
+    title: 아파트관리비 10% 할인
+    target_type: category
+    target_values: [apartment_fee]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 20000
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 자동납부 건만
+  - id: utility-10
+    title: 도시가스·전기료 10% 할인
+    target_type: category
+    target_values: [utility]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 20000
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 도시가스비·전기료 자동납부 건만. 두 요금 합산 월 5천원. 수도 등 다른 공과금은 대상 아님
+  - id: telecom-10
+    title: 이동통신 10% 할인
+    target_type: merchant
+    target_values: [skt, kt, lg_uplus]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 20000
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: 1
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 이동통신요금 자동납부 건만, 월 1회. 인터넷·TV 결합상품과 알뜰폰 제외
+  - id: transit-10
+    title: 대중교통 10% 할인
+    target_type: category
+    target_values: [public_transit]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 20000
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 지하철·시내버스만. 택시·고속버스·시외버스 제외. 후불교통은 한 달 합산 청구 건으로 접수됨. 공식 문구 미확인 - 건당 2만원 조건을 합산 청구액에 적용하는지
+  - id: insurance-10
+    title: 보험료 10% 할인
+    target_type: category
+    target_values: [insurance]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 20000
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 생명·손해보험 자동납부 건만. 카카오페이·네이버페이·페이코 등 모든 간편결제 제외
+  - id: study-10
+    title: 학습지 10% 할인
+    target_type: category
+    target_values: [education]
+    channel: offline
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 20000
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 학습지 업종만(학원 등 다른 교육 업종 아님). 오프라인만, 일부 PG 결제 제외
+  - id: delivery-10
+    title: 배달앱 10% 할인
+    target_type: merchant
+    target_values: [baemin, yogiyo, coupang_eats]
+    channel: online
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 20000
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: false
+    notes: 공식 앱 결제만. 가맹점 직접 결제 제외
+  - id: streaming-1500
+    title: 스트리밍 월 1,500원 할인
+    target_type: merchant
+    target_values: [netflix, youtube_premium, watcha, melon, genie, disney_plus]
+    channel: online
+    kind: discount
+    rate_pct: null
+    fixed_amount: 1500
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 1500
+    monthly_cap_count: 1
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: true
+    conditions_not_modeled: true
+    notes: 공식 홈페이지·앱에서 직접 신청한 정기결제만, 월 1회. 1회성 구매, 통신요금 합산 청구, 앱마켓 결제 제외. 건당 금액 조건 없음

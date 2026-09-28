@@ -12,10 +12,7 @@
 
 - 기획 문서: 설계, ERD, 시나리오, 화면 시안 PDF
 - 작업 설정: `.claude/`, `.githooks/`, `tools/validate_catalog.py`
-
-## 커밋하지 않은 것
-
-- 카드 20장 1판 초안: `catalog/cards/*.yaml`, `catalog/categories.yaml`, `catalog/merchants.yaml`. 이 PC에만 있다. 검증 오류 0개. 2판으로 옮긴 뒤 커밋할 예정
+- 카드 20장 1판 초안: `catalog/cards/*.yaml`, `catalog/categories.yaml`, `catalog/merchants.yaml`. 검증 오류 0개. 작업 001에서 2판으로 옮긴다
 
 ## 사용자 확인이 필요한 것
 

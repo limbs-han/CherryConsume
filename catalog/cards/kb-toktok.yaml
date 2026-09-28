@@ -1,0 +1,96 @@
+id: kb-toktok
+issuer: kb
+name: KB국민 청춘대로 톡톡카드
+kind: credit
+annual_fee_domestic: 10000
+annual_fee_global: 12000
+active: true
+source_url: https://img2.kbcard.com/obj/card/download/09174__prdctOpmn_20260714.pdf
+updated_at: 2026-09-28
+spend_basis: prev_calendar_month
+spend_tiers:
+  - { min_spend: 0, integrated_cap: null }
+  - { min_spend: 300000, integrated_cap: null }
+spend_rule:
+  excluded_categories: [tax, utility, apartment_fee, gift_card, annual_fee, public_transit]
+  exclude_interest_free_installment: false
+  exclude_discounted: true
+  installment_basis: full_at_purchase
+  cancellation_basis: cancel_month
+notes: >-
+  연회비는 K-WORLD(JCB타입) 1만원을 국내, Master 1만2천원을 해외겸용으로 넣음. 모바일단독 4천원·6천원.
+  해외 이용은 일시불 매입완료 기준. 실적 제외: 할인 받은 건 전액, 현금서비스, 카드론, 정부지원금, 대학 등록금, 수수료·이자, 연체료, 무승인전표(교통요금·자판기·터널통행료·항공기), 취소금액.
+  public_transit는 무승인전표 교통요금으로 보고 뺐다.
+  취소를 어느 달 실적에서 빼는지는 공식 문구 미확인, KB 다른 카드 기준 cancel_month로 둠.
+  할인 제외: 무이자할부, 상품권·선불카드 구입·충전.
+  간편결제 10%는 다른 할인과 중복 적용되고 한도는 각각 차감.
+  최초 사용등록일부터 다음 달 말까지 실적 무관. 월 한도는 본인 기준, 이월 없음.
+benefits:
+  - id: starbucks-50
+    title: 스타벅스 50% 청구할인
+    target_type: merchant
+    target_values: [starbucks]
+    channel: any
+    kind: discount
+    rate_pct: 50
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 10000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: false
+    notes: 상품권 구매, 건물 내 임대매장 제외
+  - id: burger-20
+    title: 버거·패스트푸드 20% 청구할인
+    target_type: merchant
+    target_values: [mcdonalds, burger_king, lotteria, shake_shack]
+    channel: any
+    kind: discount
+    rate_pct: 20
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 원문은 버거/패스트푸드 업종 전체. 예시로 든 맥도날드·버거킹·롯데리아·쉐이크쉑만 넣음. 상품권, 건물 내 임대매장 제외
+  - id: pay-10
+    title: 간편결제 10% 청구할인
+    target_type: all
+    target_values: []
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 삼성페이, 네이버페이, 카카오페이, KB국민 앱카드 등 온·오프라인 간편결제만. ISP·MISP 제외. 다른 할인과 중복 가능
+  - id: basic-10
+    title: 대중교통·택시·이동통신 10% 청구할인
+    target_type: category
+    target_values: [public_transit, taxi, telecom]
+    channel: any
+    kind: discount
+    rate_pct: 10
+    fixed_amount: null
+    min_txn_amount: 0
+    max_per_txn: null
+    monthly_cap_amount: 5000
+    monthly_cap_count: null
+    daily_cap_count: null
+    min_tier_index: 1
+    counts_toward_integrated_cap: false
+    conditions_not_modeled: true
+    notes: 이동통신은 SKT·KT·LG U+ 자동납부만, 결합상품·알뜰폰 제외. 시외·고속버스, 모바일티머니 후불형 제외. 버스·지하철은 명세서 이용일 기준
