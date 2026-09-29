@@ -4071,11 +4071,11 @@ uv run --project backend python -m cherry_core.catalog check
 | 추천 50ms, 업종 12개 200ms | `test_speed.py` |
 | 설계 문서 6.5절 2판 | 과제 11의 3단계 |
 
-- [ ] **3단계: 진행 상황과 작업 기록**
+- [x] **3단계: 진행 상황과 작업 기록**
 
 `.claude/progress.md`의 지금 위치를 작업 003으로 옮기고 작업 002를 끝난 것에 적는다. `docs/history/`에 작업 기록을 쓰고 목록에 한 줄 더한다. 사용자 요청은 원문 그대로 인용한다.
 
-- [ ] **4단계: 커밋**
+- [x] **4단계: 커밋**
 
 ```bash
 git add .claude/progress.md docs/work/002-calc-engine/plan.md
@@ -4083,6 +4083,8 @@ git commit -m "chore: 작업 002를 끝난 것으로 진행 상황 갱신"
 git add docs/history
 git commit -m "docs: 작업 기록 계산 엔진 추가"
 ```
+
+2026-09-29 실행 결과: 진행 상황의 지금 위치를 작업 003으로 옮겼다. 작업 기록은 의도와 설계, 계획을 26번에, 구현을 27번에 나눠 썼다. 작업 001 기록이 계획과 구현을 나눈 것과 같게 했다.
 
 ---
 
