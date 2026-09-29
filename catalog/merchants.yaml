@@ -535,3 +535,35 @@
   billing: subscription
   category: streaming
   aliases: [드림어스컴퍼니, FLO 이용권, 플로 이용권]
+- key: shoemarker
+  name: 슈마커
+  category: other
+  aliases: [슈마커, SHOEMARKER]
+- key: lotte_dfs_online
+  name: 롯데인터넷면세점
+  category: travel.duty_free
+  aliases: [롯데인터넷면세점]
+- key: shilla_dfs_online
+  name: 신라인터넷면세점
+  category: travel.duty_free
+  aliases: [신라인터넷면세점]
+- key: hyundai_dfs_online
+  name: 현대인터넷면세점
+  category: travel.duty_free
+  aliases: [현대인터넷면세점, 현대백화점인터넷면세점]
+- key: shinsegae_dfs_online
+  name: 신세계인터넷면세점
+  category: travel.duty_free
+  aliases: [신세계인터넷면세점]
+- key: emart_everyday
+  name: 이마트에브리데이
+  category: grocery_mart
+  aliases: [이마트에브리데이]
+- key: lotte_super
+  name: 롯데슈퍼
+  category: grocery_mart
+  aliases: [롯데슈퍼]
+- key: homeplus_express
+  name: 홈플러스 익스프레스
+  category: grocery_mart
+  aliases: [홈플러스익스프레스]
