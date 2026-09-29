@@ -3,8 +3,8 @@
 Postgres 기준. 설계 문서 6.3절의 Pydantic 모델을 테이블로 옮기고, 3계층 구조에 필요한 사용자·인증·추천 기록 테이블을 더했다.
 
 두 영역으로 나뉜다.
-- 카탈로그 영역: 파이프라인이 쓰고 앱은 읽기만 한다. `cards`부터 `merchant_aliases`까지.
-- 사용자 영역: 앱이 쓴다. `users`부터 `export_runs`까지. 테이블 19개.
+- 카탈로그 영역: 파이프라인이 쓰고 앱은 읽기만 한다. `cards`부터 `reference_values`까지.
+- 사용자 영역: 앱이 쓴다. `users`부터 `export_runs`까지. 테이블 22개.
 
 ```mermaid
 erDiagram
@@ -16,66 +16,53 @@ erDiagram
         text code PK "cafe, convenience, tax ..."
         text name_ko
         text kakao_group_code "CE7 등. 없으면 null"
+        text parent_code FK "자식 업종이면 부모"
     }
     cards {
         text id PK "issuer-slug"
         text issuer_code FK
         text name
+        text[] search_names
         text kind "credit | check"
-        int annual_fee_domestic
-        int annual_fee_global
-        bool active
-        text source_url
-        date updated_at
-        text spend_basis "prev_calendar_month | unsupported"
-        int catalog_version
+        text[] product_codes "카드사 내부 상품 코드"
+        text status "on_sale | discontinued | closed"
+        date status_since
+        jsonb annual_fees
+        jsonb sources "원문, 본문 지문, 심의필"
+        date checked_at
     }
-    spend_tiers {
-        text card_id PK,FK
-        int tier_index PK "0부터"
-        int min_spend
-        int integrated_cap "null이면 통합 한도 없음"
-    }
-    spend_rules {
-        text card_id PK,FK
-        bool exclude_interest_free_installment
-        bool exclude_discounted
-        text installment_basis "full_at_purchase | per_installment_month"
-        text cancellation_basis "cancel_month | original_month"
-    }
-    spend_rule_excluded_categories {
-        text card_id PK,FK
-        text category_code PK,FK
-    }
-    benefits {
+    card_revisions {
         bigint id PK
         text card_id FK
-        text key "카드 안에서 고유"
-        text title
-        text target_type "category | merchant | all"
-        text channel "online | offline | any"
-        text kind "discount | points | cashback"
-        numeric rate_pct "정률. fixed_amount와 둘 중 하나"
-        int fixed_amount
-        int min_txn_amount
-        int max_per_txn
-        int monthly_cap_amount
-        int monthly_cap_count
-        int daily_cap_count
-        int min_tier_index
-        bool counts_toward_integrated_cap
-        bool conditions_not_modeled "계산에 안 넣은 조건 있음"
-        bool active "카탈로그 교체로 사라지면 false"
-        text notes
+        date effective_from "card_id와 함께 고유"
+        bool effective_from_estimated
+        jsonb rules "합친 뒤의 개정 전체"
+        text rules_sha256
+        int schema_version
+        timestamptz published_at
     }
-    benefit_targets {
-        bigint benefit_id PK,FK
-        text target_value PK "업종 코드 또는 가맹점 키"
+    payment_methods {
+        text key PK
+        text name
+        text[] statement_names
+    }
+    point_programs {
+        text key PK
+        text name
+        numeric won_per_point
+    }
+    reference_values {
+        text key PK
+        numeric value
+        text unit
+        date as_of
+        text source
     }
     merchants {
         text key PK "starbucks, gs25 ..."
         text name
         text category_code FK
+        text billing "기본 청구 방식"
     }
     merchant_aliases {
         text alias PK "공백·대소문자 정규화한 값"
@@ -101,6 +88,8 @@ erDiagram
         text card_id FK
         text nickname
         int assumed_prev_month_spend "등록한 달의 전월 실적 추정"
+        date started_on "카드를 쓰기 시작한 날"
+        text last_payment_method FK
         timestamptz added_at
         timestamptz removed_at
     }
@@ -118,11 +107,13 @@ erDiagram
         int cancelled_amount "기본 0"
         timestamptz cancelled_at
         text channel "online | offline"
+        text region "domestic | overseas"
+        text payment_method FK
+        text billing
+        bigint card_revision_id FK "계산에 쓴 개정"
         text approval_no "카드사 승인번호. 중복 판정"
         bigint import_batch_id FK "엑셀 가져오기 배치"
         text source "manual | excel | notification"
-        bigint applied_benefit_id FK "입력 시점 계산값"
-        int estimated_benefit "입력 시점 계산값"
         uuid recommendation_request_id FK "추천에서 바로 기록했으면"
         timestamptz created_at
         timestamptz updated_at
@@ -136,6 +127,8 @@ erDiagram
         text category_code FK
         int amount "없으면 null"
         text channel
+        text region
+        text payment_method
         timestamptz requested_at
     }
     recommendation_results {
@@ -143,7 +136,8 @@ erDiagram
         int rank PK "1부터"
         uuid user_card_id FK
         int expected_benefit
-        bigint applied_benefit_id FK
+        jsonb applied "받는 혜택 key와 금액"
+        jsonb conditional "입력이 더 있으면 받는 혜택"
         text[] warnings
     }
     import_batches {
@@ -173,14 +167,33 @@ erDiagram
         timestamptz started_at
         timestamptz finished_at
     }
+    user_card_options {
+        bigint id PK
+        uuid user_card_id FK
+        text option_key
+        text choice_key
+        date effective_from
+    }
+    user_facts {
+        uuid user_id PK,FK
+        text key PK
+        text value
+    }
+    user_card_facts {
+        uuid user_card_id PK,FK
+        text key PK
+        text value
+    }
+    transaction_benefits {
+        uuid transaction_id PK,FK
+        text benefit_key PK
+        int amount
+        int base_amount "혜택 계산에 넣은 결제액"
+    }
 
     issuers ||--o{ cards : "발행"
-    cards ||--|{ spend_tiers : "실적 구간"
-    cards ||--|| spend_rules : "실적 규칙"
-    cards ||--o{ spend_rule_excluded_categories : "제외 업종"
-    categories ||--o{ spend_rule_excluded_categories : ""
-    cards ||--o{ benefits : "혜택"
-    benefits ||--o{ benefit_targets : "대상"
+    cards ||--|{ card_revisions : "개정"
+    categories o|--o{ categories : "부모 업종"
     categories ||--o{ merchants : "업종"
     merchants ||--o{ merchant_aliases : "별칭"
 
@@ -191,7 +204,12 @@ erDiagram
     user_cards ||--o{ transactions : "결제"
     categories ||--o{ transactions : ""
     merchants o|--o{ transactions : ""
-    benefits o|--o{ transactions : "적용 혜택"
+    card_revisions ||--o{ transactions : "계산에 쓴 개정"
+    payment_methods o|--o{ transactions : "결제수단"
+    transactions ||--o{ transaction_benefits : "받은 혜택"
+    user_cards ||--o{ user_card_options : "옵션 선택"
+    users ||--o{ user_facts : "사람 사실"
+    user_cards ||--o{ user_card_facts : "카드 사실"
     users ||--o{ recommendation_requests : ""
     recommendation_requests ||--|{ recommendation_results : "순위"
     user_cards ||--o{ recommendation_results : ""
@@ -203,11 +221,11 @@ erDiagram
 
 ## 설계 메모
 
-- 카탈로그 테이블은 파이프라인이 `catalog_version` 단위로 통째로 갈아 끼운다. 앱은 최신 버전만 읽는다. 과거 버전을 남기지 않는 대신 결제에 `applied_benefit_id`와 `estimated_benefit`을 고정해 두어 카탈로그가 바뀌어도 기록이 흔들리지 않는다.
-- `benefits.id`는 서로게이트 키다. 카탈로그를 갈아 끼울 때 같은 `(card_id, key)`는 id를 유지해야 `transactions.applied_benefit_id`가 끊기지 않는다. 적재 스크립트가 upsert로 처리한다.
+- 카탈로그는 카드마다 개정 행을 쌓는다. 파이프라인이 카드사 기본값과 패치를 합친 개정 전체를 `card_revisions.rules`에 넣는다. 옛 개정은 지우지 않는다. 지난달 실적은 지난달 규칙으로 계산하기 때문이다.
+- 결제는 계산에 쓴 개정을 `card_revision_id`로, 받은 혜택을 `transaction_benefits`의 혜택 key로 가리킨다. 혜택 key는 갱신해도 바꾸지 않는다. 한도 사용량은 기간 안의 `transaction_benefits`를 모아 계산한다.
 - `user_cards`는 같은 사용자가 같은 카드를 두 번 보유할 수 없게 `(user_id, card_id)`에 `removed_at IS NULL` 조건의 부분 유니크 인덱스를 둔다.
 - 실적 계산은 `transactions`를 `(user_card_id, paid_at)`으로 읽는다. 이 두 컬럼의 복합 인덱스가 핵심 인덱스다.
-- 월 한도 소진량은 `(user_card_id, applied_benefit_id, paid_at)`으로 집계한다. 같은 인덱스로 충분하다.
+- `transaction_benefits`는 `(transaction_id)`로 읽고 결제의 `(user_card_id, paid_at)` 인덱스와 함께 쓴다.
 - 추천을 따랐는지는 `transactions.recommendation_request_id`로 연결한다. 추천 화면에서 "이 카드로 결제 기록"을 누르면 채워진다. 별도 선택 테이블은 두지 않는다.
 - 로그인은 카카오와 Google만 받는다. `(provider, provider_uid)`를 유니크로 건다. 1차는 사용자 한 명에 로그인 수단 하나지만, 나중에 수단을 여럿 붙일 수 있게 테이블은 나눠 둔다. `users.email`은 연락용이라 유니크로 걸지 않는다. 카카오와 Google이 같은 이메일을 줘도 1차는 별개 사용자다.
 - 탈퇴는 `users.deleted_at`을 찍고 30일 뒤 사용자 영역 행을 물리 삭제한다. 그 사이 로그인은 막는다.

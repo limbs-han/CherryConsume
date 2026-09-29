@@ -3744,7 +3744,7 @@ git commit -m "chore: 파일 수정 뒤 검사를 카탈로그 2판 검증기로
 **파일**
 - 고치기: `docs/2026-09-19-cherryconsume-design.md`, `docs/erd.md`, `docs/erd.html`, `docs/scenarios.md`, `README.md`
 
-- [ ] **1단계: 설계 문서 6.2절 저장소 구조를 바꾼다**
+- [x] **1단계: 설계 문서 6.2절 저장소 구조를 바꾼다**
 
 코드 블록을 다음으로 바꾸고, 그 아래 `backend/`는 뒤에 FastAPI 패키지 `cherry_api`가 추가될 자리라는 문장은 둔다.
 
@@ -3778,7 +3778,7 @@ cherryConsume/
 
 실적과 추천 계산 모듈은 작업 002에서 `cherry_core` 아래에 더한다는 문장을 코드 블록 아래에 더한다.
 
-- [ ] **2단계: 6.3절 데이터 모델을 바꾼다**
+- [x] **2단계: 6.3절 데이터 모델을 바꾼다**
 
 "모두 Pydantic 모델. 금액 단위는 원, 정수." 다음부터 **Transaction 결제** 앞까지의 Card, SpendTier, SpendRule, Benefit 표 넷을 다음으로 바꾼다.
 
@@ -3817,7 +3817,7 @@ cherryConsume/
 
 **출력 모델** 끝에 `조건부 혜택 ConditionalBenefit과 경고 코드 needs_input은 작업 001 설계 3.3절에서 정했고 이름은 작업 002에서 확정한다.`를 더한다.
 
-- [ ] **3단계: 6.4절부터 6.10절을 맞춘다**
+- [x] **3단계: 6.4절부터 6.10절을 맞춘다**
 
 - 6.4절의 업종 표를 지우고 `업종은 catalog/categories.yaml의 2단 트리다. 자식 코드는 transit.subway처럼 쓰고 부모 코드는 자식 전부를 뜻한다. 목록과 카카오 업종 코드 대응은 그 파일이 기준이다. 해외는 업종이 아니라 결제의 지역이다.`로 바꾼다. 별칭표 문단 끝에 `가맹점에는 기본 청구 방식을 둔다. 통신사는 자동납부, 구독 서비스는 정기결제다.`를 더한다.
 - 6.5절 첫 줄 앞에 `이 절의 계산 규칙은 1판 필드 이름으로 썼다. 2판 틀에 맞춘 계산 규칙은 작업 002에서 이 절을 다시 쓴다. 그때까지 필드 이름이 다르면 작업 001 설계가 우선한다.`를 더한다.
@@ -3826,7 +3826,7 @@ cherryConsume/
 - 6.9절 끝에 `카탈로그 검증기 테스트는 backend/tests/catalog/에 있다. 실제 카탈로그로 작업 001 성공 기준을 확인하는 테스트도 있다.`를 더한다.
 - 6.10절에서 `주말·시간대 조건`을 지운다. 2판에서 조건으로 담는다.
 
-- [ ] **4단계: ERD를 바꾼다**
+- [x] **4단계: ERD를 바꾼다**
 
 `docs/erd.md`와 `docs/erd.html`의 mermaid 블록을 같게 고친다. 두 파일의 블록은 같은 글이다.
 
@@ -3934,20 +3934,20 @@ cherryConsume/
 
 `월 한도 소진량은 (user_card_id, applied_benefit_id, paid_at)으로 집계한다` 항목을 `transaction_benefits는 (transaction_id)로 읽고 결제의 (user_card_id, paid_at) 인덱스와 함께 쓴다`로 바꾼다.
 
-- [ ] **5단계: 시나리오를 맞춘다**
+- [x] **5단계: 시나리오를 맞춘다**
 
 - E6의 처리를 `spend.basis가 prev_calendar_month가 아닌 카드는 실적 계산을 하지 않고 홈에 실적 계산 미지원 배지와 공식 안내 링크를 보여 준다. 결제일 기준 실적은 이용기간 표가 모델에 들어간 뒤에 계산한다.`로, 새로 정한 것을 `결정. spend.basis`로 바꾼다.
 - E9의 처리를 `결제의 region이 overseas. 해외 혜택과 해외 실적 제외는 카드 규칙의 지역 조건을 따른다.`로 바꾼다.
 - E12의 처리를 `조건은 when으로 계산한다. 결제 입력으로 판단할 수 없는 조건만 unmodeled에 문장으로 남기고, 그 혜택은 조건이 없는 것처럼 계산하되 확인 필요를 붙인다.`로, 새로 정한 것을 `결정. 작업 001 설계 2.4, 2.13`으로 바꾼다.
 - 4절 스키마 변경 목록 끝에 `카탈로그 2판으로 카탈로그 영역을 card_revisions 중심으로 바꿨다. 작업 001 설계 3.4`를 더한다.
 
-- [ ] **6단계: README를 맞춘다**
+- [x] **6단계: README를 맞춘다**
 
 - 문서 표의 ERD 줄을 `Postgres 테이블 22개`로 바꾼다.
 - 현재 상태를 `하위 프로젝트 1을 진행하고 있습니다. 카탈로그 2판 검증기와 카드 20장을 만들었고, 다음은 실적과 추천 계산 엔진입니다.`로 바꾼다.
 - 진행 순서 표의 1단계 상태를 `진행 중`으로 바꾼다.
 
-- [ ] **7단계: 모순이 없는지 확인한다**
+- [x] **7단계: 모순이 없는지 확인한다**
 
 ```bash
 grep -n "integrated_cap\|min_tier_index\|conditions_not_modeled\|spend_basis\|applied_benefit_id\|estimated_benefit" docs/2026-09-19-cherryconsume-design.md docs/erd.md docs/erd.html docs/scenarios.md README.md
@@ -3955,12 +3955,19 @@ grep -n "integrated_cap\|min_tier_index\|conditions_not_modeled\|spend_basis\|ap
 
 기대: 6.5절의 1판 계산 규칙과 시나리오 4절의 1판 변경 기록에만 나온다. 다른 곳에 나오면 2판 이름으로 고친다.
 
-- [ ] **8단계: 커밋 지점**
+- [x] **8단계: 커밋 지점**
 
 ```bash
 git add docs/2026-09-19-cherryconsume-design.md docs/erd.md docs/erd.html docs/scenarios.md README.md
 git commit -m "docs: 카탈로그 2판 결론을 설계 문서와 ERD에 반영" -m "작업 001. 저장소 구조, 데이터 모델, 업종 트리, 카탈로그 파일, ERD 22개 테이블, 시나리오 E6, E9, E12"
 ```
+
+2026-09-29 실행 결과: 계획과 달라진 점이다.
+- 설계 문서 3절의 수집 제약에 과제 12에서 확인한 IBK, 현대, 롯데, NH농협 사이트 조건을 적었다
+- 7단계 grep에서 6.3절 Recommendation과 6.9절 테스트 설명에 `applied_benefit_id`가 남아 `applied`로 바꿨다
+- 6.10절에서 포인트의 원화 환산율도 지웠다. 2판 `point_programs.yaml`에 1포인트 가치가 있다
+- 시나리오 O3이 없어진 `benefits.id`를 가리켜 혜택 key와 `card_revisions` 기준으로 고쳤다
+- ERD는 브라우저로 열어 오류 없이 그려지는 것을 확인했다
 
 ---
 

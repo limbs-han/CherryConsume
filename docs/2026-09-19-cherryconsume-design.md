@@ -35,7 +35,7 @@
 ## 3. 조사로 확인된 제약
 
 - 카드 상품 단위 공공 데이터는 없다. 여신금융협회 공시는 카드사 단위 수수료율만, 금감원 금융상품한눈에는 카드를 다루지 않는다. 1차 출처는 카드사별 상품공시실 페이지다.
-- 삼성카드와 BC카드는 robots.txt로 크롤러를 전면 차단한다. 신한, KB국민, 하나, 우리는 상품 목록을 자바스크립트로 그려서 브라우저 자동화나 내부 JSON 호출이 필요하다. 롯데, 현대, NH농협은 봇 접근을 막아 구조를 확인하지 못했다.
+- 삼성카드와 BC카드는 robots.txt로 크롤러를 전면 차단한다. 신한, KB국민, 하나, 우리는 상품 목록을 자바스크립트로 그려서 브라우저 자동화나 내부 JSON 호출이 필요하다. 2026-09-29 카탈로그 2판을 만들며 더 확인했다. IBK는 robots.txt가 사이트 전체를 막는다. 현대는 robots.txt가 카드 목록과 상세를 열어 두지만 혜택 상세는 화면을 연 뒤 채워져 브라우저가 필요하다. 롯데는 robots.txt 요청이 끊기지만 브라우저로는 목록과 공지가 열린다. NH농협은 브라우저로 열면 보안 프로그램 설치 화면으로 넘어가지만 카드 상세와 새소식은 서버가 그린 HTML이라 바로 읽힌다. 카드사마다 수집 방법과 주소는 `catalog/issuers/<카드사>.yaml`의 `collect`와 `notes`에 있다.
 - 카드고릴라의 비공개 JSON API는 남의 데이터라 서비스 기반으로 쓰지 않는다. 저작권과 부정경쟁방지법 위험이 있다.
 - Databricks Free Edition은 약관에 상업적 이용 금지가 명시되어 있다. 개발 단계에만 쓰고 출시 뒤에는 종량제로 옮기거나 같은 코드를 다른 실행 환경에서 돌린다. Snowflake는 영구 무료 티어가 없다. 2026-09-29 작업 003은 무료판을 건너뛰고 처음부터 유료 계정으로 시작하기로 정했다.
 - 카드 플레이트 이미지는 카드사 저작물이다. 앱에는 이미지가 아니라 인식용 벡터만 넣고, 화면에 플레이트 이미지를 띄우는 것은 카드사 허락을 받기 전까지 하지 않는다.
@@ -150,83 +150,46 @@ DB도 웹도 없는 순수 Python 패키지 `cherry_core`. 입력은 카탈로�
 cherryConsume/
   backend/
     pyproject.toml
+    uv.lock
     cherry_core/
-      models.py        # Pydantic 모델
-      categories.py    # 업종 목록과 카카오 업종 코드 대응
-      catalog.py       # YAML 로더와 검증
-      spend.py         # 실적 계산
-      recommend.py     # 추천 계산
+      catalog/           # 카탈로그 2판 모델, 합치기, 검증, 저장 형식. 작업 001
+        models.py
+        resolve.py
+        load.py
+        check.py
+        canonical.py
+        __main__.py      # check, format 명령
     tests/
   catalog/
-    cards/<카드사>-<상품 슬러그>.yaml
-    merchants.yaml     # 가게 이름 별칭표
-    categories.yaml    # 업종 목록
+    categories.yaml      # 업종 2단 트리
+    merchants.yaml       # 가맹점, 별칭, 기본 청구 방식
+    payment_methods.yaml # 결제수단
+    point_programs.yaml  # 포인트와 1포인트 가치
+    reference.yaml       # 기름값 같은 기준값
+    issuers/<카드사>.yaml
+    cards/<카드사>/<카드 id>.yaml
   design/
   docs/
+    work/                # 작업 단위별 의도, 설계, 계획
+    history/             # 작업 기록
 ```
 
-`backend/`는 뒤에 FastAPI 패키지 `cherry_api`가 추가될 자리다.
+`backend/`는 뒤에 FastAPI 패키지 `cherry_api`가 추가될 자리다. 실적과 추천 계산 모듈은 작업 002에서 `cherry_core` 아래에 더한다.
 
 ### 6.3 데이터 모델
 
 모두 Pydantic 모델. 금액 단위는 원, 정수.
 
-**Card 카드**
+**카탈로그 모델**은 2판이다. 칸마다의 뜻과 예시는 `docs/work/001-catalog-schema-v2/design.md` 2절, 코드는 `backend/cherry_core/catalog/models.py`가 기준이다.
 
-| 필드 | 타입 | 설명 |
-|---|---|---|
-| id | str | `<카드사>-<슬러그>`. 파일 이름과 같음 |
-| issuer | str | 카드사 코드. shinhan, samsung, hyundai, kb, lotte, hana, woori, nh, bc, ibk 등 |
-| name | str | 상품 이름 |
-| kind | credit / check | 신용·체크 |
-| annual_fee_domestic | int | 국내전용 연회비. 없으면 0 |
-| annual_fee_global | int | 해외겸용 연회비. 없으면 0 |
-| active | bool | 발급 중 여부 |
-| source_url | str | 공식 안내 URL |
-| updated_at | date | 카탈로그 갱신일 |
-| spend_basis | prev_calendar_month / unsupported | 실적 기준. 전월 달력 월이 아닌 카드는 unsupported |
-| spend_tiers | SpendTier[] | 실적 구간. 하한 오름차순. 최소 1개 |
-| spend_rule | SpendRule | 실적 인정 규칙 |
-| benefits | Benefit[] | 혜택 목록 |
+| 모델 | 한 줄 설명 |
+|---|---|
+| CardFile | 카드 신원, 상품 코드, 발급 상태, 연회비, 공식 원문, 개정 목록, 확인 필요 항목 |
+| Rules | 개정 하나의 규칙 전체. 구간, 실적 규칙, 신규 발급 특례, 모든 혜택 공통 제외, 사실, 옵션, 자동 선택, 공유 한도, 중복 묶음, 혜택, 문장으로 남긴 조건 |
+| Benefit | 대상, 조건, 보상, 한도, 적용 구간, 중복 묶음, 행사 기간 |
+| IssuerFile | 카드사 공통 규칙과 수집 설정 |
 
-**SpendTier 실적 구간**
-
-| 필드 | 타입 | 설명 |
-|---|---|---|
-| min_spend | int | 전월 인정 실적 하한. 실적 무관 카드는 0 하나 |
-| integrated_cap | int 또는 null | 이 구간의 월 통합 할인한도. 없으면 null |
-
-**SpendRule 실적 인정 규칙**
-
-| 필드 | 타입 | 설명 |
-|---|---|---|
-| excluded_categories | Category[] | 실적에서 빼는 업종. tax, utility, gift_card, insurance, apartment_fee, annual_fee 등 |
-| exclude_interest_free_installment | bool | 무이자할부 결제를 실적에서 빼는지 |
-| exclude_discounted | bool | 혜택을 받은 결제 건을 실적에서 빼는지 |
-| installment_basis | full_at_purchase / per_installment_month | 할부 실적 인정 방식. 결제 당월 전액, 또는 매달 할부금만 |
-| cancellation_basis | cancel_month / original_month | 취소 금액을 빼는 달. 취소한 달, 또는 원 결제 달 |
-
-**Benefit 혜택**
-
-| 필드 | 타입 | 설명 |
-|---|---|---|
-| id | str | 카드 안에서 고유 |
-| title | str | 사람이 읽는 이름 |
-| target_type | category / merchant / all | 대상 종류 |
-| target_values | str[] | 업종 코드 또는 가게 별칭 키. all이면 빈 목록 |
-| channel | online / offline / any | 결제 채널 |
-| kind | discount / points / cashback | 종류 |
-| rate_pct | float 또는 null | 정률. 정액과 둘 중 하나만 |
-| fixed_amount | int 또는 null | 정액 |
-| min_txn_amount | int | 건당 최소 결제액. 없으면 0 |
-| max_per_txn | int 또는 null | 건당 최대 혜택 |
-| monthly_cap_amount | int 또는 null | 월 한도 금액 |
-| monthly_cap_count | int 또는 null | 월 한도 횟수 |
-| daily_cap_count | int 또는 null | 일 한도 횟수 |
-| min_tier_index | int | 필요한 실적 구간의 인덱스. 0이면 실적 무관 |
-| counts_toward_integrated_cap | bool | 통합 한도에 포함되는지. 기본 true |
-| conditions_not_modeled | bool | 주말·시간대 등 계산에 넣지 않은 조건이 있는지. 기본 false |
-| notes | str | 원문 조건 메모. conditions_not_modeled가 참이면 필수 |
+카드사 기본값과 패치를 합친 개정 전체가 계산의 입력이다. 결제일이 첫 개정보다 앞서면 첫 개정의 시행일이 추정일 때만 첫 개정을 쓴다.
 
 **Transaction 결제**
 
@@ -245,8 +208,12 @@ cherryConsume/
 | channel | online / offline | |
 | approval_no | str 또는 null | 카드사 승인번호. 엑셀 가져오기 중복 판정에 씀 |
 | import_batch_id | str 또는 null | 엑셀 가져오기로 들어온 건이면 그 배치 |
-| applied_benefit_id | str 또는 null | 입력 시점에 계산한 적용 혜택 |
-| estimated_benefit | int | 입력 시점에 계산한 예상 혜택 금액 |
+| region | domestic / overseas | 국내와 해외 |
+| payment_method | str 또는 null | 결제수단. payment_methods.yaml의 키 |
+| billing | normal / autopay / subscription / postpaid_transit / app_prepay / in_app | 청구 방식 |
+| card_revision_id | int | 계산에 쓴 카드 개정 |
+| source | manual / excel / notification | 결제가 들어온 곳 |
+| benefits | TransactionBenefit[] | 입력 시점에 계산한 혜택. 중복 묶음이 여럿이면 여러 개. 혜택 key, 금액, 혜택 계산에 넣은 결제액 |
 
 **UserCard 보유 카드**
 
@@ -254,53 +221,32 @@ cherryConsume/
 |---|---|---|
 | card_id | str | |
 | assumed_prev_month_spend | int 또는 null | 등록한 달에 쓰는 전월 실적 추정값 |
+| started_on | date 또는 null | 카드를 쓰기 시작한 날. 신규 발급 특례 |
+| options | 옵션 선택 이력 | 옵션마다 고른 선택지와 적용 시작일 |
+| facts | 사실 답 | 카드마다 다른 사실. 사람에 대한 사실은 사용자에게 한 번만 둔다 |
+| last_payment_method | str 또는 null | 마지막에 쓴 결제수단 |
 
 **출력 모델**
 
 SpendStatus: card_id, month, counted_spend, current_tier_index, next_tier_min_spend 또는 null, remaining_to_next 또는 null, warnings[]
 
-Recommendation: card_id, expected_benefit, applied_benefit_id 또는 null, remaining_monthly_cap 또는 null, counts_toward_spend, remaining_to_next 또는 null, warnings[]
+Recommendation: card_id, expected_benefit, applied 받는 혜택 key와 금액 목록, remaining_monthly_cap 또는 null, counts_toward_spend, remaining_to_next 또는 null, warnings[]
 
 LockedBenefit: card_id, benefit_id, required_min_spend, remaining_this_month, value_if_unlocked. 구간이 모자라 지금은 못 받는 혜택. 추천 결과에 Recommendation 목록과 함께 돌려준다
 
+조건부 혜택 ConditionalBenefit과 경고 코드 needs_input은 작업 001 설계 3.3절에서 정했고 이름은 작업 002에서 확정한다.
+
 ### 6.4 업종과 가게 별칭
 
-업종 `Category`는 고정 목록이다. 1차 목록과 카카오 로컬 API 업종 코드 대응은 다음과 같다.
-
-| 코드 | 뜻 | 카카오 코드 |
-|---|---|---|
-| cafe | 카페 | CE7 |
-| convenience | 편의점 | CS2 |
-| restaurant | 음식점 | FD6 |
-| delivery_app | 배달앱 | 없음. 별칭표로 |
-| grocery_mart | 마트 | MT1 |
-| department_store | 백화점 | 없음. 별칭표로 |
-| online_shopping | 온라인 쇼핑 | 없음. 별칭표로 |
-| fuel | 주유 | OL7 |
-| public_transit | 대중교통 | SW8 |
-| taxi | 택시 | 없음. 별칭표로 |
-| telecom | 통신 | 없음. 별칭표로 |
-| streaming | 구독·스트리밍 | 없음. 별칭표로 |
-| movie | 영화 | CT1 |
-| hospital | 병원 | HP8 |
-| pharmacy | 약국 | PM9 |
-| education | 교육 | AC5 |
-| travel_airline | 항공 | 없음. 별칭표로 |
-| hotel | 숙박 | AD5 |
-| overseas | 해외 | 없음 |
-| utility | 공과금 | 없음 |
-| tax | 세금 | 없음 |
-| insurance | 보험료 | 없음 |
-| gift_card | 상품권 | 없음 |
-| apartment_fee | 아파트관리비 | 없음 |
-| annual_fee | 연회비 | 없음 |
-| other | 기타 | 그 외 전부 |
+업종은 `catalog/categories.yaml`의 2단 트리다. 자식 코드는 `transit.subway`처럼 쓰고 부모 코드는 자식 전부를 뜻한다. 목록과 카카오 업종 코드 대응은 그 파일이 기준이다. 해외는 업종이 아니라 결제의 지역이다.
 
 카카오 코드 대응은 근사치이며, 별칭표에 걸리면 별칭표의 업종이 우선한다.
 
-`merchants.yaml`은 가게 이름 별칭을 특정 가맹점 키와 업종에 연결한다. 예를 들어 "스타벅스", "스벅", "STARBUCKS"는 가맹점 키 starbucks와 업종 cafe로 연결한다. 결제의 가게 이름에 별칭 문자열이 포함되면 일치로 본다. 비교할 때 공백과 대소문자는 무시한다. 여러 별칭이 걸리면 가장 긴 별칭을 택한다.
+`merchants.yaml`은 가게 이름 별칭을 특정 가맹점 키와 업종에 연결한다. 예를 들어 "스타벅스", "스벅", "STARBUCKS"는 가맹점 키 starbucks와 업종 cafe로 연결한다. 결제의 가게 이름에 별칭 문자열이 포함되면 일치로 본다. 비교할 때 공백과 대소문자는 무시한다. 여러 별칭이 걸리면 가장 긴 별칭을 택한다. 가맹점에는 기본 청구 방식을 둔다. 통신사는 자동납부, 구독 서비스는 정기결제다.
 
 ### 6.5 계산 규칙
+
+이 절의 계산 규칙은 1판 필드 이름으로 썼다. 2판 틀에 맞춘 계산 규칙은 작업 002에서 이 절을 다시 쓴다. 그때까지 필드 이름이 다르면 작업 001 설계가 우선한다.
 
 실적 월은 결제일 기준 달력 월이다.
 
@@ -369,71 +315,61 @@ LockedBenefit: card_id, benefit_id, required_min_spend, remaining_this_month, va
 
 ### 6.6 카탈로그 파일
 
-카드 한 장이 YAML 파일 하나. 구조를 보이기 위한 예시이며 값은 실제 상품과 무관하다.
+카드 한 장이 YAML 파일 하나이고 `catalog/cards/<카드사>/<카드 id>.yaml`에 둔다. 카드사 공통 실적 규칙과 제외 목록, 수집 설정은 카드사 파일 `catalog/issuers/<카드사>.yaml`에 있다. 카드 파일은 개정을 날짜순으로 쌓고, 두 번째 개정부터는 바뀌는 곳만 적는다. 칸의 뜻은 작업 001 설계 2절과 3절이다.
+
+예: 신한 Mr.Life 주말 할인. 1판의 혜택 6개가 2판에서는 혜택 2개와 공유 한도 하나가 된다.
 
 ```yaml
-id: ibk-narasarang
-issuer: ibk
-name: IBK 나라사랑카드
-kind: check
-annual_fee_domestic: 0
-annual_fee_global: 0
-active: true
-source_url: https://example.invalid/narasarang
-updated_at: 2026-09-19
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 200000, integrated_cap: 10000 }
-spend_rule:
-  excluded_categories: [tax, utility, gift_card, insurance, annual_fee]
-  exclude_interest_free_installment: false
-  exclude_discounted: false
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
+limits:
+  - key: weekend
+    per: month
+    amount: { 300000: 3000, 500000: 7000, 1000000: 10000 }
 benefits:
-  - id: cafe-10
-    title: 카페 10% 할인
-    target_type: category
-    target_values: [cafe]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 5000
-    max_per_txn: 2000
-    monthly_cap_amount: 5000
-    monthly_cap_count: null
-    daily_cap_count: 1
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    notes: 예시 값
+  - key: weekend-mart
+    title: 주말 할인마트 10% 할인
+    target: { merchants: [emart, lotte_mart, homeplus] }
+    when: [ { day: { in: [sat, sun], holidays: ignore } } ]
+    reward: { type: billing_discount, rate: 10 }
+    limits: [ { per: day, count: 1 }, { per: txn, base: 50000 }, { shared: weekend } ]
+    tiers: { from: 300000 }
+    unmodeled: [상품권 결제 제외]
+  - key: weekend-fuel
+    title: 주말 주유 리터당 60원 할인
+    target: { merchants: [sk_energy, gs_caltex, hd_oilbank, s_oil] }
+    when: [ { day: { in: [sat, sun], holidays: ignore } }, { channel: offline } ]
+    reward: { type: billing_discount, per_liter: 60 }
+    limits: [ { per: day, count: 1 }, { per: txn, base: 100000 }, { per: month, base: 300000 }, { shared: weekend } ]
+    tiers: { from: 300000 }
+    unmodeled: [LPG 제외]
 ```
 
-로더는 파일마다 스키마 검증을 하고 실패하면 파일 이름과 필드 경로를 찍고 즉시 멈춘다. 추가 검증
-- `spend_tiers`는 `min_spend` 오름차순이고 첫 구간은 0
-- `rate_pct`와 `fixed_amount`는 둘 중 하나만
-- `min_tier_index`는 구간 개수 미만
-- `target_type`이 all이면 `target_values`는 비어 있고, 아니면 1개 이상
-- category 대상 값은 업종 목록에, merchant 대상 값은 별칭표 키에 있어야 함
+검증 규칙은 작업 001 설계 4.2절이다. 검증은 `uv run --project backend python -m cherry_core.catalog check`, 고정 저장 형식 맞추기는 `uv run --project backend python -m cherry_core.catalog format`이다. 파일을 고치면 훅이 검증을 돌린다.
 
 이 파일 형식은 하위 프로젝트 3 파이프라인의 출력 형식이 된다.
 
 ### 6.7 초기 카드 20장
 
-사용자 보유 카드인 IBK 나라사랑카드를 반드시 넣는다. 나머지 19장은 카드사별 대표 카드에서 고른다. 아래는 시작 후보이며, 구현 시점에 카드사 공식 페이지에서 발급 중인지 확인하고 단종된 카드는 같은 카드사의 다른 카드로 바꾼다.
+사용자 보유 카드인 IBK 나라사랑카드를 반드시 넣었다. 나머지 19장은 카드사별 대표 카드에서 골랐다. 2026-09-29 기준 20장은 다음과 같다.
 
-- IBK: 나라사랑카드 체크
+- IBK: 나라사랑카드
 - 신한: Mr.Life, 처음, Point Plan
 - 삼성: taptap O, iD ON
-- 현대: ZERO Edition3 할인형, M, the Green
+- 현대: ZERO Edition3 할인형, M, the Green Edition4
 - KB국민: My WE:SH, 청춘대로 톡톡, Easy all 티타늄
-- 롯데: LOCA 365, LOCA LIKIT 1.2
-- 하나: 원더카드 Daily+, 트래블로그 체크
-- 우리: 카드의정석 EVERY DISCOUNT, 카드의정석 쿠키 체크
-- NH농협: zgm.히어로
-- 카카오뱅크: 프렌즈 체크
+- 롯데: LOCA 365, LOCA CLASSIC
+- 하나: 원더카드 2.0 DAILY, 트래블로그 체크
+- 우리: 카드의정석2 EVERY POINT, 카드의정석 K-LIFE CHECK
+- NH농협: 히어로즈 체크카드
+- 카카오뱅크: 프렌즈 체크카드
 
-혜택 값은 각 카드사 공식 안내 문구에서 옮기고 `source_url`과 `notes`에 근거를 남긴다.
+처음 후보에서 바꾼 카드와 이유다.
+- 롯데 LOCA LIKIT 1.2 → LOCA CLASSIC. 신규 발급이 끝나 같은 전가맹점 할인형으로 바꿨다
+- 하나 원더카드 Daily+ → 원더카드 2.0 DAILY. 원더카드가 2025-07-01 2.0으로 바뀌어 DAILY 조합으로 옮겼다
+- 우리 카드의정석 EVERY DISCOUNT → 카드의정석2 EVERY POINT. 판매가 끝나 요율과 한도가 같은 적립형으로 바꿨다
+- 우리 카드의정석 쿠키 체크 → 카드의정석 K-LIFE CHECK. 판매가 끝나 해외·영화·대중교통·온라인쇼핑 구성이 가장 비슷한 카드로 바꿨다
+- NH농협 zgm.히어로 → 히어로즈 체크카드. 그런 이름의 카드가 없어 zgm 할인카드로 대신했다가, 원문 대조에서 찾은 히어로즈 체크카드로 2026-09-29 사용자가 정했다
+
+혜택 값은 각 카드사 공식 안내 문구에서 옮기고 카드 파일의 `sources`와 `notes`에 근거를 남긴다.
 
 ### 6.8 오류 처리
 
@@ -444,13 +380,15 @@ benefits:
 ### 6.9 테스트
 
 pytest.
-- 카드별 표 테스트. 카드마다 예제 결제와 기대 `expected`, `applied_benefit_id`, `counted_spend`, `remaining_to_next`를 YAML 픽스처로 적고 한 테스트 함수가 전부 돈다
+- 카드별 표 테스트. 카드마다 예제 결제와 기대 `expected`, `applied`, `counted_spend`, `remaining_to_next`를 YAML 픽스처로 적고 한 테스트 함수가 전부 돈다
 - 규칙 테스트. 혜택은 `max_per_txn`, 남은 월 한도, 남은 통합 한도를 넘지 않는다. 제외 업종은 실적에 잡히지 않는다. 같은 입력은 같은 출력을 낸다
 - 로더 테스트. 잘못된 카탈로그 파일이 어떤 필드에서 실패하는지 확인
 
+카탈로그 검증기 테스트는 `backend/tests/catalog/`에 있다. 실제 카탈로그로 작업 001 성공 기준을 확인하는 테스트도 있다.
+
 ### 6.10 1차에서 미루는 것
 
-주말·시간대 조건, 여러 카드 사이의 혜택 중복 계산, 해외 결제 수수료, 포인트의 원화 환산율, 카탈로그 변경 시 과거 결제 재계산. 스키마에 해당 필드를 두지 않고 필요할 때 추가한다.
+여러 카드 사이의 혜택 중복 계산, 해외 결제 수수료, 카탈로그 변경 시 과거 결제 재계산. 스키마에 해당 필드를 두지 않고 필요할 때 추가한다.
 
 ## 7. 열어둔 위험
 
