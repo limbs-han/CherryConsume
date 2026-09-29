@@ -11,7 +11,7 @@
       "Bash(git log *)",
       "Bash(git show *)",
       "Bash(git branch --show-current)",
-      "Bash(uv run --script tools/validate_catalog.py)",
+      "Bash(uv run --project backend python -m cherry_core.catalog *)",
       "Bash(uv run --project backend pytest *)",
       "Bash(uvx ruff *)"
     ],

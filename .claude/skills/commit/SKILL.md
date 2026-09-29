@@ -12,7 +12,7 @@ description: 체리컨슘 저장소에 커밋을 만들 때 쓴다. 사용자가
 3. `git status --short`와 `git diff`, `git diff --staged`로 변경을 전부 본다.
 4. 변경을 논리적 작업 단위로 묶는다. 아래 "커밋 분리 기준"에 걸리면 여러 커밋으로 나눈다. 사용자가 따로 만든 변경은 되돌리거나 섞지 않는다.
 5. 민감 정보로 보이는 파일이나 줄이 있으면 stage하지 말고 알린다.
-6. 테스트나 검증을 돌릴 수 있으면 돌린다. 카탈로그를 바꿨으면 `uv run --script tools/validate_catalog.py`, backend를 바꿨으면 `uv run --project backend pytest -q`.
+6. 테스트나 검증을 돌릴 수 있으면 돌린다. 카탈로그를 바꿨으면 `uv run --project backend python -m cherry_core.catalog check`, backend를 바꿨으면 `uv run --project backend pytest -q`.
 7. 커밋마다 파일을 지정해 stage하고 커밋한다. `git add -A`로 한꺼번에 넣지 않는다.
 8. 커밋 메시지와 작성자에 claude를 넣지 않고 Co-authored-by를 붙이지 않는다. git 훅이 형식과 민감 정보를 다시 검사한다. 훅이 막으면 `--no-verify`로 넘기지 말고 원인을 고친다.
 9. 사용자가 시킨 작업이 이 커밋들로 끝나면 `docs/history/`의 기록 파일에 커밋 해시를 적고, 기록 파일과 목록을 따로 `docs:` 커밋으로 넣는다. 작업 결과와 기록을 한 커밋에 섞지 않는다.

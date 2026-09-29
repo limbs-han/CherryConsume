@@ -23,7 +23,7 @@ except ValueError:
 
 problems = []
 if rel.startswith("catalog/") and rel.endswith((".yaml", ".yml")):
-    code, out = run(["uv", "run", "--script", "tools/validate_catalog.py"])
+    code, out = run(["uv", "run", "--project", "backend", "python", "-m", "cherry_core.catalog", "check"])
     if code:
         problems.append("카탈로그 검증 실패\n" + out[-3000:])
 elif rel.endswith(".py"):

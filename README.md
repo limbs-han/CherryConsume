@@ -88,7 +88,6 @@ cherryConsume/
 ├── backend/       예정. 계산 엔진과 API
 ├── app/           예정. Flutter
 ├── catalog/       예정. 카드 상품 정의 파일
-├── tools/         검증 스크립트
 ├── .claude/       AI 작업 규칙, 스킬, 자동 검사
 └── .githooks/     커밋 메시지와 민감 정보 검사
 ```

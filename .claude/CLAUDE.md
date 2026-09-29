@@ -44,8 +44,9 @@
 
 ## 명령
 
-- 카탈로그 검증: `uv run --script tools/validate_catalog.py`
-- 계산 엔진 테스트: `uv run --project backend pytest -q`. backend가 생긴 뒤부터
+- 카탈로그 검증: `uv run --project backend python -m cherry_core.catalog check`
+- 카탈로그 형식 고치기: `uv run --project backend python -m cherry_core.catalog format`
+- 계산 엔진 테스트: `uv run --project backend pytest -q`
 
 ## 새 PC에서
 
