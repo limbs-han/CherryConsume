@@ -96,7 +96,7 @@
 - 모든 모델은 모르는 칸을 받지 않는다. `RevisionEntry`만 규칙 칸을 그대로 받아 두고, 과제 4에서 합친 뒤 `Rules`로 검사한다.
 - 파일의 `in`, `from`, `to`는 파이썬 칸 이름이 `days`, `start`, `end`이고 별칭으로 받는다.
 
-- [ ] **1단계: 패키지 파일을 쓴다**
+- [x] **1단계: 패키지 파일을 쓴다**
 
 `backend/pyproject.toml`
 
@@ -133,7 +133,7 @@ line-length = 120
 """카탈로그 2판 모델, 합치기, 검증, 저장 형식."""
 ```
 
-- [ ] **2단계: 의존성을 고정한다**
+- [x] **2단계: 의존성을 고정한다**
 
 ```bash
 uv lock --project backend
@@ -141,14 +141,14 @@ uv lock --project backend
 
 기대: `backend/uv.lock`이 생기고 `Resolved` 줄이 나온다.
 
-- [ ] **3단계: 커밋 지점**
+- [x] **3단계: 커밋 지점**
 
 ```bash
 git add backend/pyproject.toml backend/uv.lock backend/cherry_core/__init__.py backend/cherry_core/catalog/__init__.py backend/tests/__init__.py backend/tests/catalog/__init__.py
 git commit -m "build: 계산 엔진 패키지와 의존성 설정 추가" -m "작업 001. Python 3.12, pydantic, pyyaml, 개발용 pytest와 ruff"
 ```
 
-- [ ] **4단계: 실패하는 테스트를 쓴다**
+- [x] **4단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/catalog/test_models.py`
 
@@ -269,7 +269,7 @@ def test_unknown_field_is_rejected():
         Reward.model_validate({"type": "billing_discount", "rate": 10, "rat": 5})
 ```
 
-- [ ] **5단계: 실패를 확인한다**
+- [x] **5단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/catalog/test_models.py
@@ -277,7 +277,7 @@ uv run --project backend pytest -q backend/tests/catalog/test_models.py
 
 기대: `ModuleNotFoundError: No module named 'cherry_core.catalog.models'`
 
-- [ ] **6단계: 모델을 쓴다**
+- [x] **6단계: 모델을 쓴다**
 
 `backend/cherry_core/catalog/models.py`
 
@@ -775,7 +775,7 @@ class ReferenceValue(Base):
     source: str
 ```
 
-- [ ] **7단계: 통과를 확인한다**
+- [x] **7단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -785,7 +785,7 @@ uvx ruff format --check backend
 
 기대: `13 passed`, `All checks passed!`, 형식 검사에서 고칠 파일 없음.
 
-- [ ] **8단계: 커밋 지점**
+- [x] **8단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/catalog/models.py backend/tests/catalog/test_models.py
@@ -813,7 +813,7 @@ git commit -m "feat: 카탈로그 2판 모델 추가" -m "작업 001. 조건, �
   - `ResolvedRevision(effective_from: date, effective_from_estimated: bool, source: str, data: dict)`
 - 합치기가 불가능하면 `ValueError`를 던진다. 과제 4가 이것을 문제 목록으로 바꾼다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/catalog/test_resolve.py`
 
@@ -914,7 +914,7 @@ def test_before_first_revision_uses_it_only_when_estimated():
     assert revision_for(guessed, date(2026, 8, 15)).effective_from == date(2026, 9, 28)
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/catalog/test_resolve.py
@@ -922,7 +922,7 @@ uv run --project backend pytest -q backend/tests/catalog/test_resolve.py
 
 기대: `ModuleNotFoundError: No module named 'cherry_core.catalog.resolve'`
 
-- [ ] **3단계: 해석기를 쓴다**
+- [x] **3단계: 해석기를 쓴다**
 
 `backend/cherry_core/catalog/resolve.py`
 
@@ -1033,7 +1033,7 @@ def revision_for(revisions: list[ResolvedRevision], day: date) -> ResolvedRevisi
     return first if first.effective_from_estimated else None
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -1042,7 +1042,7 @@ uvx ruff check backend
 
 기대: `21 passed`, `All checks passed!`
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/catalog/resolve.py backend/tests/catalog/test_resolve.py
@@ -1067,7 +1067,7 @@ git commit -m "feat: 카드사 기본값과 패치를 합치는 개정 해석 �
   - `is_canonical(path) -> bool`
   - `format_file(path) -> bool`: 바꿨으면 True
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/catalog/test_canonical.py`
 
@@ -1148,7 +1148,7 @@ def test_benefit_fields_in_reading_order():
     assert list(yaml.safe_load(canonical_text(b))) == ["key", "title", "target", "reward", "limits", "tiers"]
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/catalog/test_canonical.py
@@ -1156,7 +1156,7 @@ uv run --project backend pytest -q backend/tests/catalog/test_canonical.py
 
 기대: `ModuleNotFoundError: No module named 'cherry_core.catalog.canonical'`
 
-- [ ] **3단계: 저장 형식을 쓴다**
+- [x] **3단계: 저장 형식을 쓴다**
 
 `backend/cherry_core/catalog/canonical.py`
 
@@ -1404,7 +1404,7 @@ def format_file(path: Path) -> bool:
     return True
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -1413,7 +1413,7 @@ uvx ruff check backend
 
 기대: `26 passed`, `All checks passed!`
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/catalog/canonical.py backend/tests/catalog/test_canonical.py
@@ -1440,7 +1440,7 @@ git commit -m "feat: 카탈로그 고정 저장 형식 추가" -m "작업 001. �
   - `load_catalog(root: Path) -> Catalog`: 예외를 던지지 않고 문제를 `problems`에 모은다
 - 합친 개정의 오류 위치 머리는 `revisions@<시행일>.`이다. 테스트 픽스처 `make_catalog(edit)`는 한 곳만 틀리게 고친 카탈로그를 임시 폴더에 쓴다.
 
-- [ ] **1단계: 픽스처와 실패하는 테스트를 쓴다**
+- [x] **1단계: 픽스처와 실패하는 테스트를 쓴다**
 
 `backend/tests/catalog/conftest.py`
 
@@ -1607,7 +1607,7 @@ def test_format_loc():
     assert format_loc(("benefits", 1, "reward"), data) == "benefits[1].reward"
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/catalog/test_load.py
@@ -1615,7 +1615,7 @@ uv run --project backend pytest -q backend/tests/catalog/test_load.py
 
 기대: `ModuleNotFoundError: No module named 'cherry_core.catalog.load'`
 
-- [ ] **3단계: 읽기를 쓴다**
+- [x] **3단계: 읽기를 쓴다**
 
 `backend/cherry_core/catalog/load.py`
 
@@ -1771,7 +1771,7 @@ def load_catalog(root: Path) -> Catalog:
     return cat
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -1780,7 +1780,7 @@ uvx ruff check backend
 
 기대: `32 passed`, `All checks passed!`
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/catalog/load.py backend/tests/catalog/conftest.py backend/tests/catalog/test_load.py
@@ -1808,7 +1808,7 @@ git commit -m "feat: 카탈로그 파일 읽기와 오류 위치 표시 추가" 
   - `removed_benefit_keys(path, raw_now) -> set[str]`
 - 기름값 기준값의 key는 `fuel_price_gasoline`이다.
 
-- [ ] **1단계: conftest에 교차 검사 도우미를 더한다**
+- [x] **1단계: conftest에 교차 검사 도우미를 더한다**
 
 `from cherry_core.catalog.canonical import canonical_text` 아래에 한 줄을 더한다.
 
@@ -1824,7 +1824,7 @@ def problems_of(root: Path, level: str = "error") -> list[str]:
     return [str(p) for p in check_catalog(load_catalog(root)) if p.level == level]
 ```
 
-- [ ] **2단계: 실패하는 테스트를 쓴다**
+- [x] **2단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/catalog/test_check.py`
 
@@ -2067,7 +2067,7 @@ def test_removed_key_against_last_commit(tmp_path):
     assert any("사라졌다: ['cafe-10']" in w for w in problems_of(root, "warning"))
 ```
 
-- [ ] **3단계: 실패를 확인한다**
+- [x] **3단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -2075,7 +2075,7 @@ uv run --project backend pytest -q
 
 기대: conftest를 읽다가 `ModuleNotFoundError: No module named 'cherry_core.catalog.check'`
 
-- [ ] **4단계: 검사를 쓴다**
+- [x] **4단계: 검사를 쓴다**
 
 `backend/cherry_core/catalog/check.py`
 
@@ -2387,7 +2387,7 @@ def removed_benefit_keys(path: Path, raw_now: Any) -> set[str]:
     return benefit_keys(old) - benefit_keys(raw_now)
 ```
 
-- [ ] **5단계: 통과를 확인한다**
+- [x] **5단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -2396,7 +2396,7 @@ uvx ruff check backend
 
 기대: `67 passed`, `All checks passed!`. 경고 테스트 하나는 임시 폴더에 git 저장소를 만들므로 git이 있어야 한다.
 
-- [ ] **6단계: 커밋 지점**
+- [x] **6단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/catalog/check.py backend/tests/catalog/conftest.py backend/tests/catalog/test_check.py backend/tests/catalog/test_warnings.py
@@ -2416,7 +2416,7 @@ git commit -m "feat: 카탈로그 교차 검사와 경고 추가" -m "작업 001
 - 받는 것: `catalog_files`, `format_file`, `check_catalog`, `load_catalog`.
 - 내놓는 것: `main(argv) -> int`. `check`는 카드마다 개정 수, 혜택 수, 문장으로 남긴 조건 수, 확인 필요 수를 찍고 오류가 있으면 1을 돌려준다. `--root`를 주지 않으면 저장소의 `catalog/`를 본다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/catalog/test_cli.py`
 
@@ -2452,7 +2452,7 @@ def test_format_rewrites_non_canonical_files(make_catalog, capsys):
     assert main(["check", "--root", str(root)]) == 0
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/catalog/test_cli.py
@@ -2460,7 +2460,7 @@ uv run --project backend pytest -q backend/tests/catalog/test_cli.py
 
 기대: `ModuleNotFoundError: No module named 'cherry_core.catalog.__main__'`
 
-- [ ] **3단계: 명령을 쓴다**
+- [x] **3단계: 명령을 쓴다**
 
 `backend/cherry_core/catalog/__main__.py`
 
@@ -2523,7 +2523,7 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -2533,7 +2533,7 @@ uvx ruff format --check backend
 
 기대: `70 passed`, `All checks passed!`, 형식 검사에서 고칠 파일 없음.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/catalog/__main__.py backend/tests/catalog/test_cli.py
