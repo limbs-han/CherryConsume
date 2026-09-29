@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .env
+
+# 사용자 실제 명세서와 그것으로 만든 테스트 입력. 공개 저장소에 올리지 않는다. 작업 002 설계 6.6
+backend/tests/engine/local/
