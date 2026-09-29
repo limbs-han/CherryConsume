@@ -2,22 +2,39 @@ schema_version: 2
 id: kb-toktok
 issuer: kb
 name: KB국민 청춘대로 톡톡카드
+search_names: [청춘대로 톡톡카드]
 kind: credit
+product_codes:
+  - '09174'
 status: on_sale
 annual_fees:
-  - {scope: domestic, amount: 10000}
-  - {scope: global, amount: 12000}
+  - {scope: global, brand: k_world_jcb, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 12000}
+  - {scope: global, brand: k_world_jcb, form: mobile, amount: 4000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 6000}
 sources:
-  - {id: page, kind: product_page, url: 'https://img2.kbcard.com/obj/card/download/09174__prdctOpmn_20260714.pdf', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/09174__prdctOpmn_20260714.pdf', fetched_at: 2026-09-29, review_no: 제2024-C1a-14663호}
+  - {id: product, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09174', fetched_at: 2026-09-29, review_no: 제2020-C1a-09147호}
+  - {id: launch, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/09174__prdctOpmn_20170125.pdf', fetched_at: 2026-09-29, review_no: 제2017-C1a-03212호, review_valid_until: 2020-01-19}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2017-01-26
     source: page
     tiers: [0, 300000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, gift_card, tax, transit, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit, utility]
+      cancellation: cancel_month
       exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax]
+      unmodeled: [호텔·백화점·대형마트·철도역사 등에 입점한 가맹점 결제 제외, 결제대행업체(PG) 전용 가맹점으로 승인된 결제 제외, 정부지원금 결제 제외]
+    limits:
+      - {key: basic, per: month, amount: 5000}
+    stacks:
+      - {key: pay}
     benefits:
       - key: starbucks-50
         title: 스타벅스 50% 청구할인
@@ -27,31 +44,55 @@ revisions:
         limits:
           - {per: month, amount: 10000}
         tiers: {from: 300000}
-        notes: 상품권 구매, 건물 내 임대매장 제외
+        unmodeled: [건물 내 임대매장 이용 제외]
+        notes: 상품권 구매 제외
       - key: burger-20
         title: 버거·패스트푸드 20% 청구할인
         target:
+          categories: [restaurant.fastfood]
           merchants: [burger_king, lotteria, mcdonalds, shake_shack]
         reward: {type: billing_discount, rate: 20}
         limits:
           - {per: month, amount: 5000}
         tiers: {from: 300000}
-        notes: 원문은 버거/패스트푸드 업종 전체. 예시로 든 맥도날드·버거킹·롯데리아·쉐이크쉑만 넣음. 상품권, 건물 내 임대매장 제외
+        unmodeled: [건물 내 임대매장 이용 제외]
+        notes: 버거·패스트푸드 업종(맥도날드, 버거킹, 롯데리아, 쉐이크쉑 등). 예시 가맹점은 merchants.yaml 업종이 음식점이라 따로 넣었다. 상품권 구매 제외
       - key: pay-10
         title: 간편결제 10% 청구할인
         target: {all: true}
+        when:
+          - payment_not: [physical_card]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 5000}
         tiers: {from: 300000}
-        notes: 삼성페이, 네이버페이, 카카오페이, KB국민 앱카드 등 온·오프라인 간편결제만. ISP·MISP 제외. 다른 할인과 중복 가능
+        stack: pay
+        notes: 삼성페이, 네이버페이, 카카오페이, KB Pay 등 온·오프라인 모든 간편결제. ISP·MISP 결제는 실물카드 결제로 잡혀 빠진다. 다른 할인과 겹쳐 받고 한도는 각각 차감
       - key: basic-10
-        title: 대중교통·택시·이동통신 10% 청구할인
+        title: 대중교통·택시 10% 청구할인
         target:
-          categories: [taxi, telecom, transit]
+          categories: [taxi, transit.bus_city, transit.subway]
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: month, amount: 5000}
+          - {shared: basic}
         tiers: {from: 300000}
-        notes: 이동통신은 SKT·KT·LG U+ 자동납부만, 결합상품·알뜰폰 제외. 시외·고속버스, 모바일티머니 후불형 제외. 버스·지하철은 명세서 이용일 기준
-notes: '연회비는 K-WORLD(JCB타입) 1만원을 국내, Master 1만2천원을 해외겸용으로 넣음. 모바일단독 4천원·6천원. 해외 이용은 일시불 매입완료 기준. 실적 제외: 할인 받은 건 전액, 현금서비스, 카드론, 정부지원금, 대학 등록금, 수수료·이자, 연체료, 무승인전표(교통요금·자판기·터널통행료·항공기), 취소금액. public_transit는 무승인전표 교통요금으로 보고 뺐다. 취소를 어느 달 실적에서 빼는지는 공식 문구 미확인, KB 다른 카드 기준 cancel_month로 둠. 할인 제외: 무이자할부, 상품권·선불카드 구입·충전. 간편결제 10%는 다른 할인과 중복 적용되고 한도는 각각 차감. 최초 사용등록일부터 다음 달 말까지 실적 무관. 월 한도는 본인 기준, 이월 없음.'
+        unmodeled: [모바일 티머니(후불형) 결제 제외, 버스·지하철은 이용대금명세서에 적힌 이용일 기준으로 달을 나눔]
+        notes: 대중교통, 택시. 시외·고속버스 제외. 이동통신 10%와 월 5천원 한도를 함께 쓴다
+      - key: basic-telecom-10
+        title: 이동통신요금 10% 청구할인
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: basic}
+        tiers: {from: 300000}
+        unmodeled: [인터넷·IPTV 등 결합상품 요금 제외]
+        notes: SKT, KT, LG U+ 이동통신요금 자동납부. 알뜰폰 제외. 대중교통·택시 10%와 월 5천원 한도를 함께 쓴다
+    unmodeled: [해외 이용금액은 승인일이 아니라 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금 결제와 자판기·터널통행료·항공기 같은 무승인 전표는 실적에서 빠진다, 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 할인 한도는 승인 순서가 아니라 전표 매입 순서대로 채운다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 공식 문구가 없다, assumed: cancel_month}
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 할인 제외에 적힌 세금은 지방세뿐이다. 국세 결제도 할인에서 빠지는지, assumed: 세금 업종 전체를 뺀다}
+  - {path: 'revisions[0].benefits[basic-10].target.categories', question: 대중교통에 철도가 드는지 공식 문구가 없다, assumed: 시내버스와 지하철만}
+notes: '첫 개정 시행일 근거: launch. 출시 2017-01-26. 출시 상품설명서와 지금 상품설명서의 혜택이 같고, 새소식 게시판에 이 카드의 부가서비스 변경 공지가 없다. 2020-10-15 약관 문구 정비(앱카드 이름)와 2024-11-29 한도 복원 문구 정리는 혜택 변경이 아니다. 전월 30만원 이상, 최초 사용등록일부터 다음 달 말일까지는 실적 무관. 간편결제 10%는 다른 할인과 겹쳐 받고 한도는 각각 차감한다. 예: 스타벅스에서 페이로 1만원 결제하면 50% 5천원과 10% 1천원을 합쳐 6천원. 할인 제외의 입점 가맹점, PG, 지방세, 대학 등록금, 연회비와 한도의 매입 순서는 product 확인사항의 공통 문구에서 옮겼다. 월 한도는 이월하지 않는다. 연회비의 K-WORLD(JCB타입)은 국내와 JCB 해외가맹점에서 쓰는 KB 고유 브랜드라 해외겸용으로 넣었다.'

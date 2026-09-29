@@ -2,98 +2,195 @@ schema_version: 2
 id: kb-my-wesh
 issuer: kb
 name: KB국민 My WE:SH 카드
+search_names: ['My WE:SH 카드', 마이 위시 카드]
 kind: credit
+product_codes:
+  - '09123'
+  - '09923'
 status: on_sale
 annual_fees:
-  - {scope: domestic, amount: 15000}
-  - {scope: global, amount: 15000}
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+  - {scope: domestic, brand: local, form: mobile, amount: 9000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 9000}
+  - {scope: global, brand: amex, form: mobile, amount: 9000}
 sources:
-  - {id: page, kind: product_page, url: 'https://img2.kbcard.com/obj/card/download/09923__prdctOpmn_20241230.pdf', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/09923__prdctOpmn_20241230.pdf', fetched_at: 2026-09-29, review_no: 제2024-C1a-15690호}
+  - {id: product, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09923', fetched_at: 2026-09-29, review_no: 제2024-C1a-15690호}
+  - {id: launch, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/09123__prdctOpmn_20221226.pdf', fetched_at: 2026-09-29, review_no: 제2022-C1a-11025호}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2022-12-26
     source: page
     tiers: [0, 400000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, gift_card, tax, transit, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
       exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
+      unmodeled: [정부지원금(보육료·유치원보조비·바우처) 결제 제외, 신차구매청구(환급) 할인 전표 제외, 결제대행업체(PG)나 별도 전용 가맹점번호로 승인되는 일부 간편결제 결제 제외]
+    facts:
+      - {key: birth_month, type: month, scope: user, ask: KB국민카드에 등록된 생일이 몇 월인가요}
+    options:
+      - key: pack
+        title: 더욱 진심 서비스팩
+        choices:
+          - {key: eat, title: 먹는데 진심}
+          - {key: play, title: 노는데 진심}
+          - {key: care, title: 관리에 진심}
+        default: null
+        change: next_month
+    limits:
+      - {key: telecom-ott, per: month, amount: 5000}
+      - key: play
+        per: month
+        amount: 5000
+        adjust:
+          - when:
+              fact: birth_month_now
+              card_month: {min: 1}
+            multiply: 2
+      - key: care
+        per: month
+        amount: 10000
+        adjust:
+          - when:
+              fact: birth_month_now
+              card_month: {min: 1}
+            multiply: 2
     benefits:
       - key: kbpay-10
         title: KB Pay 10% 할인
         target: {all: true}
+        when:
+          - payment: [kb_pay]
+          - {region: domestic}
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: txn, amount: 2500}
           - {per: month, amount: 5000}
         tiers: {from: 400000}
-        notes: 국내 가맹점에서 KB Pay로 결제한 건만. 해외 가맹점 제외
+        stack: main
+        notes: 국내 가맹점에서 KB Pay로 결제한 건. 해외 가맹점 제외
       - key: dining-cvs-10
         title: 음식점·편의점 10% 할인
         target:
-          categories: [convenience, restaurant]
+          categories: [restaurant.general]
+          merchants: [cu, gs25]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: txn, amount: 2500}
           - {per: month, amount: 5000}
         tiers: {from: 400000}
-        notes: 음식점은 한식·일식·중식·양식·뷔페·패밀리레스토랑·일반음식점. 편의점은 GS25, CU만. 백화점·대형마트 입점 매장 제외
+        unmodeled: [백화점·대형마트 등 일부 입점 매장 제외]
+        notes: 음식점은 한식·일식·중식·양식·뷔페·패밀리레스토랑·일반음식점 업종. 편의점은 GS25, CU만
       - key: telecom-10
         title: 이동통신요금 10% 할인
         target:
           merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: txn, amount: 2500}
-          - {per: month, amount: 5000}
+          - {shared: telecom-ott}
         tiers: {from: 400000}
-        notes: 자동납부 요금만. 인터넷·IPTV 결합상품 제외. OTT 30%와 월 5천원 한도를 함께 씀
+        unmodeled: [인터넷·IPTV 등 결합상품 요금 제외]
+        notes: SKT, KT, LG U+, Liiv M 이동통신 자동납부 요금. OTT 30%와 월 5천원 한도를 함께 쓴다
       - key: ott-30
         title: OTT 30% 할인
         target:
           merchants: [disney_plus, netflix, tving, wavve, youtube_premium]
         when:
           - {channel: online}
+          - billing: [subscription]
+          - payment: [physical_card]
         reward: {type: billing_discount, rate: 30}
         limits:
           - {per: txn, amount: 2500}
-          - {per: month, amount: 5000}
+          - {shared: telecom-ott}
         tiers: {from: 400000}
-        notes: 공식 홈페이지 정기결제만. 간편결제·인앱결제 제외. 이동통신 10%와 월 5천원 한도를 함께 씀
+        notes: 넷플릭스, 유튜브 프리미엄, 웨이브, 티빙, 디즈니플러스 공식 홈페이지 정기결제. 간편결제와 인앱결제 제외. 이동통신 10%와 월 5천원 한도를 함께 쓴다
       - key: pack-eat-5
         title: '[먹는데 진심] 배달·커피 5% 할인'
         target:
-          categories: [cafe, delivery_app]
+          categories: [cafe]
+          merchants: [baemin, kurly, yogiyo]
+        when:
+          - option:
+              pack: [eat]
         reward: {type: billing_discount, rate: 5}
         limits:
-          - {per: month, amount: 5000}
+          - per: month
+            amount: 5000
+            adjust:
+              - when:
+                  fact: birth_month_now
+                  card_month: {min: 1}
+                multiply: 2
         tiers: {from: 400000}
-        notes: 선택 팩 3개 중 택1. 배달앱은 배달의민족·요기요·마켓컬리만, 배달 현장결제 제외. 커피는 커피/음료전문점 업종. 상품권·선불 충전, 백화점·마트 입점 매장 제외. 생일 월 한도 1만원
+        unmodeled: [백화점·대형마트 등 일부 입점 매장 제외]
+        notes: 배달앱은 배달의민족·요기요·마켓컬리. 배달 현장결제는 배달앱 가맹점 승인이 아니라 빠진다. 커피는 커피·음료전문점 업종. 상품권(선물하기)과 선불카드 제외. 생일 달 한도 1만원
       - key: pack-play-taxi-cafe-5
         title: '[노는데 진심] 택시·커피 5% 할인'
         target:
           categories: [cafe, taxi]
+        when:
+          - option:
+              pack: [play]
         reward: {type: billing_discount, rate: 5}
         limits:
-          - {per: month, amount: 5000}
+          - {shared: play}
         tiers: {from: 400000}
-        notes: 선택 팩 3개 중 택1. 영화관 30%와 월 5천원 한도를 함께 씀. 백화점·마트 입점 매장 제외. 생일 월 한도 1만원
+        unmodeled: [백화점·대형마트 등 일부 입점 매장 제외]
+        notes: 택시, 커피·음료전문점 업종. 영화관 30%와 월 5천원 한도를 함께 쓴다. 생일 달 한도 1만원
       - key: pack-play-movie-30
         title: '[노는데 진심] 영화관 30% 할인'
         target:
           merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - option:
+              pack: [play]
         reward: {type: billing_discount, rate: 30}
         limits:
-          - {per: month, amount: 5000}
+          - {per: year, count: 4}
+          - {per: year, amount: 20000}
+          - {shared: play}
         tiers: {from: 400000}
-        notes: 선택 팩 3개 중 택1. 연 4회, 연 2만원 이내. 택시·커피 5%와 월 5천원 한도를 함께 씀. 매점, 관람권 구입, 예매대행사이트 제외
+        unmodeled: [영화관 매점 이용 제외]
+        notes: CGV, 롯데시네마, 메가박스. 연 4회, 연 2만원 이내. 관람권(상품권) 구입과 예매대행사이트 제외. 택시·커피 5%와 월 5천원 한도를 함께 쓴다
       - key: pack-care-5
-        title: '[관리에 진심] 온라인서점·올리브영 5% 할인'
+        title: '[관리에 진심] 미용실·스포츠·올리브영 5% 할인'
         target:
-          merchants: [kyobo_book, olive_young, yes24]
+          categories: [beauty.salon, sports]
+          merchants: [olive_young]
+        when:
+          - option:
+              pack: [care]
         reward: {type: billing_discount, rate: 5}
         limits:
-          - {per: month, amount: 10000}
+          - {shared: care}
         tiers: {from: 400000}
-        notes: 선택 팩 3개 중 택1. 같은 한도에 미용실·스포츠 업종도 포함되나 업종 코드가 없어 빠짐. 교보문고·YES24는 공식 홈페이지(앱)만. 올리브영은 매장·공식몰, 백화점·마트 입점 매장 제외. 생일 월 한도 2만원
-notes: '승인시점 기준, 해외는 매입완료 기준. 실적 제외: 할인 받은 건 전액, 현금서비스, 카드론, 초·중·고 학교 납입금, 정부지원금, 대학 등록금, 4대 사회보험료, 수수료·이자, 연체료, 무승인전표(교통요금·자판기·터널통행료·기내), 취소금액. public_transit는 무승인전표 교통요금으로 보고 뺐다. 할인 제외: 무이자할부, 상품권·선불카드, 아파트관리비, 학교 납입금·등록금, 세금·공과금, 4대 사회보험료, 신차구매 할인 전표 등. 더욱 진심 서비스는 3팩(먹는데·노는데·관리에 진심) 중 택1, 변경은 다음 달 1일부터. 생일 월에는 선택 팩 한도 2배(Happy Birth Month). 전월실적 35만~40만원이면 연 2회 실적 채워드림 신청 가능. 최초 사용등록일부터 다음 달 말까지 실적 무관. 월 한도는 본인 기준, 이월 없음. KB Pay 할인과 다른 할인의 중복 여부는 공식 문구 미확인. 모바일단독카드 연회비 9,000원. 가족카드 발급 불가.'
+        unmodeled: [올리브영 백화점·대형마트 등 일부 입점 매장 제외]
+        notes: 미용실, 종합스포츠센터, 골프(연습)장, 테니스장, 수영장, 요가, 볼링장, 스포츠용품점, 레저용품점 업종. 올리브영은 매장과 공식 온라인몰. 온라인서점과 월 1만원 한도를 함께 쓴다. 생일 달 한도 2만원
+      - key: pack-care-books-5
+        title: '[관리에 진심] 온라인서점 5% 할인'
+        target:
+          merchants: [kyobo_book, yes24]
+        when:
+          - option:
+              pack: [care]
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: care}
+        tiers: {from: 400000}
+        notes: 교보문고, YES24 공식 홈페이지(앱). 오프라인 매장 결제 제외. 미용실·스포츠·올리브영과 월 1만원 한도를 함께 쓴다. 생일 달 한도 2만원
+    unmodeled: [전월 실적이 35만원 이상 40만원 미만이면 연 2회까지 신청해 그달 할인을 받을 수 있다(전월실적 채워드림). 신청 여부를 모르므로 계산하지 않는다, 생일 달 두 배 한도는 실적 유예기간에 주지 않는다. 카드 등록 다음 달에 실제 전월 실적이 40만원 미만이면 두 배 한도를 받지 못한다, 해외 이용금액은 승인일이 아니라 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금(보육료·유치원보조비·바우처) 결제와 자판기·터널통행료·항공기내 같은 무승인 전표는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].benefits[kbpay-10].stack', question: KB Pay 10%가 음식점·편의점 10% 같은 다른 할인과 한 결제에 겹쳐 적용되는지 공식 문구가 없다, assumed: main}
+notes: '첫 개정 시행일 근거: launch. 출시 2022-12-26. 출시 상품설명서와 지금 상품설명서의 혜택이 같고, 새소식 게시판에 이 카드의 부가서비스 변경 공지가 없다. 2025-01-02부터 새로 발급한 카드는 기본연회비도 카드별로 청구한다는 약관 개정은 혜택 변경이 아니다. 나한테 진심 4개와 더욱 진심 3팩 중 택1, 팩 변경은 신청 다음 달 1일부터. 전월 40만원 이상, 최초 사용등록일(KB Pay 등 간편결제 등록 포함)부터 다음 달 말일까지는 실적 무관. 생일 달에는 더욱 진심 팩 월 한도가 두 배(Happy Birth Month)이고 생일 달은 KB국민카드에 등록된 회원정보 기준. 할인 제외의 교통요금은 product 확인사항에서 옮겼다. 월 한도는 본인회원 기준이고 이용 순서대로 채우며 이월하지 않는다. 가족카드 발급 불가. 상품공시실에 제휴코드 09123과 09923 두 개로 공시되고 09123은 Eco형 디자인 이미지에도 쓰인다.'

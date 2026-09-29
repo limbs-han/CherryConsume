@@ -1,7 +1,9 @@
 schema_version: 2
 id: kb
 name: KB국민카드
+collect: {list_url: 'https://card.kbcard.com/SVC/DVIEW/HSHMCXCRSZZC0002', method: browser, interval_days: 30, notice_url: 'https://card.kbcard.com/CMN/DVIEW/HSEMCXCRSCTC0001'}
 defaults:
-  - effective_from: 2026-09-28
+  - effective_from: 2017-01-26
     effective_from_estimated: true
     spend: {basis: prev_calendar_month, interest_free: count, installment: full_at_purchase, cancellation: cancel_month}
+notes: 상품 목록은 상품공시실 금융약관의 개인신용 목록이다. 행마다 카드 이름, 제휴코드(goDetail 첫 인자, product_codes), 상품설명서 PDF, 상품출시일, 발급중단일이 있고 상세보기에 상품설명서 등록 이력이 있다. 카드 이름 검색과 페이지 이동이 POST 양식이라 브라우저로 받는다. 부가서비스 변경 공지는 고객센터 새소식 게시판이고 제목·내용 검색이 된다. defaults 시행일은 KB 카드 중 첫 개정이 가장 이른 청춘대로 톡톡 출시일에 맞춘 값이다. 카드사 공통 약관의 시행일은 찾지 못해 추정으로 둔다.
