@@ -17,7 +17,8 @@
   children:
     - {code: bus_city, name: 시내버스}
     - {code: subway, name: 지하철, kakao: SW8}
-    - {code: bus_intercity, name: 시외·고속버스}
+    - {code: bus_intercity, name: 시외버스}
+    - {code: bus_express, name: 고속버스}
     - {code: rail, name: 철도}
 - {code: taxi, name: 택시}
 - code: telecom

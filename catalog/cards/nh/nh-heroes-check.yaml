@@ -108,7 +108,7 @@ revisions:
       - key: life-transit-20
         title: 철도·고속버스 20% 할인
         target:
-          categories: [transit.bus_intercity]
+          categories: [transit.bus_express]
           merchants: [korail, srt]
         when:
           - card_month: {min: 1}
@@ -118,7 +118,7 @@ revisions:
           - {per: month, amount: 5000}
           - {shared: integrated}
         tiers: {from: 200000}
-        unmodeled: [철도는 KTX와 SRT만 적혀 있다. 코레일 일반열차는 빠질 수 있다, 고속버스만 적혀 있다. 시외버스는 빠질 수 있다]
+        unmodeled: [철도는 KTX와 SRT만 적혀 있다. 코레일 일반열차는 빠질 수 있다]
         notes: 생활혜택 영역. 원문은 철도(SRT, KTX), 고속버스. 카드 등록 달에는 없음
     unmodeled: ['실적에서 과태료·범칙금, 우체국 우편요금, 가상화폐 거래소, 현금서비스·카드론, 수수료·이자, 연체료, 포인트 결제분을 뺌. 할인에서도 포인트 결제분을 뺌', 해외 이용과 통신료 자동이체 같은 무승인 결제는 매출표 접수일 기준으로 실적에 넣음. 월말 이용이 다음 달 실적이 될 수 있음]
 open_questions:

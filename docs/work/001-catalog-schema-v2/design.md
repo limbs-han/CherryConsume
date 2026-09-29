@@ -140,7 +140,7 @@ target:
 | 부모 | 자식 | 필요했던 카드 |
 |---|---|---|
 | restaurant | general, fastfood, bakery | KB 톡톡 버거, Easy all 제과 |
-| transit | bus_city, subway, bus_intercity, rail | 시외·고속버스 제외가 거의 모든 카드 |
+| transit | bus_city, subway, bus_intercity, bus_express, rail | 시외·고속버스 제외가 거의 모든 카드. 고속버스만 빼거나 고속버스만 주는 카드가 있어 시외버스와 나눈다 |
 | telecom | mobile, internet_tv | 결합상품 제외 |
 | education | academy, study_material, tuition, school_fee | LOCA 365 학습지, 등록금 실적 제외 |
 | utility | electricity, gas, water | 수도만 빠지는 카드 |
@@ -164,6 +164,7 @@ when:
   - region: overseas                            # domestic 또는 overseas
   - channel: online                             # online 또는 offline
   - interest_free: false                        # 무이자할부 건이 아니어야 한다
+  - lump_sum: true                              # 일시불이어야 한다. 할부 개월 수가 없거나 1이면 일시불이고, 할부는 무이자여도 빠진다. true만 쓴다
   - payment: [naver_pay, kakao_pay]             # 결제수단이 이 중 하나
   - payment_not: [naver_pay, kakao_pay, toss_pay]
   - billing: [autopay]                          # normal 일반, autopay 자동납부, subscription 정기결제, postpaid_transit 후불교통, app_prepay 앱 선결제, in_app 인앱결제

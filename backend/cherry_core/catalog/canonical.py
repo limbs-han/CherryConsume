@@ -55,6 +55,7 @@ KEY_ORDER = [
     "regions",
     "exclude_categories",
     "interest_free",
+    "lump_sum",
     "installment",
     "cancellation",
     "cancellation_overrides",

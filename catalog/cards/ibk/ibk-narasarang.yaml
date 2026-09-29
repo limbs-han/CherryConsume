@@ -294,7 +294,7 @@ revisions:
       - key: nara-rail
         title: KTX·SRT·일반열차·고속버스 5% 청구할인
         target:
-          categories: [transit.bus_intercity]
+          categories: [transit.bus_express]
           merchants: [korail, srt]
         reward: {type: billing_discount, rate: 5}
         limits:
@@ -304,7 +304,6 @@ revisions:
         tiers:
           from: 80000
           waived_when: {fact: salary_transfer}
-        unmodeled: [시외버스는 대상이 아니고 고속버스만 대상]
         notes: 나라 서비스. KTX·SRT·새마을호·무궁화호·전국 고속버스 통합 월 2회, 연 4회, 1회 2천원 한도
       - key: nara-cgv
         title: CGV 1,500원 현장할인

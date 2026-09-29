@@ -137,11 +137,12 @@ revisions:
         target: {all: true}
         when:
           - {region: overseas}
+          - {lump_sum: true}
         reward: {type: points, program: mysinhan_point, rate: 1.0}
         limits:
           - {shared: integrated}
         tiers: {from: 400000}
-        unmodeled: [해외 일시불만 적립된다. 일시불 뒤 할부로 전환하면 제외]
+        unmodeled: [일시불로 결제한 뒤 할부로 바꾸면 적립하지 않는다]
         notes: 일상 생활비. 해외(일시불) 결제금액 1%. 해외겸용(VISA) 카드로만, 최종 원화 청구금액 기준
       - key: weekend-dining
         title: 주말 음식점 2만원 이상 1천P 적립

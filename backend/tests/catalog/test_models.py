@@ -46,6 +46,15 @@ def test_condition_is_not_empty():
         Condition(region=None)
 
 
+def test_lump_sum_condition():
+    """신한 해외 적립의 '해외 일시불만'. 할부 개월 수는 결제에서 바로 알 수 있다."""
+    Condition(region="overseas", lump_sum=True)
+    with pytest.raises(ValidationError):
+        Condition.model_validate({"lump_sum": "일시불"})
+    with pytest.raises(ValidationError):
+        Condition(lump_sum=False)  # 뜻이 갈린다. 할부만인지 조건 없음인지
+
+
 def test_amount_range_and_time_format():
     Condition(amount={"min": 30000, "below": 100000})
     with pytest.raises(ValidationError, match="below보다 작아야"):

@@ -201,13 +201,14 @@ revisions:
       - key: overseas-1-3p
         title: 해외 1.3% 빅포인트 적립
         target:
-          exclude_categories: [education.tuition, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.subway, utility]
+          exclude_categories: [education.tuition, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
           all: true
         when:
           - {region: overseas}
+          - payment_not: [mobile_tmoney]
         reward: {type: points, program: samsung_bigpoint, rate: 1.3}
         exclude_applied: 0
-        unmodeled: ['다이어트할부, 고속버스, 고속도로 통행요금, 모바일 티머니, 이마트 이클럽, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
+        unmodeled: ['다이어트할부, 고속도로 통행요금, 이마트 이클럽, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
         notes: 해외 가맹점과 해외 직접구매. 해외겸용카드만. 실적 조건과 한도 없음. 2024-09-11 추가된 혜택
 open_questions:
   - {path: 'revisions[0].spend', question: 상품 페이지가 실적을 전월 일시불 및 할부 이용금액이라고만 적는다. 1일~말일 기준인지와 취소를 어느 달 실적에서 빼는지 없다. 카드사 기본값을 쓴다, assumed: 'prev_calendar_month, cancel_month'}

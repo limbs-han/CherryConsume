@@ -78,6 +78,7 @@ class Condition(Base):
     region: Region | None = None
     channel: Literal["online", "offline"] | None = None
     interest_free: bool | None = None
+    lump_sum: Literal[True] | None = None
     payment: list[Key] | None = None
     payment_not: list[Key] | None = None
     billing: list[Billing] | None = None
