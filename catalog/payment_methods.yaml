@@ -1,0 +1,34 @@
+- {key: physical_card, name: 실물카드}
+- {key: samsung_pay, name: 삼성페이}
+- {key: apple_pay, name: 애플페이}
+- key: naver_pay
+  name: 네이버페이
+  statement_names: [NAVERPAY, 네이버페이]
+- key: kakao_pay
+  name: 카카오페이
+  statement_names: [KAKAOPAY, 카카오페이]
+- key: toss_pay
+  name: 토스페이
+  statement_names: [TOSSPAY, 토스페이]
+- key: payco
+  name: 페이코
+  statement_names: [PAYCO, 페이코]
+- key: smile_pay
+  name: 스마일페이
+  statement_names: [스마일페이]
+- key: ssg_pay
+  name: SSGPAY
+  statement_names: [SSGPAY, 쓱페이]
+- key: l_pay
+  name: L.PAY
+  statement_names: [L.PAY, 엘페이]
+- key: coupay
+  name: 쿠페이
+  statement_names: [COUPAY, 쿠페이]
+- {key: kb_pay, name: KB Pay}
+- {key: shinhan_sol_pay, name: 신한 SOL페이}
+- {key: hana_pay, name: 하나Pay}
+- key: woori_won_pay
+  name: 우리WON페이
+  statement_names: [우리페이]
+- {key: nh_pay, name: NH페이}

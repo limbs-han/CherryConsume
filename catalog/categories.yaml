@@ -1,28 +1,72 @@
-# 업종 목록. 설계 문서 6.4절
-# kakao: 카카오 로컬 API 업종 그룹 코드. 없으면 null이고 가게 별칭표로 정한다
-- { code: cafe, name: 카페, kakao: CE7 }
-- { code: convenience, name: 편의점, kakao: CS2 }
-- { code: restaurant, name: 음식점, kakao: FD6 }
-- { code: delivery_app, name: 배달앱, kakao: null }
-- { code: grocery_mart, name: 마트, kakao: MT1 }
-- { code: department_store, name: 백화점, kakao: null }
-- { code: online_shopping, name: 온라인 쇼핑, kakao: null }
-- { code: fuel, name: 주유, kakao: OL7 }
-- { code: public_transit, name: 대중교통, kakao: SW8 }
-- { code: taxi, name: 택시, kakao: null }
-- { code: telecom, name: 통신요금, kakao: null }
-- { code: streaming, name: 구독·스트리밍, kakao: null }
-- { code: movie, name: 영화, kakao: CT1 }
-- { code: hospital, name: 병원, kakao: HP8 }
-- { code: pharmacy, name: 약국, kakao: PM9 }
-- { code: education, name: 교육, kakao: AC5 }
-- { code: travel_airline, name: 항공, kakao: null }
-- { code: hotel, name: 숙박, kakao: AD5 }
-- { code: overseas, name: 해외, kakao: null }
-- { code: utility, name: 공과금, kakao: null }
-- { code: tax, name: 세금, kakao: null }
-- { code: insurance, name: 보험료, kakao: null }
-- { code: gift_card, name: 상품권, kakao: null }
-- { code: apartment_fee, name: 아파트관리비, kakao: null }
-- { code: annual_fee, name: 연회비, kakao: null }
-- { code: other, name: 기타, kakao: null }
+- {code: cafe, name: 카페, kakao: CE7}
+- {code: convenience, name: 편의점, kakao: CS2}
+- code: restaurant
+  name: 음식점
+  kakao: FD6
+  children:
+    - {code: general, name: 일반음식점}
+    - {code: fastfood, name: 패스트푸드}
+    - {code: bakery, name: 제과·제빵}
+- {code: delivery_app, name: 배달앱}
+- {code: grocery_mart, name: 마트, kakao: MT1}
+- {code: department_store, name: 백화점}
+- {code: online_shopping, name: 온라인 쇼핑}
+- {code: fuel, name: 주유, kakao: OL7}
+- code: transit
+  name: 대중교통
+  children:
+    - {code: bus_city, name: 시내버스}
+    - {code: subway, name: 지하철, kakao: SW8}
+    - {code: bus_intercity, name: 시외·고속버스}
+    - {code: rail, name: 철도}
+- {code: taxi, name: 택시}
+- code: telecom
+  name: 통신요금
+  children:
+    - {code: mobile, name: 이동통신}
+    - {code: internet_tv, name: 인터넷·TV}
+- {code: streaming, name: 구독·스트리밍}
+- {code: movie, name: 영화, kakao: CT1}
+- {code: hospital, name: 병원, kakao: HP8}
+- {code: pharmacy, name: 약국, kakao: PM9}
+- code: education
+  name: 교육
+  children:
+    - {code: academy, name: 학원, kakao: AC5}
+    - {code: study_material, name: 학습지}
+    - {code: tuition, name: 대학 등록금}
+    - {code: school_fee, name: 유치원·초중고 납입금}
+- code: travel
+  name: 여행
+  children:
+    - {code: airline, name: 항공}
+    - {code: agency, name: 여행사}
+    - {code: hotel, name: 숙박, kakao: AD5}
+    - {code: duty_free, name: 면세점}
+- code: utility
+  name: 공과금
+  children:
+    - {code: electricity, name: 전기요금}
+    - {code: gas, name: 도시가스}
+    - {code: water, name: 수도요금}
+- {code: tax, name: 세금}
+- code: insurance
+  name: 보험료
+  children:
+    - {code: private, name: 민간 보험}
+    - {code: social, name: 4대보험}
+- code: beauty
+  name: 뷰티
+  children:
+    - {code: salon, name: 미용실}
+    - {code: cosmetics, name: 화장품}
+- {code: gift_card, name: 상품권}
+- {code: prepaid_charge, name: 선불 충전}
+- {code: apartment_fee, name: 아파트관리비}
+- {code: rent, name: 임대료}
+- {code: annual_fee, name: 연회비}
+- {code: laundry, name: 세탁}
+- {code: pc_room, name: PC방}
+- {code: sports, name: 스포츠·레저}
+- {code: pet, name: 반려동물}
+- {code: other, name: 기타}

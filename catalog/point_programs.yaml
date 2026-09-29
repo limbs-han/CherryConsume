@@ -1,0 +1,7 @@
+- {key: mysinhan_point, name: 마이신한포인트, won_per_point: 1}
+- {key: samsung_bigpoint, name: 삼성카드 빅포인트, won_per_point: 1}
+- {key: hyundai_m_point, name: 현대카드 M포인트, won_per_point: 1}
+- {key: hana_money, name: 하나머니, won_per_point: 1}
+- {key: woori_moa_point, name: 우리카드 모아포인트, won_per_point: 1}
+- {key: npay_point, name: 네이버페이 포인트, won_per_point: 1}
+- {key: nol_point, name: NOL 포인트, won_per_point: 1}

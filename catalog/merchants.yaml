@@ -1,7 +1,3 @@
-# 가게 별칭표. 설계 문서 6.4절
-# 결제의 가게 이름에 별칭이 들어 있으면 그 가맹점으로 본다. 공백과 대소문자는 무시하고, 여러 개가 걸리면 가장 긴 별칭을 쓴다
-# category는 이 가맹점을 어느 업종으로 볼지. 카카오 업종보다 우선한다
-
 - key: ably
   name: 에이블리
   category: online_shopping
@@ -76,6 +72,7 @@
   aliases: [쿠팡이츠, COUPANG EATS]
 - key: coupang_wow
   name: 쿠팡 와우 멤버십
+  billing: subscription
   category: streaming
   aliases: [쿠팡와우, 쿠팡 와우 멤버십, 쿠팡 멤버십]
 - key: cu
@@ -88,6 +85,7 @@
   aliases: [다이소, 아성다이소, DAISO]
 - key: disney_plus
   name: 디즈니플러스
+  billing: subscription
   category: streaming
   aliases: [디즈니플러스, 디즈니+, DISNEY PLUS]
 - key: dunkin
@@ -124,6 +122,7 @@
   aliases: [에버랜드, EVERLAND]
 - key: genie
   name: 지니뮤직
+  billing: subscription
   category: streaming
   aliases: [지니뮤직, GENIE MUSIC]
 - key: gmarket
@@ -192,10 +191,11 @@
   aliases: [카카오T, 카카오택시, KAKAO T]
 - key: korail
   name: 코레일
-  category: public_transit
+  category: transit.rail
   aliases: [코레일, KTX, 한국철도공사]
 - key: kt
   name: KT
+  billing: autopay
   category: telecom
   aliases: [KT통신요금, 케이티, KT 요금]
 - key: kurly
@@ -208,10 +208,12 @@
   aliases: [교보문고]
 - key: lg_uplus
   name: LG유플러스
+  billing: autopay
   category: telecom
   aliases: [LG유플러스, LGU+, 엘지유플러스]
 - key: liiv_m
   name: 리브엠
+  billing: autopay
   category: telecom
   aliases: [리브엠, LIIV M, KB리브모바일]
 - key: lotte_cinema
@@ -256,6 +258,7 @@
   aliases: [메가박스, MEGABOX]
 - key: melon
   name: 멜론
+  billing: subscription
   category: streaming
   aliases: [멜론, MELON]
 - key: moms_touch
@@ -272,6 +275,7 @@
   aliases: [네이버페이, NAVERPAY, N페이]
 - key: naver_plus_membership
   name: 네이버플러스 멤버십
+  billing: subscription
   category: streaming
   aliases: [네이버플러스 멤버십, 네이버멤버십]
 - key: naver_plus_store
@@ -284,6 +288,7 @@
   aliases: [네이버웹툰]
 - key: netflix
   name: 넷플릭스
+  billing: subscription
   category: streaming
   aliases: [넷플릭스, NETFLIX]
 - key: nexon
@@ -376,6 +381,7 @@
   aliases: [SK에너지, SK주유소]
 - key: skt
   name: SK텔레콤
+  billing: autopay
   category: telecom
   aliases: [SK텔레콤, SKT, 에스케이텔레콤]
 - key: socar
@@ -384,11 +390,12 @@
   aliases: [쏘카, SOCAR]
 - key: spotv_now
   name: SPOTV NOW
+  billing: subscription
   category: streaming
   aliases: [SPOTV NOW, 스포티비 나우]
 - key: srt
   name: SRT
-  category: public_transit
+  category: transit.rail
   aliases: [SRT, 에스알, 수서고속철도]
 - key: ssg_com
   name: SSG.COM
@@ -424,6 +431,7 @@
   aliases: [토픽, TOPIK, 한국어능력시험]
 - key: tving
   name: 티빙
+  billing: subscription
   category: streaming
   aliases: [티빙, TVING]
 - key: twentynine_cm
@@ -440,10 +448,12 @@
   aliases: [유니클로, UNIQLO]
 - key: watcha
   name: 왓챠
+  billing: subscription
   category: streaming
   aliases: [왓챠, WATCHA]
 - key: wavve
   name: 웨이브
+  billing: subscription
   category: streaming
   aliases: [웨이브, WAVVE]
 - key: wconcept
@@ -460,7 +470,7 @@
   aliases: [우리WON페이, 우리원페이]
 - key: yanolja
   name: NOL
-  category: hotel
+  category: travel.hotel
   aliases: [NOL, 야놀자, 놀유니버스]
 - key: yes24
   name: 예스24
@@ -472,6 +482,7 @@
   aliases: [요기요, YOGIYO]
 - key: youtube_premium
   name: 유튜브 프리미엄
+  billing: subscription
   category: streaming
   aliases: [유튜브 프리미엄, YOUTUBE PREMIUM]
 - key: zara
