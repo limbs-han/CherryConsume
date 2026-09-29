@@ -61,7 +61,7 @@ revisions:
         title: 간편결제 10% 청구할인
         target: {all: true}
         when:
-          - payment_not: [physical_card]
+          - payment_not: [mobile_tmoney, physical_card]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 5000}
@@ -98,4 +98,5 @@ open_questions:
   - {path: 'revisions[0].benefit_exclusions.categories', question: 할인 제외에 적힌 세금은 지방세뿐이다. 국세 결제도 할인에서 빠지는지, assumed: 세금 업종 전체를 뺀다}
   - {path: 'revisions[0].benefits[basic-10].target.categories', question: 대중교통에 철도가 드는지 공식 문구가 없다, assumed: 시내버스와 지하철만}
   - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통에 시외·고속버스와 철도가 드는지 문구가 없다. 대중교통 할인은 시외·고속버스를 따로 빼므로 KB의 대중교통은 시외·고속버스를 포함하는 말일 수 있다, assumed: 대중교통 업종 전체}
+  - {path: 'revisions[0].benefits[pay-10].when', question: '원문 간편결제 예시는 삼성페이, 네이버페이, 카카오페이, KB국민 앱카드이고 모바일티머니는 없다. 모바일티머니 결제를 간편결제로 보는지', assumed: 간편결제가 아니다. 교통카드 결제다}
 notes: '첫 개정 시행일 근거: launch. 출시 2017-01-26. 출시 상품설명서와 지금 상품설명서의 혜택이 같고, 새소식 게시판에 이 카드의 부가서비스 변경 공지가 없다. 2020-10-15 약관 문구 정비(앱카드 이름)와 2024-11-29 한도 복원 문구 정리는 혜택 변경이 아니다. 전월 30만원 이상, 최초 사용등록일부터 다음 달 말일까지는 실적 무관. 간편결제 10%는 다른 할인과 겹쳐 받고 한도는 각각 차감한다. 예: 스타벅스에서 페이로 1만원 결제하면 50% 5천원과 10% 1천원을 합쳐 6천원. 할인 제외의 입점 가맹점, PG, 지방세, 대학 등록금, 연회비와 한도의 매입 순서는 product 확인사항의 공통 문구에서 옮겼다. 월 한도는 이월하지 않는다. 연회비의 K-WORLD(JCB타입)은 국내와 JCB 해외가맹점에서 쓰는 KB 고유 브랜드라 해외겸용으로 넣었다.'
