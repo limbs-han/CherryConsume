@@ -1193,7 +1193,7 @@ git commit -m "feat: 계산 엔진 모델과 참·거짓·모름 조건 판정 �
 - 고치기: `backend/cherry_core/engine/__init__.py`
 - 테스트: `backend/tests/engine/test_spend.py`, `test_benefits.py`
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/engine/test_spend.py`
 
@@ -1963,7 +1963,7 @@ def test_common_exclusion_skipped_only_for_listed_category(engine):
     assert values(r) == [{}, {"gs-5": 2500}, {"tax-3": 3000}]
 ````
 
-- [ ] **2단계: 돌려서 실패를 본다**
+- [x] **2단계: 돌려서 실패를 본다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_spend.py backend/tests/engine/test_benefits.py
@@ -1971,7 +1971,7 @@ uv run --project backend pytest -q backend/tests/engine/test_spend.py backend/te
 
 기대: `Engine`을 가져오지 못해 실패한다.
 
-- [ ] **3단계: 실적 계산을 쓴다**
+- [x] **3단계: 실적 계산을 쓴다**
 
 `backend/cherry_core/engine/spend.py`
 
@@ -2099,7 +2099,7 @@ def card_notes(ctx: Ctx, card: UserCard, rules: Rules, month: date) -> list[Warn
     return out
 ````
 
-- [ ] **4단계: 결제 혜택 계산을 쓴다**
+- [x] **4단계: 결제 혜택 계산을 쓴다**
 
 `backend/cherry_core/engine/price.py`
 
@@ -2679,7 +2679,7 @@ def limit_status(ctx: Ctx, card: UserCard, payments: list[Payment], now: datetim
     return out
 ````
 
-- [ ] **5단계: Engine을 쓴다**
+- [x] **5단계: Engine을 쓴다**
 
 `backend/cherry_core/engine/__init__.py`
 
@@ -2723,7 +2723,7 @@ class Engine:
         return _price.limit_status(self.ctx, card, payments, now)
 ````
 
-- [ ] **6단계: 돌린다**
+- [x] **6단계: 돌린다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_spend.py backend/tests/engine/test_benefits.py
@@ -2732,7 +2732,7 @@ uvx ruff check backend/cherry_core/engine backend/tests/engine
 
 기대: `50 passed`, `All checks passed!`
 
-- [ ] **7단계: 실제 카드 20장이 멈추지 않는지 본다**
+- [x] **7단계: 실제 카드 20장이 멈추지 않는지 본다**
 
 20장마다 석 달치 무작위 결제 250건을 `price_month`, `spend_status`, `limit_status`에 넣는다. 결과 값은 보지 않고 예외가 나지 않는지만 본다. 스크립트는 저장소에 넣지 않는다.
 
@@ -2763,12 +2763,14 @@ EOF
 
 기대: `20장 모두 멈추지 않음`
 
-- [ ] **8단계: 커밋**
+- [x] **8단계: 커밋**
 
 ```bash
 git add backend/cherry_core/engine backend/tests/engine/test_spend.py backend/tests/engine/test_benefits.py
 git commit -m "feat: 실적과 결제 혜택 계산 추가" -m "작업 002 설계 2절, 3절. 사용량 표 위에서 대상, 조건, 구간, 한도, 중복 묶음, 순위, 달 합계, 현장할인을 계산한다. 시나리오 E2, E4, E5, E6, E7, E12"
 ```
+
+2026-09-29 실행 결과: 50개 통과, 전체 143개 통과, 20장 모두 멈추지 않음.
 
 ---
 
