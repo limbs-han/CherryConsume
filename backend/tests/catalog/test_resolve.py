@@ -92,3 +92,21 @@ def test_before_first_revision_uses_it_only_when_estimated():
     assert revision_for(known, date(2026, 8, 15)) is None
     guessed = resolve_card(card({**rev(date(2026, 9, 28), tiers=[0]), "effective_from_estimated": True}), None)
     assert revision_for(guessed, date(2026, 8, 15)).effective_from == date(2026, 9, 28)
+
+
+def test_issuer_estimated_date_does_not_mark_known_card_date():
+    kb = issuer({"effective_from": date(2017, 1, 26), "effective_from_estimated": True, "spend": SPEND})
+    out = resolve_card(card(rev(date(2017, 1, 26), tiers=[0])), kb)
+    assert out[0].effective_from_estimated is False
+
+
+def test_revision_started_by_issuer_default_keeps_its_estimate():
+    kb = issuer(
+        {"effective_from": date(2016, 1, 1), "spend": SPEND},
+        {"effective_from": date(2026, 9, 28), "effective_from_estimated": True, "spend": SPEND},
+    )
+    out = resolve_card(card(rev(date(2017, 1, 26), tiers=[0])), kb)
+    assert [(r.effective_from, r.effective_from_estimated) for r in out] == [
+        (date(2017, 1, 26), False),
+        (date(2026, 9, 28), True),
+    ]

@@ -88,9 +88,12 @@ def resolve_card(card: dict, issuer: dict | None) -> list[ResolvedRevision]:
         meta, content = [c for c in contents if c[0]["effective_from"] <= day][-1]
         current = [d for d in defaults if d["effective_from"] <= day]
         base = {k: current[-1][k] for k in DEFAULT_KEYS if current and current[-1].get(k) is not None}
-        estimated = any(
-            x["effective_from"] == day and x.get("effective_from_estimated", False) for x in [meta, *defaults]
-        )
+        # 카드 개정이 시작하는 날이면 카드의 추정 표시를 따른다. 카드사 기본값이 그날 바뀌는 것으로
+        # 적혀 있어도 그 날짜는 카드 개정 날짜에 맞춰 둔 것일 수 있다. 기본값만 바뀌는 날이면 기본값을 따른다
+        if meta["effective_from"] == day:
+            estimated = meta.get("effective_from_estimated", False)
+        else:
+            estimated = any(d["effective_from"] == day and d.get("effective_from_estimated", False) for d in defaults)
         out.append(ResolvedRevision(day, estimated, meta["source"], merge(base, content)))
     return out
 
