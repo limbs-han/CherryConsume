@@ -15,14 +15,14 @@ sources:
 checked_at: 2026-09-29
 revisions:
   - effective_from: 2024-09-11
-    source: page
+    source: disclosure
     tiers: [0, 300000]
     spend:
-      exclude_categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax, taxi, transit, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.subway, utility]
     new_card:
       until: next_month_end
       tier: 300000
-      tier_by_benefit: {pkg-coffee-30: 0, pkg-openmarket-7: 0, pkg-social-7: 0, pkg-starbucks-50: 0, pkg-trendy-7: 0}
+      tier_by_benefit: {pkg-coffee-30: 0, pkg-coffee-30-starbucks: 0, pkg-openmarket-7: 0, pkg-social-7: 0, pkg-starbucks-50: 0, pkg-trendy-7: 0}
       from: issue
     options:
       - key: package
@@ -37,6 +37,7 @@ revisions:
         change: next_month
     limits:
       - {key: transit-taxi, per: month, amount: 5000}
+      - {key: coffee-30, per: month, amount: 10000}
     benefits:
       - key: transit-taxi-10
         title: 대중교통 10% 할인
@@ -100,15 +101,29 @@ revisions:
       - key: pkg-coffee-30
         title: '[패키지4~6] 커피전문점 30% 할인'
         target:
-          merchants: [angel_in_us, artisee, cafe_bene, coffee_bean, hollys, pascucci, paul_bassett, starbucks, tom_n_toms, twosome]
+          merchants: [angel_in_us, artisee, cafe_bene, coffee_bean, hollys, pascucci, paul_bassett, tom_n_toms, twosome]
+        when:
+          - option:
+              package: [p4, p5, p6]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: coffee-30}
+        tiers: {from: 300000}
+        unmodeled: [가두매장만 할인하고 백화점·쇼핑몰 임대매장은 제외한다]
+      - key: pkg-coffee-30-starbucks
+        title: '[패키지4~6] 커피전문점 30% 할인 스타벅스'
+        target:
+          merchants: [starbucks]
         when:
           - option:
               package: [p4, p5, p6]
         reward: {type: billing_discount, rate: 30}
         limits:
-          - {per: month, amount: 10000}
+          - {shared: coffee-30}
         tiers: {from: 300000}
-        unmodeled: [가두매장만 할인하고 백화점·쇼핑몰 임대매장은 제외한다. 스타벅스는 사이렌오더도 할인한다, 스타벅스 상품권 구매와 선불카드 충전은 할인하지 않는다]
+        unmodeled: [가두매장만 할인하고 백화점·쇼핑몰 임대매장은 제외한다, 스타벅스 상품권 구매와 선불카드 충전은 할인하지 않는다]
+        notes: 사이렌오더 결제도 할인한다
       - key: pkg-openmarket-7
         title: '[패키지1·4] 오픈마켓 7% 할인'
         target:
@@ -186,7 +201,7 @@ revisions:
       - key: overseas-1-3p
         title: 해외 1.3% 빅포인트 적립
         target:
-          exclude_categories: [education.tuition, insurance.social, prepaid_charge, tax, taxi, transit, utility]
+          exclude_categories: [education.tuition, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.subway, utility]
           all: true
         when:
           - {region: overseas}
@@ -198,4 +213,4 @@ open_questions:
   - {path: 'revisions[0].spend', question: 상품 페이지가 실적을 전월 일시불 및 할부 이용금액이라고만 적는다. 1일~말일 기준인지와 취소를 어느 달 실적에서 빼는지 없다. 카드사 기본값을 쓴다, assumed: 'prev_calendar_month, cancel_month'}
   - {path: 'revisions[0].new_card.tier_by_benefit', question: 대중교통·택시·이동통신·영화에는 발급월+1개월 실적 무관 문구가 있으나 라이프스타일 패키지 할인에는 없다, assumed: 패키지 할인은 신규 발급 특례 없음}
   - {path: 'revisions[0].benefits', question: 할인 금액과 적립 포인트의 원 미만을 어떻게 처리하는지 공식 문구에 없다, assumed: floor}
-notes: '첫 개정 시행일 근거: disclosure. 카드 출시일자 2016-04-11. 상품약관 공시의 변경이력에서 혜택이 바뀐 날은 2017-05-19(이동통신 할인 조건)와 2024-09-11(해외 1.3% 적립 추가)이다. 2025-10-30 발급 채널 문구 삭제와 2026-07-30 안내장 유의사항 변경(2026-06-29 공지)은 혜택이 같다. 공지사항 400건과 옛 서비스변경안내 105건을 끝까지 봤고 이 카드의 부가서비스 변경 공지는 없다. 연회비 Mastercard·국내전용 모두 10,000원(기본 7,000+제휴 3,000), 가족카드 없음. 실적 제외: 할인이 적용된 이용금액(할인 전 총액), 국세·지방세·공과금, 아파트 관리비, 대학 등록금, 대중교통, 택시, 상품권, 선불카드 충전. 할인과 적립은 겹쳐 받지 않고, 무이자할부는 할인과 적립 모두 제외. 할인 적용 금액은 포인트 적립 제외. 적립 받은 결제는 실적에 들어간다. 발급월+1개월까지는 대중교통·택시, 이동통신, 영화를 실적과 상관없이 준다. 라이프스타일 옵션 패키지는 6개 중 1개를 골라 삼성카드 앱에서 매월 바꾸고 신청 다음 달 1일에 반영된다. 골라진 패키지의 커피 할인 1개, 쇼핑 7% 할인 1개, 나머지 쇼핑 2개 1% 적립만 받는다. 할인 한도는 쇼핑 월 5천원, 커피 월 1만원. 빅포인트 유효기간 5년. 결제 건 혜택 아님: 컨택리스 결제 지원, 연회비 캐시백 행사.'
+notes: '첫 개정 시행일 근거: disclosure. 실적 제외의 대중교통은 페이지 정의대로 시내버스와 지하철로 담았다. 카드 출시일자 2016-04-11. 상품약관 공시의 변경이력에서 혜택이 바뀐 날은 2017-05-19(이동통신 할인 조건)와 2024-09-11(해외 1.3% 적립 추가)이다. 2025-10-30 발급 채널 문구 삭제와 2026-07-30 안내장 유의사항 변경(2026-06-29 공지)은 혜택이 같다. 공지사항 400건과 옛 서비스변경안내 105건을 끝까지 봤고 이 카드의 부가서비스 변경 공지는 없다. 연회비 Mastercard·국내전용 모두 10,000원(기본 7,000+제휴 3,000), 가족카드 없음. 실적 제외: 할인이 적용된 이용금액(할인 전 총액), 국세·지방세·공과금, 아파트 관리비, 대학 등록금, 대중교통, 택시, 상품권, 선불카드 충전. 할인과 적립은 겹쳐 받지 않고, 무이자할부는 할인과 적립 모두 제외. 할인 적용 금액은 포인트 적립 제외. 적립 받은 결제는 실적에 들어간다. 발급월+1개월까지는 대중교통·택시, 이동통신, 영화를 실적과 상관없이 준다. 라이프스타일 옵션 패키지는 6개 중 1개를 골라 삼성카드 앱에서 매월 바꾸고 신청 다음 달 1일에 반영된다. 골라진 패키지의 커피 할인 1개, 쇼핑 7% 할인 1개, 나머지 쇼핑 2개 1% 적립만 받는다. 할인 한도는 쇼핑 월 5천원, 커피 월 1만원. 빅포인트 유효기간 5년. 결제 건 혜택 아님: 컨택리스 결제 지원, 연회비 캐시백 행사.'
