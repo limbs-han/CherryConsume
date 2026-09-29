@@ -184,7 +184,7 @@ revisions:
           - any_of:
               - {fact: soldier}
               - {fact: salary_transfer}
-        reward: {type: onsite_discount, rate: 15}
+        reward: {type: billing_discount, rate: 15}
         limits:
           - {per: month, amount: 10000}
           - per: month
@@ -203,7 +203,7 @@ revisions:
           - any_of:
               - {fact: soldier}
               - {fact: salary_transfer}
-        reward: {type: onsite_discount, rate: 10}
+        reward: {type: billing_discount, rate: 10}
         limits:
           - {shared: px-basic}
         notes: PX기본할인. 건당 3만원 이상 7만원 미만. 3만원 이상 세 구간이 월 5만원 한도와 횟수를 같이 씀. 현역병 월 2회, 병 급여이체자 횟수 제한 없음
@@ -217,7 +217,7 @@ revisions:
           - any_of:
               - {fact: soldier}
               - {fact: salary_transfer}
-        reward: {type: onsite_discount, rate: 20}
+        reward: {type: billing_discount, rate: 20}
         limits:
           - {shared: px-basic}
         notes: PX기본할인. 건당 7만원 이상 10만원 미만
@@ -231,7 +231,7 @@ revisions:
           - any_of:
               - {fact: soldier}
               - {fact: salary_transfer}
-        reward: {type: onsite_discount, rate: 30}
+        reward: {type: billing_discount, rate: 30}
         limits:
           - {shared: px-basic}
         notes: PX기본할인. 건당 10만원 이상
@@ -245,7 +245,7 @@ revisions:
           - any_of:
               - {fact: soldier}
               - {fact: salary_transfer}
-        reward: {type: onsite_discount, fixed: 50000}
+        reward: {type: billing_discount, fixed: 50000}
         limits:
           - per: year
             count: 1
@@ -567,7 +567,7 @@ open_questions:
   - {path: 'revisions[0].benefits[gs25-items-onsite].unmodeled', question: '2026-01-05 원문 품목은 음료(주류 제외), 빙과류, 신선식품이고 지금 페이지는 간편식, 음료, 아이스크림이다. 바뀐 날을 알려 주는 원문이 없다', assumed: 지금 페이지 문구}
   - {path: 'revisions[0].benefits[mytag-momstouch].when', question: 리플렛은 맘스터치 오프라인 매장 결제만이라고 쓰고 지금 상품 페이지는 채널 조건이 없다, assumed: 채널 조건 없음}
   - {path: 'revisions[0].benefits[aio-transit].limits', question: '대중교통 20% 할인이 All in One 월 통합할인한도에 들어가는지. 상품 페이지 문구는 대중교통은 할인 횟수, 할인 금액 제한 없음. 2026-09-29 카드 주인도 포함되는 것 같다고 했지만 확실하지 않다', assumed: 통합할인한도에 포함}
-  - {path: 'revisions[0].benefits[px-under-30k].reward.type', question: PX 할인이 결제할 때 빠지는지 청구서에서 빠지는지. 상품 페이지와 설명서에 표기가 없고 IBK 블로그는 현장할인이라고 쓴다. PX 기본할인 네 구간과 특별할인이 같은 답을 따른다. 2026-09-29 카드 주인은 청구할인이라는 말이 없어 결제할 때 빠지는 것으로 본다, assumed: onsite_discount}
+  - {path: 'revisions[0].benefits[px-under-30k].reward.type', question: PX 할인이 결제할 때 빠지는지 청구서에서 빠지는지. 상품 페이지와 설명서에 표기가 없고 IBK 블로그는 현장할인이라고 쓴다. PX 기본할인 네 구간과 특별할인이 같은 답을 따른다. 2026-09-29 카드 주인은 청구할인 같다고 했지만 확실하지 않다, assumed: billing_discount}
   - {path: 'revisions[0].benefits[mega-order-weekday]', question: 메가오더 제휴 할인이 All in One 카페 할인과 한 결제에 같이 적용되는지. 주말 할인도 같은 답을 따른다. 2026-09-29 카드 주인도 모른다, assumed: 둘 중 큰 쪽 하나}
   - {path: 'revisions[0].benefits[mytag-kakaot-taxi]', question: '마이태그 쿠폰과 All in One 할인이 한 결제에 같이 적용되는지. 카카오T 택시와 All in One 택시, 쿠팡 쿠폰과 All in One 쇼핑, NOL 적립과 All in One 여행·레저가 해당한다', assumed: 둘 중 큰 쪽 하나}
   - {path: 'revisions[0].benefits[emart24-items-onsite]', question: 이마트24 주요품목 현장할인이 편의점 10% 청구할인과 한 결제에 같이 적용되는지. GS25 주요품목은 추가 할인으로 적혀 있어 같이 받는 것으로 두었다, assumed: 둘 중 큰 쪽 하나}
