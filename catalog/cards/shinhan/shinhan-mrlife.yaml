@@ -101,7 +101,7 @@ revisions:
           - {per: month, count: 10}
           - {shared: integrated}
         tiers: {from: 300000}
-        unmodeled: [티켓몬스터, 롯데홈쇼핑, 쿠팡 사이트나 앱에 직접 접속해 결제한 건만 할인한다]
+        unmodeled: ['티켓몬스터, 롯데홈쇼핑, 쿠팡 사이트나 앱에 직접 접속해 결제한 건만 할인한다']
         notes: TIME Night. 승인시간 오후 9시~오전 9시. 옥션, G마켓, AK몰, 11번가, 티켓몬스터, 롯데홈쇼핑, 쿠팡. 일 1회, 월 10회, 1회 승인금액 1만원까지. 2026.07.15 공지로 위메프가 롯데홈쇼핑으로 바뀌었다
       - key: time-night-taxi
         title: 야간 택시 10% 할인

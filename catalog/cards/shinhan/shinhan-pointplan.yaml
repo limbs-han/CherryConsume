@@ -129,7 +129,7 @@ revisions:
           - {shared: integrated}
         tiers: {from: 400000}
         stack: solpay
-        unmodeled: [신한 SOL페이의 ARS결제, 일반결제, Smart결제는 추가 적립 제외]
+        unmodeled: ['신한 SOL페이의 ARS결제, 일반결제, Smart결제는 추가 적립 제외']
         notes: 일상 생활비. 국내 결제를 신한 SOL페이·신한 슈퍼SOL로 할 때(터치결제, QR·바코드 결제, NFC결제 포함). 결제금액별 적립률에 더해 받는다. 2024.06.26 공지로 ARS·일반·Smart결제 제외가 더해졌다
       - key: daily-overseas
         title: 해외 일시불 1% 적립
@@ -176,7 +176,7 @@ revisions:
           - {shared: weekend-day}
           - {shared: weekend-month}
         stack: weekend
-        unmodeled: [신한 SOL페이의 ARS결제, 일반결제, Smart결제는 제외]
+        unmodeled: ['신한 SOL페이의 ARS결제, 일반결제, Smart결제는 제외']
         notes: 주말 외식비. 배달의민족, 요기요, 땡겨요 공식 앱에서 앱 내 카드결제를 신한 SOL페이·신한 슈퍼SOL로 한 건만. 만나서·현장 카드 결제와 다른 페이 결제 제외. 음식점과 통합 일 1회, 월 횟수 한도를 같이 쓴다
       - key: autopay-utility
         title: 도시가스·전기요금 자동납부 2만원당 1천P 적립
