@@ -3,7 +3,11 @@ name = "cherry-core"
 version = "0.1.0"
 description = "체리컨슘 카탈로그와 계산 엔진"
 requires-python = ">=3.12"
-dependencies = ["pydantic>=2.9", "pyyaml>=6.0"]
+dependencies = [
+    "holidays>=0.60",
+    "pydantic>=2.9",
+    "pyyaml>=6.0",
+]
 
 [dependency-groups]
 dev = ["pytest>=8.3", "ruff>=0.8"]

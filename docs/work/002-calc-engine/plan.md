@@ -63,11 +63,11 @@
 **파일**
 - 고치기: `backend/pyproject.toml`, `backend/uv.lock`
 
-- [ ] **1단계: 계획 실행 중의 커밋을 허락받는다**
+- [x] **1단계: 계획 실행 중의 커밋을 허락받는다**
 
 사용자에게 묻는다. "계획 실행 중에 과제마다 커밋해도 될까요. 푸시는 따로 요청받을 때만 합니다." 답을 `.claude/progress.md`에 적는다. 허락받지 못하면 과제마다 커밋 단계에서 멈추고 묻는다.
 
-- [ ] **2단계: 공휴일 패키지를 더한다**
+- [x] **2단계: 공휴일 패키지를 더한다**
 
 ```bash
 uv add --project backend "holidays>=0.60"
@@ -75,7 +75,7 @@ uv add --project backend "holidays>=0.60"
 
 기대: `backend/pyproject.toml`의 dependencies에 `"holidays>=0.60"`이 생긴다.
 
-- [ ] **3단계: 한국 공휴일이 나오는지 본다**
+- [x] **3단계: 한국 공휴일이 나오는지 본다**
 
 ```bash
 uv run --project backend python -c "import holidays; kr = holidays.country_holidays('KR', years=[2026]); import datetime as d; print(d.date(2026, 10, 5) in kr, d.date(2026, 6, 3) in kr)"
@@ -83,7 +83,7 @@ uv run --project backend python -c "import holidays; kr = holidays.country_holid
 
 기대: `True True`. 개천절 대체공휴일과 지방선거일이다.
 
-- [ ] **4단계: 커밋**
+- [x] **4단계: 커밋**
 
 ```bash
 git add backend/pyproject.toml backend/uv.lock
