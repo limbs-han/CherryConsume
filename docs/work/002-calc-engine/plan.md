@@ -281,7 +281,7 @@ git commit -m "test: 계산 엔진 손계산 표 형식과 형식 검사 추가"
 
 IBK는 Npay 적립이 2027-01-01에 바뀌어 그 혜택은 두 번 센다.
 
-- [ ] **1단계: 적용 범위 검사를 더한다**
+- [x] **1단계: 적용 범위 검사를 더한다**
 
 `backend/tests/engine/test_cases.py`
 
@@ -364,7 +364,7 @@ def test_every_benefit_is_covered(catalog):
     assert missing == []
 ````
 
-- [ ] **2단계: 돌려서 실패를 본다**
+- [x] **2단계: 돌려서 실패를 본다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_cases.py
@@ -372,7 +372,7 @@ uv run --project backend pytest -q backend/tests/engine/test_cases.py
 
 기대: `test_every_benefit_is_covered` 실패. 빠진 혜택이 191개다.
 
-- [ ] **3단계: 에이전트 6개를 띄운다**
+- [x] **3단계: 에이전트 6개를 띄운다**
 
 묶음마다 `general-purpose` 에이전트 하나를 동시에 띄운다. 프롬프트는 다음과 같다. `<묶음>`과 `<카드>`만 바꾼다.
 
@@ -406,11 +406,11 @@ backend/tests/engine/cases/<카드 id>.yaml을 카드마다 하나 쓴다.
 카드마다 경우 수, 계산한 혜택 수, 설계로 판단이 갈린 곳, 카드 파일과 원문이 다른 곳을 10줄 안에 적는다.
 ```
 
-- [ ] **4단계: 보고를 모은다**
+- [x] **4단계: 보고를 모은다**
 
 에이전트 보고에서 "설계로 판단이 갈린 곳"과 "카드 파일과 원문이 다른 곳"을 `docs/work/002-calc-engine/plan.md` 끝의 `## 표를 만들며 나온 것`에 한 줄씩 적는다. 설계 판단이 갈린 곳은 사용자에게 묻고 design.md를 고친다. 카드 파일이 틀린 곳은 작업 001의 방식으로 카드 파일을 고치고 원문을 다시 대조한다.
 
-- [ ] **5단계: 돌린다**
+- [x] **5단계: 돌린다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_cases.py
@@ -418,12 +418,14 @@ uv run --project backend pytest -q backend/tests/engine/test_cases.py
 
 기대: 2개 통과.
 
-- [ ] **6단계: 커밋**
+- [x] **6단계: 커밋**
 
 ```bash
 git add backend/tests/engine docs/work/002-calc-engine/plan.md
 git commit -m "test: 카드 20장 손계산 표 추가" -m "작업 002 설계 6.1, 6.2. 엔진 코드를 쓰지 않은 에이전트가 원문과 카드 파일로 기대값을 만들었다. 혜택 190개가 모두 한 번 이상 나온다."
 ```
+
+2026-09-29 실행 결과: 표 20장, 경우 279개, 결제 781건. 혜택 191개가 모두 한 번 이상 나온다. 멈춤 훅이 실패한 테스트를 두고 끝내지 못하게 해서, 에이전트가 쓰는 동안에는 적용 범위 검사를 빼 두었다가 표가 다 모인 뒤 다시 넣었다. 시제품 엔진으로 미리 돌려 보니 275개가 처음부터 같았고 다른 4개는 모두 엔진 쪽이었다. 엔진 고침과 설계 문장은 아래 "표를 만들며 나온 것"에 있다.
 
 ---
 
@@ -1872,6 +1874,91 @@ def test_same_input_same_output_and_integers(engine):
         for x in r.benefits
     )
     assert values(first) == [{"m": 160}, {"m": 882}]  # 12,345 × 1.3% = 160.485, 67,891 × 1.3% = 882.583 → 버림
+
+
+def test_new_card_tier_decides_ranked_top(engine):
+    # KB Easy all처럼 상위 몇 개가 구간표인데 새 카드면 특례 구간으로 센다. 표 대조에서 찾았다
+    benefits = [
+        b("coffee", {"merchants": ["ediya"]}, RATE10, when=[{"ranked": "top"}], tiers={"from": 300000}),
+        b("delivery", {"merchants": ["baemin"]}, RATE10, when=[{"ranked": "top"}], tiers={"from": 300000}),
+    ]
+    rules = {
+        "ranked": [{"key": "top", "top": {300000: 1}}],
+        "new_card": {"from": "registration", "until": "next_month_end", "tier": 300000},
+    }
+    eng = engine(card(benefits, **rules))
+    r = run(eng, [pay(10000, "2026-09-10T10:00", merchant="ediya")], holder(started_on=date(2026, 9, 5)))
+    assert values(r) == [{"coffee": 1000}]
+
+
+def test_waived_unknown_reports_tier_and_input(engine):
+    # 나라사랑처럼 급여이체자면 하한 면제인데 급여이체 여부를 모르면 구간 미달과 묻기를 함께 붙인다. 표 대조에서 찾았다
+    nara = b(
+        "nara-cvs", {"categories": ["convenience"]}, RATE10, tiers={"from": 80000, "waived_when": {"fact": "salary"}}
+    )
+    eng = engine(
+        card([nara], tiers=(0, 80000), facts=[{"key": "salary", "type": "bool", "scope": "card", "ask": "급여이체"}])
+    )
+    r = run(eng, prev_month(79999) + [pay(8000, "2026-09-01T12:00", merchant="gs25")])[1]
+    assert r.benefits == [] and {"tier_not_met", "needs_input"} <= set(codes(r))
+
+
+def test_unknown_adjust_asks(engine):
+    # My WE:SH처럼 한도 조건이 모름이면 한도를 늘리지 않고 묻는다. 표 대조에서 찾았다
+    doubled = [{"per": "month", "amount": 1000, "adjust": [{"when": {"fact": "birth_month_now"}, "multiply": 2}]}]
+    eng = engine(
+        card(
+            [b("cafe-10", CAFE, RATE10, limits=doubled)],
+            tiers=(0,),
+            facts=[{"key": "birth_month", "type": "month", "scope": "user", "ask": "생일"}],
+        )
+    )
+    r = run(eng, [pay(50000, "2026-09-02T10:00", merchant="ediya")])[0]
+    assert values([r]) == [{"cafe-10": 1000}]
+    assert ["fact", "birth_month"] in next(w for w in r.warnings if w.code == "needs_input").data["needs"]
+
+
+def test_onsite_discount_with_cap(engine):
+    # 현장할인 20%에 건당 4만원 한도. 기록 170,000원이면 할인 4만원, 할인 전 210,000원. 식대로 212,500원으로 부풀리지 않는다
+    t = b(
+        "outback",
+        {"categories": ["restaurant"]},
+        {"type": "onsite_discount", "rate": 20},
+        limits=[{"per": "txn", "amount": 40000}],
+    )
+    r = run(engine(card([t], tiers=(0,))), [pay(170000, "2026-09-02T19:00", category="restaurant")])[0]
+    assert values([r]) == [{"outback": 40000}] and r.benefits[0].base == 210000
+
+
+def test_limit_exhausted_only_for_period_limits(engine):
+    # 건당 최대 1,000원으로 줄어든 것은 한도를 다 쓴 것이 아니다. 달 한도로 줄면 붙인다
+    per_txn = b("cafe-10", CAFE, RATE10, limits=[{"per": "txn", "amount": 1000}])
+    r = run(engine(card([per_txn], tiers=(0,))), [pay(12500, "2026-09-02T10:00", merchant="ediya")])[0]
+    assert "limit_exhausted" not in codes(r)
+    monthly = b("cafe-10", CAFE, RATE10, limits=[{"per": "month", "amount": 1000}])
+    r = run(engine(card([monthly], tiers=(0,))), [pay(12500, "2026-09-02T10:00", merchant="ediya")])[0]
+    assert "limit_exhausted" in codes(r)
+
+
+def test_common_exclusion_skipped_only_for_listed_category(engine):
+    # 가맹점만 적은 혜택은 결제 업종으로 공통 제외를 본다. 이마트에서 산 상품권 5만원은 0원, 장보기 5만원은 2,500원.
+    # 업종을 직접 적은 혜택은 공통 제외보다 우선한다. 2026-09-29 사용자가 정했다. 설계 3.2의 3
+    benefits = [
+        b("gs-5", {"merchants": ["gs25"]}, {"type": "billing_discount", "rate": 5}),
+        b("tax-3", {"categories": ["tax"]}, {"type": "billing_discount", "rate": 3}, stack="tax"),
+    ]
+    eng = engine(
+        card(benefits, tiers=(0,), stacks=[{"key": "tax"}], benefit_exclusions={"categories": ["tax", "other"]})
+    )
+    r = run(
+        eng,
+        [
+            pay(50000, "2026-09-02T10:00", merchant="gs25", category="other"),
+            pay(50000, "2026-09-03T10:00", merchant="gs25"),
+            pay(100000, "2026-09-04T10:00", category="tax"),
+        ],
+    )
+    assert values(r) == [{}, {"gs-5": 2500}, {"tax-3": 3000}]
 ````
 
 - [ ] **2단계: 돌려서 실패를 본다**
@@ -2095,7 +2182,9 @@ def benefit_match(rules: Rules, b: Benefit, s: Situation) -> Tri:
         return FALSE
     parts = [hit, negate(categories_match(s.category, t.exclude_categories))]
     be = rules.benefit_exclusions
-    if t.all or hit[0] is not True:
+    # 대상이 이 결제의 업종을 직접 적었으면 공통 제외 업종보다 우선한다. 가맹점만 적었으면 결제 업종으로 공통 제외를 본다.
+    # 이마트 5% 혜택으로 이마트에서 산 상품권은 뺀다. 2026-09-29 사용자가 정했다. 설계 3.2의 3
+    if categories_match(s.category, t.categories)[0] is not True:
         parts.append(negate(categories_match(s.category, be.categories)))
     parts += [negate(check(w, s)) for w in be.when_any]
     s.area = b.area or b.key
@@ -2227,11 +2316,16 @@ def pre_discount(b: Benefit, net: int, tier: int) -> int:
     return net + int(at_tier(r.fixed, tier) or 0)
 
 
-def caps(lim: Limit, tier: int, s: Situation) -> tuple[int | None, int | None, int | None]:
-    """한도 칸의 (금액, 횟수, 결제액). 구간표와 adjust를 적용한다. adjust 조건이 모름이면 적용하지 않는다"""
+def caps(lim: Limit, tier: int, s: Situation) -> tuple[int | None, int | None, int | None, frozenset]:
+    """한도 칸의 (금액, 횟수, 결제액, 모르는 것). 구간표와 adjust를 적용한다.
+    adjust 조건이 모름이면 적용하지 않고 무엇을 모르는지 돌려준다. 설계 3.1"""
     amount, count, base = at_tier(lim.amount, tier), at_tier(lim.count, tier), at_tier(lim.base, tier)
+    needs: frozenset = frozenset()
     for a in lim.adjust:
-        if check(a.when, s)[0] is not True:
+        hit = check(a.when, s)
+        if hit[0] is None:
+            needs |= hit[1]
+        if hit[0] is not True:
             continue
         given = a.model_fields_set
         if "amount" in given:
@@ -2244,7 +2338,7 @@ def caps(lim: Limit, tier: int, s: Situation) -> tuple[int | None, int | None, i
             amount = math.floor(amount * frac(a.multiply))
         if a.add is not None and amount is not None:
             amount += a.add
-    return amount, count, base
+    return amount, count, base, needs
 
 
 @dataclass
@@ -2256,6 +2350,8 @@ class Offer:
     value: int
     base: int
     limited: bool
+    exhausted: bool = False
+    needs: frozenset = frozenset()
 
     def applied(self) -> AppliedBenefit:
         return AppliedBenefit(key=self.benefit.key, amount=self.amount, value=self.value, base=self.base)
@@ -2265,19 +2361,25 @@ def offer(
     ctx: Ctx, rules: Rules, b: Benefit, s: Situation, tier: int, ledger: Ledger, room: int, total: int = 0
 ) -> Offer:
     """한도 안에서 이 혜택이 이 결제에 줄 수 있는 금액. room은 이 묶음에서 아직 혜택에 쓰지 않은 결제액이고
-    total은 달 합계 혜택이면 이 결제까지의 이번 달 대상 이용액이다"""
+    total은 달 합계 혜택이면 이 결제까지의 이번 달 대상 이용액이다.
+
+    limited는 어느 한도든 금액을 줄였는지, exhausted는 날, 달, 기간 한도가 줄였는지다. 건당 한도는
+    "한도를 다 썼다"가 아니라서 exhausted에 넣지 않는다. 설계 5.1
+    """
     onsite = b.reward.type == "onsite_discount"
     pre = pre_discount(b, room, tier) if onsite else room
-    base, limited = pre, False
+    base, limited, exhausted = pre, False, False
     specs = [(ident, lim, caps(lim, tier, s)) for ident, lim in limit_specs(rules, b)]
+    needs = frozenset().union(*(c[3] for _, _, c in specs))
     usage = {
         ident: ledger.used(ident, key) if (key := period_key(lim.per, s.at)) else [0, 0, 0] for ident, lim, _ in specs
     }
-    for ident, _, (_, count, cap_base) in specs:
+    for ident, lim, (_, count, cap_base, _) in specs:
         if count is not None and usage[ident][1] >= count:
-            return Offer(b, 0, 0, 0, True)
+            return Offer(b, 0, 0, 0, True, lim.per != "txn", needs)
         if cap_base is not None and base > cap_base - usage[ident][2]:
             base, limited = max(cap_base - usage[ident][2], 0), True
+            exhausted = exhausted or lim.per != "txn"
     if b.reward.basis == "month_total":
         given = ledger.used(("given", b.key), period_key("month", s.at))[0]
         amount = max(reward_amount(ctx, b, total, tier) - given, 0)
@@ -2285,25 +2387,30 @@ def offer(
         amount = pre - room if b.reward.rate is not None else reward_amount(ctx, b, base, tier)
     else:
         amount = reward_amount(ctx, b, base, tier)
-    for ident, _, (cap_amount, _, _) in specs:
+    for ident, lim, (cap_amount, _, _, _) in specs:
         if cap_amount is not None and amount > cap_amount - usage[ident][0]:
             amount, limited = max(cap_amount - usage[ident][0], 0), True
+            exhausted = exhausted or lim.per != "txn"
     if amount == 0:
         base = 0
+    elif onsite and b.reward.rate is not None:
+        base = room + amount  # 현장할인은 기록 금액에 실제 할인액을 더한 것이 할인 전 금액이다. 설계 3.6
     elif limited and b.reward.rate is not None and b.reward.basis == "txn":
         base = min(base, math.ceil(frac(amount) * 100 / frac(at_tier(b.reward.rate, tier))))
     value = amount if b.reward.type != "points" else math.floor(amount * ctx.point_value.get(b.reward.program, frac(1)))
-    return Offer(b, amount, value, base, limited)
+    return Offer(b, amount, value, base, limited, exhausted, needs)
 
 
 def choose(
     ctx: Ctx, rules: Rules, s: Situation, candidates: dict[str, list[tuple[Benefit, int, int]]], ledger: Ledger
-) -> tuple[list[Offer], set[str]]:
-    """중복 묶음마다 혜택을 고른다. 설계 3.7. candidates는 묶음 key마다 (혜택, 구간, 달 합계)이고 파일 순서다"""
+) -> tuple[list[Offer], set[str], dict[str, frozenset]]:
+    """중복 묶음마다 혜택을 고른다. 설계 3.7. candidates는 묶음 key마다 (혜택, 구간, 달 합계)이고 파일 순서다.
+    (받은 혜택, 기간 한도로 줄어든 혜택 key, 혜택마다 한도 조건에서 모르는 것)을 돌려준다"""
     specs = {st.key: st for st in rules.stacks}
     scratch = ledger.child()
     got: list[Offer] = []
-    limited: set[str] = set()
+    exhausted: set[str] = set()
+    needs: dict[str, frozenset] = {}
     for stack, members in candidates.items():
         st = specs.get(stack)
         pick, spill = (st.pick, st.spill) if st else ("best", "none")
@@ -2313,7 +2420,10 @@ def choose(
         room, left = s.amount, list(members)
         while left and room > 0:
             offers = [offer(ctx, rules, b, s, tier, scratch, room, total) for b, tier, total in left]
-            limited |= {o.benefit.key for o in offers if o.limited}
+            exhausted |= {o.benefit.key for o in offers if o.exhausted}
+            for o in offers:
+                if o.needs:
+                    needs[o.benefit.key] = needs.get(o.benefit.key, frozenset()) | o.needs
             live = [o for o in offers if o.amount > 0]
             if not live:
                 break
@@ -2324,7 +2434,7 @@ def choose(
                 break
             room -= best.base
             left = [m for m in left if m[0].key != best.benefit.key]
-    return got, limited
+    return got, exhausted, needs
 
 
 @dataclass
@@ -2358,9 +2468,11 @@ def price(ctx: Ctx, card: UserCard, p: Payment, ledger: Ledger, final_areas: dic
     got: list[Offer] = []
     unknown: dict[str, frozenset] = {}
     tier_short: dict[str, int] = {}
-    limited: set[str] = set()
+    exhausted: set[str] = set()
+    limit_needs: dict[str, frozenset] = {}
     if net > 0:
-        s.top_areas = top_areas(rules, s, month, base_tier, ledger, final_areas)
+        top_tier, _ = new_card_tier(card, month, rules, None, base_tier)
+        s.top_areas = top_areas(rules, s, month, top_tier, ledger, final_areas)
         candidates: dict[str, list[tuple[Benefit, int, int]]] = {}
         for b in rules.benefits:
             tier, _ = new_card_tier(card, month, rules, b.key, base_tier)
@@ -2387,15 +2499,17 @@ def price(ctx: Ctx, card: UserCard, p: Payment, ledger: Ledger, final_areas: dic
                         tier_short[b.key] = lo
                     continue
                 if waived[0] is None:
+                    tier_short[b.key] = lo
                     hit = all_of([hit, waived])
             if hit[0] is None:
                 unknown[b.key] = hit[1]
                 continue
             candidates.setdefault(b.stack, []).append((b, tier, total))
-        got, limited = choose(ctx, rules, s, candidates, ledger)
+        got, exhausted, limit_needs = choose(ctx, rules, s, candidates, ledger)
     applied = [o.applied() for o in got]
     parts, spend_warns = spend_parts(ctx, card, p, rules, applied)
-    warns += spend_warns + notes(ctx, card, got, unknown, tier_short, limited, final_areas is not None)
+    unknown = {**unknown, **limit_needs}
+    warns += spend_warns + notes(ctx, card, got, unknown, tier_short, exhausted, final_areas is not None)
     result = PaymentResult(payment_id=p.id, benefits=applied, spend=parts, warnings=warns)
     return Priced(result, rules, base_tier, unknown, tier_short)
 
@@ -2431,12 +2545,12 @@ def notes(
     got: list[Offer],
     unknown: dict[str, frozenset],
     tier_short: dict[str, int],
-    limited: set[str],
+    exhausted: set[str],
     final: bool,
 ) -> list[Warn]:
     """결제 결과에 붙는 경고. 설계 5절"""
     out = [Warn(code="tier_not_met", benefit=k, data={"required": lo}) for k, lo in tier_short.items()]
-    out += [Warn(code="limit_exhausted", benefit=k) for k in sorted(limited)]
+    out += [Warn(code="limit_exhausted", benefit=k) for k in sorted(exhausted)]
     if unknown:
         needs = sorted({n for ns in unknown.values() for n in ns})
         out.append(Warn(code="needs_input", data={"needs": [list(n) for n in needs], "benefits": sorted(unknown)}))
@@ -2546,7 +2660,7 @@ def limit_status(ctx: Ctx, card: UserCard, payments: list[Payment], now: datetim
                 continue
             seen.add(ident)
             used = ledger.used(ident, key)
-            cap_amount, cap_count, cap_base = caps(lim, t, s)
+            cap_amount, cap_count, cap_base, _ = caps(lim, t, s)
             out.append(
                 LimitUse(
                     key=ident[1],
@@ -2614,7 +2728,7 @@ uv run --project backend pytest -q backend/tests/engine/test_spend.py backend/te
 uvx ruff check backend/cherry_core/engine backend/tests/engine
 ```
 
-기대: `44 passed`, `All checks passed!`
+기대: `50 passed`, `All checks passed!`
 
 - [ ] **7단계: 실제 카드 20장이 멈추지 않는지 본다**
 
@@ -3937,6 +4051,30 @@ git commit -m "docs: 작업 기록 계산 엔진 추가"
 ## 표를 만들며 나온 것
 
 과제 3과 7에서 채운다.
+
+### 과제 3
+
+사용자가 정한 것. 2026-09-29
+- 공통 제외는 혜택이 대상 업종으로 결제 업종을 직접 적었을 때만 무시한다. 가맹점만 적었으면 결제 업종으로 본다. 이마트에서 산 상품권은 이마트 5%를 받지 않는다. 설계 3.2의 3. 20장에서 계산이 바뀌는 혜택은 없다
+- 어학원 2곳은 `education.academy`, 어학시험 7곳은 새 업종 `education.exam`으로 옮겼다. 통신사 3곳은 부모 업종으로 두고 결제 때 묻는다. 설계 2.1. 이 가맹점으로 부모 업종 규칙을 시험하던 경우 3개는 결제에 업종 education을 직접 적어 기대값을 그대로 두었다
+
+엔진을 고친 것. 시제품에서 규칙 테스트를 먼저 쓰고 고쳤고 과제 5의 코드에 들어 있다
+- 이용액 순위의 상위 개수를 신규 발급 특례 구간으로 센다. KB Easy all 새 카드가 순위 혜택을 하나도 못 받았다
+- 구간이 모자라고 `waived_when`이 모름이면 구간 미달과 묻기를 함께 붙인다. IBK 나라 서비스 두 경우
+- 한도 `adjust` 조건이 모름이면 묻기를 붙인다. My WE:SH 생일 달 두 배
+- 현장할인은 할인액을 한도로 먼저 자르고 할인 전 금액을 기록 금액 + 할인액으로 본다. IBK 아웃백 170,000원이 212,500원으로 부풀던 것
+- `limit_exhausted`는 기간 한도로 줄었을 때만 붙인다. 에이전트 셋 중 둘의 해석
+- 공통 제외 규칙을 위의 사용자 결정대로 바꿨다
+
+설계 문장만 분명히 한 것. 엔진은 이미 그렇게 계산했다
+- `tier_by_benefit`은 그 값과 기본 구간 중 큰 쪽, 달 합계 대상 이용액은 다른 조건까지 맞는 결제액, 제외 조건의 모름은 혜택 없음, 다른 묶음이 공유 한도를 같이 쓰면 파일 순서, 시간 조건은 끝 시각 제외, 전 가맹점 대상에도 대상 제외, 실적 비율의 원 미만은 실적 금액에서 버림, 옵션은 기본값 먼저이고 선택 이력은 적용 시작일, 결제 업종이 가맹점 업종보다 우선, `price_month`는 달 중간 순위, 한도로 0원이면 받지 않은 혜택, priority 묶음은 한도가 남은 혜택, 실적 조건 없는 카드도 실적 금액은 돌려줌, 현장할인과 청구할인이 겹치면 청구할인은 기록 금액
+
+카드 파일을 고친 것
+- KB 톡톡 간편결제 10%에서 모바일티머니를 뺐다. 원문 예시에 없어 확인 필요로도 남겼다
+
+그대로 둔 것
+- 신한 묶음 에이전트는 권한 때문에 원문을 열지 못해 카드 파일 메모로 계산했다. 세 카드의 실적 제외와 적립 제외는 작업 001 과제 13에서 원문과 대조를 마쳤다
+- 트래블로그 국내 적립의 "일시불만"은 체크카드라 결과가 같아 옮기지 않았다. taptap O 해외 적립 제외의 고용·산재보험은 업종이 4대보험 하나라 나누지 않았다
 
 ## 명세서 대조 결과
 
