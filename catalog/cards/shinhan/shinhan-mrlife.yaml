@@ -2,128 +2,174 @@ schema_version: 2
 id: shinhan-mrlife
 issuer: shinhan
 name: 신한카드 Mr.Life
+search_names: [미스터라이프]
 kind: credit
+product_codes:
+  - '201509030001'
+  - AUAARH
 status: on_sale
 annual_fees:
-  - {scope: domestic, amount: 15000}
-  - {scope: global, amount: 18000}
+  - {scope: domestic, brand: amex, amount: 15000}
+  - {scope: global, brand: visa, amount: 18000}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1187937_2207.html', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1187937_2207.html', fetched_at: 2026-09-29, review_no: 제2026-C1a-09920호}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201509030001', fetched_at: 2026-09-29}
+  - {id: notice-20260715, kind: notice, url: 'https://www.shinhancard.com/pconts/html/helpdesk/dataRoom/MOBFM164N/2013781_1119.html', fetched_at: 2026-09-29}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2026-07-15
     source: page
     tiers: [0, 300000, 500000, 1000000]
     spend:
-      exclude_categories: [annual_fee, gift_card]
+      exclude_categories: [annual_fee, gift_card, prepaid_charge]
+    new_card: {tier: 300000}
     limits:
       - key: integrated
         per: month
         amount: {300000: 10000, 500000: 20000, 1000000: 30000}
+      - key: weekend
+        per: month
+        amount: {300000: 3000, 500000: 7000, 1000000: 10000}
     benefits:
       - key: bill-10
         title: 전기·가스·통신요금 10% 할인
+        source: page
         target:
-          categories: [telecom, utility]
+          categories: [utility.electricity, utility.gas]
+          merchants: [kt, lg_uplus, skt]
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: txn, amount: 5000}
+          - {per: txn, base: 50000}
           - {per: day, count: 1}
           - per: month
             amount: {300000: 3000, 500000: 7000, 1000000: 10000}
         tiers: {from: 300000}
-        notes: '월납(공과금) 할인. 전기요금, 도시가스요금, SKT·KT·LG U+ 통신요금(인터넷·집전화·이동통신·결합상품)만, 수도 등 다른 공과금은 대상 아님. 일 1회, 1회 승인 5만원까지. 공식 문구 미확인: 자동납부 필요 여부'
+        notes: 월납(공과금) 할인. 전기요금, 도시가스요금, SKT·KT·LG U+ 통신요금(인터넷·집전화·이동통신·결합상품 포함). 일 1회, 1회 승인금액 5만원까지(1회 최대 5천원)
       - key: time-convenience
         title: 편의점 10% 할인
+        source: page
         target:
           categories: [convenience]
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: txn, amount: 1000}
+          - {per: txn, base: 10000}
           - {per: day, count: 1}
           - {per: month, count: 5}
           - {shared: integrated}
         tiers: {from: 300000}
-        notes: TIME All Day, 24시간. 신한카드 가맹점 업종 기준. 일 1회, 월 5회, 1회 승인 1만원까지
+        notes: TIME All Day, 24시간. 신한카드 가맹점 업종 기준. 일 1회, 월 5회, 1회 승인금액 1만원까지
       - key: time-medical
         title: 병원·약국 10% 할인
+        source: page
         target:
           categories: [hospital, pharmacy]
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: txn, amount: 1000}
+          - {per: txn, base: 10000}
           - {per: day, count: 1}
           - {per: month, count: 5}
           - {shared: integrated}
         tiers: {from: 300000}
-        notes: TIME All Day, 24시간. 병원·약국 합쳐 일 1회, 월 5회, 1회 승인 1만원까지. 동물병원 제외, 치과·한의원 포함
+        unmodeled: [동물병원은 제외된다]
+        notes: TIME All Day, 24시간. 병원·약국을 한 영역으로 일 1회, 월 5회, 1회 승인금액 1만원까지. 치과·한의원 포함
+      - key: time-laundry
+        title: 세탁소 10% 할인
+        source: page
+        target:
+          categories: [laundry]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        notes: TIME All Day, 24시간. 세탁소 업종. 일 1회, 월 5회, 1회 승인금액 1만원까지
       - key: time-night-shopping
         title: 야간 온라인쇼핑 10% 할인
+        source: page
         target:
           merchants: [ak_mall, auction, coupang, eleven_st, gmarket, lotte_homeshopping, tmon]
         when:
           - {channel: online}
+          - time: {from: '21:00', to: '09:00'}
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: txn, amount: 1000}
+          - {per: txn, base: 10000}
           - {per: day, count: 1}
           - {per: month, count: 10}
           - {shared: integrated}
         tiers: {from: 300000}
-        notes: TIME Night. 승인시간 오후 9시~오전 9시만. 일 1회, 월 10회, 1회 승인 1만원까지. 티몬·롯데홈쇼핑·쿠팡은 사이트나 앱 직접 접속 시만
+        notes: TIME Night. 승인시간 오후 9시~오전 9시. 옥션, G마켓, AK몰, 11번가, 티켓몬스터, 롯데홈쇼핑, 쿠팡. 티몬·롯데홈쇼핑·쿠팡은 사이트나 앱 직접 접속 시만. 일 1회, 월 10회, 1회 승인금액 1만원까지. 2026.07.15 공지로 위메프가 롯데홈쇼핑으로 바뀌었다
       - key: time-night-taxi
         title: 야간 택시 10% 할인
+        source: page
         target:
           categories: [taxi]
+        when:
+          - time: {from: '21:00', to: '09:00'}
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: txn, amount: 1000}
+          - {per: txn, base: 10000}
           - {per: day, count: 1}
           - {per: month, count: 10}
           - {shared: integrated}
         tiers: {from: 300000}
-        notes: TIME Night. 승인시간 오후 9시~오전 9시만. 후불교통·비교통 모두 적용. 일 1회, 월 10회, 1회 승인 1만원까지
+        notes: TIME Night. 승인시간 오후 9시~오전 9시. 후불교통·비교통 카드 모두 적용. 일 1회, 월 10회, 1회 승인금액 1만원까지
       - key: time-night-food
         title: 야간 식음료 10% 할인
+        source: page
         target:
-          categories: [cafe, restaurant]
+          categories: [cafe, restaurant.fastfood, restaurant.general]
+        when:
+          - time: {from: '21:00', to: '09:00'}
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: txn, amount: 1000}
+          - {per: txn, base: 10000}
           - {per: day, count: 1}
           - {per: month, count: 10}
           - {shared: integrated}
         tiers: {from: 300000}
-        notes: TIME Night. 승인시간 오후 9시~오전 9시만. 한식·양식·일식·중식·뷔페·일반대중음식·패스트푸드·커피전문점 업종 합쳐 일 1회, 월 10회, 1회 승인 1만원까지
+        notes: TIME Night. 승인시간 오후 9시~오전 9시. 한식·양식·일식·중식·뷔페·일반대중음식·패스트푸드·커피전문점 업종을 한 영역으로 일 1회, 월 10회, 1회 승인금액 1만원까지
       - key: weekend-mart
         title: 주말 할인마트 10% 할인
+        source: page
         target:
           merchants: [emart, homeplus, lotte_mart]
+        when:
+          - day:
+              in: [sat, sun]
+              holidays: ignore
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: txn, amount: 5000}
+          - {per: txn, base: 50000}
           - {per: day, count: 1}
-          - per: month
-            amount: {300000: 3000, 500000: 7000, 1000000: 10000}
+          - {shared: weekend}
         tiers: {from: 300000}
-        notes: 주말 할인. 토·일만(토·일 외 공휴일 제외). 기업형 슈퍼마켓·온라인몰 포함, 상품권 제외. 일 1회, 1회 승인 5만원까지. 월 한도는 주유 할인과 공유
+        unmodeled: [상품권 구매는 제외된다, 세 마트의 기업형 슈퍼마켓과 온라인몰도 포함된다]
+        notes: 주말 할인. 이마트, 롯데마트, 홈플러스. 토·일만이고 토·일이 아닌 공휴일은 제외. 일 1회, 1회 승인금액 5만원까지(1회 최대 5천원). 월 한도는 주유 할인과 같이 쓴다
       - key: weekend-fuel
         title: 주말 주유 리터당 60원 할인
+        source: page
         target:
           merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
         when:
           - {channel: offline}
-        reward: {type: billing_discount, rate: 3.5}
+          - day:
+              in: [sat, sun]
+              holidays: ignore
+        reward: {type: billing_discount, per_liter: 60}
         limits:
-          - {per: txn, amount: 3500}
+          - {per: txn, base: 100000}
           - {per: day, count: 1}
-          - per: month
-            amount: {300000: 3000, 500000: 7000, 1000000: 10000}
+          - {per: month, base: 300000}
+          - {shared: weekend}
         tiers: {from: 300000}
-        notes: 원문은 휘발유·등유·경유 리터당 60원(LPG 제외), 정유사 공시 휘발유가로 환산. rate_pct는 휘발유 1,700원/L 가정 환산값. 토·일만. 일 1회, 1회 승인 10만원·월 승인 30만원까지. 월 한도는 마트 할인과 공유
+        unmodeled: [LPG는 제외된다. 휘발유·등유·경유만, 리터는 정유사 공시 휘발유가로 환산한다. 등유와 경유도 휘발유가로 환산한다]
+        notes: 주말 할인. SK에너지, GS칼텍스, HD현대오일뱅크, S-Oil. 토·일만. 일 1회, 1회 승인금액 10만원, 월 승인금액 30만원까지. 월 한도는 마트 할인과 같이 쓴다
       - key: intake-20
         title: 인테이크몰 20% 할인
+        source: page
         target:
           merchants: [shop_intake]
         when:
@@ -132,5 +178,12 @@ revisions:
         limits:
           - {per: month, count: 4}
         tiers: {from: 300000}
-        notes: '특화 서비스. 전월 이용금액(일시불+할부) 유실적 시 월 4회. 인테이크몰 직접 접속 시만. 공식 문구 미확인: 금액 한도(페이지에 없음)'
-notes: '신한카드 상품 페이지(여신금융협회 심의필 제2026-C1a-09920호, 2026.07.01)와 같은 페이지가 부르는 신한카드 상품 API(getCardProductsInformation, entryId 201509030001) 기준. 연회비는 API 값. 연회비 국내 칸은 S&브랜드(아멕스 제휴, 국내전용 연회비로 해외 아멕스 가맹점 이용) 15,000원, 해외 칸은 VISA 18,000원. 순수 국내전용 브랜드는 없음. integrated_cap은 TIME 할인(All Day와 Night 합산) 한도 1만/2만/3만원. 월납 할인과 주말 할인은 서비스별 한도가 따로라 구간별 혜택으로 나누고 counts_toward_integrated_cap false. 실적 제외: 장·단기 카드대출, 연회비, 각종 수수료, 이자, 기프트카드 구매, 선불카드 충전, 거래취소금액. 교통 이용금액은 전전월 기준, 해외 이용금액은 매입일 기준. 신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 30만~50만원 구간 한도 제공. 인테이크몰은 이 기간 실적 무관. 할인은 전표 매입 순서대로 결제일 할인. 가족카드 발급 불가. 후불교통 신청 가능. TIME All Day의 세탁소 업종 10% 할인(일 1회, 월 5회, 1회 1만원까지)은 업종 코드가 없어 뺌. 공식 문구 미확인: 전월 이용금액 산정기간이 1일~말일인지(페이지에 명시 없음, 신한카드 다른 상품 기준으로 가정). 할부를 결제 달에 전액 인정하는지. 취소를 어느 달 실적에서 빼는지.'
+        notes: 특화 서비스. 전월 이용금액(일시불+할부) 유실적 고객에게 월 4회. 신규 발급 회원은 등록월의 다음 달 말까지 실적 무관. 인테이크몰 직접 접속 시만
+    unmodeled: [해외 이용금액은 매입일 기준으로 실적 달을 정한다, 할인은 한도 안에서 신한카드 전표 매입 순서대로 적용된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 약관 개정 공지는 2026.07.15에 올라왔는데 시행일자가 2025년 7월 15일로 적혀 있다. 다른 약관 개정 공지는 게시일과 시행일이 며칠 차이라 게시일을 썼다, assumed: '2026-07-15'}
+  - {path: 'revisions[0].spend', question: '전월 이용금액 산정 기간이 1일~말일인지, 할부를 결제한 달에 전액 넣는지 페이지에 없다. 처음과 Point Plan 문구를 따랐다', assumed: 'prev_calendar_month, full_at_purchase'}
+  - {path: 'revisions[0].benefits[bill-10]', question: 월납 할인이 자동납부 건만인지 페이지에 없다, assumed: 자동납부 조건 없음}
+  - {path: 'revisions[0].benefits[intake-20].limits', question: 인테이크몰 할인의 금액 한도가 페이지에 없다, assumed: 월 4회만}
+  - {path: 'revisions[0].benefits[intake-20].tiers', question: 유실적이 전월 이용금액 1원 이상인지 30만원 이상인지 페이지에 없다, assumed: 300000}
+notes: '신한카드 Mr.Life 상품 페이지와 신한카드 상품 API 기준. 첫 개정 시행일 근거: notice-20260715. 카드 출시 일자 2015.09.03. 공지사항은 2020년 1월 글부터 남아 있고 이 카드 공지는 2023.02.08 디자인 변경(시행 2023-02-09, 혜택 변경 아님)과 2026.07.15 약관 개정(Night 온라인쇼핑 위메프를 롯데홈쇼핑으로, 주말 할인 문구 정리)이다. 2026.05.15 발급 중단 공지의 Mr.Life는 글로벌금융판매 제휴 상품이고 이 카드는 발급 중이다. 연회비는 API 값. 국내 칸은 S&브랜드(신한카드가 아멕스와 제휴한 브랜드, 국내전용 연회비로 해외 아멕스 가맹점 이용) 15,000원, 해외 칸은 VISA 18,000원. TIME 할인(All Day와 Night 합산) 한도는 integrated 1만/2만/3만원. 주말 할인 한도는 weekend 3천/7천/1만원. 월납 할인 한도는 따로 3천/7천/1만원. TIME은 구분 영역별로 각각 일 1회, All Day는 월 5회, Night는 월 10회. 실적 제외: 카드대출, 연회비, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 거래취소금액. 카드대출, 수수료, 이자는 결제가 아니라 담지 않았다. 교통 이용금액은 전전월 기준, 해외 이용금액은 매입일 기준. 신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 30만~50만원 구간 한도. 인테이크몰은 이 기간 실적 무관. 가족카드 발급 불가. 후불교통 신청 가능.'
