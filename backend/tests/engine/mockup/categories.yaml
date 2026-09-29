@@ -1,0 +1,7 @@
+- {code: cafe, name: 카페}
+- {code: convenience, name: 편의점}
+- {code: restaurant, name: 음식점}
+- {code: online_shopping, name: 온라인 쇼핑}
+- {code: transit, name: 대중교통}
+- {code: tax, name: 세금}
+- {code: other, name: 기타}

@@ -1,0 +1,65 @@
+schema_version: 2
+id: mock-mrlife
+issuer: mock
+name: 시안 신한 Mr.Life
+kind: credit
+product_codes: [MOCK1]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://example.com/mock', fetched_at: 2026-09-01}
+checked_at: 2026-09-01
+revisions:
+  - effective_from: 2026-01-01
+    source: page
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [tax]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 600000: 20000, 900000: 30000}
+    benefits:
+      - key: cafe-10
+        title: 카페 10% 할인
+        target:
+          categories: [cafe]
+        when:
+          - amount: {min: 5000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: cvs-5
+        title: 편의점 5% 할인
+        target:
+          categories: [convenience]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: transit-10
+        title: 대중교통 10% 할인
+        target:
+          categories: [transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 600000}
+      - key: sb-20
+        title: 스타벅스 20% 할인
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 900000}

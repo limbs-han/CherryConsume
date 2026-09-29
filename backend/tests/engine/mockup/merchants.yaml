@@ -1,0 +1,16 @@
+- key: starbucks
+  name: 스타벅스
+  category: cafe
+  aliases: [스타벅스]
+- key: ediya
+  name: 이디야
+  category: cafe
+  aliases: [이디야]
+- key: gs25
+  name: GS25
+  category: convenience
+  aliases: [GS25]
+- key: coupang
+  name: 쿠팡
+  category: online_shopping
+  aliases: [쿠팡]

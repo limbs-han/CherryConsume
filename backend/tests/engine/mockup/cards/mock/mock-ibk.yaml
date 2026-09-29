@@ -1,0 +1,39 @@
+schema_version: 2
+id: mock-ibk
+issuer: mock
+name: 시안 IBK 나라사랑카드
+kind: check
+product_codes: [MOCK2]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://example.com/mock', fetched_at: 2026-09-01}
+checked_at: 2026-09-01
+revisions:
+  - effective_from: 2026-01-01
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [tax]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000}
+    benefits:
+      - key: cvs-10
+        title: 편의점 10% 할인
+        target:
+          categories: [convenience]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: base-0-2
+        title: 기본 0.2% 적립
+        target: {all: true}
+        reward: {type: points, program: mock_point, rate: 0.2}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}

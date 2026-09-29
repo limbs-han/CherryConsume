@@ -3462,7 +3462,7 @@ git commit -m "test: 손계산 표 20장을 엔진과 대조" -m "작업 002 설
 **파일**
 - 만들기: `backend/tests/engine/mockup/` 아래 파일 9개, `backend/tests/engine/test_mockup.py`
 
-- [ ] **1단계: 시안 카탈로그를 만든다**
+- [x] **1단계: 시안 카탈로그를 만든다**
 
 `backend/tests/engine/mockup/cards/mock/mock-ibk.yaml`
 
@@ -3667,7 +3667,7 @@ revisions:
 ````
 
 
-- [ ] **2단계: 검증기로 본다**
+- [x] **2단계: 검증기로 본다**
 
 ```bash
 uv run --project backend python -c "from pathlib import Path; from cherry_core.catalog.check import check_catalog; from cherry_core.catalog.load import load_catalog; print([str(p) for p in check_catalog(load_catalog(Path('backend/tests/engine/mockup')))])"
@@ -3675,7 +3675,7 @@ uv run --project backend python -c "from pathlib import Path; from cherry_core.c
 
 기대: `[]`
 
-- [ ] **3단계: 시안 숫자 테스트를 쓴다**
+- [x] **3단계: 시안 숫자 테스트를 쓴다**
 
 `backend/tests/engine/test_mockup.py`
 
@@ -3854,7 +3854,7 @@ def test_11_cafe_limit_exhausted_and_reset():
     assert "limit_exhausted" in [w.code for w in rs[5].warnings]
 ````
 
-- [ ] **4단계: 돌린다**
+- [x] **4단계: 돌린다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_mockup.py
@@ -3862,12 +3862,14 @@ uv run --project backend pytest -q backend/tests/engine/test_mockup.py
 
 기대: `9 passed`
 
-- [ ] **5단계: 커밋**
+- [x] **5단계: 커밋**
 
 ```bash
 git add backend/tests/engine/mockup backend/tests/engine/test_mockup.py
 git commit -m "test: 화면 시안 숫자를 시안 카드로 재현" -m "작업 002 설계 6.3. 시안 카드는 지어낸 카드라 테스트 폴더에만 둔다."
 ```
+
+2026-09-29 실행 결과: 시안 카탈로그 검증 오류 0, 시안 숫자 테스트 9개 통과, 전체 440개 통과.
 
 ---
 

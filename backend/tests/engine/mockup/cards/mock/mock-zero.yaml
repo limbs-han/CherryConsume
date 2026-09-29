@@ -1,0 +1,26 @@
+schema_version: 2
+id: mock-zero
+issuer: mock
+name: 시안 현대 ZERO Edition3
+kind: credit
+product_codes: [MOCK3]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://example.com/mock', fetched_at: 2026-09-01}
+checked_at: 2026-09-01
+revisions:
+  - effective_from: 2026-01-01
+    source: page
+    tiers: [0]
+    spend:
+      basis: none
+      exclude_categories: [tax]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      categories: [tax]
+    benefits:
+      - key: base-0-7
+        title: 기본 0.7% 할인
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.7}
