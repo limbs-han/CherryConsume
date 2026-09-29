@@ -16,19 +16,20 @@ sources:
   - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI42000000D.web?_frame=no&CD_PD_SEQ=17333', fetched_at: 2026-09-29, review_no: 제2026-C1h-10500호, review_valid_until: 2027-07-05}
   - {id: notice-14490, kind: notice, url: 'https://www.hanacard.co.kr/OPP25350001D.web?schID=ncd&mID=OPP25350000D&AN_NO=14490', fetched_at: 2026-09-29}
   - {id: notice-14253, kind: notice, url: 'https://www.hanacard.co.kr/OPP35150001D.web?schID=ncd&mID=OPP35150000D&AN_NO=14253', fetched_at: 2026-09-29}
+  - {id: leaflet, kind: manual_pdf, url: 'https://m.hanacard.co.kr/leaflet/14/14126_20250616.pdf', fetched_at: 2026-09-29}
 checked_at: 2026-09-29
 revisions:
-  - effective_from: 2026-08-01
-    source: page
+  - effective_from: 2025-07-01
+    source: notice-14253
     tiers: [0, 400000, 800000, 1200000]
     spend:
-      exclude_categories: [education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_categories: [education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
       exclude_applied: 1
     new_card: {until: next_month_end, tier: 400000, from: registration}
     benefit_exclusions:
       when_any:
         - {interest_free: true}
-      categories: [education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      categories: [education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
     options:
       - key: combo
         title: 원더카드 맞춤 혜택 조합
@@ -159,8 +160,8 @@ revisions:
         tiers: {from: 400000}
         unmodeled: ['상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 제외된다', '상품 선택 때 연결된 다른 사이트와 앱에서 결제한 건, 롯데ON과 더현대닷컴에서 몰 이동으로 다른 계열사 몰에서 결제한 건은 제외된다']
         notes: 공식 홈페이지·앱 결제만
-    unmodeled: ['가족카드 이용금액과 월별 할인횟수, 할인한도는 본인카드와 합산된다', 트래블로그 스위치로 해외결제를 외화 하나머니로 설정해 해외 이용하면 원더 서비스가 없다]
+    unmodeled: ['가족카드 이용금액과 월별 할인횟수, 할인한도는 본인카드와 합산된다', 트래블로그 스위치로 해외결제를 외화 하나머니로 설정해 해외 이용하면 원더 서비스가 없다. 그 결제는 실적에도 들지 않는다]
 open_questions:
   - {path: 'revisions[0].spend', question: 취소가 실적에서 빠지는 달. 원문에는 혜택을 매입 취소가 접수된 달에 차감한다는 문구만 있다, assumed: cancel_month}
   - {path: 'revisions[0].benefits[transit-10].reward.rate', question: '대중교통 할인율이 상세표는 10%, 같은 페이지 주요혜택 요약은 3% 청구할인이라 서로 다르다', assumed: 10}
-notes: '원더카드 2.0의 DAILY 맞춤 혜택 조합. 발급 후 하나Pay에서 서비스 영역을 월 1회 바꿀 수 있고 바꾸면 즉시 적용된다(notice-14253). 바꾼 조합은 options의 custom으로 두고 계산하지 않는다. 연회비는 국내전용·국내외겸용 19,900원(기본 12,000원, 제휴 7,900원). 제휴연회비는 혜택플러스 선택 시 부과되는데 DAILY 조합은 제휴연회비 7,900원으로 적혀 있어 19,900원으로 둔다. 실적은 지난달 1일~말일 승인 기준 국내외 일시불·할부 금액, 40만원 미만이면 혜택 없음. 최초 카드 사용등록일~다음 달 말일은 40만~80만원 구간 기준. 실적 제외: 국세, 지방세, 공과금, 4대보험, 상품권·기프트카드, 선불카드·선불전자지급수단 충전, 수도요금, 대학·대학원 등록금, 스쿨뱅킹, 부동산임대료, 초·중·고 납입금, 할인·적립 받은 매출. 할인 제외: 같은 항목과 무이자·부분무이자할부 전체. 무승인거래는 매입 확정 다음날 혜택. 해외 이용은 수수료 포함 최종 원화 청구액에 혜택 적용. 결제 건 혜택 아님: 온가족 플러스(가족카드당 월 1만원 캐시백, 차년도 연회비 1만원 캐시백), 트래블로그 스위치(외화 하나머니 결제 시 해외 수수료 면제). 첫 개정 시행일 근거: notice-14490. 카드 출시 시기는 2022-11-15이고 2025-07-01 원더카드 2.0으로 바뀌었다(notice-14253). 원더카드2.0 DAILY가 대상인 위메프·인터파크 선택 영역 제공처 변경이 2026-08-01 시행이라 그날로 둔다. 이 변경은 DAILY 조합의 영역을 건드리지 않는다.'
+notes: '원더카드 2.0의 DAILY 맞춤 혜택 조합. 발급 후 하나Pay에서 서비스 영역을 월 1회 바꿀 수 있고 바꾸면 즉시 적용된다(notice-14253). 바꾼 조합은 options의 custom으로 두고 계산하지 않는다. 연회비는 국내전용·국내외겸용 19,900원(기본 12,000원, 제휴 7,900원). 제휴연회비는 혜택플러스 선택 시 부과되는데 DAILY 조합은 제휴연회비 7,900원으로 적혀 있어 19,900원으로 둔다. 실적은 지난달 1일~말일 승인 기준 국내외 일시불·할부 금액, 40만원 미만이면 혜택 없음. 최초 카드 사용등록일~다음 달 말일은 40만~80만원 구간 기준. 실적 제외: 국세, 지방세, 공과금, 4대보험, 상품권·기프트카드, 선불카드·선불전자지급수단 충전, 수도요금, 대학·대학원 등록금, 스쿨뱅킹, 부동산임대료, 초·중·고 납입금, 할인·적립 받은 매출. 할인 제외: 같은 항목과 무이자·부분무이자할부 전체. 무승인거래는 매입 확정 다음날 혜택. 해외 이용은 수수료 포함 최종 원화 청구액에 혜택 적용. 결제 건 혜택 아님: 온가족 플러스(가족카드당 월 1만원 캐시백, 차년도 연회비 1만원 캐시백), 트래블로그 스위치(외화 하나머니 결제 시 해외 수수료 면제). 첫 개정 시행일 근거: notice-14253. 카드 출시 시기는 2022-11-15이고 2025-07-01 원더카드 2.0으로 바뀌며 트래블로그 스위치 규칙이 처음 생겼다(notice-14253 변경일자 2025. 7. 1). notice-14490은 2026-08-01 위메프·인터파크 제공처 변경으로 오픈마켓 영역만 바꾼다. DAILY 영역과 관계없는 변경이다. 실적 산정 기준과 트래블로그 스위치 결제 실적 제외는 상품안내장(leaflet) 23쪽.'

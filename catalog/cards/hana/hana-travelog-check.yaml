@@ -11,15 +11,13 @@ annual_fees:
   - {scope: global, brand: mastercard, amount: 0}
   - {scope: global, brand: unionpay, amount: 0}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15414', fetched_at: 2026-09-29}
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15414', fetched_at: 2026-09-29, review_no: A-26-0332}
 checked_at: 2026-09-29
 revisions:
   - effective_from: 2022-07-18
     source: page
     tiers: [0]
     spend: {basis: none}
-    benefit_exclusions:
-      categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
     benefits:
       - key: overseas-fee-free
         title: 해외 가맹점 이용수수료 면제
@@ -31,7 +29,9 @@ revisions:
         notes: 해외 가맹점 결제 시 국제브랜드수수료(이용금액의 1%)와 해외서비스수수료(건당 US$0.5) 면제. 1%만 정률로 넣었다. 하나카드 전산상 해외 가맹점 매출로 분류된 건만. 해외 결제는 외화 하나머니 잔액에서만 나가므로 따로 조건을 달지 않았다. 실적과 한도 없음
       - key: domestic-0-3p
         title: 국내 가맹점 0.3% 하나머니 적립
-        target: {all: true}
+        target:
+          exclude_categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+          all: true
         when:
           - {region: domestic}
         reward: {type: points, program: hana_money, rate: 0.3, round: round}

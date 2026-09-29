@@ -28,7 +28,6 @@ revisions:
       tier_by_benefit: {overseas-1: 0}
       from: registration
     benefit_exclusions:
-      categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
       unmodeled: ['정부지원금(보육료, 유치원보조비, 바우처), 우편요금, 과태료·범칙금·벌금, 여권발급비용, 국가·공공기관·공공단체 가맹점 이용금액은 캐시백에서 빠진다', 고속버스 차내 단말기와 고속버스 앱 결제는 캐시백에서 빠진다]
     limits:
       - key: integrated
@@ -49,7 +48,7 @@ revisions:
       - key: easypay-online-2
         title: 간편결제 온라인 2% 캐시백
         target:
-          exclude_categories: [transit.bus_city, transit.subway]
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_city, transit.subway, utility]
           all: true
           exclude_merchants: [cgv, cu, daiso, eleven_st, gmarket, gs25, hackers_academy, hsk, kt, kyobo_book, lg_uplus, lotte_cinema, megabox, olive_young, opic, pagoda_academy, seven_eleven, skt, toeic, topik]
         when:
@@ -67,6 +66,7 @@ revisions:
       - key: online-mall-5
         title: 11번가·G마켓 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           merchants: [eleven_st, gmarket]
         when:
           - {channel: online}
@@ -82,6 +82,7 @@ revisions:
       - key: oliveyoung-daiso-5
         title: 올리브영·다이소 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           merchants: [daiso, olive_young]
         when:
           - {channel: offline}
@@ -97,6 +98,7 @@ revisions:
       - key: convenience-5
         title: 편의점 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           merchants: [cu, gs25, seven_eleven]
         when:
           - amount: {min: 10000}
@@ -110,6 +112,7 @@ revisions:
       - key: movie-5
         title: 영화 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           merchants: [cgv, lotte_cinema, megabox]
         when:
           - amount: {min: 20000}
@@ -123,6 +126,7 @@ revisions:
       - key: transit-5
         title: 대중교통 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           categories: [transit.bus_city, transit.subway]
         when:
           - amount: {min: 50000}
@@ -138,6 +142,7 @@ revisions:
       - key: telecom-5
         title: 이동통신 요금 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           merchants: [kt, lg_uplus, skt]
         when:
           - amount: {min: 50000}
@@ -153,6 +158,7 @@ revisions:
       - key: kyobo-5
         title: 교보문고 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           merchants: [kyobo_book]
         when:
           - amount: {min: 20000}
@@ -167,6 +173,7 @@ revisions:
       - key: language-5
         title: 어학원·어학시험 5% 캐시백
         target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           merchants: [hackers_academy, hsk, opic, pagoda_academy, toeic, topik]
         when:
           - amount: {min: 20000}
@@ -179,6 +186,7 @@ revisions:
         notes: 원문은 어학원(해커스, 파고다)과 어학시험(TOEIC, TOPIK, OPIc, HSK)
     unmodeled: ['정부지원금(보육료, 유치원보조비, 바우처), 우편요금, 과태료·범칙금·벌금, 여권발급비용, 국가·공공기관·공공단체 가맹점 이용금액은 실적에서 빠진다', 고속버스 차내 단말기와 고속버스 앱 결제는 실적에서 빠진다. 시외버스와 업종이 같아 가리지 않는다, 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다]
 open_questions:
-  - {path: 'revisions[0].benefits[transit-5].when', question: 후불교통은 이용액이 합산 청구되는데 건당 5만원 조건을 합산 청구액에 적용하는지, assumed: 결제 기록 한 건마다 5만원 이상일 때만 캐시백}
+  - {path: 'revisions[0].benefits[transit-5].when', question: '후불교통은 이용액이 합산 청구되는데 건당 5만원 조건을 합산 청구액에 적용하는지. LOCA 365처럼 한 달 합산 청구액을 한 건으로 보면 basis: month_total과 month_total min 50000으로 담는다. 가정대로면 탑승 한 번은 5만원을 넘지 않아 혜택이 거의 0이다', assumed: 결제 기록 한 건마다 5만원 이상일 때만 캐시백}
   - {path: 'revisions[0].new_card', question: 카드 수령(사용)등록일과 사용개시일 중 빠른 날이 기준인데 한 날짜만 받는다, assumed: registration}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 원문은 아파트 관리비(임대료)뿐이고 부동산 임대료를 따로 적지 않았다. 월세 카드납부도 빠지는지, assumed: 빠진다}
 notes: '원래 맡은 카드의정석 COOKIE CHECK(cdPrdCd 838832)는 우리카드 공식 판매여부가 N이고 페이지가 2023년 4월 기준이라, 해외·영화·대중교통·온라인쇼핑 캐시백 구성이 가장 비슷한 이 카드로 바꿈. 외국인 고객 맞춤 체크카드이고 우리은행 영업점에서만 발급. 연회비 없음(해외겸용 Mastercard, 국내전용, 가족카드 포함). 실적은 전월 1일~말일 매출승인일 기준 국내 가맹점 이용분이고 해외 이용금액은 실적에서 빠짐. 국내 서비스로 캐시백 받은 건은 이용금액의 50%만 실적에서 빠진다. 실적 제외와 국내 캐시백 제외: 상품권·기프트카드·선불카드 구매와 충전, 교통카드 구매와 충전, 고속버스(차내 단말기, 앱), 정부지원금, 대학(대학원) 등록금, 국세·지방세·공공요금(4대보험, 전기, 우편, 도시가스, 상하수도, 과태료·범칙금·벌금, 여권발급, 공공기관 가맹점), 아파트 관리비(임대료), 매출취소금액. 수수료와 이자는 결제 기록이 아니라 다루지 않는다. 취소는 취소 매출표 접수월 실적에서 뺀다. 카드 수령(사용)등록일과 사용개시일 중 빠른 날부터 다음 달 말일까지는 국내 서비스를 최저 구간으로 제공하고 해외 서비스는 특례가 없다. 월 한도와 횟수는 당월 1일~말일, 매입 순서대로 적용. 캐시백은 매출표 접수일에 결제계좌로 입금. 가족카드 실적과 한도는 본인카드와 따로. 첫 개정 시행일 근거: page. 상품 출시일 2024-05-29, 준법 심의필 2024-C01139(2024.05.21). 우리카드 서비스 변경 게시판 317건을 끝까지 봤고 이 카드 공지는 없다.'
