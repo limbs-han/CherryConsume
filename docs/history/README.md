@@ -63,3 +63,4 @@
 | [20](20-catalog-schema-v2-sections.md) | 2026-09-28 | 카탈로그 틀 2판 2절부터 4절과 전체 검토 |
 | [21](21-notification-reading.md) | 2026-09-28 | 결제 알림 읽기 |
 | [22](22-catalog-schema-v2-plan.md) | 2026-09-29 | 카탈로그 틀 2판 구현 계획 |
+| [23](23-databricks-reasons.md) | 2026-09-29 | Databricks를 고른 이유와 설정 방침 |
