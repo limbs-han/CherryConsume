@@ -2546,13 +2546,13 @@ git commit -m "feat: 카탈로그 check와 format 명령 추가" -m "작업 001"
 
 내용은 1판 그대로 두고 자리만 옮긴다. git이 이동으로 알아보게 하려고 내용 변경과 커밋을 나눈다. 설계 4.4 끝.
 
-- [ ] **1단계: 옮긴다**
+- [x] **1단계: 옮긴다**
 
 ```bash
 for f in catalog/cards/*.yaml; do id=$(basename "$f" .yaml); iss=${id%%-*}; mkdir -p "catalog/cards/$iss"; git mv "$f" "catalog/cards/$iss/$id.yaml"; done
 ```
 
-- [ ] **2단계: 확인한다**
+- [x] **2단계: 확인한다**
 
 ```bash
 git status --short | grep -c "^R "
@@ -2561,7 +2561,7 @@ ls catalog/cards
 
 기대: `20`. 폴더는 hana, hyundai, ibk, kakaobank, kb, lotte, nh, samsung, shinhan, woori의 10개다.
 
-- [ ] **3단계: 커밋 지점**
+- [x] **3단계: 커밋 지점**
 
 ```bash
 git commit -m "refactor: 카드 파일을 카드사 폴더로 이동" -m "작업 001. 내용은 1판 그대로다. 다음 커밋들에서 2판으로 다시 쓴다"
@@ -2573,7 +2573,7 @@ git commit -m "refactor: 카드 파일을 카드사 폴더로 이동" -m "작업
 
 업종을 2단 트리로 바꾸고, 가맹점에 기본 청구 방식을 더한다. 결제수단, 포인트, 기준값 파일과 카드사 파일 뼈대 10개를 만든다. 설계 2.3, 2.5, 3.1.
 
-- [ ] **1단계: 스크립트를 `$SCRATCH/common_v2.py`에 쓴다**
+- [x] **1단계: 스크립트를 `$SCRATCH/common_v2.py`에 쓴다**
 
 `$SCRATCH/common_v2.py`
 
@@ -2793,11 +2793,11 @@ for key, name in ISSUERS.items():
 print("공통 파일과 카드사 파일 뼈대를 썼다")
 ```
 
-- [ ] **2단계: 기름값을 확인한다**
+- [x] **2단계: 기름값을 확인한다**
 
 한국석유공사 오피넷에서 실행하는 날의 전국 평균 휘발유 판매가격을 찾는다. 소수점 아래는 버리고 원 단위로 쓴다. 찾지 못하면 사용자에게 묻는다. 추측한 값을 넣지 않는다.
 
-- [ ] **3단계: 돌린다**
+- [x] **3단계: 돌린다**
 
 ```bash
 uv run --project backend python "$SCRATCH/common_v2.py" catalog <기름값> <확인한 날 YYYY-MM-DD>
@@ -2805,7 +2805,7 @@ uv run --project backend python "$SCRATCH/common_v2.py" catalog <기름값> <확
 
 기대: `공통 파일과 카드사 파일 뼈대를 썼다`
 
-- [ ] **4단계: 공통 파일에 오류가 없는지 확인한다**
+- [x] **4단계: 공통 파일에 오류가 없는지 확인한다**
 
 카드 파일은 아직 1판이라 카드 파일 오류는 나온다. 공통 파일과 카드사 파일 줄만 본다.
 
@@ -2815,7 +2815,7 @@ uv run --project backend python -m cherry_core.catalog check | grep -E "^  (cate
 
 기대: 출력 없음.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add catalog/categories.yaml catalog/merchants.yaml catalog/payment_methods.yaml catalog/point_programs.yaml catalog/reference.yaml catalog/issuers
@@ -2829,7 +2829,7 @@ git commit -m "feat: 카탈로그 2판 공통 파일 추가" -m "작업 001. 업
 
 1판에서 그대로 옮길 수 있는 것을 스크립트로 옮긴다. 이름 끝이 `-t1`, `-t2`인 구간 복제 혜택은 나머지 칸이 같으면 구간표 하나로 합친다. 설계 4.4의 1번.
 
-- [ ] **1단계: 스크립트를 `$SCRATCH/convert_v1.py`에 쓴다**
+- [x] **1단계: 스크립트를 `$SCRATCH/convert_v1.py`에 쓴다**
 
 `$SCRATCH/convert_v1.py`
 
@@ -3040,7 +3040,7 @@ print(
 )
 ```
 
-- [ ] **2단계: 돌린다**
+- [x] **2단계: 돌린다**
 
 ```bash
 uv run --project backend python "$SCRATCH/convert_v1.py" catalog "$SCRATCH/todo.txt"
@@ -3048,7 +3048,7 @@ uv run --project backend python "$SCRATCH/convert_v1.py" catalog "$SCRATCH/todo.
 
 기대: `카드 20장 변환, 판단할 것 131건`
 
-- [ ] **3단계: 형식과 검증을 확인한다**
+- [x] **3단계: 형식과 검증을 확인한다**
 
 ```bash
 uv run --project backend python -m cherry_core.catalog format
@@ -3057,7 +3057,7 @@ uv run --project backend python -m cherry_core.catalog check | grep -E "^오류|
 
 기대: `형식을 고친 파일 0개`, `오류 0`, `경고 20`. 경고는 모두 빈 `product_codes`다.
 
-- [ ] **4단계: 판단 목록을 저장소에 둔다**
+- [x] **4단계: 판단 목록을 저장소에 둔다**
 
 다른 PC에서도 이어 받을 수 있게 목록을 작업 폴더에 옮긴다.
 
@@ -3083,7 +3083,7 @@ EOF
 
 기대: `151`. 기계 변환이 남긴 131건과 카드마다 시행일 조사 1건이다.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add catalog/cards
@@ -3099,7 +3099,7 @@ git commit -m "docs: 카탈로그 2판 카드별 판단 목록 추가" -m "작�
 
 같은 카드사 카드끼리 값이 같은 실적 규칙 칸을 카드사 파일 기본값으로 올린다. 올리기 전과 뒤에 합친 개정이 카드마다 같은지 스크립트가 확인한다. 설계 4.4의 3번.
 
-- [ ] **1단계: 스크립트를 `$SCRATCH/lift_defaults.py`에 쓴다**
+- [x] **1단계: 스크립트를 `$SCRATCH/lift_defaults.py`에 쓴다**
 
 `$SCRATCH/lift_defaults.py`
 
@@ -3169,7 +3169,7 @@ for issuer, cards in sorted(by_issuer.items()):
     print(f"{issuer}: 카드 {len(cards)}장에서 {sorted(common)}를 올렸다")
 ```
 
-- [ ] **2단계: 돌린다**
+- [x] **2단계: 돌린다**
 
 ```bash
 uv run --project backend python "$SCRATCH/lift_defaults.py" catalog
@@ -3177,7 +3177,7 @@ uv run --project backend python "$SCRATCH/lift_defaults.py" catalog
 
 기대: 카드가 두 장 이상인 7개 카드사에서 `...를 올렸다`, ibk, kakaobank, nh는 `카드 1장이라 기본값을 올리지 않는다`.
 
-- [ ] **3단계: 확인한다**
+- [x] **3단계: 확인한다**
 
 ```bash
 uv run --project backend python -m cherry_core.catalog format
@@ -3186,7 +3186,7 @@ uv run --project backend python -m cherry_core.catalog check | grep -E "^오류|
 
 기대: `오류 0`, `경고 20`.
 
-- [ ] **4단계: 커밋 지점**
+- [x] **4단계: 커밋 지점**
 
 ```bash
 git add catalog/cards catalog/issuers
@@ -3202,7 +3202,7 @@ git commit -m "refactor: 카드사 공통 실적 규칙을 카드사 파일로 �
 **파일**
 - 고치기: `.claude/agents/card-researcher.md`, `.claude/agents/card-verifier.md`, `.claude/rules/catalog.md`
 
-- [ ] **1단계: `.claude/agents/card-researcher.md`를 다시 쓴다**
+- [x] **1단계: `.claude/agents/card-researcher.md`를 다시 쓴다**
 
 ````markdown
 ---
@@ -3247,7 +3247,7 @@ tools: WebSearch, WebFetch, Read, Edit, Write, Glob, Grep, Bash
 - 공통 파일에 더해야 할 가맹점, 업종, 결제수단, 포인트
 ````
 
-- [ ] **2단계: `.claude/agents/card-verifier.md`의 "순서" 앞에 한 절을 더한다**
+- [x] **2단계: `.claude/agents/card-verifier.md`의 "순서" 앞에 한 절을 더한다**
 
 ```markdown
 ## 먼저 읽을 것
@@ -3258,7 +3258,7 @@ tools: WebSearch, WebFetch, Read, Edit, Write, Glob, Grep, Bash
 
 같은 파일 "순서" 3번의 끝에 문장을 더한다. `공유 한도는 limits의 key와 shared, 중복은 stacks, 고르는 패키지는 options, 이용액 순위는 ranked로 담겼는지 본다.`
 
-- [ ] **3단계: `.claude/rules/catalog.md`를 다시 쓴다**
+- [x] **3단계: `.claude/rules/catalog.md`를 다시 쓴다**
 
 ````markdown
 ---
@@ -3294,7 +3294,7 @@ paths:
 - 파일을 고치면 훅이 검증을 돌린다. 오류가 나오면 그 자리에서 고친다.
 ````
 
-- [ ] **4단계: 커밋 지점**
+- [x] **4단계: 커밋 지점**
 
 ```bash
 git add .claude/agents/card-researcher.md .claude/agents/card-verifier.md .claude/rules/catalog.md
