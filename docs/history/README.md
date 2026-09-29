@@ -66,3 +66,4 @@
 | [23](23-databricks-reasons.md) | 2026-09-29 | Databricks를 고른 이유와 설정 방침 |
 | [24](24-databricks-approach.md) | 2026-09-29 | Databricks 파이프라인 방식 |
 | [25](25-catalog-schema-v2-build.md) | 2026-09-29 | 카탈로그 틀 2판 구현 |
+| [26](26-calc-engine-design.md) | 2026-09-29 | 계산 엔진 의도, 설계, 계획 |
