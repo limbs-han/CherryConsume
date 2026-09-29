@@ -72,3 +72,10 @@ def test_benefit_fields_in_reading_order():
         "key": "k",
     }
     assert list(yaml.safe_load(canonical_text(b))) == ["key", "title", "target", "reward", "limits", "tiers"]
+
+
+def test_number_like_strings_stay_strings_in_any_yaml_reader():
+    text = canonical_text({"product_codes": ["09256", "202404150001", "12-11-296-0001"]})
+    assert "'09256'" in text
+    assert "'202404150001'" in text
+    assert yaml.safe_load(text)["product_codes"] == ["09256", "12-11-296-0001", "202404150001"]

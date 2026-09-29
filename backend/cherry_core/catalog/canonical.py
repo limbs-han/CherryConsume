@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -202,8 +203,18 @@ class _Dumper(yaml.SafeDumper):
         return super().increase_indent(flow, False)
 
 
+# YAML 1.2로 읽는 도구는 09256 같은 글자를 숫자로 읽는다. 숫자처럼 보이는 글자는 늘 따옴표로 감싼다
+_NUMBER_LIKE = re.compile(r"[-+]?(\.\d+|\d[\d_]*(\.\d*)?)([eE][-+]?\d+)?")
+
+
 def _represent_str(dumper: yaml.SafeDumper, value: str) -> yaml.Node:
-    return dumper.represent_scalar("tag:yaml.org,2002:str", value, style="|" if "\n" in value else None)
+    if "\n" in value:
+        style = "|"
+    elif _NUMBER_LIKE.fullmatch(value):
+        style = "'"
+    else:
+        style = None
+    return dumper.represent_scalar("tag:yaml.org,2002:str", value, style=style)
 
 
 _Dumper.add_representer(str, _represent_str)
