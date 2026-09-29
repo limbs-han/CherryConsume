@@ -1,7 +1,13 @@
 schema_version: 2
 id: samsung
 name: 삼성카드
+collect: {list_url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPDCCardCardinfoRecommendPC001', method: blocked, interval_days: 30, notice_url: 'https://www.samsungcard.com/personal/notice/news/UHPPCC0247M0.jsp'}
 defaults:
-  - effective_from: 2026-09-28
-    effective_from_estimated: true
+  - effective_from: 2021-03-25
     spend: {basis: prev_calendar_month, interest_free: count, installment: full_at_purchase, cancellation: cancel_month, exclude_applied: 1}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+open_questions:
+  - {path: 'defaults[0].spend.installment', question: 두 카드 상품 페이지 모두 전월 이용금액을 일시불 및 할부 이용금액이라고만 적고 할부를 승인한 달에 전액 넣는지 적지 않는다, assumed: full_at_purchase}
+notes: 2026-09-29 확인. defaults 시작일 2021-03-25는 신용카드 개인회원 표준약관 시행일(공지사항 2021-02-25 게시). 삼성카드 카드 중 가장 이른 첫 개정은 iD ON 2021-09-01. 그 뒤 약관 시행일 2021-09-24, 2022-11-01, 2024-10-17, 2026-05-12는 실적 규칙 기본값을 바꾸지 않아 항목을 더하지 않았다. 무이자할부 할인 제외는 iD ON과 taptap O 공통. robots.txt는 User-agent *를 전부 막고 이름 붙은 검색 봇에만 카드 안내 페이지를 열어 blocked로 둔다. 카드 상세와 공지는 자바스크립트로 그리고 공지 목록은 frontservice/SHPPCC0247S01 POST로 온다. 카드별 출시일자와 안내장 변경이력은 상품공시실의 신용카드 상품약관 공시(company/IR/announce/product-conditions/UHPPCI0261M0.jsp)에 있다. 옛 서비스변경안내 게시판(UHPPCC0249M0)은 2023-03-14 글이 마지막이고 그 뒤 변경 안내는 공지사항에 올라온다.

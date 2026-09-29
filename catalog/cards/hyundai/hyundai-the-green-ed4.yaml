@@ -2,55 +2,77 @@ schema_version: 2
 id: hyundai-the-green-ed4
 issuer: hyundai
 name: 현대카드 the Green Edition4
+search_names: [the Green Edition4, 더 그린 에디션4]
 kind: credit
+product_codes: [TGE4]
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 200000}
-  - {scope: global, amount: 200000}
+  - {scope: global, brand: visa, amount: 200000}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=TGE4', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=TGE4', fetched_at: 2026-09-29, review_no: 제2026-C1h-13291호, review_valid_until: 2027-09-01}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2026-08-24
     source: page
     tiers: [0, 500000, 1000000]
     spend:
-      exclude_categories: [annual_fee, gift_card, tax, utility]
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility]
       cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 1000000, from: receipt}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    stacks:
+      - key: main
+        pick: priority
+        order: [travel-5, overseas-5, dining-5, base-all-1-5]
+        spill: split
     benefits:
       - key: base-all-1-5
         title: 국내외 가맹점 1.5% M포인트 적립
         target: {all: true}
-        reward: {type: points, program: hyundai_m_point, rate: 1.5}
+        reward: {type: points, program: hyundai_m_point, rate: 1.5, round: round}
         tiers: {from: 500000}
-        notes: 한도 없음. 매출 건별 소수점 이하 반올림. 카드 notes의 적립 제외 항목은 적립 안 됨
+        notes: 한도 없음
       - key: travel-5
         title: 여행 영역 5% M포인트 적립
         target:
-          categories: [travel.airline, travel.hotel]
-        reward: {type: points, program: hyundai_m_point, rate: 5}
+          categories: [travel.agency, travel.airline, travel.duty_free, travel.hotel]
+        when:
+          - {region: domestic}
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
         limits:
           - {per: month, amount: 50000}
         tiers: {from: 1000000}
-        notes: 국내 항공사, 여행사, 특급호텔, 면세점 업종. 호텔은 특급호텔만. 여행사·면세점은 업종 코드 없음. PG·간편결제 가맹점명 승인 건 제외. 적용 시 기본 1.5% 중복 없음
+        unmodeled: ['항공은 국내 항공사, 호텔은 특급호텔만 적립한다', PG(결제대행) 가맹점명으로 승인된 결제는 적립하지 않는다, 영역별 적립 한도는 본인과 가족 카드를 합산한다]
+        notes: 국내 항공사, 여행사, 특급호텔, 면세점 업종. 월 5만 M포인트, 넘으면 1.5%. 간편결제 가맹점명으로 승인되면 제외
       - key: overseas-5
         title: 해외 영역 5% M포인트 적립
         target: {all: true}
         when:
           - {region: overseas}
-        reward: {type: points, program: hyundai_m_point, rate: 5}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
         limits:
           - {per: month, amount: 40000}
         tiers: {from: 1000000}
-        notes: 해외 온·오프라인 가맹점. 국내외겸용 카드만. 국제브랜드·해외서비스 수수료 제외. 적용 시 기본 1.5% 중복 없음
+        unmodeled: [영역별 적립 한도는 본인과 가족 카드를 합산한다]
+        notes: 해외 온·오프라인 가맹점. 국내외겸용 카드만. 월 4만 M포인트, 넘으면 1.5%
       - key: dining-5
         title: 다이닝 영역 5% M포인트 적립
         target:
-          categories: [restaurant]
-        reward: {type: points, program: hyundai_m_point, rate: 5}
+          categories: [restaurant.general]
+        when:
+          - {region: domestic}
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
         limits:
           - {per: month, amount: 10000}
         tiers: {from: 1000000}
-        notes: 국내 일반음식점. 네이버페이 등 간편결제·PG 가맹점명으로 승인되면 제외. 적용 시 기본 1.5% 중복 없음
-notes: '2026-09-09 출시한 Edition4 기준. 실적 제외: 카드론, 현금서비스, 각종 수수료·이자, 국제브랜드·해외서비스 수수료. 취소는 승인월 실적에서 빼며 해외 이용 취소만 취소월에서 뺀다. 적립 제외(실적과 별개): 아파트관리비, 월세, 유치원·학교 납입금, 대학 등록금, 4대 사회보험료, 고속도로 통행료, 후불하이패스, 고속버스, 다른 현대카드 할인·무이자할부 적용 건 전체. 추가 혜택(5%)이 적용되면 기본 1.5%는 겹쳐 주지 않고, 영역 한도를 넘으면 1.5%로 적립. 신규 발급 시 카드 수령 등록월 다음 달 이용분까지 실적 무관. 결제 건 혜택 아님: 연 15만원 바우처(첫해 누적 100만원, 이후 전년 1,200만원 이상), 공항 라운지 연 5회, 공항·특급호텔 발레파킹 월 5회, M 긴급적립, 메탈 플레이트.'
+        unmodeled: [PG(결제대행) 가맹점명으로 승인된 결제는 적립하지 않는다, 영역별 적립 한도는 본인과 가족 카드를 합산한다]
+        notes: 국내 일반음식점. 네이버페이 등 간편결제 가맹점명으로 승인되면 제외. 월 1만 M포인트, 넘으면 1.5%
+    unmodeled: ['대중교통, 정기결제처럼 사후 승인되는 가맹점과 해외 이용 금액은 매출일자 기준으로 실적 달을 정한다', 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 본인과 가족 카드 이용 금액을 합산해 실적을 센다, 적립은 결제 순서가 아니라 현대카드 매출전표 접수 순서대로 한도를 쓴다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다, 세이브-오토 같은 선지급 포인트 약정을 쓰면 그 약정의 적립 기준을 따른다, 월 적립 한도를 넘긴 뒤 혜택 받은 결제를 취소하면 한도 때문에 빠졌던 이전 결제에 다음 달 15일경 적립한다]
+notes: '첫 개정 시행일 근거: page. 상품 페이지의 부가서비스 안내에 카드 신규 출시 2026-08-24로 적혀 있다. 1판 기록의 출시일 2026-09-09와 다르다. 출시 뒤 뉴스·공지에 이 카드의 부가서비스 변경 공지는 없다(2026-09-29까지). 연회비 Visa와 국내전용 모두 200,000원. 실적은 전월 1일~말일 the Green Edition4 본인+가족 카드 일시불·할부 금액이고 다른 카드 이용 금액은 합산하지 않는다. 할부와 리볼빙은 최초 승인월에 넣는다. 취소는 승인월 실적에서 빼고 해외 이용 취소만 취소 발생월에서 뺀다. 실적 제외: 세금과 공과금(국세, 지방세, 지방세외수입, 수도, 전기, 도시가스 요금 등), 상품권 등 현금성 유가증권, 선불카드 구매·충전, 연회비, 국제브랜드·해외서비스 수수료. 적립 제외: 실적 제외 항목, 아파트 관리비, 부동산 임대료(월세), 유치원·초중고 납입금, 대학·대학원 등록금, 4대 사회보험료와 장애인 고용부담금, 고속도로 통행료, 후불하이패스, 고속버스, 이 카드 혜택 밖의 현대카드 할인과 무이자할부가 적용된 결제 전체. 추가 혜택이 적용되면 기본 1.5%는 겹쳐 주지 않고 영역 한도를 넘은 금액은 1.5%로 적립한다. 매출 건별 소수점 이하 반올림. 신규 발급 시 카드 수령 등록월 다음 달 이용분까지 기본·추가 혜택과 라운지·발레파킹을 실적과 상관없이 준다. 결제 건 혜택 아님: 연 15만원 바우처(첫해 누적 100만원, 이후 전년 1,200만원 이상), 공항 라운지 연 5회, 공항·특급호텔 발레파킹 월 5회(전월 50만원 이상), M 긴급적립, 메탈 플레이트, Visa Signature 서비스.'

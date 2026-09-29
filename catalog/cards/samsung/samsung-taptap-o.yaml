@@ -2,40 +2,75 @@ schema_version: 2
 id: samsung-taptap-o
 issuer: samsung
 name: 삼성카드 taptap O
+search_names: [taptap O, 탭탭오]
 kind: credit
+product_codes: [AAP1483]
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 10000}
-  - {scope: global, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1483', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1483', fetched_at: 2026-09-29, review_no: 제2026-C1h-02439호, review_valid_until: 2027-02-23}
+  - {id: disclosure, kind: notice, url: 'https://www.samsungcard.com/company/IR/announce/product-conditions/UHPPCI0261M0.jsp', fetched_at: 2026-09-29}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2024-09-11
     source: page
     tiers: [0, 300000]
     spend:
-      exclude_categories: [apartment_fee, gift_card, tax, taxi, transit, utility]
+      exclude_categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax, taxi, transit, utility]
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {pkg-coffee-30: 0, pkg-openmarket-7: 0, pkg-social-7: 0, pkg-starbucks-50: 0, pkg-trendy-7: 0}
+      from: issue
+    options:
+      - key: package
+        title: 라이프스타일 옵션 패키지
+        choices:
+          - {key: p1, title: 패키지1 스타벅스 50%·오픈마켓 7%}
+          - {key: p2, title: 패키지2 스타벅스 50%·소셜커머스 7%}
+          - {key: p3, title: 패키지3 스타벅스 50%·트렌디숍 7%}
+          - {key: p4, title: 패키지4 커피전문점 30%·오픈마켓 7%}
+          - {key: p5, title: 패키지5 커피전문점 30%·소셜커머스 7%}
+          - {key: p6, title: 패키지6 커피전문점 30%·트렌디숍 7%}
+        change: next_month
+    limits:
+      - {key: transit-taxi, per: month, amount: 5000}
     benefits:
       - key: transit-taxi-10
-        title: 대중교통·택시 10% 할인
+        title: 대중교통 10% 할인
         target:
-          categories: [taxi, transit]
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: month, amount: 5000}
+          - {shared: transit-taxi}
         tiers: {from: 300000}
-        notes: 버스·지하철은 후불교통기능 선택 시만. 대중교통·택시 통합 월 5,000원
+        unmodeled: [실제 이용일이 아닌 이용대금명세서에 적힌 이용일 기준으로 할인하고 접수된 순서대로 한도를 쓴다]
+        notes: 버스·지하철은 후불교통기능을 고른 카드만. 대중교통·택시 통합 월 5천원
+      - key: taxi-10
+        title: 택시 10% 할인
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: transit-taxi}
+        tiers: {from: 300000}
+        unmodeled: [실제 이용일이 아닌 이용대금명세서에 적힌 이용일 기준으로 할인하고 접수된 순서대로 한도를 쓴다]
       - key: telecom-10
         title: 이동통신요금 10% 할인
         target:
           merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 5000}
         tiers: {from: 300000}
-        notes: 카드 자동납부 건만. 결합상품요금, 단말기 구매, 대리점 결제 제외
+        unmodeled: ['결합상품요금, 휴대전화 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다']
+        notes: SKT·KT·LG U+ 이동통신요금 자동납부. 신규 발급 특례도 카드 자동납부를 연결해야 받는다
       - key: movie-5000
         title: CGV·롯데시네마 5,000원 할인
         target:
@@ -46,88 +81,121 @@ revisions:
         limits:
           - {per: day, count: 1}
           - {per: month, count: 2}
+          - {per: year, count: 12}
         tiers: {from: 300000}
-        notes: 1만원 이상 결제 시. 통합 일 1회, 월 2회, 연 12회(1.1~12.31). 현장·공식 홈페이지·앱만, 예매 대행 사이트 제외. 연 한도는 미모델
+        unmodeled: [영화 티켓 결제만 할인한다, 현장 결제와 공식 홈페이지·앱 예매만 할인하고 예매 대행 사이트는 제외한다]
+        notes: 영화 티켓 1만원 이상. 통합 일 1회, 월 2회, 연 12회(1월 1일~12월 31일). 신규 발급 특례로 받은 할인도 연 12회에 들어간다
       - key: pkg-starbucks-50
         title: '[패키지1~3] 스타벅스 50% 할인'
         target:
           merchants: [starbucks]
+        when:
+          - option:
+              package: [p1, p2, p3]
         reward: {type: billing_discount, rate: 50}
         limits:
           - {per: month, amount: 10000}
         tiers: {from: 300000}
-        notes: 옵션 패키지 택1(패키지1~3 선택 시). 가두매장과 사이렌오더만, 백화점·쇼핑몰 입점 매장, 상품권·선불카드 충전 제외
+        unmodeled: [가두매장과 사이렌오더만 할인하고 백화점·쇼핑몰 임대매장은 제외한다, 스타벅스 상품권 구매와 선불카드 충전은 할인하지 않는다]
       - key: pkg-coffee-30
         title: '[패키지4~6] 커피전문점 30% 할인'
         target:
           merchants: [angel_in_us, artisee, cafe_bene, coffee_bean, hollys, pascucci, paul_bassett, starbucks, tom_n_toms, twosome]
+        when:
+          - option:
+              package: [p4, p5, p6]
         reward: {type: billing_discount, rate: 30}
         limits:
           - {per: month, amount: 10000}
         tiers: {from: 300000}
-        notes: 옵션 패키지 택1(패키지4~6 선택 시). 가두매장만, 백화점·쇼핑몰 입점 매장 제외. 스타벅스는 사이렌오더 포함
+        unmodeled: [가두매장만 할인하고 백화점·쇼핑몰 임대매장은 제외한다. 스타벅스는 사이렌오더도 할인한다, 스타벅스 상품권 구매와 선불카드 충전은 할인하지 않는다]
       - key: pkg-openmarket-7
         title: '[패키지1·4] 오픈마켓 7% 할인'
         target:
           merchants: [auction, eleven_st, gmarket]
         when:
+          - option:
+              package: [p1, p4]
           - {channel: online}
         reward: {type: billing_discount, rate: 7}
         limits:
           - {per: month, amount: 5000}
         tiers: {from: 300000}
-        notes: 옵션 패키지 택1(패키지1·4 선택 시). 쇼핑 할인 월 5,000원
       - key: pkg-social-7
         title: '[패키지2·5] 소셜커머스 7% 할인'
         target:
           merchants: [coupang, tmon, wemakeprice]
         when:
+          - option:
+              package: [p2, p5]
           - {channel: online}
         reward: {type: billing_discount, rate: 7}
         limits:
           - {per: month, amount: 5000}
         tiers: {from: 300000}
-        notes: 옵션 패키지 택1(패키지2·5 선택 시). 쇼핑 할인 월 5,000원
       - key: pkg-trendy-7
         title: '[패키지3·6] 트렌디숍 7% 할인'
         target:
-          merchants: [cu, eight_seconds, emart24, gs25, hm, olive_young, seven_eleven, uniqlo, zara]
+          categories: [convenience]
+          merchants: [eight_seconds, hm, olive_young, uniqlo, zara]
         when:
+          - option:
+              package: [p3, p6]
           - {channel: offline}
         reward: {type: billing_discount, rate: 7}
         limits:
           - {per: month, amount: 5000}
         tiers: {from: 300000}
-        notes: '옵션 패키지 택1(패키지3·6 선택 시). 트렌디숍: 편의점, 올리브영, 유니클로, 자라, H&M, 8SECONDS. 가두매장만. 공식 문구 미확인: 편의점 대상 브랜드'
+        unmodeled: [가두매장만 할인하고 백화점·쇼핑몰 임대매장은 제외한다]
+        notes: 트렌디숍은 편의점, 올리브영, 유니클로, 자라, H&M, 8SECONDS. 공식 문구는 편의점 브랜드를 따로 적지 않아 편의점 업종 전체로 둔다
       - key: pkg-openmarket-1p
         title: '[패키지2·3·5·6] 오픈마켓 1% 적립'
         target:
           merchants: [auction, eleven_st, gmarket]
         when:
+          - option:
+              package: [p2, p3, p5, p6]
           - {channel: online}
         reward: {type: points, program: samsung_bigpoint, rate: 1}
-        notes: 오픈마켓 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 적립은 한도·실적 조건 없음
+        exclude_applied: 0
+        notes: 적립은 한도와 실적 조건 없음
       - key: pkg-social-1p
         title: '[패키지1·3·4·6] 소셜커머스 1% 적립'
         target:
           merchants: [coupang, tmon, wemakeprice]
         when:
+          - option:
+              package: [p1, p3, p4, p6]
           - {channel: online}
         reward: {type: points, program: samsung_bigpoint, rate: 1}
-        notes: 소셜커머스 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 적립은 한도·실적 조건 없음
+        exclude_applied: 0
+        notes: 적립은 한도와 실적 조건 없음
       - key: pkg-trendy-1p
         title: '[패키지1·2·4·5] 트렌디숍 1% 적립'
         target:
-          merchants: [cu, eight_seconds, emart24, gs25, hm, olive_young, seven_eleven, uniqlo, zara]
+          categories: [convenience]
+          merchants: [eight_seconds, hm, olive_young, uniqlo, zara]
         when:
+          - option:
+              package: [p1, p2, p4, p5]
           - {channel: offline}
         reward: {type: points, program: samsung_bigpoint, rate: 1}
-        notes: 트렌디숍 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 가두매장만. 적립은 한도·실적 조건 없음
+        exclude_applied: 0
+        unmodeled: [가두매장만 적립하고 백화점·쇼핑몰 임대매장은 제외한다]
+        notes: 적립은 한도와 실적 조건 없음
       - key: overseas-1-3p
         title: 해외 1.3% 빅포인트 적립
-        target: {all: true}
+        target:
+          exclude_categories: [education.tuition, insurance.social, prepaid_charge, tax, taxi, transit, utility]
+          all: true
         when:
           - {region: overseas}
         reward: {type: points, program: samsung_bigpoint, rate: 1.3}
-        notes: 해외겸용카드만. 해외 가맹점과 해외 직구. 실적·한도 없음. 무이자할부, 할인 적용 건 등 적립 제외
-notes: '실적은 "전월 일시불 및 할부 이용금액". 공식 문구 미확인: 전월 1일~말일 기준 명시, 할부 인정 방식, 취소 반영 달. 실적 제외 중 업종 코드 없는 것: 대학 등록금, 선불카드 충전. 할인 적용 건은 할인 전 총액이 실적에서 빠짐. 무이자할부 결제는 할인 대상 아님(실적 제외 여부는 공식 문구에 없음). 발급월+1개월까지는 실적 무관 제공(영화는 연 12회 한도에 포함). 라이프스타일 옵션 패키지 6개 중 1개를 골라 앱에서 매월 변경. 골라진 패키지의 커피 1개, 쇼핑 7% 1개, 나머지 쇼핑 2개 1% 적립만 적용되며 pkg- 혜택은 모두 선택지로 나열함. 결제 건 혜택 아님: 컨택리스 결제 지원.'
+        exclude_applied: 0
+        unmodeled: ['다이어트할부, 고속버스, 고속도로 통행요금, 모바일 티머니, 이마트 이클럽, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
+        notes: 해외 가맹점과 해외 직접구매. 해외겸용카드만. 실적 조건과 한도 없음. 2024-09-11 추가된 혜택
+open_questions:
+  - {path: 'revisions[0].spend', question: 상품 페이지가 실적을 전월 일시불 및 할부 이용금액이라고만 적는다. 1일~말일 기준인지와 취소를 어느 달 실적에서 빼는지 없다. 카드사 기본값을 쓴다, assumed: 'prev_calendar_month, cancel_month'}
+  - {path: 'revisions[0].new_card.tier_by_benefit', question: 대중교통·택시·이동통신·영화에는 발급월+1개월 실적 무관 문구가 있으나 라이프스타일 패키지 할인에는 없다, assumed: 패키지 할인은 신규 발급 특례 없음}
+  - {path: 'revisions[0].benefits', question: 할인 금액과 적립 포인트의 원 미만을 어떻게 처리하는지 공식 문구에 없다, assumed: floor}
+notes: '첫 개정 시행일 근거: disclosure. 카드 출시일자 2016-04-11. 상품약관 공시의 변경이력에서 혜택이 바뀐 날은 2017-05-19(이동통신 할인 조건)와 2024-09-11(해외 1.3% 적립 추가)이다. 2025-10-30 발급 채널 문구 삭제와 2026-07-30 안내장 유의사항 변경(2026-06-29 공지)은 혜택이 같다. 공지사항 400건과 옛 서비스변경안내 105건을 끝까지 봤고 이 카드의 부가서비스 변경 공지는 없다. 연회비 Mastercard·국내전용 모두 10,000원(기본 7,000+제휴 3,000), 가족카드 없음. 실적 제외: 할인이 적용된 이용금액(할인 전 총액), 국세·지방세·공과금, 아파트 관리비, 대학 등록금, 대중교통, 택시, 상품권, 선불카드 충전. 할인과 적립은 겹쳐 받지 않고, 무이자할부는 할인과 적립 모두 제외. 할인 적용 금액은 포인트 적립 제외. 적립 받은 결제는 실적에 들어간다. 발급월+1개월까지는 대중교통·택시, 이동통신, 영화를 실적과 상관없이 준다. 라이프스타일 옵션 패키지는 6개 중 1개를 골라 삼성카드 앱에서 매월 바꾸고 신청 다음 달 1일에 반영된다. 골라진 패키지의 커피 할인 1개, 쇼핑 7% 할인 1개, 나머지 쇼핑 2개 1% 적립만 받는다. 할인 한도는 쇼핑 월 5천원, 커피 월 1만원. 빅포인트 유효기간 5년. 결제 건 혜택 아님: 컨택리스 결제 지원, 연회비 캐시백 행사.'

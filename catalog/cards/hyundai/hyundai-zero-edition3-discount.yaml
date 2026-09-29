@@ -2,26 +2,28 @@ schema_version: 2
 id: hyundai-zero-edition3-discount
 issuer: hyundai
 name: 현대카드ZERO Edition3(할인형)
+search_names: [제로 에디션3 할인형, 현대카드ZERO Edition3 할인형]
 kind: credit
+product_codes: [ZROE3]
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 15000}
-  - {scope: global, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZROE3', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZROE3', fetched_at: 2026-09-29, review_no: 제2026-C1h-13718호, review_valid_until: 2027-09-07}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2024-01-05
     source: page
     tiers: [0]
-    spend:
-      exclude_categories: []
-      cancellation: cancel_month
+    spend: {basis: none, cancellation: cancel_month}
     benefits:
       - key: all-0-8
         title: 국내외 가맹점 0.8% 할인
         target: {all: true}
         reward: {type: billing_discount, rate: 0.8}
-        notes: 실적·한도·횟수 제한 없음. 청구 할인. 해외는 국내외겸용 카드만. 카드 notes의 할인 제외 항목은 할인 안 됨
-notes: '전월실적 조건이 없어 spend_basis와 spend_rule은 계산에 쓰이지 않음. spend_rule 값은 자리 채움용 기본값. 할인 제외(실적과 별개): 카드론, 현금서비스, 연회비, 수수료·이자, 국제브랜드·해외서비스 수수료, 공과금(국세·관세·지방세·상하수도·벌과금 등), 전기·도시가스 요금, 아파트관리비, 초·중·고 학교납입금, 사립유치원비, 대학·대학원 등록금, 상품권·선불카드, 4대 사회보험료, 고속도로 통행료, 후불하이패스, 고속버스, 다른 현대카드 할인·무이자할부 적용 건. 할부는 개월 수와 관계없이 1개월 차에 전액 할인. 결제 건 혜택 아님: 긴급할인(선지급 포인트 서비스), 메탈 플레이트, Visa/Amex 플래티넘 서비스.'
+        notes: 실적·한도·횟수 제한 없는 청구 할인. 해외는 국내외겸용 카드만. 할부는 개월 수와 상관없이 1개월 차에 전액 할인. 할인 제외는 카드사 파일의 혜택 제외
+open_questions:
+  - {path: 'revisions[0].benefits[all-0-8].reward', question: 할인 금액의 원 미만을 어떻게 처리하는지 공식 문구에 없다, assumed: floor}
+notes: '첫 개정 시행일 근거: page. 카드 신규 출시 2024-01-05(상품 페이지 부가서비스 유지 안내). 뉴스·공지 중 2024-01-01 뒤 438건의 본문을 끝까지 봤다. 이 카드가 대상에 든 공지는 긴급할인 대상 확대(2024-10-30, 2025-01-20, 2025-06-10), 긴급할인 이름 변경(2025-08-13), 약관 국제브랜드 수수료 문구(2026-01-07), 해외 결제 대행은행 문구(2026-03-30)이고 모두 할인 혜택은 그대로다. 전월실적 조건이 없어 실적 기준은 none이고 취소 칸은 자리를 채우는 값이다. 연회비 국내외겸용(Visa Platinum/Amex Platinum)과 국내전용 모두 15,000원(기본 10,000+제휴 5,000), 가족카드 5,000원. 할인 제외(실적과 별개)는 공과금(국세, 관세, 지방세, 지방세외수입, 상하수도, 벌과금, 과태료 등), 전기·도시가스 요금, 아파트관리비, 초·중·고 학교납입금, 사립유치원비, 대학·대학원 등록금, 상품권·선불카드, 4대 사회보험료, 고속도로 통행료, 후불하이패스, 고속버스, 다른 현대카드 할인·무이자할부 적용 건, 연회비, 국제브랜드·해외서비스 수수료. 긴급할인을 쓰면 기본 할인 금액이 긴급할인 상환에 쓰인다. 결제 건 혜택 아님: 긴급할인(선지급 포인트 서비스), 메탈 플레이트, 톰 삭스 크레딧 카드 플레이트, Visa/Amex 플래티넘 서비스.'
