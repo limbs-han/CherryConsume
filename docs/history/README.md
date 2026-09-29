@@ -62,3 +62,4 @@
 | [19](19-work-history.md) | 2026-09-28 | 작업 기록 폴더 |
 | [20](20-catalog-schema-v2-sections.md) | 2026-09-28 | 카탈로그 틀 2판 2절부터 4절과 전체 검토 |
 | [21](21-notification-reading.md) | 2026-09-28 | 결제 알림 읽기 |
+| [22](22-catalog-schema-v2-plan.md) | 2026-09-29 | 카탈로그 틀 2판 구현 계획 |
