@@ -2,40 +2,65 @@ schema_version: 2
 id: ibk-narasarang
 issuer: ibk
 name: IBK나라사랑카드
+search_names: [나라사랑카드]
 kind: check
+product_codes: [12-11-296-0001]
 status: on_sale
 annual_fees:
-  - {scope: domestic, amount: 0}
-  - {scope: global, amount: 0}
+  - {scope: domestic, brand: bc, amount: 0}
+  - {scope: global, brand: master, amount: 0}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=296&PDCD=0001&pageId=CA01030000', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=296&PDCD=0001&pageId=CA01030000', fetched_at: 2026-09-29, review_no: 제2026-5925호, review_valid_until: 2026-12-31}
+  - {id: manual, kind: manual_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/2026010710225623561658375415794.pdf', fetched_at: 2026-09-29, review_no: 제2026-0104호, review_valid_until: 2027-01-04}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
+  - effective_from: 2026-09-28
     effective_from_estimated: true
     source: page
     tiers: [0, 80000, 200000, 250000, 500000, 1000000]
     spend:
       basis: prev_calendar_month
-      exclude_categories: [gift_card, tax, transit, utility]
+      exclude_categories: [gift_card, tax, transit.bus_city, transit.subway, utility]
       interest_free: count
       installment: full_at_purchase
       cancellation: cancel_month
       exclude_applied: 0
+    new_card: {until: next_month_end, tier: 250000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card]
+      unmodeled: [간편결제로 가맹점명이 결제대행사명으로 찍힌 건은 할인 제외]
+    facts:
+      - {key: soldier, type: bool, scope: user, ask: '현역병으로 인정되었나요? IBK장병내일준비적금이 있거나 복무확인서와 건강보험자격득실확인서를 냈으면 예입니다'}
+      - {key: salary_transfer, type: bool, scope: card, ask: 지난달 이 카드 결제계좌로 병 급여를 받았나요}
+      - {key: mytag, type: bool, scope: card, ask: BC카드 마이태그에 이 카드를 등록했나요}
     limits:
       - key: integrated
         per: month
         amount: {250000: 10000, 500000: 25000, 1000000: 45000}
+      - key: px-basic
+        per: month
+        amount: 50000
+        count: 2
+        adjust:
+          - when: {fact: salary_transfer}
+            count: null
+      - {key: themepark-month, per: month, count: 1}
+      - {key: themepark-year, per: year, count: 2}
+      - {key: nol, per: month, amount: 13000}
+    stacks:
+      - {key: extra}
     benefits:
       - key: aio-transit
         title: 대중교통 20% 청구할인
         target:
-          categories: [transit]
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
         reward: {type: billing_discount, rate: 20}
         limits:
           - {shared: integrated}
         tiers: {from: 250000}
-        notes: '파워업 All in One. 전국 시내버스·지하철, 후불교통 IC카드 이용분만. 할인 횟수·금액 제한 없음. 공식 문구 미확인: 월 통합할인한도 적용 여부. 보수적으로 한도에 포함'
+        notes: 파워업 All in One. 전국 시내버스·지하철을 후불교통 IC카드로 이용한 건. 할인 횟수와 금액 제한 없음
       - key: aio-convenience
         title: 편의점 10% 청구할인
         target:
@@ -47,7 +72,7 @@ revisions:
           - {per: month, count: 10}
           - {shared: integrated}
         tiers: {from: 250000}
-        notes: 파워업 All in One. 건당 최대 1천원, 월 10회, 1일 2회(BC카드 페이지는 1일 1회)
+        notes: 파워업 All in One. 건당 최대 1천원, 월 10회, 1일 2회
       - key: aio-taxi
         title: 카카오T 10% 청구할인
         target:
@@ -83,7 +108,7 @@ revisions:
           - {per: month, count: 2}
           - {shared: integrated}
         tiers: {from: 250000}
-        notes: '파워업 All in One 카페 항목. 합산 월 2회, 건당 최대 1천원. 공식 문구 미확인: 메가오더 특별 제휴 할인과 중복 여부'
+        notes: 파워업 All in One 카페 항목. 합산 월 2회, 건당 최대 1천원
       - key: aio-shopping
         title: 쇼핑·배달 10% 청구할인
         target:
@@ -102,6 +127,8 @@ revisions:
           merchants: [app_store, google_play, naver_webtoon, netflix, nexon, riot_games, tving, youtube_premium]
         when:
           - {channel: online}
+          - {region: domestic}
+          - billing: [autopay, subscription]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: txn, amount: 1000}
@@ -113,6 +140,7 @@ revisions:
       - key: aio-leisure
         title: 여행·레저 10% 청구할인
         target:
+          categories: [pc_room]
           merchants: [socar, yanolja]
         reward: {type: billing_discount, rate: 10}
         limits:
@@ -121,11 +149,15 @@ revisions:
           - {per: month, count: 2}
           - {shared: integrated}
         tiers: {from: 250000}
-        notes: 파워업 All in One. NOL(야놀자)·쏘카·PC방 합산 월 2회, 건당 최대 1천원. PC방은 업종 코드가 없어 대상에서 뺌
+        notes: 파워업 All in One. NOL(야놀자)·쏘카·PC방 합산 월 2회, 건당 최대 1천원
       - key: npay-points
         title: Npay 결제 10% 포인트 적립
         target:
-          merchants: [naver_pay]
+          exclude_categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+          all: true
+        when:
+          - payment: [naver_pay]
+          - {region: domestic}
         reward: {type: points, program: npay_point, rate: 10}
         limits:
           - {per: txn, amount: 1000}
@@ -135,42 +167,49 @@ revisions:
           - per: month
             count: {250000: 5, 500000: 7, 1000000: 10}
         tiers: {from: 250000}
-        notes: 파워업 Npay포인트. Npay에 등록한 이 카드로 국내 가맹점 결제 시(온·오프라인 모두) Npay 포인트 적립, 네이버 계정 연결 필요. 전월 25만원 이상 월 5회. 세금·공과금·4대보험·공공기관·등록금·학부모부담금·수수료·상품권·선불·아파트관리비 제외
+        unmodeled: [이 카드와 연결된 네이버 계정으로만 적립, 공공기관 가맹점과 수수료 결제는 적립 제외]
+        notes: 파워업 Npay포인트. Npay에 등록한 이 카드로 국내 가맹점 온·오프라인 결제. 이용월 다음 달 중 적립. 50만·100만 구간의 7회·10회는 2026-12-31까지 프로모션이고 2027-01-01부터 25만원 이상 월 5회, 월 5천원
       - key: px-under-30k
         title: 군마트(PX) 3만원 미만 15% 할인
         target:
           merchants: [px]
         when:
           - {channel: offline}
+          - amount: {below: 30000}
+          - {fact: soldier}
         reward: {type: billing_discount, rate: 15}
         limits:
           - {per: month, amount: 10000}
-          - {per: month, count: 3}
-        notes: PX기본할인. 건당 3만원 미만 결제만. 전국 군부대 PX(해군마트 포함). 현역병 월 3회, 병 급여이체자 월 6회(값은 현역병 기준). 현역병 인정은 전월 말일 기준 장병내일준비적금 보유 또는 복무확인서·건강보험자격득실확인서 제출
+          - per: month
+            count: 3
+            adjust:
+              - when: {fact: salary_transfer}
+                count: 6
+        notes: PX기본할인. 건당 3만원 미만. 전국 군부대 PX(해군마트 포함). 현역병 월 3회, 병 급여이체자 월 6회, 월 1만원 한도. 3만원 이상 구간과 한도 별도. 전월실적 조건 없음
       - key: px-30k
         title: 군마트(PX) 3만원 이상 10% 할인
         target:
           merchants: [px]
         when:
           - {channel: offline}
-          - amount: {min: 30000}
+          - amount: {min: 30000, below: 70000}
+          - {fact: soldier}
         reward: {type: billing_discount, rate: 10}
         limits:
-          - {per: month, amount: 50000}
-          - {per: month, count: 2}
-        notes: PX기본할인. 건당 3만원 이상 7만원 미만. 3만원 이상 구간(10·20·30%)은 월 5만원 한도와 횟수를 함께 씀. 현역병 월 2회, 병 급여이체자 횟수 제한 없음
+          - {shared: px-basic}
+        notes: PX기본할인. 건당 3만원 이상 7만원 미만. 3만원 이상 세 구간이 월 5만원 한도와 횟수를 같이 씀. 현역병 월 2회, 병 급여이체자 횟수 제한 없음
       - key: px-70k
         title: 군마트(PX) 7만원 이상 20% 할인
         target:
           merchants: [px]
         when:
           - {channel: offline}
-          - amount: {min: 70000}
+          - amount: {min: 70000, below: 100000}
+          - {fact: soldier}
         reward: {type: billing_discount, rate: 20}
         limits:
-          - {per: month, amount: 50000}
-          - {per: month, count: 2}
-        notes: PX기본할인. 건당 7만원 이상 10만원 미만. 한도·횟수는 px-30k와 공유
+          - {shared: px-basic}
+        notes: PX기본할인. 건당 7만원 이상 10만원 미만
       - key: px-100k
         title: 군마트(PX) 10만원 이상 30% 할인
         target:
@@ -178,11 +217,11 @@ revisions:
         when:
           - {channel: offline}
           - amount: {min: 100000}
+          - {fact: soldier}
         reward: {type: billing_discount, rate: 30}
         limits:
-          - {per: month, amount: 50000}
-          - {per: month, count: 2}
-        notes: PX기본할인. 건당 10만원 이상. 한도·횟수는 px-30k와 공유
+          - {shared: px-basic}
+        notes: PX기본할인. 건당 10만원 이상
       - key: px-special
         title: 군마트(PX) 20만원 이상 5만원 특별할인
         target:
@@ -190,10 +229,16 @@ revisions:
         when:
           - {channel: offline}
           - amount: {min: 200000}
+          - {fact: soldier}
         reward: {type: billing_discount, fixed: 50000}
         limits:
-          - {per: month, count: 1}
-        notes: PX특별할인. 기본할인과 한도·횟수 별도로 동시 적용(20만원 결제 시 기본 5만원+특별 5만원). 현역병 연 1회, 병 급여이체자 연 2회
+          - per: year
+            count: 1
+            adjust:
+              - when: {fact: salary_transfer}
+                count: 2
+        stack: extra
+        notes: PX특별할인. 기본할인과 한도·횟수를 따로 쓰며 동시 적용. 20만원 결제 시 기본 5만원과 특별 5만원. 현역병 연 1회, 병 급여이체자 연 2회
       - key: nara-convenience
         title: 편의점 10% 청구할인
         target:
@@ -202,99 +247,136 @@ revisions:
         limits:
           - {per: txn, amount: 1000}
           - {per: month, count: 2}
-        tiers: {from: 80000}
-        notes: 나라 서비스. 월 2회, 1회 1천원 한도. 전월 25만원 이상이면 이 혜택 대신 aio-convenience만 적용
+        tiers:
+          from: 80000
+          to: 200000
+          waived_when: {fact: salary_transfer}
+        notes: 나라 서비스. 월 2회, 1회 1천원 한도. 전월 25만원 이상이면 All in One 편의점 할인만 받는다
       - key: gs25-items-onsite
         title: GS25 주요품목 10% 현장할인
         target:
           merchants: [gs25]
         when:
           - {channel: offline}
-        reward: {type: billing_discount, rate: 10}
+        reward: {type: onsite_discount, rate: 10}
         limits:
           - {per: day, count: 1}
-        notes: 실적 무관 상시. 간편식(도시락·김밥·주먹밥·햄버거·샌드위치·FF간편식), 음료(주류 제외), 아이스크림만. 1회 할인한도 없음
+        stack: extra
+        unmodeled: ['간편식(도시락·김밥·주먹밥·햄버거·샌드위치·FF간편식), 음료(주류 제외), 아이스크림만']
+        notes: 나라 서비스의 추가 할인. 전월실적과 관계없이 상시. 1일 1회, 1회 할인한도 없음
       - key: emart24-items-onsite
         title: 이마트24 주요품목 10% 현장할인
         target:
           merchants: [emart24]
         when:
           - {channel: offline}
-        reward: {type: billing_discount, rate: 10}
+        reward: {type: onsite_discount, rate: 10}
         limits:
           - {per: day, count: 1}
-        notes: 특별 제휴서비스, 2026-12-31까지. 간편식, 음료(주류 제외), 아이스크림만. 1회 할인한도 없음
+        valid_until: 2026-12-31
+        unmodeled: ['간편식, 음료(주류 제외), 아이스크림만']
+        notes: 특별 제휴서비스. 1일 1회, 1회 할인한도 없음
       - key: nara-rail
-        title: KTX·SRT·일반열차 5% 청구할인
+        title: KTX·SRT·일반열차·고속버스 5% 청구할인
         target:
+          categories: [transit.bus_intercity]
           merchants: [korail, srt]
         reward: {type: billing_discount, rate: 5}
         limits:
           - {per: txn, amount: 2000}
           - {per: month, count: 2}
-        tiers: {from: 80000}
-        notes: 나라 서비스. KTX·SRT·새마을호·무궁화호·고속버스 통합 월 2회, 연 4회, 1회 2천원 한도. 고속버스는 업종 코드가 없어 대상에서 뺌
+          - {per: year, count: 4}
+        tiers:
+          from: 80000
+          waived_when: {fact: salary_transfer}
+        unmodeled: [시외버스는 대상이 아니고 고속버스만 대상]
+        notes: 나라 서비스. KTX·SRT·새마을호·무궁화호·전국 고속버스 통합 월 2회, 연 4회, 1회 2천원 한도
       - key: nara-cgv
         title: CGV 1,500원 현장할인
         target:
           merchants: [cgv]
-        reward: {type: billing_discount, fixed: 1500}
+        reward: {type: onsite_discount, fixed: 1500}
         limits:
           - {per: month, count: 1}
-        tiers: {from: 80000}
-        notes: 나라 서비스. 1인 구매 시 1,500원, 동반 1인 포함 시 최대 3천원. 월 1회, 연 6회
+          - {per: year, count: 6}
+        tiers:
+          from: 80000
+          waived_when: {fact: salary_transfer}
+        unmodeled: [동반 1인을 포함해 결제하면 최대 3천원]
+        notes: 나라 서비스. 1인 구매 1,500원, 동반 1인 포함 최대 3천원. 월 1회, 연 6회
       - key: nara-themepark
         title: 놀이공원 자유이용권 50% 현장할인
         target:
           merchants: [e_world, everland, gyeongju_world, lotte_world, seoul_land]
         when:
           - {channel: offline}
-        reward: {type: billing_discount, rate: 50}
+        reward: {type: onsite_discount, rate: 50}
         limits:
-          - {per: month, count: 1}
-        tiers: {from: 80000}
-        notes: 나라 서비스. 본인 자유이용권만. 롯데월드(서울·부산), 에버랜드, 서울랜드, 이월드, 경주월드. 캐리비안베이와 통합 월 1회, 연 2회
+          - {shared: themepark-month}
+          - {shared: themepark-year}
+        tiers:
+          from: 80000
+          waived_when: {fact: salary_transfer}
+        unmodeled: [본인 자유이용권만]
+        notes: 나라 서비스. 롯데월드(서울·부산), 에버랜드, 서울랜드, 이월드, 경주월드. 캐리비안베이와 통합 월 1회, 연 2회
       - key: nara-caribbean-bay
         title: 캐리비안베이 자유이용권 30% 현장할인
         target:
           merchants: [caribbean_bay]
         when:
           - {channel: offline}
-        reward: {type: billing_discount, rate: 30}
+        reward: {type: onsite_discount, rate: 30}
         limits:
-          - {per: month, count: 1}
-        tiers: {from: 80000}
-        notes: 나라 서비스. 본인 자유이용권만. nara-themepark와 통합 월 1회, 연 2회
+          - {shared: themepark-month}
+          - {shared: themepark-year}
+        tiers:
+          from: 80000
+          waived_when: {fact: salary_transfer}
+        unmodeled: [본인 자유이용권만]
+        notes: 나라 서비스. 놀이공원 할인과 통합 월 1회, 연 2회
       - key: sarang-outback
         title: 아웃백 20% 현장할인
         target:
           merchants: [outback]
         when:
           - {channel: offline}
-        reward: {type: billing_discount, rate: 20}
+        reward: {type: onsite_discount, rate: 20}
         limits:
           - {per: txn, amount: 40000}
           - {per: month, count: 1}
-        tiers: {from: 200000}
-        notes: 사랑 서비스. 월 1회, 1회 최대 4만원 할인. 딜리버리 제외
+        tiers:
+          from: 200000
+          waived_when: {fact: salary_transfer}
+        unmodeled: [딜리버리 제외]
+        notes: 사랑 서비스. 월 1회, 1회 최대 4만원 할인
       - key: sarang-transit
         title: 시내버스·지하철 10% 청구할인
         target:
-          categories: [transit]
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 2000}
-        tiers: {from: 200000}
-        notes: 사랑 서비스. 후불교통 IC카드 이용분만, 매출표 접수일 기준 월 2천원 한도. 전월 25만원 이상이면 이 혜택 대신 aio-transit만 적용
+        tiers:
+          from: 200000
+          to: 200000
+          waived_when: {fact: salary_transfer}
+        unmodeled: [월 한도는 매출표 접수일 기준 달로 센다]
+        notes: 사랑 서비스. 후불교통 IC카드 이용분만, 월 2천원 한도. 전월 25만원 이상이면 All in One 대중교통 할인만 받는다
       - key: sarang-telecom
         title: 이동통신요금 자동납부 5% 청구할인
         target:
-          categories: [telecom]
+          categories: [telecom.mobile]
+        when:
+          - billing: [autopay]
         reward: {type: billing_discount, rate: 5}
         limits:
           - {per: month, amount: 2000}
           - {per: month, count: 1}
-        tiers: {from: 200000}
+        tiers:
+          from: 200000
+          waived_when: {fact: salary_transfer}
         notes: 사랑 서비스. 이동통신요금 자동납부만, 최초 접수분 월 1회, 2천원 한도
       - key: sarang-toeic-kyobo
         title: 토익 접수·교보문고 2천원 청구할인
@@ -306,7 +388,10 @@ revisions:
         reward: {type: billing_discount, fixed: 2000}
         limits:
           - {per: month, count: 1}
-        tiers: {from: 200000}
+          - {per: year, count: 4}
+        tiers:
+          from: 200000
+          waived_when: {fact: salary_transfer}
         notes: 사랑 서비스. 인터넷 토익시험 접수, 교보문고 온라인 서적 구매. 통합 월 1회, 연 4회, 1회 2만원 이상
       - key: naver-membership
         title: 네이버플러스 멤버십 100% 청구할인
@@ -314,83 +399,111 @@ revisions:
           merchants: [naver_plus_membership]
         when:
           - {channel: online}
+          - {fact: salary_transfer}
         reward: {type: billing_discount, rate: 100}
         limits:
           - {per: month, amount: 4900}
-        notes: 현역병 급여수령 우대 패키지, 2026-12-31까지. 직전월 이 카드 결제계좌로 병 급여 수령자만. 이 카드로 결제된 구독료만 월 최대 4,900원
+        valid_until: 2026-12-31
+        notes: 현역병 급여수령 우대 패키지. 직전월 이 카드 결제계좌로 병 급여를 받은 고객. 이 카드로 결제된 구독료만 월 최대 4,900원
       - key: mytag-coupang-daiso-oliveyoung
         title: 쿠팡·다이소·올리브영 1천원 청구할인
         target:
           merchants: [coupang, daiso, olive_young]
         when:
           - amount: {min: 10000}
+          - {fact: salary_transfer}
+          - {fact: mytag}
         reward: {type: billing_discount, fixed: 1000}
         limits:
           - {per: month, count: 1}
-        notes: 현역병 급여수령 우대 패키지, 2026-12-31까지. 병 급여이체자만, BC카드 마이태그 등록 후 대상 브랜드 중 최초 1만원 이상 결제 1건
+        valid_until: 2026-12-31
+        notes: 현역병 급여수령 우대 패키지. BC카드 마이태그 등록 후 대상 브랜드 중 최초 1만원 이상 결제 1건, 매월 1회
       - key: mytag-kakaot-taxi
         title: 카카오T 택시 50% 청구할인
         target:
           merchants: [kakao_t]
         when:
           - amount: {min: 5000}
+          - {fact: soldier}
+          - {fact: mytag}
         reward: {type: billing_discount, rate: 50}
         limits:
           - {per: txn, amount: 5000}
-          - {per: month, count: 1}
-        notes: 현역병 고객 우대 패키지. 현역병만, 마이태그 등록 후 택시 5천원 이상, 기간 내 1회, 최대 5천원
+          - {per: period, count: 1}
+        valid_until: 2026-12-31
+        unmodeled: [카카오T 택시 결제만]
+        notes: 현역병 고객 우대 패키지. 마이태그 등록 후 택시 5천원 이상, 기간 내 1회, 최대 5천원
       - key: mytag-momstouch
         title: 맘스터치 1천원 청구할인
         target:
           merchants: [moms_touch]
         when:
           - amount: {min: 10000}
+          - {fact: soldier}
+          - {fact: mytag}
         reward: {type: billing_discount, fixed: 1000}
         limits:
-          - {per: month, count: 1}
-        notes: 현역병 고객 우대 패키지. 현역병만, 마이태그 등록 후 1만원 이상, 분기당 1회
+          - {per: quarter, count: 1}
+        valid_until: 2026-12-31
+        notes: 현역병 고객 우대 패키지. 마이태그 등록 후 1만원 이상, 분기당 1회
       - key: mega-order-weekday
         title: 메가MGC커피 앱 평일 20% 청구할인
         target:
           merchants: [mega_coffee]
         when:
           - {channel: online}
+          - day:
+              in: [mon, tue, wed, thu, fri]
+          - billing_not: [app_prepay]
         reward: {type: billing_discount, rate: 20}
         limits:
           - {per: day, count: 1}
-        notes: 특별 제휴서비스, 2026-12-31까지. 메가오더 앱 결제, 평일만. 선물하기·선불충전 제외. 1일 1회, 1회 한도 없음
+        valid_until: 2026-12-31
+        unmodeled: [메가오더 앱 결제만, 선물하기 결제 제외]
+        notes: 특별 제휴서비스. 메가오더 앱 결제, 평일. 선물하기·선불충전 제외. 주말 할인과 합쳐 1일 1회, 1회 한도 없음
       - key: mega-order-weekend
         title: 메가MGC커피 앱 주말 30% 청구할인
         target:
           merchants: [mega_coffee]
         when:
           - {channel: online}
+          - day:
+              in: [sat, sun]
+          - billing_not: [app_prepay]
         reward: {type: billing_discount, rate: 30}
         limits:
           - {per: day, count: 1}
-        notes: 특별 제휴서비스, 2026-12-31까지. 메가오더 앱 결제, 토·일만. 평일 혜택과 합쳐 1일 1회
+        valid_until: 2026-12-31
+        unmodeled: [메가오더 앱 결제만, 선물하기 결제 제외]
+        notes: 특별 제휴서비스. 메가오더 앱 결제, 토·일. 평일 할인과 합쳐 1일 1회
       - key: nol-points-25k
         title: NOL 2만5천원 이상 1,200P 적립
         target:
           merchants: [yanolja]
         when:
           - {channel: online}
-          - amount: {min: 25000}
-        reward: {type: points, program: npay_point, fixed: 1200}
+          - amount: {min: 25000, below: 50000}
+          - payment_not: [apple_pay, coupay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: points, program: nol_point, fixed: 1200}
         limits:
-          - {per: month, amount: 13000}
-        notes: 특별 제휴서비스, 2026-12-31까지. NOL 포인트(제휴사 포인트). 국내·해외숙소, 레저, 교통 상품만, 간편결제 제외. 건당 2만5천원~5만원 미만. 월 1.3만P 한도는 3개 구간과 IBK·하나·신한 나라사랑카드 합산
+          - {shared: nol}
+        valid_until: 2026-12-31
+        unmodeled: ['국내·해외숙소, 레저, 교통 상품만', 월 1만3천P 한도는 IBK·하나·신한 나라사랑카드 합산]
+        notes: 특별 제휴서비스. NOL 포인트. 건당 2만5천원 이상 5만원 미만. 간편결제 제외. 세 구간 합쳐 인당 월 최대 1만3천P
       - key: nol-points-50k
         title: NOL 5만원 이상 2,500P 적립
         target:
           merchants: [yanolja]
         when:
           - {channel: online}
-          - amount: {min: 50000}
-        reward: {type: points, program: npay_point, fixed: 2500}
+          - amount: {min: 50000, below: 100000}
+          - payment_not: [apple_pay, coupay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: points, program: nol_point, fixed: 2500}
         limits:
-          - {per: month, amount: 13000}
-        notes: 건당 5만원~10만원 미만. 조건은 nol-points-25k와 같음
+          - {shared: nol}
+        valid_until: 2026-12-31
+        unmodeled: ['국내·해외숙소, 레저, 교통 상품만', 월 1만3천P 한도는 IBK·하나·신한 나라사랑카드 합산]
+        notes: 특별 제휴서비스. 건당 5만원 이상 10만원 미만
       - key: nol-points-100k
         title: NOL 10만원 이상 6,000P 적립
         target:
@@ -398,8 +511,31 @@ revisions:
         when:
           - {channel: online}
           - amount: {min: 100000}
-        reward: {type: points, program: npay_point, fixed: 6000}
+          - payment_not: [apple_pay, coupay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: points, program: nol_point, fixed: 6000}
         limits:
-          - {per: month, amount: 13000}
-        notes: 건당 10만원 이상. 조건은 nol-points-25k와 같음
-notes: 'IBK 상품 페이지(준법감시인 심의필 제2026-5925호, 2026.07.27) 기준. BC카드 상품 페이지와 체크카드 개인설명서(2026.01.05)로 교차 확인. integrated_cap은 파워업 서비스 All in One의 월 통합할인한도(1만/2.5만/4.5만원). 나라·사랑·PX·Npay·우대 패키지·특별 제휴 혜택은 각자 한도라 counts_toward_integrated_cap false. 실적은 전월 1일~말일 국내외 가맹점 이용금액. 제세공과금, 상품권 구매금액, 교통카드 이용금액은 실적 제외. 취소는 취소 매출표가 접수된 달 실적에서 차감. 전월 병 급여이체(카드 결제계좌로 국군재정관리단 병 급여 수령) 조건을 채우면 나라·사랑 서비스 전월실적 조건 면제. 이 면제는 모델에 못 담음. 전월 25만원 이상이면 편의점·대중교통은 All in One 할인만 적용하고 나라·사랑의 편의점·대중교통 할인은 주지 않음. 카드 등록일부터 다음 달 말일까지는 실적 미달이어도 할인·Npay 적립 제공. 이때 All in One은 25만~50만원 구간 한도. 간편결제 가맹점명이 결제대행사로 찍히면 할인 제외. 모든 혜택은 비씨카드 전산 등록 가맹점(업종) 기준. 상품권 구매는 할인 제외. 현장할인 혜택(GS25·이마트24 주요품목, 아웃백, CGV, 놀이공원)은 결제 금액이 이미 할인된 금액으로 찍힘. 공식 문구 미확인: PX 할인이 현장할인인지 청구할인인지. 메가MGC커피 All in One 할인과 메가오더 제휴 할인, 카카오T All in One 할인과 마이태그 쿠폰의 중복 여부. 프로모션 기한 2026-12-31까지: 네이버멤버십, 마이태그 쿠폰, 특별 제휴서비스, Npay 50만·100만원 구간 추가 적립, 공항라운지. 결제 건 혜택 아님: 국내 공항라운지 연 1회(Master 브랜드, 병 급여이체자), 상해보험·병영생활 안심보험 무료가입, 부모상 장례용품 지원, 트래블서비스(국제브랜드 1%·해외이용 0.18% 수수료 면제, 해외 ATM 수수료 월 3회 면제, 매매기준율 적용), GS ALL·그린카드·SYRUP 멤버십. 제휴 전용가·쿠폰이라 모델 제외: 지니뮤직 전용 이용권 최대 43%(6개월), SPOTV NOW 전용 이용권 최대 30%, 왓챠 30%(4개월), 해커스 인강 30%·라이브 20%·어학원 10%, 월급쟁이부자들 10% 쿠폰(5만원 이상, 월 1회, 최대 5만원), 쏘카 4시간 이상 50% 쿠폰, 슈마커 오프라인 1만원(10만원 이상, 2026-09-30까지). 공식 문구 차이: 편의점 All in One 1일 할인횟수가 IBK 페이지는 1일 2회, BC카드 페이지는 1일 1회. IBK 값을 씀. 소액 신용한도 최대 30만원 신청 가능.'
+          - {shared: nol}
+        valid_until: 2026-12-31
+        unmodeled: ['국내·해외숙소, 레저, 교통 상품만', 월 1만3천P 한도는 IBK·하나·신한 나라사랑카드 합산]
+        notes: 특별 제휴서비스. 건당 10만원 이상
+    unmodeled: [모든 혜택은 비씨카드 전산에 등록된 가맹점과 업종 기준으로 준다]
+  - effective_from: 2027-01-01
+    source: page
+    patch:
+      benefits:
+        npay-points:
+          limits:
+            - {per: txn, amount: 1000}
+            - {per: day, count: 1}
+            - {per: month, amount: 5000}
+            - {per: month, count: 5}
+open_questions:
+  - {path: 'revisions[0].effective_from', question: '첫 개정 시행일. 상품 페이지의 부가서비스 유지 안내에 신규출시일 2012-06-11이 있으나, 3기 개편 시행일과 그 뒤 부가서비스 변경 공지를 확인하지 못했다. IBK 상품소식 게시판은 자바스크립트로 쪽을 넘겨 첫 쪽(2026-08-03~2026-09-28 공지 10건)만 봤고 나라사랑카드 공지는 없었다. 2026-01-05 설명서와 지금 페이지가 다르다. 설명서는 GS25 추가할인 품목이 음료·빙과류·신선식품이고 Npay 적립에 전월실적 조건이 없다', assumed: '2026-09-28'}
+  - {path: 'revisions[0].benefits[aio-transit].limits', question: '대중교통 20% 할인이 All in One 월 통합할인한도에 들어가는지. 상품 페이지 문구는 대중교통은 할인 횟수, 할인 금액 제한 없음', assumed: 통합할인한도에 포함}
+  - {path: 'revisions[0].benefits[aio-convenience].limits', question: '편의점 All in One 할인의 1일 횟수. IBK 상품 페이지는 1일 2회, BC카드 상품 페이지는 1일 1회', assumed: 1일 2회}
+  - {path: 'revisions[0].benefits[px-under-30k].reward.type', question: PX 할인이 결제할 때 빠지는지 청구서에서 빠지는지. 상품 페이지와 설명서에 표기가 없고 IBK 블로그는 현장할인이라고 쓴다. PX 기본할인 네 구간과 특별할인이 같은 답을 따른다, assumed: billing_discount}
+  - {path: 'revisions[0].benefits[mega-order-weekday]', question: 메가오더 제휴 할인이 All in One 카페 할인과 한 결제에 같이 적용되는지. 주말 할인도 같은 답을 따른다, assumed: 둘 중 큰 쪽 하나}
+  - {path: 'revisions[0].benefits[mytag-kakaot-taxi]', question: '마이태그 쿠폰과 All in One 할인이 한 결제에 같이 적용되는지. 카카오T 택시와 All in One 택시, 쿠팡 쿠폰과 All in One 쇼핑, NOL 적립과 All in One 여행·레저가 해당한다', assumed: 둘 중 큰 쪽 하나}
+  - {path: 'revisions[0].benefits[emart24-items-onsite]', question: 이마트24 주요품목 현장할인이 편의점 10% 청구할인과 한 결제에 같이 적용되는지. GS25 주요품목은 추가 할인으로 적혀 있어 같이 받는 것으로 두었다, assumed: 둘 중 큰 쪽 하나}
+  - {path: 'revisions[0].benefits[npay-points]', question: Npay 포인트 적립과 가맹점 카드 할인을 한 결제에 같이 받는지. 상품 페이지에 문구가 없다, assumed: 둘 중 큰 쪽 하나}
+notes: 'IBK 상품 페이지(준법감시인 심의필 제2026-5925호, 2026.07.27, 유효기간 2026.12.31) 기준. 2026.01.05 설명서(제2026-0104호)와 BC카드 상품 페이지로 교차 확인. 상품 페이지의 부가서비스 유지 안내에 카드 신규출시일 2012.06.11이 적혀 있다. product_codes는 상품 페이지 주소의 PDLN_CD, PDGR_CD, PDTM_CD, PDCD 값을 순서대로 이은 것. 서비스 묶음은 나라(전월 8만원 이상), 사랑(전월 20만원 이상), 파워업 All in One(전월 25만원 이상, 월 통합할인한도 1만/2.5만/4.5만원), 파워업 군마트(PX)와 Npay포인트, 현역병 급여수령 우대 패키지와 현역병 고객 우대 패키지, 특별 제휴서비스(2026.12.31까지)다. 전월 병 급여이체자는 나라·사랑 서비스의 전월실적 조건이 면제된다. 실적은 전월 1일부터 말일까지 국내외 이용금액이고 제세공과금, 상품권, 교통카드 이용금액은 빠진다. 취소는 취소 매출표가 접수된 달 실적에서 뺀다. 카드 등록일부터 다음 달 말일까지는 실적이 모자라도 할인과 Npay 적립을 주고 All in One은 25만~50만원 구간 한도를 쓴다. 결제 건 혜택이 아니라 모델에 없는 것: 국내 공항라운지 연 1회(Master 발급, 병 급여이체자, 2026.12.31까지), 상해보험·병영생활 안심보험 무료가입, 부모상 장례용품 지원, 트래블서비스(국제브랜드 1%·해외이용 0.18% 수수료 면제, 해외 ATM 수수료 월 3회 면제, 매매기준율 적용), GS ALL·그린카드·SYRUP 멤버십, 소액 신용한도 최대 30만원. 제휴 전용가나 쿠폰이라 모델에 없는 것: 지니뮤직 전용 이용권 최대 43%(6개월), SPOTV NOW 전용 이용권 최대 30%, 왓챠 30%(4개월), 해커스 인강 30%·라이브 20%·어학원 10%, 월급쟁이부자들 10% 쿠폰(5만원 이상, 월 1회, 최대 5만원), 쏘카 4시간 이상 50% 쿠폰, 슈마커 오프라인 1만원(10만원 이상, 2026.09.30까지).'

@@ -1,1 +1,5 @@
-{schema_version: 2, id: ibk, name: IBK기업은행}
+schema_version: 2
+id: ibk
+name: IBK기업은행
+collect: {list_url: 'https://www.ibk.co.kr/cardbiz/listBizNew.ibk?pageId=CA01010000', method: blocked, interval_days: 30, notice_url: 'https://www.ibk.co.kr/cyber/newibkListCyber.ibk?pageId=IR03010300&category=4'}
+notes: 2026-09-29 확인. robots.txt가 도박 상담 페이지 하나만 허용하고 사이트 전체를 막아 blocked로 둔다. 전체카드 목록은 HTML에 나오지만 상세 페이지 이동은 자바스크립트다. notice_url은 상품소식 게시판이고 쪽 넘김이 자바스크립트라 첫 쪽만 바로 읽힌다.
