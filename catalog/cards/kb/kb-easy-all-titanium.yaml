@@ -54,6 +54,8 @@ revisions:
       - key: integrated
         per: month
         amount: {500000: 16000, 1000000: 32000, 1500000: 48000}
+      - {key: a-overseas-dutyfree, per: month, amount: 4000}
+      - {key: d-sub-movie, per: month, amount: 4000}
     benefits:
       - key: a-food-3
         title: '[A] 음식 3% 캐시백'
@@ -108,12 +110,30 @@ revisions:
               mode: [auto]
           - {ranked: easy-all-a}
           - {region: overseas}
+        area: overseas-dutyfree
         reward: {type: cashback, rate: 3}
         limits:
-          - {per: month, amount: 4000}
+          - {shared: a-overseas-dutyfree}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 해외 이용금액(해외직구 포함), 면세점 업종, 롯데·신라·현대·신세계 인터넷면세점. 국내 면세점은 해외 조건과 한 혜택에 담지 못해 빠졌다
+        notes: 해외 이용금액(해외직구 포함), 면세점 업종, 롯데·신라·현대·신세계 인터넷면세점. 국내 면세점은 a-dutyfree-3으로 나눴고 두 혜택이 한 영역, 월 4천원 한도 하나를 같이 쓴다
+      - key: a-dutyfree-3
+        title: '[A] 면세점 3% 캐시백'
+        target:
+          categories: [travel.duty_free]
+          merchants: [hyundai_dfs_online, lotte_dfs_online, shilla_dfs_online, shinsegae_dfs_online]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-a}
+          - {region: domestic}
+        area: overseas-dutyfree
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {shared: a-overseas-dutyfree}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 국내 면세점 업종, 롯데·신라·현대·신세계 인터넷면세점. 해외 이용 a-overseas-3과 한 영역이고 월 4천원 한도를 같이 쓴다
       - key: a-bills-3
         title: '[A] 관리비·공과금 3% 캐시백'
         target:
@@ -345,21 +365,37 @@ revisions:
         tiers: {from: 500000}
         notes: 배달의민족, 요기요, 마켓컬리
       - key: d-sub-movie-10
-        title: '[D] 구독·영화 10% 캐시백'
+        title: '[D] 구독 10% 캐시백'
         target:
-          merchants: [cgv, genie, lotte_cinema, megabox, melon, netflix, tving, wavve]
+          merchants: [genie, melon, netflix, tving, wavve]
         when:
           - option:
               mode: [auto]
           - {ranked: easy-all-d}
+          - billing: [subscription]
+        area: d-sub-movie
         reward: {type: cashback, rate: 10}
         limits:
-          - {per: month, amount: 4000}
+          - {shared: d-sub-movie}
           - {shared: integrated}
         tiers: {from: 500000}
-        unmodeled: [구독 가맹점은 공식 홈페이지·앱을 통한 정기결제만 대상]
-        notes: 구독은 넷플릭스, 티빙, 웨이브, 멜론, 지니. 영화는 CGV, 롯데시네마, 메가박스 현장·공식 홈페이지·앱 결제
-    unmodeled: [해외 이용금액은 승인일이 아니라 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금(보육료·유치원보조비·바우처) 결제는 실적에서 빠진다, 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+        notes: 넷플릭스, 티빙, 웨이브, 멜론, 지니 공식 홈페이지·앱 정기결제. 영화 d-movie-10과 한 영역이고 월 4천원 한도를 같이 쓴다
+      - key: d-movie-10
+        title: '[D] 영화 10% 캐시백'
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-d}
+        area: d-sub-movie
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: d-sub-movie}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: CGV, 롯데시네마, 메가박스 현장·공식 홈페이지·앱 결제. 구독 d-sub-movie-10과 한 영역이고 월 4천원 한도를 같이 쓴다
+    unmodeled: [해외 이용금액은 승인일이 아니라 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금(보육료·유치원보조비·바우처) 결제는 실적에서 빠진다, 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 할인 한도는 이용 순서가 아니라 전표 매입 순서대로 채운다, 실적 유예기간은 본인회원이 이 카드를 생애 처음 발급받은 경우에만 적용한다. 가족카드만 발급하면 적용하지 않는다]
 open_questions:
-  - {path: 'revisions[0].benefits[a-overseas-3].target', question: '같은 영역인 국내 면세점 업종과 롯데·신라·현대·신세계 인터넷면세점을 해외 이용과 한 혜택, 한 순위, 한 한도로 담을 방법이 없다', assumed: 해외 이용만 계산}
-notes: '첫 개정 시행일 근거: launch. 출시 2020-06-18. 출시 상품설명서와 지금 상품설명서의 혜택이 같고, 새소식 게시판에 이 카드의 부가서비스 변경 공지가 없다. 2020-10-15 약관 문구 정비와 국제브랜드·티타늄 서비스 변경 공지는 계산하는 혜택과 관계없다. Easy all 선택서비스는 전월 50만원 이상, 최초 발급 때 Auto 모드. Auto 모드는 4개 그룹(A 3%, B 5%, C 7%, D 10%) 20개 영역 중 그룹별 이용금액 상위 1·2·3개 영역에 영역당 월 4천원까지 캐시백하고 다음 달 둘째 금요일에 결제계좌로 입금한다. DIY 모드는 영역과 한도 패턴을 직접 골라 통합한도를 나누는 청구할인이라 계산하지 않는다. 모드 변경은 신청 다음 달 1일부터. 실적 제외의 공과금은 원문이 전기·수도만 적어 도시가스는 실적에 넣었다. 할인 제외의 입점 가맹점, PG, 지방세, 대학 등록금, 연회비는 product 확인사항의 공통 제외에서 옮겼다. 한도는 이용 순서대로 채우고 이월하지 않는다. 티타늄 서비스(공항·호텔 발레파킹, 공항 라운지, 전월 30만원 이상)와 Visa 서비스는 결제 건 혜택이 아니다. KB Pay에서 신청한다.'
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 원문 할인 제외에는 지방세만 있다. 국세도 할인에서 빠지는지, assumed: 세금 전체 제외}
+notes: '첫 개정 시행일 근거: launch. 출시 2020-06-18. 출시 상품설명서와 지금 상품설명서의 혜택이 같고, 새소식 게시판에 이 카드의 부가서비스 변경 공지가 없다. 2020-10-15 약관 문구 정비와 국제브랜드·티타늄 서비스 변경 공지는 계산하는 혜택과 관계없다. Easy all 선택서비스는 전월 50만원 이상, 최초 발급 때 Auto 모드. Auto 모드는 4개 그룹(A 3%, B 5%, C 7%, D 10%) 20개 영역 중 그룹별 이용금액 상위 1·2·3개 영역에 영역당 월 4천원까지 캐시백하고 다음 달 둘째 금요일에 결제계좌로 입금한다. DIY 모드는 영역과 한도 패턴을 직접 골라 통합한도를 나누는 청구할인이라 계산하지 않는다. 모드 변경은 신청 다음 달 1일부터. 실적 제외의 공과금은 원문이 전기·수도만 적어 도시가스는 실적에 넣었다. 할인 제외의 입점 가맹점, PG, 지방세, 대학 등록금, 연회비는 product 확인사항의 공통 제외에서 옮겼다. 한도는 이용 순서가 아니라 전표매입 순서대로 채운다. 2020년 상품설명서는 이용순서대로라고 적어 상품 페이지와 다르다. 월 한도는 이월하지 않는다. 티타늄 서비스(공항·호텔 발레파킹, 공항 라운지, 전월 30만원 이상)와 Visa 서비스는 결제 건 혜택이 아니다. KB Pay에서 신청한다.'
