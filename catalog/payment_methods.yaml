@@ -32,3 +32,6 @@
   name: 우리WON페이
   statement_names: [우리페이]
 - {key: nh_pay, name: NH페이}
+- key: baemin_pay
+  name: 배민페이
+  statement_names: [배민페이]

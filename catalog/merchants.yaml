@@ -28,7 +28,7 @@
   aliases: [배달의민족, 배민, 우아한형제들]
 - key: baskin_robbins
   name: 배스킨라빈스
-  category: restaurant
+  category: restaurant.bakery
   aliases: [배스킨라빈스, 베스킨라빈스, BASKIN ROBBINS]
 - key: blue_bottle
   name: 블루보틀
@@ -36,7 +36,7 @@
   aliases: [블루보틀, BLUE BOTTLE]
 - key: burger_king
   name: 버거킹
-  category: restaurant
+  category: restaurant.fastfood
   aliases: [버거킹, BURGER KING]
 - key: cafe_bene
   name: 카페베네
@@ -90,7 +90,7 @@
   aliases: [디즈니플러스, 디즈니+, DISNEY PLUS]
 - key: dunkin
   name: 던킨
-  category: restaurant
+  category: restaurant.bakery
   aliases: [던킨, 던킨도너츠, DUNKIN]
 - key: e_world
   name: 이월드
@@ -242,11 +242,11 @@
   aliases: [롯데월드, 롯데월드 어드벤처]
 - key: lotteria
   name: 롯데리아
-  category: restaurant
+  category: restaurant.fastfood
   aliases: [롯데리아, LOTTERIA]
 - key: mcdonalds
   name: 맥도날드
-  category: restaurant
+  category: restaurant.fastfood
   aliases: [맥도날드, MCDONALD]
 - key: mega_coffee
   name: 메가MGC커피
@@ -263,7 +263,7 @@
   aliases: [멜론, MELON]
 - key: moms_touch
   name: 맘스터치
-  category: restaurant
+  category: restaurant.fastfood
   aliases: [맘스터치, MOMS TOUCH]
 - key: musinsa
   name: 무신사
@@ -333,7 +333,7 @@
   aliases: [빽다방, PAIKDABANG]
 - key: paris_baguette
   name: 파리바게뜨
-  category: restaurant
+  category: restaurant.bakery
   aliases: [파리바게뜨, 파리바게트, PARIS BAGUETTE]
 - key: pascucci
   name: 파스쿠찌
@@ -365,7 +365,7 @@
   aliases: [세븐일레븐, 7-ELEVEN, 코리아세븐]
 - key: shake_shack
   name: 쉐이크쉑
-  category: restaurant
+  category: restaurant.fastfood
   aliases: [쉐이크쉑, 쉑쉑버거, SHAKE SHACK]
 - key: shinsegae_department
   name: 신세계백화점
@@ -407,7 +407,7 @@
   aliases: [스타벅스, 스벅, STARBUCKS]
 - key: subway
   name: 써브웨이
-  category: restaurant
+  category: restaurant.fastfood
   aliases: [써브웨이, 서브웨이, SUBWAY]
 - key: the_hyundai_com
   name: 더현대닷컴
@@ -497,3 +497,41 @@
   name: 지그재그
   category: online_shopping
   aliases: [지그재그, 카카오스타일, ZIGZAG]
+- key: ddangyo
+  name: 땡겨요
+  category: delivery_app
+  aliases: [땡겨요, 신한땡겨요]
+- key: ut
+  name: 우티
+  category: taxi
+  aliases: [우티, 우버택시]
+- key: sk_telink
+  name: SK텔링크
+  billing: autopay
+  category: telecom.mobile
+  aliases: [SK텔링크, SK세븐모바일, 세븐모바일]
+- key: kt_skylife
+  name: KT스카이라이프
+  billing: autopay
+  category: telecom.mobile
+  aliases: [KT스카이라이프, 스카이라이프]
+- key: kt_m_mobile
+  name: KT M모바일
+  billing: autopay
+  category: telecom.mobile
+  aliases: [KT M모바일, KT엠모바일]
+- key: hello_mobile
+  name: 헬로모바일
+  billing: autopay
+  category: telecom.mobile
+  aliases: [헬로모바일, LG헬로비전]
+- key: media_log
+  name: 미디어로그
+  billing: autopay
+  category: telecom.mobile
+  aliases: [미디어로그, U+유모바일, 유모바일]
+- key: flo
+  name: FLO
+  billing: subscription
+  category: streaming
+  aliases: [드림어스컴퍼니, FLO 이용권, 플로 이용권]

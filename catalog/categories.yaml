@@ -68,5 +68,8 @@
 - {code: laundry, name: 세탁}
 - {code: pc_room, name: PC방}
 - {code: sports, name: 스포츠·레저}
-- {code: pet, name: 반려동물}
+- code: pet
+  name: 반려동물
+  children:
+    - {code: vet, name: 동물병원}
 - {code: other, name: 기타}
