@@ -222,7 +222,7 @@ erDiagram
 ## 설계 메모
 
 - 카탈로그는 카드마다 개정 행을 쌓는다. 파이프라인이 카드사 기본값과 패치를 합친 개정 전체를 `card_revisions.rules`에 넣는다. 옛 개정은 지우지 않는다. 지난달 실적은 지난달 규칙으로 계산하기 때문이다.
-- 결제는 계산에 쓴 개정을 `card_revision_id`로, 받은 혜택을 `transaction_benefits`의 혜택 key로 가리킨다. 혜택 key는 갱신해도 바꾸지 않는다. 한도 사용량은 기간 안의 `transaction_benefits`를 모아 계산한다. 저장한 혜택은 다시 계산하지 않는다. 예외는 달이 끝난 순위 카드다. E48
+- 결제는 계산에 쓴 개정을 `card_revision_id`로, 받은 혜택을 `transaction_benefits`의 혜택 key로 가리킨다. 혜택 key는 갱신해도 바꾸지 않는다. 한도 사용량은 기간 안의 `transaction_benefits`를 모아 계산한다. 저장한 혜택은 다시 계산하지 않는다. 예외는 달이 끝난 순위 카드, 결제한 달 기준 취소로 구간이 바뀐 달, 엑셀로 앞선 결제가 들어온 달이다. E48, E5, E51
 - `user_cards`는 같은 사용자가 같은 카드를 두 번 보유할 수 없게 `(user_id, card_id)`에 `removed_at IS NULL` 조건의 부분 유니크 인덱스를 둔다.
 - 실적 계산은 `transactions`를 `(user_card_id, paid_at)`으로 읽는다. 이 두 컬럼의 복합 인덱스가 핵심 인덱스다.
 - `transaction_benefits`는 `(transaction_id)`로 읽고 결제의 `(user_card_id, paid_at)` 인덱스와 함께 쓴다.
