@@ -3299,7 +3299,7 @@ git commit -m "feat: 추천과 못 받는 혜택, 조건부 혜택 추가" -m "�
 - 고치기: `backend/tests/engine/cases.py`, `backend/tests/engine/test_cases.py`
 - 고칠 수 있음: 엔진 코드, 표, 카드 파일, design.md
 
-- [ ] **1단계: 대조 함수를 더한다**
+- [x] **1단계: 대조 함수를 더한다**
 
 `backend/tests/engine/cases.py` 맨 위 설명의 목록 끝에 다음 줄을 더한다.
 
@@ -3329,7 +3329,7 @@ def mismatches(eng: Engine, case: Case) -> list[str]:
     return out
 ````
 
-- [ ] **2단계: 대조 테스트를 더한다**
+- [x] **2단계: 대조 테스트를 더한다**
 
 `backend/tests/engine/test_cases.py`
 
@@ -3418,13 +3418,13 @@ def test_case_matches_engine(catalog, case):
     assert mismatches(Engine(catalog), case) == []
 ````
 
-- [ ] **3단계: 돌린다**
+- [x] **3단계: 돌린다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_cases.py
 ```
 
-- [ ] **4단계: 다른 곳마다 원문을 다시 본다**
+- [x] **4단계: 다른 곳마다 원문을 다시 본다**
 
 실패한 경우마다 카드사 원문을 다시 읽고 셋 중 무엇이 틀렸는지 정한다.
 - 표가 틀렸으면 표를 고친다. 기대값을 엔진 값으로 그냥 바꾸지 않는다. calc도 고친다
@@ -3434,7 +3434,7 @@ uv run --project backend pytest -q backend/tests/engine/test_cases.py
 
 고친 것은 `plan.md` 끝의 `## 표를 만들며 나온 것`에 "카드, 경우, 틀린 쪽, 고친 것"으로 한 줄씩 적는다.
 
-- [ ] **5단계: 전체를 돌린다**
+- [x] **5단계: 전체를 돌린다**
 
 ```bash
 uv run --project backend pytest -q
@@ -3442,7 +3442,7 @@ uv run --project backend pytest -q
 
 기대: 실패 0. 속도 테스트도 통과한다.
 
-- [ ] **6단계: 커밋**
+- [x] **6단계: 커밋**
 
 고친 쪽마다 나눠 커밋한다. 엔진은 `fix:`, 표는 `test:`, 카드 파일은 `fix:`, 설계는 `docs:`다. 마지막에 대조 테스트를 커밋한다.
 
@@ -3450,6 +3450,8 @@ uv run --project backend pytest -q
 git add backend/tests/engine/cases.py backend/tests/engine/test_cases.py docs/work/002-calc-engine/plan.md
 git commit -m "test: 손계산 표 20장을 엔진과 대조" -m "작업 002 설계 6.2. 다른 곳은 plan.md 표를 만들며 나온 것에 적었다."
 ```
+
+2026-09-29 실행 결과: 표 279개가 모두 엔진과 같다. 다른 곳이 없어 4단계에서 고친 것은 없다. 과제 3에서 시제품으로 찾은 엔진 쪽 4건은 과제 5 코드에 이미 고쳐 넣었다. 전체 테스트 431개 통과.
 
 ---
 
@@ -4081,6 +4083,10 @@ git commit -m "docs: 작업 기록 계산 엔진 추가"
 그대로 둔 것
 - 신한 묶음 에이전트는 권한 때문에 원문을 열지 못해 카드 파일 메모로 계산했다. 세 카드의 실적 제외와 적립 제외는 작업 001 과제 13에서 원문과 대조를 마쳤다
 - 트래블로그 국내 적립의 "일시불만"은 체크카드라 결과가 같아 옮기지 않았다. taptap O 해외 적립 제외의 고용·산재보험은 업종이 4대보험 하나라 나누지 않았다
+
+### 과제 7
+
+저장소 엔진으로 표 279개를 대조해 모두 같았다. 고친 것 없음.
 
 ## 명세서 대조 결과
 

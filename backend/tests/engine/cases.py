@@ -15,6 +15,7 @@ cases:
 - at은 한국 시간이다. 결제의 나머지 칸은 엔진의 Payment와 같다
 - benefits는 그 결제가 받는 혜택 전부다. 값은 보상 단위라 포인트면 포인트 수다. 받는 혜택이 없으면 {}
 - counted는 그 결제가 실적에 넣는 금액의 합이다. warnings는 반드시 있어야 하는 경고 코드다. 둘 다 없어도 된다
+- difference는 엔진과 다른 까닭이다. 실제 명세서 대조에서만 쓴다. 적어 두면 그 결제는 대조하지 않는다. 설계 6.6
 """
 
 from __future__ import annotations
@@ -25,6 +26,7 @@ from pathlib import Path
 
 import yaml
 
+from cherry_core.engine import Engine
 from cherry_core.engine.cond import KST, month_of
 from cherry_core.engine.models import Payment, UserCard
 
@@ -75,4 +77,23 @@ def load_cases(root: Path = CASES) -> list[Case]:
                     raw.get("calc", ""),
                 )
             )
+    return out
+
+
+def mismatches(eng: Engine, case: Case) -> list[str]:
+    """손계산과 엔진이 다른 곳. difference를 적은 결제는 보지 않는다"""
+    results = {r.payment_id: r for r in eng.price_month(case.holder, case.payments)}
+    out = []
+    for e in case.expect:
+        if "difference" in e:
+            continue
+        r = results[case.payments[e["payment"]].id]
+        got = {b.key: b.amount for b in r.benefits}
+        if got != e.get("benefits", {}):
+            out.append(f"결제 {e['payment']}: 혜택 {got} 기대 {e.get('benefits', {})}. {case.calc}")
+        if "counted" in e and sum(p.amount for p in r.spend) != e["counted"]:
+            out.append(f"결제 {e['payment']}: 실적 {sum(p.amount for p in r.spend)} 기대 {e['counted']}")
+        missing = set(e.get("warnings", [])) - {w.code for w in r.warnings}
+        if missing:
+            out.append(f"결제 {e['payment']}: 없는 경고 {sorted(missing)}")
     return out

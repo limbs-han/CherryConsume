@@ -1,13 +1,14 @@
-"""손계산 표. 설계 6.1과 6.2. 표 형식과 모든 혜택이 한 번 이상 나오는지 본다."""
+"""손계산 표. 설계 6.1과 6.2. 표 형식, 모든 혜택이 한 번 이상 나오는지, 엔진과 같은지를 본다."""
 
 from pathlib import Path
 
 import pytest
 
 from cherry_core.catalog.load import load_catalog
+from cherry_core.engine import Engine
 from cherry_core.engine.cond import local
 
-from .cases import load_cases
+from .cases import load_cases, mismatches
 
 ROOT = Path(__file__).resolve().parents[3] / "catalog"
 CASES = load_cases()
@@ -74,3 +75,8 @@ def test_every_benefit_is_covered(catalog):
             if not any(start <= d and (end is None or d < end) for d in days):
                 missing.append(f"{card_id}:{key}@{start}")
     assert missing == []
+
+
+@pytest.mark.parametrize("case", CASES, ids=[f"{c.card_id}:{c.name}" for c in CASES])
+def test_case_matches_engine(catalog, case):
+    assert mismatches(Engine(catalog), case) == []
