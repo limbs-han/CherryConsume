@@ -3650,13 +3650,13 @@ EOF
 | IBK 확인 필요 네 가지 | 과제 14 |
 | 첫 개정 시행일 | 3단계 보고의 카드별 첫 개정 날짜. 추정으로 남은 카드는 확인 필요 항목에 있다 |
 
-- [ ] **5단계: 사용자에게 보고하고 검토를 받는다**
+- [x] **5단계: 사용자에게 보고하고 검토를 받는다**
 
-2026-09-29 실행 결과: 테스트는 80개가 통과한다. 계획을 쓴 뒤 area 검사 테스트가 늘었다. 보고를 뽑다가 문장 조건 세 곳이 YAML 쉼표에서 잘린 것을 찾아 합쳤다. "문장으로 남김" 247개를 사용자 검토에 올렸다.
+2026-09-29 실행 결과: 테스트는 80개가 통과한다. 계획을 쓴 뒤 area 검사 테스트가 늘었다. 보고를 뽑다가 문장 조건 세 곳이 YAML 쉼표에서 잘린 것을 찾아 합쳤다. "문장으로 남김" 247개를 사용자 검토에 올렸다. 사용자가 고속버스 업종 나누기와 일시불 조건 더하기를 골라 조건 11곳을 구조로 옮겼고 241개가 남았다. 위험 검토에서 신한 처음 즉시결제 적립에도 일시불 조건이 필요한 것을 찾아 같이 고쳤다. 테스트는 81개다.
 
 "문장으로 남김" 목록을 보여 주고, 구조로 담을 수 있는데 문장으로 남은 것이 있는지 확인받는다. 있으면 과제 12의 방법으로 고친다.
 
-- [ ] **6단계: 커밋 지점**
+- [x] **6단계: 커밋 지점**
 
 ```bash
 git add backend/tests/catalog/test_real_catalog.py
@@ -3673,7 +3673,7 @@ git commit -m "docs: 카탈로그 2판 카드별 결과와 성공 기준 확인 
 - 고치기: `.claude/hooks/after_edit.py`, `.claude/settings.json`, `.claude/CLAUDE.md`, `README.md`
 - 지우기: `tools/validate_catalog.py`
 
-- [ ] **1단계: 훅을 고친다**
+- [x] **1단계: 훅을 고친다**
 
 `.claude/hooks/after_edit.py`에서 다음 줄을
 
@@ -3687,7 +3687,7 @@ git commit -m "docs: 카탈로그 2판 카드별 결과와 성공 기준 확인 
     code, out = run(["uv", "run", "--project", "backend", "python", "-m", "cherry_core.catalog", "check"])
 ```
 
-- [ ] **2단계: 권한과 명령 안내를 고친다**
+- [x] **2단계: 권한과 명령 안내를 고친다**
 
 `.claude/settings.json`의 `permissions.allow`에서 `"Bash(uv run --script tools/validate_catalog.py)"`를 `"Bash(uv run --project backend python -m cherry_core.catalog *)"`로 바꾼다.
 
@@ -3702,13 +3702,13 @@ git commit -m "docs: 카탈로그 2판 카드별 결과와 성공 기준 확인 
 
 `README.md` 폴더 절에서 `├── tools/         검증 스크립트` 줄을 지운다.
 
-- [ ] **3단계: 1판 스크립트를 지운다**
+- [x] **3단계: 1판 스크립트를 지운다**
 
 ```bash
 git rm tools/validate_catalog.py
 ```
 
-- [ ] **4단계: 훅이 막는지 확인한다**
+- [x] **4단계: 훅이 막는지 확인한다**
 
 저장소를 건드리지 않게 복사본에서 확인한다.
 
@@ -3726,12 +3726,14 @@ printf '{"tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$(cygpath -m "$F"
 
 기대: 첫 번째는 `카탈로그 검증 실패`와 `cards/kb/kb-toktok.yaml: kind`가 나오고 `exit 2`. 두 번째는 `exit 0`.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add .claude/hooks/after_edit.py .claude/settings.json .claude/CLAUDE.md README.md
 git commit -m "chore: 파일 수정 뒤 검사를 카탈로그 2판 검증기로 교체" -m "작업 001. 1판 검증 스크립트를 지운다"
 ```
+
+2026-09-29 실행 결과: 기대대로 첫 번째는 exit 2, 두 번째는 exit 0이었다. 계획에 없던 `.claude/skills/commit/SKILL.md`도 1판 스크립트를 가리켜 같이 고쳤다. 커밋 메시지에 파일 이름 CLAUDE.md를 쓰면 커밋 훅이 막으므로 "프로젝트 안내"로 적었다.
 
 ---
 
@@ -4000,7 +4002,7 @@ git commit -m "docs: 작업 기록 카탈로그 2판 구현 추가"
 | 성공 기준 | 근거 | 결과 |
 |---|---|---|
 | 20장이 2판 검증을 통과한다 | `test_twenty_cards_pass_check` | 통과. NH는 zgm 할인카드 대신 히어로즈 체크카드다 |
-| 구조로 담을 수 있는데 문장으로만 남긴 조건이 없다 | judgment.md "결과"의 "문장으로 남김" 목록. 과제 13 대조 에이전트가 구조로 담을 수 있는 것을 찾아 옮겼다 | 사용자 검토 |
+| 구조로 담을 수 있는데 문장으로만 남긴 조건이 없다 | judgment.md "결과"의 "문장으로 남김" 목록. 과제 13 대조 에이전트가 구조로 담을 수 있는 것을 찾아 옮겼다 | 사용자 검토에서 고속버스 업종과 일시불 조건을 더해 11곳을 더 옮겼다. 남은 241개는 결제 입력에 없는 정보가 필요하다 |
 | 구간별 복제 혜택이 남지 않는다 | `test_no_benefit_is_copied_per_tier` | 통과 |
 | 같은 원문으로 두 번 갱신해도 차이가 없다 | `test_every_file_is_canonical`과 과제 3의 `format` 두 번 테스트. 갱신기는 하위 프로젝트 3에서 만든다 | 통과 |
 | 카드사 공통 규칙 하나를 바꾸면 그 카드사 카드 전부에 반영된다 | `test_issuer_default_change_reaches_every_card` | 통과 |
