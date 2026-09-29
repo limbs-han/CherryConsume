@@ -2,42 +2,60 @@ schema_version: 2
 id: woori-every-point
 issuer: woori
 name: 우리카드 카드의정석2 EVERY POINT
+search_names: [카드의정석 EVERY POINT, 카드의정석2 EVERY POINT]
 kind: credit
+product_codes:
+  - '102718'
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 12000}
-  - {scope: global, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+  - {scope: global, brand: visa, amount: 12000}
 sources:
-  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102718', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102718', fetched_at: 2026-09-29, review_no: 제2026-C1h-07987호, review_valid_until: 2027-05-28}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2024-02-26
     source: page
     tiers: [0, 400000, 800000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, gift_card, tax, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
       interest_free: exclude
       exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
     limits:
       - key: integrated
         per: month
         amount: {400000: 10000, 800000: 20000}
+    stacks:
+      - {key: extra}
     benefits:
       - key: all-0-8
         title: 국내외 가맹점 0.8% 적립
         target: {all: true}
         reward: {type: points, program: woori_moa_point, rate: 0.8}
-        notes: 전월실적 조건과 적립한도 없음. Two-in-One 결제(체크 매출)는 0.3%
+        unmodeled: [Two-in-One 결제서비스로 체크 매출이 된 건은 0.3%만 적립한다]
+        notes: 전월실적 조건과 적립한도 없음
       - key: easypay-online-2
         title: 간편결제 온라인 2% 추가 적립
-        target:
-          merchants: [kakao_pay, naver_pay, woori_won_pay]
+        target: {all: true}
         when:
+          - payment: [kakao_pay, naver_pay, woori_won_pay]
           - {channel: online}
+          - {region: domestic}
         reward: {type: points, program: woori_moa_point, rate: 2}
         limits:
           - {shared: integrated}
         tiers: {from: 400000}
-        notes: 기본 0.8%에 더해 주는 추가 적립. 해당 간편결제에 이 카드를 등록해 온라인 결제할 때만 제공. 매장 QR·바코드·MST/NFC 같은 모바일 오프라인 결제, 의약품 전용몰·제약회사 업종, Two-in-One 체크 매출은 제외. 통합 적립한도를 넘은 금액은 기본 적립만 받음
-notes: '원래 맡은 카드의정석2 EVERY DISCOUNT(cdPrdCd 103729)는 우리카드 공식 판매여부가 N이고 개인 신용카드 목록에도 없어 같은 구조의 적립형인 이 카드로 바꿈. 연회비는 해외겸용(Mastercard, VISA)·국내전용 모두 1만2천원, 가족카드 무료. 포인트는 1모아포인트 = 1꿀 = 1원. 실적은 전월 1일~말일 매출승인일 기준 국내외 가맹점 이용분. 해외 이용, 교통카드 이용, 통신료 자동납부는 매출표 접수일 기준. 실적 제외 중 업종 코드가 없는 것: 정부지원금, 대학(대학원) 등록금, 교통카드 구매·충전, 고속버스(차내 단말기·앱 결제), 각종 수수료·이자, 현금서비스, 카드론, 매출취소금액. 공과금에는 4대보험, 우편요금, 과태료, 여권발급비용, 공공기관 가맹점 포함. 취소는 취소 매출표 접수월 실적에서 빼되, 국내 취소가 매월 1~2일에 접수되면 전월 실적에서 뺌. 공식 문구 미확인: 할부를 실적에 어떻게 넣는지. full_at_purchase로 둠. 적립 제외는 실적 제외 목록과 같음. 카드 수령일과 사용개시일 중 빠른 날부터 다음 달 말일까지는 추가 적립을 실적 무관 최저 구간으로 제공. 월 한도는 당월 1일~말일, 매입 순서대로 적용.'
+        stack: extra
+        unmodeled: [의약품 전용몰과 제약회사 업종 결제는 추가 적립에서 빠진다, Two-in-One 결제서비스로 체크 매출이 된 건은 추가 적립이 없다]
+        notes: 기본 0.8%에 더해 주는 추가 적립. 우리WON페이, 네이버페이, 카카오페이에 이 카드를 등록해 국내 온라인에서 결제할 때만. 매장 QR·바코드·MST/NFC 같은 모바일 오프라인 결제 제외. 통합 적립한도를 넘은 금액은 기본 적립만 받는다
+    unmodeled: ['정부지원금(보육료, 유치원보조비, 바우처), 우편요금, 과태료·범칙금·벌금, 여권발급비용, 국가·공공기관·공공단체 가맹점 이용금액은 실적과 적립에서 빠진다', 고속버스 차내 단말기와 고속버스 앱 결제는 실적과 적립에서 빠진다. 시외버스와 업종이 같아 가리지 않는다, '해외 이용, 교통카드 이용, 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다', 국내 가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '다른 쿠폰, 할인 등 프로모션과 중복되지 않는다']
+open_questions:
+  - {path: 'revisions[0].spend', question: 할부를 실적에 어떻게 넣는지 원문에 없다, assumed: full_at_purchase}
+  - {path: 'revisions[0].new_card', question: 카드 수령(사용)등록일과 사용개시일 중 빠른 날이 기준인데 한 날짜만 받는다, assumed: registration}
+notes: '원래 맡은 카드의정석2 EVERY DISCOUNT(cdPrdCd 103729)는 우리카드 공식 판매여부가 N이고 개인 신용카드 목록에도 없어 같은 구조의 적립형인 이 카드로 바꿈. 2026-05-29 카드의정석 EVERY POINT에서 카드의정석2 EVERY POINT로 이름이 바뀌었다. 연회비는 해외겸용(Mastercard, VISA)·국내전용 모두 1만2천원(기본 7천원, 제휴 5천원), 가족카드 무료. 1모아포인트 = 1꿀 = 1원. 실적은 전월 1일~말일 매출승인일 기준 국내외 가맹점 이용분. 실적 제외와 적립 제외: 무이자할부, 정부지원금, 대학(대학원) 등록금, 국세·지방세·공공요금(4대보험, 전기, 우편, 도시가스, 상하수도, 과태료·범칙금·벌금, 여권발급, 공공기관 가맹점), 상품권·기프트카드·선불카드 구매와 충전, 교통카드 구매와 충전, 고속버스(차내 단말기, 앱), 아파트 관리비(임대료), 연회비, 매출취소금액. 수수료, 이자, 현금서비스, 카드론은 결제 기록이 아니라 다루지 않는다. 취소는 취소 매출표 접수월 실적에서 뺀다. 카드 수령(사용)등록일과 사용개시일 중 빠른 날부터 다음 달 말일까지는 추가 적립을 최저 구간으로 제공. 월 한도는 당월 1일~말일, 매입 순서대로 적용. 가족카드 실적과 적립한도는 본인카드와 따로. 첫 개정 시행일 근거: page. 상품 출시일 2024-02-26. 우리카드 서비스 변경 게시판 317건을 끝까지 봤다. 이 카드 공지는 2024-09-30 이용안내 문구 개정과 2026-05-29 상품명 변경뿐이고 혜택 내용 변경은 없다.'

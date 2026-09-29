@@ -2,31 +2,40 @@ schema_version: 2
 id: lotte-loca-classic
 issuer: lotte
 name: 롯데카드 LOCA CLASSIC
+search_names: [LOCA CLASSIC 카드]
 kind: credit
+product_codes: [P13379-A13379]
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 20000}
-  - {scope: global, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDXAA_V001.lc?vtCdKndC=P13379-A13379', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDXAA_V001.lc?vtCdKndC=P13379-A13379', fetched_at: 2026-09-29, review_no: 제2020-C1a-06222호}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2020-07-10
     source: page
     tiers: [0, 1500000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, gift_card, tax, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    new_card: {until: next_month_end, tier: 1500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: [오토·스마트 캐시백을 신청한 이용금액은 할인에서 빠진다, 장애인 고용부담금은 할인에서 빠진다]
     benefits:
       - key: all-0-5
         title: 국내외 가맹점 0.5% 할인
         target: {all: true}
         reward: {type: billing_discount, rate: 0.5}
-        notes: 지난달 150만원 미만 구간 기본할인. 150만원 이상이면 all-1-0-t1로 대체되고 함께 적용되지 않음
+        tiers: {to: 0}
+        notes: 지난달 1일~말일 이용금액 150만원 미만 기본할인. 특별할인과 중복 제공되지 않는다
       - key: all-1-0
         title: 국내외 가맹점 1.0% 할인
         target: {all: true}
         reward: {type: billing_discount, rate: 1.0}
         tiers: {from: 1500000}
-        notes: 지난달 150만원 이상 특별할인. 기본할인 0.5%와 중복 없음
-notes: 'LOCA LIKIT 1.2 신규 발급 중단으로 대신 넣은 카드. 국내외 전가맹점 결제일 할인, 할인한도 없음. 지난달 1일~말일 150만원 미만 0.5%, 150만원 이상 1.0%. 기본할인과 특별할인은 중복 없음(두 혜택 중 하나만 적용). 최초 발급 시 발급일~다음 달 말일은 실적 무관 1.0%. 실적 제외 중 업종 코드에 없는 것: 건강보험·국민연금·고용보험·산재보험, LOCA 시리즈가 아닌 롯데카드 이용금액, 초·중·고 납입금, LH·SH 공공임대료, 부동산 임대료, 장애인 고용부담금, 대학등록금, 오토·스마트 캐시백 신청 금액, 포인트 충전, 현금서비스·카드론, 이자·수수료. 할인 제외: 무이자할부, 국세·지방세, 도시가스비·공과금, 4대보험, 초·중·고 납입금, 공공임대료, 부동산 임대료, 장애인 고용부담금, 아파트관리비, 대학등록금, 캐시백 신청 금액, 기프트·선불카드, 포인트 충전, 상품권, 현금서비스·카드론, 연회비, 이자·수수료. 해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준 실적 반영. 할부는 이용일 기준 전체 금액에 할인. 해외 이용 수수료 별도. 롯데카드 L.POINT 적립 없음. 가족카드 연회비 없음, 실적 합산.'
+        notes: 지난달 1일~말일 이용금액 150만원 이상 특별할인. 할인한도 없음
+    unmodeled: [LOCA 시리즈 카드가 아닌 롯데카드 이용금액만 실적에서 빠져 다른 LOCA 시리즈 카드 이용금액도 실적에 합산될 수 있다. 이 카드 결제만 센다, 가족카드 이용금액이 본인카드 실적에 합산된다, 해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 오토·스마트 캐시백을 신청한 이용금액과 장애인 고용부담금은 실적에서 빠진다, 신규 발급 특례는 LOCA 카드를 처음 발급받은 경우에만 받는다]
+notes: 'LOCA LIKIT 1.2 신규 발급 중단으로 대신 넣은 카드. 국내외 전가맹점 결제일 할인, 할인한도 없음. 지난달 150만원 미만 0.5%, 150만원 이상 1.0%, 기본할인과 특별할인은 중복 제공되지 않는다. 최초 발급 시 카드발급일~다음 달 말일은 실적과 상관없이 특별할인. 실적 제외와 할인 제외: 무이자할부, 국세·지방세, 도시가스비·공과금, 4대보험, LOCA 시리즈가 아닌 롯데카드 이용금액(실적만), 초·중·고 납입금, LH·SH 공공임대료, 부동산 임대료, 장애인 고용부담금, 아파트관리비, 대학등록금, 오토·스마트 캐시백 신청 금액, 기프트·선불카드 충전과 구매, 포인트 충전, 상품권, 현금서비스·카드론, 연회비, 이자·수수료. 현금서비스, 카드론, 이자, 수수료는 결제 기록이 아니라 다루지 않는다. 취소매출은 승인된 달의 실적에서 빠진다. 할부는 승인된 달에 전체 금액이 실적에 들어간다. 해외 이용 수수료 별도. L.POINT 적립 없음. 가족카드 연회비 없음. 첫 개정 시행일 근거: page. 카드출시일 2020-07-10. 롯데카드 공지사항 2019-11~2026-09 71건에 이 카드의 부가서비스 변경 공지 없음.'

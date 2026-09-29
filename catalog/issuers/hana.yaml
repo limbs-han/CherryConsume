@@ -1,7 +1,9 @@
 schema_version: 2
 id: hana
 name: 하나카드
+collect: {list_url: 'https://www.hanacard.co.kr/OPI31000000D.web?schID=pcd&mID=OPI31000005P&CT_ID=241704030444153', method: browser, interval_days: 30, notice_url: 'https://www.hanacard.co.kr/OPP35150000D.web?schID=ncd&mID=OPP35150000D'}
 defaults:
-  - effective_from: 2026-09-28
+  - effective_from: 2022-07-18
     effective_from_estimated: true
     spend: {basis: prev_calendar_month, interest_free: count, installment: full_at_purchase, cancellation: cancel_month}
+notes: 'defaults 시작일은 공통 약관 시행일을 찾지 못해 하나 카드 중 첫 개정이 가장 이른 트래블로그 체크카드 출시일로 두고 추정 표시. 수집: 상품 목록과 공지는 자바스크립트로 그린다. 목록 주소는 신용카드 목록이고 체크카드는 CT_ID=241704050328506이다. 공지는 주요공지(OPP35150000D)가 서비스변경안내(OPP25350000D) 글도 함께 싣는다. 목록은 같은 주소에 page, displayCount를 POST로 보내 받는다.'

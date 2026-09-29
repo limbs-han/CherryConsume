@@ -2,21 +2,31 @@ schema_version: 2
 id: lotte-loca365
 issuer: lotte
 name: 롯데카드 LOCA 365
+search_names: [LOCA 365 카드]
 kind: credit
+product_codes: [P14028-A14028]
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 20000}
-  - {scope: global, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
 sources:
-  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14028-A14028', fetched_at: &id001 2026-09-28}
-checked_at: *id001
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14028-A14028', fetched_at: 2026-09-29, review_no: 제2024-C1a-13338호}
+checked_at: 2026-09-29
 revisions:
-  - effective_from: *id001
-    effective_from_estimated: true
+  - effective_from: 2022-02-14
     source: page
     tiers: [0, 500000]
     spend:
-      exclude_categories: [annual_fee, gift_card, tax, taxi]
+      exclude_categories: [annual_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi]
+      month_offset: {transit: 1}
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [스마트 캐시백을 신청한 이용금액은 할인에서 빠진다]
     limits:
       - key: integrated
         per: month
@@ -28,41 +38,45 @@ revisions:
           categories: [apartment_fee]
         when:
           - amount: {min: 20000}
+          - billing: [autopay]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 5000}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 자동납부 건만
+        notes: 아파트 관리비 자동납부 건만
       - key: utility-10
         title: 도시가스·전기료 10% 할인
         target:
-          categories: [utility]
+          categories: [utility.electricity, utility.gas]
         when:
           - amount: {min: 20000}
+          - billing: [autopay]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 5000}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 도시가스비·전기료 자동납부 건만. 두 요금 합산 월 5천원. 수도 등 다른 공과금은 대상 아님
+        notes: 도시가스비·전기료 자동납부 건만. 두 요금 합산 월 5천원
       - key: telecom-10
         title: 이동통신 10% 할인
         target:
           merchants: [kt, lg_uplus, skt]
         when:
           - amount: {min: 20000}
+          - billing: [autopay]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 5000}
           - {per: month, count: 1}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 이동통신요금 자동납부 건만, 월 1회. 인터넷·TV 결합상품과 알뜰폰 제외
+        unmodeled: [인터넷·TV 결합상품 요금은 제외된다]
+        notes: SKT, KT, LG U+ 이동통신요금 자동납부 건만, 월 1회. 알뜰폰 제외
       - key: transit-10
         title: 대중교통 10% 할인
         target:
-          categories: [transit]
+          categories: [transit.bus_city, transit.subway]
         when:
           - amount: {min: 20000}
         reward: {type: billing_discount, rate: 10}
@@ -70,23 +84,25 @@ revisions:
           - {per: month, amount: 5000}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 지하철·시내버스만. 택시·고속버스·시외버스 제외. 후불교통은 한 달 합산 청구 건으로 접수됨. 공식 문구 미확인 - 건당 2만원 조건을 합산 청구액에 적용하는지
+        notes: 지하철, 시내버스 이용 건만. 택시, 고속버스, 시외버스 제외
       - key: insurance-10
         title: 보험료 10% 할인
         target:
-          categories: [insurance]
+          categories: [insurance.private]
         when:
           - amount: {min: 20000}
+          - billing: [autopay]
+          - payment_not: [apple_pay, coupay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
         reward: {type: billing_discount, rate: 10}
         limits:
           - {per: month, amount: 5000}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 생명·손해보험 자동납부 건만. 카카오페이·네이버페이·페이코 등 모든 간편결제 제외
+        notes: 생명·손해보험 자동납부 건만. 카카오페이, 네이버페이, 페이코 등 모든 간편결제 제외
       - key: study-10
         title: 학습지 10% 할인
         target:
-          categories: [education]
+          categories: [education.study_material]
         when:
           - {channel: offline}
           - amount: {min: 20000}
@@ -95,7 +111,8 @@ revisions:
           - {per: month, amount: 5000}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 학습지 업종만(학원 등 다른 교육 업종 아님). 오프라인만, 일부 PG 결제 제외
+        unmodeled: [일부 PG 결제대행 업체를 거친 결제는 제외된다]
+        notes: 학습지 업종 오프라인 이용 건만
       - key: delivery-10
         title: 배달앱 10% 할인
         target:
@@ -115,11 +132,16 @@ revisions:
           merchants: [disney_plus, genie, melon, netflix, watcha, youtube_premium]
         when:
           - {channel: online}
+          - billing: [subscription]
         reward: {type: billing_discount, fixed: 1500}
         limits:
           - {per: month, amount: 1500}
           - {per: month, count: 1}
           - {shared: integrated}
         tiers: {from: 500000}
-        notes: 공식 홈페이지·앱에서 직접 신청한 정기결제만, 월 1회. 1회성 구매, 통신요금 합산 청구, 앱마켓 결제 제외. 건당 금액 조건 없음
-notes: '지난달 1일~말일 50만원 이상(본인·가족카드 합산) 이용 시 생활업종 결제일 할인, 월 최대 36,500원. 건당 2만원 이상 결제만 할인(스트리밍은 금액 무관). 최초 발급 시 발급일~다음 달 말일은 실적 무관 할인. 실적 제외 중 업종 코드에 없는 것: 건강보험·국민연금·고용보험·산재보험, 초·중·고 납입금, 대학등록금, LH·SH 공공임대료, 부동산 임대료, 장애인 고용부담금, 오토·스마트 캐시백 신청 금액, 포인트 충전, 고속버스, 고속도로 통행료, 무승인전표(자판기·터널통행료·기내), 벌금·과태료, 민원 수수료, 관세·인지세·송달료, 현금서비스·카드론, 이자·수수료, LOCA 365가 아닌 롯데카드 이용금액. 할인 제외: 모든 무이자할부, 기프트·선불카드 충전·구매, 포인트 충전, 상품권 구매, 스마트 캐시백 신청 금액. 해외 이용은 현지 매출일자, 이동통신·대중교통처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 실적과 할인에 반영. 할부는 이용일 기준 전체 금액에 할인. 다른 롯데카드 결제일 할인과 겹치면 큰 쪽 하나만. 결제 건 혜택 아님: 국내 5만원 이상 2~3개월 무이자할부(적용 시 다른 할인 없음). 롯데카드 L.POINT 적립 없음.'
+        notes: 공식 홈페이지·앱에서 직접 신청한 정기결제(자동이체)만, 월 1회. 건당 금액 조건 없음
+    unmodeled: [가족카드 이용금액이 본인카드 실적에 합산되고 할인한도도 본인카드와 합산된다, 롯데카드의 다른 결제일 할인과 겹치면 할인금액이 큰 혜택 하나만 받는다, 이동통신과 대중교통처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 할인과 한도가 적용된다, 고속버스는 실적에서 빠진다. 시외버스와 업종이 같아 가리지 않는다, '고속도로 통행요금, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원 발급 수수료, 관세, 인지세, 송달료, 장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액은 실적에서 빠진다', 신규 발급 특례는 LOCA 365 카드를 처음 발급받은 경우에만 받는다]
+open_questions:
+  - {path: 'revisions[0].benefits[transit-10].when', question: 후불교통은 한 달 이용액이 다음 달 합산 청구되는데 건당 2만원 조건을 합산 청구액에 적용하는지, assumed: 결제 기록 한 건마다 2만원 이상일 때만 할인}
+  - {path: 'revisions[0].benefits[insurance-10].when', question: 모든 간편결제 제외에 삼성페이와 애플페이도 드는지, assumed: 든다}
+notes: '지난달 1일~말일 50만원 이상(본인·가족카드 합산) 이용 시 생활업종 결제일 할인, 월 최대 36,500원. 건당 2만원 이상 결제만 할인하고 스트리밍은 금액과 상관없다. 최초 발급 시 카드발급일~다음 달 말일은 실적과 상관없이 할인. 실적 제외: LOCA 365가 아닌 롯데카드 이용금액, 무이자할부, 국세·지방세, 4대보험, 초·중·고 납입금, 대학등록금, LH·SH 공공임대료, 부동산 임대료, 장애인 고용부담금, 오토·스마트 캐시백 신청 금액, 기프트·선불카드 충전과 구매, 포인트 충전, 상품권, 택시, 고속버스, 고속도로 통행요금, 무승인전표, 벌금·과태료, 민원 발급 수수료, 관세·인지세·송달료, 현금서비스·카드론, 연회비, 이자·수수료. 할인 제외: 모든 무이자할부, 기프트·선불카드 충전과 구매, 포인트 충전, 상품권, 스마트 캐시백 신청 금액. 해외 이용은 현지 매출일자, 이동통신·대중교통처럼 한 달 이용액이 다음 달 결제되는 건은 롯데카드 접수일 기준으로 실적과 할인에 반영. 지난달 실적에 든 매출을 취소하면 지난달 실적과 이번 달 한도가 바뀔 수 있다. 할부는 이용일 기준 전체 금액이 실적에 들어간다. 할인한도는 승인 시점 기준, 이월되지 않는다. 결제 건 혜택 아님: 국내 5만원 이상 2~3개월 무이자할부. L.POINT 적립 없음. 현금서비스, 카드론, 이자, 수수료는 결제 기록이 아니라 다루지 않는다. 첫 개정 시행일 근거: page. 카드출시일 2022-02-14. 롯데카드 공지사항 2019-11~2026-09 71건에 이 카드의 부가서비스 변경 공지 없음.'
