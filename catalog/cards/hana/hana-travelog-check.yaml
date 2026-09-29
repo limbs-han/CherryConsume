@@ -16,11 +16,7 @@ revisions:
     source: page
     tiers: [0]
     spend:
-      basis: prev_calendar_month
       exclude_categories: []
-      interest_free: count
-      installment: full_at_purchase
-      cancellation: cancel_month
       exclude_applied: 0
     benefits:
       - key: overseas-fee-free

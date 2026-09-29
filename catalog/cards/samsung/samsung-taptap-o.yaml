@@ -16,12 +16,7 @@ revisions:
     source: page
     tiers: [0, 300000]
     spend:
-      basis: prev_calendar_month
       exclude_categories: [apartment_fee, gift_card, tax, taxi, transit, utility]
-      interest_free: count
-      installment: full_at_purchase
-      cancellation: cancel_month
-      exclude_applied: 1
     benefits:
       - key: transit-taxi-10
         title: 대중교통·택시 10% 할인

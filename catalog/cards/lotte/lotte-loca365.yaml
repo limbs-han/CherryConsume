@@ -16,12 +16,7 @@ revisions:
     source: page
     tiers: [0, 500000]
     spend:
-      basis: prev_calendar_month
       exclude_categories: [annual_fee, gift_card, tax, taxi]
-      interest_free: exclude
-      installment: full_at_purchase
-      cancellation: original_month
-      exclude_applied: 0
     limits:
       - key: integrated
         per: month

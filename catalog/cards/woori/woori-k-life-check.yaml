@@ -16,12 +16,9 @@ revisions:
     source: page
     tiers: [0, 200000, 500000, 700000]
     spend:
-      basis: prev_calendar_month
       regions: [domestic]
       exclude_categories: [apartment_fee, gift_card, tax, utility]
       interest_free: count
-      installment: full_at_purchase
-      cancellation: cancel_month
       exclude_applied: 1
     limits:
       - key: integrated

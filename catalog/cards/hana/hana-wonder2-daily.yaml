@@ -16,11 +16,7 @@ revisions:
     source: page
     tiers: [0, 400000, 800000, 1200000]
     spend:
-      basis: prev_calendar_month
       exclude_categories: [gift_card, tax, utility]
-      interest_free: count
-      installment: full_at_purchase
-      cancellation: cancel_month
       exclude_applied: 1
     benefits:
       - key: delivery-10

@@ -16,12 +16,8 @@ revisions:
     source: page
     tiers: [0, 500000, 1000000]
     spend:
-      basis: prev_calendar_month
       exclude_categories: [annual_fee, gift_card, tax, utility]
-      interest_free: count
-      installment: full_at_purchase
       cancellation: original_month
-      exclude_applied: 0
     benefits:
       - key: base-all-1-5
         title: 국내외 가맹점 1.5% M포인트 적립

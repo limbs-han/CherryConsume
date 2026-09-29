@@ -1,1 +1,7 @@
-{schema_version: 2, id: samsung, name: 삼성카드}
+schema_version: 2
+id: samsung
+name: 삼성카드
+defaults:
+  - effective_from: 2026-09-28
+    effective_from_estimated: true
+    spend: {basis: prev_calendar_month, interest_free: count, installment: full_at_purchase, cancellation: cancel_month, exclude_applied: 1}
