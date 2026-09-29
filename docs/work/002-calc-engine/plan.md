@@ -4023,7 +4023,7 @@ git commit -m "docs: 계산 엔진 결론을 설계 문서와 시나리오에 �
 
 ## 과제 12: 성공 기준 확인과 마무리
 
-- [ ] **1단계: 전체를 돌린다**
+- [x] **1단계: 전체를 돌린다**
 
 ```bash
 uv run --project backend pytest -q
@@ -4032,7 +4032,7 @@ uv run --project backend python -m cherry_core.catalog check
 
 기대: 실패 0, 명세서 입력이 있는 PC에서는 명세서 대조도 통과, 카탈로그 오류 0.
 
-- [ ] **2단계: 성공 기준을 하나씩 적는다**
+- [x] **2단계: 성공 기준을 하나씩 적는다**
 
 이 파일 끝 `## 성공 기준 확인` 표를 채운다.
 
@@ -4128,4 +4128,16 @@ git commit -m "docs: 작업 기록 계산 엔진 추가"
 
 ## 성공 기준 확인
 
-과제 12에서 채운다.
+2026-09-29 확인. 전체 테스트 441개 통과, 카탈로그 오류 0. 과제 10 검토에서 고친 것이 있으면 다시 돌려 이 줄을 고친다.
+
+| 성공 기준 | 결과 | 근거 |
+|---|---|---|
+| 혜택이 모두 손계산 표에 나오고 통과 | 맞음. 혜택 191개, 경우 279개. 의도 문서의 190개와 약 250건보다 조금 많다 | `test_every_benefit_is_covered`, `test_case_matches_engine` |
+| 기대값은 엔진 코드를 쓰지 않은 에이전트가 계산 | 맞음. 카드사 묶음 에이전트 6개가 엔진 코드와 계획 과제 4부터를 보지 않고 썼다 | 과제 3 실행 결과와 "표를 만들며 나온 것" |
+| 화면 시안 숫자 재현 | 맞음. 재현 목록 11묶음 | `test_mockup.py` 9개 |
+| E2, E4, E5, E6, E7, E11, E12, E37 테스트 | 맞음 | E2 `test_registration_month_uses_estimate_only_without_records`, E4 `test_installment_split_by_month`, E5 `test_cancellation_months`, `test_original_month_cancellation_lowers_this_month_tier`, `test_full_cancellation_gives_nothing`, E6 `test_basis_none_and_billing_cycle`, E7 `test_korean_time_month_boundary`, `test_time_uses_korean_time`, E11 `test_order_by_value_and_default_amount`, E12 `test_unmodeled_is_computed_with_warning`, E37 `test_locked_benefit` |
+| 나라사랑 급여이체자도 전월 25만원 이상이면 나라 편의점 할인 없음 | 맞음 | `test_tiers_to_and_waived_from_only` |
+| 원 단위 정수, 같은 입력 같은 출력, 시각은 인자 | 맞음. `recommend`와 `limit_status`는 현재 시각을 인자로 받는다 | `test_same_input_same_output_and_integers` |
+| 명세서 결제마다 같거나 원인 기록 | 맞음. 187건 중 170건 같고 17건은 원인을 적었다. 명세서와 입력은 커밋하지 않았다 | `test_statement_matches_engine`, "명세서 대조 결과" |
+| 추천 50ms, 업종 12개 200ms | 맞음. 가운데 값 12.7ms, 33.5ms | `test_speed.py` |
+| 설계 문서 6.5절 2판, 1판 이름 없음 | 맞음 | 과제 11의 3단계 grep 출력 없음 |
