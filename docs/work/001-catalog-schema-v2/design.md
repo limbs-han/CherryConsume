@@ -122,6 +122,7 @@ limits:
 
 - IBK 나라사랑의 나라 편의점 할인은 `to: 200000`이다. 25만 구간부터는 All in One 할인만 받기 때문이다.
 - 사용자 사실로 구간 조건이 면제되면 `tiers: { from: 80000, waived_when: { fact: salary_transfer } }`로 적는다. 나라사랑의 병 급여이체 면제가 이 경우다.
+- `waived_when`은 `from`만 푼다. `to`는 그대로다. 나라사랑 급여이체자도 전월 25만원 이상이면 나라 편의점 할인을 받지 못한다. 엔진 테스트에 이 경우를 넣는다.
 
 ### 2.3 대상과 업종 트리
 
@@ -287,6 +288,10 @@ ranked:
 
 그룹에 드는 혜택은 각자 `when`에 `ranked: easy-all-a`를 단다. 그룹은 몇 개를 고를지만 정한다. KB Easy all A그룹이면 음식, 교육, 병원·약국, 해외, 관리비 다섯 혜택이 이 조건을 단다.
 
+혜택 하나가 영역 하나다. 조건이나 보상이 달라 한 영역을 혜택 여럿으로 나눴으면 그 혜택들에 같은 `area`를 적는다. 순위는 영역마다 이용액을 합쳐 매긴다.
+- KB Easy all의 해외/면세점은 해외 혜택과 국내 면세점 혜택으로 나뉘지만 `area: overseas-dutyfree`로 한 영역이다.
+- 삼성 iD ON 커피전문점 영역의 스타벅스는 사이렌오더도 받아 오프라인 조건이 없는 혜택으로 따로 둔다. 두 혜택 모두 `area: coffee`다.
+
 순위는 그 달 1일부터 계산한 순간까지의 대상 이용액으로 매긴다. 달 중간의 추천은 잠정값이다. 순위가 바뀌면 화면에 알린다. 삼성 iD ON의 많이 쓰는 영역 30%는 `top: 1`이다.
 
 ### 2.9 사용자에게 묻는 사실
@@ -316,7 +321,7 @@ spend:
   cancellation: cancel_month    # 또는 original_month
   cancellation_overrides:
     - { when: { region: overseas }, use: cancel_month }   # the Green은 해외 취소만 취소 달
-  month_offset: { transit: 1 }  # 신한은 교통 이용액을 다음 달 실적으로 넣는다
+  month_offset: { transit.bus_city: 1, transit.subway: 1 }  # 신한은 교통카드 이용액을 다음 달 실적으로 넣는다
   exclude_applied: 0            # 혜택 받은 결제를 실적에서 빼는 비율. 0, 0.5, 1
 ```
 
@@ -585,7 +590,7 @@ backend/
 | 보상 | rate, fixed, per_unit, per_liter 중 정확히 하나다. points면 program이 있고 목록에 있다 |
 | 한도 | `shared`가 가리키는 한도가 있다. 한도마다 amount, count, base 중 하나 이상이 있다. 쓰이지 않는 공유 한도는 경고다 |
 | 중복 묶음 | 혜택의 stack이 정의돼 있다. `main`은 적지 않아도 있다. priority 묶음의 order에는 그 묶음의 혜택이 빠짐없이 한 번씩 있다 |
-| 옵션, 사실, 자동 선택 | 조건이 가리키는 옵션, 선택지, 사실, ranked 그룹이 있다. 옵션의 default는 선택지 중 하나이거나 null이다. ranked 그룹마다 그 조건을 단 혜택이 둘 이상이다. `month_total` 조건은 `basis: month_total` 보상에만 쓴다 |
+| 옵션, 사실, 자동 선택 | 조건이 가리키는 옵션, 선택지, 사실, ranked 그룹이 있다. 옵션의 default는 선택지 중 하나이거나 null이다. ranked 그룹마다 영역이 둘 이상이다. `area`가 같은 혜택은 한 영역으로 센다. `month_total` 조건은 `basis: month_total` 보상에만 쓴다 |
 | 날짜 | 개정은 날짜 오름차순이고 날짜가 겹치지 않는다. 첫 개정은 패치가 아니다. valid_from은 valid_until 이하다 |
 | 근거 | 혜택의 source는 sources에 있다. open_questions의 path는 실제 필드를 가리킨다 |
 | key | 개정 안에서 혜택, 한도, 묶음, 옵션, 사실의 key가 겹치지 않는다 |

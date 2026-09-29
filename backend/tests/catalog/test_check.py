@@ -65,6 +65,13 @@ def ranked_with_one_member(f):
     benefit(f)["when"] = [{"ranked": "top-area"}]
 
 
+def ranked_members_in_one_area(f):
+    rev(f)["ranked"] = [{"key": "top-area", "top": 1}]
+    benefit(f)["when"] = [{"ranked": "top-area"}]
+    benefit(f)["area"] = "coffee"
+    rev(f)["benefits"].append({**benefit(f), "key": "starbucks-30"})
+
+
 def month_total_on_txn_reward(f):
     benefit(f)["when"] = [{"month_total": {"min": 50000}}]
 
@@ -135,7 +142,8 @@ CASES = [
     (unknown_choice, R + "benefits[cafe-10].when[0].option: 옵션 package에 선택지 ['p9']"),
     (unknown_fact, R + "benefits[cafe-10].when[0].fact"),
     (month_fact_as_condition, R + "benefits[cafe-10].when[0].fact: 사실 birth_month는 bool"),
-    (ranked_with_one_member, R + "ranked[top-area]: 이 조건을 단 혜택이 둘 이상"),
+    (ranked_with_one_member, R + "ranked[top-area]: 영역이 둘 이상"),
+    (ranked_members_in_one_area, R + "ranked[top-area]: 영역이 둘 이상"),
     (month_total_on_txn_reward, R + "benefits[cafe-10].when[0].month_total"),
     (unknown_program, R + "benefits[cafe-10].reward.program"),
     (missing_shared, R + "benefits[cafe-10].limits[1].shared"),
@@ -162,6 +170,19 @@ def test_each_check_reports_its_place(make_catalog, edit, expected):
 def test_open_question_path_by_key(make_catalog):
     def edit(f):
         f[CARD]["open_questions"] = [{"path": "revisions[0].benefits[cafe-10].reward.rate", "question": "비율"}]
+
+    assert problems_of(make_catalog(edit)) == []
+
+
+def test_benefits_sharing_an_area_count_as_one_area(make_catalog):
+    """KB Easy all 해외와 면세점처럼 혜택 둘이 한 영역이면 다른 영역이 하나 더 있어야 순위를 매긴다."""
+
+    def edit(f):
+        rev(f)["ranked"] = [{"key": "top-area", "top": 1}]
+        benefit(f)["when"] = [{"ranked": "top-area"}]
+        benefit(f)["area"] = "coffee"
+        rev(f)["benefits"].append({**benefit(f), "key": "starbucks-30"})
+        rev(f)["benefits"].append({**benefit(f), "key": "delivery-30", "area": "delivery"})
 
     assert problems_of(make_catalog(edit)) == []
 

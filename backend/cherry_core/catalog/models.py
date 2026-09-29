@@ -304,6 +304,7 @@ class Benefit(Base):
     source: Key | None = None
     target: Target
     when: list[Condition] = []
+    area: Key | None = None
     reward: Reward
     limits: list[Limit] = []
     tiers: BenefitTiers | None = None

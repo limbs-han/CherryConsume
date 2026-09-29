@@ -149,6 +149,7 @@ BENEFIT_ORDER = [
     "source",
     "target",
     "when",
+    "area",
     "reward",
     "limits",
     "tiers",

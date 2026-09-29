@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 import subprocess
-from collections import Counter
 from itertools import pairwise
 from pathlib import Path
 from typing import Any
@@ -175,7 +174,7 @@ def check_rules(rules: Rules, cat: Catalog, source_ids: set[str]) -> list[tuple[
 
     shared_first: dict[str, int] = {}
     ranked_first: dict[str, int] = {}
-    ranked_use: Counter[str] = Counter()
+    ranked_areas: dict[str, set[str]] = {}
     for b in rules.benefits:
         bp = f"benefits[{b.key}]"
         start, end = tiers[0], tiers[-1]
@@ -199,7 +198,7 @@ def check_rules(rules: Rules, cat: Catalog, source_ids: set[str]) -> list[tuple[
         for i, c in enumerate(b.when):
             cond(c, f"{bp}.when[{i}]", b)
             if c.ranked in ranked_keys:
-                ranked_use[c.ranked] += 1
+                ranked_areas.setdefault(c.ranked, set()).add(b.area or b.key)
                 ranked_first[c.ranked] = min(ranked_first.get(c.ranked, start), start)
         rw = b.reward
         if rw.program is not None and rw.program not in cat.point_programs:
@@ -239,8 +238,8 @@ def check_rules(rules: Rules, cat: Catalog, source_ids: set[str]) -> list[tuple[
         if st.pick == "priority" and sorted(st.order) != members:
             err(f"stacks[{st.key}].order", f"묶음의 혜택 {members}이 빠짐없이 한 번씩 있어야 한다")
     for rk in rules.ranked:
-        if ranked_use[rk.key] < 2:
-            err(f"ranked[{rk.key}]", "이 조건을 단 혜택이 둘 이상이어야 한다")
+        if len(ranked_areas.get(rk.key, ())) < 2:
+            err(f"ranked[{rk.key}]", "영역이 둘 이상이어야 한다. area가 같은 혜택은 한 영역이다")
         table(rk.top, f"ranked[{rk.key}].top", ranked_first.get(rk.key))
     return out
 
