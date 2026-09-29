@@ -23,6 +23,8 @@ revisions:
     spend:
       exclude_categories: [annual_fee, gift_card, prepaid_charge]
     new_card: {tier: 300000}
+    benefit_exclusions:
+      when_any: []
     limits:
       - key: integrated
         per: month
@@ -70,7 +72,6 @@ revisions:
           - {per: month, count: 5}
           - {shared: integrated}
         tiers: {from: 300000}
-        unmodeled: [동물병원은 제외된다]
         notes: TIME All Day, 24시간. 병원·약국을 한 영역으로 일 1회, 월 5회, 1회 승인금액 1만원까지. 치과·한의원 포함
       - key: time-laundry
         title: 세탁소 10% 할인
@@ -100,7 +101,8 @@ revisions:
           - {per: month, count: 10}
           - {shared: integrated}
         tiers: {from: 300000}
-        notes: TIME Night. 승인시간 오후 9시~오전 9시. 옥션, G마켓, AK몰, 11번가, 티켓몬스터, 롯데홈쇼핑, 쿠팡. 티몬·롯데홈쇼핑·쿠팡은 사이트나 앱 직접 접속 시만. 일 1회, 월 10회, 1회 승인금액 1만원까지. 2026.07.15 공지로 위메프가 롯데홈쇼핑으로 바뀌었다
+        unmodeled: [티켓몬스터, 롯데홈쇼핑, 쿠팡 사이트나 앱에 직접 접속해 결제한 건만 할인한다]
+        notes: TIME Night. 승인시간 오후 9시~오전 9시. 옥션, G마켓, AK몰, 11번가, 티켓몬스터, 롯데홈쇼핑, 쿠팡. 일 1회, 월 10회, 1회 승인금액 1만원까지. 2026.07.15 공지로 위메프가 롯데홈쇼핑으로 바뀌었다
       - key: time-night-taxi
         title: 야간 택시 10% 할인
         source: page
@@ -135,7 +137,7 @@ revisions:
         title: 주말 할인마트 10% 할인
         source: page
         target:
-          merchants: [emart, homeplus, lotte_mart]
+          merchants: [emart, emart_everyday, homeplus, homeplus_express, lotte_mart, lotte_super]
         when:
           - day:
               in: [sat, sun]
@@ -146,7 +148,7 @@ revisions:
           - {per: day, count: 1}
           - {shared: weekend}
         tiers: {from: 300000}
-        unmodeled: [상품권 구매는 제외된다, 세 마트의 기업형 슈퍼마켓과 온라인몰도 포함된다]
+        unmodeled: [상품권 구매는 제외된다, '이마트, 롯데마트, 홈플러스 온라인몰 결제도 할인한다']
         notes: 주말 할인. 이마트, 롯데마트, 홈플러스. 토·일만이고 토·일이 아닌 공휴일은 제외. 일 1회, 1회 승인금액 5만원까지(1회 최대 5천원). 월 한도는 주유 할인과 같이 쓴다
       - key: weekend-fuel
         title: 주말 주유 리터당 60원 할인
@@ -178,12 +180,13 @@ revisions:
         limits:
           - {per: month, count: 4}
         tiers: {from: 300000}
-        notes: 특화 서비스. 전월 이용금액(일시불+할부) 유실적 고객에게 월 4회. 신규 발급 회원은 등록월의 다음 달 말까지 실적 무관. 인테이크몰 직접 접속 시만
+        unmodeled: [인테이크몰에 직접 접속해 결제한 건만 할인한다]
+        notes: 특화 서비스. 전월 이용금액(일시불+할부) 유실적 고객에게 월 4회. 신규 발급 회원은 등록월의 다음 달 말까지 실적 무관
     unmodeled: [해외 이용금액은 매입일 기준으로 실적 달을 정한다, 할인은 한도 안에서 신한카드 전표 매입 순서대로 적용된다]
 open_questions:
-  - {path: 'revisions[0].effective_from', question: 약관 개정 공지는 2026.07.15에 올라왔는데 시행일자가 2025년 7월 15일로 적혀 있다. 다른 약관 개정 공지는 게시일과 시행일이 며칠 차이라 게시일을 썼다, assumed: '2026-07-15'}
-  - {path: 'revisions[0].spend', question: '전월 이용금액 산정 기간이 1일~말일인지, 할부를 결제한 달에 전액 넣는지 페이지에 없다. 처음과 Point Plan 문구를 따랐다', assumed: 'prev_calendar_month, full_at_purchase'}
+  - {path: 'revisions[0].benefit_exclusions.when_any', question: Mr.Life 원문에는 간편결제 가맹점명 제외와 무이자할부 제외 문구가 없다. 처음과 Point Plan에만 있다, assumed: Mr.Life에는 적용하지 않는다}
+  - {path: 'revisions[0].spend', question: '인테이크몰 문구 "전월 이용금액(일시불+할부)"로 할부가 실적에 드는 것은 확인했다. 전월 이용금액 산정 기간이 1일~말일인지, 할부를 결제한 달에 전액 넣는지는 페이지에 없다. 처음과 Point Plan 문구를 따랐다', assumed: 'prev_calendar_month, full_at_purchase'}
   - {path: 'revisions[0].benefits[bill-10]', question: 월납 할인이 자동납부 건만인지 페이지에 없다, assumed: 자동납부 조건 없음}
-  - {path: 'revisions[0].benefits[intake-20].limits', question: 인테이크몰 할인의 금액 한도가 페이지에 없다, assumed: 월 4회만}
+  - {path: 'revisions[0].benefits[weekend-mart].target.merchants', question: 세 회사 온라인몰이 명세서에 어떤 가맹점명으로 찍히는지 확인하지 못했다, assumed: 오프라인 매장과 기업형 슈퍼마켓만}
   - {path: 'revisions[0].benefits[intake-20].tiers', question: 유실적이 전월 이용금액 1원 이상인지 30만원 이상인지 페이지에 없다, assumed: 300000}
-notes: '신한카드 Mr.Life 상품 페이지와 신한카드 상품 API 기준. 첫 개정 시행일 근거: notice-20260715. 카드 출시 일자 2015.09.03. 공지사항은 2020년 1월 글부터 남아 있고 이 카드 공지는 2023.02.08 디자인 변경(시행 2023-02-09, 혜택 변경 아님)과 2026.07.15 약관 개정(Night 온라인쇼핑 위메프를 롯데홈쇼핑으로, 주말 할인 문구 정리)이다. 2026.05.15 발급 중단 공지의 Mr.Life는 글로벌금융판매 제휴 상품이고 이 카드는 발급 중이다. 연회비는 API 값. 국내 칸은 S&브랜드(신한카드가 아멕스와 제휴한 브랜드, 국내전용 연회비로 해외 아멕스 가맹점 이용) 15,000원, 해외 칸은 VISA 18,000원. TIME 할인(All Day와 Night 합산) 한도는 integrated 1만/2만/3만원. 주말 할인 한도는 weekend 3천/7천/1만원. 월납 할인 한도는 따로 3천/7천/1만원. TIME은 구분 영역별로 각각 일 1회, All Day는 월 5회, Night는 월 10회. 실적 제외: 카드대출, 연회비, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 거래취소금액. 카드대출, 수수료, 이자는 결제가 아니라 담지 않았다. 교통 이용금액은 전전월 기준, 해외 이용금액은 매입일 기준. 신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 30만~50만원 구간 한도. 인테이크몰은 이 기간 실적 무관. 가족카드 발급 불가. 후불교통 신청 가능.'
+notes: '신한카드 Mr.Life 상품 페이지와 신한카드 상품 API 기준. 첫 개정 시행일 근거: notice-20260715. 공지 본문의 시행일자 2025년 7월 15일은 오기로 보고 게시일 2026-07-15를 썼다. 2026-07-06 웹 보관본의 공식 상품 페이지는 아직 Night 온라인쇼핑에 위메프가 있고 심의필 제2025-C1h-16799호였으며, 지금 페이지는 롯데홈쇼핑이고 심의필 제2026-C1a-09920호(2026.07.01)다. 카드 출시 일자 2015.09.03. 공지사항은 2020년 1월 글부터 남아 있고 이 카드 공지는 2023.02.08 디자인 변경(시행 2023-02-09, 혜택 변경 아님)과 2026.07.15 약관 개정(Night 온라인쇼핑 위메프를 롯데홈쇼핑으로, 주말 할인 문구 정리)이다. 2026.05.15 발급 중단 공지의 Mr.Life는 글로벌금융판매 제휴 상품이고 이 카드는 발급 중이다. 연회비는 API 값. 국내 칸은 S&브랜드(신한카드가 아멕스와 제휴한 브랜드, 국내전용 연회비로 해외 아멕스 가맹점 이용) 15,000원, 해외 칸은 VISA 18,000원. TIME 할인(All Day와 Night 합산) 한도는 integrated 1만/2만/3만원. 주말 할인 한도는 weekend 3천/7천/1만원. 월납 할인 한도는 따로 3천/7천/1만원. TIME은 구분 영역별로 각각 일 1회, All Day는 월 5회, Night는 월 10회. 실적 제외: 카드대출, 연회비, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 거래취소금액. 카드대출, 수수료, 이자는 결제가 아니라 담지 않았다. 교통 이용금액은 전전월 기준, 해외 이용금액은 매입일 기준. 신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 30만~50만원 구간 한도. 인테이크몰은 이 기간 실적 무관. 가족카드 발급 불가. 후불교통 신청 가능.'
