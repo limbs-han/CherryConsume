@@ -435,7 +435,7 @@ git commit -m "test: 카드 20장 손계산 표 추가" -m "작업 002 설계 6.
 - 만들기: `backend/cherry_core/engine/models.py`, `cond.py`, `context.py`. 과제 2에서 먼저 만들었으면 내용이 같은지만 본다
 - 만들기: `backend/tests/engine/conftest.py`, `backend/tests/engine/test_cond.py`
 
-- [ ] **1단계: 모델, 조건 판정, 준비 값을 쓴다**
+- [x] **1단계: 모델, 조건 판정, 준비 값을 쓴다**
 
 `backend/cherry_core/engine/models.py`
 
@@ -910,7 +910,7 @@ class Ctx:
         )
 ````
 
-- [ ] **2단계: 테스트용 작은 카탈로그와 조건 테스트를 쓴다**
+- [x] **2단계: 테스트용 작은 카탈로그와 조건 테스트를 쓴다**
 
 `backend/tests/engine/conftest.py`
 
@@ -1167,7 +1167,7 @@ def test_any_of_unknown_only_when_nothing_true():
     assert check(c, sit())[1] == frozenset({("fact", "soldier"), ("fact", "salary")})
 ````
 
-- [ ] **3단계: 돌린다**
+- [x] **3단계: 돌린다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_cond.py
@@ -1175,12 +1175,14 @@ uv run --project backend pytest -q backend/tests/engine/test_cond.py
 
 기대: `10 passed`.
 
-- [ ] **4단계: 커밋**
+- [x] **4단계: 커밋**
 
 ```bash
 git add backend/cherry_core/engine backend/tests/engine/conftest.py backend/tests/engine/test_cond.py
 git commit -m "feat: 계산 엔진 모델과 참·거짓·모름 조건 판정 추가" -m "작업 002 설계 1절, 2.1, 3.1, 3.2. 부모 업종까지만 아는 결제와 모르는 결제수단, 사실, 옵션은 모름으로 판정한다."
 ```
+
+2026-09-29 실행 결과: 10개 통과, 전체 93개 통과. 모델, 조건 판정, 준비 값 파일은 과제 2에서 둔 것과 같았다.
 
 ---
 
