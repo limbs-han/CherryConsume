@@ -12,11 +12,13 @@ annual_fees:
 sources:
   - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=296&PDCD=0001&pageId=CA01030000', fetched_at: 2026-09-29, review_no: 제2026-5925호, review_valid_until: 2026-12-31}
   - {id: manual, kind: manual_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/2026010710225623561658375415794.pdf', fetched_at: 2026-09-29, review_no: 제2026-0104호, review_valid_until: 2027-01-04}
+  - {id: terms-diff, kind: terms_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/2026010512173923395727396205419.pdf', fetched_at: 2026-09-29}
+  - {id: leaflet, kind: manual_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/2026010914503123750499621380230.pdf', fetched_at: 2026-09-29, review_no: 제2025-8633호}
+  - {id: notice-316743, kind: notice, url: 'https://www.ibk.co.kr/cyber/newibkDetailCyber.ibk?pageId=IR03010300&category=4&srno=316743', fetched_at: 2026-09-29}
 checked_at: 2026-09-29
 revisions:
-  - effective_from: 2026-09-28
-    effective_from_estimated: true
-    source: page
+  - effective_from: 2026-01-05
+    source: terms-diff
     tiers: [0, 80000, 200000, 250000, 500000, 1000000]
     spend:
       basis: prev_calendar_month
@@ -32,7 +34,10 @@ revisions:
     facts:
       - {key: soldier, type: bool, scope: user, ask: '현역병으로 인정되었나요? IBK장병내일준비적금이 있거나 복무확인서와 건강보험자격득실확인서를 냈으면 예입니다'}
       - {key: salary_transfer, type: bool, scope: card, ask: 지난달 이 카드 결제계좌로 병 급여를 받았나요}
-      - {key: mytag, type: bool, scope: card, ask: BC카드 마이태그에 이 카드를 등록했나요}
+      - {key: mytag_coupang, type: bool, scope: card, ask: BC카드 마이태그에서 이 카드로 쿠팡·다이소·올리브영을 등록했나요}
+      - {key: mytag_kakaot, type: bool, scope: card, ask: BC카드 마이태그에서 이 카드로 카카오T를 등록했나요}
+      - {key: mytag_momstouch, type: bool, scope: card, ask: BC카드 마이태그에서 이 카드로 맘스터치를 등록했나요}
+      - {key: mytag_shoemarker, type: bool, scope: card, ask: BC카드 마이태그에서 이 카드로 슈마커를 등록했나요}
     limits:
       - key: integrated
         per: month
@@ -176,7 +181,9 @@ revisions:
         when:
           - {channel: offline}
           - amount: {below: 30000}
-          - {fact: soldier}
+          - any_of:
+              - {fact: soldier}
+              - {fact: salary_transfer}
         reward: {type: billing_discount, rate: 15}
         limits:
           - {per: month, amount: 10000}
@@ -193,7 +200,9 @@ revisions:
         when:
           - {channel: offline}
           - amount: {min: 30000, below: 70000}
-          - {fact: soldier}
+          - any_of:
+              - {fact: soldier}
+              - {fact: salary_transfer}
         reward: {type: billing_discount, rate: 10}
         limits:
           - {shared: px-basic}
@@ -205,7 +214,9 @@ revisions:
         when:
           - {channel: offline}
           - amount: {min: 70000, below: 100000}
-          - {fact: soldier}
+          - any_of:
+              - {fact: soldier}
+              - {fact: salary_transfer}
         reward: {type: billing_discount, rate: 20}
         limits:
           - {shared: px-basic}
@@ -217,7 +228,9 @@ revisions:
         when:
           - {channel: offline}
           - amount: {min: 100000}
-          - {fact: soldier}
+          - any_of:
+              - {fact: soldier}
+              - {fact: salary_transfer}
         reward: {type: billing_discount, rate: 30}
         limits:
           - {shared: px-basic}
@@ -229,7 +242,9 @@ revisions:
         when:
           - {channel: offline}
           - amount: {min: 200000}
-          - {fact: soldier}
+          - any_of:
+              - {fact: soldier}
+              - {fact: salary_transfer}
         reward: {type: billing_discount, fixed: 50000}
         limits:
           - per: year
@@ -412,7 +427,7 @@ revisions:
         when:
           - amount: {min: 10000}
           - {fact: salary_transfer}
-          - {fact: mytag}
+          - {fact: mytag_coupang}
         reward: {type: billing_discount, fixed: 1000}
         limits:
           - {per: month, count: 1}
@@ -424,8 +439,10 @@ revisions:
           merchants: [kakao_t]
         when:
           - amount: {min: 5000}
-          - {fact: soldier}
-          - {fact: mytag}
+          - any_of:
+              - {fact: soldier}
+              - {fact: salary_transfer}
+          - {fact: mytag_kakaot}
         reward: {type: billing_discount, rate: 50}
         limits:
           - {per: txn, amount: 5000}
@@ -439,8 +456,10 @@ revisions:
           merchants: [moms_touch]
         when:
           - amount: {min: 10000}
-          - {fact: soldier}
-          - {fact: mytag}
+          - any_of:
+              - {fact: soldier}
+              - {fact: salary_transfer}
+          - {fact: mytag_momstouch}
         reward: {type: billing_discount, fixed: 1000}
         limits:
           - {per: quarter, count: 1}
@@ -518,6 +537,21 @@ revisions:
         valid_until: 2026-12-31
         unmodeled: ['국내·해외숙소, 레저, 교통 상품만', 월 1만3천P 한도는 IBK·하나·신한 나라사랑카드 합산]
         notes: 특별 제휴서비스. 건당 10만원 이상
+      - key: mytag-shoemarker
+        title: 슈마커 오프라인 1만원 청구할인
+        target:
+          merchants: [shoemarker]
+        when:
+          - amount: {min: 100000}
+          - {channel: offline}
+          - {fact: mytag_shoemarker}
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {per: month, count: 1}
+        valid_from: 2026-07-20
+        valid_until: 2026-09-30
+        unmodeled: [이마트와 홈플러스 안의 슈마커 매장은 할인하지 않는다]
+        notes: 특별 제휴서비스. IBK카드앱이나 BC페이북에서 슈마커 마이태그 후 오프라인 매장 10만원 이상 결제, 월 1회. 대상자 조건과 전월실적 조건 없음
     unmodeled: [모든 혜택은 비씨카드 전산에 등록된 가맹점과 업종 기준으로 준다]
   - effective_from: 2027-01-01
     source: page
@@ -530,7 +564,8 @@ revisions:
             - {per: month, amount: 5000}
             - {per: month, count: 5}
 open_questions:
-  - {path: 'revisions[0].effective_from', question: '첫 개정 시행일. 상품 페이지의 부가서비스 유지 안내에 신규출시일 2012-06-11이 있으나, 3기 개편 시행일과 그 뒤 부가서비스 변경 공지를 확인하지 못했다. IBK 상품소식 게시판은 자바스크립트로 쪽을 넘겨 첫 쪽(2026-08-03~2026-09-28 공지 10건)만 봤고 나라사랑카드 공지는 없었다. 2026-01-05 설명서와 지금 페이지가 다르다. 설명서는 GS25 추가할인 품목이 음료·빙과류·신선식품이고 Npay 적립에 전월실적 조건이 없다', assumed: '2026-09-28'}
+  - {path: 'revisions[0].benefits[gs25-items-onsite].unmodeled', question: '2026-01-05 원문 품목은 음료(주류 제외), 빙과류, 신선식품이고 지금 페이지는 간편식, 음료, 아이스크림이다. 바뀐 날을 알려 주는 원문이 없다', assumed: 지금 페이지 문구}
+  - {path: 'revisions[0].benefits[mytag-momstouch].when', question: 리플렛은 맘스터치 오프라인 매장 결제만이라고 쓰고 지금 상품 페이지는 채널 조건이 없다, assumed: 채널 조건 없음}
   - {path: 'revisions[0].benefits[aio-transit].limits', question: '대중교통 20% 할인이 All in One 월 통합할인한도에 들어가는지. 상품 페이지 문구는 대중교통은 할인 횟수, 할인 금액 제한 없음', assumed: 통합할인한도에 포함}
   - {path: 'revisions[0].benefits[aio-convenience].limits', question: '편의점 All in One 할인의 1일 횟수. IBK 상품 페이지는 1일 2회, BC카드 상품 페이지는 1일 1회', assumed: 1일 2회}
   - {path: 'revisions[0].benefits[px-under-30k].reward.type', question: PX 할인이 결제할 때 빠지는지 청구서에서 빠지는지. 상품 페이지와 설명서에 표기가 없고 IBK 블로그는 현장할인이라고 쓴다. PX 기본할인 네 구간과 특별할인이 같은 답을 따른다, assumed: billing_discount}
@@ -538,4 +573,4 @@ open_questions:
   - {path: 'revisions[0].benefits[mytag-kakaot-taxi]', question: '마이태그 쿠폰과 All in One 할인이 한 결제에 같이 적용되는지. 카카오T 택시와 All in One 택시, 쿠팡 쿠폰과 All in One 쇼핑, NOL 적립과 All in One 여행·레저가 해당한다', assumed: 둘 중 큰 쪽 하나}
   - {path: 'revisions[0].benefits[emart24-items-onsite]', question: 이마트24 주요품목 현장할인이 편의점 10% 청구할인과 한 결제에 같이 적용되는지. GS25 주요품목은 추가 할인으로 적혀 있어 같이 받는 것으로 두었다, assumed: 둘 중 큰 쪽 하나}
   - {path: 'revisions[0].benefits[npay-points]', question: Npay 포인트 적립과 가맹점 카드 할인을 한 결제에 같이 받는지. 상품 페이지에 문구가 없다, assumed: 둘 중 큰 쪽 하나}
-notes: 'IBK 상품 페이지(준법감시인 심의필 제2026-5925호, 2026.07.27, 유효기간 2026.12.31) 기준. 2026.01.05 설명서(제2026-0104호)와 BC카드 상품 페이지로 교차 확인. 상품 페이지의 부가서비스 유지 안내에 카드 신규출시일 2012.06.11이 적혀 있다. product_codes는 상품 페이지 주소의 PDLN_CD, PDGR_CD, PDTM_CD, PDCD 값을 순서대로 이은 것. 서비스 묶음은 나라(전월 8만원 이상), 사랑(전월 20만원 이상), 파워업 All in One(전월 25만원 이상, 월 통합할인한도 1만/2.5만/4.5만원), 파워업 군마트(PX)와 Npay포인트, 현역병 급여수령 우대 패키지와 현역병 고객 우대 패키지, 특별 제휴서비스(2026.12.31까지)다. 전월 병 급여이체자는 나라·사랑 서비스의 전월실적 조건이 면제된다. 실적은 전월 1일부터 말일까지 국내외 이용금액이고 제세공과금, 상품권, 교통카드 이용금액은 빠진다. 취소는 취소 매출표가 접수된 달 실적에서 뺀다. 카드 등록일부터 다음 달 말일까지는 실적이 모자라도 할인과 Npay 적립을 주고 All in One은 25만~50만원 구간 한도를 쓴다. 결제 건 혜택이 아니라 모델에 없는 것: 국내 공항라운지 연 1회(Master 발급, 병 급여이체자, 2026.12.31까지), 상해보험·병영생활 안심보험 무료가입, 부모상 장례용품 지원, 트래블서비스(국제브랜드 1%·해외이용 0.18% 수수료 면제, 해외 ATM 수수료 월 3회 면제, 매매기준율 적용), GS ALL·그린카드·SYRUP 멤버십, 소액 신용한도 최대 30만원. 제휴 전용가나 쿠폰이라 모델에 없는 것: 지니뮤직 전용 이용권 최대 43%(6개월), SPOTV NOW 전용 이용권 최대 30%, 왓챠 30%(4개월), 해커스 인강 30%·라이브 20%·어학원 10%, 월급쟁이부자들 10% 쿠폰(5만원 이상, 월 1회, 최대 5만원), 쏘카 4시간 이상 50% 쿠폰, 슈마커 오프라인 1만원(10만원 이상, 2026.09.30까지).'
+notes: 'IBK 상품 페이지(준법감시인 심의필 제2026-5925호, 2026.07.27, 유효기간 2026.12.31) 기준. 2026.01.05 설명서(제2026-0104호)와 BC카드 상품 페이지로 교차 확인. 상품 페이지의 부가서비스 유지 안내에 카드 신규출시일 2012.06.11이 적혀 있다. 리플렛 부가서비스 유지 안내는 카드 신규출시를 2015-12-21로 쓴다.product_codes는 상품 페이지 주소의 PDLN_CD, PDGR_CD, PDTM_CD, PDCD 값을 순서대로 이은 것. 서비스 묶음은 나라(전월 8만원 이상), 사랑(전월 20만원 이상), 파워업 All in One(전월 25만원 이상, 월 통합할인한도 1만/2.5만/4.5만원), 파워업 군마트(PX)와 Npay포인트, 현역병 급여수령 우대 패키지와 현역병 고객 우대 패키지, 특별 제휴서비스(2026.12.31까지)다. 전월 병 급여이체자는 나라·사랑 서비스의 전월실적 조건이 면제된다. 실적은 전월 1일부터 말일까지 국내외 이용금액이고 제세공과금, 상품권, 교통카드 이용금액은 빠진다. 취소는 취소 매출표가 접수된 달 실적에서 뺀다. 카드 등록일부터 다음 달 말일까지는 실적이 모자라도 할인과 Npay 적립을 주고 All in One은 25만~50만원 구간 한도를 쓴다. 결제 건 혜택이 아니라 모델에 없는 것: 국내 공항라운지 연 1회(Master 발급, 병 급여이체자, 2026.12.31까지), 상해보험·병영생활 안심보험 무료가입, 부모상 장례용품 지원, 트래블서비스(국제브랜드 1%·해외이용 0.18% 수수료 면제, 해외 ATM 수수료 월 3회 면제, 매매기준율 적용), GS ALL·그린카드·SYRUP 멤버십, 소액 신용한도. 소액 신용한도 부여 시 설명서가 따로 있다.제휴 전용가나 쿠폰이라 모델에 없는 것: 지니뮤직 전용 이용권 최대 43%(6개월), SPOTV NOW 전용 이용권 최대 30%, 왓챠 30%(4개월), 해커스 인강 30%·라이브 20%·어학원 10%, 월급쟁이부자들 10% 쿠폰(5만원 이상, 월 1회, 최대 5만원), 쏘카 4시간 이상 50% 쿠폰. Npay 적립 전월실적 조건은 설명서 2쪽 요약만 없다고 쓰고 전후대비표 5쪽, 리플렛, 상품 페이지는 모두 25만원 이상이라 25만원 이상으로 둔다.'
