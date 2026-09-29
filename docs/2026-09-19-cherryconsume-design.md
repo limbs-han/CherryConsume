@@ -159,6 +159,13 @@ cherryConsume/
         check.py
         canonical.py
         __main__.py      # check, format 명령
+      engine/            # 실적, 결제 혜택, 추천 계산. 작업 002
+        models.py
+        cond.py
+        context.py
+        spend.py
+        price.py
+        recommend.py
     tests/
   catalog/
     categories.yaml      # 업종 2단 트리
@@ -174,7 +181,7 @@ cherryConsume/
     history/             # 작업 기록
 ```
 
-`backend/`는 뒤에 FastAPI 패키지 `cherry_api`가 추가될 자리다. 실적과 추천 계산 모듈은 작업 002에서 `cherry_core` 아래에 더한다.
+`backend/`는 뒤에 FastAPI 패키지 `cherry_api`가 추가될 자리다.
 
 ### 6.3 데이터 모델
 
@@ -220,21 +227,30 @@ cherryConsume/
 | 필드 | 타입 | 설명 |
 |---|---|---|
 | card_id | str | |
+| registered_on | date 또는 null | 앱에 등록한 날. 등록한 달에는 전월 실적 추정값을 쓴다. E2 |
 | assumed_prev_month_spend | int 또는 null | 등록한 달에 쓰는 전월 실적 추정값 |
 | started_on | date 또는 null | 카드를 쓰기 시작한 날. 신규 발급 특례 |
 | options | 옵션 선택 이력 | 옵션마다 고른 선택지와 적용 시작일 |
 | facts | 사실 답 | 카드마다 다른 사실. 사람에 대한 사실은 사용자에게 한 번만 둔다 |
 | last_payment_method | str 또는 null | 마지막에 쓴 결제수단 |
+| removed | bool | 해지 여부. 추천에서 뺀다. S9 |
 
-**출력 모델**
+**엔진 입력과 출력**
 
-SpendStatus: card_id, month, counted_spend, current_tier_index, next_tier_min_spend 또는 null, remaining_to_next 또는 null, warnings[]
+엔진이 받는 결제 `Payment`는 위 결제에서 계산에 쓰는 칸만 받는다. 가맹점은 가게 이름이 아니라 가맹점 키다. 모델의 코드는 `backend/cherry_core/engine/models.py`, 칸마다의 뜻은 작업 002 설계 1절이 기준이다.
 
-Recommendation: card_id, expected_benefit, applied 받는 혜택 key와 금액 목록, remaining_monthly_cap 또는 null, counts_toward_spend, remaining_to_next 또는 null, warnings[]
+| 출력 | 한 줄 설명 | 칸 |
+|---|---|---|
+| AppliedBenefit | 결제 한 건이 받은 혜택 하나. 중복 묶음이 여럿이면 여러 개 | key, amount 보상 단위의 금액이나 포인트 수, value 원 가치, base 혜택 계산에 넣은 결제액 |
+| PaymentResult | 결제 한 건의 계산 결과 | payment_id, benefits, spend 실적에 넣는 달과 금액이고 취소는 음수, conditional, warnings |
+| SpendStatus | 카드 한 장의 이번 달 실적 현황 | user_card_id, month, counted 이번 달 인정 실적, tier 적용 구간 하한, tier_source 구간의 근거, prev_month_counted, to_keep 유지까지, next_tier, to_next 다음 구간까지, warnings |
+| LimitUse | 한도 하나의 이번 기간 사용량과 한도 | key, benefit, per, used_amount, used_count, used_base, cap_amount, cap_count, cap_base |
+| Recommendation | 추천 한 줄 | user_card_id, card_id, value 기대 혜택, benefits, counted 실적 인정 여부, to_keep, to_next, locked, conditional, warnings |
+| LockedBenefit | 구간이 모자라 지금은 못 받는 혜택. E37 | user_card_id, benefit, required_tier 필요한 구간 하한, remaining_this_month 이번 달 더 써야 하는 금액, value_if_unlocked 받았다면의 금액 |
+| ConditionalBenefit | 모르는 값이 참이면 더 받는 혜택 | user_card_id, benefit, needs 무엇을 모르는지, extra 더 받는 금액 |
+| Warn | 경고 하나. 사람이 읽는 문구는 앱이 만든다 | code, benefit, data |
 
-LockedBenefit: card_id, benefit_id, required_min_spend, remaining_this_month, value_if_unlocked. 구간이 모자라 지금은 못 받는 혜택. 추천 결과에 Recommendation 목록과 함께 돌려준다
-
-조건부 혜택 ConditionalBenefit과 경고 코드 needs_input은 작업 001 설계 3.3절에서 정했고 이름은 작업 002에서 확정한다.
+`tier_source`는 지난달 실적 `prev_month`, 등록한 달의 추정값 `assumed`, 신규 발급 특례 `new_card`, 실적 조건 없음 `none`, 계산하지 않는 실적 기준 `unsupported` 중 하나다.
 
 ### 6.4 업종과 가게 별칭
 
@@ -246,72 +262,83 @@ LockedBenefit: card_id, benefit_id, required_min_spend, remaining_this_month, va
 
 ### 6.5 계산 규칙
 
-이 절의 계산 규칙은 1판 필드 이름으로 썼다. 2판 틀에 맞춘 계산 규칙은 작업 002에서 이 절을 다시 쓴다. 그때까지 필드 이름이 다르면 작업 001 설계가 우선한다.
+작업 002에서 2판 틀에 맞춰 다시 썼다. 규칙마다의 예와 까닭은 `docs/work/002-calc-engine/design.md` 2절부터 5절이고 코드는 `backend/cherry_core/engine/`이다.
 
-실적 월은 결제일 기준 달력 월이다.
+**원칙**
+- 엔진은 DB도 웹도 모르는 순수 함수다. 예외를 던지지 않고 계산할 수 없는 경우는 경고로 돌려준다. 현재 시각은 인자로 받는다.
+- 금액은 원 단위 정수다. 비율은 정수 분수로 곱한다. 1.3%는 13/1000이다. 포인트는 `point_programs.yaml`의 1포인트 가치로 원으로 바꾸고 원 미만을 버린다.
+- 달과 날은 한국 시간으로 나눈다. E7
+- 결제일에 적용되는 개정 하나로 계산한다. 결제일이 첫 개정보다 앞서면 첫 개정의 시행일이 추정일 때만 첫 개정을 쓰고 `revision_estimated`를, 아니면 `no_revision`을 붙인다.
 
-실적 인정 여부 `countable(t, card)`
-- 업종이 `excluded_categories`에 없고
-- 무이자할부 제외 카드면 무이자할부 결제가 아니고
-- 혜택 건 제외 카드면 `estimated_benefit`가 0인 결제
+**업종 맞추기**
+- 부모 코드는 자식 전부를 뜻한다. 결제가 부모 업종까지만 알면 부풀리지 않는 쪽으로 본다. 실적 제외, 혜택 대상 제외, 모든 혜택 공통 제외에는 걸린 것으로, 혜택 대상에는 안 맞는 것으로 보고 자식 업종을 한 번 묻는다. E47
+- 결제에 적은 업종이 가맹점의 기본 업종보다 우선한다. 둘 다 없으면 other다.
 
-결제 한 건이 어느 달에 얼마를 실적에 넣는지 `contribution(t, month)`
-- 일시불이거나 카드의 `installment_basis`가 `full_at_purchase`면 결제 달에 `amount` 전액, 다른 달은 0
-- `per_installment_month`면 결제 달부터 `installment_months`개월 동안 매달 `amount / installment_months`를 원 단위로 내림해 넣고 나머지는 마지막 달에 넣음
-- 취소가 있으면 카드의 `cancellation_basis`에 따라 뺀다. `cancel_month`면 `cancelled_at`이 속한 달에서 `cancelled_amount`를, `original_month`면 결제 달에서 `cancelled_amount`를 뺀다
+**실적**
 
-이번 달 인정 실적 `counted_spend(card, month)` = `countable`인 결제들의 `contribution(t, month)` 합. 0보다 작으면 0
+결제 한 건이 실적에 넣는 금액은 결제일 개정의 `spend`로 차례대로 정한다.
+1. 지역이 `spend.regions`에 없으면 0이다.
+2. 업종이 `spend.exclude_categories`에 맞으면 0이다.
+3. `spend.interest_free`가 `exclude`이고 무이자할부 결제면 0이다.
+4. 혜택을 받은 결제면 받은 혜택의 `exclude_applied` 비율만큼 뺀다. 혜택에 값이 없으면 카드의 값이고, 둘 이상 받았으면 가장 큰 비율이다. 원 미만은 버린다. 한도가 차서 0원이 된 혜택은 받은 것으로 보지 않는다.
+5. 넣는 달은 `spend.installment`를 따른다. `full_at_purchase`면 결제한 달에 전액이다. `per_installment_month`면 할부 개월 수로 나눠 매달 넣고 원 미만은 버리며 나머지는 마지막 달에 넣는다. `month_offset`에 맞는 업종이면 그만큼 뒤 달로 미룬다. E4
 
-이번 달 적용 구간 `current_tier(card, month)` = `counted_spend(card, month - 1)` 이상인 `min_spend` 중 가장 큰 구간. 전월 결제가 하나도 없고 `assumed_prev_month_spend`가 있으면 그 값을 쓰고, 둘 다 없으면 0번 구간에 경고 `no_prev_month_data`를 붙인다.
+- 취소는 그 결제가 실적에 넣은 비율대로 뺀다. 빼는 달은 `spend.cancellation`을 따르고 `cancellation_overrides`의 조건에 맞으면 그 값을 쓴다. `original_month` 취소로 지난달 실적이 줄면 이번 달 구간도 다시 정한다. 달의 인정 실적이 0보다 작으면 0이다. E5
+- 이번 달 구간은 지난달 인정 실적 이상인 구간 하한 중 가장 큰 것이다. 카드를 등록한 달에는 지난달 결제가 한 건 이상 기록돼 있으면 그 합계를, 없으면 등록할 때 받은 추정값을 쓴다. 둘 다 없으면 0 구간에 `no_prev_month_data`를 붙인다. E1, E2
+- 신규 발급 특례 기간은 쓰기 시작한 날이 속한 달부터 그다음 달 말일까지다. 그동안은 `new_card.tier`와 기본 구간 중 큰 쪽이고, 혜택마다 `tier_by_benefit`이 있으면 그 혜택에는 그 값과 기본 구간 중 큰 쪽이다. 쓰기 시작한 날이 없으면 특례를 주지 않는다.
+- `basis: none`은 구간을 세지 않는다. `basis: billing_cycle`은 실적을 계산하지 않고 `spend_basis_unsupported`를 붙인 뒤 구간 조건이 없는 혜택만 계산한다. E6
+- 유지까지 남은 금액은 지금 구간 하한 − 이번 달 인정 실적이다. 다음 구간까지 남은 금액은 다음 구간 하한 − 이번 달 인정 실적이고 마지막 구간이면 없다.
 
-다음 구간 잔액 `remaining_to_next` = 다음 구간 `min_spend` − `counted_spend(card, month)`. 마지막 구간이면 null.
+**결제 하나의 혜택**
+- 조건은 참, 거짓, 모름 셋이다. 모름은 결제수단, 사실 답, 옵션, 쓰기 시작한 날, 자식 업종을 모를 때다. 저장한 결제에서는 거짓으로 계산하고 `needs_input`을 붙인다. 추천에서는 거짓으로 순위를 매기고 참이었다면 더 받는 금액을 조건부 혜택으로 준다.
+- `any_of`는 참이 하나라도 있으면 참이고, 참이 없고 모름이 있으면 모름이다. 제외 조건이 모름이면 혜택도 모름이다. 한도 `adjust` 조건이 모름이면 한도를 바꾸지 않는다. 구간이 모자라고 `waived_when`이 모름이면 `tier_not_met`과 `needs_input`을 함께 붙인다.
+- 혜택이 걸리려면 결제일이 행사 기간 안이고, 대상에 맞고 대상 제외에 안 걸리고, 모든 혜택 공통 제외에 안 걸리고, `when`이 모두 참이고, 이번 달 구간이 `tiers` 안이어야 한다. `waived_when`이 참이면 `from`만 푼다.
+- 혜택이 대상 업종으로 결제의 업종을 직접 적었으면 공통 제외 업종은 무시한다. 가맹점만 적었으면 결제 업종으로 공통 제외를 본다. 이마트 할인으로 이마트에서 산 상품권은 뺀다.
+- 공휴일은 `holidays` 패키지의 한국 달력으로 보고 대체공휴일과 임시공휴일을 포함한다. 시간 조건은 시작 시각을 넣고 끝 시각을 빼며 자정을 넘길 수 있다.
+- 보상은 비율, 정액, 단위당, 리터당이다. 값이 구간표면 이번 달 구간의 값을 쓴다. 카드의 `round`를 따른다. floor는 원 미만 버림, round는 반올림, floor10과 floor100은 10원과 100원 미만 버림이다.
+- 한도는 `limits`를 모두 넘지 않는 가장 큰 값이다. 기간은 한국 시간의 날, 달, 분기, 연, 행사 기간 전체, 결제 하나다. 사용량은 같은 기간 앞선 결제의 저장된 혜택으로 센다. 앞선 결제는 결제 시각 순서이고 같으면 결제 id 순서다. 공유 한도는 그 key를 쓰는 혜택의 사용량을 합친다. `base` 한도가 결제액보다 적게 남았으면 남은 만큼만 혜택 계산에 넣는다.
+- 카드를 등록하기 전의 이용은 입력한 결제로만 센다. 입력하지 않은 이용은 0회로 본다. E49
+- `basis: month_total` 혜택은 결제마다 이 결제까지의 달 혜택 − 이 결제 전의 달 혜택을 붙인다.
+- 이용액 순위 `ranked`는 1일부터 이 결제까지의 영역 이용액으로 순위를 매기고 `top`개 영역만 준다. 같으면 카드 파일에 먼저 적힌 영역이 앞이다. 달 중간 혜택은 잠정값이라 순위가 바뀌면 `ranked_provisional`을 붙인다. 달이 끝나면 서버가 그 카드의 그 달 결제를 최종 순위로 다시 계산한다. E48
+- 현장할인의 기록 금액은 할인 뒤 금액이다. 정률 r%면 할인 전 금액은 기록 금액 × 100 ÷ (100 − r)를 올림한 값이고 정액이면 기록 금액 + 정액이다. 할인액을 한도로 잘랐으면 할인 전 금액은 기록 금액 + 할인액이다. 조건의 금액과 혜택 계산은 할인 전 금액으로, 실적과 같은 결제의 청구할인은 기록 금액으로 본다.
+- 같은 중복 묶음의 혜택은 하나만, 다른 묶음의 혜택은 더해서 받는다. `pick: best`는 가장 큰 하나이고 같으면 카드 파일에 먼저 적힌 혜택이다. `pick: priority`는 `order`에서 먼저 걸리고 한도가 남은 하나다. `spill: split`이면 한도에 걸려 넣지 못한 결제액을 다음 혜택으로 넘긴다. 두 묶음이 공유 한도를 같이 쓰면 카드 파일에 먼저 적힌 혜택의 묶음이 먼저 쓴다.
+- 옵션은 결제일에 골라 둔 선택지로 계산한다. 고른 적이 없으면 `default`, 그것도 없으면 모름이다. `unsupported` 선택지를 골랐으면 옵션에 걸린 혜택을 계산하지 않고 `option_unsupported`를 붙인다.
+- 문장으로 남긴 조건은 그 조건이 없는 것처럼 계산하고 `check_conditions`에 문장을 담는다. E12. 확인 필요 항목은 가정한 값으로 계산하고 `assumed_value`를 붙인다.
 
-혜택 후보 `eligible(b, t, card, month)`
-- 대상 일치. all이면 항상, category면 업종 일치, merchant면 가게 별칭 키 일치
-- 채널 일치. any면 항상
-- `amount >= min_txn_amount`
-- `current_tier_index >= min_tier_index`
-- 일 한도가 있으면 같은 날 그 혜택 적용 건수가 한도 미만
-- 월 횟수 한도가 있으면 그 달 적용 건수가 한도 미만
-- 월 금액 한도가 있으면 남은 금액이 0보다 큼
+**저장한 혜택**
+- 결제를 저장할 때 계산한 혜택은 카탈로그가 바뀌어도 다시 계산하지 않는다. E18
+- 결제를 고치거나 취소하거나 모르던 값을 답하면 그 결제만 다시 계산한다. 뒤 결제의 저장된 혜택은 바꾸지 않는다. 전액 취소면 혜택은 0이고 한도 사용량에서도 빠진다. E5
+- 예외는 달이 끝난 순위 카드다. E48
 
-혜택 금액 `value(b, t, card, month)`
-1. 기본값 = `rate_pct` × `amount`를 원 단위로 내림, 또는 `fixed_amount`
-2. `max_per_txn`이 있으면 그 값으로 자름
-3. `monthly_cap_amount`가 있으면 남은 월 한도로 자름. 남은 한도 = 한도 − 그 달 이 혜택으로 받은 `estimated_benefit` 합
-4. `counts_toward_integrated_cap`이고 구간에 `integrated_cap`이 있으면 남은 통합 한도로 자름. 남은 통합 한도 = 한도 − 그 달 이 카드에서 통합 한도에 포함되는 `estimated_benefit` 합
-
-카드 기대 혜택 `expected(card, t, month)` = 후보 혜택의 `value` 중 최댓값. 한 카드 안에서 혜택은 중복 적용하지 않는다. 후보가 없으면 0.
-
-추천 정렬
-1. `expected` 내림차순
-2. 같으면 이 결제가 실적에 잡히고 `remaining_to_next`가 0보다 큰 카드를 앞에, 그중 잔액이 작은 카드를 앞에
-3. 그래도 같으면 카드 id 순
-
-경고 코드
-- `not_counted_toward_spend`: 이 결제는 실적 제외
-- `monthly_cap_exhausted`: 이번 달 한도 소진으로 혜택 0
-- `tier_not_met`: 전월실적 미충족으로 해당 혜택 불가
-- `no_prev_month_data`: 전월 데이터 없어 최저 구간으로 계산
-- `conditions_not_modeled`: 계산에 넣지 않은 조건이 있어 실제와 다를 수 있음
-- `spend_basis_unsupported`: 이 카드의 실적 기준은 계산하지 않음
-- `default_amount_used`: 금액이 없어 1만 원 기준으로 계산
-
-포인트와 마일리지는 1차에서 1포인트 = 1원으로 보고 정렬한다. 결제를 저장할 때 계산한 `applied_benefit_id`와 `estimated_benefit`은 카탈로그가 바뀌어도 다시 계산하지 않는다.
-
-시나리오 검토에서 추가한 규칙. 근거는 `docs/scenarios.md`.
-- 카드를 등록한 달에는 입력된 전월 결제가 1건 이상이면 그 합계를 전월 실적으로 쓰고, 없을 때만 추정값을 쓴다. 다음 달부터는 입력된 결제만 본다. (E2)
-- 할부는 카드의 `installment_basis`를 따른다. 카드사마다 다르므로 카탈로그에 카드별로 적는다. (E4)
-- 취소는 카드의 `cancellation_basis`를 따른다. `original_month`로 전월 실적이 줄면 이번 달 적용 구간도 다시 정한다. `cancel_month`면 이번 달 구간은 그대로다. 전액 취소된 결제의 `estimated_benefit`은 0으로 되돌려 한도 사용량에서 뺀다. (E5)
-- `spend_basis`가 `unsupported`인 카드는 실적 계산을 하지 않고 `min_tier_index`가 0인 혜택만 추천에 넣는다. (E6)
-- 월 경계는 한국 시간 기준이다. (E7)
-- 추천에 금액이 없으면 1만 원을 기준 금액으로 계산하고 결과에 표시한다. (E11)
-- `conditions_not_modeled`가 참인 혜택은 조건이 없는 것처럼 계산하되 결과에 `conditions_not_modeled` 경고를 붙인다. (E12)
-
-화면 시안 검토에서 추가한 규칙.
-- 구간이 모자라 후보에서 빠진 혜택은 버리지 않고 `LockedBenefit`으로 모은다. `required_min_spend`는 그 혜택이 요구하는 구간의 하한이고, `remaining_this_month` = `required_min_spend` − 이번 달 인정 실적이다. 받는 시점은 다음 달이다. 전월 실적에서 빼지 않는다. 예: 90만 구간 혜택, 이번 달 18.2만이면 71.8만. (E37)
-- 추천 탭 첫 화면의 업종별 1순위는 업종마다 가게 없이 기준 금액 1만 원으로 추천을 돌린 결과의 1위다.
+**추천**
+- 보유 카드마다 추천 질문으로 가상의 결제 한 건을 만들어 계산한다. 저장하지 않으므로 한도 사용량과 실적에 들어가지 않는다. 해지한 카드는 넣지 않는다. S9
+- 가상의 결제 시각은 현재 시각이다. 금액이 없으면 1만원으로 계산하고 `default_amount_used`를 붙인다. E11. 채널과 지역은 질문의 값, 없으면 가맹점 기본값, 그것도 없으면 오프라인과 국내다. 결제수단은 질문의 값, 없으면 그 카드로 마지막에 쓴 결제수단, 처음이면 실물카드다. 할부는 일시불, 청구 방식은 가맹점 기본값이다.
+- 순위는 기대 혜택이 큰 카드가 앞이다. 기대 혜택은 받는 혜택의 원 가치 합이다. 같으면 이 결제가 실적에 들어가는 카드 중 유지까지 남은 카드, 그다음 다음 구간까지 남은 카드를 앞에 두고 각각 남은 금액이 적은 쪽이 앞이다. 그래도 같으면 카드 id 순이다. S5
+- 대상과 조건은 맞는데 구간이 모자란 혜택은 버리지 않고 못 받는 혜택으로 준다. 이번 달 더 써야 하는 금액은 필요한 구간 하한 − 이번 달 인정 실적이고, 받았다면의 금액은 다음 달 한도가 비어 있다고 보고 계산한다. 예: 90만 구간 혜택, 이번 달 18.2만이면 71.8만. E37
+- 조건부 혜택은 모르는 값마다 다시 계산해 늘어난 금액만 낸다. 결제수단은 결제 직전에 고를 수 있어서 알고 있어도 카드의 조건에 적힌 다른 결제수단마다 본다.
+- 추천 탭 첫 화면의 업종별 1순위는 업종마다 가게 없이 1만원으로 추천을 돌린 결과의 1위다.
 - 결제 기록 화면의 카드 기본값은 그 가게 추천 1위다. 사용자가 바꾸면 바꾼 카드로 저장한다.
+- 추천 한 번은 카드 10장, 이번 달 결제 300건, 조건부 혜택 포함으로 50ms, 업종 12개의 업종별 1순위는 200ms 안이다. 서버 안의 계산 시간이다.
+
+**경고 코드**
+
+엔진은 경고를 코드와 값으로만 돌려준다. 사람이 읽는 문구는 앱이 만든다.
+
+| 코드 | 한 줄 설명 |
+|---|---|
+| `not_counted_toward_spend` | 이 결제는 실적에 들어가지 않는다. 이유는 제외 업종, 무이자할부, 지역, 혜택 받은 결제 |
+| `limit_exhausted` | 날, 달, 분기, 연, 행사 기간 한도를 다 써서 혜택이 0이거나 줄었다. 건당 한도로 줄어든 것은 넣지 않는다 |
+| `tier_not_met` | 구간이 모자라 혜택을 못 받는다 |
+| `no_prev_month_data` | 지난달 기록도 추정값도 없어 가장 낮은 구간으로 계산했다 |
+| `spend_basis_unsupported` | 결제일 기준 실적 카드라 실적을 계산하지 않는다. E6 |
+| `default_amount_used` | 금액이 없어 1만원으로 계산했다. E11 |
+| `needs_input` | 모르는 값이 있어 그 조건을 거짓으로 계산했다. 무엇을 모르는지 함께 준다 |
+| `option_unsupported` | 계산하지 않는 옵션을 골랐다 |
+| `ranked_provisional` | 달 중간 순위라 달이 끝나면 바뀔 수 있다. E48 |
+| `check_conditions` | 문장으로 남긴 조건이 있어 실제와 다를 수 있다. E12 |
+| `assumed_value` | 카드사 원문으로 확인하지 못해 가정한 값으로 계산했다 |
+| `revision_estimated` | 결제일이 첫 개정보다 앞서 추정 시작일의 첫 개정으로 계산했다 |
+| `no_revision` | 결제일에 적용되는 개정이 없어 혜택을 계산하지 않았다 |
 
 ### 6.6 카탈로그 파일
 
@@ -374,17 +401,18 @@ benefits:
 ### 6.8 오류 처리
 
 - 카탈로그 로딩은 실패 즉시 중단한다. 잘못된 카탈로그로 추천을 계산하지 않는다.
-- 엔진 함수는 예외를 던지지 않는 순수 함수다. 알 수 없는 업종은 other로 본다. 카탈로그에 없는 `card_id`의 결제는 건너뛰고 경고 목록에 남긴다.
+- 엔진 함수는 예외를 던지지 않는 순수 함수다. 알 수 없는 업종은 other로 본다. 부모 업종까지만 아는 결제는 부풀리지 않는 쪽으로 본다. E47 카탈로그에 없는 `card_id`의 결제는 건너뛰고 경고 목록에 남긴다.
 - 금액이 0 이하인 결제는 모델 검증에서 거부한다.
 
 ### 6.9 테스트
 
-pytest.
-- 카드별 표 테스트. 카드마다 예제 결제와 기대 `expected`, `applied`, `counted_spend`, `remaining_to_next`를 YAML 픽스처로 적고 한 테스트 함수가 전부 돈다
-- 규칙 테스트. 혜택은 `max_per_txn`, 남은 월 한도, 남은 통합 한도를 넘지 않는다. 제외 업종은 실적에 잡히지 않는다. 같은 입력은 같은 출력을 낸다
-- 로더 테스트. 잘못된 카탈로그 파일이 어떤 필드에서 실패하는지 확인
-
-카탈로그 검증기 테스트는 `backend/tests/catalog/`에 있다. 실제 카탈로그로 작업 001 성공 기준을 확인하는 테스트도 있다.
+pytest. 계산 엔진 테스트는 `backend/tests/engine/`, 카탈로그 검증기 테스트는 `backend/tests/catalog/`에 있다.
+- 손계산 표. 카드마다 `backend/tests/engine/cases/<카드 id>.yaml`에 결제, 기대 혜택, 실적에 넣는 금액, 경고, 한 줄 손계산을 적고 한 테스트 함수가 전부 돈다. 표에 한 번도 양수로 나오지 않는 혜택이 있으면 실패한다
+- 시안 카드. 화면 시안의 숫자를 지어낸 카드 세 장의 작은 카탈로그 `backend/tests/engine/mockup/`로 재현한다
+- 규칙 테스트. 작은 가짜 카드로 규칙 하나씩 본다. 시나리오, 한도와 구간의 경계, 공유 한도와 중복 묶음 같은 틀, 같은 입력은 같은 출력을 내고 모든 금액이 정수라는 성질이다
+- 속도 테스트. 가장 무거운 경우로 추천 한 번과 업종별 1순위를 재고 6.5의 기준을 넘으면 실패한다
+- 실제 명세서 대조. 사용자 IBK 나라사랑카드의 이용대금명세서를 `backend/tests/engine/local/`에 두고 엔진과 대조한다. 이 폴더는 공개 저장소에 올리지 않고, 파일이 없는 PC에서는 건너뛴다. 결과는 작업 002 plan.md
+- 카탈로그 검증기 테스트. 잘못된 카탈로그 파일이 어떤 칸에서 실패하는지, 실제 카탈로그가 작업 001 성공 기준을 지키는지 본다
 
 ### 6.10 1차에서 미루는 것
 

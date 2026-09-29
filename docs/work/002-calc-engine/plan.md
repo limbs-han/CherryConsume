@@ -3987,14 +3987,14 @@ git commit -m "fix: 위험 검토에서 나온 계산 엔진 문제 수정" -m "
 **파일**
 - 고치기: `docs/2026-09-19-cherryconsume-design.md`, `docs/scenarios.md`, `docs/erd.md`, `docs/erd.html`
 
-- [ ] **1단계: 설계 문서 6장을 고친다**
+- [x] **1단계: 설계 문서 6장을 고친다**
 
 - 6.3 출력 모델: SpendStatus, Recommendation, LockedBenefit을 design.md 1.4의 출력으로 바꾸고 ConditionalBenefit을 더한다. `current_tier_index`를 없앤다
 - 6.5 계산 규칙: 1판 본문을 지우고 design.md 2절 실적, 3절 혜택, 4절 추천, 5절 경고를 줄여 옮긴다. "시나리오 검토에서 추가한 규칙" 목록은 E번호를 두고 2판 이름으로 고쳐 쓴다. 부모 업종 규칙에 E47, 순위 재계산에 E48, 등록 전 이용을 세는 한도 규칙에 E49를 인용한다
 - 6.8 오류 처리: "알 수 없는 업종은 other로 본다" 뒤에 "부모 업종까지만 아는 결제는 부풀리지 않는 쪽으로 본다. E47"을 더한다
 - 6.9 테스트: design.md 6절의 손계산 표, 시안 카드, 규칙 테스트, 속도 테스트, 실제 명세서 대조로 바꾼다
 
-- [ ] **2단계: 시나리오와 ERD를 고친다**
+- [x] **2단계: 시나리오와 ERD를 고친다**
 
 - `docs/scenarios.md` 2.2 혜택과 추천 표에 E47부터 E49까지 더한다. 형식은 다른 E번호 줄과 같다
   - E47 결제가 부모 업종까지만 알 때. 처리: 실적 제외와 혜택 제외에는 걸린 것으로, 혜택 대상에는 안 맞는 것으로 보고 자식 업종을 한 번 묻는다. 추천에서는 조건부 혜택으로 보여 준다. 결정: 작업 002 설계 2.1
@@ -4002,7 +4002,7 @@ git commit -m "fix: 위험 검토에서 나온 계산 엔진 문제 수정" -m "
   - E49 카드를 등록하기 전에 이미 쓴 연·분기·기간 한도 횟수를 모를 때. 처리: 등록 전 결제를 입력하면 그 결제로 세고, 입력하지 않은 이용은 0회로 본다. E2와 같은 원칙이다. 결정: 2026-09-29 사용자, 작업 002 설계 3.4
 - `docs/erd.md`와 `docs/erd.html`의 설계 메모에서 결제가 받은 혜택을 가리킨다는 항목 끝에 "저장한 혜택은 다시 계산하지 않는다. 예외는 달이 끝난 순위 카드다. E48"을 더한다
 
-- [ ] **3단계: 1판 이름이 남지 않았는지 본다**
+- [x] **3단계: 1판 이름이 남지 않았는지 본다**
 
 ```bash
 grep -n "integrated_cap\|min_tier_index\|conditions_not_modeled\|applied_benefit_id\|estimated_benefit\|monthly_cap_exhausted\|current_tier_index" docs/2026-09-19-cherryconsume-design.md
@@ -4010,12 +4010,14 @@ grep -n "integrated_cap\|min_tier_index\|conditions_not_modeled\|applied_benefit
 
 기대: 출력 없음. intent 성공 기준이다.
 
-- [ ] **4단계: 커밋**
+- [x] **4단계: 커밋**
 
 ```bash
 git add docs/2026-09-19-cherryconsume-design.md docs/scenarios.md docs/erd.md docs/erd.html
 git commit -m "docs: 계산 엔진 결론을 설계 문서와 시나리오에 반영" -m "작업 002 설계 7절. 계산 규칙 6.5절을 2판으로 다시 쓰고 시나리오 E47부터 E49까지 더한다."
 ```
+
+2026-09-29 실행 결과: 1판 이름 grep 출력 없음. 계획 밖으로 더 고친 것은 셋이다. 6.2 저장소 구조에 `engine/`을 넣었고, 6.3 보유 카드에 앱에 등록한 날과 해지 여부를 더했다. 시나리오 E4, E5, E10, E13, E14의 1판 이름과 옛 규칙을 2판으로 고쳤다. `docs/erd.html`에는 설계 메모가 없고 그림만 있어 고치지 않았다.
 
 ---
 
