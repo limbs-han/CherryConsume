@@ -2,4 +2,4 @@ schema_version: 2
 id: nh
 name: NH농협카드
 collect: {list_url: 'https://card.nonghyup.com/servlet/IpCc1210I.act', method: browser, interval_days: 30, notice_url: 'https://card.nonghyup.com/servlet/IpCi9010I.act'}
-notes: 카드 상세는 서버가 그린 HTML이라 바로 읽히지만 브라우저로 열면 몇 초 뒤 보안프로그램 설치 화면으로 넘어감. 카드 목록은 자바스크립트로 불러옴. 새소식 목록은 POST 폼(pageNum, pageSize)이고 상세는 bbrd_sqno를 POST로 보내야 열림. 상품 코드는 카드 상세 주소의 CD_WRS_SQNO.
+notes: 카드 상세는 서버가 그린 HTML이라 바로 읽히지만 브라우저로 열면 몇 초 뒤 보안프로그램 설치 화면으로 넘어감. 카드 목록은 자바스크립트로 불러옴. 새소식 목록은 IpCi9010I.act?pageNum=N&pageSize=50, 상세는 IpCi9011R.act?bbrd_sqno=<번호>를 GET으로 열면 읽힘. 2026-09-29 확인. 상품 코드는 카드 상세 주소의 CD_WRS_SQNO.

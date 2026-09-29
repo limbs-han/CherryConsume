@@ -567,3 +567,27 @@
   name: 홈플러스 익스프레스
   category: grocery_mart
   aliases: [홈플러스익스프레스]
+- key: aladin
+  name: 알라딘
+  category: online_shopping
+  aliases: [알라딘, ALADIN]
+- key: interpark_book
+  name: 인터파크도서
+  category: online_shopping
+  aliases: [인터파크도서]
+- key: youngpoong_book
+  name: 영풍문고
+  category: other
+  aliases: [영풍문고]
+- key: teps
+  name: TEPS 접수
+  category: education
+  aliases: [TEPS, 텝스]
+- key: jpt
+  name: JPT 접수
+  category: education
+  aliases: [JPT]
+- key: kpe
+  name: KPE 접수
+  category: education
+  aliases: [KPE]
