@@ -100,7 +100,7 @@ git commit -m "build: 계산 엔진의 한국 공휴일 패키지 추가" -m "�
 - 만들기: `backend/tests/engine/__init__.py` 빈 파일, `backend/tests/engine/cases.py`, `backend/tests/engine/test_cases.py`, `backend/tests/engine/cases/` 빈 폴더
 - 과제 4에서 쓰는 `backend/cherry_core/engine/models.py`와 `cond.py`가 이 과제에 먼저 필요하다. 과제 4의 1단계 코드 두 파일과 `engine/__init__.py` 한 줄 문서를 이 과제에서 먼저 만든다
 
-- [ ] **1단계: 엔진 모델과 조건 판정 파일을 먼저 둔다**
+- [x] **1단계: 엔진 모델과 조건 판정 파일을 먼저 둔다**
 
 과제 4 1단계의 `models.py`, `cond.py`, `context.py`와 아래 `__init__.py`를 그대로 만든다. 표 읽기가 `Payment`, `UserCard`, 한국 시간을 쓰기 때문이다. 테스트는 과제 4에서 쓴다.
 
@@ -110,7 +110,7 @@ git commit -m "build: 계산 엔진의 한국 공휴일 패키지 추가" -m "�
 """계산 엔진. 설계는 docs/work/002-calc-engine/design.md"""
 ````
 
-- [ ] **2단계: 표 읽기 코드를 쓴다**
+- [x] **2단계: 표 읽기 코드를 쓴다**
 
 `backend/tests/engine/cases.py`
 
@@ -193,10 +193,9 @@ def load_cases(root: Path = CASES) -> list[Case]:
                 )
             )
     return out
-
 ````
 
-- [ ] **3단계: 형식 검사를 쓴다**
+- [x] **3단계: 형식 검사를 쓴다**
 
 `backend/tests/engine/test_cases.py`
 
@@ -242,10 +241,9 @@ def test_case_files_are_valid(catalog):
         if not c.calc:
             problems.append(f"{where}: calc가 비어 있다")
     assert problems == []
-
 ````
 
-- [ ] **4단계: 돌린다**
+- [x] **4단계: 돌린다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine
@@ -253,12 +251,14 @@ uv run --project backend pytest -q backend/tests/engine
 
 기대: `1 passed`. 표가 없어 검사할 것이 없다.
 
-- [ ] **5단계: 커밋**
+- [x] **5단계: 커밋**
 
 ```bash
 git add backend/cherry_core/engine backend/tests/engine
 git commit -m "test: 계산 엔진 손계산 표 형식과 형식 검사 추가" -m "작업 002 설계 6.1. 표는 카드마다 파일 하나이고 과제 3에서 채운다."
 ```
+
+2026-09-29 실행 결과: 1개 통과. 계획의 두 파일과 과제 3의 test_cases.py 끝에 빈 줄이 하나 더 있어 형식 검사에 걸렸다. 계획을 만들 때 생긴 것이라 계획의 코드 블록 셋을 함께 고쳤다.
 
 ---
 
@@ -362,7 +362,6 @@ def test_every_benefit_is_covered(catalog):
             if not any(start <= d and (end is None or d < end) for d in days):
                 missing.append(f"{card_id}:{key}@{start}")
     assert missing == []
-
 ````
 
 - [ ] **2단계: 돌려서 실패를 본다**
