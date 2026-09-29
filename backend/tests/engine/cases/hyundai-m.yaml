@@ -1,0 +1,70 @@
+card: hyundai-m
+cases:
+  - name: 50만 구간 하한 기본 1.5%, 카드사 반올림 예시
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-03T12:00, amount: 4639, merchant: emart}
+      - {at: 2026-09-04T12:00, amount: 10300, merchant: emart}
+    expect:
+      - {payment: 0, benefits: {base-all-1-5: 70}, counted: 4639}
+      - {payment: 1, benefits: {base-all-1-5: 155}, counted: 10300}
+    calc: 전월 500,000은 50만 구간 하한. 4,639 × 1.5% = 69.585, 반올림 70P로 카드사 예시와 같다. 10,300 × 1.5% = 154.5, 반올림 155P. 적립 건도 실적 인정
+
+  - name: 100만 구간 하한 음식점 5%는 1.5%를 대신하고 쿠팡이츠는 1.5%
+    prev_month_spend: 1000000
+    payments:
+      - {at: 2026-09-05T19:00, amount: 100000, category: restaurant.general}
+      - {at: 2026-09-06T19:00, amount: 20000, merchant: coupang_eats, channel: online}
+    expect:
+      - {payment: 0, benefits: {online-dining-overseas-5: 5000}, counted: 100000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {base-all-1-5: 300}, counted: 20000}
+    calc: 전월 1,000,000은 100만 구간 하한. 음식점 100,000 × 5% = 5,000P, 5%가 걸려 1.5%는 겹쳐 주지 않는다. 쿠팡이츠는 5% 대상 제외라 20,000 × 1.5% = 300P
+
+  - name: 영역 한도를 넘은 금액은 1.5%로, 설계 2.15 예
+    prev_month_spend: 1200000
+    payments:
+      - {at: 2026-09-08T20:00, amount: 300000, merchant: coupang, channel: online}
+    expect:
+      - {payment: 0, benefits: {online-dining-overseas-5: 10000, base-all-1-5: 1500}, counted: 300000, warnings: [limit_exhausted]}
+    calc: 5%는 월 10,000P까지라 10,000 ÷ 5% = 200,000까지 5%로 10,000P. 남은 100,000은 1.5%로 넘겨 1,500P. 합 11,500P
+
+  - name: 국내 영역과 해외 영역이 월 1만P 한도를 같이 쓴다
+    prev_month_spend: 1500000
+    payments:
+      - {at: 2026-09-02T19:00, amount: 120000, category: restaurant.general}
+      - {at: 2026-09-15T14:00, amount: 100000, category: other, region: overseas}
+      - {at: 2026-09-20T21:00, amount: 10000, merchant: naver_plus_store, channel: online}
+    expect:
+      - {payment: 0, benefits: {online-dining-overseas-5: 6000}, counted: 120000}
+      - {payment: 1, benefits: {overseas-5: 4000, base-all-1-5: 300}, counted: 100000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {base-all-1-5: 150}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 음식점 120,000 × 5% = 6,000P. 해외 100,000 × 5% = 5,000P이나 공유 한도 4,000P 남아 80,000까지 5%로 4,000P, 남은 20,000 × 1.5% = 300P. 네이버쇼핑 10,000은 한도 0 남아 전액 1.5%로 150P
+
+  - name: 신규 발급 특례로 100만 구간
+    holder: {started_on: 2026-08-05}
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-09-10T19:00, amount: 40000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {online-dining-overseas-5: 2000}, counted: 40000}
+    calc: 발급 8월이라 9월 말일까지 특례 100만 구간. 40,000 × 5% = 2,000P
+
+  - name: 50만 하한 1원 아래는 적립 없음
+    prev_month_spend: 499999
+    payments:
+      - {at: 2026-09-10T12:00, amount: 50000, merchant: emart}
+    expect:
+      - {payment: 0, benefits: {}, counted: 50000, warnings: [tier_not_met]}
+    calc: 전월 499,999는 0 구간이라 1.5%와 5% 모두 없다. 실적은 인정 50,000
+
+  - name: 적립 제외와 실적 제외가 다른 곳, 무이자할부
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-15T09:00, amount: 80000, category: utility.electricity}
+      - {at: 2026-09-15T09:10, amount: 30000, category: utility.water}
+      - {at: 2026-09-16T15:00, amount: 300000, merchant: emart, installment_months: 3, interest_free: true}
+    expect:
+      - {payment: 0, benefits: {}, counted: 80000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 300000}
+    calc: 전기요금은 적립 제외지만 실적에는 들어가 80,000. 수도요금은 적립과 실적 모두 제외라 0. 무이자할부는 적립 제외지만 실적은 넣어 300,000

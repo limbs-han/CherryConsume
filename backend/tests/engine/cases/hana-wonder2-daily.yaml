@@ -1,0 +1,122 @@
+card: hana-wonder2-daily
+holder:
+  options:
+    - {option: combo, choice: daily, effective_from: 2025-07-01}
+cases:
+  - name: 배달앱 40만 구간, 혜택 받은 결제는 실적에서 빠진다
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-05T19:00, amount: 30000, merchant: baemin, channel: online}
+    expect:
+      - {payment: 0, benefits: {delivery-10: 3000}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 40만 구간. 30,000 × 10% = 3,000, 월 4,000원 한도 안. exclude_applied 1이라 실적 0
+
+  - name: 배달앱 80만 구간 월 6천원 한도 직후
+    prev_month_spend: 900000
+    payments:
+      - {at: 2026-09-06T19:00, amount: 45000, merchant: baemin, channel: online}
+      - {at: 2026-09-13T19:00, amount: 20000, merchant: coupang_eats, channel: online}
+    expect:
+      - {payment: 0, benefits: {delivery-10: 4500}, counted: 0}
+      - {payment: 1, benefits: {delivery-10: 1500}, counted: 0, warnings: [limit_exhausted]}
+    calc: 80만 구간 한도 6,000. 45,000 × 10% = 4,500. 20,000 × 10% = 2,000인데 6,000 − 4,500 = 1,500 남아 1,500
+
+  - name: 편의점 120만 구간, 오프라인만
+    prev_month_spend: 1200000
+    payments:
+      - {at: 2026-09-07T22:00, amount: 8000, merchant: gs25, channel: offline}
+      - {at: 2026-09-08T22:00, amount: 10000, merchant: cu, channel: online}
+    expect:
+      - {payment: 0, benefits: {cvs-10: 800}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 10000}
+    calc: 120만 구간 한도 12,000. GS25 오프라인 8,000 × 10% = 800. CU 온라인은 channel 조건에 걸려 0이고 혜택이 없어 전액 실적
+
+  - name: 영상 스트리밍 40% 간편결제 제외와 한도 직후
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-01T06:00, amount: 7900, merchant: wavve, channel: online, billing: subscription, payment_method: naver_pay}
+      - {at: 2026-09-02T06:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+      - {at: 2026-09-03T06:00, amount: 13900, merchant: disney_plus, channel: online, billing: subscription, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 7900}
+      - {payment: 1, benefits: {streaming-40: 6800}, counted: 0}
+      - {payment: 2, benefits: {streaming-40: 1200}, counted: 0, warnings: [limit_exhausted]}
+    calc: 40만 구간 하한, 한도 8,000. 웨이브 네이버페이는 payment_not에 걸려 0. 넷플릭스 17,000 × 40% = 6,800. 디즈니 13,900 × 40% = 5,560인데 8,000 − 6,800 = 1,200 남아 1,200
+
+  - name: 택시 업종과 카카오T 앱 선결제는 택시 한도를 같이 쓴다
+    prev_month_spend: 800000
+    payments:
+      - {at: 2026-09-04T23:30, amount: 30000, category: taxi, channel: offline}
+      - {at: 2026-09-11T08:00, amount: 60000, merchant: kakao_t, channel: online, billing: app_prepay}
+      - {at: 2026-09-12T08:00, amount: 20000, merchant: kakao_t, channel: offline, billing: normal}
+    expect:
+      - {payment: 0, benefits: {taxi-10: 3000}, counted: 0}
+      - {payment: 1, benefits: {taxi-app-10: 5000}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 20000}
+    calc: 80만 구간 공유 한도 taxi 8,000. 택시 30,000 × 10% = 3,000. 카카오T 선결제 60,000 × 10% = 6,000인데 8,000 − 3,000 = 5,000 남아 5,000. 카카오T 현장결제는 택시 업종 대상에서 빠지고 app_prepay가 아니라 0
+
+  - name: 대중교통 10%, 고속버스는 대상이 아니다
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-09T08:00, amount: 1450, category: transit.subway, channel: offline}
+      - {at: 2026-09-19T10:00, amount: 30000, category: transit.bus_express, channel: offline}
+    expect:
+      - {payment: 0, benefits: {transit-10: 145}, counted: 0, warnings: [assumed_value]}
+      - {payment: 1, benefits: {}, counted: 30000}
+    calc: 40만 구간. 지하철 1,450 × 10% = 145. 할인율은 원문 요약 3%와 상세 10%가 달라 카드 파일 가정값 10%. 고속버스는 대상 자식 업종이 아니라 0이고 이 카드 실적 제외도 아니다
+
+  - name: 하나Pay 맛집은 오프라인만, 미리 결제하는 방식 제외
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-10T12:30, amount: 25000, category: restaurant.general, channel: offline, billing: normal}
+      - {at: 2026-09-17T12:30, amount: 20000, category: restaurant.general, channel: offline, billing: app_prepay}
+    expect:
+      - {payment: 0, benefits: {matzip-10: 2500}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 20000}
+    calc: 40만 구간 한도 4,000. 음식점 25,000 × 10% = 2,500. 앱 선결제는 billing_not에 걸려 0. 맛집 지정 가맹점 조건은 문장 조건
+
+  - name: 온라인식품 40만 구간 월 4천원 한도
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-14T21:00, amount: 50000, merchant: kurly, channel: online}
+    expect:
+      - {payment: 0, benefits: {online-food-10: 4000}, counted: 0, warnings: [limit_exhausted, check_conditions]}
+    calc: 40만 구간. 50,000 × 10% = 5,000인데 월 4,000원 한도라 4,000
+
+  - name: 지난달 39만9,999원이면 혜택 없음
+    prev_month_spend: 399999
+    payments:
+      - {at: 2026-09-05T19:00, amount: 30000, merchant: baemin, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 30000, warnings: [tier_not_met]}
+    calc: 40만 구간 하한 1원 아래라 0 구간. 모든 혜택이 40만부터라 0. 혜택이 없어 전액 실적
+
+  - name: 신규 사용등록 특례로 첫 달 40만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-01}
+    payments:
+      - {at: 2026-09-02T22:00, amount: 10000, merchant: cu, channel: offline}
+    expect:
+      - {payment: 0, benefits: {cvs-10: 1000}, counted: 0, warnings: [check_conditions]}
+    calc: 사용등록일 9월 1일부터 10월 31일까지 특례 40만 구간. 10,000 × 10% = 1,000
+
+  - name: 하나Pay에서 바꾼 조합은 계산하지 않는다
+    prev_month_spend: 500000
+    holder:
+      options:
+        - {option: combo, choice: custom, effective_from: 2026-09-01}
+    payments:
+      - {at: 2026-09-05T19:00, amount: 30000, merchant: baemin, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 30000}
+    calc: combo가 unsupported 선택지 custom이라 옵션에 걸린 혜택 8개를 계산하지 않는다. 혜택이 없어 전액 실적
+
+  - name: 무이자할부는 할인 없이 실적만, 세금은 둘 다 없음
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-20T21:00, amount: 60000, merchant: kurly, channel: online, installment_months: 3, interest_free: true}
+      - {at: 2026-09-25T09:00, amount: 100000, category: tax, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 60000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 무이자할부는 공통 제외 when_any로 할인 0. 하나 기본값 interest_free count라 실적 60,000. 세금은 공통 제외 업종이자 실적 제외

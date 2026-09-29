@@ -1,0 +1,128 @@
+card: woori-k-life-check
+cases:
+  - name: 해외 1%는 건당 1만원부터, 해외 결제와 상품권은 실적에서 빠진다
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-10T15:00, amount: 25000, category: other, channel: offline, region: overseas}
+      - {at: 2026-09-11T15:00, amount: 9999, category: other, channel: offline, region: overseas}
+      - {at: 2026-09-12T12:00, amount: 50000, category: gift_card, channel: offline}
+    expect:
+      - {payment: 0, benefits: {overseas-1: 250}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 20만 구간. 해외 25,000 × 1% = 250, 월 5만원 한도 안. 9,999원은 건당 1만원 미만이라 0. 실적은 국내만이라 해외 둘은 0. 상품권은 캐시백 대상 제외이자 실적 제외
+
+  - name: 신규 발급 특례는 국내 서비스만, 해외 1%는 특례가 없다
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-01}
+    payments:
+      - {at: 2026-09-05T15:00, amount: 50000, category: other, channel: offline, region: overseas}
+      - {at: 2026-09-06T22:00, amount: 12000, merchant: gs25, channel: offline}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {convenience-5: 600}, counted: 6000, warnings: [check_conditions]}
+    calc: 해외 1%는 tier_by_benefit 0이라 0 구간이고 20만부터라 0. 편의점은 특례 20만 구간, 12,000 × 5% = 600. 혜택 받은 결제는 절반만 실적이라 6,000
+
+  - name: 간편결제 2%는 건당 3만원부터 월 3회
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-02T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: kakao_pay}
+      - {at: 2026-09-09T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-16T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: woori_won_pay}
+      - {at: 2026-09-23T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: kakao_pay}
+    expect:
+      - {payment: 0, benefits: {easypay-online-2: 600}, counted: 15000}
+      - {payment: 1, benefits: {easypay-online-2: 600}, counted: 15000}
+      - {payment: 2, benefits: {easypay-online-2: 600}, counted: 15000}
+      - {payment: 3, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 20만 구간 하한. 30,000 × 2% = 600씩 세 번, 합 1,800은 월 3,000원 한도 안. 넷째는 월 3회를 써서 0이고 혜택이 없어 전액 실적
+
+  - name: G마켓 간편결제는 간편결제 2%가 아니라 쇼핑 5%, 한도 직후
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-03T21:00, amount: 40000, merchant: gmarket, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-13T21:00, amount: 150000, merchant: eleven_st, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {online-mall-5: 2000}, counted: 20000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {online-mall-5: 4000}, counted: 75000, warnings: [limit_exhausted, check_conditions]}
+    calc: G마켓은 간편결제 2% 대상 제외 가맹점. 40,000 × 5% = 2,000. 11번가 150,000 × 5% = 7,500인데 월 6,000 − 2,000 = 4,000 남아 4,000. 실적은 절반
+
+  - name: 올리브영은 오프라인만
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-05T18:00, amount: 10000, merchant: olive_young, channel: offline}
+      - {at: 2026-09-06T18:00, amount: 20000, merchant: daiso, channel: online}
+    expect:
+      - {payment: 0, benefits: {oliveyoung-daiso-5: 500}, counted: 5000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 20000}
+    calc: 20만 구간. 올리브영 10,000 × 5% = 500, 월 4,000원 한도 안. 다이소 온라인은 channel 조건에 걸려 0
+
+  - name: 편의점은 건당 1만원부터 월 2회
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-07T22:00, amount: 9999, merchant: gs25, channel: offline}
+      - {at: 2026-09-08T22:00, amount: 10000, merchant: cu, channel: offline}
+      - {at: 2026-09-09T22:00, amount: 15000, merchant: seven_eleven, channel: offline}
+      - {at: 2026-09-10T22:00, amount: 20000, merchant: gs25, channel: offline}
+    expect:
+      - {payment: 0, benefits: {}, counted: 9999}
+      - {payment: 1, benefits: {convenience-5: 500}, counted: 5000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {convenience-5: 750}, counted: 7500, warnings: [check_conditions]}
+      - {payment: 3, benefits: {}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 20만 구간. 9,999원은 1만원 미만이라 0. 10,000 × 5% = 500, 15,000 × 5% = 750, 합 1,250은 월 2,000원 한도 안. 넷째는 월 2회를 써서 0
+
+  - name: 영화 5%
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-12T19:00, amount: 24000, merchant: cgv, channel: offline}
+    expect:
+      - {payment: 0, benefits: {movie-5: 1200}, counted: 12000, warnings: [check_conditions]}
+    calc: 20만 구간. 24,000 × 5% = 1,200, 월 3,000원 한도 안. 실적은 절반 12,000
+
+  - name: 대중교통은 후불교통 건당 5만원 이상만
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-03T08:00, amount: 1450, category: transit.subway, channel: offline, billing: postpaid_transit}
+      - {at: 2026-09-30T23:00, amount: 52000, category: transit.subway, channel: offline, billing: postpaid_transit}
+    expect:
+      - {payment: 0, benefits: {}, counted: 1450}
+      - {payment: 1, benefits: {transit-5: 2600}, counted: 26000, warnings: [assumed_value, check_conditions]}
+    calc: 20만 구간. 1,450원은 건당 5만원 미만이라 0. 52,000 × 5% = 2,600, 월 3,000원 한도 안. 건당 조건을 결제 기록 한 건에 적용하는 것은 카드 파일 가정값
+
+  - name: 이동통신 자동납부 5%, 월 3천원 한도
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-15T09:00, amount: 65000, merchant: skt, channel: online, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {telecom-5: 3000}, counted: 32500, warnings: [limit_exhausted, check_conditions]}
+    calc: 20만 구간. 65,000 × 5% = 3,250인데 월 3,000원 한도라 3,000. 실적은 절반 32,500
+
+  - name: 교보문고 5%
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-14T15:00, amount: 20000, merchant: kyobo_book, channel: offline}
+    expect:
+      - {payment: 0, benefits: {kyobo-5: 1000}, counted: 10000, warnings: [check_conditions]}
+    calc: 20만 구간. 건당 2만원 하한 20,000 × 5% = 1,000
+
+  - name: 어학원은 자식 업종을 알 때만, 부모 업종 교육이면 제외로 본다
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-01T10:00, amount: 150000, merchant: hackers_academy, category: education.academy, channel: offline}
+      - {at: 2026-09-02T10:00, amount: 50000, merchant: toeic, category: education, channel: online}
+    expect:
+      - {payment: 0, benefits: {language-5: 3000}, counted: 75000, warnings: [limit_exhausted]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [needs_input]}
+    calc: 학원 150,000 × 5% = 7,500인데 월 3,000원 한도라 3,000, 실적 절반 75,000. TOEIC 결제의 업종을 education까지만 적어 대상 제외와 실적 제외 education.tuition에 걸린 것으로 보고 혜택 0, 실적 0. 설계 2.1
+
+  - name: 20만 구간 국내 통합 한도 1만원 직후
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-04T21:00, amount: 120000, merchant: eleven_st, channel: online, payment_method: physical_card}
+      - {at: 2026-09-15T09:00, amount: 60000, merchant: skt, channel: online, billing: autopay}
+      - {at: 2026-09-20T19:00, amount: 40000, merchant: cgv, channel: offline}
+    expect:
+      - {payment: 0, benefits: {online-mall-5: 6000}, counted: 60000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {telecom-5: 3000}, counted: 30000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {movie-5: 1000}, counted: 20000, warnings: [limit_exhausted, check_conditions]}
+    calc: 통합 한도 10,000. 120,000 × 5% = 6,000, 60,000 × 5% = 3,000, 합 9,000. 영화 40,000 × 5% = 2,000인데 통합 10,000 − 9,000 = 1,000 남아 1,000. 실적은 셋 다 절반

@@ -1,10 +1,11 @@
-"""손계산 표. 설계 6.1과 6.2. 과제 2에서는 표 형식만 본다."""
+"""손계산 표. 설계 6.1과 6.2. 표 형식과 모든 혜택이 한 번 이상 나오는지 본다."""
 
 from pathlib import Path
 
 import pytest
 
 from cherry_core.catalog.load import load_catalog
+from cherry_core.engine.cond import local
 
 from .cases import load_cases
 
@@ -39,3 +40,37 @@ def test_case_files_are_valid(catalog):
         if not c.calc:
             problems.append(f"{where}: calc가 비어 있다")
     assert problems == []
+
+
+def versions(card) -> list[tuple[str, object, object, dict]]:
+    """혜택 key마다 내용이 같은 기간. (key, 시작, 끝, 내용). 끝은 다음 개정 시행일이고 없으면 None"""
+    revs = card.revisions
+    out = []
+    for i, (rev, rules) in enumerate(revs):
+        end = revs[i + 1][0].effective_from if i + 1 < len(revs) else None
+        for b in rules.benefits:
+            dump = b.model_dump()
+            if out and any(v[0] == b.key and v[3] == dump and v[2] == rev.effective_from for v in out):
+                prev = next(v for v in out if v[0] == b.key and v[3] == dump and v[2] == rev.effective_from)
+                out[out.index(prev)] = (b.key, prev[1], end, dump)
+            else:
+                out.append((b.key, rev.effective_from, end, dump))
+    return out
+
+
+def test_every_benefit_is_covered(catalog):
+    # intent 성공 기준 1. 혜택마다, 개정으로 내용이 바뀐 혜택은 바뀐 내용마다 양수로 한 번 이상 나온다
+    covered: dict[str, list] = {}
+    for c in CASES:
+        for e in c.expect:
+            day = local(c.payments[e["payment"]].paid_at).date()
+            for key, amount in e.get("benefits", {}).items():
+                if amount > 0:
+                    covered.setdefault(f"{c.card_id}:{key}", []).append(day)
+    missing = []
+    for card_id, card in sorted(catalog.cards.items()):
+        for key, start, end, _ in versions(card):
+            days = covered.get(f"{card_id}:{key}", [])
+            if not any(start <= d and (end is None or d < end) for d in days):
+                missing.append(f"{card_id}:{key}@{start}")
+    assert missing == []

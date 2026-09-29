@@ -1,0 +1,117 @@
+card: lotte-loca365
+cases:
+  - name: 아파트관리비 건당 2만원 하한 1원 아래와 월 5천원 한도
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-10T09:00, amount: 19999, category: apartment_fee, channel: online, billing: autopay}
+      - {at: 2026-09-25T09:00, amount: 150000, category: apartment_fee, channel: online, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 19999}
+      - {payment: 1, benefits: {apartment-10: 5000}, counted: 150000, warnings: [limit_exhausted]}
+    calc: 50만 구간. 19,999원은 건당 2만원 미만이라 0. 150,000 × 10% = 15,000인데 월 5,000원 한도라 5,000. 아파트관리비는 이 카드 실적 제외가 아니라 전액 실적
+
+  - name: 도시가스와 전기료는 월 5천원 한도를 같이 쓴다
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-12T09:00, amount: 30000, category: utility.electricity, channel: online, billing: autopay}
+      - {at: 2026-09-20T09:00, amount: 40000, category: utility.gas, channel: online, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {utility-10: 3000}, counted: 30000}
+      - {payment: 1, benefits: {utility-10: 2000}, counted: 40000, warnings: [limit_exhausted]}
+    calc: 50만 구간. 전기 30,000 × 10% = 3,000. 가스 40,000 × 10% = 4,000인데 월 한도 5,000 − 3,000 = 2,000 남아 2,000
+
+  - name: 이동통신은 월 1회, 5천원까지
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-15T09:00, amount: 55000, merchant: kt, channel: online, billing: autopay}
+      - {at: 2026-09-21T09:00, amount: 30000, merchant: lg_uplus, channel: online, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {telecom-10: 5000}, counted: 55000, warnings: [limit_exhausted, check_conditions]}
+      - {payment: 1, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 50만 구간. KT 55,000 × 10% = 5,500인데 월 5,000원 한도라 5,000. LG U+ 30,000은 월 1회를 이미 써서 0
+
+  - name: 대중교통은 한 달 합산 2만원을 넘는 결제부터, 월 5천원까지
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-03T08:00, amount: 12000, category: transit.subway, channel: offline}
+      - {at: 2026-09-10T08:00, amount: 7000, category: transit.bus_city, channel: offline}
+      - {at: 2026-09-17T08:00, amount: 3000, category: transit.subway, channel: offline}
+      - {at: 2026-09-24T08:00, amount: 40000, category: transit.subway, channel: offline}
+    expect:
+      - {payment: 0, benefits: {}, counted: 12000}
+      - {payment: 1, benefits: {}, counted: 7000}
+      - {payment: 2, benefits: {transit-10: 2200}, counted: 3000}
+      - {payment: 3, benefits: {transit-10: 2800}, counted: 40000}
+    calc: 50만 구간, month_total. 누적 12,000과 19,000은 2만원 미만이라 0. 누적 22,000 × 10% = 2,200 − 0 = 2,200. 누적 62,000 × 10% = 6,200인데 월 5,000원 한도라 5,000 − 2,200 = 2,800. 실적은 month_offset으로 10월에 들어간다
+
+  - name: 보험료는 간편결제면 빠지고 실물카드면 5천원까지
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-05T09:00, amount: 30000, category: insurance.private, channel: online, billing: autopay, payment_method: kakao_pay}
+      - {at: 2026-09-18T09:00, amount: 60000, category: insurance.private, channel: online, billing: autopay, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 30000}
+      - {payment: 1, benefits: {insurance-10: 5000}, counted: 60000, warnings: [assumed_value, limit_exhausted]}
+    calc: 50만 구간. 카카오페이는 payment_not에 걸려 0. 실물카드 60,000 × 10% = 6,000인데 월 5,000원 한도라 5,000. 간편결제 제외 목록은 확인 필요 항목이라 assumed_value
+
+  - name: 학습지는 오프라인만
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-07T10:00, amount: 30000, category: education.study_material, channel: offline}
+      - {at: 2026-09-14T10:00, amount: 30000, category: education.study_material, channel: online}
+    expect:
+      - {payment: 0, benefits: {study-10: 3000}, counted: 30000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 30000}
+    calc: 50만 구간. 오프라인 30,000 × 10% = 3,000, 월 5,000원 한도 안. 온라인 결제는 channel 조건에 걸려 0. 학습지는 등록금, 초중고 납입금과 다른 자식 업종이라 실적 제외가 아니다
+
+  - name: 배달앱은 공식 앱 온라인 결제만
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-06T19:00, amount: 25000, merchant: baemin, channel: online}
+      - {at: 2026-09-13T19:00, amount: 25000, merchant: yogiyo, channel: offline}
+    expect:
+      - {payment: 0, benefits: {delivery-10: 2500}, counted: 25000}
+      - {payment: 1, benefits: {}, counted: 25000}
+    calc: 50만 구간. 배민 25,000 × 10% = 2,500. 요기요 오프라인 가맹점 직접 결제는 channel 조건에 걸려 0
+
+  - name: 스트리밍은 금액과 상관없이 월 1회 1,500원
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-01T06:00, amount: 5500, merchant: netflix, channel: online, billing: subscription}
+      - {at: 2026-09-02T06:00, amount: 14900, merchant: youtube_premium, channel: online, billing: subscription}
+    expect:
+      - {payment: 0, benefits: {streaming-1500: 1500}, counted: 5500}
+      - {payment: 1, benefits: {}, counted: 14900, warnings: [limit_exhausted]}
+    calc: 50만 구간. 넷플릭스 5,500원은 2만원 미만이어도 정액 1,500. 유튜브 프리미엄은 월 1회와 월 1,500원을 이미 써서 0
+
+  - name: 8월 지하철은 9월 실적이라 8월 실적 48만원으로 9월은 0 구간
+    payments:
+      - {at: 2026-08-10T12:00, amount: 480000, merchant: emart, channel: offline}
+      - {at: 2026-08-20T08:00, amount: 30000, category: transit.subway, channel: offline}
+      - {at: 2026-09-05T19:00, amount: 25000, merchant: baemin, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 480000}
+      - {payment: 1, benefits: {}, counted: 30000}
+      - {payment: 2, benefits: {}, counted: 25000, warnings: [tier_not_met]}
+    calc: 8월 지하철 30,000은 month_offset 1로 9월 실적. 8월 인정 실적 480,000은 50만 미만이라 9월은 0 구간이고 배민 할인 없음. 8월 구간도 7월 실적 0이라 0 구간
+
+  - name: 신규 발급 특례로 첫 달부터 50만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-05}
+    payments:
+      - {at: 2026-09-06T19:00, amount: 20000, merchant: yogiyo, channel: online}
+    expect:
+      - {payment: 0, benefits: {delivery-10: 2000}, counted: 20000}
+    calc: 발급일 9월 5일부터 10월 31일까지 특례 50만 구간. 건당 2만원 하한 20,000 × 10% = 2,000
+
+  - name: 무이자할부, 상품권, 택시는 혜택 없음
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-08T19:00, amount: 50000, merchant: baemin, channel: online, installment_months: 3, interest_free: true}
+      - {at: 2026-09-09T12:00, amount: 30000, category: gift_card, channel: offline}
+      - {at: 2026-09-10T23:00, amount: 15000, category: taxi, channel: offline}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 무이자할부는 공통 제외와 실적 interest_free exclude로 0. 상품권은 공통 제외 업종이자 실적 제외. 택시는 대상 업종이 없고 실적 제외

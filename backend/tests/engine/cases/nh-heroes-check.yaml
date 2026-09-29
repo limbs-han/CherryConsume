@@ -1,0 +1,138 @@
+card: nh-heroes-check
+holder: {started_on: 2025-03-10}
+cases:
+  - name: 외국어학원 12,345원, 전월 20만 구간 하한
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-08T19:00, amount: 12345, category: education.academy}
+    expect:
+      - {payment: 0, benefits: {dev-lang-academy-10: 1234}, counted: 0, warnings: [not_counted_toward_spend, check_conditions, assumed_value]}
+    calc: 전월 200,000은 20만 구간 하한이라 충족. 12,345 × 10% = 1,234.5, 원 미만 버림 1,234. 통합 한도 15,000 안. 할인받은 결제라 exclude_applied 1로 실적 12,345 × (1 − 1) = 0
+
+  - name: 구간 1원 모자람과 부모 업종만 아는 어학시험
+    prev_month_spend: 199999
+    payments:
+      - {at: 2026-09-08T19:00, amount: 50000, category: education.academy}
+      - {at: 2026-09-12T10:00, amount: 48000, merchant: toeic, category: education}
+    expect:
+      - {payment: 0, benefits: {}, counted: 50000, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [tier_not_met, needs_input]}
+    calc: 199,999는 20만 하한보다 1원 적어 0 구간이라 자기계발 10% 없음. 외국어학원은 할인이 없어 실적 50,000. 토익 결제의 업종을 부모 education까지만 적어 실적 제외 education.tuition, education.school_fee에 모른다로 걸려 실적 0이고 자식 업종을 묻는다
+
+  - name: 통합 한도 15,000 직전과 직후
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-02T12:00, amount: 100000, merchant: kyobo_book}
+      - {at: 2026-09-05T19:00, amount: 49990, category: education.academy}
+      - {at: 2026-09-10T21:00, amount: 20000, merchant: yes24, channel: online}
+      - {at: 2026-09-15T07:00, amount: 30000, category: sports}
+    expect:
+      - {payment: 0, benefits: {dev-books-10: 10000}, counted: 0}
+      - {payment: 1, benefits: {dev-lang-academy-10: 4999}, counted: 0}
+      - {payment: 2, benefits: {dev-books-10: 1}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 교보 100,000 × 10% = 10,000. 외국어학원 49,990 × 10% = 4,999. 합 14,999라 통합 잔여 1. 예스24 20,000 × 10% = 2,000이지만 잔여 1이라 1. 수영장 30,000 × 10% = 3,000이지만 잔여 0이라 0이고 할인이 없어 실적 30,000
+
+  - name: 어학시험과 스포츠
+    prev_month_spend: 250000
+    payments:
+      - {at: 2026-09-03T10:00, amount: 48000, merchant: toeic}
+      - {at: 2026-09-04T20:00, amount: 33333, category: sports}
+    expect:
+      - {payment: 0, benefits: {dev-lang-test-10: 4800}, counted: 0}
+      - {payment: 1, benefits: {dev-sports-10: 3333}, counted: 0, warnings: [check_conditions]}
+    calc: 토익 48,000 × 10% = 4,800. 수영장 33,333 × 10% = 3,333.3, 버림 3,333. 합 8,133이라 통합 15,000 안. 둘 다 할인받아 실적 0
+
+  - name: 할인 제외와 실적 제외 결제
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-07T23:00, amount: 25000, category: taxi}
+      - {at: 2026-09-09T10:00, amount: 100000, category: tax}
+      - {at: 2026-09-11T18:00, amount: 300000, category: education.academy, installment_months: 3, interest_free: true}
+      - {at: 2026-09-14T08:00, amount: 1550, category: transit.subway, billing: postpaid_transit}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 300000}
+      - {payment: 3, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 택시, 세금, 지하철은 실적 제외 업종이라 0이고 택시와 지하철은 할인 제외이기도 하다. 무이자 3개월 외국어학원 300,000은 공통 제외 when_any interest_free라 할인 없음. interest_free count, full_at_purchase라 실적은 결제한 달에 300,000
+
+  - name: 디지털 구독 영역 월 2회, 월 5,000원
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-01T09:00, amount: 17000, merchant: netflix, channel: online}
+      - {at: 2026-09-05T09:00, amount: 14900, merchant: youtube_premium, channel: online}
+      - {at: 2026-09-10T09:00, amount: 13900, merchant: tving, channel: online}
+    expect:
+      - {payment: 0, benefits: {life-digital-20: 3400}, counted: 0, warnings: [check_conditions, assumed_value]}
+      - {payment: 1, benefits: {life-digital-20: 1600}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 13900, warnings: [limit_exhausted]}
+    calc: 청구 방식은 가맹점 기본 subscription. 넷플릭스 17,000 × 20% = 3,400. 유튜브 14,900 × 20% = 2,980이지만 영역 월 5,000 잔여 1,600이라 1,600. 티빙 13,900은 영역 월 2회와 월 5,000을 다 써 0이고 실적 13,900. 통합 사용 5,000
+
+  - name: 이동통신 자동납부와 청구 방식
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-20T02:00, amount: 65432, merchant: kt, category: telecom.mobile}
+      - {at: 2026-09-21T02:00, amount: 55000, merchant: skt}
+      - {at: 2026-09-22T21:00, amount: 17000, merchant: netflix, channel: online, billing: in_app}
+    expect:
+      - {payment: 0, benefits: {life-telecom-10: 6543}, counted: 0}
+      - {payment: 1, benefits: {}, counted: 55000, warnings: [needs_input]}
+      - {payment: 2, benefits: {}, counted: 17000}
+    calc: KT 이동통신 자동납부 65,432 × 10% = 6,543.2, 버림 6,543. 영역 한도 없고 통합 15,000 안. SKT 결제는 업종이 부모 telecom까지만이라 대상 제외 telecom.internet_tv에 모른다로 걸려 없음, 휴대폰 요금인지 묻는다. 넷플릭스 인앱결제는 subscription이 아니라 없음
+
+  - name: 철도·고속버스 월 2회, 월 5,000원
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-09-04T08:00, amount: 18000, category: transit.bus_express}
+      - {at: 2026-09-11T08:00, amount: 9800, merchant: srt}
+      - {at: 2026-09-18T08:00, amount: 30000, merchant: korail}
+    expect:
+      - {payment: 0, benefits: {life-transit-20: 3600}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {life-transit-20: 1400}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 고속버스 18,000 × 20% = 3,600. SRT 9,800 × 20% = 1,960이지만 영역 월 5,000 잔여 1,400이라 1,400. 코레일 30,000은 영역 월 2회를 다 써 0이고 실적 30,000
+
+  - name: 신규 특례 첫 달, 쓰기 시작한 달
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-05}
+    payments:
+      - {at: 2026-09-06T14:00, amount: 25000, merchant: aladin, channel: online}
+      - {at: 2026-09-07T09:00, amount: 17000, merchant: netflix, channel: online}
+    expect:
+      - {payment: 0, benefits: {dev-books-10: 2500}, counted: 0}
+      - {payment: 1, benefits: {}, counted: 17000}
+    calc: 9월 5일에 쓰기 시작해 9월부터 10월 말까지 특례. 자기계발은 특례 20만 구간이라 알라딘 25,000 × 10% = 2,500. 넷플릭스는 card_month 0이라 생활혜택 없음
+
+  - name: 신규 특례 둘째 달, 지난달 5만원
+    prev_month_spend: 50000
+    holder: {started_on: 2026-08-20}
+    payments:
+      - {at: 2026-09-03T19:00, amount: 30000, category: education.academy}
+      - {at: 2026-09-04T09:00, amount: 17000, merchant: netflix, channel: online}
+    expect:
+      - {payment: 0, benefits: {dev-lang-academy-10: 3000}, counted: 0}
+      - {payment: 1, benefits: {}, counted: 17000, warnings: [tier_not_met]}
+    calc: 8월 20일 시작이라 9월 30일까지 특례. 자기계발은 특례 20만 구간이라 30,000 × 10% = 3,000. 넷플릭스는 card_month 1이지만 생활혜택 특례 구간이 0이고 지난달 50,000도 0 구간이라 없음
+
+  - name: 신규 특례 둘째 달, 지난달 20만원
+    prev_month_spend: 200000
+    holder: {started_on: 2026-08-20}
+    payments:
+      - {at: 2026-09-04T09:00, amount: 17000, merchant: netflix, channel: online}
+    expect:
+      - {payment: 0, benefits: {life-digital-20: 3400}, counted: 0}
+    calc: card_month 1. 생활혜택 특례 구간 0과 기본 구간 20만 중 큰 쪽 20만이라 17,000 × 20% = 3,400. 원문도 카드등록월 다음 달부터 전월실적 충족 시 제공
+
+  - name: 쓰기 시작한 날 모름
+    prev_month_spend: 300000
+    holder: {started_on: null}
+    payments:
+      - {at: 2026-09-01T09:00, amount: 17000, merchant: netflix, channel: online}
+      - {at: 2026-09-20T02:00, amount: 65432, merchant: kt, category: telecom.mobile}
+      - {at: 2026-09-21T13:00, amount: 20000, merchant: youngpoong_book}
+    expect:
+      - {payment: 0, benefits: {}, counted: 17000, warnings: [needs_input]}
+      - {payment: 1, benefits: {}, counted: 65432, warnings: [needs_input]}
+      - {payment: 2, benefits: {dev-books-10: 2000}, counted: 0}
+    calc: 쓰기 시작한 날을 몰라 card_month가 모름이라 생활혜택은 거짓으로 계산하고 그 날을 묻는다. 특례도 없고 지난달 300,000으로 20만 구간. 자기계발에는 card_month 조건이 없어 영풍문고 20,000 × 10% = 2,000

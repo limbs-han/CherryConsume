@@ -1,0 +1,214 @@
+card: shinhan-cheoeum
+holder: {facts: {instant_pay: false}}
+cases:
+  - name: 오늘도 5% 하루 1천P를 음식점·카페와 편의점이 같이 쓴다
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T12:00, amount: 12000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-08T13:00, amount: 8000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-08T18:00, amount: 5000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 5000, merchant: cu, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {today-food-cafe: 500}, counted: 12000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {today-food-cafe: 400}, counted: 8000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {today-convenience: 100}, counted: 5000, warnings: [check_conditions, limit_exhausted]}
+      - {payment: 3, benefits: {today-convenience: 250}, counted: 5000, warnings: [check_conditions]}
+    calc: 0번 1회 1만원까지 10,000 × 5% = 500P. 1번 8,000 × 5% = 400P로 하루 900P. 2번 5,000 × 5% = 250P이나 하루 1,000 − 900 = 100P 남아 100P. 3번 다음 날 250P
+
+  - name: 스타벅스·투썸 스마트 오더와 쿠팡·컬리
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 6300, merchant: starbucks, channel: online, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 4500, merchant: twosome, channel: online, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 15000, merchant: coupang, channel: online, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 9990, merchant: kurly, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {today-smart-order: 315}, counted: 6300, warnings: [check_conditions]}
+      - {payment: 1, benefits: {today-smart-order: 225}, counted: 4500, warnings: [check_conditions]}
+      - {payment: 2, benefits: {today-online: 500}, counted: 15000, warnings: [check_conditions]}
+      - {payment: 3, benefits: {today-online: 499}, counted: 9990, warnings: [check_conditions]}
+    calc: 0번 6,300 × 5% = 315P. 1번 4,500 × 5% = 225P. 2번 1회 1만원까지 10,000 × 5% = 500P. 3번 9,990 × 5% = 499.5 버림 499P. 온라인 스타벅스는 오프라인 조건인 음식점·카페 적립이 아니다
+
+  - name: 오늘도 5% 월 한도 30만 구간 5천P가 결제 도중 끝난다
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-01T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-02T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-03T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-04T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-05T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-06T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-07T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 6000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-12T10:00, amount: 10000, merchant: cu, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {today-convenience: 500}}
+      - {payment: 1, benefits: {today-convenience: 500}}
+      - {payment: 2, benefits: {today-convenience: 500}}
+      - {payment: 3, benefits: {today-convenience: 500}}
+      - {payment: 4, benefits: {today-convenience: 500}}
+      - {payment: 5, benefits: {today-convenience: 500}}
+      - {payment: 6, benefits: {today-convenience: 500}}
+      - {payment: 7, benefits: {today-convenience: 500}}
+      - {payment: 8, benefits: {today-convenience: 500}}
+      - {payment: 9, benefits: {today-convenience: 300}}
+      - {payment: 10, benefits: {today-convenience: 200}, warnings: [limit_exhausted]}
+      - {payment: 11, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 0~8번 500P씩 4,500P. 9번 6,000 × 5% = 300P로 4,800P. 10번 500P이나 30만 구간 5,000 − 4,800 = 200P 남아 200P. 11번 한도 다 써서 0
+
+  - name: 일상 속 5% 월 한도 30만 구간 5천P
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 60000, merchant: olive_young, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 45000, merchant: musinsa, channel: online, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 12345, merchant: daiso, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 10000, category: taxi, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-shop: 2500}, counted: 60000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {daily-shop-online: 2250}, counted: 45000}
+      - {payment: 2, benefits: {daily-shop-offline: 250}, counted: 12345, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 0번 1회 5만원까지 50,000 × 5% = 2,500P. 1번 45,000 × 5% = 2,250P로 4,750P. 2번 12,345 × 5% = 617.25 버림 617P이나 5,000 − 4,750 = 250P 남아 250P. 3번 택시 500P이나 일상 속 한도 다 써서 0
+
+  - name: 다이소, KTX, 택시와 원 미만 버림, 50만 구간
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 12345, merchant: daiso, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 59800, merchant: korail, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 23450, category: taxi, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 12000, merchant: daiso, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-shop-offline: 617}, counted: 12345}
+      - {payment: 1, benefits: {daily-shop: 2500}, counted: 59800, warnings: [check_conditions]}
+      - {payment: 2, benefits: {daily-travel: 1172}, counted: 23450}
+      - {payment: 3, benefits: {}, counted: 12000}
+    calc: 0번 12,345 × 5% = 617.25 → 617P. 1번 1회 5만원까지 50,000 × 5% = 2,500P. 2번 23,450 × 5% = 1,172.5 → 1,172P. 3번 다이소 온라인은 오프라인 조건이라 0. 누계 4,289P로 50만 구간 1만P 안
+
+  - name: 해외 일시불 5%와 해외 할부
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 80000, category: other, region: overseas, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 30000, category: taxi, region: overseas, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 80000, category: other, region: overseas, installment_months: 3, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-overseas: 2500}, counted: 80000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {daily-overseas: 1500}, counted: 30000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {}, counted: 80000}
+    calc: 0번 1회 5만원까지 50,000 × 5% = 2,500P. 1번 해외 택시는 국내 조건인 택시 적립이 아니고 해외 일시불로 30,000 × 5% = 1,500P. 2번 3개월 할부라 일시불 조건이 거짓이라 0
+
+  - name: 정기결제 통신·OTT·멤버십이 월 한도 5천P를 같이 쓴다, 30만 구간
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-05T10:00, amount: 45000, merchant: skt, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 17000, merchant: netflix, channel: online, payment_method: physical_card}
+      - {at: 2026-09-15T10:00, amount: 7890, merchant: coupang_wow, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {sub-telecom: 3000}, counted: 45000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {sub-ott: 2000}, counted: 17000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 7890, warnings: [limit_exhausted]}
+    calc: 0번 SKT 자동납부 이용금액 3만원까지 30,000 × 10% = 3,000P. 1번 17,000 × 15% = 2,550P이나 5,000 − 3,000 = 2,000P 남아 2,000P. 2번 7,890 × 20% = 1,578P이나 한도 다 써서 0
+
+  - name: 멤버십 20%와 OTT 15%, 인앱결제와 일반 청구는 제외, 50만 구간
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-05T10:00, amount: 7890, merchant: coupang_wow, channel: online, payment_method: physical_card}
+      - {at: 2026-09-06T10:00, amount: 4900, merchant: naver_plus_membership, channel: online, payment_method: physical_card}
+      - {at: 2026-09-07T10:00, amount: 14900, merchant: youtube_premium, channel: online, payment_method: physical_card}
+      - {at: 2026-09-08T10:00, amount: 17000, merchant: netflix, channel: online, billing: in_app, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 45000, merchant: skt, billing: normal, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {sub-membership: 1578}, counted: 7890}
+      - {payment: 1, benefits: {sub-membership: 980}, counted: 4900}
+      - {payment: 2, benefits: {sub-ott: 2235}, counted: 14900}
+      - {payment: 3, benefits: {}, counted: 17000}
+      - {payment: 4, benefits: {}, counted: 45000}
+    calc: 0번 7,890 × 20% = 1,578P. 1번 4,900 × 20% = 980P. 2번 14,900 × 15% = 2,235P. 3번 인앱결제라 정기결제 조건이 거짓. 4번 자동납부가 아니라 0. 누계 4,793P로 50만 구간 1만P 안
+
+  - name: 즉시결제 0.3%는 다른 적립과 따로 더하고 보너스 한도 3천P
+    prev_month_spend: 350000
+    holder: {facts: {instant_pay: true}}
+    payments:
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-08T12:00, amount: 200000, category: department_store, installment_months: 3, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 1000000, category: department_store, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 50000, merchant: emart, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {today-convenience: 500, instant-pay: 30}, counted: 10000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 200000}
+      - {payment: 2, benefits: {instant-pay: 2970}, counted: 1000000, warnings: [check_conditions, limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 50000, warnings: [limit_exhausted]}
+    calc: 0번 편의점 10,000 × 5% = 500P와 다른 묶음 즉시결제 10,000 × 0.3% = 30P. 1번 할부라 일시불 조건 거짓. 2번 1,000,000 × 0.3% = 3,000P이나 30만 구간 보너스 3,000 − 30 = 2,970P 남아 2,970P. 3번 150P이나 한도 다 써서 0
+
+  - name: 즉시결제 여부를 답하지 않으면 적립 없음
+    prev_month_spend: 350000
+    holder: {facts: {}}
+    payments:
+      - {at: 2026-09-08T10:00, amount: 100000, merchant: emart, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 100000, warnings: [needs_input]}
+    calc: instant_pay 사실이 모름이라 거짓으로 계산해 0. 참이었다면 100,000 × 0.3% = 300P
+
+  - name: 즉시결제 100만 구간 한도 1만P와 실적·적립 제외 업종
+    prev_month_spend: 1200000
+    holder: {facts: {instant_pay: true}}
+    payments:
+      - {at: 2026-09-08T10:00, amount: 50000, category: utility.electricity, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 300000, category: tax, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 2000000, category: department_store, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 1500000, category: department_store, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {instant-pay: 6000}, counted: 2000000, warnings: [check_conditions]}
+      - {payment: 3, benefits: {instant-pay: 4000}, counted: 1500000, warnings: [check_conditions, limit_exhausted]}
+    calc: 0번 전기요금은 utility, 1번 세금은 tax라 실적과 적립 모두 제외. 2번 2,000,000 × 0.3% = 6,000P. 3번 4,500P이나 100만 구간 보너스 10,000 − 6,000 = 4,000P 남아 4,000P
+
+  - name: 간편결제와 무이자할부는 적립 제외, 삼성페이는 적립
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25, payment_method: naver_pay}
+      - {at: 2026-09-09T10:00, amount: 10000, merchant: starbucks, installment_months: 3, interest_free: true, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 10000, merchant: gs25, payment_method: samsung_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000}
+      - {payment: 1, benefits: {}, counted: 10000}
+      - {payment: 2, benefits: {today-convenience: 500}, counted: 10000, warnings: [check_conditions]}
+    calc: 0번 네이버페이는 신한 공통 제외 when_any라 0이고 실적에는 든다. 1번 무이자할부도 공통 제외, 실적은 interest_free count라 10,000. 2번 삼성페이는 제외 목록에 없어 10,000 × 5% = 500P
+
+  - name: 업종을 음식점까지만 알면 오늘도 5% 대상에 안 맞는다
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T12:00, amount: 15000, category: restaurant, payment_method: physical_card}
+      - {at: 2026-09-08T13:00, amount: 15000, category: restaurant.general, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 15000, warnings: [needs_input]}
+      - {payment: 1, benefits: {today-food-cafe: 500}, counted: 15000, warnings: [check_conditions]}
+    calc: 0번 대상은 일반음식점·패스트푸드라 부모 restaurant는 모름으로 0. 1번 1회 1만원까지 10,000 × 5% = 500P
+
+  - name: 전월 299,999원이면 0 구간이라 적립 없음
+    prev_month_spend: 299999
+    payments:
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000, warnings: [tier_not_met]}
+    calc: 30만 구간 하한 1원 아래라 0 구간. 모든 혜택이 30만 구간부터라 0
+
+  - name: 전월 300,000원이면 30만 구간
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {today-convenience: 500}, counted: 10000, warnings: [check_conditions]}
+    calc: 30만 구간 하한과 같아 30만 구간. 10,000 × 5% = 500P
+
+  - name: 신규 발급 특례로 첫 달 30만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-01}
+    payments:
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {today-convenience: 500}, counted: 10000, warnings: [check_conditions]}
+    calc: 전월 0원이라 기본 0 구간이나 사용 등록한 9월이 특례 기간이라 30만 구간. 10,000 × 5% = 500P

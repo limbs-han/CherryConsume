@@ -1,0 +1,198 @@
+card: shinhan-pointplan
+cases:
+  - name: 결제금액 구간 하한과 1원 아래, 120만 구간
+    prev_month_spend: 1300000
+    payments:
+      - {at: 2026-09-01T10:00, amount: 29999, category: other, payment_method: physical_card}
+      - {at: 2026-09-02T10:00, amount: 30000, category: other, payment_method: physical_card}
+      - {at: 2026-09-03T10:00, amount: 99999, category: other, payment_method: physical_card}
+      - {at: 2026-09-04T10:00, amount: 100000, category: other, payment_method: physical_card}
+      - {at: 2026-09-07T10:00, amount: 299999, category: other, payment_method: physical_card}
+      - {at: 2026-09-08T10:00, amount: 300000, category: other, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-under-30k: 149}, counted: 29999}
+      - {payment: 1, benefits: {daily-30k: 210}, counted: 30000}
+      - {payment: 2, benefits: {daily-30k: 699}, counted: 99999}
+      - {payment: 3, benefits: {daily-100k: 1000}, counted: 100000}
+      - {payment: 4, benefits: {daily-100k: 2999}, counted: 299999}
+      - {payment: 5, benefits: {daily-300k: 6000}, counted: 300000}
+    calc: 0번 29,999 × 0.5% = 149.995 → 149P. 1번 30,000 × 0.7% = 210P. 2번 99,999 × 0.7% = 699.993 → 699P. 3번 100,000 × 1% = 1,000P. 4번 299,999 × 1% = 2,999.99 → 2,999P. 5번 300,000 × 2% = 6,000P. 누계 11,057P로 120만 구간 5만P 안
+
+  - name: 100만원 경계와 통합 한도가 1P 남는 결제, 120만 구간
+    prev_month_spend: 1300000
+    payments:
+      - {at: 2026-09-01T10:00, amount: 999999, category: department_store, payment_method: physical_card}
+      - {at: 2026-09-02T10:00, amount: 1000000, category: department_store, payment_method: physical_card}
+      - {at: 2026-09-03T10:00, amount: 10000, category: other, payment_method: physical_card}
+      - {at: 2026-09-04T10:00, amount: 10000, category: other, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-300k: 19999}, counted: 999999}
+      - {payment: 1, benefits: {daily-1m: 30000}, counted: 1000000}
+      - {payment: 2, benefits: {daily-under-30k: 1}, counted: 10000, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 0번 999,999 × 2% = 19,999.98 → 19,999P. 1번 1,000,000 × 3% = 30,000P로 49,999P. 2번 50P이나 50,000 − 49,999 = 1P 남아 1P. 3번 한도 다 써서 0
+
+  - name: 가족행사월 5월은 통합 한도 1만P 추가, 40만 구간
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-05-06T10:00, amount: 1000000, category: department_store, payment_method: physical_card}
+      - {at: 2026-05-07T10:00, amount: 10000, category: other, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-1m: 20000}, counted: 1000000, warnings: [limit_exhausted]}
+      - {payment: 1, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 0번 1,000,000 × 3% = 30,000P이나 40만 구간 10,000 + 5월 adjust 10,000 = 20,000P라 20,000P. 1번 50P이나 한도 다 써서 0
+
+  - name: 9월은 추가 한도 없이 40만 구간 1만P
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 1000000, category: department_store, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-1m: 10000}, counted: 1000000, warnings: [limit_exhausted]}
+    calc: 1,000,000 × 3% = 30,000P이나 40만 구간 통합 한도 10,000P라 10,000P
+
+  - name: SOL페이 0.1% 추가 적립은 금액별 적립에 더한다, 전월 40만원 하한
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 50000, category: other, payment_method: shinhan_sol_pay}
+      - {at: 2026-09-09T10:00, amount: 25000, category: other, payment_method: shinhan_sol_pay}
+      - {at: 2026-09-10T10:00, amount: 25000, category: other, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-30k: 350, daily-solpay-extra: 50}, counted: 50000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {daily-under-30k: 125, daily-solpay-extra: 25}, counted: 25000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {daily-under-30k: 125}, counted: 25000}
+    calc: 전월 400,000원은 40만 구간 하한. 0번 50,000 × 0.7% = 350P와 다른 묶음 50,000 × 0.1% = 50P. 1번 25,000 × 0.5% = 125P와 25P. 2번 실물카드라 추가 적립 없이 125P
+
+  - name: 해외 일시불 1%와 해외 할부
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 200000, category: other, region: overseas, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 200000, category: other, region: overseas, installment_months: 3, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {daily-overseas: 2000}, counted: 200000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 200000}
+    calc: 0번 200,000 × 1% = 2,000P. 금액별 적립은 국내 조건이라 없다. 1번 3개월 할부라 일시불 조건 거짓으로 0
+
+  - name: 주말 외식 1천P는 일상 생활비와 더하고 배달앱과 일 1회를 같이 쓴다
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-05T12:00, amount: 25000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-05T19:00, amount: 30000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-06T12:00, amount: 22000, merchant: baemin, channel: online, payment_method: shinhan_sol_pay}
+      - {at: 2026-09-12T12:00, amount: 19999, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-12T13:00, amount: 25000, merchant: starbucks, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {weekend-dining: 1000, daily-under-30k: 125}, counted: 25000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {daily-30k: 210}, counted: 30000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {weekend-delivery: 1000, daily-under-30k: 110, daily-solpay-extra: 22}, counted: 22000, warnings: [check_conditions]}
+      - {payment: 3, benefits: {daily-under-30k: 99}, counted: 19999}
+      - {payment: 4, benefits: {daily-under-30k: 125}, counted: 25000}
+    calc: 0번 토요일 음식점 2만원 이상 1,000P와 25,000 × 0.5% = 125P. 1번 같은 날이라 주말 일 1회로 0, 30,000 × 0.7% = 210P. 2번 일요일 배달의민족 SOL페이 1,000P와 22,000 × 0.5% = 110P와 22,000 × 0.1% = 22P. 3번 19,999원은 2만원 미만이라 주말 없음, 99.995 → 99P. 4번 카페는 음식점이 아니라 주말 없음, 125P
+
+  - name: 주말 외식 월 5회, 40만 구간
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-05T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-06T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-12T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-13T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-19T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-20T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {weekend-dining: 1000, daily-under-30k: 100}}
+      - {payment: 1, benefits: {weekend-dining: 1000, daily-under-30k: 100}}
+      - {payment: 2, benefits: {weekend-dining: 1000, daily-under-30k: 100}}
+      - {payment: 3, benefits: {weekend-dining: 1000, daily-under-30k: 100}}
+      - {payment: 4, benefits: {weekend-dining: 1000, daily-under-30k: 100}}
+      - {payment: 5, benefits: {daily-under-30k: 100}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 토·일 음식점 20,000원은 2만원 이상이라 1,000P와 20,000 × 0.5% = 100P. 40만 구간 주말 월 5회, 5,000P라 5번은 주말 0이고 100P만
+
+  - name: 40만 미만 0 구간은 주말 외식만 월 2회
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-09-05T12:00, amount: 25000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-06T12:00, amount: 25000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-12T12:00, amount: 25000, category: restaurant.general, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {weekend-dining: 1000}, counted: 25000, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {weekend-dining: 1000}, counted: 25000, warnings: [tier_not_met]}
+      - {payment: 2, benefits: {}, counted: 25000, warnings: [limit_exhausted, tier_not_met]}
+    calc: 전월 10만원은 0 구간이라 일상 생활비는 40만 구간부터라 없다. 주말 외식은 구간 조건이 없고 0 구간 월 2회, 2,000P라 0번 1번 1,000P씩, 2번 0
+
+  - name: 신규 발급 특례는 일상 생활비 40만 구간, 주말 외식 0 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-02}
+    payments:
+      - {at: 2026-09-05T12:00, amount: 25000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-06T12:00, amount: 30000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-12T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-15T10:00, amount: 1000000, category: department_store, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {weekend-dining: 1000, daily-under-30k: 125}, counted: 25000}
+      - {payment: 1, benefits: {weekend-dining: 1000, daily-30k: 210}, counted: 30000}
+      - {payment: 2, benefits: {daily-under-30k: 100}, counted: 20000, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {daily-1m: 9565}, counted: 1000000, warnings: [limit_exhausted]}
+    calc: 전월 0원, 9월 사용 등록이라 특례. 일상 생활비는 40만 구간, 주말 외식은 tier_by_benefit 0 구간. 0번 1,000P와 125P. 1번 1,000P와 210P. 2번 0 구간 주말 월 2회를 다 써서 주말 0, 100P. 3번 30,000P이나 40만 구간 10,000 − 435 = 9,565P
+
+  - name: 전기요금 자동납부 2만원당 1천P, 도시가스와 한 영역 월 1건
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-10T10:00, amount: 63000, category: utility.electricity, billing: autopay, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 45000, category: utility.gas, billing: autopay, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {autopay-utility: 3000}, counted: 63000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 45000, warnings: [limit_exhausted]}
+    calc: 0번 63,000 ÷ 20,000 = 3 남는 3,000원 버림, 3 × 1,000 = 3,000P. 일상 생활비는 전기·가스를 빼서 없다. 1번 월 1건을 써서 0. 전기·가스요금은 이 카드 실적에 든다
+
+  - name: 자동납부 2만원 미만, 1회 10만원까지, 일반 청구는 제외
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-09T10:00, amount: 50000, category: utility.electricity, billing: normal, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 19999, category: utility.gas, billing: autopay, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 130000, category: utility.gas, billing: autopay, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 50000}
+      - {payment: 1, benefits: {}, counted: 19999}
+      - {payment: 2, benefits: {autopay-utility: 5000}, counted: 130000, warnings: [check_conditions]}
+    calc: 0번 자동납부가 아니라 0. 1번 2만원 미만이라 0. 2번 1회 10만원까지 100,000 ÷ 20,000 = 5, 5 × 1,000 = 5,000P로 월 5천P 한도와 같다
+
+  - name: 이동통신 자동납부와 인터넷 요금
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-10T10:00, amount: 63000, merchant: skt, category: telecom.mobile, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 33000, merchant: kt, category: telecom.internet_tv, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {autopay-telecom: 3000}, counted: 63000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {daily-30k: 231}, counted: 33000}
+    calc: 0번 SKT 자동납부 63,000 ÷ 20,000 = 3, 3,000P. 일상 생활비는 이동통신을 빼서 없다. 1번 인터넷·TV는 자동납부 적립에서 빠지고 일상 생활비 33,000 × 0.7% = 231P
+
+  - name: 통신요금 업종을 부모까지만 알면 적립 없음
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-10T10:00, amount: 55000, merchant: kt, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 55000, warnings: [needs_input]}
+    calc: KT 가맹점 업종이 telecom까지만 알려져 자동납부 적립의 인터넷·TV 제외와 일상 생활비의 이동통신 제외에 걸린 것으로 보아 0. 설계 2.1의 예
+
+  - name: 실적과 적립 제외, 간편결제와 무이자할부, 학원은 적립만
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 15000, category: pharmacy, payment_method: physical_card}
+      - {at: 2026-09-09T10:00, amount: 59800, merchant: korail, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 500000, category: department_store, installment_months: 3, interest_free: true, payment_method: physical_card}
+      - {at: 2026-09-11T10:00, amount: 20000, category: other, payment_method: kakao_pay}
+      - {at: 2026-09-14T10:00, amount: 200000, category: education.academy, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 500000}
+      - {payment: 3, benefits: {}, counted: 20000}
+      - {payment: 4, benefits: {daily-100k: 2000}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 0번 약국, 1번 철도는 실적과 적립 모두 제외. 2번 무이자할부는 적립 제외, 실적은 전액. 3번 카카오페이는 적립 제외. 4번 학원은 실적 제외지만 적립 제외 목록에 없어 200,000 × 1% = 2,000P
+
+  - name: 전월 399,999원이면 0 구간이라 일상 생활비 없음
+    prev_month_spend: 399999
+    payments:
+      - {at: 2026-09-08T10:00, amount: 50000, category: other, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 50000, warnings: [tier_not_met]}
+    calc: 40만 구간 하한 1원 아래라 0 구간. 일상 생활비는 40만 구간부터라 0

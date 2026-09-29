@@ -1,0 +1,165 @@
+card: samsung-id-on
+cases:
+  - name: 커피 영역 한도 직전과 직후, 스타벅스 사이렌오더, 30만 구간 하한
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-02T09:00, amount: 30000, merchant: starbucks, channel: online, payment_method: physical_card}
+      - {at: 2026-09-04T13:00, amount: 5000, merchant: twosome, payment_method: physical_card}
+      - {at: 2026-09-06T15:00, amount: 4000, merchant: blue_bottle, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {top-area-30-starbucks: 9000}, counted: 30000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {top-area-30: 1000}, counted: 5000, warnings: [check_conditions, limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 4000, warnings: [limit_exhausted]}
+    calc: 전월 300,000은 30만 구간 하한. 커피 영역만 써서 1위. 스타벅스 30,000 × 30% = 9,000. 투썸 5,000 × 30% = 1,500이나 영역 한도 10,000 − 9,000 = 1,000 남아 1,000. 블루보틀은 한도 0 남아 0. 30% 할인은 실적에서 빼지 않아 세 건 모두 전액 인정
+
+  - name: 배달앱이 1위면 커피 결제는 할인 없음
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-05T19:00, amount: 25000, merchant: baemin, channel: online, payment_method: physical_card}
+      - {at: 2026-09-07T10:00, amount: 10000, merchant: ediya, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {top-area-30-delivery: 7500}, counted: 25000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 10000}
+    calc: 배민 25,000 × 30% = 7,500, 배달앱 영역 1위. 이디야 뒤 커피 10,000 < 배달앱 25,000이라 커피는 순위 밖 0. 달 끝 순위도 같아 잠정값과 최종값이 같다
+
+  - name: 커피 영역은 스타벅스와 커피전문점을 합쳐 순위를 센다
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-01T09:00, amount: 15000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-02T09:00, amount: 10000, merchant: ediya, payment_method: physical_card}
+      - {at: 2026-09-03T20:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {top-area-30-starbucks: 4500}, counted: 15000}
+      - {payment: 1, benefits: {top-area-30: 3000}, counted: 10000}
+      - {payment: 2, benefits: {}, counted: 20000}
+    calc: 커피 영역 = 스타벅스 15,000 + 이디야 10,000 = 25,000 > 배달앱 20,000이라 커피 1위. 따로 세면 배달앱이 1위가 된다. 15,000 × 30% = 4,500, 10,000 × 30% = 3,000, 합 7,500으로 한도 10,000 안. 배민 0
+
+  - name: 영역 이용액이 같으면 카드 파일에 먼저 적힌 커피가 1위
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-10T09:00, amount: 10000, merchant: ediya, payment_method: physical_card}
+      - {at: 2026-09-11T19:00, amount: 10000, merchant: baemin, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {top-area-30: 3000}, counted: 10000}
+      - {payment: 1, benefits: {}, counted: 10000}
+    calc: 이디야 10,000 × 30% = 3,000. 배민 뒤 커피 10,000 = 배달앱 10,000으로 같아 먼저 적힌 커피 영역이 1위라 배민 0
+
+  - name: 델리 영역 30%, 원 미만 버림
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-12T12:00, amount: 23456, merchant: shake_shack, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {top-area-30-deli: 7036}, counted: 23456, warnings: [check_conditions]}
+    calc: 델리 영역만 써서 1위. 23,456 × 30% = 7,036.8, 원 미만 버림 7,036. 영역 한도는 구간과 상관없이 10,000
+
+  - name: 스타벅스 사이렌오더를 삼성페이로 내면 30%와 간편결제 3%를 함께 받는다
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T08:00, amount: 10000, merchant: starbucks, channel: online, payment_method: samsung_pay}
+    expect:
+      - {payment: 0, benefits: {top-area-30-starbucks: 3000, easypay-overseas-3: 300}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 30%는 area 묶음, 3%는 main 묶음이라 더한다. 10,000 × 30% = 3,000, 10,000 × 3% = 300. 실적 제외 비율은 30% 0과 3% 1 중 큰 1이라 실적 0
+
+  - name: 교통 10%, 지하철과 택시
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-01T08:10, amount: 1450, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+      - {at: 2026-09-01T23:40, amount: 15800, category: taxi, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {transit-telecom-streaming-10: 145}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {transit-telecom-streaming-10: 1580}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 지하철 1,450 × 10% = 145, 택시 15,800 × 10% = 1,580. 생활 통합 한도 30만 구간 10,000 안. 지하철과 택시는 실적 제외 업종이라 0
+
+  - name: 교통·이동통신·스트리밍 통합 한도 30만 구간 1만원, 직전과 직후
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-05T10:00, amount: 89000, merchant: skt, payment_method: physical_card}
+      - {at: 2026-09-10T10:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+      - {at: 2026-09-12T22:00, amount: 12000, category: taxi, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {telecom-10: 8900}, counted: 0, warnings: [check_conditions, not_counted_toward_spend]}
+      - {payment: 1, benefits: {streaming-10: 1100}, counted: 0, warnings: [limit_exhausted, not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [limit_exhausted, not_counted_toward_spend]}
+    calc: SKT 자동납부 89,000 × 10% = 8,900. 넷플릭스 17,000 × 10% = 1,700이나 통합 한도 10,000 − 8,900 = 1,100 남아 1,100. 택시는 한도 0 남아 0. 10% 받은 건은 실적 제외 비율 1, 택시는 실적 제외 업종이라 모두 0
+
+  - name: 60만 구간 통합 한도 2만원
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-05T10:00, amount: 120000, merchant: kt, payment_method: physical_card}
+      - {at: 2026-09-15T10:00, amount: 90000, merchant: lg_uplus, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {telecom-10: 12000}, counted: 0}
+      - {payment: 1, benefits: {telecom-10: 8000}, counted: 0, warnings: [limit_exhausted]}
+    calc: 전월 600,000은 60만 구간 하한이라 통합 한도 20,000. KT 120,000 × 10% = 12,000. LG U+ 90,000 × 10% = 9,000이나 20,000 − 12,000 = 8,000 남아 8,000. 할인 건 실적 0
+
+  - name: 온라인 간편결제 3%, 원 미만 버림
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-09T21:00, amount: 12345, merchant: coupang, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {easypay-overseas-3: 370}, counted: 0, warnings: [check_conditions, not_counted_toward_spend]}
+    calc: 12,345 × 3% = 370.35, 원 미만 버림 370. 한도 5,000 안. 3% 받은 건은 실적 0
+
+  - name: 3% 한도를 넘긴 다음 결제부터 1%, 간편결제와 해외가 한도를 같이 쓴다
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-03T12:00, amount: 150000, merchant: coupang, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-10T12:00, amount: 40000, merchant: gmarket, channel: online, payment_method: kakao_pay}
+      - {at: 2026-09-17T12:00, amount: 20000, merchant: eleven_st, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-20T12:00, amount: 10000, category: other, region: overseas, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {easypay-overseas-3: 4500}, counted: 0}
+      - {payment: 1, benefits: {easypay-overseas-3: 500}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {easypay-overseas-1: 200}, counted: 20000}
+      - {payment: 3, benefits: {overseas-1: 100}, counted: 10000}
+    calc: 30만 구간 3% 한도 5,000을 간편결제와 해외가 같이 쓴다. 150,000 × 3% = 4,500. 40,000 × 3% = 1,200이나 500 남아 500이고 같은 결제 안에서 1%로 나누지 않는다. 그다음 결제부터 1%로 20,000 × 1% = 200, 해외 10,000 × 1% = 100. 1% 건은 실적 인정
+
+  - name: 해외 3%, 60만 구간
+    prev_month_spend: 700000
+    payments:
+      - {at: 2026-09-22T15:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {overseas-3: 3000}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 해외 100,000 × 3% = 3,000. 60만 구간 한도 10,000 안. 3% 받은 건은 실적 0
+
+  - name: 30만 하한 1원 아래는 0 구간이라 30% 없고 1%만
+    prev_month_spend: 299999
+    payments:
+      - {at: 2026-09-04T09:00, amount: 10000, merchant: ediya, payment_method: physical_card}
+      - {at: 2026-09-06T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-15T10:00, amount: 50000, category: other, region: overseas, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {easypay-overseas-1: 300}, counted: 30000}
+      - {payment: 2, benefits: {overseas-1: 500}, counted: 50000}
+    calc: 전월 299,999는 0 구간. 30%와 3%는 30만 구간부터라 없다. 간편결제 30,000 × 1% = 300, 해외 50,000 × 1% = 500, 0 구간 1%는 한도 없음. 1% 건과 혜택 없는 건은 실적 인정
+
+  - name: 신규 발급 특례로 30만 구간
+    holder: {started_on: 2026-08-10}
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-09-15T20:00, amount: 20000, merchant: coupang, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {easypay-overseas-3: 600}, counted: 0}
+    calc: 발급일 2026-08-10이라 8월부터 9월 말일까지 특례. 전월 100,000은 0 구간이지만 특례 30만 구간이 커서 30만 구간. 20,000 × 3% = 600
+
+  - name: 신규 발급 특례가 끝난 달은 1%
+    holder: {started_on: 2026-08-10}
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-10-05T20:00, amount: 20000, merchant: coupang, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {easypay-overseas-1: 200}, counted: 20000}
+    calc: 특례는 9월 말일까지. 10월은 전월 100,000으로 0 구간이라 20,000 × 1% = 200
+
+  - name: 무이자할부, 상품권, 아파트관리비는 할인 없음
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-18T14:00, amount: 120000, merchant: coupang, channel: online, payment_method: naver_pay, installment_months: 3, interest_free: true}
+      - {at: 2026-09-25T09:00, amount: 230000, category: apartment_fee, payment_method: physical_card}
+      - {at: 2026-09-26T10:00, amount: 50000, category: gift_card, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 120000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 무이자할부는 삼성 모든 혜택 공통 제외지만 실적에는 넣어 120,000. 아파트관리비는 걸리는 혜택이 없고 실적 제외 0. 상품권은 모든 혜택 공통 제외라 간편결제 3%도 없고 실적 제외 0

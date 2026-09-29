@@ -1,0 +1,32 @@
+card: hyundai-zero-edition3-discount
+cases:
+  - name: 0.8% 청구할인, 해외와 유이자 할부도 전액 할인
+    payments:
+      - {at: 2026-09-03T12:00, amount: 12345, merchant: emart}
+      - {at: 2026-09-10T15:00, amount: 100000, category: other, region: overseas}
+      - {at: 2026-09-12T14:00, amount: 300000, merchant: emart, installment_months: 3}
+    expect:
+      - {payment: 0, benefits: {all-0-8: 98}, warnings: [assumed_value]}
+      - {payment: 1, benefits: {all-0-8: 800}}
+      - {payment: 2, benefits: {all-0-8: 2400}}
+    calc: 실적 조건 없음. 12,345 × 0.8% = 98.76, 원 미만 버림 가정 98. 해외 100,000 × 0.8% = 800. 유이자 3개월 할부 300,000도 1개월 차에 전액 할인 2,400
+
+  - name: 무이자할부, 아파트관리비, 고속버스, 도시가스는 할인 없음
+    payments:
+      - {at: 2026-09-05T15:00, amount: 150000, merchant: emart, installment_months: 3, interest_free: true}
+      - {at: 2026-09-25T09:00, amount: 250000, category: apartment_fee}
+      - {at: 2026-09-26T07:00, amount: 23000, category: transit.bus_express}
+      - {at: 2026-09-27T09:00, amount: 40000, category: utility.gas}
+    expect:
+      - {payment: 0, benefits: {}}
+      - {payment: 1, benefits: {}}
+      - {payment: 2, benefits: {}}
+      - {payment: 3, benefits: {}}
+    calc: 현대카드 공통 할인 제외. 무이자할부, 아파트관리비, 고속버스는 그대로 걸리고 도시가스는 부모 업종 공과금이 제외라 걸린다. 모두 0
+
+  - name: 업종을 대중교통까지만 알면 고속버스 제외에 걸린 것으로 본다
+    payments:
+      - {at: 2026-09-15T08:00, amount: 10000, category: transit}
+    expect:
+      - {payment: 0, benefits: {}, warnings: [needs_input]}
+    calc: 결제 업종이 부모 transit이라 제외 업종 transit.bus_express에 맞는지 모른다. 공통 제외에는 걸린 것으로 보고 0, 자식 업종을 묻는다

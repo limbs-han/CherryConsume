@@ -1,0 +1,53 @@
+card: lotte-loca-classic
+cases:
+  - name: 지난달 149만9,999원이면 기본할인 0.5%, 원 미만 버림
+    prev_month_spend: 1499999
+    payments:
+      - {at: 2026-09-03T12:00, amount: 33333, merchant: starbucks, channel: offline}
+      - {at: 2026-09-05T15:00, amount: 100000, merchant: emart, channel: offline}
+    expect:
+      - {payment: 0, benefits: {all-0-5: 166}, counted: 33333}
+      - {payment: 1, benefits: {all-0-5: 500}, counted: 100000}
+    calc: 149만9,999원은 150만 구간 하한 1원 아래라 0 구간. 33,333 × 0.5% = 166.665 → 166. 100,000 × 0.5% = 500. 한도 없음
+
+  - name: 지난달 150만원이면 특별할인 1.0%, 해외와 유이자 할부 포함
+    prev_month_spend: 1500000
+    payments:
+      - {at: 2026-09-04T12:00, amount: 45678, merchant: emart, channel: offline}
+      - {at: 2026-09-10T20:00, amount: 50000, category: travel.hotel, channel: offline, region: overseas}
+      - {at: 2026-09-12T13:00, amount: 120000, merchant: coupang, channel: online, installment_months: 6}
+    expect:
+      - {payment: 0, benefits: {all-1-0: 456}, counted: 45678}
+      - {payment: 1, benefits: {all-1-0: 500}, counted: 50000}
+      - {payment: 2, benefits: {all-1-0: 1200}, counted: 120000}
+    calc: 150만 구간 하한. 45,678 × 1.0% = 456.78 → 456. 해외 50,000 × 1.0% = 500. 6개월 유이자 할부 120,000은 승인한 달에 전액 실적, 전체 금액 × 1.0% = 1,200. 기본할인 0.5%는 to 0이라 중복 없음
+
+  - name: 신규 발급 특례 마지막 날 한국 시간 23시 30분
+    prev_month_spend: 0
+    holder: {started_on: 2026-08-20}
+    payments:
+      - {at: 2026-09-30T23:30, amount: 20000, merchant: coupang, channel: online}
+    expect:
+      - {payment: 0, benefits: {all-1-0: 200}, counted: 20000}
+    calc: 발급일 8월 20일이 속한 달부터 다음 달 말일 9월 30일까지 특례 150만 구간. 20,000 × 1.0% = 200. 9월 30일 23:30 한국 시간은 아직 9월
+
+  - name: 신규 발급 특례가 끝난 다음 날은 지난달 실적대로
+    prev_month_spend: 0
+    holder: {started_on: 2026-08-20}
+    payments:
+      - {at: 2026-10-01T00:10, amount: 20000, merchant: coupang, channel: online}
+    expect:
+      - {payment: 0, benefits: {all-0-5: 100}, counted: 20000}
+    calc: 특례는 9월 30일까지. 10월은 지난달 추정값 0원이라 0 구간. 20,000 × 0.5% = 100
+
+  - name: 무이자할부, 세금, 아파트관리비는 할인과 실적에서 빠진다
+    prev_month_spend: 1500000
+    payments:
+      - {at: 2026-09-08T12:00, amount: 300000, merchant: coupang, channel: online, installment_months: 3, interest_free: true}
+      - {at: 2026-09-15T09:00, amount: 200000, category: tax, channel: online}
+      - {at: 2026-09-25T09:00, amount: 150000, category: apartment_fee, channel: online, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 무이자할부는 공통 제외 when_any와 실적 interest_free exclude로 0. 세금과 아파트관리비는 공통 제외 업종이자 실적 제외 업종이라 혜택 0, 실적 0

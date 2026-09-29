@@ -1,0 +1,283 @@
+card: kb-easy-all-titanium
+holder:
+  options:
+    - {option: mode, choice: auto, effective_from: 2020-06-18}
+cases:
+  - name: '[A] 음식 3%는 건당 1만원 이상, 50만 구간 하한'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-02T12:00, amount: 9900, category: restaurant.general}
+      - {at: 2026-09-03T12:00, amount: 10000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {}, counted: 9900}
+      - {payment: 1, benefits: {a-food-3: 300}, counted: 10000}
+    calc: 전월 500,000은 50만 구간 하한이라 그룹별 상위 1개. 9,900은 건당 1만원 미만이라 없음. 10,000 × 3% = 300. A그룹에 이용액이 있는 영역은 음식뿐이라 1위
+  - name: '[A] 음식 영역 월 4천원 한도 직전과 직후'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-04T19:00, amount: 100000, category: restaurant.general}
+      - {at: 2026-09-11T19:00, amount: 33333, category: restaurant.general}
+      - {at: 2026-09-18T19:00, amount: 20000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {a-food-3: 3000}, counted: 100000}
+      - {payment: 1, benefits: {a-food-3: 999}, counted: 33333}
+      - {payment: 2, benefits: {a-food-3: 1}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 100,000 × 3% = 3,000. 33,333 × 3% = 999.99라 원 미만 버려 999, 누적 3,999. 20,000 × 3% = 600이지만 영역 한도 4,000 − 3,999 = 1
+  - name: '[A] 교육 3%는 오프라인 학원만'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-01T10:00, amount: 150000, category: education.academy}
+      - {at: 2026-09-02T10:00, amount: 50000, category: education.academy, channel: online}
+    expect:
+      - {payment: 0, benefits: {a-education-3: 4000}, counted: 150000, warnings: [limit_exhausted]}
+      - {payment: 1, benefits: {}, counted: 50000}
+    calc: 150,000 × 3% = 4,500이 영역 월 4,000에 걸려 4,000. 온라인 학원 결제는 channel offline 조건이 거짓이라 없음
+  - name: '[A] 병원·약국 3% 원 미만 버림'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-07T10:00, amount: 30000, category: hospital}
+      - {at: 2026-09-07T11:00, amount: 12345, category: pharmacy}
+      - {at: 2026-09-09T15:00, amount: 25000, category: pet.vet}
+    expect:
+      - {payment: 0, benefits: {a-medical-3: 900}, counted: 30000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {a-medical-3: 370}, counted: 12345}
+      - {payment: 2, benefits: {a-medical-3: 750}, counted: 25000}
+    calc: 병원 30,000 × 3% = 900. 약국 12,345 × 3% = 370.35라 370. 동물병원 25,000 × 3% = 750. 합 2,020이라 한도 안
+  - name: '[A] 해외와 국내 면세점은 한 영역이라 월 4천원을 같이 씀'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-05T02:00, amount: 100000, category: other, region: overseas, channel: online}
+      - {at: 2026-09-06T14:00, amount: 50000, merchant: lotte_dfs_online, channel: online}
+    expect:
+      - {payment: 0, benefits: {a-overseas-3: 3000}, counted: 100000}
+      - {payment: 1, benefits: {a-dutyfree-3: 1000}, counted: 50000, warnings: [limit_exhausted]}
+    calc: 해외 100,000 × 3% = 3,000. 인터넷면세점 50,000 × 3% = 1,500이지만 같은 영역 공유 한도 4,000 − 3,000 = 1,000. 영역 이용액 150,000으로 A그룹 1위
+  - name: '[A] 관리비·공과금 3%, 실적은 전기와 관리비가 빠지고 가스는 들어감'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-10T09:00, amount: 40000, category: utility.gas}
+      - {at: 2026-09-15T09:00, amount: 60000, category: utility.electricity}
+      - {at: 2026-09-25T09:00, amount: 120000, category: apartment_fee}
+    expect:
+      - {payment: 0, benefits: {a-bills-3: 1200}, counted: 40000}
+      - {payment: 1, benefits: {a-bills-3: 1800}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {a-bills-3: 1000}, counted: 0, warnings: [limit_exhausted, not_counted_toward_spend]}
+    calc: 가스 40,000 × 3% = 1,200, 전기 60,000 × 3% = 1,800. 관리비 120,000 × 3% = 3,600이지만 잔여 4,000 − 3,000 = 1,000. 전기와 관리비는 실적 제외 업종
+  - name: 업종을 부모 공과금까지만 알면 대상에는 맞고 실적 제외에는 걸림
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-10T09:00, amount: 50000, category: utility}
+    expect:
+      - {payment: 0, benefits: {a-bills-3: 1500}, counted: 0, warnings: [needs_input]}
+    calc: 대상 utility와 결제 utility가 같아 50,000 × 3% = 1,500. 실적 제외의 전기·수도는 자식 업종이라 모름이고 걸린 것으로 봐 실적 0
+  - name: '[B] 마트 5%는 오프라인만'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-06T11:00, amount: 60000, merchant: emart}
+      - {at: 2026-09-07T21:00, amount: 40000, merchant: emart, channel: online}
+    expect:
+      - {payment: 0, benefits: {b-mart-5: 3000}, counted: 60000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 40000}
+    calc: 이마트 60,000 × 5% = 3,000. 온라인 결제는 channel offline 조건이 거짓이라 없고 영역 이용액에도 넣지 않음
+  - name: '[B] 이동통신 5%는 건당 3만원 이상 자동납부'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-25T06:00, amount: 29990, merchant: skt}
+      - {at: 2026-09-25T06:10, amount: 30000, merchant: kt}
+    expect:
+      - {payment: 0, benefits: {}, counted: 29990}
+      - {payment: 1, benefits: {b-telecom-5: 1500}, counted: 30000}
+    calc: 29,990은 건당 3만원 미만이라 없음. KT 30,000 × 5% = 1,500. 청구 방식은 가맹점 기본값 자동납부
+  - name: '[B] 온라인쇼핑 5%, 여행 업종은 대상 제외'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-08T21:00, amount: 45000, merchant: gmarket, channel: online}
+      - {at: 2026-09-09T21:00, amount: 300000, merchant: interpark, category: travel.airline, channel: online}
+    expect:
+      - {payment: 0, benefits: {b-online-5: 2250}, counted: 45000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 300000}
+    calc: G마켓 45,000 × 5% = 2,250. 인터파크 항공권은 대상 제외 업종 travel의 자식이라 없음
+  - name: '[B] 50만 구간은 그룹별 1위 영역 하나만'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-03T21:00, amount: 80000, merchant: coupang, channel: online}
+      - {at: 2026-09-10T11:00, amount: 60000, merchant: emart}
+    expect:
+      - {payment: 0, benefits: {b-social-5: 4000}, counted: 80000}
+      - {payment: 1, benefits: {}, counted: 60000}
+    calc: B그룹 이용액 소셜 80,000 > 마트 60,000이고 50만 구간은 상위 1개라 소셜만. 80,000 × 5% = 4,000, 마트는 2위라 없음
+  - name: '[B] 100만 구간은 그룹별 상위 2개'
+    prev_month_spend: 1000000
+    payments:
+      - {at: 2026-09-03T21:00, amount: 80000, merchant: coupang, channel: online}
+      - {at: 2026-09-10T11:00, amount: 60000, merchant: emart}
+      - {at: 2026-09-12T08:00, amount: 50000, merchant: sk_energy}
+    expect:
+      - {payment: 0, benefits: {b-social-5: 4000}, counted: 80000}
+      - {payment: 1, benefits: {b-mart-5: 3000}, counted: 60000}
+      - {payment: 2, benefits: {}, counted: 50000}
+    calc: 100만 구간은 상위 2개. 소셜 80,000, 마트 60,000, 주유 50,000 순이라 80,000 × 5% = 4,000, 60,000 × 5% = 3,000이고 주유는 3위라 없음
+  - name: '[B] 150만 구간은 그룹별 상위 3개'
+    prev_month_spend: 1500000
+    payments:
+      - {at: 2026-09-03T21:00, amount: 80000, merchant: coupang, channel: online}
+      - {at: 2026-09-10T11:00, amount: 60000, merchant: emart}
+      - {at: 2026-09-12T08:00, amount: 50000, merchant: sk_energy}
+      - {at: 2026-09-14T21:00, amount: 40000, merchant: gmarket, channel: online}
+    expect:
+      - {payment: 0, benefits: {b-social-5: 4000}, counted: 80000}
+      - {payment: 1, benefits: {b-mart-5: 3000}, counted: 60000}
+      - {payment: 2, benefits: {b-fuel-5: 2500}, counted: 50000}
+      - {payment: 3, benefits: {}, counted: 40000}
+    calc: 150만 구간은 상위 3개. 소셜 80,000 × 5% = 4,000, 마트 60,000 × 5% = 3,000, 주유 50,000 × 5% = 2,500이고 온라인쇼핑 40,000은 4위라 없음
+  - name: '[C] 이용액이 같으면 카드 파일에 먼저 적힌 영역이 1위'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-05T19:00, amount: 30000, category: sports}
+      - {at: 2026-09-06T13:00, amount: 30000, merchant: cu}
+    expect:
+      - {payment: 0, benefits: {c-sports-7: 2100}, counted: 30000}
+      - {payment: 1, benefits: {}, counted: 30000}
+    calc: C그룹 스포츠 30,000과 편의점 30,000이 같아 카드 파일에 먼저 적힌 스포츠가 1위. 30,000 × 7% = 2,100, 편의점은 없음
+  - name: '[C] 대중교통 7%는 시내버스와 지하철만'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-01T08:10, amount: 1450, category: transit.subway}
+      - {at: 2026-09-01T18:20, amount: 1500, category: transit.bus_city}
+      - {at: 2026-09-04T07:00, amount: 15000, category: transit.bus_intercity}
+    expect:
+      - {payment: 0, benefits: {c-transit-7: 101}, counted: 1450, warnings: [check_conditions]}
+      - {payment: 1, benefits: {c-transit-7: 105}, counted: 1500}
+      - {payment: 2, benefits: {}, counted: 15000}
+    calc: 1,450 × 7% = 101.5라 101. 1,500 × 7% = 105. 시외버스는 대상이 아님. 이 카드는 교통을 실적에서 빼지 않음
+  - name: '[C] 패션·인테리어 7% 영역 월 4천원'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-12T15:00, amount: 50000, merchant: hyundai_department}
+      - {at: 2026-09-19T15:00, amount: 20000, merchant: zara}
+    expect:
+      - {payment: 0, benefits: {c-fashion-7: 3500}, counted: 50000}
+      - {payment: 1, benefits: {c-fashion-7: 500}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 현대백화점 50,000 × 7% = 3,500. ZARA 20,000 × 7% = 1,400이지만 잔여 4,000 − 3,500 = 500
+  - name: '[C] 뷰티 7%는 올리브영과 미용실, 영역 월 4천원'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-12T15:00, amount: 25000, merchant: olive_young}
+      - {at: 2026-09-19T15:00, amount: 40000, category: beauty.salon}
+    expect:
+      - {payment: 0, benefits: {c-beauty-7: 1750}, counted: 25000}
+      - {payment: 1, benefits: {c-beauty-7: 2250}, counted: 40000, warnings: [limit_exhausted]}
+    calc: 올리브영 25,000 × 7% = 1,750. 미용실 40,000 × 7% = 2,800이지만 잔여 4,000 − 1,750 = 2,250
+  - name: 네 그룹은 따로 순위를 매겨 그룹마다 1위가 받음
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-02T12:00, amount: 20000, category: restaurant.general}
+      - {at: 2026-09-03T08:00, amount: 70000, merchant: sk_energy}
+      - {at: 2026-09-04T13:00, amount: 8950, merchant: gs25}
+      - {at: 2026-09-05T23:30, amount: 15000, merchant: kakao_t}
+    expect:
+      - {payment: 0, benefits: {a-food-3: 600}, counted: 20000}
+      - {payment: 1, benefits: {b-fuel-5: 3500}, counted: 70000}
+      - {payment: 2, benefits: {c-cvs-7: 626}, counted: 8950, warnings: [check_conditions]}
+      - {payment: 3, benefits: {d-taxi-10: 1500}, counted: 15000}
+    calc: 음식 20,000 × 3% = 600, 주유 70,000 × 5% = 3,500, GS25 8,950 × 7% = 626.5라 626, 택시 15,000 × 10% = 1,500. 합 6,226이라 통합 16,000 안
+  - name: '[D] 커피 10%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-03T08:00, amount: 6500, merchant: starbucks}
+    expect:
+      - {payment: 0, benefits: {d-coffee-10: 650}, counted: 6500, warnings: [check_conditions]}
+    calc: 6,500 × 10% = 650
+  - name: '[D] 제과·패스트푸드 10%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-04T08:00, amount: 12000, merchant: paris_baguette}
+      - {at: 2026-09-05T12:00, amount: 7800, merchant: mcdonalds}
+    expect:
+      - {payment: 0, benefits: {d-bakery-fastfood-10: 1200}, counted: 12000}
+      - {payment: 1, benefits: {d-bakery-fastfood-10: 780}, counted: 7800}
+    calc: 파리바게뜨 12,000 × 10% = 1,200, 맥도날드 7,800 × 10% = 780. 일반음식점이 아니라 음식 3%에는 맞지 않음
+  - name: '[D] 배달앱 10%는 온라인 결제만'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-06T19:00, amount: 25000, merchant: baemin, channel: online}
+      - {at: 2026-09-07T19:00, amount: 20000, merchant: yogiyo}
+    expect:
+      - {payment: 0, benefits: {d-delivery-10: 2500}, counted: 25000}
+      - {payment: 1, benefits: {}, counted: 20000}
+    calc: 배민 25,000 × 10% = 2,500. 요기요 현장결제는 channel online 조건이 거짓이라 없음
+  - name: '[D] 구독과 영화는 한 영역이라 월 4천원을 같이 씀'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-01T09:00, amount: 17000, merchant: netflix, channel: online}
+      - {at: 2026-09-13T19:00, amount: 30000, merchant: cgv}
+    expect:
+      - {payment: 0, benefits: {d-sub-movie-10: 1700}, counted: 17000}
+      - {payment: 1, benefits: {d-movie-10: 2300}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 넷플릭스 정기결제 17,000 × 10% = 1,700. CGV 30,000 × 10% = 3,000이지만 같은 영역 공유 한도 4,000 − 1,700 = 2,300
+  - name: 영역 이용액은 조건에 맞는 결제만 셈. 1만원 미만 음식은 빠져 병원이 1위
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-01T12:00, amount: 9000, category: restaurant.general}
+      - {at: 2026-09-02T12:00, amount: 9000, category: restaurant.general}
+      - {at: 2026-09-03T12:00, amount: 9000, category: restaurant.general}
+      - {at: 2026-09-04T10:00, amount: 20000, category: hospital}
+      - {at: 2026-09-05T12:00, amount: 10000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {}, counted: 9000}
+      - {payment: 1, benefits: {}, counted: 9000}
+      - {payment: 2, benefits: {}, counted: 9000}
+      - {payment: 3, benefits: {a-medical-3: 600}, counted: 20000}
+      - {payment: 4, benefits: {}, counted: 10000}
+    calc: 음식 영역은 건당 1만원 이상만 세어 10,000이고 병원 20,000보다 작음. A그룹 1위는 병원이라 20,000 × 3% = 600, 음식 10,000은 2위라 없음
+  - name: 받는 혜택이 없는 결제. 무이자할부, 세금, 상품권, 연회비
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-05T15:00, amount: 300000, merchant: hyundai_department, installment_months: 3, interest_free: true}
+      - {at: 2026-09-10T10:00, amount: 100000, category: tax}
+      - {at: 2026-09-12T10:00, amount: 50000, category: gift_card}
+      - {at: 2026-09-20T10:00, amount: 30000, category: annual_fee}
+    expect:
+      - {payment: 0, benefits: {}, counted: 300000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 3, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 무이자할부는 when_any라 백화점을 직접 적은 패션 영역에도 걸려 없지만 실적에는 넣음. 세금, 상품권, 연회비는 할인과 실적 모두 제외
+  - name: 전월 499,999원이면 0 구간이라 선택서비스 없음
+    prev_month_spend: 499999
+    payments:
+      - {at: 2026-09-03T08:00, amount: 10000, merchant: starbucks}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000}
+    calc: 전월 499,999 < 500,000이라 0 구간. 모든 혜택이 50만 구간부터라 0
+  - name: 지난달 결제로 정한 50만 구간. 세금은 실적에서 빠짐
+    payments:
+      - {at: 2026-08-05T11:00, amount: 300000, merchant: emart}
+      - {at: 2026-08-10T10:00, amount: 100000, category: tax}
+      - {at: 2026-08-20T08:00, amount: 200000, merchant: sk_energy}
+      - {at: 2026-09-03T08:00, amount: 10000, merchant: starbucks}
+    expect:
+      - {payment: 0, benefits: {}, counted: 300000}
+      - {payment: 1, benefits: {}, counted: 0}
+      - {payment: 2, benefits: {}, counted: 200000}
+      - {payment: 3, benefits: {d-coffee-10: 1000}, counted: 10000}
+    calc: 7월 결제가 없어 8월은 0 구간이라 혜택 없음. 8월 인정 실적 300,000 + 0 + 200,000 = 500,000이라 9월은 50만 구간. 스타벅스 10,000 × 10% = 1,000
+  - name: 8월 1일부터 DIY 모드면 9월은 Auto 혜택을 계산하지 않음
+    prev_month_spend: 500000
+    holder:
+      options:
+        - {option: mode, choice: auto, effective_from: 2020-06-18}
+        - {option: mode, choice: diy, effective_from: 2026-08-01}
+    payments:
+      - {at: 2026-09-03T08:00, amount: 10000, merchant: starbucks}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000}
+    calc: 결제일에 골라 둔 모드는 DIY라 option 조건 mode auto가 거짓. DIY는 unsupported라 계산하지 않음
+  - name: 9월에 쓰기 시작한 카드는 신규 발급 특례로 50만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-03}
+    payments:
+      - {at: 2026-09-10T08:00, amount: 10000, merchant: starbucks}
+    expect:
+      - {payment: 0, benefits: {d-coffee-10: 1000}, counted: 10000}
+    calc: 특례 기간은 9월부터 10월 말일까지라 new_card.tier 500,000이 전월 추정 0의 0 구간보다 큼. 10,000 × 10% = 1,000

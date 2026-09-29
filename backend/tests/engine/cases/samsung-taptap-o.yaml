@@ -1,0 +1,178 @@
+card: samsung-taptap-o
+cases:
+  - name: 후불교통 대중교통 10%, 30만 구간 하한, 후불이 아니면 없음
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-01T08:00, amount: 1550, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+      - {at: 2026-09-01T18:30, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+      - {at: 2026-09-02T08:00, amount: 1550, category: transit.subway, billing: normal, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {transit-taxi-10: 155}, counted: 0, warnings: [check_conditions, not_counted_toward_spend]}
+      - {payment: 1, benefits: {transit-taxi-10: 150}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 전월 300,000은 30만 구간 하한. 1,550 × 10% = 155, 1,500 × 10% = 150, 통합 한도 5,000 안. 후불교통이 아닌 지하철은 0. 대중교통은 실적 제외 업종이라 모두 0
+
+  - name: 택시와 대중교통 통합 한도 5천원, 직전과 직후
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-03T23:00, amount: 45000, category: taxi, payment_method: physical_card}
+      - {at: 2026-09-10T23:00, amount: 8000, category: taxi, payment_method: physical_card}
+      - {at: 2026-09-11T08:00, amount: 1550, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {taxi-10: 4500}, counted: 0}
+      - {payment: 1, benefits: {taxi-10: 500}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [limit_exhausted]}
+    calc: 택시 45,000 × 10% = 4,500. 8,000 × 10% = 800이나 통합 한도 5,000 − 4,500 = 500 남아 500. 지하철은 한도 0 남아 0. 택시와 대중교통은 실적 제외 0
+
+  - name: 이동통신 자동납부 월 한도 5천원
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-25T10:00, amount: 62000, merchant: skt, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {telecom-10: 5000}, counted: 0, warnings: [check_conditions, limit_exhausted, not_counted_toward_spend]}
+    calc: SKT 자동납부 62,000 × 10% = 6,200이나 월 한도 5,000. 할인 받은 건은 할인 전 총액이 실적 제외라 0
+
+  - name: 신규 발급 특례, 이동통신과 택시는 받고 패키지 할인은 없다
+    holder:
+      started_on: 2026-08-20
+      options: [{option: package, choice: p1, effective_from: 2026-08-20}]
+    prev_month_spend: 50000
+    payments:
+      - {at: 2026-09-25T10:00, amount: 40000, merchant: kt, billing: autopay, payment_method: physical_card}
+      - {at: 2026-09-26T09:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-27T22:00, amount: 12000, category: taxi, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {telecom-10: 4000}, counted: 0}
+      - {payment: 1, benefits: {}, counted: 10000, warnings: [tier_not_met]}
+      - {payment: 2, benefits: {taxi-10: 1200}, counted: 0}
+    calc: 발급 8월이라 9월 말일까지 특례 30만 구간. KT 40,000 × 10% = 4,000, 택시 12,000 × 10% = 1,200. 패키지 할인은 혜택별 특례 구간이 0이고 전월 50,000도 0 구간이라 스타벅스 50% 없음, 실적 인정
+
+  - name: 영화 1만원 하한, 일 1회, 월 2회
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-04T14:00, amount: 9900, merchant: cgv, payment_method: physical_card}
+      - {at: 2026-09-05T14:00, amount: 12000, merchant: cgv, payment_method: physical_card}
+      - {at: 2026-09-05T20:00, amount: 15000, merchant: lotte_cinema, payment_method: physical_card}
+      - {at: 2026-09-06T14:00, amount: 10000, merchant: cgv, payment_method: physical_card}
+      - {at: 2026-09-20T14:00, amount: 20000, merchant: lotte_cinema, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 9900}
+      - {payment: 1, benefits: {movie-5000: 5000}, counted: 0, warnings: [check_conditions]}
+      - {payment: 2, benefits: {}, counted: 15000, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {movie-5000: 5000}, counted: 0}
+      - {payment: 4, benefits: {}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 9,900은 1만원 미만이라 0이고 횟수도 쓰지 않는다. 12,000은 5,000 정액. 같은 날 두 번째는 일 1회로 0. 10,000은 하한 이상이라 5,000. 월 2회를 채워 20일은 0. 할인 못 받은 건은 실적 인정, 받은 건은 0
+
+  - name: 패키지1 스타벅스 50% 한도 직전과 직후
+    holder:
+      options: [{option: package, choice: p1, effective_from: 2026-08-01}]
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-02T08:00, amount: 18000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-03T08:00, amount: 3000, merchant: starbucks, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pkg-starbucks-50: 9000}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {pkg-starbucks-50: 1000}, counted: 0, warnings: [limit_exhausted]}
+    calc: 18,000 × 50% = 9,000. 사이렌오더 3,000 × 50% = 1,500이나 월 한도 10,000 − 9,000 = 1,000 남아 1,000. 할인 건 실적 0
+
+  - name: 패키지4 커피전문점 30%와 스타벅스가 커피 한도를 같이 쓴다
+    holder:
+      options: [{option: package, choice: p4, effective_from: 2026-08-01}]
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-02T08:00, amount: 20000, merchant: twosome, payment_method: physical_card}
+      - {at: 2026-09-09T08:00, amount: 15000, merchant: starbucks, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pkg-coffee-30: 6000}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {pkg-coffee-30-starbucks: 4000}, counted: 0, warnings: [limit_exhausted]}
+    calc: 투썸 20,000 × 30% = 6,000. 스타벅스 15,000 × 30% = 4,500이나 커피 공유 한도 10,000 − 6,000 = 4,000 남아 4,000. 할인 건 실적 0
+
+  - name: 패키지1 오픈마켓 7% 한도와 소셜커머스 1% 적립
+    holder:
+      options: [{option: package, choice: p1, effective_from: 2026-08-01}]
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-12T21:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+      - {at: 2026-09-20T21:00, amount: 40000, merchant: eleven_st, channel: online, payment_method: physical_card}
+      - {at: 2026-09-21T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pkg-openmarket-7: 3500}, counted: 0}
+      - {payment: 1, benefits: {pkg-openmarket-7: 1500}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {pkg-social-1p: 300}, counted: 30000}
+    calc: G마켓 50,000 × 7% = 3,500. 11번가 40,000 × 7% = 2,800이나 한도 5,000 − 3,500 = 1,500 남아 1,500. 패키지1의 쿠팡은 1% 적립 300P이고 적립 건은 실적 인정
+
+  - name: 패키지2 소셜커머스 7%, 오픈마켓과 트렌디숍 1% 적립
+    holder:
+      options: [{option: package, choice: p2, effective_from: 2026-08-01}]
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-05T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+      - {at: 2026-09-06T21:00, amount: 45678, merchant: gmarket, channel: online, payment_method: physical_card}
+      - {at: 2026-09-07T15:00, amount: 25000, merchant: uniqlo, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pkg-social-7: 2100}, counted: 0}
+      - {payment: 1, benefits: {pkg-openmarket-1p: 456}, counted: 45678}
+      - {payment: 2, benefits: {pkg-trendy-1p: 250}, counted: 25000}
+    calc: 쿠팡 30,000 × 7% = 2,100. G마켓 45,678 × 1% = 456.78, 버림 456P. 유니클로 25,000 × 1% = 250P. 할인 건은 실적 0, 적립 건은 실적 인정
+
+  - name: 패키지3 트렌디숍 7%와 편의점, 오픈마켓과 소셜커머스 1% 적립
+    holder:
+      options: [{option: package, choice: p3, effective_from: 2026-08-01}]
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-05T15:00, amount: 20000, merchant: olive_young, payment_method: physical_card}
+      - {at: 2026-09-06T22:00, amount: 8000, merchant: cu, payment_method: physical_card}
+      - {at: 2026-09-07T21:00, amount: 10000, merchant: tmon, channel: online, payment_method: physical_card}
+      - {at: 2026-09-08T21:00, amount: 20000, merchant: auction, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pkg-trendy-7: 1400}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {pkg-trendy-7: 560}, counted: 0}
+      - {payment: 2, benefits: {pkg-social-1p: 100}, counted: 10000}
+      - {payment: 3, benefits: {pkg-openmarket-1p: 200}, counted: 20000}
+    calc: 올리브영 20,000 × 7% = 1,400. 편의점 업종 CU 8,000 × 7% = 560. 쇼핑 한도 5,000 안. 티몬 10,000 × 1% = 100P, 옥션 20,000 × 1% = 200P
+
+  - name: 0 구간은 패키지 할인 없고 적립만 받는다
+    holder:
+      options: [{option: package, choice: p5, effective_from: 2026-08-01}]
+    prev_month_spend: 250000
+    payments:
+      - {at: 2026-09-05T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+      - {at: 2026-09-06T15:00, amount: 10000, merchant: olive_young, payment_method: physical_card}
+      - {at: 2026-09-07T21:00, amount: 20000, merchant: gmarket, channel: online, payment_method: physical_card}
+      - {at: 2026-09-08T08:00, amount: 10000, merchant: twosome, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 30000, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {pkg-trendy-1p: 100}, counted: 10000}
+      - {payment: 2, benefits: {pkg-openmarket-1p: 200}, counted: 20000}
+      - {payment: 3, benefits: {}, counted: 10000, warnings: [tier_not_met]}
+    calc: 전월 250,000은 0 구간. 패키지5의 쿠팡 7%와 커피 30%는 30만 구간부터라 0. 적립은 구간 조건이 없어 올리브영 10,000 × 1% = 100P, G마켓 20,000 × 1% = 200P
+
+  - name: 해외 1.3% 적립은 구간과 한도 없음, 결제수단을 모르면 없음
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-09-10T15:00, amount: 12345, category: other, region: overseas, payment_method: physical_card}
+      - {at: 2026-09-11T15:00, amount: 50000, category: other, region: overseas}
+    expect:
+      - {payment: 0, benefits: {overseas-1-3p: 160}, counted: 12345, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 50000, warnings: [needs_input]}
+    calc: 12,345 × 1.3% = 160.485, 버림 160P. 적립 건은 실적 인정. 결제수단을 모르면 모바일티머니 제외 조건이 모름이라 0으로 계산하고 묻는다
+
+  - name: 패키지를 고르지 않았으면 패키지 혜택은 모름
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-10T08:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000, warnings: [needs_input]}
+    calc: 옵션을 고르지 않아 스타벅스 50%와 커피 30%가 모두 모름이라 0. 할인이 없어 실적 인정
+
+  - name: 무이자할부는 할인과 적립 모두 없음, 아파트관리비는 실적 제외
+    holder:
+      options: [{option: package, choice: p2, effective_from: 2026-08-01}]
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-14T21:00, amount: 90000, merchant: coupang, channel: online, payment_method: physical_card, installment_months: 3, interest_free: true}
+      - {at: 2026-09-25T09:00, amount: 200000, category: apartment_fee, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 90000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 무이자할부는 삼성 모든 혜택 공통 제외라 소셜 7%도 없다. 실적은 무이자할부도 넣어 90,000. 아파트관리비는 걸리는 혜택이 없고 실적 제외 0

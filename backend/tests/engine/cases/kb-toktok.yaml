@@ -1,0 +1,85 @@
+card: kb-toktok
+cases:
+  - name: 스타벅스 간편결제 1만원은 50%와 10%가 겹치고, 결제수단을 모르면 50%만
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-03T08:30, amount: 10000, merchant: starbucks, payment_method: kakao_pay}
+      - {at: 2026-09-10T08:30, amount: 10000, merchant: starbucks}
+    expect:
+      - {payment: 0, benefits: {starbucks-50: 5000, pay-10: 1000}, counted: 0, warnings: [not_counted_toward_spend, check_conditions]}
+      - {payment: 1, benefits: {starbucks-50: 5000}, counted: 0, warnings: [needs_input]}
+    calc: 전월 300,000은 30만 구간 하한. 10,000 × 50% = 5,000과 pay 묶음 10,000 × 10% = 1,000을 더해 6,000. 두 번째는 결제수단이 없어 payment_not이 모름이라 50%만 5,000이고 스타벅스 월 1만 한도를 딱 채움. 혜택 받은 결제라 exclude_applied 1로 실적 0
+  - name: 스타벅스 월 1만원 한도가 결제 도중 끝남
+    prev_month_spend: 450000
+    payments:
+      - {at: 2026-09-02T09:00, amount: 12000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-09T09:00, amount: 9000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-16T09:00, amount: 5000, merchant: starbucks, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {starbucks-50: 6000}, counted: 0}
+      - {payment: 1, benefits: {starbucks-50: 4000}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, warnings: [limit_exhausted]}
+    calc: 12,000 × 50% = 6,000. 9,000 × 50% = 4,500이지만 월 10,000 − 6,000 = 4,000 남아 4,000. 세 번째 5,000은 잔여 0이라 0
+  - name: 버거·패스트푸드 20%는 업종과 가맹점 둘 다, 월 5천원 한도
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-04T12:30, amount: 8900, merchant: moms_touch, payment_method: physical_card}
+      - {at: 2026-09-11T12:30, amount: 20000, merchant: burger_king, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {burger-20: 1780}, counted: 0}
+      - {payment: 1, benefits: {burger-20: 3220}, counted: 0, warnings: [limit_exhausted]}
+    calc: 맘스터치는 패스트푸드 업종이라 8,900 × 20% = 1,780. 버거킹 20,000 × 20% = 4,000이지만 월 5,000 − 1,780 = 3,220 남아 3,220
+  - name: 간편결제 10% 월 5천원 한도, 실물카드는 빠짐
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-05T20:00, amount: 30000, merchant: gmarket, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-12T15:00, amount: 30000, merchant: olive_young, payment_method: samsung_pay}
+      - {at: 2026-09-13T15:00, amount: 20000, merchant: olive_young, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pay-10: 3000}, counted: 0}
+      - {payment: 1, benefits: {pay-10: 2000}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 20000}
+    calc: 30,000 × 10% = 3,000. 30,000 × 10% = 3,000이지만 월 5,000 − 3,000 = 2,000. 실물카드는 payment_not에 걸려 없고 혜택이 없어 실적 20,000
+  - name: 대중교통·택시와 이동통신이 basic 월 5천원을 같이 씀
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-01T08:10, amount: 1450, category: transit.subway, payment_method: physical_card}
+      - {at: 2026-09-01T18:20, amount: 1500, category: transit.bus_city, payment_method: physical_card}
+      - {at: 2026-09-05T23:40, amount: 12300, merchant: kakao_t, payment_method: samsung_pay}
+      - {at: 2026-09-20T10:00, amount: 45000, merchant: kt, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {basic-10: 145}, counted: 0, warnings: [assumed_value, not_counted_toward_spend]}
+      - {payment: 1, benefits: {basic-10: 150}, counted: 0}
+      - {payment: 2, benefits: {basic-10: 1230, pay-10: 1230}, counted: 0}
+      - {payment: 3, benefits: {basic-telecom-10: 3475}, counted: 0, warnings: [limit_exhausted]}
+    calc: 지하철 1,450 × 10% = 145, 버스 1,500 × 10% = 150, 택시 12,300 × 10% = 1,230에 삼성페이 pay 묶음 1,230을 더함. KT 45,000 × 10% = 4,500이지만 basic 공유 5,000 − 1,525 = 3,475. 지하철은 실적 제외 업종이고 나머지는 혜택 받아 실적 0
+  - name: 받는 혜택이 없는 결제. 알뜰폰, 시외버스, 무이자할부, 세금, 상품권
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-10T09:00, amount: 33000, merchant: liiv_m, payment_method: physical_card}
+      - {at: 2026-09-11T07:00, amount: 15000, category: transit.bus_intercity, payment_method: physical_card}
+      - {at: 2026-09-12T14:00, amount: 300000, merchant: olive_young, installment_months: 3, interest_free: true, payment_method: kakao_pay}
+      - {at: 2026-09-15T11:00, amount: 100000, category: tax, payment_method: physical_card}
+      - {at: 2026-09-16T11:00, amount: 50000, category: gift_card, payment_method: kakao_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 33000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 300000}
+      - {payment: 3, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 4, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 리브엠은 이동통신 대상 가맹점이 아니라 없음. 시외버스는 대상이 아니고 대중교통이라 실적 제외. 무이자할부는 공통 제외 when_any라 간편결제 10%도 없지만 실적에는 넣음. 세금과 상품권은 할인과 실적 모두 제외
+  - name: 전월 299,999원이면 30만 구간 미달
+    prev_month_spend: 299999
+    payments:
+      - {at: 2026-09-03T08:30, amount: 10000, merchant: starbucks, payment_method: kakao_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000, warnings: [tier_not_met]}
+    calc: 전월 299,999 < 300,000이라 0 구간. 스타벅스 50%와 간편결제 10% 모두 30만 구간부터라 0. 혜택이 없어 실적 10,000
+  - name: 8월에 쓰기 시작한 카드는 9월까지 신규 발급 특례로 30만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-08-20}
+    payments:
+      - {at: 2026-09-25T08:30, amount: 10000, merchant: starbucks, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {starbucks-50: 5000}, counted: 0}
+    calc: 특례 기간은 쓰기 시작한 8월부터 9월 말일까지라 new_card.tier 300,000이 전월 추정 0의 0 구간보다 큼. 10,000 × 50% = 5,000

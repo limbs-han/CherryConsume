@@ -1,0 +1,216 @@
+card: shinhan-mrlife
+cases:
+  - name: 주말 이마트 5만원, 30만 구간
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-05T11:00, amount: 50000, merchant: emart}
+    expect:
+      - {payment: 0, benefits: {weekend-mart: 3000}, counted: 50000, warnings: [check_conditions, assumed_value, limit_exhausted]}
+    calc: 50,000 × 10% = 5,000. 1회 5만원까지라 그대로. 주말 공유 한도 30만 구간 3,000원이라 3,000
+
+  - name: 주말 마트와 주유가 공유 한도 7천원을 나눠 쓴다, 50만 구간
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-05T10:00, amount: 60000, merchant: emart}
+      - {at: 2026-09-06T15:00, amount: 100000, merchant: sk_energy}
+      - {at: 2026-09-12T11:00, amount: 20000, merchant: lotte_mart}
+    expect:
+      - {payment: 0, benefits: {weekend-mart: 5000}, counted: 60000, warnings: [check_conditions, assumed_value]}
+      - {payment: 1, benefits: {weekend-fuel: 2000}, counted: 100000, warnings: [check_conditions, limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 0번 1회 5만원까지 50,000 × 10% = 5,000. 1번 100,000 ÷ 1,858원 × 60원 = 3,229.28 버림 3,229이나 주말 한도 7,000 − 5,000 = 2,000 남아 2,000. 2번 2,000이나 주말 한도 0 남아 0
+
+  - name: 주말 주유 월 승인 30만원 한도가 결제 도중 끝나고 일 1회, 100만 구간
+    prev_month_spend: 1200000
+    payments:
+      - {at: 2026-09-05T10:00, amount: 100000, merchant: gs_caltex}
+      - {at: 2026-09-06T10:00, amount: 120000, merchant: s_oil}
+      - {at: 2026-09-12T10:00, amount: 80000, merchant: hd_oilbank}
+      - {at: 2026-09-12T18:00, amount: 30000, merchant: gs_caltex}
+      - {at: 2026-09-13T10:00, amount: 50000, merchant: sk_energy}
+      - {at: 2026-09-19T10:00, amount: 50000, merchant: sk_energy}
+    expect:
+      - {payment: 0, benefits: {weekend-fuel: 3229}, counted: 100000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {weekend-fuel: 3229}, counted: 120000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {weekend-fuel: 2583}, counted: 80000, warnings: [check_conditions]}
+      - {payment: 3, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+      - {payment: 4, benefits: {weekend-fuel: 645}, counted: 50000, warnings: [check_conditions, limit_exhausted]}
+      - {payment: 5, benefits: {}, counted: 50000, warnings: [limit_exhausted]}
+    calc: 리터를 중간에 자르지 않고 금액 × 60 ÷ 1,858 뒤 버림. 0번 100,000 → 3,229. 1번 1회 10만원까지 100,000 → 3,229. 2번 80,000 → 2,583.42 → 2,583. 3번 같은 날 두 번째라 일 1회로 0. 4번 월 승인 누계 280,000이라 20,000만 넣어 20,000 × 60 ÷ 1,858 = 645.86 → 645. 5번 월 승인 30만원 다 써서 0. 주말 한도 누계 9,686으로 1만원 안
+
+  - name: 월납 할인 일 1회와 월납 한도 7천원, 50만 구간
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-10T09:00, amount: 60000, merchant: kt}
+      - {at: 2026-09-10T10:00, amount: 30000, category: utility.electricity}
+      - {at: 2026-09-11T09:00, amount: 30000, category: utility.gas}
+    expect:
+      - {payment: 0, benefits: {bill-10: 5000}, counted: 60000, warnings: [assumed_value]}
+      - {payment: 1, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {bill-10: 2000}, counted: 30000, warnings: [assumed_value, limit_exhausted]}
+    calc: 0번 1회 5만원까지 50,000 × 10% = 5,000. 1번 같은 날 두 번째라 일 1회로 0. 2번 30,000 × 10% = 3,000이나 월납 한도 50만 구간 7,000 − 5,000 = 2,000 남아 2,000. Mr.Life는 공과금과 통신요금을 실적에서 빼지 않는다
+
+  - name: 편의점 일 1회와 월 5회
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-01T10:00, amount: 12000, merchant: gs25}
+      - {at: 2026-09-01T20:00, amount: 5000, merchant: cu}
+      - {at: 2026-09-02T10:00, amount: 12000, merchant: gs25}
+      - {at: 2026-09-03T10:00, amount: 12000, merchant: gs25}
+      - {at: 2026-09-04T10:00, amount: 12000, merchant: gs25}
+      - {at: 2026-09-05T10:00, amount: 12000, merchant: gs25}
+      - {at: 2026-09-07T10:00, amount: 8000, merchant: cu}
+    expect:
+      - {payment: 0, benefits: {time-convenience: 1000}, counted: 12000}
+      - {payment: 1, benefits: {}, counted: 5000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {time-convenience: 1000}}
+      - {payment: 3, benefits: {time-convenience: 1000}}
+      - {payment: 4, benefits: {time-convenience: 1000}}
+      - {payment: 5, benefits: {time-convenience: 1000}}
+      - {payment: 6, benefits: {}, counted: 8000, warnings: [limit_exhausted]}
+    calc: 1회 1만원까지 10,000 × 10% = 1,000. 1번 같은 날 두 번째라 0. 0, 2~5번이 월 5회를 채워 6번은 0. 통합 한도 누계 5,000으로 1만원 안
+
+  - name: 병원과 약국은 한 영역이라 같은 날 두 번째는 할인 없음
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 8000, category: hospital}
+      - {at: 2026-09-08T10:30, amount: 5000, category: pharmacy}
+      - {at: 2026-09-09T10:00, amount: 4500, category: pharmacy}
+    expect:
+      - {payment: 0, benefits: {time-medical: 800}, counted: 8000}
+      - {payment: 1, benefits: {}, counted: 5000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {time-medical: 450}, counted: 4500}
+    calc: 0번 8,000 × 10% = 800. 1번 병원·약국 한 영역 일 1회로 0. 2번 다음 날 4,500 × 10% = 450
+
+  - name: 세탁소 1회 1만원까지, 무이자할부도 할인
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 15000, category: laundry}
+      - {at: 2026-09-09T10:00, amount: 10000, category: laundry, installment_months: 3, interest_free: true}
+    expect:
+      - {payment: 0, benefits: {time-laundry: 1000}, counted: 15000}
+      - {payment: 1, benefits: {time-laundry: 1000}, counted: 10000}
+    calc: 0번 1회 1만원까지 10,000 × 10% = 1,000. 1번 10,000 × 10% = 1,000. Mr.Life는 무이자할부 제외가 없고 할부는 결제한 달에 전액 실적
+
+  - name: 야간 온라인쇼핑은 21시부터 9시까지
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T20:59, amount: 25000, merchant: coupang, channel: online}
+      - {at: 2026-09-08T21:00, amount: 25000, merchant: coupang, channel: online}
+      - {at: 2026-09-09T08:59, amount: 8000, merchant: gmarket, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 25000}
+      - {payment: 1, benefits: {time-night-shopping: 1000}, counted: 25000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {time-night-shopping: 800}, counted: 8000, warnings: [check_conditions]}
+    calc: 0번 20시 59분이라 시간 밖. 1번 1회 1만원까지 10,000 × 10% = 1,000. 2번 다음 날 8시 59분이라 새 날 1회 8,000 × 10% = 800
+
+  - name: 야간 택시가 자정을 넘긴다
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T23:40, amount: 13500, category: taxi}
+      - {at: 2026-09-09T00:30, amount: 7200, category: taxi}
+      - {at: 2026-09-10T09:30, amount: 7200, category: taxi}
+    expect:
+      - {payment: 0, benefits: {time-night-taxi: 1000}, counted: 13500}
+      - {payment: 1, benefits: {time-night-taxi: 720}, counted: 7200}
+      - {payment: 2, benefits: {}, counted: 7200}
+    calc: 0번 1회 1만원까지 10,000 × 10% = 1,000. 1번 0시 30분은 21~9시 안이고 날이 바뀌어 7,200 × 10% = 720. 2번 9시 30분은 시간 밖
+
+  - name: 야간 식음료 일 1회와 부모 업종 음식점
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-08T21:30, amount: 6500, merchant: starbucks}
+      - {at: 2026-09-08T22:30, amount: 20000, category: restaurant.general}
+      - {at: 2026-09-09T22:00, amount: 15000, category: restaurant}
+      - {at: 2026-09-10T22:00, amount: 9000, category: restaurant.fastfood}
+    expect:
+      - {payment: 0, benefits: {time-night-food: 650}, counted: 6500}
+      - {payment: 1, benefits: {}, counted: 20000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {}, counted: 15000, warnings: [needs_input]}
+      - {payment: 3, benefits: {time-night-food: 900}, counted: 9000}
+    calc: 0번 6,500 × 10% = 650. 1번 커피와 음식점은 한 영역이라 같은 날 두 번째 0. 2번 업종이 restaurant까지만 알려져 대상인 일반음식점·패스트푸드에 맞는지 모름이라 0. 3번 9,000 × 10% = 900
+
+  - name: TIME 통합 한도 1만원이 결제 도중 끝난다, 30만 구간
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-01T10:00, amount: 10000, merchant: gs25}
+      - {at: 2026-09-01T12:00, amount: 10000, category: laundry}
+      - {at: 2026-09-02T10:00, amount: 10000, merchant: gs25}
+      - {at: 2026-09-02T12:00, amount: 10000, category: laundry}
+      - {at: 2026-09-03T10:00, amount: 10000, merchant: gs25}
+      - {at: 2026-09-03T12:00, amount: 10000, category: laundry}
+      - {at: 2026-09-04T10:00, amount: 10000, merchant: gs25}
+      - {at: 2026-09-04T12:00, amount: 10000, category: laundry}
+      - {at: 2026-09-05T10:00, amount: 10000, merchant: gs25}
+      - {at: 2026-09-05T12:00, amount: 5000, category: laundry}
+      - {at: 2026-09-06T10:00, amount: 10000, category: hospital}
+      - {at: 2026-09-07T22:00, amount: 10000, category: taxi}
+    expect:
+      - {payment: 0, benefits: {time-convenience: 1000}}
+      - {payment: 1, benefits: {time-laundry: 1000}}
+      - {payment: 2, benefits: {time-convenience: 1000}}
+      - {payment: 3, benefits: {time-laundry: 1000}}
+      - {payment: 4, benefits: {time-convenience: 1000}}
+      - {payment: 5, benefits: {time-laundry: 1000}}
+      - {payment: 6, benefits: {time-convenience: 1000}}
+      - {payment: 7, benefits: {time-laundry: 1000}}
+      - {payment: 8, benefits: {time-convenience: 1000}}
+      - {payment: 9, benefits: {time-laundry: 500}}
+      - {payment: 10, benefits: {time-medical: 500}, counted: 10000, warnings: [limit_exhausted]}
+      - {payment: 11, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 0~8번 1,000씩 9,000. 9번 5,000 × 10% = 500으로 9,500. 10번 1,000이나 통합 30만 구간 10,000 − 9,500 = 500 남아 500. 11번 통합 한도 다 써서 0. 편의점과 세탁소는 각각 월 5회 안
+
+  - name: 인테이크몰 20% 월 4회
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-02T14:00, amount: 30000, merchant: shop_intake, channel: online}
+      - {at: 2026-09-09T14:00, amount: 30000, merchant: shop_intake, channel: online}
+      - {at: 2026-09-16T14:00, amount: 30000, merchant: shop_intake, channel: online}
+      - {at: 2026-09-23T14:00, amount: 30000, merchant: shop_intake, channel: online}
+      - {at: 2026-09-30T14:00, amount: 30000, merchant: shop_intake, channel: online}
+    expect:
+      - {payment: 0, benefits: {intake-20: 6000}, counted: 30000, warnings: [check_conditions, assumed_value]}
+      - {payment: 1, benefits: {intake-20: 6000}}
+      - {payment: 2, benefits: {intake-20: 6000}}
+      - {payment: 3, benefits: {intake-20: 6000}}
+      - {payment: 4, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 30,000 × 20% = 6,000. 금액 한도 없이 월 4회라 4번은 0. 인테이크몰은 TIME 통합 한도를 쓰지 않는다
+
+  - name: 전월 299,999원이면 0 구간이라 할인 없음
+    prev_month_spend: 299999
+    payments:
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000, warnings: [tier_not_met]}
+    calc: 299,999원은 30만 구간 하한 1원 아래라 0 구간. 모든 혜택이 30만 구간부터라 0
+
+  - name: 전월 300,000원이면 30만 구간
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-09-08T10:00, amount: 10000, merchant: gs25}
+    expect:
+      - {payment: 0, benefits: {time-convenience: 1000}, counted: 10000}
+    calc: 30만 구간 하한과 같아 30만 구간. 10,000 × 10% = 1,000
+
+  - name: 신규 발급 특례로 첫 달 30만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-03}
+    payments:
+      - {at: 2026-09-04T10:00, amount: 5000, merchant: gs25}
+    expect:
+      - {payment: 0, benefits: {time-convenience: 500}, counted: 5000}
+    calc: 전월 0원이라 기본 0 구간이나 쓰기 시작한 9월이 특례 기간이라 30만 구간. 5,000 × 10% = 500
+
+  - name: 평일 마트, 실적 제외 업종, 교통은 다음 달 실적
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-24T12:00, amount: 50000, merchant: emart}
+      - {at: 2026-09-24T13:00, amount: 50000, category: gift_card}
+      - {at: 2026-09-25T08:00, amount: 1400, category: transit.subway}
+      - {at: 2026-09-25T10:00, amount: 30000, category: prepaid_charge}
+    expect:
+      - {payment: 0, benefits: {}, counted: 50000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 1400}
+      - {payment: 3, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 0번 9월 24일 목요일은 추석 연휴지만 holidays ignore라 요일만 보고 토·일이 아니라 0. 1번 상품권, 3번 선불 충전은 실적 제외라 0. 2번 지하철 1,400원은 month_offset 1로 10월 실적에 들어간다

@@ -1,0 +1,60 @@
+card: woori-every-point
+cases:
+  - name: 0 구간은 기본 0.8%만, 원 미만 버림
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-09-03T21:00, amount: 12345, merchant: coupang, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {all-0-8: 98}, counted: 12345, warnings: [tier_not_met, check_conditions]}
+    calc: 12,345 × 0.8% = 98.76 → 98P. 간편결제 추가 적립은 40만 구간부터라 없음
+
+  - name: 40만 구간 하한에서 간편결제 온라인 2% 추가
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-04T21:00, amount: 50000, merchant: coupang, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {all-0-8: 400, easypay-online-2: 1000}, counted: 50000, warnings: [check_conditions]}
+    calc: 기본 50,000 × 0.8% = 400P. 추가 적립은 다른 묶음 extra라 더해서 50,000 × 2% = 1,000P. 합 2.8%
+
+  - name: 40만 구간 추가 적립 통합 한도 1만P 직전과 직후
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-05T21:00, amount: 480000, merchant: coupang, channel: online, payment_method: kakao_pay}
+      - {at: 2026-09-12T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: woori_won_pay}
+      - {at: 2026-09-19T21:00, amount: 10000, merchant: coupang, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {all-0-8: 3840, easypay-online-2: 9600}, counted: 480000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {all-0-8: 240, easypay-online-2: 400}, counted: 30000, warnings: [limit_exhausted, check_conditions]}
+      - {payment: 2, benefits: {all-0-8: 80}, counted: 10000, warnings: [limit_exhausted, check_conditions]}
+    calc: 480,000 × 0.8% = 3,840, × 2% = 9,600. 30,000 × 2% = 600인데 한도 10,000 − 9,600 = 400. 셋째는 추가 한도가 없어 기본 10,000 × 0.8% = 80만. 기본 적립은 한도 없음
+
+  - name: 80만 구간, 결제수단 모름과 오프라인과 해외는 기본만
+    prev_month_spend: 800000
+    payments:
+      - {at: 2026-09-06T21:00, amount: 20000, merchant: coupang, channel: online}
+      - {at: 2026-09-07T12:00, amount: 20000, merchant: emart, channel: offline, payment_method: naver_pay}
+      - {at: 2026-09-08T12:00, amount: 100000, category: online_shopping, channel: online, region: overseas, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {all-0-8: 160}, counted: 20000, warnings: [needs_input, check_conditions]}
+      - {payment: 1, benefits: {all-0-8: 160}, counted: 20000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {all-0-8: 800}, counted: 100000, warnings: [check_conditions]}
+    calc: 결제수단을 모르면 payment 조건을 거짓으로 보고 기본 20,000 × 0.8% = 160. 매장 네이버페이는 channel, 해외 직구는 region 조건에 걸려 기본만. 100,000 × 0.8% = 800
+
+  - name: 무이자할부와 아파트관리비는 적립과 실적에서 빠진다
+    prev_month_spend: 800000
+    payments:
+      - {at: 2026-09-10T20:00, amount: 300000, merchant: coupang, channel: online, installment_months: 3, interest_free: true, payment_method: naver_pay}
+      - {at: 2026-09-25T09:00, amount: 200000, category: apartment_fee, channel: online, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 무이자할부는 공통 제외 when_any와 실적 interest_free exclude로 0. 아파트관리비는 공통 제외 업종이자 실적 제외 업종
+
+  - name: 신규 사용등록 특례로 추가 적립 40만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-09-02}
+    payments:
+      - {at: 2026-09-03T21:00, amount: 30000, merchant: coupang, channel: online, payment_method: kakao_pay}
+    expect:
+      - {payment: 0, benefits: {all-0-8: 240, easypay-online-2: 600}, counted: 30000, warnings: [check_conditions]}
+    calc: 사용등록일 9월 2일부터 10월 31일까지 특례 40만 구간. 30,000 × 0.8% = 240, × 2% = 600

@@ -1,0 +1,750 @@
+card: ibk-narasarang
+cases:
+  - name: All in One 항목들이 25만 구간 통합한도 1만원을 나눠 쓴다
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-01T13:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-02T12:00, amount: 12000, merchant: kakao_t}
+      - {at: 2026-10-02T13:00, amount: 12000, category: hospital}
+      - {at: 2026-10-06T12:00, amount: 12000, merchant: starbucks}
+      - {at: 2026-10-06T13:00, amount: 12000, merchant: coupang, channel: online}
+      - {at: 2026-10-07T12:00, amount: 12000, category: pc_room}
+      - {at: 2026-10-07T13:00, amount: 14900, merchant: youtube_premium, channel: online, billing: subscription}
+      - {at: 2026-10-08T12:00, amount: 12000, merchant: baemin, channel: online}
+      - {at: 2026-10-08T18:00, amount: 1550, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-12T12:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-13T08:00, amount: 1550, category: transit.subway, billing: postpaid_transit}
+    expect:
+      - {payment: 0, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 1, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 2, benefits: {aio-taxi: 1000}, counted: 12000}
+      - {payment: 3, benefits: {aio-medical: 1000}, counted: 12000}
+      - {payment: 4, benefits: {aio-cafe: 1000}, counted: 12000}
+      - {payment: 5, benefits: {aio-shopping: 1000}, counted: 12000}
+      - {payment: 6, benefits: {aio-leisure: 1000}, counted: 12000}
+      - {payment: 7, benefits: {aio-subscription: 1000}, counted: 14900}
+      - {payment: 8, benefits: {aio-shopping: 1000}, counted: 12000}
+      - {payment: 9, benefits: {aio-transit: 310}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 10, benefits: {aio-convenience: 690}, counted: 12000, warnings: [limit_exhausted]}
+      - {payment: 11, benefits: {}, counted: 0, warnings: [not_counted_toward_spend, limit_exhausted]}
+    calc: 25만 구간 통합한도 10,000. 앞 아홉 건은 10%가 1,200 이상이라 건당 1,000씩 9,000, 지하철 1,550 × 20% = 310으로 9,310, 편의점 12,000 × 10% = 1,200은 건당 1,000이지만 통합 잔여 690, 마지막 지하철 310은 통합 잔여 0이라 0. 지하철은 교통카드 이용이라 실적 0
+
+  - name: All in One 대중교통 20%는 후불교통만
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T08:00, amount: 1550, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-01T18:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+      - {at: 2026-10-02T08:00, amount: 1550, category: transit.subway, billing: normal}
+    expect:
+      - {payment: 0, benefits: {aio-transit: 310}, counted: 0, warnings: [not_counted_toward_spend, assumed_value]}
+      - {payment: 1, benefits: {aio-transit: 300}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+    calc: 25만 구간. 1,550 × 20% = 310, 1,500 × 20% = 300. 후불교통이 아닌 지하철은 0. 사랑 대중교통은 20만 구간까지라 없다. 교통카드 이용은 실적 제외
+
+  - name: All in One 편의점 1일 2회와 건당 1천원
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T09:00, amount: 4321, merchant: cu}
+      - {at: 2026-10-01T12:00, amount: 7000, merchant: cu}
+      - {at: 2026-10-01T18:00, amount: 8000, merchant: cu}
+      - {at: 2026-10-02T09:00, amount: 15000, merchant: cu}
+    expect:
+      - {payment: 0, benefits: {aio-convenience: 432}, counted: 4321}
+      - {payment: 1, benefits: {aio-convenience: 700}, counted: 7000}
+      - {payment: 2, benefits: {}, counted: 8000, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {aio-convenience: 1000}, counted: 15000}
+    calc: 25만 구간. 4,321 × 10% = 432.1 원 미만 버림 432, 7,000 × 10% = 700, 같은 날 세 번째는 1일 2회라 0, 다음 날 15,000 × 10% = 1,500은 건당 1,000. 나라 편의점은 20만 구간까지라 없다
+
+  - name: All in One 편의점 월 10회
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-10-01T09:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-01T18:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-02T09:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-02T18:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-03T09:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-03T18:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-04T09:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-04T18:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-05T09:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-05T18:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-06T09:00, amount: 12000, merchant: cu}
+    expect:
+      - {payment: 0, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 1, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 2, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 3, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 4, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 5, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 6, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 7, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 8, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 9, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 10, benefits: {}, counted: 12000, warnings: [limit_exhausted]}
+    calc: 50만 구간 통합한도 25,000. 12,000 × 10% = 1,200은 건당 1,000, 하루 두 번씩 열 번 10,000. 열한 번째는 월 10회라 0
+
+  - name: All in One 택시 1일 1회와 월 2회
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T08:00, amount: 8500, merchant: kakao_t}
+      - {at: 2026-10-01T22:00, amount: 6000, merchant: kakao_t}
+      - {at: 2026-10-02T08:00, amount: 4999, merchant: kakao_t}
+      - {at: 2026-10-03T08:00, amount: 9000, merchant: kakao_t}
+    expect:
+      - {payment: 0, benefits: {aio-taxi: 850}, counted: 8500}
+      - {payment: 1, benefits: {}, counted: 6000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {aio-taxi: 499}, counted: 4999}
+      - {payment: 3, benefits: {}, counted: 9000, warnings: [limit_exhausted]}
+    calc: 25만 구간. 8,500 × 10% = 850, 같은 날 두 번째는 1일 1회라 0, 4,999 × 10% = 499.9 버림 499, 네 번째는 월 2회라 0. 마이태그 택시는 사실을 몰라 없다
+
+  - name: All in One 병원·약국 합산 1일 1회와 월 2회
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T10:00, amount: 9000, category: hospital}
+      - {at: 2026-10-01T11:00, amount: 5500, category: pharmacy}
+      - {at: 2026-10-02T10:00, amount: 5500, category: pharmacy}
+      - {at: 2026-10-05T10:00, amount: 20000, category: hospital}
+    expect:
+      - {payment: 0, benefits: {aio-medical: 900}, counted: 9000}
+      - {payment: 1, benefits: {}, counted: 5500, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {aio-medical: 550}, counted: 5500}
+      - {payment: 3, benefits: {}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 25만 구간. 병원 9,000 × 10% = 900, 같은 날 약국은 병원·약국 합산 1일 1회라 0, 다음 날 약국 5,500 × 10% = 550, 네 번째는 월 2회라 0
+
+  - name: All in One 카페 스타벅스와 메가MGC 합산 월 2회
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T09:00, amount: 6100, merchant: starbucks}
+      - {at: 2026-10-02T09:00, amount: 3000, merchant: mega_coffee}
+      - {at: 2026-10-05T09:00, amount: 8000, merchant: starbucks}
+    expect:
+      - {payment: 0, benefits: {aio-cafe: 610}, counted: 6100}
+      - {payment: 1, benefits: {aio-cafe: 300}, counted: 3000}
+      - {payment: 2, benefits: {}, counted: 8000, warnings: [limit_exhausted]}
+    calc: 25만 구간. 6,100 × 10% = 610, 매장 메가MGC 3,000 × 10% = 300. 메가오더 할인은 온라인만이라 없다. 세 번째는 월 2회라 0
+
+  - name: All in One 구독은 자동납부와 정기결제만
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T09:00, amount: 13500, merchant: netflix, channel: online}
+      - {at: 2026-10-02T09:00, amount: 11000, merchant: app_store, channel: online, billing: in_app}
+      - {at: 2026-10-03T09:00, amount: 5500, merchant: tving, channel: online, billing: subscription}
+      - {at: 2026-10-04T09:00, amount: 3000, merchant: naver_webtoon, channel: online, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {aio-subscription: 1000}, counted: 13500}
+      - {payment: 1, benefits: {}, counted: 11000}
+      - {payment: 2, benefits: {aio-subscription: 550}, counted: 5500}
+      - {payment: 3, benefits: {}, counted: 3000, warnings: [limit_exhausted]}
+    calc: 25만 구간. 넷플릭스는 가맹점 기본 정기결제라 13,500 × 10% = 1,350은 건당 1,000, 앱스토어 인앱결제는 0, 티빙 5,500 × 10% = 550, 네 번째는 월 2회라 0
+
+  - name: All in One 여행·레저 합산 월 2회
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T20:00, amount: 3456, category: pc_room}
+      - {at: 2026-10-02T20:00, amount: 24999, merchant: yanolja, channel: online, payment_method: physical_card}
+      - {at: 2026-10-03T20:00, amount: 30000, merchant: socar, channel: online}
+    expect:
+      - {payment: 0, benefits: {aio-leisure: 345}, counted: 3456}
+      - {payment: 1, benefits: {aio-leisure: 1000}, counted: 24999}
+      - {payment: 2, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 25만 구간. PC방 3,456 × 10% = 345.6 버림 345, NOL 24,999 × 10% = 2,499는 건당 1,000이고 NOL 적립은 25,000 미만이라 없다, 쏘카는 월 2회라 0
+
+  - name: Npay 25만 구간 1일 1회와 건당 1천원
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 8500, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-01T19:00, amount: 5000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-02T12:00, amount: 12000, category: restaurant.general, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {npay-points: 850}, counted: 8500, warnings: [check_conditions, assumed_value]}
+      - {payment: 1, benefits: {}, counted: 5000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {npay-points: 1000}, counted: 12000}
+    calc: 25만 구간. 8,500 × 10% = 850P, 같은 날 두 번째는 1일 1회라 0, 12,000 × 10% = 1,200P는 건당 1,000P
+
+  - name: Npay 50만 구간 2026년 프로모션 월 7회
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-02T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-03T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-04T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-05T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-06T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-07T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-08T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 1, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 2, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 3, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 4, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 5, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 6, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 7, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 50만 구간 월 7회 7,000P. 10,000 × 10% = 1,000P씩 일곱 번 7,000P, 여덟 번째는 월 7회라 0. 25만 구간이면 다섯 번째까지였다
+
+  - name: 2027년 개정 뒤 Npay는 100만 구간도 월 5회이고 이마트24 현장할인은 끝났다
+    prev_month_spend: 1200000
+    payments:
+      - {at: 2027-01-04T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2027-01-05T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2027-01-06T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2027-01-07T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2027-01-08T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2027-01-09T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2027-01-11T12:00, amount: 9000, merchant: emart24}
+    expect:
+      - {payment: 0, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 1, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 2, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 3, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 4, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 5, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+      - {payment: 6, benefits: {aio-convenience: 900}, counted: 9000}
+    calc: 2027-01-01 개정. 100만 구간이어도 월 5회 5,000P라 1,000P씩 다섯 번, 여섯 번째 0. 이마트24 현장할인은 2026-12-31까지라 없고 9,000 × 10% = 900 편의점 청구할인
+
+  - name: 결제수단을 모르면 Npay와 NOL은 거짓으로 계산한다
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 10000, category: restaurant.general}
+      - {at: 2026-10-02T12:00, amount: 30000, merchant: yanolja, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000, warnings: [needs_input]}
+      - {payment: 1, benefits: {aio-leisure: 1000}, counted: 30000, warnings: [needs_input]}
+    calc: 설계 3.1. 결제수단이 없으면 Npay 조건은 모름이라 0. NOL은 간편결제가 아니어야 해서 모름이라 0이고 여행·레저 30,000 × 10% = 3,000은 건당 1,000
+
+  - name: 쇼핑 할인과 Npay가 같으면 카드 파일에 먼저 적힌 쇼핑 할인
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 8000, merchant: naver_plus_store, channel: online, payment_method: naver_pay}
+      - {at: 2026-10-02T12:00, amount: 9000, merchant: naver_plus_store, channel: online, payment_method: naver_pay}
+      - {at: 2026-10-03T12:00, amount: 7000, merchant: naver_plus_store, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {aio-shopping: 800}, counted: 8000}
+      - {payment: 1, benefits: {aio-shopping: 900}, counted: 9000}
+      - {payment: 2, benefits: {npay-points: 700}, counted: 7000}
+    calc: 같은 main 묶음 best. 8,000 × 10% = 800 대 800P로 같아 먼저 적힌 쇼핑 800, 9,000은 900 대 900P로 쇼핑 900, 세 번째는 쇼핑 월 2회가 끝나 0이라 Npay 7,000 × 10% = 700P
+
+  - name: 신규 발급 특례로 등록 달에 25만 구간
+    prev_month_spend: 0
+    holder: {started_on: 2026-10-02}
+    payments:
+      - {at: 2026-10-05T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-10-06T12:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-07T12:00, amount: 30000, merchant: korail, channel: online}
+    expect:
+      - {payment: 0, benefits: {npay-points: 1000}, counted: 10000}
+      - {payment: 1, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 2, benefits: {nara-rail: 1500}, counted: 30000}
+    calc: 쓰기 시작한 10-02부터 11월 말까지 new_card 25만 구간, 전월 0원보다 크다. Npay 10,000 × 10% = 1,000P, 편의점 12,000 × 10% = 1,200은 건당 1,000, KTX 30,000 × 5% = 1,500
+
+  - name: 신규 발급 특례는 쓰기 시작한 다음 달 말일에 끝난다
+    prev_month_spend: 0
+    holder: {started_on: 2026-08-20}
+    payments:
+      - {at: 2026-10-05T12:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-06T12:00, amount: 10000, category: restaurant.general, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 12000, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {}, counted: 10000, warnings: [tier_not_met]}
+    calc: 8-20 시작이면 특례는 9-30까지. 10월은 전월 0원 0 구간이라 편의점과 Npay 모두 구간 미달 0
+
+  - name: PX 3만원 미만 현역병 월 3회
+    prev_month_spend: 0
+    holder: {facts: {soldier: true, salary_transfer: false}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 20000, merchant: px}
+      - {at: 2026-10-02T12:00, amount: 20000, merchant: px}
+      - {at: 2026-10-05T12:00, amount: 20000, merchant: px}
+      - {at: 2026-10-06T12:00, amount: 20000, merchant: px}
+    expect:
+      - {payment: 0, benefits: {px-under-30k: 3000}, counted: 20000, warnings: [assumed_value]}
+      - {payment: 1, benefits: {px-under-30k: 3000}, counted: 20000}
+      - {payment: 2, benefits: {px-under-30k: 3000}, counted: 20000}
+      - {payment: 3, benefits: {}, counted: 20000, warnings: [limit_exhausted]}
+    calc: 전월실적 조건 없음. 20,000 × 15% = 3,000씩 세 번 9,000으로 월 1만원 안, 네 번째는 현역병 월 3회라 0
+
+  - name: PX 3만원 미만 월 1만원 한도 직전과 직후
+    prev_month_spend: 0
+    holder: {facts: {soldier: true, salary_transfer: false}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 29990, merchant: px}
+      - {at: 2026-10-02T12:00, amount: 29990, merchant: px}
+      - {at: 2026-10-05T12:00, amount: 29999, merchant: px}
+    expect:
+      - {payment: 0, benefits: {px-under-30k: 4498}, counted: 29990}
+      - {payment: 1, benefits: {px-under-30k: 4498}, counted: 29990}
+      - {payment: 2, benefits: {px-under-30k: 1004}, counted: 29999, warnings: [limit_exhausted]}
+    calc: 29,990 × 15% = 4,498.5 버림 4,498 두 번 8,996. 29,999는 3만원 미만이고 × 15% = 4,499.85 버림 4,499지만 월 1만원 잔여 1,004
+
+  - name: PX 3만원 미만 병 급여이체자 월 6회
+    prev_month_spend: 0
+    holder: {facts: {salary_transfer: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 10000, merchant: px}
+      - {at: 2026-10-02T12:00, amount: 10000, merchant: px}
+      - {at: 2026-10-05T12:00, amount: 10000, merchant: px}
+      - {at: 2026-10-06T12:00, amount: 10000, merchant: px}
+      - {at: 2026-10-07T12:00, amount: 10000, merchant: px}
+      - {at: 2026-10-08T12:00, amount: 10000, merchant: px}
+      - {at: 2026-10-12T12:00, amount: 10000, merchant: px}
+    expect:
+      - {payment: 0, benefits: {px-under-30k: 1500}, counted: 10000}
+      - {payment: 1, benefits: {px-under-30k: 1500}, counted: 10000}
+      - {payment: 2, benefits: {px-under-30k: 1500}, counted: 10000}
+      - {payment: 3, benefits: {px-under-30k: 1500}, counted: 10000}
+      - {payment: 4, benefits: {px-under-30k: 1500}, counted: 10000}
+      - {payment: 5, benefits: {px-under-30k: 1500}, counted: 10000}
+      - {payment: 6, benefits: {}, counted: 10000, warnings: [limit_exhausted]}
+    calc: 급여이체자라 adjust로 월 6회. 10,000 × 15% = 1,500씩 여섯 번 9,000, 일곱 번째는 월 1만원 잔여 1,000이 있어도 6회가 끝나 0
+
+  - name: PX 3만원 이상 세 구간 현역병 합산 월 2회
+    prev_month_spend: 0
+    holder: {facts: {soldier: true, salary_transfer: false}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 69999, merchant: px}
+      - {at: 2026-10-02T12:00, amount: 100000, merchant: px}
+      - {at: 2026-10-05T12:00, amount: 70000, merchant: px}
+    expect:
+      - {payment: 0, benefits: {px-30k: 6999}, counted: 69999}
+      - {payment: 1, benefits: {px-100k: 30000}, counted: 100000}
+      - {payment: 2, benefits: {}, counted: 70000, warnings: [limit_exhausted]}
+    calc: 공유 한도 px-basic 월 5만원 2회. 69,999는 7만원 미만 10%로 6,999.9 버림 6,999, 100,000은 30%로 30,000, 합 36,999. 세 번째 7만원 20%는 2회가 끝나 0
+
+  - name: PX 3만원 이상 급여이체자 월 5만원 한도 직전과 직후
+    prev_month_spend: 0
+    holder: {facts: {salary_transfer: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 100000, merchant: px}
+      - {at: 2026-10-02T12:00, amount: 99999, merchant: px}
+      - {at: 2026-10-05T12:00, amount: 30000, merchant: px}
+      - {at: 2026-10-06T12:00, amount: 70000, merchant: px}
+    expect:
+      - {payment: 0, benefits: {px-100k: 30000}, counted: 100000}
+      - {payment: 1, benefits: {px-70k: 19999}, counted: 99999}
+      - {payment: 2, benefits: {px-30k: 1}, counted: 30000, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 70000, warnings: [limit_exhausted]}
+    calc: 급여이체자라 px-basic 횟수 제한 없음, 금액 월 50,000. 100,000 × 30% = 30,000, 99,999 × 20% = 19,999.8 버림 19,999로 49,999, 30,000 × 10% = 3,000은 잔여 1, 네 번째는 잔여 0
+
+  - name: PX 20만원 이상은 기본할인과 특별할인을 같이 받는다
+    prev_month_spend: 0
+    holder: {facts: {soldier: true, salary_transfer: false}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 200000, merchant: px}
+      - {at: 2026-10-05T12:00, amount: 250000, merchant: px}
+    expect:
+      - {payment: 0, benefits: {px-100k: 50000, px-special: 50000}, counted: 200000}
+      - {payment: 1, benefits: {}, counted: 250000, warnings: [limit_exhausted]}
+    calc: 원문 예시 20만원 결제 10만원 할인. 200,000 × 30% = 60,000은 px-basic 월 50,000까지 50,000, 특별할인은 extra 묶음이라 더해 50,000. 두 번째는 기본 잔여 0, 현역병 특별 연 1회가 끝나 0
+
+  - name: PX 특별할인 급여이체자 연 2회
+    prev_month_spend: 0
+    holder: {facts: {salary_transfer: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 200000, merchant: px}
+      - {at: 2026-10-05T12:00, amount: 210000, merchant: px}
+      - {at: 2026-10-06T12:00, amount: 220000, merchant: px}
+    expect:
+      - {payment: 0, benefits: {px-100k: 50000, px-special: 50000}, counted: 200000}
+      - {payment: 1, benefits: {px-special: 50000}, counted: 210000}
+      - {payment: 2, benefits: {}, counted: 220000, warnings: [limit_exhausted]}
+    calc: 200,000 × 30% = 60,000은 월 50,000까지, 특별 50,000. 두 번째는 기본 잔여 0이고 특별은 급여이체자 연 2회라 50,000. 세 번째는 둘 다 0
+
+  - name: 현역병인지 급여이체자인지 모르면 PX와 멤버십을 거짓으로 계산한다
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-10-01T12:00, amount: 20000, merchant: px}
+      - {at: 2026-10-02T12:00, amount: 4900, merchant: naver_plus_membership, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 20000, warnings: [needs_input]}
+      - {payment: 1, benefits: {}, counted: 4900, warnings: [needs_input]}
+    calc: 설계 3.1. 사실에 답하지 않아 any_of soldier, salary_transfer가 모름이라 PX 0, 멤버십도 salary_transfer 모름이라 0
+
+  - name: 전월 79,999원은 나라 서비스 구간 하한 1원 아래
+    prev_month_spend: 79999
+    payments:
+      - {at: 2026-10-01T12:00, amount: 8000, merchant: cu}
+      - {at: 2026-10-02T12:00, amount: 30000, merchant: korail, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 8000, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {}, counted: 30000, warnings: [tier_not_met]}
+    calc: 79,999는 8만 미만이라 0 구간. 나라 편의점과 KTX 모두 8만 구간부터라 0
+
+  - name: 전월 8만원이면 나라 편의점 월 2회
+    prev_month_spend: 80000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 8000, merchant: cu}
+      - {at: 2026-10-02T12:00, amount: 15000, merchant: cu}
+      - {at: 2026-10-05T12:00, amount: 9000, merchant: cu}
+    expect:
+      - {payment: 0, benefits: {nara-convenience: 800}, counted: 8000}
+      - {payment: 1, benefits: {nara-convenience: 1000}, counted: 15000}
+      - {payment: 2, benefits: {}, counted: 9000, warnings: [limit_exhausted]}
+    calc: 8만 구간 하한. 8,000 × 10% = 800, 15,000 × 10% = 1,500은 1회 1,000, 세 번째는 월 2회라 0
+
+  - name: 급여이체자도 전월 25만원 이상이면 나라 편의점과 사랑 교통 대신 All in One
+    prev_month_spend: 300000
+    holder: {facts: {salary_transfer: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 12000, merchant: cu}
+      - {at: 2026-10-01T18:00, amount: 1550, category: transit.subway, billing: postpaid_transit}
+    expect:
+      - {payment: 0, benefits: {aio-convenience: 1000}, counted: 12000}
+      - {payment: 1, benefits: {aio-transit: 310}, counted: 0}
+    calc: 설계 6.4 작업 001에서 넘어온 것. waived_when은 from만 풀고 to 20만은 남아 25만 구간에서 나라 편의점과 사랑 교통은 없다. 12,000 × 10% = 1,200은 건당 1,000, 1,550 × 20% = 310
+
+  - name: 급여이체자는 전월 0원이어도 나라와 사랑 서비스를 받는다
+    prev_month_spend: 0
+    holder: {facts: {salary_transfer: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 8000, merchant: cu}
+      - {at: 2026-10-01T18:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+      - {at: 2026-10-02T19:00, amount: 50000, merchant: outback}
+      - {at: 2026-10-05T12:00, amount: 25000, merchant: kyobo_book, channel: online}
+    expect:
+      - {payment: 0, benefits: {nara-convenience: 800}, counted: 8000}
+      - {payment: 1, benefits: {sarang-transit: 150}, counted: 0}
+      - {payment: 2, benefits: {sarang-outback: 12500}, counted: 50000}
+      - {payment: 3, benefits: {sarang-toeic-kyobo: 2000}, counted: 25000}
+    calc: waived_when으로 from이 풀려 0 구간도 대상. 편의점 8,000 × 10% = 800, 버스 1,500 × 10% = 150, 아웃백 현장할인 50,000 × 100 ÷ 80 = 62,500의 20% 12,500, 교보문고 2만원 이상 정액 2,000
+
+  - name: 전월실적 없이 GS25와 이마트24 주요품목 현장할인
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-10-01T12:00, amount: 9000, merchant: gs25}
+      - {at: 2026-10-01T18:00, amount: 4500, merchant: gs25}
+      - {at: 2026-10-02T12:00, amount: 4321, merchant: gs25}
+      - {at: 2026-10-02T13:00, amount: 9000, merchant: emart24}
+      - {at: 2026-10-02T18:00, amount: 5400, merchant: emart24}
+    expect:
+      - {payment: 0, benefits: {gs25-items-onsite: 1000}, counted: 9000, warnings: [check_conditions, assumed_value]}
+      - {payment: 1, benefits: {}, counted: 4500, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {gs25-items-onsite: 481}, counted: 4321}
+      - {payment: 3, benefits: {emart24-items-onsite: 1000}, counted: 9000, warnings: [check_conditions, assumed_value]}
+      - {payment: 4, benefits: {}, counted: 5400, warnings: [limit_exhausted]}
+    calc: 0 구간. 기록 9,000 × 100 ÷ 90 = 10,000이 할인 전이라 1,000, 같은 날 두 번째는 1일 1회라 0, 4,321 × 100 ÷ 90 = 4,801.1 올림 4,802라 481, 이마트24 9,000도 1,000, 같은 날 두 번째 0. 실적은 기록 금액
+
+  - name: GS25는 나라 편의점 청구할인과 주요품목 현장할인을 더해 받는다
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 18000, merchant: gs25}
+      - {at: 2026-10-02T12:00, amount: 10000, merchant: gs25, channel: online}
+    expect:
+      - {payment: 0, benefits: {nara-convenience: 1000, gs25-items-onsite: 2000}, counted: 18000}
+      - {payment: 1, benefits: {nara-convenience: 1000}, counted: 10000}
+    calc: 8만 구간. 기록 18,000은 할인 전 20,000이라 현장할인 2,000은 extra 묶음, 나라 편의점 10%는 1,800이든 2,000이든 1회 1,000. 온라인 10,000은 현장할인 없이 1,000
+
+  - name: 이마트24는 현장할인과 편의점 청구할인 중 큰 쪽
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 18000, merchant: emart24}
+      - {at: 2026-10-01T18:00, amount: 15000, merchant: emart24}
+    expect:
+      - {payment: 0, benefits: {emart24-items-onsite: 2000}, counted: 18000}
+      - {payment: 1, benefits: {aio-convenience: 1000}, counted: 15000}
+    calc: 같은 main 묶음 best. 기록 18,000은 할인 전 20,000이라 현장할인 2,000이 건당 1,000인 편의점 할인보다 크다. 같은 날 두 번째는 현장할인 1일 1회가 끝나 편의점 15,000 × 10% = 1,500의 건당 1,000
+
+  - name: KTX·SRT·고속버스 통합 월 2회와 1회 2천원
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-10-01T09:00, amount: 59800, merchant: korail, channel: online}
+      - {at: 2026-10-02T09:00, amount: 18000, category: transit.bus_express}
+      - {at: 2026-10-05T09:00, amount: 23700, merchant: srt, channel: online}
+      - {at: 2026-10-06T09:00, amount: 15000, category: transit.bus_intercity}
+    expect:
+      - {payment: 0, benefits: {nara-rail: 2000}, counted: 59800}
+      - {payment: 1, benefits: {nara-rail: 900}, counted: 18000}
+      - {payment: 2, benefits: {}, counted: 23700, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 15000}
+    calc: 8만 구간. 59,800 × 5% = 2,990은 1회 2,000, 고속버스 18,000 × 5% = 900, SRT는 통합 월 2회라 0, 시외버스는 대상 아님
+
+  - name: CGV 1인 1,500원과 캐리비안베이 30% 현장할인
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-10-01T19:00, amount: 12500, merchant: cgv}
+      - {at: 2026-10-10T19:00, amount: 13000, merchant: cgv}
+      - {at: 2026-10-11T10:00, amount: 42000, merchant: caribbean_bay}
+    expect:
+      - {payment: 0, benefits: {nara-cgv: 1500}, counted: 12500, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 13000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {nara-caribbean-bay: 18000}, counted: 42000, warnings: [check_conditions]}
+    calc: 8만 구간. CGV 기록 12,500 + 1,500 = 14,000이 할인 전이라 1,500, 두 번째는 월 1회라 0. 캐리비안베이 42,000 × 100 ÷ 70 = 60,000의 30% 18,000. 실적은 기록 금액
+
+  - name: 놀이공원과 캐리비안베이 통합 월 1회
+    prev_month_spend: 100000
+    payments:
+      - {at: 2026-10-03T10:00, amount: 31000, merchant: everland}
+      - {at: 2026-10-10T10:00, amount: 42000, merchant: caribbean_bay}
+    expect:
+      - {payment: 0, benefits: {nara-themepark: 31000}, counted: 31000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 42000, warnings: [limit_exhausted]}
+    calc: 8만 구간. 에버랜드 기록 31,000 × 100 ÷ 50 = 62,000의 50% 31,000. 캐리비안베이는 공유 themepark-month 1회가 끝나 0
+
+  - name: 아웃백 20% 현장할인 월 1회
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-10-02T19:00, amount: 96000, merchant: outback}
+      - {at: 2026-10-16T19:00, amount: 50000, merchant: outback}
+    expect:
+      - {payment: 0, benefits: {sarang-outback: 24000}, counted: 96000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 50000, warnings: [limit_exhausted]}
+    calc: 20만 구간. 기록 96,000 × 100 ÷ 80 = 120,000의 20% 24,000, 두 번째는 월 1회라 0
+
+  - name: 사랑 20만 구간 아웃백 1회 4만원에 딱 맞는 결제와 이동통신 월 1회
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-10-02T19:00, amount: 160000, merchant: outback}
+      - {at: 2026-10-25T09:00, amount: 55000, category: telecom.mobile, billing: autopay}
+      - {at: 2026-10-26T09:00, amount: 35990, category: telecom.mobile, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {sarang-outback: 40000}, counted: 160000}
+      - {payment: 1, benefits: {sarang-telecom: 2000}, counted: 55000}
+      - {payment: 2, benefits: {}, counted: 35990, warnings: [limit_exhausted]}
+    calc: 아웃백 기록 160,000 × 100 ÷ 80 = 200,000의 20% 40,000은 1회 한도와 같다. 이동통신 55,000 × 5% = 2,750은 월 2,000, 두 번째는 월 1회라 0
+
+  - name: 전월 199,999원은 사랑 서비스 구간 하한 1원 아래
+    prev_month_spend: 199999
+    payments:
+      - {at: 2026-10-02T19:00, amount: 96000, merchant: outback}
+      - {at: 2026-10-03T12:00, amount: 8000, merchant: cu}
+    expect:
+      - {payment: 0, benefits: {}, counted: 96000, warnings: [tier_not_met]}
+      - {payment: 1, benefits: {nara-convenience: 800}, counted: 8000}
+    calc: 199,999는 8만 구간. 아웃백은 20만 구간부터라 0, 나라 편의점 8,000 × 10% = 800
+
+  - name: 사랑 시내버스·지하철 월 2천원 한도 직전과 직후
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-10-01T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-02T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-03T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-04T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-05T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-06T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-07T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+      - {at: 2026-10-08T08:00, amount: 3050, category: transit.subway, billing: postpaid_transit}
+    expect:
+      - {payment: 0, benefits: {sarang-transit: 305}, counted: 0, warnings: [not_counted_toward_spend, check_conditions]}
+      - {payment: 1, benefits: {sarang-transit: 305}, counted: 0}
+      - {payment: 2, benefits: {sarang-transit: 305}, counted: 0}
+      - {payment: 3, benefits: {sarang-transit: 305}, counted: 0}
+      - {payment: 4, benefits: {sarang-transit: 305}, counted: 0}
+      - {payment: 5, benefits: {sarang-transit: 305}, counted: 0}
+      - {payment: 6, benefits: {sarang-transit: 170}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 7, benefits: {}, counted: 0, warnings: [limit_exhausted]}
+    calc: 20만 구간. 3,050 × 10% = 305씩 여섯 번 1,830, 일곱 번째는 월 2,000 잔여 170, 여덟 번째 0. 교통카드 이용이라 실적 0
+
+  - name: 통신요금을 부모 업종까지만 알면 이동통신 할인은 모른다
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-10-25T09:00, amount: 55000, merchant: skt, billing: autopay}
+      - {at: 2026-10-26T09:00, amount: 33000, category: telecom.internet_tv, billing: autopay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 55000, warnings: [needs_input]}
+      - {payment: 1, benefits: {}, counted: 33000}
+    calc: 설계 2.1. SK텔레콤 업종이 telecom까지만이라 telecom.mobile 대상에는 안 맞는 것으로 보고 자식 업종을 묻는다. 인터넷·TV는 대상 아님
+
+  - name: 토익·교보문고 1회 2만원 이상과 통합 월 1회
+    prev_month_spend: 200000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 19999, merchant: kyobo_book, channel: online}
+      - {at: 2026-10-02T12:00, amount: 20000, merchant: kyobo_book, channel: online}
+      - {at: 2026-10-05T12:00, amount: 52500, merchant: toeic, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 19999}
+      - {payment: 1, benefits: {sarang-toeic-kyobo: 2000}, counted: 20000}
+      - {payment: 2, benefits: {}, counted: 52500, warnings: [limit_exhausted]}
+    calc: 20만 구간. 19,999는 2만원 미만이라 0, 20,000은 하한이라 정액 2,000, 토익은 통합 월 1회라 0
+
+  - name: 급여이체자 네이버플러스 멤버십 월 4,900원
+    prev_month_spend: 0
+    holder: {facts: {salary_transfer: true}}
+    payments:
+      - {at: 2026-10-01T09:00, amount: 4900, merchant: naver_plus_membership, channel: online}
+      - {at: 2026-10-15T09:00, amount: 4900, merchant: naver_plus_membership, channel: online}
+    expect:
+      - {payment: 0, benefits: {naver-membership: 4900}, counted: 4900}
+      - {payment: 1, benefits: {}, counted: 4900, warnings: [limit_exhausted]}
+    calc: 전월실적 조건 없음. 4,900 × 100% = 4,900은 월 4,900 한도에 딱 맞고 두 번째는 잔여 0
+
+  - name: 마이태그 쿠팡·다이소·올리브영 1만원 이상 월 1회
+    prev_month_spend: 0
+    holder: {facts: {salary_transfer: true, mytag_coupang: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 9999, merchant: olive_young}
+      - {at: 2026-10-02T12:00, amount: 12000, merchant: daiso}
+      - {at: 2026-10-05T12:00, amount: 15000, merchant: coupang, channel: online}
+    expect:
+      - {payment: 0, benefits: {}, counted: 9999}
+      - {payment: 1, benefits: {mytag-coupang-daiso-oliveyoung: 1000}, counted: 12000}
+      - {payment: 2, benefits: {}, counted: 15000, warnings: [limit_exhausted]}
+    calc: 0 구간이라 쇼핑 할인은 없다. 9,999는 1만원 미만이라 0, 다이소 12,000은 정액 1,000, 쿠팡은 월 1회라 0
+
+  - name: 쿠팡 마이태그 1천원과 All in One 쇼핑 1천원이 같으면 먼저 적힌 쇼핑
+    prev_month_spend: 300000
+    holder: {facts: {salary_transfer: true, mytag_coupang: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 12000, merchant: coupang, channel: online}
+      - {at: 2026-10-02T12:00, amount: 11000, merchant: olive_young}
+    expect:
+      - {payment: 0, benefits: {aio-shopping: 1000}, counted: 12000}
+      - {payment: 1, benefits: {mytag-coupang-daiso-oliveyoung: 1000}, counted: 11000}
+    calc: 같은 main 묶음 best. 쿠팡 12,000 × 10% = 1,200의 건당 1,000과 마이태그 정액 1,000이 같아 먼저 적힌 쇼핑. 마이태그 월 1회는 남아 올리브영 11,000에 1,000
+
+  - name: 마이태그 카카오T 택시 50% 기간 내 1회
+    prev_month_spend: 0
+    holder: {facts: {soldier: true, mytag_kakaot: true}}
+    payments:
+      - {at: 2026-10-01T23:00, amount: 7800, merchant: kakao_t}
+      - {at: 2026-10-02T23:00, amount: 12000, merchant: kakao_t}
+    expect:
+      - {payment: 0, benefits: {mytag-kakaot-taxi: 3900}, counted: 7800, warnings: [check_conditions, assumed_value]}
+      - {payment: 1, benefits: {}, counted: 12000, warnings: [limit_exhausted]}
+    calc: 0 구간이라 All in One 택시는 없다. 7,800 × 50% = 3,900, 두 번째는 period 1회가 끝나 0
+
+  - name: 마이태그 카카오T 50%와 All in One 택시 중 큰 쪽
+    prev_month_spend: 300000
+    holder: {facts: {soldier: true, mytag_kakaot: true}}
+    payments:
+      - {at: 2026-10-01T23:00, amount: 12000, merchant: kakao_t}
+      - {at: 2026-10-02T23:00, amount: 12000, merchant: kakao_t}
+      - {at: 2026-10-05T23:00, amount: 4999, merchant: kakao_t}
+    expect:
+      - {payment: 0, benefits: {mytag-kakaot-taxi: 5000}, counted: 12000}
+      - {payment: 1, benefits: {aio-taxi: 1000}, counted: 12000}
+      - {payment: 2, benefits: {aio-taxi: 499}, counted: 4999}
+    calc: 같은 main 묶음 best. 12,000 × 50% = 6,000은 건당 5,000이라 5,000이 택시 1,000보다 크다. 두 번째는 마이태그 1회가 끝나 택시 1,200의 건당 1,000, 4,999는 5천원 미만이라 택시 499.9 버림 499
+
+  - name: 마이태그 맘스터치 1만원 이상 분기 1회
+    prev_month_spend: 0
+    holder: {facts: {soldier: true, mytag_momstouch: true}}
+    payments:
+      - {at: 2026-10-01T12:00, amount: 10500, merchant: moms_touch}
+      - {at: 2026-10-20T12:00, amount: 15000, merchant: moms_touch}
+    expect:
+      - {payment: 0, benefits: {mytag-momstouch: 1000}, counted: 10500, warnings: [assumed_value]}
+      - {payment: 1, benefits: {}, counted: 15000, warnings: [limit_exhausted]}
+    calc: 10,500은 1만원 이상이라 정액 1,000, 두 번째는 같은 4분기라 0
+
+  - name: 메가오더 평일 20% 1일 1회와 앱 선결제 제외
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-10-06T09:00, amount: 4500, merchant: mega_coffee, channel: online, billing: normal}
+      - {at: 2026-10-06T15:00, amount: 3000, merchant: mega_coffee, channel: online, billing: normal}
+      - {at: 2026-10-07T09:00, amount: 2345, merchant: mega_coffee, channel: online, billing: normal}
+      - {at: 2026-10-08T09:00, amount: 10000, merchant: mega_coffee, channel: online, billing: app_prepay}
+    expect:
+      - {payment: 0, benefits: {mega-order-weekday: 900}, counted: 4500, warnings: [check_conditions, assumed_value]}
+      - {payment: 1, benefits: {}, counted: 3000, warnings: [limit_exhausted]}
+      - {payment: 2, benefits: {mega-order-weekday: 469}, counted: 2345}
+      - {payment: 3, benefits: {}, counted: 10000}
+    calc: 화요일 4,500 × 20% = 900, 같은 날 두 번째는 1일 1회라 0, 수요일 2,345 × 20% = 469, 앱 선결제 충전은 billing_not이라 0
+
+  - name: 메가오더 공휴일 금요일은 평일이고 토일은 주말 30%
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-10-09T09:00, amount: 4000, merchant: mega_coffee, channel: online, billing: normal}
+      - {at: 2026-10-10T09:00, amount: 6300, merchant: mega_coffee, channel: online, billing: normal}
+      - {at: 2026-10-11T09:00, amount: 3333, merchant: mega_coffee, channel: online, billing: normal}
+    expect:
+      - {payment: 0, benefits: {mega-order-weekday: 800}, counted: 4000}
+      - {payment: 1, benefits: {mega-order-weekend: 1890}, counted: 6300}
+      - {payment: 2, benefits: {mega-order-weekend: 999}, counted: 3333}
+    calc: 10-09 한글날은 금요일이고 holidays ignore라 평일 4,000 × 20% = 800. 토요일 6,300 × 30% = 1,890, 일요일 3,333 × 30% = 999.9 버림 999
+
+  - name: 메가오더 주말 30%와 All in One 카페 중 큰 쪽
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-10T09:00, amount: 5000, merchant: mega_coffee, channel: online, billing: normal}
+      - {at: 2026-10-12T09:00, amount: 5000, merchant: mega_coffee}
+    expect:
+      - {payment: 0, benefits: {mega-order-weekend: 1500}, counted: 5000}
+      - {payment: 1, benefits: {aio-cafe: 500}, counted: 5000}
+    calc: 같은 main 묶음 best. 토요일 앱 5,000 × 30% = 1,500이 카페 500보다 크다. 월요일 매장 결제는 메가오더가 아니라 카페 5,000 × 10% = 500
+
+  - name: NOL 결제 금액 구간별 정액 적립과 간편결제 제외
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-10-01T20:00, amount: 32000, merchant: yanolja, channel: online, payment_method: physical_card}
+      - {at: 2026-10-02T20:00, amount: 49999, merchant: yanolja, channel: online, payment_method: physical_card}
+      - {at: 2026-10-05T20:00, amount: 50000, merchant: yanolja, channel: online, payment_method: physical_card}
+      - {at: 2026-10-06T20:00, amount: 60000, merchant: yanolja, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {nol-points-25k: 1200}, counted: 32000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {nol-points-25k: 1200}, counted: 49999}
+      - {payment: 2, benefits: {nol-points-50k: 2500}, counted: 50000}
+      - {payment: 3, benefits: {}, counted: 60000}
+    calc: 0 구간이라 여행·레저 할인은 없다. 32,000과 49,999는 2만5천 이상 5만 미만 1,200P, 50,000은 하한이라 2,500P, 네이버페이 결제는 payment_not이라 0
+
+  - name: NOL 공유 월 1만3천P 한도 직전과 직후
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-10-01T20:00, amount: 100000, merchant: yanolja, channel: online, payment_method: physical_card}
+      - {at: 2026-10-02T20:00, amount: 120000, merchant: yanolja, channel: online, payment_method: physical_card}
+      - {at: 2026-10-05T20:00, amount: 50000, merchant: yanolja, channel: online, payment_method: physical_card}
+      - {at: 2026-10-06T20:00, amount: 30000, merchant: yanolja, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {nol-points-100k: 6000}, counted: 100000}
+      - {payment: 1, benefits: {nol-points-100k: 6000}, counted: 120000}
+      - {payment: 2, benefits: {nol-points-50k: 1000}, counted: 50000, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 30000, warnings: [limit_exhausted]}
+    calc: 세 구간 공유 nol 월 13,000P. 6,000 + 6,000 = 12,000P, 50,000의 2,500P는 잔여 1,000P, 30,000의 1,200P는 잔여 0
+
+  - name: NOL 적립과 All in One 여행·레저 중 큰 쪽
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T20:00, amount: 30000, merchant: yanolja, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {nol-points-25k: 1200}, counted: 30000}
+    calc: 같은 main 묶음 best. 1,200P는 1포인트 1원으로 1,200이고 여행·레저 30,000 × 10% = 3,000의 건당 1,000보다 크다
+
+  - name: 슈마커 마이태그 오프라인 10만원 이상 월 1회
+    prev_month_spend: 0
+    holder: {facts: {mytag_shoemarker: true}}
+    payments:
+      - {at: 2026-09-19T15:00, amount: 99999, merchant: shoemarker}
+      - {at: 2026-09-20T15:00, amount: 129000, merchant: shoemarker}
+      - {at: 2026-09-21T15:00, amount: 110000, merchant: shoemarker}
+    expect:
+      - {payment: 0, benefits: {}, counted: 99999}
+      - {payment: 1, benefits: {mytag-shoemarker: 10000}, counted: 129000, warnings: [check_conditions]}
+      - {payment: 2, benefits: {}, counted: 110000, warnings: [limit_exhausted]}
+    calc: 행사 기간 2026-07-20부터 09-30. 99,999는 10만원 미만이라 0, 129,000은 정액 10,000, 세 번째는 월 1회라 0
+
+  - name: 슈마커 행사는 9월 30일에 끝난다
+    prev_month_spend: 0
+    holder: {facts: {mytag_shoemarker: true}}
+    payments:
+      - {at: 2026-10-01T15:00, amount: 129000, merchant: shoemarker}
+    expect:
+      - {payment: 0, benefits: {}, counted: 129000}
+    calc: valid_until 2026-09-30이 지나 0
+
+  - name: 실적 제외 업종과 Npay 적립 제외
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T12:00, amount: 128000, category: tax, payment_method: naver_pay}
+      - {at: 2026-10-02T12:00, amount: 45000, category: utility.electricity, billing: autopay}
+      - {at: 2026-10-05T12:00, amount: 50000, category: gift_card, payment_method: naver_pay}
+      - {at: 2026-10-06T12:00, amount: 20000, category: restaurant.general, region: overseas, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 3, benefits: {}, counted: 20000}
+    calc: 세금, 전기요금, 상품권은 실적 제외라 0이고 Npay 대상 제외 업종이라 적립도 0. 해외 결제는 국내외 실적이라 20,000을 세지만 Npay는 국내만이라 0
+
+  - name: 전액 취소한 결제는 혜택도 한도 사용도 없다
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-10-01T10:00, amount: 12000, merchant: kakao_t, cancelled_amount: 12000, cancelled_at: 2026-10-01T10:30}
+      - {at: 2026-10-02T10:00, amount: 8000, merchant: kakao_t}
+      - {at: 2026-10-03T10:00, amount: 9000, merchant: kakao_t}
+      - {at: 2026-10-05T10:00, amount: 8000, merchant: cu, cancelled_amount: 3000, cancelled_at: 2026-10-05T12:00}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0}
+      - {payment: 1, benefits: {aio-taxi: 800}, counted: 8000}
+      - {payment: 2, benefits: {aio-taxi: 900}, counted: 9000}
+      - {payment: 3, benefits: {aio-convenience: 500}, counted: 5000}
+    calc: E5. 전액 취소한 택시는 0이라 월 2회를 쓰지 않아 8,000 × 10% = 800, 9,000 × 10% = 900. 편의점 8,000 중 3,000 취소는 남은 5,000 × 10% = 500, 취소한 달이 같은 10월이라 실적 5,000

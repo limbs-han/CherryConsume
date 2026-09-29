@@ -1,0 +1,26 @@
+card: hana-travelog-check
+cases:
+  - name: 해외 가맹점 국제브랜드수수료 1% 면제
+    payments:
+      - {at: 2026-09-10T15:00, amount: 100000, category: travel.hotel, channel: offline, region: overseas}
+    expect:
+      - {payment: 0, benefits: {overseas-fee-free: 1000}, warnings: [check_conditions]}
+    calc: 실적 조건 없음. 해외 100,000 × 1% = 1,000. 국내 0.3% 적립은 region 조건에 걸려 없음. 건당 US$0.5 면제는 문장 조건
+
+  - name: 국내 0.3% 하나머니는 소수점 이하 반올림
+    payments:
+      - {at: 2026-09-03T08:30, amount: 5500, merchant: starbucks, channel: offline}
+      - {at: 2026-09-04T21:00, amount: 12345, merchant: gs25, channel: offline}
+    expect:
+      - {payment: 0, benefits: {domestic-0-3p: 17}}
+      - {payment: 1, benefits: {domestic-0-3p: 37}}
+    calc: 5,500 × 0.3% = 16.5 → 반올림 17P. 12,345 × 0.3% = 37.035 → 반올림 37P. 월 한도 없음
+
+  - name: 세금과 부모 업종까지만 아는 교육 결제는 적립 없음
+    payments:
+      - {at: 2026-09-15T09:00, amount: 100000, category: tax, channel: online}
+      - {at: 2026-09-16T10:00, amount: 100000, merchant: hackers_academy, category: education, channel: offline}
+    expect:
+      - {payment: 0, benefits: {}}
+      - {payment: 1, benefits: {}, warnings: [needs_input]}
+    calc: 세금은 대상 제외 업종이라 0. 해커스어학원 결제의 업종을 education까지만 적어 제외 업종 education.tuition과 education.school_fee에 걸리는지 모르므로 걸린 것으로 보고 0, 자식 업종을 묻는다. 설계 2.1

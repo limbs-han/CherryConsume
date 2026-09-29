@@ -1,0 +1,176 @@
+card: kb-my-wesh
+holder:
+  options:
+    - {option: pack, choice: eat, effective_from: 2026-01-01}
+cases:
+  - name: KB Pay 10% 건당 2,500원과 월 5천원 한도, 해외 가맹점 제외
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-02T15:00, amount: 20000, merchant: olive_young, payment_method: kb_pay}
+      - {at: 2026-09-06T11:00, amount: 30000, merchant: emart, payment_method: kb_pay}
+      - {at: 2026-09-10T11:00, amount: 10000, merchant: emart, payment_method: kb_pay}
+      - {at: 2026-09-12T22:00, amount: 50000, category: other, region: overseas, channel: online, payment_method: kb_pay}
+    expect:
+      - {payment: 0, benefits: {kbpay-10: 2000}, counted: 0, warnings: [assumed_value, not_counted_toward_spend]}
+      - {payment: 1, benefits: {kbpay-10: 2500}, counted: 0}
+      - {payment: 2, benefits: {kbpay-10: 500}, counted: 0, warnings: [limit_exhausted]}
+      - {payment: 3, benefits: {}, counted: 50000}
+    calc: 전월 400,000은 40만 구간 하한. 20,000 × 10% = 2,000. 30,000 × 10% = 3,000이 건당 2,500에 걸려 2,500. 10,000 × 10% = 1,000이지만 월 5,000 − 4,500 = 500. 해외 가맹점은 region 조건이 거짓이라 없고 실적 50,000
+  - name: 음식점·편의점 10% 건당 2,500원과 월 5천원 한도
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-03T19:00, amount: 30000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-04T13:00, amount: 12000, merchant: gs25, payment_method: physical_card}
+      - {at: 2026-09-08T13:00, amount: 15000, merchant: cu, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {dining-cvs-10: 2500}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {dining-cvs-10: 1200}, counted: 0}
+      - {payment: 2, benefits: {dining-cvs-10: 1300}, counted: 0, warnings: [limit_exhausted]}
+    calc: 30,000 × 10% = 3,000이 건당 2,500. GS25 12,000 × 10% = 1,200. CU 15,000 × 10% = 1,500이지만 월 5,000 − 3,700 = 1,300
+  - name: KB Pay와 음식점·편의점은 한 묶음이라 큰 쪽 하나. 같으면 먼저 적힌 KB Pay
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-05T13:00, amount: 20000, merchant: gs25, payment_method: kb_pay}
+      - {at: 2026-09-06T11:00, amount: 25000, merchant: emart, payment_method: kb_pay}
+      - {at: 2026-09-07T13:00, amount: 10000, merchant: cu, payment_method: kb_pay}
+    expect:
+      - {payment: 0, benefits: {kbpay-10: 2000}, counted: 0, warnings: [assumed_value]}
+      - {payment: 1, benefits: {kbpay-10: 2500}, counted: 0}
+      - {payment: 2, benefits: {dining-cvs-10: 1000}, counted: 0}
+    calc: GS25 20,000은 KB Pay 2,000과 편의점 2,000이 같아 카드 파일에 먼저 적힌 KB Pay. 이마트 25,000 × 10% = 2,500. CU 10,000은 KB Pay 월 잔여 5,000 − 4,500 = 500보다 편의점 1,000이 커서 편의점 1,000
+  - name: 이동통신과 OTT가 월 5천원 한도를 같이 씀
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-01T09:00, amount: 20000, merchant: kt, payment_method: physical_card}
+      - {at: 2026-09-10T09:00, amount: 17000, merchant: netflix, channel: online, payment_method: physical_card}
+      - {at: 2026-09-15T09:00, amount: 14900, merchant: youtube_premium, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {telecom-10: 2000}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {ott-30: 2500}, counted: 0}
+      - {payment: 2, benefits: {ott-30: 500}, counted: 0, warnings: [limit_exhausted]}
+    calc: KT 자동납부 20,000 × 10% = 2,000. 넷플릭스 17,000 × 30% = 5,100이 건당 2,500. 유튜브 14,900 × 30% = 4,470이 건당 2,500인데 공유 잔여 5,000 − 4,500 = 500
+  - name: 먹는데 진심 커피·배달앱 5% 월 5천원 한도
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-03T08:00, amount: 6000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-10T19:00, amount: 80000, merchant: baemin, channel: online, payment_method: physical_card}
+      - {at: 2026-09-20T15:00, amount: 30000, merchant: twosome, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pack-eat-5: 300}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {pack-eat-5: 4000}, counted: 0}
+      - {payment: 2, benefits: {pack-eat-5: 700}, counted: 0, warnings: [limit_exhausted]}
+    calc: 6,000 × 5% = 300. 배민 80,000 × 5% = 4,000. 투썸 30,000 × 5% = 1,500이지만 월 5,000 − 4,300 = 700
+  - name: 노는데 진심 택시·커피와 영화관이 월 5천원을 같이 씀
+    prev_month_spend: 400000
+    holder:
+      options:
+        - {option: pack, choice: play, effective_from: 2026-01-01}
+    payments:
+      - {at: 2026-09-05T23:00, amount: 20000, merchant: kakao_t, payment_method: physical_card}
+      - {at: 2026-09-06T10:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+      - {at: 2026-09-13T19:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pack-play-taxi-cafe-5: 1000}, counted: 0}
+      - {payment: 1, benefits: {pack-play-taxi-cafe-5: 500}, counted: 0}
+      - {payment: 2, benefits: {pack-play-movie-30: 3500}, counted: 0, warnings: [limit_exhausted, check_conditions]}
+    calc: 택시 20,000 × 5% = 1,000, 커피 10,000 × 5% = 500. CGV 15,000 × 30% = 4,500이지만 play 공유 5,000 − 1,500 = 3,500
+  - name: 영화관 30%는 연 4회까지
+    prev_month_spend: 400000
+    holder:
+      options:
+        - {option: pack, choice: play, effective_from: 2026-01-01}
+    payments:
+      - {at: 2026-09-05T10:00, amount: 4000, merchant: megabox, payment_method: physical_card}
+      - {at: 2026-09-12T10:00, amount: 4000, merchant: megabox, payment_method: physical_card}
+      - {at: 2026-09-19T10:00, amount: 4000, merchant: megabox, payment_method: physical_card}
+      - {at: 2026-09-26T10:00, amount: 4000, merchant: megabox, payment_method: physical_card}
+      - {at: 2026-09-27T10:00, amount: 4000, merchant: megabox, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pack-play-movie-30: 1200}}
+      - {payment: 1, benefits: {pack-play-movie-30: 1200}}
+      - {payment: 2, benefits: {pack-play-movie-30: 1200}}
+      - {payment: 3, benefits: {pack-play-movie-30: 1200}}
+      - {payment: 4, benefits: {}, warnings: [limit_exhausted]}
+    calc: 4,000 × 30% = 1,200씩 네 번 4,800이라 play 월 5,000 안. 다섯 번째는 play 잔여 200이 있어도 연 4회 한도에 걸려 0
+  - name: 관리에 진심 생일 달 한도 두 배
+    prev_month_spend: 400000
+    holder:
+      started_on: 2026-05-10
+      facts: {birth_month: 9}
+      options:
+        - {option: pack, choice: care, effective_from: 2026-01-01}
+    payments:
+      - {at: 2026-09-04T18:00, amount: 250000, category: sports, payment_method: physical_card}
+      - {at: 2026-09-18T21:00, amount: 180000, merchant: yes24, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pack-care-5: 12500}, counted: 0}
+      - {payment: 1, benefits: {pack-care-books-5: 7500}, counted: 0, warnings: [limit_exhausted]}
+    calc: 9월이 생일 달이고 쓰기 시작한 5월을 0으로 세면 9월은 card_month 4라 care 한도 10,000 × 2 = 20,000. 스포츠 250,000 × 5% = 12,500. YES24 180,000 × 5% = 9,000이지만 공유 잔여 20,000 − 12,500 = 7,500
+  - name: 생일 달이어도 쓰기 시작한 날을 모르면 두 배를 주지 않음
+    prev_month_spend: 400000
+    holder:
+      facts: {birth_month: 9}
+      options:
+        - {option: pack, choice: care, effective_from: 2026-01-01}
+    payments:
+      - {at: 2026-09-04T18:00, amount: 150000, category: beauty.salon, payment_method: physical_card}
+      - {at: 2026-09-18T21:00, amount: 100000, merchant: kyobo_book, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pack-care-5: 7500}, counted: 0}
+      - {payment: 1, benefits: {pack-care-books-5: 2500}, counted: 0, warnings: [limit_exhausted, needs_input]}
+    calc: card_month가 모름이라 adjust를 거짓으로 보고 care 한도 10,000. 미용실 150,000 × 5% = 7,500. 교보 100,000 × 5% = 5,000이지만 잔여 10,000 − 7,500 = 2,500
+  - name: 관리에 진심 올리브영은 매장도, 온라인서점은 온라인만
+    prev_month_spend: 400000
+    holder:
+      options:
+        - {option: pack, choice: care, effective_from: 2026-01-01}
+    payments:
+      - {at: 2026-09-09T16:00, amount: 30000, merchant: olive_young, payment_method: physical_card}
+      - {at: 2026-09-10T16:00, amount: 20000, merchant: kyobo_book, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pack-care-5: 1500}, counted: 0, warnings: [check_conditions]}
+      - {payment: 1, benefits: {}, counted: 20000}
+    calc: 올리브영 30,000 × 5% = 1,500. 교보문고 매장 결제는 channel online 조건이 거짓이라 없고 실적 20,000
+  - name: 팩을 고르지 않으면 팩 혜택은 모름이라 없음
+    prev_month_spend: 400000
+    holder: {options: []}
+    payments:
+      - {at: 2026-09-03T08:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000, warnings: [needs_input]}
+    calc: 더욱 진심 팩을 고르지 않아 option 조건이 모름이라 커피 5%를 거짓으로 계산. 나한테 진심에는 커피가 없어 0이고 실적 10,000
+  - name: 옵션 이력. 8월 1일부터 노는데 진심이면 9월 커피는 노는데 진심
+    prev_month_spend: 400000
+    holder:
+      options:
+        - {option: pack, choice: eat, effective_from: 2026-01-01}
+        - {option: pack, choice: play, effective_from: 2026-08-01}
+    payments:
+      - {at: 2026-09-03T08:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {pack-play-taxi-cafe-5: 500}, counted: 0}
+    calc: 결제일에 골라 둔 팩은 노는데 진심이라 커피 10,000 × 5% = 500. 먹는데 진심은 적용하지 않음
+  - name: 받는 혜택이 없는 결제. 관리비, 무이자할부, 교통, OTT 간편결제와 인앱결제, 부모 업종 음식점
+    prev_month_spend: 400000
+    payments:
+      - {at: 2026-09-02T10:00, amount: 200000, category: apartment_fee, payment_method: kb_pay}
+      - {at: 2026-09-05T19:00, amount: 100000, category: restaurant.general, installment_months: 3, interest_free: true, payment_method: physical_card}
+      - {at: 2026-09-08T08:00, amount: 1450, category: transit.subway, payment_method: kb_pay}
+      - {at: 2026-09-10T09:00, amount: 13500, merchant: netflix, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-11T09:00, amount: 14900, merchant: youtube_premium, channel: online, billing: in_app, payment_method: physical_card}
+      - {at: 2026-09-12T19:00, amount: 30000, merchant: outback, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 1, benefits: {}, counted: 100000}
+      - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 3, benefits: {}, counted: 13500}
+      - {payment: 4, benefits: {}, counted: 14900}
+      - {payment: 5, benefits: {}, counted: 30000, warnings: [needs_input]}
+    calc: 관리비와 지하철은 공통 제외라 KB Pay도 없고 실적 제외. 무이자할부는 when_any 제외지만 실적 포함. OTT는 실물카드와 정기결제만이라 네이버페이와 인앱결제는 없음. 아웃백은 음식점 부모 업종까지만 알아 일반음식점 대상에 모름
+  - name: 전월 399,999원이면 40만 구간 미달
+    prev_month_spend: 399999
+    payments:
+      - {at: 2026-09-03T13:00, amount: 20000, merchant: gs25, payment_method: kb_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 20000, warnings: [tier_not_met]}
+    calc: 전월 399,999 < 400,000이라 0 구간. 모든 혜택이 40만 구간부터라 0이고 실적 20,000

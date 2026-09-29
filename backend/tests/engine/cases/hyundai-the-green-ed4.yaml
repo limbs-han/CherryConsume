@@ -1,0 +1,66 @@
+card: hyundai-the-green-ed4
+cases:
+  - name: 50만 구간 기본 1.5%, 여행 5%는 100만 구간부터
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-09-03T12:00, amount: 4639, merchant: emart, payment_method: physical_card}
+      - {at: 2026-09-04T10:00, amount: 100000, category: travel.airline, channel: online, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {base-all-1-5: 70}, counted: 4639}
+      - {payment: 1, benefits: {base-all-1-5: 1500}, counted: 100000, warnings: [tier_not_met]}
+    calc: 전월 500,000은 50만 구간 하한. 4,639 × 1.5% = 69.585, 반올림 70P로 카드사 예시와 같다. 항공 100,000은 5%가 100만 구간부터라 1.5%로 1,500P
+
+  - name: 여행 영역 5% 월 5만P, 면세점 포함, 한도를 넘은 금액은 1.5%
+    prev_month_spend: 1000000
+    payments:
+      - {at: 2026-09-02T10:00, amount: 200000, merchant: lotte_dfs_online, channel: online, payment_method: physical_card}
+      - {at: 2026-09-05T15:00, amount: 700000, category: travel.hotel, payment_method: physical_card}
+      - {at: 2026-09-12T11:00, amount: 200000, category: travel.agency, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {travel-5: 10000}, counted: 200000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {travel-5: 35000}, counted: 700000}
+      - {payment: 2, benefits: {travel-5: 5000, base-all-1-5: 1500}, counted: 200000, warnings: [limit_exhausted]}
+    calc: 전월 1,000,000은 100만 구간 하한. 면세점 200,000 × 5% = 10,000P, 호텔 700,000 × 5% = 35,000P. 여행사 200,000 × 5% = 10,000P이나 한도 50,000 − 45,000 = 5,000P 남아 100,000까지 5%로 5,000P, 남은 100,000 × 1.5% = 1,500P
+
+  - name: 해외 영역 5% 월 4만P를 한 결제가 넘긴다
+    prev_month_spend: 1500000
+    payments:
+      - {at: 2026-09-20T15:00, amount: 1000000, category: other, region: overseas, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {overseas-5: 40000, base-all-1-5: 3000}, counted: 1000000, warnings: [limit_exhausted]}
+    calc: 1,000,000 × 5% = 50,000P이나 한도 40,000P라 800,000까지 5%로 40,000P. 남은 200,000 × 1.5% = 3,000P
+
+  - name: 다이닝 5% 월 1만P, 간편결제와 결제수단 모름은 1.5%
+    prev_month_spend: 1100000
+    payments:
+      - {at: 2026-09-04T19:00, amount: 150000, category: restaurant.general, payment_method: physical_card}
+      - {at: 2026-09-10T19:00, amount: 50000, category: restaurant.general, payment_method: naver_pay}
+      - {at: 2026-09-11T19:00, amount: 30000, category: restaurant.general}
+      - {at: 2026-09-18T19:00, amount: 80000, category: restaurant.general, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {dining-5: 7500}, counted: 150000, warnings: [check_conditions]}
+      - {payment: 1, benefits: {base-all-1-5: 750}, counted: 50000}
+      - {payment: 2, benefits: {base-all-1-5: 450}, counted: 30000, warnings: [needs_input]}
+      - {payment: 3, benefits: {dining-5: 2500, base-all-1-5: 450}, counted: 80000, warnings: [limit_exhausted]}
+    calc: 150,000 × 5% = 7,500P. 네이버페이는 간편결제 제외라 50,000 × 1.5% = 750P. 결제수단을 모르면 간편결제 제외 조건이 모름이라 5%를 빼고 30,000 × 1.5% = 450P. 80,000 × 5% = 4,000P이나 2,500P 남아 50,000까지 5%로 2,500P, 남은 30,000 × 1.5% = 450P
+
+  - name: 카드 수령 특례로 100만 구간
+    holder: {started_on: 2026-09-02}
+    prev_month_spend: 0
+    payments:
+      - {at: 2026-09-10T19:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {dining-5: 1000}, counted: 20000}
+    calc: 카드 수령 9월이라 10월 말일까지 특례 100만 구간. 20,000 × 5% = 1,000P
+
+  - name: 임대료는 적립만 제외, 전기요금은 둘 다 제외, 무이자할부
+    prev_month_spend: 600000
+    payments:
+      - {at: 2026-09-01T09:00, amount: 500000, category: rent, payment_method: physical_card}
+      - {at: 2026-09-15T09:00, amount: 50000, category: utility.electricity, payment_method: physical_card}
+      - {at: 2026-09-16T21:00, amount: 200000, merchant: coupang, channel: online, payment_method: physical_card, installment_months: 6, interest_free: true}
+    expect:
+      - {payment: 0, benefits: {}, counted: 500000}
+      - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
+      - {payment: 2, benefits: {}, counted: 200000}
+    calc: 임대료는 적립 제외지만 실적 제외에는 없어 500,000 인정. 전기요금은 적립과 실적 모두 제외라 0. 무이자할부는 적립 제외, 실적은 넣어 200,000
