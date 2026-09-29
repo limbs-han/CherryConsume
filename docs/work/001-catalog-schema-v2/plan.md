@@ -3973,15 +3973,15 @@ git commit -m "docs: 카탈로그 2판 결론을 설계 문서와 ERD에 반영"
 
 ## 과제 18: 작업 마무리
 
-- [ ] **1단계: 진행 상황을 고친다**
+- [x] **1단계: 진행 상황을 고친다**
 
 `.claude/progress.md`의 지금 위치를 작업 002 계산 엔진 준비로 바꾸고, 작업 001을 끝난 것으로 옮긴다.
 
-- [ ] **2단계: 작업 기록을 쓴다**
+- [x] **2단계: 작업 기록을 쓴다**
 
 `docs/history/`에 작업 기록을 쓰고 목록에 한 줄 더한다. 형식은 `docs/history/README.md`를 따른다. 구현 계획을 세운 요청부터 이 과제까지 사용자 요청을 원문 그대로 인용한다.
 
-- [ ] **3단계: 전체를 확인한다**
+- [x] **3단계: 전체를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -3991,7 +3991,7 @@ git status --short
 
 기대: `75 passed`, `오류 0`, 남은 변경은 1단계와 2단계 파일뿐.
 
-- [ ] **4단계: 커밋 지점**
+- [x] **4단계: 커밋 지점**
 
 ```bash
 git add .claude/progress.md
@@ -3999,6 +3999,8 @@ git commit -m "chore: 작업 001을 끝난 것으로 진행 상황 갱신"
 git add docs/history
 git commit -m "docs: 작업 기록 카탈로그 2판 구현 추가"
 ```
+
+2026-09-29 실행 결과: 테스트는 81개가 통과했다. 작업 기록은 `docs/history/25-catalog-schema-v2-build.md`다. 다음이 작업 002인지 작업 003 과제 1인지는 사용자에게 묻는다.
 
 ---
 
