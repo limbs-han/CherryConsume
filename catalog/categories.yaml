@@ -37,6 +37,7 @@
     - {code: study_material, name: 학습지}
     - {code: tuition, name: 대학 등록금}
     - {code: school_fee, name: 유치원·초중고 납입금}
+    - {code: exam, name: 어학시험}
 - code: travel
   name: 여행
   children:

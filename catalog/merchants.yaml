@@ -147,7 +147,7 @@
   aliases: [경주월드]
 - key: hackers_academy
   name: 해커스어학원
-  category: education
+  category: education.academy
   aliases: [해커스어학원]
 - key: hd_oilbank
   name: HD현대오일뱅크
@@ -167,7 +167,7 @@
   aliases: [홈플러스, HOMEPLUS]
 - key: hsk
   name: HSK 접수
-  category: education
+  category: education.exam
   aliases: [HSK, 한어수평고시]
 - key: hyundai_department
   name: 현대백화점
@@ -317,7 +317,7 @@
   aliases: [올리브영, OLIVE YOUNG, CJ올리브영]
 - key: opic
   name: OPIc 접수
-  category: education
+  category: education.exam
   aliases: [오픽, OPIC]
 - key: outback
   name: 아웃백스테이크하우스
@@ -325,7 +325,7 @@
   aliases: [아웃백, 아웃백스테이크하우스, OUTBACK]
 - key: pagoda_academy
   name: 파고다어학원
-  category: education
+  category: education.academy
   aliases: [파고다어학원]
 - key: paik_coffee
   name: 빽다방
@@ -419,7 +419,7 @@
   aliases: [티몬, 티켓몬스터, TMON]
 - key: toeic
   name: TOEIC 접수
-  category: education
+  category: education.exam
   aliases: [토익, TOEIC, 한국TOEIC위원회]
 - key: tom_n_toms
   name: 탐앤탐스
@@ -427,7 +427,7 @@
   aliases: [탐앤탐스, TOM N TOMS]
 - key: topik
   name: TOPIK 접수
-  category: education
+  category: education.exam
   aliases: [토픽, TOPIK, 한국어능력시험]
 - key: tving
   name: 티빙
@@ -581,13 +581,13 @@
   aliases: [영풍문고]
 - key: teps
   name: TEPS 접수
-  category: education
+  category: education.exam
   aliases: [TEPS, 텝스]
 - key: jpt
   name: JPT 접수
-  category: education
+  category: education.exam
   aliases: [JPT]
 - key: kpe
   name: KPE 접수
-  category: education
+  category: education.exam
   aliases: [KPE]
