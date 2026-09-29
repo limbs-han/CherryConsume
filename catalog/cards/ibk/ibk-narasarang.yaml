@@ -1,651 +1,405 @@
+schema_version: 2
 id: ibk-narasarang
 issuer: ibk
 name: IBK나라사랑카드
 kind: check
-annual_fee_domestic: 0
-annual_fee_global: 0
-active: true
-source_url: https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=296&PDCD=0001&pageId=CA01030000
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 80000, integrated_cap: null }      # '나라' 서비스
-  - { min_spend: 200000, integrated_cap: null }     # '사랑' 서비스
-  - { min_spend: 250000, integrated_cap: 10000 }    # 파워업 All in One, Npay 포인트
-  - { min_spend: 500000, integrated_cap: 25000 }
-  - { min_spend: 1000000, integrated_cap: 45000 }
-spend_rule:
-  excluded_categories: [tax, utility, gift_card, public_transit]
-  exclude_interest_free_installment: false
-  exclude_discounted: false
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  IBK 상품 페이지(준법감시인 심의필 제2026-5925호, 2026.07.27) 기준. BC카드 상품 페이지와 체크카드 개인설명서(2026.01.05)로 교차 확인.
-  integrated_cap은 파워업 서비스 All in One의 월 통합할인한도(1만/2.5만/4.5만원). 나라·사랑·PX·Npay·우대 패키지·특별 제휴 혜택은 각자 한도라 counts_toward_integrated_cap false.
-  실적은 전월 1일~말일 국내외 가맹점 이용금액. 제세공과금, 상품권 구매금액, 교통카드 이용금액은 실적 제외. 취소는 취소 매출표가 접수된 달 실적에서 차감.
-  전월 병 급여이체(카드 결제계좌로 국군재정관리단 병 급여 수령) 조건을 채우면 나라·사랑 서비스 전월실적 조건 면제. 이 면제는 모델에 못 담음.
-  전월 25만원 이상이면 편의점·대중교통은 All in One 할인만 적용하고 나라·사랑의 편의점·대중교통 할인은 주지 않음.
-  카드 등록일부터 다음 달 말일까지는 실적 미달이어도 할인·Npay 적립 제공. 이때 All in One은 25만~50만원 구간 한도.
-  간편결제 가맹점명이 결제대행사로 찍히면 할인 제외. 모든 혜택은 비씨카드 전산 등록 가맹점(업종) 기준. 상품권 구매는 할인 제외.
-  현장할인 혜택(GS25·이마트24 주요품목, 아웃백, CGV, 놀이공원)은 결제 금액이 이미 할인된 금액으로 찍힘.
-  공식 문구 미확인: PX 할인이 현장할인인지 청구할인인지. 메가MGC커피 All in One 할인과 메가오더 제휴 할인, 카카오T All in One 할인과 마이태그 쿠폰의 중복 여부.
-  프로모션 기한 2026-12-31까지: 네이버멤버십, 마이태그 쿠폰, 특별 제휴서비스, Npay 50만·100만원 구간 추가 적립, 공항라운지.
-  결제 건 혜택 아님: 국내 공항라운지 연 1회(Master 브랜드, 병 급여이체자), 상해보험·병영생활 안심보험 무료가입, 부모상 장례용품 지원, 트래블서비스(국제브랜드 1%·해외이용 0.18% 수수료 면제, 해외 ATM 수수료 월 3회 면제, 매매기준율 적용), GS ALL·그린카드·SYRUP 멤버십.
-  제휴 전용가·쿠폰이라 모델 제외: 지니뮤직 전용 이용권 최대 43%(6개월), SPOTV NOW 전용 이용권 최대 30%, 왓챠 30%(4개월), 해커스 인강 30%·라이브 20%·어학원 10%, 월급쟁이부자들 10% 쿠폰(5만원 이상, 월 1회, 최대 5만원), 쏘카 4시간 이상 50% 쿠폰, 슈마커 오프라인 1만원(10만원 이상, 2026-09-30까지).
-  공식 문구 차이: 편의점 All in One 1일 할인횟수가 IBK 페이지는 1일 2회, BC카드 페이지는 1일 1회. IBK 값을 씀.
-  소액 신용한도 최대 30만원 신청 가능.
-benefits:
-  - id: aio-transit
-    title: 대중교통 20% 청구할인
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: discount
-    rate_pct: 20
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: "파워업 All in One. 전국 시내버스·지하철, 후불교통 IC카드 이용분만. 할인 횟수·금액 제한 없음. 공식 문구 미확인: 월 통합할인한도 적용 여부. 보수적으로 한도에 포함"
-  - id: aio-convenience
-    title: 편의점 10% 청구할인
-    target_type: merchant
-    target_values: [gs25, emart24, cu]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 10
-    daily_cap_count: 2
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 파워업 All in One. 건당 최대 1천원, 월 10회, 1일 2회(BC카드 페이지는 1일 1회)
-  - id: aio-taxi
-    title: 카카오T 10% 청구할인
-    target_type: merchant
-    target_values: [kakao_t]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 파워업 All in One 택시 항목. 건당 최대 1천원, 월 2회, 1일 1회
-  - id: aio-medical
-    title: 병원·약국 10% 청구할인
-    target_type: category
-    target_values: [hospital, pharmacy]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 파워업 All in One. 전국 병원·약국 합산 월 2회, 건당 최대 1천원
-  - id: aio-cafe
-    title: 스타벅스·메가MGC커피 10% 청구할인
-    target_type: merchant
-    target_values: [starbucks, mega_coffee]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: "파워업 All in One 카페 항목. 합산 월 2회, 건당 최대 1천원. 공식 문구 미확인: 메가오더 특별 제휴 할인과 중복 여부"
-  - id: aio-shopping
-    title: 쇼핑·배달 10% 청구할인
-    target_type: merchant
-    target_values: [coupang, musinsa, naver_plus_store, gmarket, baemin]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 파워업 All in One. 쿠팡·무신사·네이버플러스스토어·G마켓·배달의민족 합산 월 2회, 건당 최대 1천원
-  - id: aio-subscription
-    title: 구독·게임 콘텐츠 10% 청구할인
-    target_type: merchant
-    target_values: [youtube_premium, netflix, tving, nexon, naver_webtoon, riot_games, app_store, google_play]
-    channel: online
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 파워업 All in One. 공식앱이나 홈페이지를 통한 국내 매출 자동납부 건만. 합산 월 2회, 건당 최대 1천원
-  - id: aio-leisure
-    title: 여행·레저 10% 청구할인
-    target_type: merchant
-    target_values: [yanolja, socar]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 3
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 파워업 All in One. NOL(야놀자)·쏘카·PC방 합산 월 2회, 건당 최대 1천원. PC방은 업종 코드가 없어 대상에서 뺌
-  - id: npay-points-t1
-    title: Npay 결제 10% 포인트 적립
-    target_type: merchant
-    target_values: [naver_pay]
-    channel: any
-    kind: points
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: 5000
-    monthly_cap_count: 5
-    daily_cap_count: 1
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 파워업 Npay포인트. Npay에 등록한 이 카드로 국내 가맹점 결제 시(온·오프라인 모두) Npay 포인트 적립, 네이버 계정 연결 필요. 전월 25만원 이상 월 5회. 세금·공과금·4대보험·공공기관·등록금·학부모부담금·수수료·상품권·선불·아파트관리비 제외
-  - id: npay-points-t2
-    title: Npay 결제 10% 포인트 적립
-    target_type: merchant
-    target_values: [naver_pay]
-    channel: any
-    kind: points
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: 7000
-    monthly_cap_count: 7
-    daily_cap_count: 1
-    min_tier_index: 4
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 전월 50만원 이상 월 7회(프로모션, 2026-12-31까지). 조건은 npay-points-t1과 같음
-  - id: npay-points-t3
-    title: Npay 결제 10% 포인트 적립
-    target_type: merchant
-    target_values: [naver_pay]
-    channel: any
-    kind: points
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: 10000
-    monthly_cap_count: 10
-    daily_cap_count: 1
-    min_tier_index: 5
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 전월 100만원 이상 월 10회(프로모션, 2026-12-31까지). 조건은 npay-points-t1과 같음
-  - id: px-under-30k
-    title: 군마트(PX) 3만원 미만 15% 할인
-    target_type: merchant
-    target_values: [px]
-    channel: offline
-    kind: discount
-    rate_pct: 15
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 10000
-    monthly_cap_count: 3
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: PX기본할인. 건당 3만원 미만 결제만. 전국 군부대 PX(해군마트 포함). 현역병 월 3회, 병 급여이체자 월 6회(값은 현역병 기준). 현역병 인정은 전월 말일 기준 장병내일준비적금 보유 또는 복무확인서·건강보험자격득실확인서 제출
-  - id: px-30k
-    title: 군마트(PX) 3만원 이상 10% 할인
-    target_type: merchant
-    target_values: [px]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 30000
-    max_per_txn: null
-    monthly_cap_amount: 50000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: PX기본할인. 건당 3만원 이상 7만원 미만. 3만원 이상 구간(10·20·30%)은 월 5만원 한도와 횟수를 함께 씀. 현역병 월 2회, 병 급여이체자 횟수 제한 없음
-  - id: px-70k
-    title: 군마트(PX) 7만원 이상 20% 할인
-    target_type: merchant
-    target_values: [px]
-    channel: offline
-    kind: discount
-    rate_pct: 20
-    fixed_amount: null
-    min_txn_amount: 70000
-    max_per_txn: null
-    monthly_cap_amount: 50000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: PX기본할인. 건당 7만원 이상 10만원 미만. 한도·횟수는 px-30k와 공유
-  - id: px-100k
-    title: 군마트(PX) 10만원 이상 30% 할인
-    target_type: merchant
-    target_values: [px]
-    channel: offline
-    kind: discount
-    rate_pct: 30
-    fixed_amount: null
-    min_txn_amount: 100000
-    max_per_txn: null
-    monthly_cap_amount: 50000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: PX기본할인. 건당 10만원 이상. 한도·횟수는 px-30k와 공유
-  - id: px-special
-    title: 군마트(PX) 20만원 이상 5만원 특별할인
-    target_type: merchant
-    target_values: [px]
-    channel: offline
-    kind: discount
-    rate_pct: null
-    fixed_amount: 50000
-    min_txn_amount: 200000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: PX특별할인. 기본할인과 한도·횟수 별도로 동시 적용(20만원 결제 시 기본 5만원+특별 5만원). 현역병 연 1회, 병 급여이체자 연 2회
-  - id: nara-convenience
-    title: 편의점 10% 청구할인
-    target_type: merchant
-    target_values: [gs25, emart24, cu]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 1000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 나라 서비스. 월 2회, 1회 1천원 한도. 전월 25만원 이상이면 이 혜택 대신 aio-convenience만 적용
-  - id: gs25-items-onsite
-    title: GS25 주요품목 10% 현장할인
-    target_type: merchant
-    target_values: [gs25]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: 1
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 실적 무관 상시. 간편식(도시락·김밥·주먹밥·햄버거·샌드위치·FF간편식), 음료(주류 제외), 아이스크림만. 1회 할인한도 없음
-  - id: emart24-items-onsite
-    title: 이마트24 주요품목 10% 현장할인
-    target_type: merchant
-    target_values: [emart24]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: 1
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 특별 제휴서비스, 2026-12-31까지. 간편식, 음료(주류 제외), 아이스크림만. 1회 할인한도 없음
-  - id: nara-rail
-    title: KTX·SRT·일반열차 5% 청구할인
-    target_type: merchant
-    target_values: [korail, srt]
-    channel: any
-    kind: discount
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 2000
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 나라 서비스. KTX·SRT·새마을호·무궁화호·고속버스 통합 월 2회, 연 4회, 1회 2천원 한도. 고속버스는 업종 코드가 없어 대상에서 뺌
-  - id: nara-cgv
-    title: CGV 1,500원 현장할인
-    target_type: merchant
-    target_values: [cgv]
-    channel: any
-    kind: discount
-    rate_pct: null
-    fixed_amount: 1500
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 나라 서비스. 1인 구매 시 1,500원, 동반 1인 포함 시 최대 3천원. 월 1회, 연 6회
-  - id: nara-themepark
-    title: 놀이공원 자유이용권 50% 현장할인
-    target_type: merchant
-    target_values: [lotte_world, everland, seoul_land, e_world, gyeongju_world]
-    channel: offline
-    kind: discount
-    rate_pct: 50
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 나라 서비스. 본인 자유이용권만. 롯데월드(서울·부산), 에버랜드, 서울랜드, 이월드, 경주월드. 캐리비안베이와 통합 월 1회, 연 2회
-  - id: nara-caribbean-bay
-    title: 캐리비안베이 자유이용권 30% 현장할인
-    target_type: merchant
-    target_values: [caribbean_bay]
-    channel: offline
-    kind: discount
-    rate_pct: 30
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 나라 서비스. 본인 자유이용권만. nara-themepark와 통합 월 1회, 연 2회
-  - id: sarang-outback
-    title: 아웃백 20% 현장할인
-    target_type: merchant
-    target_values: [outback]
-    channel: offline
-    kind: discount
-    rate_pct: 20
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: 40000
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 사랑 서비스. 월 1회, 1회 최대 4만원 할인. 딜리버리 제외
-  - id: sarang-transit
-    title: 시내버스·지하철 10% 청구할인
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 2000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 사랑 서비스. 후불교통 IC카드 이용분만, 매출표 접수일 기준 월 2천원 한도. 전월 25만원 이상이면 이 혜택 대신 aio-transit만 적용
-  - id: sarang-telecom
-    title: 이동통신요금 자동납부 5% 청구할인
-    target_type: category
-    target_values: [telecom]
-    channel: any
-    kind: discount
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 2000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 사랑 서비스. 이동통신요금 자동납부만, 최초 접수분 월 1회, 2천원 한도
-  - id: sarang-toeic-kyobo
-    title: 토익 접수·교보문고 2천원 청구할인
-    target_type: merchant
-    target_values: [toeic, kyobo_book]
-    channel: online
-    kind: discount
-    rate_pct: null
-    fixed_amount: 2000
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 사랑 서비스. 인터넷 토익시험 접수, 교보문고 온라인 서적 구매. 통합 월 1회, 연 4회, 1회 2만원 이상
-  - id: naver-membership
-    title: 네이버플러스 멤버십 100% 청구할인
-    target_type: merchant
-    target_values: [naver_plus_membership]
-    channel: online
-    kind: discount
-    rate_pct: 100
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4900
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 현역병 급여수령 우대 패키지, 2026-12-31까지. 직전월 이 카드 결제계좌로 병 급여 수령자만. 이 카드로 결제된 구독료만 월 최대 4,900원
-  - id: mytag-coupang-daiso-oliveyoung
-    title: 쿠팡·다이소·올리브영 1천원 청구할인
-    target_type: merchant
-    target_values: [coupang, daiso, olive_young]
-    channel: any
-    kind: discount
-    rate_pct: null
-    fixed_amount: 1000
-    min_txn_amount: 10000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 현역병 급여수령 우대 패키지, 2026-12-31까지. 병 급여이체자만, BC카드 마이태그 등록 후 대상 브랜드 중 최초 1만원 이상 결제 1건
-  - id: mytag-kakaot-taxi
-    title: 카카오T 택시 50% 청구할인
-    target_type: merchant
-    target_values: [kakao_t]
-    channel: any
-    kind: discount
-    rate_pct: 50
-    fixed_amount: null
-    min_txn_amount: 5000
-    max_per_txn: 5000
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 현역병 고객 우대 패키지. 현역병만, 마이태그 등록 후 택시 5천원 이상, 기간 내 1회, 최대 5천원
-  - id: mytag-momstouch
-    title: 맘스터치 1천원 청구할인
-    target_type: merchant
-    target_values: [moms_touch]
-    channel: any
-    kind: discount
-    rate_pct: null
-    fixed_amount: 1000
-    min_txn_amount: 10000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 현역병 고객 우대 패키지. 현역병만, 마이태그 등록 후 1만원 이상, 분기당 1회
-  - id: mega-order-weekday
-    title: 메가MGC커피 앱 평일 20% 청구할인
-    target_type: merchant
-    target_values: [mega_coffee]
-    channel: online
-    kind: discount
-    rate_pct: 20
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: 1
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 특별 제휴서비스, 2026-12-31까지. 메가오더 앱 결제, 평일만. 선물하기·선불충전 제외. 1일 1회, 1회 한도 없음
-  - id: mega-order-weekend
-    title: 메가MGC커피 앱 주말 30% 청구할인
-    target_type: merchant
-    target_values: [mega_coffee]
-    channel: online
-    kind: discount
-    rate_pct: 30
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: 1
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 특별 제휴서비스, 2026-12-31까지. 메가오더 앱 결제, 토·일만. 평일 혜택과 합쳐 1일 1회
-  - id: nol-points-25k
-    title: NOL 2만5천원 이상 1,200P 적립
-    target_type: merchant
-    target_values: [yanolja]
-    channel: online
-    kind: points
-    rate_pct: null
-    fixed_amount: 1200
-    min_txn_amount: 25000
-    max_per_txn: null
-    monthly_cap_amount: 13000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 특별 제휴서비스, 2026-12-31까지. NOL 포인트(제휴사 포인트). 국내·해외숙소, 레저, 교통 상품만, 간편결제 제외. 건당 2만5천원~5만원 미만. 월 1.3만P 한도는 3개 구간과 IBK·하나·신한 나라사랑카드 합산
-  - id: nol-points-50k
-    title: NOL 5만원 이상 2,500P 적립
-    target_type: merchant
-    target_values: [yanolja]
-    channel: online
-    kind: points
-    rate_pct: null
-    fixed_amount: 2500
-    min_txn_amount: 50000
-    max_per_txn: null
-    monthly_cap_amount: 13000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 건당 5만원~10만원 미만. 조건은 nol-points-25k와 같음
-  - id: nol-points-100k
-    title: NOL 10만원 이상 6,000P 적립
-    target_type: merchant
-    target_values: [yanolja]
-    channel: online
-    kind: points
-    rate_pct: null
-    fixed_amount: 6000
-    min_txn_amount: 100000
-    max_per_txn: null
-    monthly_cap_amount: 13000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 건당 10만원 이상. 조건은 nol-points-25k와 같음
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=296&PDCD=0001&pageId=CA01030000', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 80000, 200000, 250000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [gift_card, tax, transit, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    limits:
+      - key: integrated
+        per: month
+        amount: {250000: 10000, 500000: 25000, 1000000: 45000}
+    benefits:
+      - key: aio-transit
+        title: 대중교통 20% 청구할인
+        target:
+          categories: [transit]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: '파워업 All in One. 전국 시내버스·지하철, 후불교통 IC카드 이용분만. 할인 횟수·금액 제한 없음. 공식 문구 미확인: 월 통합할인한도 적용 여부. 보수적으로 한도에 포함'
+      - key: aio-convenience
+        title: 편의점 10% 청구할인
+        target:
+          merchants: [cu, emart24, gs25]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 2}
+          - {per: month, count: 10}
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: 파워업 All in One. 건당 최대 1천원, 월 10회, 1일 2회(BC카드 페이지는 1일 1회)
+      - key: aio-taxi
+        title: 카카오T 10% 청구할인
+        target:
+          merchants: [kakao_t]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: 파워업 All in One 택시 항목. 건당 최대 1천원, 월 2회, 1일 1회
+      - key: aio-medical
+        title: 병원·약국 10% 청구할인
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: 파워업 All in One. 전국 병원·약국 합산 월 2회, 건당 최대 1천원
+      - key: aio-cafe
+        title: 스타벅스·메가MGC커피 10% 청구할인
+        target:
+          merchants: [mega_coffee, starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: '파워업 All in One 카페 항목. 합산 월 2회, 건당 최대 1천원. 공식 문구 미확인: 메가오더 특별 제휴 할인과 중복 여부'
+      - key: aio-shopping
+        title: 쇼핑·배달 10% 청구할인
+        target:
+          merchants: [baemin, coupang, gmarket, musinsa, naver_plus_store]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: 파워업 All in One. 쿠팡·무신사·네이버플러스스토어·G마켓·배달의민족 합산 월 2회, 건당 최대 1천원
+      - key: aio-subscription
+        title: 구독·게임 콘텐츠 10% 청구할인
+        target:
+          merchants: [app_store, google_play, naver_webtoon, netflix, nexon, riot_games, tving, youtube_premium]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: 파워업 All in One. 공식앱이나 홈페이지를 통한 국내 매출 자동납부 건만. 합산 월 2회, 건당 최대 1천원
+      - key: aio-leisure
+        title: 여행·레저 10% 청구할인
+        target:
+          merchants: [socar, yanolja]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 250000}
+        notes: 파워업 All in One. NOL(야놀자)·쏘카·PC방 합산 월 2회, 건당 최대 1천원. PC방은 업종 코드가 없어 대상에서 뺌
+      - key: npay-points
+        title: Npay 결제 10% 포인트 적립
+        target:
+          merchants: [naver_pay]
+        reward: {type: points, program: npay_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - per: month
+            amount: {250000: 5000, 500000: 7000, 1000000: 10000}
+          - per: month
+            count: {250000: 5, 500000: 7, 1000000: 10}
+        tiers: {from: 250000}
+        notes: 파워업 Npay포인트. Npay에 등록한 이 카드로 국내 가맹점 결제 시(온·오프라인 모두) Npay 포인트 적립, 네이버 계정 연결 필요. 전월 25만원 이상 월 5회. 세금·공과금·4대보험·공공기관·등록금·학부모부담금·수수료·상품권·선불·아파트관리비 제외
+      - key: px-under-30k
+        title: 군마트(PX) 3만원 미만 15% 할인
+        target:
+          merchants: [px]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {per: month, amount: 10000}
+          - {per: month, count: 3}
+        notes: PX기본할인. 건당 3만원 미만 결제만. 전국 군부대 PX(해군마트 포함). 현역병 월 3회, 병 급여이체자 월 6회(값은 현역병 기준). 현역병 인정은 전월 말일 기준 장병내일준비적금 보유 또는 복무확인서·건강보험자격득실확인서 제출
+      - key: px-30k
+        title: 군마트(PX) 3만원 이상 10% 할인
+        target:
+          merchants: [px]
+        when:
+          - {channel: offline}
+          - amount: {min: 30000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 50000}
+          - {per: month, count: 2}
+        notes: PX기본할인. 건당 3만원 이상 7만원 미만. 3만원 이상 구간(10·20·30%)은 월 5만원 한도와 횟수를 함께 씀. 현역병 월 2회, 병 급여이체자 횟수 제한 없음
+      - key: px-70k
+        title: 군마트(PX) 7만원 이상 20% 할인
+        target:
+          merchants: [px]
+        when:
+          - {channel: offline}
+          - amount: {min: 70000}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: month, amount: 50000}
+          - {per: month, count: 2}
+        notes: PX기본할인. 건당 7만원 이상 10만원 미만. 한도·횟수는 px-30k와 공유
+      - key: px-100k
+        title: 군마트(PX) 10만원 이상 30% 할인
+        target:
+          merchants: [px]
+        when:
+          - {channel: offline}
+          - amount: {min: 100000}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, amount: 50000}
+          - {per: month, count: 2}
+        notes: PX기본할인. 건당 10만원 이상. 한도·횟수는 px-30k와 공유
+      - key: px-special
+        title: 군마트(PX) 20만원 이상 5만원 특별할인
+        target:
+          merchants: [px]
+        when:
+          - {channel: offline}
+          - amount: {min: 200000}
+        reward: {type: billing_discount, fixed: 50000}
+        limits:
+          - {per: month, count: 1}
+        notes: PX특별할인. 기본할인과 한도·횟수 별도로 동시 적용(20만원 결제 시 기본 5만원+특별 5만원). 현역병 연 1회, 병 급여이체자 연 2회
+      - key: nara-convenience
+        title: 편의점 10% 청구할인
+        target:
+          merchants: [cu, emart24, gs25]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, count: 2}
+        tiers: {from: 80000}
+        notes: 나라 서비스. 월 2회, 1회 1천원 한도. 전월 25만원 이상이면 이 혜택 대신 aio-convenience만 적용
+      - key: gs25-items-onsite
+        title: GS25 주요품목 10% 현장할인
+        target:
+          merchants: [gs25]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: day, count: 1}
+        notes: 실적 무관 상시. 간편식(도시락·김밥·주먹밥·햄버거·샌드위치·FF간편식), 음료(주류 제외), 아이스크림만. 1회 할인한도 없음
+      - key: emart24-items-onsite
+        title: 이마트24 주요품목 10% 현장할인
+        target:
+          merchants: [emart24]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: day, count: 1}
+        notes: 특별 제휴서비스, 2026-12-31까지. 간편식, 음료(주류 제외), 아이스크림만. 1회 할인한도 없음
+      - key: nara-rail
+        title: KTX·SRT·일반열차 5% 청구할인
+        target:
+          merchants: [korail, srt]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, amount: 2000}
+          - {per: month, count: 2}
+        tiers: {from: 80000}
+        notes: 나라 서비스. KTX·SRT·새마을호·무궁화호·고속버스 통합 월 2회, 연 4회, 1회 2천원 한도. 고속버스는 업종 코드가 없어 대상에서 뺌
+      - key: nara-cgv
+        title: CGV 1,500원 현장할인
+        target:
+          merchants: [cgv]
+        reward: {type: billing_discount, fixed: 1500}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 80000}
+        notes: 나라 서비스. 1인 구매 시 1,500원, 동반 1인 포함 시 최대 3천원. 월 1회, 연 6회
+      - key: nara-themepark
+        title: 놀이공원 자유이용권 50% 현장할인
+        target:
+          merchants: [e_world, everland, gyeongju_world, lotte_world, seoul_land]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 80000}
+        notes: 나라 서비스. 본인 자유이용권만. 롯데월드(서울·부산), 에버랜드, 서울랜드, 이월드, 경주월드. 캐리비안베이와 통합 월 1회, 연 2회
+      - key: nara-caribbean-bay
+        title: 캐리비안베이 자유이용권 30% 현장할인
+        target:
+          merchants: [caribbean_bay]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 80000}
+        notes: 나라 서비스. 본인 자유이용권만. nara-themepark와 통합 월 1회, 연 2회
+      - key: sarang-outback
+        title: 아웃백 20% 현장할인
+        target:
+          merchants: [outback]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, amount: 40000}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        notes: 사랑 서비스. 월 1회, 1회 최대 4만원 할인. 딜리버리 제외
+      - key: sarang-transit
+        title: 시내버스·지하철 10% 청구할인
+        target:
+          categories: [transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+        notes: 사랑 서비스. 후불교통 IC카드 이용분만, 매출표 접수일 기준 월 2천원 한도. 전월 25만원 이상이면 이 혜택 대신 aio-transit만 적용
+      - key: sarang-telecom
+        title: 이동통신요금 자동납부 5% 청구할인
+        target:
+          categories: [telecom]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 2000}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        notes: 사랑 서비스. 이동통신요금 자동납부만, 최초 접수분 월 1회, 2천원 한도
+      - key: sarang-toeic-kyobo
+        title: 토익 접수·교보문고 2천원 청구할인
+        target:
+          merchants: [kyobo_book, toeic]
+        when:
+          - {channel: online}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        notes: 사랑 서비스. 인터넷 토익시험 접수, 교보문고 온라인 서적 구매. 통합 월 1회, 연 4회, 1회 2만원 이상
+      - key: naver-membership
+        title: 네이버플러스 멤버십 100% 청구할인
+        target:
+          merchants: [naver_plus_membership]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 4900}
+        notes: 현역병 급여수령 우대 패키지, 2026-12-31까지. 직전월 이 카드 결제계좌로 병 급여 수령자만. 이 카드로 결제된 구독료만 월 최대 4,900원
+      - key: mytag-coupang-daiso-oliveyoung
+        title: 쿠팡·다이소·올리브영 1천원 청구할인
+        target:
+          merchants: [coupang, daiso, olive_young]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 1}
+        notes: 현역병 급여수령 우대 패키지, 2026-12-31까지. 병 급여이체자만, BC카드 마이태그 등록 후 대상 브랜드 중 최초 1만원 이상 결제 1건
+      - key: mytag-kakaot-taxi
+        title: 카카오T 택시 50% 청구할인
+        target:
+          merchants: [kakao_t]
+        when:
+          - amount: {min: 5000}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: txn, amount: 5000}
+          - {per: month, count: 1}
+        notes: 현역병 고객 우대 패키지. 현역병만, 마이태그 등록 후 택시 5천원 이상, 기간 내 1회, 최대 5천원
+      - key: mytag-momstouch
+        title: 맘스터치 1천원 청구할인
+        target:
+          merchants: [moms_touch]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 1}
+        notes: 현역병 고객 우대 패키지. 현역병만, 마이태그 등록 후 1만원 이상, 분기당 1회
+      - key: mega-order-weekday
+        title: 메가MGC커피 앱 평일 20% 청구할인
+        target:
+          merchants: [mega_coffee]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: day, count: 1}
+        notes: 특별 제휴서비스, 2026-12-31까지. 메가오더 앱 결제, 평일만. 선물하기·선불충전 제외. 1일 1회, 1회 한도 없음
+      - key: mega-order-weekend
+        title: 메가MGC커피 앱 주말 30% 청구할인
+        target:
+          merchants: [mega_coffee]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: day, count: 1}
+        notes: 특별 제휴서비스, 2026-12-31까지. 메가오더 앱 결제, 토·일만. 평일 혜택과 합쳐 1일 1회
+      - key: nol-points-25k
+        title: NOL 2만5천원 이상 1,200P 적립
+        target:
+          merchants: [yanolja]
+        when:
+          - {channel: online}
+          - amount: {min: 25000}
+        reward: {type: points, program: npay_point, fixed: 1200}
+        limits:
+          - {per: month, amount: 13000}
+        notes: 특별 제휴서비스, 2026-12-31까지. NOL 포인트(제휴사 포인트). 국내·해외숙소, 레저, 교통 상품만, 간편결제 제외. 건당 2만5천원~5만원 미만. 월 1.3만P 한도는 3개 구간과 IBK·하나·신한 나라사랑카드 합산
+      - key: nol-points-50k
+        title: NOL 5만원 이상 2,500P 적립
+        target:
+          merchants: [yanolja]
+        when:
+          - {channel: online}
+          - amount: {min: 50000}
+        reward: {type: points, program: npay_point, fixed: 2500}
+        limits:
+          - {per: month, amount: 13000}
+        notes: 건당 5만원~10만원 미만. 조건은 nol-points-25k와 같음
+      - key: nol-points-100k
+        title: NOL 10만원 이상 6,000P 적립
+        target:
+          merchants: [yanolja]
+        when:
+          - {channel: online}
+          - amount: {min: 100000}
+        reward: {type: points, program: npay_point, fixed: 6000}
+        limits:
+          - {per: month, amount: 13000}
+        notes: 건당 10만원 이상. 조건은 nol-points-25k와 같음
+notes: 'IBK 상품 페이지(준법감시인 심의필 제2026-5925호, 2026.07.27) 기준. BC카드 상품 페이지와 체크카드 개인설명서(2026.01.05)로 교차 확인. integrated_cap은 파워업 서비스 All in One의 월 통합할인한도(1만/2.5만/4.5만원). 나라·사랑·PX·Npay·우대 패키지·특별 제휴 혜택은 각자 한도라 counts_toward_integrated_cap false. 실적은 전월 1일~말일 국내외 가맹점 이용금액. 제세공과금, 상품권 구매금액, 교통카드 이용금액은 실적 제외. 취소는 취소 매출표가 접수된 달 실적에서 차감. 전월 병 급여이체(카드 결제계좌로 국군재정관리단 병 급여 수령) 조건을 채우면 나라·사랑 서비스 전월실적 조건 면제. 이 면제는 모델에 못 담음. 전월 25만원 이상이면 편의점·대중교통은 All in One 할인만 적용하고 나라·사랑의 편의점·대중교통 할인은 주지 않음. 카드 등록일부터 다음 달 말일까지는 실적 미달이어도 할인·Npay 적립 제공. 이때 All in One은 25만~50만원 구간 한도. 간편결제 가맹점명이 결제대행사로 찍히면 할인 제외. 모든 혜택은 비씨카드 전산 등록 가맹점(업종) 기준. 상품권 구매는 할인 제외. 현장할인 혜택(GS25·이마트24 주요품목, 아웃백, CGV, 놀이공원)은 결제 금액이 이미 할인된 금액으로 찍힘. 공식 문구 미확인: PX 할인이 현장할인인지 청구할인인지. 메가MGC커피 All in One 할인과 메가오더 제휴 할인, 카카오T All in One 할인과 마이태그 쿠폰의 중복 여부. 프로모션 기한 2026-12-31까지: 네이버멤버십, 마이태그 쿠폰, 특별 제휴서비스, Npay 50만·100만원 구간 추가 적립, 공항라운지. 결제 건 혜택 아님: 국내 공항라운지 연 1회(Master 브랜드, 병 급여이체자), 상해보험·병영생활 안심보험 무료가입, 부모상 장례용품 지원, 트래블서비스(국제브랜드 1%·해외이용 0.18% 수수료 면제, 해외 ATM 수수료 월 3회 면제, 매매기준율 적용), GS ALL·그린카드·SYRUP 멤버십. 제휴 전용가·쿠폰이라 모델 제외: 지니뮤직 전용 이용권 최대 43%(6개월), SPOTV NOW 전용 이용권 최대 30%, 왓챠 30%(4개월), 해커스 인강 30%·라이브 20%·어학원 10%, 월급쟁이부자들 10% 쿠폰(5만원 이상, 월 1회, 최대 5만원), 쏘카 4시간 이상 50% 쿠폰, 슈마커 오프라인 1만원(10만원 이상, 2026-09-30까지). 공식 문구 차이: 편의점 All in One 1일 할인횟수가 IBK 페이지는 1일 2회, BC카드 페이지는 1일 1회. IBK 값을 씀. 소액 신용한도 최대 30만원 신청 가능.'

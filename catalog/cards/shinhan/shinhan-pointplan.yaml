@@ -1,221 +1,136 @@
+schema_version: 2
 id: shinhan-pointplan
 issuer: shinhan
 name: 신한카드 Point Plan
 kind: credit
-annual_fee_domestic: 20000
-annual_fee_global: 23000
-active: true
-source_url: https://www.shinhancard.com/pconts/html/card/apply/credit/1226113_2207.html
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 400000, integrated_cap: 10000 }    # 일상 생활비 적립 한도
-  - { min_spend: 800000, integrated_cap: 30000 }
-  - { min_spend: 1200000, integrated_cap: 50000 }
-spend_rule:
-  excluded_categories: [annual_fee, gift_card, tax, apartment_fee, pharmacy]
-  exclude_interest_free_installment: false
-  exclude_discounted: false
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  신한카드 상품 페이지(여신금융협회 심의필 제2025-C1h-16768호, 2025.11.19~2026.11.18)와 신한카드 상품 API(entryId 202402020001) 기준. 연회비는 API 값(국내전용 20,000원, VISA 23,000원).
-  모든 혜택은 마이신한포인트 적립(1P=1원), 매월 이용분을 다음 달 20일 적립.
-  integrated_cap은 일상 생활비 적립 서비스(국내 결제금액별 0.5~3%, SOL페이 추가 0.1%, 해외 1%)의 월 통합 적립 한도 1만/3만/5만P. 주말 외식비와 정기결제 자동납부는 한도가 따로라 counts_toward_integrated_cap false.
-  가족행사월(5월, 12월)은 전월 40만원 이상이면 일상 생활비 한도 1만P 추가(2만/4만/6만P). 모델에 못 담음.
-  전월(1일~말일) 거래 시점 이용금액(일시불+할부) 기준. 해외는 매입일 기준, 교통카드는 전전월 이용금액 반영(모바일 후불교통은 전월). 본인·가족카드 실적·한도·횟수 합산.
-  실적 제외 중 업종 코드에 없는 것: 단기·장기 카드대출, 각종 수수료·이자, 선불카드·선불전자지급수단 구매·충전, 수도요금, 4대보험, 거래 취소금액, 학원(일반전문학원·학습지·자동차학원) 업종, 의약품 전용몰·제약회사, 철도 업종. 전기·도시가스요금과 통신요금은 실적에 들어감.
-  모든 적립 제외: 기프트카드·선불·상품권 구매·충전, 무이자할부(부분 무이자 포함), 국세·지방세·수도요금, 4대보험, 아파트관리비, 스쿨뱅킹·대학(원) 등록금, 할인 서비스를 받은 거래 전체, 포인트 사용 금액, 거래 취소, 의약품 전용몰·제약회사·약국, 철도.
-  간편결제 가맹점명이 페이 이름이면 적립 제외. 온라인은 해당 업체 사이트·앱 직접 결제만. 부분취소는 취소 반영 후 최종 금액으로 적립률 다시 적용.
-  신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 일상 생활비는 40만~80만원 구간, 주말 외식비는 40만원 미만 구간, 자동납부는 40만원 이상 구간 적용. 그 기간에 일상 생활비는 80만원, 주말 외식비는 40만원 이상 쓰면 다음 달 해당 구간.
-  가족카드 발급 가능(연회비 없음). 후불교통 신청 가능.
-  공식 문구 미확인: 취소를 어느 달 실적에서 빼는지.
-benefits:
-  - id: daily-under-30k
-    title: 국내 3만원 미만 0.5% 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 0.5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 일상 생활비. 국내 건당 3만원 미만 결제만. 건당 결제금액 구간 하나의 적립률만 적용(daily-30k 이상 혜택과 중복 아님). 할부는 원거래 금액으로 1회 판단. 도시가스·전기요금·SKT·KT·LG U+ 이동통신요금 결제 제외(자동납부 여부 무관)
-  - id: daily-30k
-    title: 국내 3만원 이상 0.7% 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 0.7
-    fixed_amount: null
-    min_txn_amount: 30000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 일상 생활비. 국내 건당 3만원 이상 10만원 미만. 조건은 daily-under-30k와 같음
-  - id: daily-100k
-    title: 국내 10만원 이상 1% 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 1.0
-    fixed_amount: null
-    min_txn_amount: 100000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 일상 생활비. 국내 건당 10만원 이상 30만원 미만. 조건은 daily-under-30k와 같음
-  - id: daily-300k
-    title: 국내 30만원 이상 2% 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 2.0
-    fixed_amount: null
-    min_txn_amount: 300000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 일상 생활비. 국내 건당 30만원 이상 100만원 미만. 조건은 daily-under-30k와 같음
-  - id: daily-1m
-    title: 국내 100만원 이상 3% 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 3.0
-    fixed_amount: null
-    min_txn_amount: 1000000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 일상 생활비. 국내 건당 100만원 이상. 조건은 daily-under-30k와 같음
-  - id: daily-solpay-extra
-    title: 신한 SOL페이 결제 0.1% 추가 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 0.1
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 일상 생활비. 국내 결제를 신한 SOL페이·신한 슈퍼SOL로 할 때만(터치·QR·바코드·NFC 포함, ARS·일반·Smart결제 제외). 금액 구간 적립률에 더해 줌
-  - id: daily-overseas
-    title: 해외 일시불 1% 적립
-    target_type: category
-    target_values: [overseas]
-    channel: any
-    kind: points
-    rate_pct: 1.0
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 일상 생활비. 해외 일시불만, VISA 해외겸용 카드만, 최종 원화 청구금액 기준. 할부 전환 시 제외
-  - id: weekend-dining-t0
-    title: 주말 음식점·배달앱 2만원 이상 1천P 적립
-    target_type: category
-    target_values: [restaurant, delivery_app]
-    channel: any
-    kind: points
-    rate_pct: null
-    fixed_amount: 1000
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: 2000
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 주말 외식비. 토·일만, 건당 2만원 이상. 음식점은 오프라인 음식점 업종(한식·일식·양식·중식·뷔페·맥주홀·일반대중음식·패스트푸드·제과점), 커피 업종·백화점/할인점 입점 매장 제외. 배달앱은 배달의민족·요기요·땡겨요 앱 내 카드결제를 신한 SOL페이로 한 건만. 통합 일 1회. 전월 40만원 미만 월 2회. 일상 생활비 적립과 중복 제공
-  - id: weekend-dining-t1
-    title: 주말 음식점·배달앱 2만원 이상 1천P 적립
-    target_type: category
-    target_values: [restaurant, delivery_app]
-    channel: any
-    kind: points
-    rate_pct: null
-    fixed_amount: 1000
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: 5000
-    monthly_cap_count: 5
-    daily_cap_count: 1
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 전월 40만원 이상 월 5회. 조건은 weekend-dining-t0과 같음
-  - id: autopay-utility
-    title: 도시가스·전기요금 자동납부 2만원당 1천P 적립
-    target_type: category
-    target_values: [utility]
-    channel: any
-    kind: points
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 20000
-    max_per_txn: 5000
-    monthly_cap_amount: 5000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 정기결제 자동납부. 원문은 자동납부 승인금액 2만원당 1천P(2만원 단위 절사), rate_pct 5는 근사값. 도시가스·전기요금만, 둘 합쳐 월 첫 자동납부 1건, 1회 승인 10만원까지. 아파트관리비에 포함된 결제 제외. 이 혜택을 받은 건은 일상 생활비 적립 없음
-  - id: autopay-telecom
-    title: 이동통신요금 자동납부 2만원당 1천P 적립
-    target_type: merchant
-    target_values: [skt, kt, lg_uplus]
-    channel: any
-    kind: points
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 20000
-    max_per_txn: 5000
-    monthly_cap_amount: 5000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 정기결제 자동납부. 원문은 자동납부 승인금액 2만원당 1천P(예 63,000원이면 3천P), rate_pct 5는 근사값. 순수 통신요금 자동납부 월 첫 1건만, 1회 승인 10만원까지. 약정금액 대납·지점 월납·알뜰폰 제외. 이 혜택을 받은 건은 일상 생활비 적립 없음
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, amount: 23000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1226113_2207.html', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, gift_card, pharmacy, tax]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    limits:
+      - key: integrated
+        per: month
+        amount: {400000: 10000, 800000: 30000, 1200000: 50000}
+    benefits:
+      - key: daily-under-30k
+        title: 국내 3만원 미만 0.5% 적립
+        target: {all: true}
+        reward: {type: points, program: mysinhan_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 일상 생활비. 국내 건당 3만원 미만 결제만. 건당 결제금액 구간 하나의 적립률만 적용(daily-30k 이상 혜택과 중복 아님). 할부는 원거래 금액으로 1회 판단. 도시가스·전기요금·SKT·KT·LG U+ 이동통신요금 결제 제외(자동납부 여부 무관)
+      - key: daily-30k
+        title: 국내 3만원 이상 0.7% 적립
+        target: {all: true}
+        when:
+          - amount: {min: 30000}
+        reward: {type: points, program: mysinhan_point, rate: 0.7}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 일상 생활비. 국내 건당 3만원 이상 10만원 미만. 조건은 daily-under-30k와 같음
+      - key: daily-100k
+        title: 국내 10만원 이상 1% 적립
+        target: {all: true}
+        when:
+          - amount: {min: 100000}
+        reward: {type: points, program: mysinhan_point, rate: 1.0}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 일상 생활비. 국내 건당 10만원 이상 30만원 미만. 조건은 daily-under-30k와 같음
+      - key: daily-300k
+        title: 국내 30만원 이상 2% 적립
+        target: {all: true}
+        when:
+          - amount: {min: 300000}
+        reward: {type: points, program: mysinhan_point, rate: 2.0}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 일상 생활비. 국내 건당 30만원 이상 100만원 미만. 조건은 daily-under-30k와 같음
+      - key: daily-1m
+        title: 국내 100만원 이상 3% 적립
+        target: {all: true}
+        when:
+          - amount: {min: 1000000}
+        reward: {type: points, program: mysinhan_point, rate: 3.0}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 일상 생활비. 국내 건당 100만원 이상. 조건은 daily-under-30k와 같음
+      - key: daily-solpay-extra
+        title: 신한 SOL페이 결제 0.1% 추가 적립
+        target: {all: true}
+        reward: {type: points, program: mysinhan_point, rate: 0.1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 일상 생활비. 국내 결제를 신한 SOL페이·신한 슈퍼SOL로 할 때만(터치·QR·바코드·NFC 포함, ARS·일반·Smart결제 제외). 금액 구간 적립률에 더해 줌
+      - key: daily-overseas
+        title: 해외 일시불 1% 적립
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: mysinhan_point, rate: 1.0}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 일상 생활비. 해외 일시불만, VISA 해외겸용 카드만, 최종 원화 청구금액 기준. 할부 전환 시 제외
+      - key: weekend-dining
+        title: 주말 음식점·배달앱 2만원 이상 1천P 적립
+        target:
+          categories: [delivery_app, restaurant]
+        when:
+          - amount: {min: 20000}
+        reward: {type: points, program: mysinhan_point, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - per: month
+            amount: {0: 2000, 400000: 5000}
+          - per: month
+            count: {0: 2, 400000: 5}
+        notes: 주말 외식비. 토·일만, 건당 2만원 이상. 음식점은 오프라인 음식점 업종(한식·일식·양식·중식·뷔페·맥주홀·일반대중음식·패스트푸드·제과점), 커피 업종·백화점/할인점 입점 매장 제외. 배달앱은 배달의민족·요기요·땡겨요 앱 내 카드결제를 신한 SOL페이로 한 건만. 통합 일 1회. 전월 40만원 미만 월 2회. 일상 생활비 적립과 중복 제공
+      - key: autopay-utility
+        title: 도시가스·전기요금 자동납부 2만원당 1천P 적립
+        target:
+          categories: [utility]
+        when:
+          - amount: {min: 20000}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, amount: 5000}
+          - {per: month, amount: 5000}
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+        notes: 정기결제 자동납부. 원문은 자동납부 승인금액 2만원당 1천P(2만원 단위 절사), rate_pct 5는 근사값. 도시가스·전기요금만, 둘 합쳐 월 첫 자동납부 1건, 1회 승인 10만원까지. 아파트관리비에 포함된 결제 제외. 이 혜택을 받은 건은 일상 생활비 적립 없음
+      - key: autopay-telecom
+        title: 이동통신요금 자동납부 2만원당 1천P 적립
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 20000}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, amount: 5000}
+          - {per: month, amount: 5000}
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+        notes: 정기결제 자동납부. 원문은 자동납부 승인금액 2만원당 1천P(예 63,000원이면 3천P), rate_pct 5는 근사값. 순수 통신요금 자동납부 월 첫 1건만, 1회 승인 10만원까지. 약정금액 대납·지점 월납·알뜰폰 제외. 이 혜택을 받은 건은 일상 생활비 적립 없음
+notes: '신한카드 상품 페이지(여신금융협회 심의필 제2025-C1h-16768호, 2025.11.19~2026.11.18)와 신한카드 상품 API(entryId 202402020001) 기준. 연회비는 API 값(국내전용 20,000원, VISA 23,000원). 모든 혜택은 마이신한포인트 적립(1P=1원), 매월 이용분을 다음 달 20일 적립. integrated_cap은 일상 생활비 적립 서비스(국내 결제금액별 0.5~3%, SOL페이 추가 0.1%, 해외 1%)의 월 통합 적립 한도 1만/3만/5만P. 주말 외식비와 정기결제 자동납부는 한도가 따로라 counts_toward_integrated_cap false. 가족행사월(5월, 12월)은 전월 40만원 이상이면 일상 생활비 한도 1만P 추가(2만/4만/6만P). 모델에 못 담음. 전월(1일~말일) 거래 시점 이용금액(일시불+할부) 기준. 해외는 매입일 기준, 교통카드는 전전월 이용금액 반영(모바일 후불교통은 전월). 본인·가족카드 실적·한도·횟수 합산. 실적 제외 중 업종 코드에 없는 것: 단기·장기 카드대출, 각종 수수료·이자, 선불카드·선불전자지급수단 구매·충전, 수도요금, 4대보험, 거래 취소금액, 학원(일반전문학원·학습지·자동차학원) 업종, 의약품 전용몰·제약회사, 철도 업종. 전기·도시가스요금과 통신요금은 실적에 들어감. 모든 적립 제외: 기프트카드·선불·상품권 구매·충전, 무이자할부(부분 무이자 포함), 국세·지방세·수도요금, 4대보험, 아파트관리비, 스쿨뱅킹·대학(원) 등록금, 할인 서비스를 받은 거래 전체, 포인트 사용 금액, 거래 취소, 의약품 전용몰·제약회사·약국, 철도. 간편결제 가맹점명이 페이 이름이면 적립 제외. 온라인은 해당 업체 사이트·앱 직접 결제만. 부분취소는 취소 반영 후 최종 금액으로 적립률 다시 적용. 신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 일상 생활비는 40만~80만원 구간, 주말 외식비는 40만원 미만 구간, 자동납부는 40만원 이상 구간 적용. 그 기간에 일상 생활비는 80만원, 주말 외식비는 40만원 이상 쓰면 다음 달 해당 구간. 가족카드 발급 가능(연회비 없음). 후불교통 신청 가능. 공식 문구 미확인: 취소를 어느 달 실적에서 빼는지.'

@@ -1,242 +1,161 @@
+schema_version: 2
 id: kakaobank-friends-check
 issuer: kakaobank
 name: 카카오뱅크 프렌즈 체크카드
 kind: check
-annual_fee_domestic: 0
-annual_fee_global: 0
-active: true
-source_url: https://www.kakaobank.com/products/checkcard
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 300000, integrated_cap: null }
-spend_rule:
-  excluded_categories: [tax, utility, apartment_fee, gift_card]
-  exclude_interest_free_installment: false
-  exclude_discounted: false
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  기본 캐시백은 상품 페이지(심의필 26-0018), 전월 30만원 이상 혜택은 카카오뱅크 앱 혜택 페이지
-  https://kakaobankcontent.com/event/card_benefit 의 2026 캐시백 프로모션(2026.02.01~2027.01.31, 심의필 26-0007)에서 옮김.
-  프로모션 종료 뒤에는 다시 확인 필요. 연회비 없음. 재발급 수수료 2천원. 매입·정산은 KB국민카드가 맡고 업종은 KB국민카드 기준.
-  실적은 전월 1일~말일 실제 승인금액 기준이며 프렌즈 체크카드를 여러 장 가지면 고객별로 합산.
-  실적 제외 중 업종 코드가 없는 것: 대학(대학원) 등록금, 수수료·이자, 선물하기(상품권 업종), 정부지원금, 사회보험료, 연체료, 결제취소금액,
-  교통카드/RF유통기관 이용금액. 이 교통 항목에 후불교통 이용분이 들어가는지는 공식 문구 미확인이라 public_transit은 제외 목록에 넣지 않음.
-  취소는 취소매출전표 접수월 실적에서 뺌. 체크카드라 할부 없음.
-  최초 사용등록일 또는 첫 승인·매입일 중 빠른 날부터 다음 달 말일까지 프로모션 혜택을 실적 무관 제공.
-  프로모션 혜택은 항목마다 고객별 월 1회. 금액은 1회 승인금액 기준이고 여러 승인을 합치지 않음. 간편결제로 결제하면 혜택이 빠질 수 있음.
-  캐시백은 다음 달 10일 결제계좌로 입금. 기본 캐시백 제외 항목은 실적 제외 항목과 같음.
-benefits:
-  - id: weekday-0-2
-    title: 평일 0.2% 캐시백
-    target_type: all
-    target_values: []
-    channel: any
-    kind: cashback
-    rate_pct: 0.2
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 월~금 결제만. 주말·공휴일은 0.4% 혜택이 대신 적용. 전월실적과 한도 없음. 국내외 가맹점
-  - id: weekend-0-4
-    title: 주말·공휴일 0.4% 캐시백
-    target_type: all
-    target_values: []
-    channel: any
-    kind: cashback
-    rate_pct: 0.4
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 토·일·공휴일 결제만. 평일 0.2%와 겹치지 않음. 전월실적과 한도 없음
-  - id: baemin-1000
-    title: 배달의민족 1천원 캐시백
-    target_type: merchant
-    target_values: [baemin]
-    channel: online
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 1000
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: 1000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: >-
-      배민페이 또는 다른 결제수단에서 카카오뱅크 카드를 골라 결제할 때만. 카카오페이·네이버페이·토스페이 같은 간편결제,
-      선물하기, 광고비, 현장결제, 배민상회, 테이블 오더 제외
-  - id: gs25-coffee-100
-    title: GS25·저가커피 100원 캐시백
-    target_type: merchant
-    target_values: [gs25, compose_coffee, mega_coffee, paik_coffee]
-    channel: offline
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 100
-    min_txn_amount: 2000
-    max_per_txn: null
-    monthly_cap_amount: 1000
-    monthly_cap_count: 10
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: >-
-      GS25는 건당 5천원 이상, 컴포즈·메가MGC커피·빽다방은 건당 2천원 이상. 두 혜택 합쳐 월 10회, 월 1천원.
-      오프라인 매장에서 실물카드나 삼성페이로 결제할 때만. 온라인·앱 결제, 우리동네GS앱, 일부 키오스크 PG 결제,
-      대형마트·쇼핑몰 입점 매장, 상품권·기프티콘 결제 제외
-  - id: daiso-1000
-    title: 다이소 1천원 캐시백
-    target_type: merchant
-    target_values: [daiso]
-    channel: any
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 1000
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: 1000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 오프라인은 실물카드·삼성페이 결제만. 온라인은 일반 카드결제에서 카카오뱅크 선택 또는 삼성페이만. 다른 간편결제 제외
-  - id: coupang-3000
-    title: 쿠팡 3천원 캐시백
-    target_type: merchant
-    target_values: [coupang]
-    channel: online
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 3000
-    min_txn_amount: 50000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 쿠페이에 카드 등록 또는 결제수단에서 카카오뱅크카드 선택 시만. 쿠팡플레이, 쿠팡이츠, 교환권, 상품권, 선불전자지급수단 제외
-  - id: ably-2000
-    title: 에이블리 2천원 캐시백
-    target_type: merchant
-    target_values: [ably]
-    channel: online
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 2000
-    min_txn_amount: 50000
-    max_per_txn: null
-    monthly_cap_amount: 2000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 카드에서 카카오뱅크 선택 후 결제할 때만. 간편결제, 포인트충전·웹툰 같은 쇼핑 외 결제 제외
-  - id: gs-caltex-3000
-    title: GS칼텍스 3천원 캐시백
-    target_type: merchant
-    target_values: [gs_caltex]
-    channel: offline
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 3000
-    min_txn_amount: 50000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: LPG 충전소 포함
-  - id: telecom-3000
-    title: 휴대전화 요금 3천원 캐시백
-    target_type: merchant
-    target_values: [skt, kt, lg_uplus]
-    channel: any
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 3000
-    min_txn_amount: 50000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 휴대전화 요금 카드 자동결제만. 유선요금, 유무선통합요금, 약정요금 대납, 지점 월납, 알뜰폰 제외
-  - id: academy-10000
-    title: 학원 1만원 캐시백
-    target_type: category
-    target_values: [education]
-    channel: offline
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 10000
-    min_txn_amount: 200000
-    max_per_txn: null
-    monthly_cap_amount: 10000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 원문은 학원업종. KB국민카드 분류로 학원, 자동차학원, 독서실만. 학습지 업종과 온라인 결제(PG) 제외
-  - id: transit-4000
-    title: 후불교통 4천원 캐시백
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 4000
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: >-
-      버스·지하철 후불교통을 카드 1장 기준 한 달 합산 5만원 이상 쓸 때 제공. 건당 조건이 아니라 min_txn_amount는 0으로 둠.
-      택시, 시외·고속·공항버스, 삼성페이 선불교통 제외. 이용 다음 달 접수 금액 기준
-  - id: taxi-1000
-    title: 택시 1천원 캐시백
-    target_type: category
-    target_values: [taxi]
-    channel: offline
-    kind: cashback
-    rate_pct: null
-    fixed_amount: 1000
-    min_txn_amount: 30000
-    max_per_txn: null
-    monthly_cap_amount: 1000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: KB국민카드 분류 택시업종. 온라인 결제(PG업종) 제외
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.kakaobank.com/products/checkcard', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, gift_card, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    benefits:
+      - key: weekday-0-2
+        title: 평일 0.2% 캐시백
+        target: {all: true}
+        reward: {type: cashback, rate: 0.2}
+        notes: 월~금 결제만. 주말·공휴일은 0.4% 혜택이 대신 적용. 전월실적과 한도 없음. 국내외 가맹점
+      - key: weekend-0-4
+        title: 주말·공휴일 0.4% 캐시백
+        target: {all: true}
+        reward: {type: cashback, rate: 0.4}
+        notes: 토·일·공휴일 결제만. 평일 0.2%와 겹치지 않음. 전월실적과 한도 없음
+      - key: baemin-1000
+        title: 배달의민족 1천원 캐시백
+        target:
+          merchants: [baemin]
+        when:
+          - {channel: online}
+          - amount: {min: 20000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, amount: 1000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: 배민페이 또는 다른 결제수단에서 카카오뱅크 카드를 골라 결제할 때만. 카카오페이·네이버페이·토스페이 같은 간편결제, 선물하기, 광고비, 현장결제, 배민상회, 테이블 오더 제외
+      - key: gs25-coffee-100
+        title: GS25·저가커피 100원 캐시백
+        target:
+          merchants: [compose_coffee, gs25, mega_coffee, paik_coffee]
+        when:
+          - {channel: offline}
+          - amount: {min: 2000}
+        reward: {type: cashback, fixed: 100}
+        limits:
+          - {per: month, amount: 1000}
+          - {per: month, count: 10}
+        tiers: {from: 300000}
+        notes: GS25는 건당 5천원 이상, 컴포즈·메가MGC커피·빽다방은 건당 2천원 이상. 두 혜택 합쳐 월 10회, 월 1천원. 오프라인 매장에서 실물카드나 삼성페이로 결제할 때만. 온라인·앱 결제, 우리동네GS앱, 일부 키오스크 PG 결제, 대형마트·쇼핑몰 입점 매장, 상품권·기프티콘 결제 제외
+      - key: daiso-1000
+        title: 다이소 1천원 캐시백
+        target:
+          merchants: [daiso]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, amount: 1000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: 오프라인은 실물카드·삼성페이 결제만. 온라인은 일반 카드결제에서 카카오뱅크 선택 또는 삼성페이만. 다른 간편결제 제외
+      - key: coupang-3000
+        title: 쿠팡 3천원 캐시백
+        target:
+          merchants: [coupang]
+        when:
+          - {channel: online}
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: 쿠페이에 카드 등록 또는 결제수단에서 카카오뱅크카드 선택 시만. 쿠팡플레이, 쿠팡이츠, 교환권, 상품권, 선불전자지급수단 제외
+      - key: ably-2000
+        title: 에이블리 2천원 캐시백
+        target:
+          merchants: [ably]
+        when:
+          - {channel: online}
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, amount: 2000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: 카드에서 카카오뱅크 선택 후 결제할 때만. 간편결제, 포인트충전·웹툰 같은 쇼핑 외 결제 제외
+      - key: gs-caltex-3000
+        title: GS칼텍스 3천원 캐시백
+        target:
+          merchants: [gs_caltex]
+        when:
+          - {channel: offline}
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: LPG 충전소 포함
+      - key: telecom-3000
+        title: 휴대전화 요금 3천원 캐시백
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: 휴대전화 요금 카드 자동결제만. 유선요금, 유무선통합요금, 약정요금 대납, 지점 월납, 알뜰폰 제외
+      - key: academy-10000
+        title: 학원 1만원 캐시백
+        target:
+          categories: [education]
+        when:
+          - {channel: offline}
+          - amount: {min: 200000}
+        reward: {type: cashback, fixed: 10000}
+        limits:
+          - {per: month, amount: 10000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: 원문은 학원업종. KB국민카드 분류로 학원, 자동차학원, 독서실만. 학습지 업종과 온라인 결제(PG) 제외
+      - key: transit-4000
+        title: 후불교통 4천원 캐시백
+        target:
+          categories: [transit]
+        reward: {type: cashback, fixed: 4000}
+        limits:
+          - {per: month, amount: 4000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: 버스·지하철 후불교통을 카드 1장 기준 한 달 합산 5만원 이상 쓸 때 제공. 건당 조건이 아니라 min_txn_amount는 0으로 둠. 택시, 시외·고속·공항버스, 삼성페이 선불교통 제외. 이용 다음 달 접수 금액 기준
+      - key: taxi-1000
+        title: 택시 1천원 캐시백
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+          - amount: {min: 30000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, amount: 1000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        notes: KB국민카드 분류 택시업종. 온라인 결제(PG업종) 제외
+notes: '기본 캐시백은 상품 페이지(심의필 26-0018), 전월 30만원 이상 혜택은 카카오뱅크 앱 혜택 페이지 https://kakaobankcontent.com/event/card_benefit 의 2026 캐시백 프로모션(2026.02.01~2027.01.31, 심의필 26-0007)에서 옮김. 프로모션 종료 뒤에는 다시 확인 필요. 연회비 없음. 재발급 수수료 2천원. 매입·정산은 KB국민카드가 맡고 업종은 KB국민카드 기준. 실적은 전월 1일~말일 실제 승인금액 기준이며 프렌즈 체크카드를 여러 장 가지면 고객별로 합산. 실적 제외 중 업종 코드가 없는 것: 대학(대학원) 등록금, 수수료·이자, 선물하기(상품권 업종), 정부지원금, 사회보험료, 연체료, 결제취소금액, 교통카드/RF유통기관 이용금액. 이 교통 항목에 후불교통 이용분이 들어가는지는 공식 문구 미확인이라 public_transit은 제외 목록에 넣지 않음. 취소는 취소매출전표 접수월 실적에서 뺌. 체크카드라 할부 없음. 최초 사용등록일 또는 첫 승인·매입일 중 빠른 날부터 다음 달 말일까지 프로모션 혜택을 실적 무관 제공. 프로모션 혜택은 항목마다 고객별 월 1회. 금액은 1회 승인금액 기준이고 여러 승인을 합치지 않음. 간편결제로 결제하면 혜택이 빠질 수 있음. 캐시백은 다음 달 10일 결제계좌로 입금. 기본 캐시백 제외 항목은 실적 제외 항목과 같음.'

@@ -1,353 +1,239 @@
+schema_version: 2
 id: kb-easy-all-titanium
 issuer: kb
 name: KB국민 Easy all 티타늄카드
 kind: credit
-annual_fee_domestic: 30000
-annual_fee_global: 30000
-active: true
-source_url: https://img2.kbcard.com/obj/card/download/09256__prdctOpmn_20240403.pdf
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 500000, integrated_cap: 16000 }
-  - { min_spend: 1000000, integrated_cap: 32000 }
-  - { min_spend: 1500000, integrated_cap: 48000 }
-spend_rule:
-  excluded_categories: [tax, utility, apartment_fee, gift_card, annual_fee]
-  exclude_interest_free_installment: false
-  exclude_discounted: false
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  발급 시 기본인 Auto 모드 캐시백 기준으로 옮김. Auto 모드는 4개 그룹(A 3%, B 5%, C 7%, D 10%) 20개 영역 중 그룹별 이용금액 상위 1·2·3개 영역(구간별 총 4·8·12개)만 영역당 월 4천원까지 캐시백, 다음 달 둘째 금요일 입금.
-  DIY 모드(청구할인)는 영역과 한도 패턴을 직접 골라 통합한도를 나눠 쓰는 방식이라 담지 못함. 모드 변경은 다음 달 1일부터.
-  C그룹 스포츠 영역(스포츠·레저용품, 골프, 테니스, 볼링, 스키, 수영, 헬스, 당구, 요가, 필라테스 업종)은 업종 코드가 없어 빠짐.
-  승인시점 기준, 해외는 일시불 매입완료 기준. 실적 제외: 현금서비스, 카드론, 정부지원금, 초·중·고 학교 납입금, 대학 등록금, 4대 사회보험료, 수수료·이자, 연체료, 취소금액.
-  할인 제외: 무이자할부, 상품권·선불카드 구입·충전.
-  최초 사용등록일부터 다음 달 말까지 실적 없어도 1구간 제공. KB Pay에서만 신청 가능. 모바일단독 연회비 2만4천원.
-  결제 건 혜택 아님: 티타늄 서비스(공항·호텔 발레파킹, 공항 라운지, 전월 30만원 이상), Visa 브랜드 서비스.
-benefits:
-  - id: a-food-3
-    title: "[A] 음식 3% 캐시백"
-    target_type: category
-    target_values: [restaurant]
-    channel: any
-    kind: cashback
-    rate_pct: 3
-    fixed_amount: null
-    min_txn_amount: 10000
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 한식·일식·중식·양식·뷔페·패밀리레스토랑·일반음식점. 건당 1만원 이상
-  - id: a-education-3
-    title: "[A] 교육 3% 캐시백"
-    target_type: category
-    target_values: [education]
-    channel: offline
-    kind: cashback
-    rate_pct: 3
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 학원·독서실 업종. 온라인결제, 유아교육기관, 학습자재 제외
-  - id: a-medical-3
-    title: "[A] 병원·약국 3% 캐시백"
-    target_type: category
-    target_values: [hospital, pharmacy]
-    channel: any
-    kind: cashback
-    rate_pct: 3
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 종합병원, 병·의원, 약국, 동물병원. 요양병원, 보건소, 산후조리원 제외
-  - id: a-overseas-3
-    title: "[A] 해외·면세점 3% 캐시백"
-    target_type: category
-    target_values: [overseas]
-    channel: any
-    kind: cashback
-    rate_pct: 3
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 해외 이용(직구 포함). 같은 한도의 면세점 업종과 롯데·신라·현대·신세계 인터넷면세점은 코드가 없어 빠짐
-  - id: a-bills-3
-    title: "[A] 관리비·공과금 3% 캐시백"
-    target_type: category
-    target_values: [apartment_fee, utility]
-    channel: any
-    kind: cashback
-    rate_pct: 3
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 아파트관리비, 전기·수도, 도시가스. 실적에서는 제외됨
-  - id: b-mart-5
-    title: "[B] 마트 5% 캐시백"
-    target_type: merchant
-    target_values: [emart, lotte_mart, homeplus, nh_hanaro_mart]
-    channel: offline
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 온라인결제, 상품권, 임대매장, SSM(이마트에브리데이·롯데슈퍼·홈플러스익스프레스 등) 제외
-  - id: b-fuel-5
-    title: "[B] 주유 5% 캐시백"
-    target_type: merchant
-    target_values: [sk_energy, gs_caltex]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. SK주유소, GS주유소(충전소 포함). 정률 할인
-  - id: b-telecom-5
-    title: "[B] 이동통신 5% 캐시백"
-    target_type: merchant
-    target_values: [skt, kt, lg_uplus, liiv_m]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 30000
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 자동이체만. 유선전화·인터넷 결합상품 포함. 건당 3만원 이상
-  - id: b-online-5
-    title: "[B] 온라인쇼핑 5% 캐시백"
-    target_type: merchant
-    target_values: [gmarket, auction, eleven_st, interpark, lotte_on, ssg_com]
-    channel: online
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 원문 표기는 롯데닷컴, 롯데온으로 옮김. 상품권, 여행·항공권, 티켓, 도서, 별도 팝업사이트 제외
-  - id: b-social-5
-    title: "[B] 소셜커머스 5% 캐시백"
-    target_type: merchant
-    target_values: [coupang, tmon, wemakeprice]
-    channel: online
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 상품권, 여행·항공권, 티켓, 도서, 별도 팝업사이트 제외
-  - id: c-transit-7
-    title: "[C] 대중교통 7% 캐시백"
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: cashback
-    rate_pct: 7
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 버스·지하철. 시외·고속·공항버스 제외. 명세서 이용일 기준
-  - id: c-fashion-7
-    title: "[C] 패션·인테리어 7% 캐시백"
-    target_type: merchant
-    target_values: [lotte_department, hyundai_department, shinsegae_department, zara, hm, cos, ikea, zara_home]
-    channel: offline
-    kind: cashback
-    rate_pct: 7
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 롯데·현대·신세계 백화점, ZARA, H&M, COS, IKEA, ZARA HOME. 온라인결제, 상품권 제외
-  - id: c-beauty-7
-    title: "[C] 뷰티 7% 캐시백"
-    target_type: merchant
-    target_values: [olive_young]
-    channel: offline
-    kind: cashback
-    rate_pct: 7
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 같은 한도의 화장품점·미용원·피부미용원 업종은 코드가 없어 빠짐. 온라인결제 제외
-  - id: c-cvs-7
-    title: "[C] 편의점 7% 캐시백"
-    target_type: merchant
-    target_values: [cu, gs25]
-    channel: any
-    kind: cashback
-    rate_pct: 7
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 백화점·마트 입점 매장 제외
-  - id: d-taxi-10
-    title: "[D] 택시 10% 캐시백"
-    target_type: category
-    target_values: [taxi]
-    channel: any
-    kind: cashback
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 택시 업종
-  - id: d-coffee-10
-    title: "[D] 커피 10% 캐시백"
-    target_type: category
-    target_values: [cafe]
-    channel: any
-    kind: cashback
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 스타벅스 사이렌오더 포함. 상품권(선물하기)·선불 충전, 백화점·마트 입점 매장 제외
-  - id: d-bakery-fastfood-10
-    title: "[D] 제과·패스트푸드 10% 캐시백"
-    target_type: merchant
-    target_values: [paris_baguette, baskin_robbins, mcdonalds, burger_king, lotteria]
-    channel: any
-    kind: cashback
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 원문은 제과·아이스크림·패스트푸드 업종 전체, 대표 가맹점만 넣음. 백화점·마트 입점 매장 제외
-  - id: d-delivery-10
-    title: "[D] 배달앱 10% 캐시백"
-    target_type: merchant
-    target_values: [baemin, yogiyo, kurly]
-    channel: online
-    kind: cashback
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 배달의민족, 요기요, 마켓컬리
-  - id: d-sub-movie-10
-    title: "[D] 구독·영화 10% 캐시백"
-    target_type: merchant
-    target_values: [netflix, tving, wavve, melon, genie, cgv, lotte_cinema, megabox]
-    channel: any
-    kind: cashback
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: Auto 모드 그룹별 상위 영역만. 구독은 공식 홈페이지·앱 정기결제만. 영화는 현장·공식 홈페이지·앱 결제
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://img2.kbcard.com/obj/card/download/09256__prdctOpmn_20240403.pdf', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, gift_card, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    limits:
+      - key: integrated
+        per: month
+        amount: {500000: 16000, 1000000: 32000, 1500000: 48000}
+    benefits:
+      - key: a-food-3
+        title: '[A] 음식 3% 캐시백'
+        target:
+          categories: [restaurant]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 한식·일식·중식·양식·뷔페·패밀리레스토랑·일반음식점. 건당 1만원 이상
+      - key: a-education-3
+        title: '[A] 교육 3% 캐시백'
+        target:
+          categories: [education]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 학원·독서실 업종. 온라인결제, 유아교육기관, 학습자재 제외
+      - key: a-medical-3
+        title: '[A] 병원·약국 3% 캐시백'
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 종합병원, 병·의원, 약국, 동물병원. 요양병원, 보건소, 산후조리원 제외
+      - key: a-overseas-3
+        title: '[A] 해외·면세점 3% 캐시백'
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 해외 이용(직구 포함). 같은 한도의 면세점 업종과 롯데·신라·현대·신세계 인터넷면세점은 코드가 없어 빠짐
+      - key: a-bills-3
+        title: '[A] 관리비·공과금 3% 캐시백'
+        target:
+          categories: [apartment_fee, utility]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 아파트관리비, 전기·수도, 도시가스. 실적에서는 제외됨
+      - key: b-mart-5
+        title: '[B] 마트 5% 캐시백'
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 온라인결제, 상품권, 임대매장, SSM(이마트에브리데이·롯데슈퍼·홈플러스익스프레스 등) 제외
+      - key: b-fuel-5
+        title: '[B] 주유 5% 캐시백'
+        target:
+          merchants: [gs_caltex, sk_energy]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. SK주유소, GS주유소(충전소 포함). 정률 할인
+      - key: b-telecom-5
+        title: '[B] 이동통신 5% 캐시백'
+        target:
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 자동이체만. 유선전화·인터넷 결합상품 포함. 건당 3만원 이상
+      - key: b-online-5
+        title: '[B] 온라인쇼핑 5% 캐시백'
+        target:
+          merchants: [auction, eleven_st, gmarket, interpark, lotte_on, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 원문 표기는 롯데닷컴, 롯데온으로 옮김. 상품권, 여행·항공권, 티켓, 도서, 별도 팝업사이트 제외
+      - key: b-social-5
+        title: '[B] 소셜커머스 5% 캐시백'
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 상품권, 여행·항공권, 티켓, 도서, 별도 팝업사이트 제외
+      - key: c-transit-7
+        title: '[C] 대중교통 7% 캐시백'
+        target:
+          categories: [transit]
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 버스·지하철. 시외·고속·공항버스 제외. 명세서 이용일 기준
+      - key: c-fashion-7
+        title: '[C] 패션·인테리어 7% 캐시백'
+        target:
+          merchants: [cos, hm, hyundai_department, ikea, lotte_department, shinsegae_department, zara, zara_home]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 롯데·현대·신세계 백화점, ZARA, H&M, COS, IKEA, ZARA HOME. 온라인결제, 상품권 제외
+      - key: c-beauty-7
+        title: '[C] 뷰티 7% 캐시백'
+        target:
+          merchants: [olive_young]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 같은 한도의 화장품점·미용원·피부미용원 업종은 코드가 없어 빠짐. 온라인결제 제외
+      - key: c-cvs-7
+        title: '[C] 편의점 7% 캐시백'
+        target:
+          merchants: [cu, gs25]
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 백화점·마트 입점 매장 제외
+      - key: d-taxi-10
+        title: '[D] 택시 10% 캐시백'
+        target:
+          categories: [taxi]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 택시 업종
+      - key: d-coffee-10
+        title: '[D] 커피 10% 캐시백'
+        target:
+          categories: [cafe]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 스타벅스 사이렌오더 포함. 상품권(선물하기)·선불 충전, 백화점·마트 입점 매장 제외
+      - key: d-bakery-fastfood-10
+        title: '[D] 제과·패스트푸드 10% 캐시백'
+        target:
+          merchants: [baskin_robbins, burger_king, lotteria, mcdonalds, paris_baguette]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 원문은 제과·아이스크림·패스트푸드 업종 전체, 대표 가맹점만 넣음. 백화점·마트 입점 매장 제외
+      - key: d-delivery-10
+        title: '[D] 배달앱 10% 캐시백'
+        target:
+          merchants: [baemin, kurly, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 배달의민족, 요기요, 마켓컬리
+      - key: d-sub-movie-10
+        title: '[D] 구독·영화 10% 캐시백'
+        target:
+          merchants: [cgv, genie, lotte_cinema, megabox, melon, netflix, tving, wavve]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: Auto 모드 그룹별 상위 영역만. 구독은 공식 홈페이지·앱 정기결제만. 영화는 현장·공식 홈페이지·앱 결제
+notes: '발급 시 기본인 Auto 모드 캐시백 기준으로 옮김. Auto 모드는 4개 그룹(A 3%, B 5%, C 7%, D 10%) 20개 영역 중 그룹별 이용금액 상위 1·2·3개 영역(구간별 총 4·8·12개)만 영역당 월 4천원까지 캐시백, 다음 달 둘째 금요일 입금. DIY 모드(청구할인)는 영역과 한도 패턴을 직접 골라 통합한도를 나눠 쓰는 방식이라 담지 못함. 모드 변경은 다음 달 1일부터. C그룹 스포츠 영역(스포츠·레저용품, 골프, 테니스, 볼링, 스키, 수영, 헬스, 당구, 요가, 필라테스 업종)은 업종 코드가 없어 빠짐. 승인시점 기준, 해외는 일시불 매입완료 기준. 실적 제외: 현금서비스, 카드론, 정부지원금, 초·중·고 학교 납입금, 대학 등록금, 4대 사회보험료, 수수료·이자, 연체료, 취소금액. 할인 제외: 무이자할부, 상품권·선불카드 구입·충전. 최초 사용등록일부터 다음 달 말까지 실적 없어도 1구간 제공. KB Pay에서만 신청 가능. 모바일단독 연회비 2만4천원. 결제 건 혜택 아님: 티타늄 서비스(공항·호텔 발레파킹, 공항 라운지, 전월 30만원 이상), Visa 브랜드 서비스.'

@@ -1,206 +1,162 @@
+schema_version: 2
 id: woori-k-life-check
 issuer: woori
 name: 우리카드 카드의정석 K-LIFE CHECK
 kind: check
-annual_fee_domestic: 0
-annual_fee_global: 0
-active: true
-source_url: https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102490
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 200000, integrated_cap: 10000 }
-  - { min_spend: 500000, integrated_cap: 20000 }
-  - { min_spend: 700000, integrated_cap: 30000 }
-spend_rule:
-  excluded_categories: [tax, utility, gift_card, apartment_fee, overseas]
-  exclude_interest_free_installment: false
-  exclude_discounted: true
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  원래 맡은 카드의정석 COOKIE CHECK(cdPrdCd 838832)는 우리카드 공식 판매여부가 N이고 페이지가 2023년 4월 기준이라,
-  해외·영화·대중교통·온라인쇼핑 캐시백 구성이 가장 비슷한 이 카드로 바꿈. 우리은행 영업점에서만 발급.
-  연회비 없음(가족카드 포함).
-  실적은 전월 1일~말일 매출승인일 기준 국내 가맹점 이용분이고 해외 이용금액은 실적에서 빠짐. 교통카드 이용, 통신료 자동납부는 매출표 접수일 기준.
-  국내 서비스로 캐시백 받은 건은 이용금액의 50%만 실적에서 빠지는데, 스키마가 참거짓만 받아 exclude_discounted를 true로 둠.
-  실적 제외 중 업종 코드가 없는 것: 교통카드 구매·충전, 고속버스(차내 단말기·앱 결제), 정부지원금, 대학(대학원) 등록금, 각종 수수료·이자, 매출취소금액.
-  공과금에는 4대보험, 우편요금, 과태료, 여권발급비용, 공공기관 가맹점 포함.
-  취소는 취소 매출표 접수월 실적에서 빼되, 매월 1~2일 접수분은 전월 실적에서 뺌.
-  카드 수령일과 사용개시일 중 빠른 날부터 다음 달 말일까지는 국내 서비스를 실적 무관 최저 구간으로 제공.
-  해외 캐시백 한도 월 5만원은 국내 통합한도와 따로. 캐시백은 매출표 접수일에 결제계좌로 입금.
-  공항라운지 같은 부가서비스는 없음.
-benefits:
-  - id: overseas-1
-    title: 해외 가맹점 1% 캐시백
-    target_type: category
-    target_values: [overseas]
-    channel: any
-    kind: cashback
-    rate_pct: 1
-    fixed_amount: null
-    min_txn_amount: 10000
-    max_per_txn: null
-    monthly_cap_amount: 50000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 해외 직구 포함. 전월 국내 이용 20만원 이상. 매출표 접수일 기준 반영
-  - id: easypay-online-2
-    title: 간편결제 온라인 2% 캐시백
-    target_type: merchant
-    target_values: [woori_won_pay, kakao_pay, naver_pay]
-    channel: online
-    kind: cashback
-    rate_pct: 2
-    fixed_amount: null
-    min_txn_amount: 30000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 3
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: >-
-      원문은 우리페이, 카카오페이, 네이버페이 결제. 오프라인 결제와 상품권·선불 충전 제외.
-      아래 쇼핑·일상·교육 5% 대상 가맹점에서 쓴 간편결제는 이 혜택 제외
-  - id: online-mall-5
-    title: 11번가·G마켓 5% 캐시백
-    target_type: merchant
-    target_values: [eleven_st, gmarket]
-    channel: online
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 30000
-    max_per_txn: null
-    monthly_cap_amount: 6000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 공식 앱·홈페이지 결제만. 연결된 다른 사이트 결제, 상품권·선불 충전 제외
-  - id: oliveyoung-daiso-5
-    title: 올리브영·다이소 5% 캐시백
-    target_type: merchant
-    target_values: [olive_young, daiso]
-    channel: offline
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 10000
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: 4
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 온라인 매장 제외. 백화점·대형할인점 입점 매장 제외. 상품권·선불 충전 제외
-  - id: convenience-5
-    title: 편의점 5% 캐시백
-    target_type: merchant
-    target_values: [cu, gs25, seven_eleven]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 10000
-    max_per_txn: null
-    monthly_cap_amount: 2000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 백화점·대형할인점 입점 매장 제외. 상품권·선불 충전 제외
-  - id: movie-5
-    title: 영화 5% 캐시백
-    target_type: merchant
-    target_values: [cgv, lotte_cinema, megabox]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 예매 대행 사이트 예매 제외. 상품권·선불 충전 제외
-  - id: transit-5
-    title: 대중교통 5% 캐시백
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 50000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 버스·지하철 후불교통 RF 거래만. 고속·시외·공항버스, 공항철도 직통열차 제외. 원문은 건당 5만원 이상
-  - id: telecom-5
-    title: 이동통신 요금 5% 캐시백
-    target_type: merchant
-    target_values: [skt, kt, lg_uplus]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 50000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 1
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: 이 카드로 통신사 자동납부 신청한 휴대전화 요금만. 알뜰폰, 인터넷·집전화 결합상품 제외
-  - id: kyobo-5
-    title: 교보문고 5% 캐시백
-    target_type: merchant
-    target_values: [kyobo_book]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 온라인은 공식 앱·홈페이지 결제만. 상품권·선불 충전 제외
-  - id: language-5
-    title: 어학원·어학시험 5% 캐시백
-    target_type: merchant
-    target_values: [hackers_academy, pagoda_academy, toeic, topik, opic, hsk]
-    channel: any
-    kind: cashback
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 20000
-    max_per_txn: null
-    monthly_cap_amount: 3000
-    monthly_cap_count: 2
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: false
-    notes: 원문은 어학원(해커스, 파고다)과 어학시험(TOEIC, TOPIK, OPIc, HSK). 상품권·선불 충전 제외
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102490', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 700000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, gift_card, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 10000, 500000: 20000, 700000: 30000}
+    benefits:
+      - key: overseas-1
+        title: 해외 가맹점 1% 캐시백
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {per: month, amount: 50000}
+        tiers: {from: 200000}
+        notes: 해외 직구 포함. 전월 국내 이용 20만원 이상. 매출표 접수일 기준 반영
+      - key: easypay-online-2
+        title: 간편결제 온라인 2% 캐시백
+        target:
+          merchants: [kakao_pay, naver_pay, woori_won_pay]
+        when:
+          - {channel: online}
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 원문은 우리페이, 카카오페이, 네이버페이 결제. 오프라인 결제와 상품권·선불 충전 제외. 아래 쇼핑·일상·교육 5% 대상 가맹점에서 쓴 간편결제는 이 혜택 제외
+      - key: online-mall-5
+        title: 11번가·G마켓 5% 캐시백
+        target:
+          merchants: [eleven_st, gmarket]
+        when:
+          - {channel: online}
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 6000}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 공식 앱·홈페이지 결제만. 연결된 다른 사이트 결제, 상품권·선불 충전 제외
+      - key: oliveyoung-daiso-5
+        title: 올리브영·다이소 5% 캐시백
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {per: month, count: 4}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 온라인 매장 제외. 백화점·대형할인점 입점 매장 제외. 상품권·선불 충전 제외
+      - key: convenience-5
+        title: 편의점 5% 캐시백
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 2000}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 백화점·대형할인점 입점 매장 제외. 상품권·선불 충전 제외
+      - key: movie-5
+        title: 영화 5% 캐시백
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 예매 대행 사이트 예매 제외. 상품권·선불 충전 제외
+      - key: transit-5
+        title: 대중교통 5% 캐시백
+        target:
+          categories: [transit]
+        when:
+          - amount: {min: 50000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 버스·지하철 후불교통 RF 거래만. 고속·시외·공항버스, 공항철도 직통열차 제외. 원문은 건당 5만원 이상
+      - key: telecom-5
+        title: 이동통신 요금 5% 캐시백
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 50000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 이 카드로 통신사 자동납부 신청한 휴대전화 요금만. 알뜰폰, 인터넷·집전화 결합상품 제외
+      - key: kyobo-5
+        title: 교보문고 5% 캐시백
+        target:
+          merchants: [kyobo_book]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 온라인은 공식 앱·홈페이지 결제만. 상품권·선불 충전 제외
+      - key: language-5
+        title: 어학원·어학시험 5% 캐시백
+        target:
+          merchants: [hackers_academy, hsk, opic, pagoda_academy, toeic, topik]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 원문은 어학원(해커스, 파고다)과 어학시험(TOEIC, TOPIK, OPIc, HSK). 상품권·선불 충전 제외
+notes: '원래 맡은 카드의정석 COOKIE CHECK(cdPrdCd 838832)는 우리카드 공식 판매여부가 N이고 페이지가 2023년 4월 기준이라, 해외·영화·대중교통·온라인쇼핑 캐시백 구성이 가장 비슷한 이 카드로 바꿈. 우리은행 영업점에서만 발급. 연회비 없음(가족카드 포함). 실적은 전월 1일~말일 매출승인일 기준 국내 가맹점 이용분이고 해외 이용금액은 실적에서 빠짐. 교통카드 이용, 통신료 자동납부는 매출표 접수일 기준. 국내 서비스로 캐시백 받은 건은 이용금액의 50%만 실적에서 빠지는데, 스키마가 참거짓만 받아 exclude_discounted를 true로 둠. 실적 제외 중 업종 코드가 없는 것: 교통카드 구매·충전, 고속버스(차내 단말기·앱 결제), 정부지원금, 대학(대학원) 등록금, 각종 수수료·이자, 매출취소금액. 공과금에는 4대보험, 우편요금, 과태료, 여권발급비용, 공공기관 가맹점 포함. 취소는 취소 매출표 접수월 실적에서 빼되, 매월 1~2일 접수분은 전월 실적에서 뺌. 카드 수령일과 사용개시일 중 빠른 날부터 다음 달 말일까지는 국내 서비스를 실적 무관 최저 구간으로 제공. 해외 캐시백 한도 월 5만원은 국내 통합한도와 따로. 캐시백은 매출표 접수일에 결제계좌로 입금. 공항라운지 같은 부가서비스는 없음.'

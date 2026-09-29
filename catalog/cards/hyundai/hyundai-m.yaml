@@ -1,63 +1,41 @@
+schema_version: 2
 id: hyundai-m
 issuer: hyundai
 name: 현대카드M
 kind: credit
-annual_fee_domestic: 30000
-annual_fee_global: 30000
-active: true
-source_url: https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ME4
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 500000, integrated_cap: null }
-  - { min_spend: 1000000, integrated_cap: null }
-spend_rule:
-  excluded_categories: [tax, utility, gift_card, annual_fee]
-  exclude_interest_free_installment: false
-  exclude_discounted: false
-  installment_basis: full_at_purchase
-  cancellation_basis: original_month
-notes: >-
-  2024-01-19 출시한 현행 현대카드M(카드 코드 ME4) 기준. 실적은 전월 1일~말일 본인+가족 카드 일시불·할부 금액. 할부·리볼빙은 최초 승인월에 포함.
-  취소는 승인월 실적에서 빼며, 그 때문에 전월 실적이 모자라면 당월 적립 없음. 대중교통 등 사후 승인 건과 해외 이용은 매출일자 기준.
-  실적 제외 중 업종 코드 없는 것: 카드론, 현금서비스, 수수료·이자, 국제브랜드·해외서비스 수수료. 현대카드M(구) 등 다른 카드 이용금액은 합산 불가.
-  적립 제외(실적과 별개): 전기·도시가스 요금, 아파트관리비, 사립유치원비, 초·중·고 학교납입금, 대학·대학원 등록금, 4대 사회보험료, 고속도로 통행료, 후불하이패스, 고속버스, 다른 현대카드 할인·무이자할부 적용 건.
-  추가 혜택(5%)이 적용되면 기본 1.5%는 겹쳐 주지 않고, 5% 한도를 넘으면 1.5%로 적립. 매출 건별 소수점 이하 반올림.
-  신규 발급 시 발급월 다음 달 이용분까지 실적 무관.
-  결제 건 혜택 아님: M 긴급적립, 메탈 플레이트, Visa/Amex 플래티넘 서비스.
-benefits:
-  - id: base-all-1-5
-    title: 국내외 가맹점 1.5% M포인트 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 1.5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 1회·연간 한도 없음. 카드 notes의 적립 제외 항목은 적립 안 됨
-  - id: online-dining-overseas-5
-    title: 온라인 쇼핑몰·일반음식점·해외 5% M포인트 적립
-    target_type: category
-    target_values: [online_shopping, restaurant, overseas]
-    channel: any
-    kind: points
-    rate_pct: 5
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 10000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: "대상점 통합 월 1만 M포인트(본인+가족). 온라인 쇼핑몰은 네이버쇼핑(naver.com 도메인 가맹점)·쿠팡(쿠팡이츠 제외)·G마켓·옥션·11번가·SSG.COM·컬리 공식 홈페이지·앱 결제만(가맹점 키 naver_shopping, coupang, gmarket, auction, eleven_st, ssg_com, kurly). 해외는 해외 온·오프라인 가맹점, 수수료 제외. 적용 시 기본 1.5% 중복 없음"
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ME4', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    benefits:
+      - key: base-all-1-5
+        title: 국내외 가맹점 1.5% M포인트 적립
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1.5}
+        tiers: {from: 500000}
+        notes: 1회·연간 한도 없음. 카드 notes의 적립 제외 항목은 적립 안 됨
+      - key: online-dining-overseas-5
+        title: 온라인 쇼핑몰·일반음식점·해외 5% M포인트 적립
+        target:
+          categories: [online_shopping, restaurant]
+        reward: {type: points, program: hyundai_m_point, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 1000000}
+        notes: 대상점 통합 월 1만 M포인트(본인+가족). 온라인 쇼핑몰은 네이버쇼핑(naver.com 도메인 가맹점)·쿠팡(쿠팡이츠 제외)·G마켓·옥션·11번가·SSG.COM·컬리 공식 홈페이지·앱 결제만(가맹점 키 naver_shopping, coupang, gmarket, auction, eleven_st, ssg_com, kurly). 해외는 해외 온·오프라인 가맹점, 수수료 제외. 적용 시 기본 1.5% 중복 없음
+notes: '2024-01-19 출시한 현행 현대카드M(카드 코드 ME4) 기준. 실적은 전월 1일~말일 본인+가족 카드 일시불·할부 금액. 할부·리볼빙은 최초 승인월에 포함. 취소는 승인월 실적에서 빼며, 그 때문에 전월 실적이 모자라면 당월 적립 없음. 대중교통 등 사후 승인 건과 해외 이용은 매출일자 기준. 실적 제외 중 업종 코드 없는 것: 카드론, 현금서비스, 수수료·이자, 국제브랜드·해외서비스 수수료. 현대카드M(구) 등 다른 카드 이용금액은 합산 불가. 적립 제외(실적과 별개): 전기·도시가스 요금, 아파트관리비, 사립유치원비, 초·중·고 학교납입금, 대학·대학원 등록금, 4대 사회보험료, 고속도로 통행료, 후불하이패스, 고속버스, 다른 현대카드 할인·무이자할부 적용 건. 추가 혜택(5%)이 적용되면 기본 1.5%는 겹쳐 주지 않고, 5% 한도를 넘으면 1.5%로 적립. 매출 건별 소수점 이하 반올림. 신규 발급 시 발급월 다음 달 이용분까지 실적 무관. 결제 건 혜택 아님: M 긴급적립, 메탈 플레이트, Visa/Amex 플래티넘 서비스.'

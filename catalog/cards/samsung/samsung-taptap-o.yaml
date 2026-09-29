@@ -1,231 +1,138 @@
+schema_version: 2
 id: samsung-taptap-o
 issuer: samsung
 name: 삼성카드 taptap O
 kind: credit
-annual_fee_domestic: 10000
-annual_fee_global: 10000
-active: true
-source_url: https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1483
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 300000, integrated_cap: null }
-spend_rule:
-  excluded_categories: [tax, utility, apartment_fee, public_transit, taxi, gift_card]
-  exclude_interest_free_installment: false
-  exclude_discounted: true
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  실적은 "전월 일시불 및 할부 이용금액". 공식 문구 미확인: 전월 1일~말일 기준 명시, 할부 인정 방식, 취소 반영 달.
-  실적 제외 중 업종 코드 없는 것: 대학 등록금, 선불카드 충전. 할인 적용 건은 할인 전 총액이 실적에서 빠짐.
-  무이자할부 결제는 할인 대상 아님(실적 제외 여부는 공식 문구에 없음).
-  발급월+1개월까지는 실적 무관 제공(영화는 연 12회 한도에 포함).
-  라이프스타일 옵션 패키지 6개 중 1개를 골라 앱에서 매월 변경. 골라진 패키지의 커피 1개, 쇼핑 7% 1개, 나머지 쇼핑 2개 1% 적립만 적용되며 pkg- 혜택은 모두 선택지로 나열함.
-  결제 건 혜택 아님: 컨택리스 결제 지원.
-benefits:
-  - id: transit-taxi-10
-    title: 대중교통·택시 10% 할인
-    target_type: category
-    target_values: [public_transit, taxi]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 5000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 버스·지하철은 후불교통기능 선택 시만. 대중교통·택시 통합 월 5,000원
-  - id: telecom-10
-    title: 이동통신요금 10% 할인
-    target_type: merchant
-    target_values: [skt, kt, lg_uplus]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 5000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 카드 자동납부 건만. 결합상품요금, 단말기 구매, 대리점 결제 제외
-  - id: movie-5000
-    title: CGV·롯데시네마 5,000원 할인
-    target_type: merchant
-    target_values: [cgv, lotte_cinema]
-    channel: any
-    kind: discount
-    rate_pct: null
-    fixed_amount: 5000
-    min_txn_amount: 10000
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: 2
-    daily_cap_count: 1
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 1만원 이상 결제 시. 통합 일 1회, 월 2회, 연 12회(1.1~12.31). 현장·공식 홈페이지·앱만, 예매 대행 사이트 제외. 연 한도는 미모델
-  - id: pkg-starbucks-50
-    title: "[패키지1~3] 스타벅스 50% 할인"
-    target_type: merchant
-    target_values: [starbucks]
-    channel: any
-    kind: discount
-    rate_pct: 50
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 10000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 옵션 패키지 택1(패키지1~3 선택 시). 가두매장과 사이렌오더만, 백화점·쇼핑몰 입점 매장, 상품권·선불카드 충전 제외
-  - id: pkg-coffee-30
-    title: "[패키지4~6] 커피전문점 30% 할인"
-    target_type: merchant
-    target_values: [starbucks, twosome, cafe_bene, tom_n_toms, coffee_bean, angel_in_us, hollys, pascucci, artisee, paul_bassett]
-    channel: any
-    kind: discount
-    rate_pct: 30
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 10000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 옵션 패키지 택1(패키지4~6 선택 시). 가두매장만, 백화점·쇼핑몰 입점 매장 제외. 스타벅스는 사이렌오더 포함
-  - id: pkg-openmarket-7
-    title: "[패키지1·4] 오픈마켓 7% 할인"
-    target_type: merchant
-    target_values: [gmarket, auction, eleven_st]
-    channel: online
-    kind: discount
-    rate_pct: 7
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 5000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 옵션 패키지 택1(패키지1·4 선택 시). 쇼핑 할인 월 5,000원
-  - id: pkg-social-7
-    title: "[패키지2·5] 소셜커머스 7% 할인"
-    target_type: merchant
-    target_values: [coupang, tmon, wemakeprice]
-    channel: online
-    kind: discount
-    rate_pct: 7
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 5000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 옵션 패키지 택1(패키지2·5 선택 시). 쇼핑 할인 월 5,000원
-  - id: pkg-trendy-7
-    title: "[패키지3·6] 트렌디숍 7% 할인"
-    target_type: merchant
-    target_values: [gs25, cu, seven_eleven, emart24, olive_young, uniqlo, zara, hm, eight_seconds]
-    channel: offline
-    kind: discount
-    rate_pct: 7
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 5000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: "옵션 패키지 택1(패키지3·6 선택 시). 트렌디숍: 편의점, 올리브영, 유니클로, 자라, H&M, 8SECONDS. 가두매장만. 공식 문구 미확인: 편의점 대상 브랜드"
-  - id: pkg-openmarket-1p
-    title: "[패키지2·3·5·6] 오픈마켓 1% 적립"
-    target_type: merchant
-    target_values: [gmarket, auction, eleven_st]
-    channel: online
-    kind: points
-    rate_pct: 1
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 오픈마켓 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 적립은 한도·실적 조건 없음
-  - id: pkg-social-1p
-    title: "[패키지1·3·4·6] 소셜커머스 1% 적립"
-    target_type: merchant
-    target_values: [coupang, tmon, wemakeprice]
-    channel: online
-    kind: points
-    rate_pct: 1
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 소셜커머스 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 적립은 한도·실적 조건 없음
-  - id: pkg-trendy-1p
-    title: "[패키지1·2·4·5] 트렌디숍 1% 적립"
-    target_type: merchant
-    target_values: [gs25, cu, seven_eleven, emart24, olive_young, uniqlo, zara, hm, eight_seconds]
-    channel: offline
-    kind: points
-    rate_pct: 1
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 트렌디숍 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 가두매장만. 적립은 한도·실적 조건 없음
-  - id: overseas-1-3p
-    title: 해외 1.3% 빅포인트 적립
-    target_type: category
-    target_values: [overseas]
-    channel: any
-    kind: points
-    rate_pct: 1.3
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 해외겸용카드만. 해외 가맹점과 해외 직구. 실적·한도 없음. 무이자할부, 할인 적용 건 등 적립 제외
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1483', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, gift_card, tax, taxi, transit, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    benefits:
+      - key: transit-taxi-10
+        title: 대중교통·택시 10% 할인
+        target:
+          categories: [taxi, transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        notes: 버스·지하철은 후불교통기능 선택 시만. 대중교통·택시 통합 월 5,000원
+      - key: telecom-10
+        title: 이동통신요금 10% 할인
+        target:
+          merchants: [kt, lg_uplus, skt]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        notes: 카드 자동납부 건만. 결합상품요금, 단말기 구매, 대리점 결제 제외
+      - key: movie-5000
+        title: CGV·롯데시네마 5,000원 할인
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+        tiers: {from: 300000}
+        notes: 1만원 이상 결제 시. 통합 일 1회, 월 2회, 연 12회(1.1~12.31). 현장·공식 홈페이지·앱만, 예매 대행 사이트 제외. 연 한도는 미모델
+      - key: pkg-starbucks-50
+        title: '[패키지1~3] 스타벅스 50% 할인'
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        notes: 옵션 패키지 택1(패키지1~3 선택 시). 가두매장과 사이렌오더만, 백화점·쇼핑몰 입점 매장, 상품권·선불카드 충전 제외
+      - key: pkg-coffee-30
+        title: '[패키지4~6] 커피전문점 30% 할인'
+        target:
+          merchants: [angel_in_us, artisee, cafe_bene, coffee_bean, hollys, pascucci, paul_bassett, starbucks, tom_n_toms, twosome]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        notes: 옵션 패키지 택1(패키지4~6 선택 시). 가두매장만, 백화점·쇼핑몰 입점 매장 제외. 스타벅스는 사이렌오더 포함
+      - key: pkg-openmarket-7
+        title: '[패키지1·4] 오픈마켓 7% 할인'
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        notes: 옵션 패키지 택1(패키지1·4 선택 시). 쇼핑 할인 월 5,000원
+      - key: pkg-social-7
+        title: '[패키지2·5] 소셜커머스 7% 할인'
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        notes: 옵션 패키지 택1(패키지2·5 선택 시). 쇼핑 할인 월 5,000원
+      - key: pkg-trendy-7
+        title: '[패키지3·6] 트렌디숍 7% 할인'
+        target:
+          merchants: [cu, eight_seconds, emart24, gs25, hm, olive_young, seven_eleven, uniqlo, zara]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        notes: '옵션 패키지 택1(패키지3·6 선택 시). 트렌디숍: 편의점, 올리브영, 유니클로, 자라, H&M, 8SECONDS. 가두매장만. 공식 문구 미확인: 편의점 대상 브랜드'
+      - key: pkg-openmarket-1p
+        title: '[패키지2·3·5·6] 오픈마켓 1% 적립'
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        notes: 오픈마켓 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 적립은 한도·실적 조건 없음
+      - key: pkg-social-1p
+        title: '[패키지1·3·4·6] 소셜커머스 1% 적립'
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        notes: 소셜커머스 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 적립은 한도·실적 조건 없음
+      - key: pkg-trendy-1p
+        title: '[패키지1·2·4·5] 트렌디숍 1% 적립'
+        target:
+          merchants: [cu, eight_seconds, emart24, gs25, hm, olive_young, seven_eleven, uniqlo, zara]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        notes: 트렌디숍 7% 할인을 고르지 않은 패키지에서 빅포인트 1% 적립. 가두매장만. 적립은 한도·실적 조건 없음
+      - key: overseas-1-3p
+        title: 해외 1.3% 빅포인트 적립
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 1.3}
+        notes: 해외겸용카드만. 해외 가맹점과 해외 직구. 실적·한도 없음. 무이자할부, 할인 적용 건 등 적립 제외
+notes: '실적은 "전월 일시불 및 할부 이용금액". 공식 문구 미확인: 전월 1일~말일 기준 명시, 할부 인정 방식, 취소 반영 달. 실적 제외 중 업종 코드 없는 것: 대학 등록금, 선불카드 충전. 할인 적용 건은 할인 전 총액이 실적에서 빠짐. 무이자할부 결제는 할인 대상 아님(실적 제외 여부는 공식 문구에 없음). 발급월+1개월까지는 실적 무관 제공(영화는 연 12회 한도에 포함). 라이프스타일 옵션 패키지 6개 중 1개를 골라 앱에서 매월 변경. 골라진 패키지의 커피 1개, 쇼핑 7% 1개, 나머지 쇼핑 2개 1% 적립만 적용되며 pkg- 혜택은 모두 선택지로 나열함. 결제 건 혜택 아님: 컨택리스 결제 지원.'

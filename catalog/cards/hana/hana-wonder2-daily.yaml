@@ -1,389 +1,106 @@
+schema_version: 2
 id: hana-wonder2-daily
 issuer: hana
 name: 하나카드 원더카드 2.0 DAILY
 kind: credit
-annual_fee_domestic: 19900
-annual_fee_global: 19900
-active: true
-source_url: https://www.hanacard.co.kr/OPI42000000D.web?_frame=no&CD_PD_SEQ=17333
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 400000, integrated_cap: null }
-  - { min_spend: 800000, integrated_cap: null }
-  - { min_spend: 1200000, integrated_cap: null }
-spend_rule:
-  excluded_categories: [tax, utility, gift_card]
-  exclude_interest_free_installment: false
-  exclude_discounted: true
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  원더카드 2.0의 DAILY 맞춤 혜택 조합. 발급 후 하나Pay에서 영역을 바꿀 수 있어 실제 혜택은 회원마다 다를 수 있음.
-  실적은 지난달 1일~말일 승인 기준 국내외 일시불·할부 금액. 영역마다 한도가 따로 있고 통합 한도 문구는 없음.
-  지난달 40만원 미만이면 혜택 없음. 최초 사용등록일~다음 달 말일은 40만~80만원 구간 기준으로 제공.
-  실적 제외 중 업종 코드에 없는 것: 국민연금·고용보험·산재보험·건강보험, 선불카드·선불전자지급수단(하나머니 등) 충전, 수도요금(utility로 처리), 대학·대학원 등록금, 스쿨뱅킹, 부동산임대료, 초·중·고 납입금. 할인·적립 받은 매출은 실적에서 빠짐.
-  할인 제외: 위 실적 제외 항목과 무이자·부분무이자할부 전체.
-  공식 문구 미확인: 취소가 실적에서 빠지는 달. 혜택은 매입 취소가 접수된 달에 차감한다는 문구만 있음.
-  공식 문구 미확인: 연회비. 상단은 19,900원(기본 12,000원+제휴 7,900원)이나 제휴연회비는 혜택플러스 선택 시 부과라고 함. DAILY만 쓰면 12,000원일 수 있음.
-  결제 건 혜택 아님: 온가족 플러스(가족카드당 월 1만원 캐시백, 차년도 연회비 1만원 캐시백), 트래블로그 스위치(외화 하나머니 결제 시 해외 수수료 면제, 이때 원더 서비스 없음).
-  해외 이용은 수수료 포함 최종 원화 청구액에 혜택 적용. 가족카드 실적·한도 합산.
-benefits:
-  - id: delivery-10-t1
-    title: 배달앱 10% 할인
-    target_type: merchant
-    target_values: [baemin, yogiyo, coupang_eats]
-    channel: online
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 40만~80만원 구간 한도. 공식 홈페이지·앱 결제만. 음식점 직접 결제 제외
-  - id: delivery-10-t2
-    title: 배달앱 10% 할인
-    target_type: merchant
-    target_values: [baemin, yogiyo, coupang_eats]
-    channel: online
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 6000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 80만~120만원 구간 한도. 공식 홈페이지·앱 결제만. 음식점 직접 결제 제외
-  - id: delivery-10-t3
-    title: 배달앱 10% 할인
-    target_type: merchant
-    target_values: [baemin, yogiyo, coupang_eats]
-    channel: online
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 10000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 120만원 이상 구간 한도. 공식 홈페이지·앱 결제만. 음식점 직접 결제 제외
-  - id: cvs-10-t1
-    title: 편의점 10% 할인
-    target_type: merchant
-    target_values: [cu, gs25, seven_eleven, emart24]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 40만~80만원 구간 한도. 오프라인만. 백화점·할인점·아울렛·쇼핑몰·휴게소·공항·호텔·리조트·역사·마트 입점 점포와 임대 매장 제외
-  - id: cvs-10-t2
-    title: 편의점 10% 할인
-    target_type: merchant
-    target_values: [cu, gs25, seven_eleven, emart24]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 8000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 80만~120만원 구간 한도. 오프라인만. 백화점·할인점·아울렛·쇼핑몰·휴게소·공항·호텔·리조트·역사·마트 입점 점포와 임대 매장 제외
-  - id: cvs-10-t3
-    title: 편의점 10% 할인
-    target_type: merchant
-    target_values: [cu, gs25, seven_eleven, emart24]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 12000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 120만원 이상 구간 한도. 오프라인만. 백화점·할인점·아울렛·쇼핑몰·휴게소·공항·호텔·리조트·역사·마트 입점 점포와 임대 매장 제외
-  - id: streaming-40-t1
-    title: 영상 스트리밍 40% 할인
-    target_type: merchant
-    target_values: [netflix, disney_plus, wavve, youtube_premium]
-    channel: online
-    kind: discount
-    rate_pct: 40
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 8000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 40만~80만원 구간 한도. 월 정기결제만. 포인트·캐시·머니 충전, 콘텐츠 개별 결제, 간편결제, 앱스토어 인앱 결제 제외
-  - id: streaming-40-t2
-    title: 영상 스트리밍 40% 할인
-    target_type: merchant
-    target_values: [netflix, disney_plus, wavve, youtube_premium]
-    channel: online
-    kind: discount
-    rate_pct: 40
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 12000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 80만~120만원 구간 한도. 월 정기결제만. 포인트·캐시·머니 충전, 콘텐츠 개별 결제, 간편결제, 앱스토어 인앱 결제 제외
-  - id: streaming-40-t3
-    title: 영상 스트리밍 40% 할인
-    target_type: merchant
-    target_values: [netflix, disney_plus, wavve, youtube_premium]
-    channel: online
-    kind: discount
-    rate_pct: 40
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 15000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 120만원 이상 구간 한도. 월 정기결제만. 포인트·캐시·머니 충전, 콘텐츠 개별 결제, 간편결제, 앱스토어 인앱 결제 제외
-  - id: taxi-10-t1
-    title: 택시 10% 할인
-    target_type: category
-    target_values: [taxi]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 40만~80만원 구간 한도. 대상은 카카오T, UT, 택시업종. 카카오T·UT는 공식 앱에 카드 등록 후 미리 결제하는 방식만, 현장결제·나중결제 제외. 택시업종은 오프라인만
-  - id: taxi-10-t2
-    title: 택시 10% 할인
-    target_type: category
-    target_values: [taxi]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 8000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 80만~120만원 구간 한도. 대상은 카카오T, UT, 택시업종. 카카오T·UT는 공식 앱에 카드 등록 후 미리 결제하는 방식만, 현장결제·나중결제 제외. 택시업종은 오프라인만
-  - id: taxi-10-t3
-    title: 택시 10% 할인
-    target_type: category
-    target_values: [taxi]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 12000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 120만원 이상 구간 한도. 대상은 카카오T, UT, 택시업종. 카카오T·UT는 공식 앱에 카드 등록 후 미리 결제하는 방식만, 현장결제·나중결제 제외. 택시업종은 오프라인만
-  - id: transit-10-t1
-    title: 대중교통 10% 할인
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 40만~80만원 구간 한도. 버스·지하철. 시외버스·고속버스·KTX·SRT 제외. 공식 문구 충돌 - 상세표는 10% 할인, 같은 페이지 요약은 3% 청구할인, 원더카드 2.0 통합 페이지 요약은 10% 하나머니 적립. 상세표를 따름
-  - id: transit-10-t2
-    title: 대중교통 10% 할인
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 8000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 80만~120만원 구간 한도. 버스·지하철. 시외버스·고속버스·KTX·SRT 제외. 공식 문구 충돌 - 상세표는 10% 할인, 같은 페이지 요약은 3% 청구할인, 원더카드 2.0 통합 페이지 요약은 10% 하나머니 적립. 상세표를 따름
-  - id: transit-10-t3
-    title: 대중교통 10% 할인
-    target_type: category
-    target_values: [public_transit]
-    channel: any
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 12000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 120만원 이상 구간 한도. 버스·지하철. 시외버스·고속버스·KTX·SRT 제외. 공식 문구 충돌 - 상세표는 10% 할인, 같은 페이지 요약은 3% 청구할인, 원더카드 2.0 통합 페이지 요약은 10% 하나머니 적립. 상세표를 따름
-  - id: matzip-10-t1
-    title: 하나Pay 원더카드 맛집 10% 할인
-    target_type: category
-    target_values: [restaurant]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 40만~80만원 구간 한도. 하나Pay 앱 맛집 서비스의 원더카드 맛집 지정 가맹점만(수시 변경). 오프라인만. 배달앱·예약앱 주문과 선결제 제외
-  - id: matzip-10-t2
-    title: 하나Pay 원더카드 맛집 10% 할인
-    target_type: category
-    target_values: [restaurant]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 8000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 80만~120만원 구간 한도. 하나Pay 앱 맛집 서비스의 원더카드 맛집 지정 가맹점만(수시 변경). 오프라인만. 배달앱·예약앱 주문과 선결제 제외
-  - id: matzip-10-t3
-    title: 하나Pay 원더카드 맛집 10% 할인
-    target_type: category
-    target_values: [restaurant]
-    channel: offline
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 12000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: true
-    notes: 지난달 120만원 이상 구간 한도. 하나Pay 앱 맛집 서비스의 원더카드 맛집 지정 가맹점만(수시 변경). 오프라인만. 배달앱·예약앱 주문과 선결제 제외
-  - id: online-food-10-t1
-    title: 온라인식품·쇼핑 10% 할인
-    target_type: merchant
-    target_values: [kurly, ssg_com, lotte_on, the_hyundai_com]
-    channel: online
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 4000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 40만~80만원 구간 한도. 공식 홈페이지·앱 결제만. 상품권·여행·항공권·티켓·도서·공연 제외. 연결된 다른 사이트 결제, 롯데ON·더현대닷컴에서 다른 몰로 이동한 결제 제외
-  - id: online-food-10-t2
-    title: 온라인식품·쇼핑 10% 할인
-    target_type: merchant
-    target_values: [kurly, ssg_com, lotte_on, the_hyundai_com]
-    channel: online
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 8000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 2
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 80만~120만원 구간 한도. 공식 홈페이지·앱 결제만. 상품권·여행·항공권·티켓·도서·공연 제외. 연결된 다른 사이트 결제, 롯데ON·더현대닷컴에서 다른 몰로 이동한 결제 제외
-  - id: online-food-10-t3
-    title: 온라인식품·쇼핑 10% 할인
-    target_type: merchant
-    target_values: [kurly, ssg_com, lotte_on, the_hyundai_com]
-    channel: online
-    kind: discount
-    rate_pct: 10
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: 12000
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 3
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 지난달 120만원 이상 구간 한도. 공식 홈페이지·앱 결제만. 상품권·여행·항공권·티켓·도서·공연 제외. 연결된 다른 사이트 결제, 롯데ON·더현대닷컴에서 다른 몰로 이동한 결제 제외
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 19900}
+  - {scope: global, amount: 19900}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI42000000D.web?_frame=no&CD_PD_SEQ=17333', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [gift_card, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    benefits:
+      - key: delivery-10
+        title: 배달앱 10% 할인
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 6000, 1200000: 10000}
+        tiers: {from: 400000}
+        notes: 지난달 40만~80만원 구간 한도. 공식 홈페이지·앱 결제만. 음식점 직접 결제 제외
+      - key: cvs-10
+        title: 편의점 10% 할인
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        notes: 지난달 40만~80만원 구간 한도. 오프라인만. 백화점·할인점·아울렛·쇼핑몰·휴게소·공항·호텔·리조트·역사·마트 입점 점포와 임대 매장 제외
+      - key: streaming-40
+        title: 영상 스트리밍 40% 할인
+        target:
+          merchants: [disney_plus, netflix, wavve, youtube_premium]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 40}
+        limits:
+          - per: month
+            amount: {400000: 8000, 800000: 12000, 1200000: 15000}
+        tiers: {from: 400000}
+        notes: 지난달 40만~80만원 구간 한도. 월 정기결제만. 포인트·캐시·머니 충전, 콘텐츠 개별 결제, 간편결제, 앱스토어 인앱 결제 제외
+      - key: taxi-10
+        title: 택시 10% 할인
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        notes: 지난달 40만~80만원 구간 한도. 대상은 카카오T, UT, 택시업종. 카카오T·UT는 공식 앱에 카드 등록 후 미리 결제하는 방식만, 현장결제·나중결제 제외. 택시업종은 오프라인만
+      - key: transit-10
+        title: 대중교통 10% 할인
+        target:
+          categories: [transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        notes: 지난달 40만~80만원 구간 한도. 버스·지하철. 시외버스·고속버스·KTX·SRT 제외. 공식 문구 충돌 - 상세표는 10% 할인, 같은 페이지 요약은 3% 청구할인, 원더카드 2.0 통합 페이지 요약은 10% 하나머니 적립. 상세표를 따름
+      - key: matzip-10
+        title: 하나Pay 원더카드 맛집 10% 할인
+        target:
+          categories: [restaurant]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        notes: 지난달 40만~80만원 구간 한도. 하나Pay 앱 맛집 서비스의 원더카드 맛집 지정 가맹점만(수시 변경). 오프라인만. 배달앱·예약앱 주문과 선결제 제외
+      - key: online-food-10
+        title: 온라인식품·쇼핑 10% 할인
+        target:
+          merchants: [kurly, lotte_on, ssg_com, the_hyundai_com]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        notes: 지난달 40만~80만원 구간 한도. 공식 홈페이지·앱 결제만. 상품권·여행·항공권·티켓·도서·공연 제외. 연결된 다른 사이트 결제, 롯데ON·더현대닷컴에서 다른 몰로 이동한 결제 제외
+notes: '원더카드 2.0의 DAILY 맞춤 혜택 조합. 발급 후 하나Pay에서 영역을 바꿀 수 있어 실제 혜택은 회원마다 다를 수 있음. 실적은 지난달 1일~말일 승인 기준 국내외 일시불·할부 금액. 영역마다 한도가 따로 있고 통합 한도 문구는 없음. 지난달 40만원 미만이면 혜택 없음. 최초 사용등록일~다음 달 말일은 40만~80만원 구간 기준으로 제공. 실적 제외 중 업종 코드에 없는 것: 국민연금·고용보험·산재보험·건강보험, 선불카드·선불전자지급수단(하나머니 등) 충전, 수도요금(utility로 처리), 대학·대학원 등록금, 스쿨뱅킹, 부동산임대료, 초·중·고 납입금. 할인·적립 받은 매출은 실적에서 빠짐. 할인 제외: 위 실적 제외 항목과 무이자·부분무이자할부 전체. 공식 문구 미확인: 취소가 실적에서 빠지는 달. 혜택은 매입 취소가 접수된 달에 차감한다는 문구만 있음. 공식 문구 미확인: 연회비. 상단은 19,900원(기본 12,000원+제휴 7,900원)이나 제휴연회비는 혜택플러스 선택 시 부과라고 함. DAILY만 쓰면 12,000원일 수 있음. 결제 건 혜택 아님: 온가족 플러스(가족카드당 월 1만원 캐시백, 차년도 연회비 1만원 캐시백), 트래블로그 스위치(외화 하나머니 결제 시 해외 수수료 면제, 이때 원더 서비스 없음). 해외 이용은 수수료 포함 최종 원화 청구액에 혜택 적용. 가족카드 실적·한도 합산.'

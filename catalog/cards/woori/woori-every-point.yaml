@@ -1,69 +1,46 @@
+schema_version: 2
 id: woori-every-point
 issuer: woori
 name: 우리카드 카드의정석2 EVERY POINT
 kind: credit
-annual_fee_domestic: 12000
-annual_fee_global: 12000
-active: true
-source_url: https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102718
-updated_at: 2026-09-28
-spend_basis: prev_calendar_month
-spend_tiers:
-  - { min_spend: 0, integrated_cap: null }
-  - { min_spend: 400000, integrated_cap: 10000 }
-  - { min_spend: 800000, integrated_cap: 20000 }
-spend_rule:
-  excluded_categories: [tax, utility, gift_card, apartment_fee, annual_fee]
-  exclude_interest_free_installment: true
-  exclude_discounted: false
-  installment_basis: full_at_purchase
-  cancellation_basis: cancel_month
-notes: >-
-  원래 맡은 카드의정석2 EVERY DISCOUNT(cdPrdCd 103729)는 우리카드 공식 판매여부가 N이고 개인 신용카드 목록에도 없어
-  같은 구조의 적립형인 이 카드로 바꿈. 연회비는 해외겸용(Mastercard, VISA)·국내전용 모두 1만2천원, 가족카드 무료.
-  포인트는 1모아포인트 = 1꿀 = 1원.
-  실적은 전월 1일~말일 매출승인일 기준 국내외 가맹점 이용분. 해외 이용, 교통카드 이용, 통신료 자동납부는 매출표 접수일 기준.
-  실적 제외 중 업종 코드가 없는 것: 정부지원금, 대학(대학원) 등록금, 교통카드 구매·충전, 고속버스(차내 단말기·앱 결제),
-  각종 수수료·이자, 현금서비스, 카드론, 매출취소금액. 공과금에는 4대보험, 우편요금, 과태료, 여권발급비용, 공공기관 가맹점 포함.
-  취소는 취소 매출표 접수월 실적에서 빼되, 국내 취소가 매월 1~2일에 접수되면 전월 실적에서 뺌.
-  공식 문구 미확인: 할부를 실적에 어떻게 넣는지. full_at_purchase로 둠.
-  적립 제외는 실적 제외 목록과 같음. 카드 수령일과 사용개시일 중 빠른 날부터 다음 달 말일까지는 추가 적립을 실적 무관 최저 구간으로 제공.
-  월 한도는 당월 1일~말일, 매입 순서대로 적용.
-benefits:
-  - id: all-0-8
-    title: 국내외 가맹점 0.8% 적립
-    target_type: all
-    target_values: []
-    channel: any
-    kind: points
-    rate_pct: 0.8
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 0
-    counts_toward_integrated_cap: false
-    conditions_not_modeled: false
-    notes: 전월실적 조건과 적립한도 없음. Two-in-One 결제(체크 매출)는 0.3%
-  - id: easypay-online-2
-    title: 간편결제 온라인 2% 추가 적립
-    target_type: merchant
-    target_values: [woori_won_pay, naver_pay, kakao_pay]
-    channel: online
-    kind: points
-    rate_pct: 2
-    fixed_amount: null
-    min_txn_amount: 0
-    max_per_txn: null
-    monthly_cap_amount: null
-    monthly_cap_count: null
-    daily_cap_count: null
-    min_tier_index: 1
-    counts_toward_integrated_cap: true
-    conditions_not_modeled: true
-    notes: >-
-      기본 0.8%에 더해 주는 추가 적립. 해당 간편결제에 이 카드를 등록해 온라인 결제할 때만 제공.
-      매장 QR·바코드·MST/NFC 같은 모바일 오프라인 결제, 의약품 전용몰·제약회사 업종, Two-in-One 체크 매출은 제외.
-      통합 적립한도를 넘은 금액은 기본 적립만 받음
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102718', fetched_at: &id001 2026-09-28}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, gift_card, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    limits:
+      - key: integrated
+        per: month
+        amount: {400000: 10000, 800000: 20000}
+    benefits:
+      - key: all-0-8
+        title: 국내외 가맹점 0.8% 적립
+        target: {all: true}
+        reward: {type: points, program: woori_moa_point, rate: 0.8}
+        notes: 전월실적 조건과 적립한도 없음. Two-in-One 결제(체크 매출)는 0.3%
+      - key: easypay-online-2
+        title: 간편결제 온라인 2% 추가 적립
+        target:
+          merchants: [kakao_pay, naver_pay, woori_won_pay]
+        when:
+          - {channel: online}
+        reward: {type: points, program: woori_moa_point, rate: 2}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        notes: 기본 0.8%에 더해 주는 추가 적립. 해당 간편결제에 이 카드를 등록해 온라인 결제할 때만 제공. 매장 QR·바코드·MST/NFC 같은 모바일 오프라인 결제, 의약품 전용몰·제약회사 업종, Two-in-One 체크 매출은 제외. 통합 적립한도를 넘은 금액은 기본 적립만 받음
+notes: '원래 맡은 카드의정석2 EVERY DISCOUNT(cdPrdCd 103729)는 우리카드 공식 판매여부가 N이고 개인 신용카드 목록에도 없어 같은 구조의 적립형인 이 카드로 바꿈. 연회비는 해외겸용(Mastercard, VISA)·국내전용 모두 1만2천원, 가족카드 무료. 포인트는 1모아포인트 = 1꿀 = 1원. 실적은 전월 1일~말일 매출승인일 기준 국내외 가맹점 이용분. 해외 이용, 교통카드 이용, 통신료 자동납부는 매출표 접수일 기준. 실적 제외 중 업종 코드가 없는 것: 정부지원금, 대학(대학원) 등록금, 교통카드 구매·충전, 고속버스(차내 단말기·앱 결제), 각종 수수료·이자, 현금서비스, 카드론, 매출취소금액. 공과금에는 4대보험, 우편요금, 과태료, 여권발급비용, 공공기관 가맹점 포함. 취소는 취소 매출표 접수월 실적에서 빼되, 국내 취소가 매월 1~2일에 접수되면 전월 실적에서 뺌. 공식 문구 미확인: 할부를 실적에 어떻게 넣는지. full_at_purchase로 둠. 적립 제외는 실적 제외 목록과 같음. 카드 수령일과 사용개시일 중 빠른 날부터 다음 달 말일까지는 추가 적립을 실적 무관 최저 구간으로 제공. 월 한도는 당월 1일~말일, 매입 순서대로 적용.'
