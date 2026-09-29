@@ -2781,7 +2781,7 @@ git commit -m "feat: 실적과 결제 혜택 계산 추가" -m "작업 002 설�
 - 고치기: `backend/cherry_core/engine/__init__.py`
 - 테스트: `backend/tests/engine/test_recommend.py`, `test_speed.py`
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/engine/test_recommend.py`
 
@@ -3044,7 +3044,7 @@ def test_category_tops_under_200ms(heavy):
     assert ms < 200, f"{ms:.1f}ms"
 ````
 
-- [ ] **2단계: 돌려서 실패를 본다**
+- [x] **2단계: 돌려서 실패를 본다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_recommend.py
@@ -3052,7 +3052,7 @@ uv run --project backend pytest -q backend/tests/engine/test_recommend.py
 
 기대: `Engine`에 `recommend`가 없어 실패한다.
 
-- [ ] **3단계: 추천을 쓴다**
+- [x] **3단계: 추천을 쓴다**
 
 `backend/cherry_core/engine/recommend.py`
 
@@ -3224,7 +3224,7 @@ def order(r: Recommendation) -> tuple:
     return (-r.value, keep is None, keep or 0, nxt is None, nxt or 0, r.card_id)
 ````
 
-- [ ] **4단계: Engine에 추천을 더한다**
+- [x] **4단계: Engine에 추천을 더한다**
 
 `backend/cherry_core/engine/__init__.py`
 
@@ -3274,7 +3274,7 @@ class Engine:
         return _recommend.recommend(self.ctx, cards, payments, queries, now)
 ````
 
-- [ ] **5단계: 돌린다**
+- [x] **5단계: 돌린다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/engine/test_recommend.py backend/tests/engine/test_speed.py
@@ -3282,12 +3282,14 @@ uv run --project backend pytest -q backend/tests/engine/test_recommend.py backen
 
 기대: `9 passed`. 시제품에서 추천 한 번은 14ms, 업종 12개는 37ms였다.
 
-- [ ] **6단계: 커밋**
+- [x] **6단계: 커밋**
 
 ```bash
 git add backend/cherry_core/engine backend/tests/engine/test_recommend.py backend/tests/engine/test_speed.py
 git commit -m "feat: 추천과 못 받는 혜택, 조건부 혜택 추가" -m "작업 002 설계 4절. 카드마다 사용량 표를 한 번 만들어 추천 한 번 50ms, 업종 12개 200ms 안에 끝난다. 시나리오 E11, E37, S4, S5, S9"
 ```
+
+2026-09-29 실행 결과: 9개 통과, 전체 152개 통과. 추천 한 번 14.5ms, 업종 12개 36.0ms.
 
 ---
 

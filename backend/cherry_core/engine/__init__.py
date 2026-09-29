@@ -8,8 +8,9 @@ from pathlib import Path
 from cherry_core.catalog.load import Catalog, load_catalog
 
 from . import price as _price
+from . import recommend as _recommend
 from .context import Ctx
-from .models import LimitUse, Payment, PaymentResult, SpendStatus, UserCard
+from .models import LimitUse, Payment, PaymentResult, Query, Recommendation, SpendStatus, UserCard
 
 
 class Engine:
@@ -35,3 +36,8 @@ class Engine:
 
     def limit_status(self, card: UserCard, payments: list[Payment], now: datetime) -> list[LimitUse]:
         return _price.limit_status(self.ctx, card, payments, now)
+
+    def recommend(
+        self, cards: list[UserCard], payments: dict[str, list[Payment]], queries: list[Query], now: datetime
+    ) -> list[list[Recommendation]]:
+        return _recommend.recommend(self.ctx, cards, payments, queries, now)
