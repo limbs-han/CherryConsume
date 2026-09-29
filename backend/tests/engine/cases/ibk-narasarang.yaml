@@ -420,10 +420,10 @@ cases:
     expect:
       - {payment: 0, benefits: {gs25-items-onsite: 1000}, counted: 9000, warnings: [check_conditions, assumed_value]}
       - {payment: 1, benefits: {}, counted: 4500, warnings: [limit_exhausted]}
-      - {payment: 2, benefits: {gs25-items-onsite: 481}, counted: 4321}
+      - {payment: 2, benefits: {gs25-items-onsite: 480}, counted: 4321}
       - {payment: 3, benefits: {emart24-items-onsite: 1000}, counted: 9000, warnings: [check_conditions, assumed_value]}
       - {payment: 4, benefits: {}, counted: 5400, warnings: [limit_exhausted]}
-    calc: 0 구간. 기록 9,000 × 100 ÷ 90 = 10,000이 할인 전이라 1,000, 같은 날 두 번째는 1일 1회라 0, 4,321 × 100 ÷ 90 = 4,801.1 올림 4,802라 481, 이마트24 9,000도 1,000, 같은 날 두 번째 0. 실적은 기록 금액
+    calc: 0 구간. 기록 9,000 × 100 ÷ 90 = 10,000이 할인 전이라 1,000, 같은 날 두 번째는 1일 1회라 0, 4,321은 할인 전 4,801에서 원 미만 버림 할인 480을 뺀 값이라 480. 4,802는 할인 480이라 기록이 4,322가 된다. 2026-09-29 되짚기를 반올림 칸에 맞췄다, 이마트24 9,000도 1,000, 같은 날 두 번째 0. 실적은 기록 금액
 
   - name: GS25는 나라 편의점 청구할인과 주요품목 현장할인을 더해 받는다
     prev_month_spend: 100000

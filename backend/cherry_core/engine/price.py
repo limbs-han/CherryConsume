@@ -78,10 +78,11 @@ def benefit_match(rules: Rules, b: Benefit, s: Situation) -> Tri:
         return FALSE
     parts = [hit, negate(categories_match(s.category, t.exclude_categories))]
     be = rules.benefit_exclusions
-    # 대상이 이 결제의 업종을 직접 적었으면 공통 제외 업종보다 우선한다. 가맹점만 적었으면 결제 업종으로 공통 제외를 본다.
-    # 이마트 5% 혜택으로 이마트에서 산 상품권은 뺀다. 2026-09-29 사용자가 정했다. 설계 3.2의 3
-    if categories_match(s.category, t.categories)[0] is not True:
-        parts.append(negate(categories_match(s.category, be.categories)))
+    # 대상이 공통 제외 업종이나 더 좁은 업종으로 이 결제를 적었으면 그 공통 제외는 무시한다. 가맹점만 적었거나 대상이 제외보다
+    # 넓으면 결제 업종으로 공통 제외를 본다. 이마트 5% 혜택으로 산 상품권, 음식점 대상의 패스트푸드 제외. 2026-09-29 사용자가 정했다. 설계 3.2의 3
+    listed = [c for c in t.categories if categories_match(s.category, [c])[0] is True]
+    left = [e for e in be.categories if not any(categories_match(c, [e])[0] is True for c in listed)]
+    parts.append(negate(categories_match(s.category, left)))
     parts += [negate(check(w, s)) for w in be.when_any]
     s.area = b.area or b.key
     parts.append(check_all(b.when, s))
@@ -205,36 +206,68 @@ def reward_amount(ctx: Ctx, b: Benefit, base: int, tier: int) -> int:
 
 
 def pre_discount(b: Benefit, net: int, tier: int) -> int:
-    """현장할인의 할인 전 금액을 되짚는다. 설계 3.6"""
+    """현장할인의 할인 전 금액을 되짚는다. 혜택의 반올림으로 할인하면 기록 금액이 나오는 금액 중 가장 큰 값이다.
+    그런 금액이 없으면 비율로 되짚고 버린다. 2026-09-29 사용자가 정했다. 설계 3.6"""
     r = b.reward
-    if r.rate is not None:
-        return math.ceil(frac(net) / (1 - frac(at_tier(r.rate, tier)) / 100))
-    return net + int(at_tier(r.fixed, tier) or 0)
+    if r.rate is None:
+        return net + int(at_tier(r.fixed, tier) or 0)
+    rate = frac(at_tier(r.rate, tier)) / 100
+    step = {"floor": 1, "round": 1, "floor10": 10, "floor100": 100}[r.round]
+    top, bottom = math.floor((net + 1) / (1 - rate)), math.floor((net - step) / (1 - rate))
+    for pre in range(top, max(bottom, net) - 1, -1):
+        if pre - round_money(pre * rate, r.round) == net:
+            return pre
+    return math.floor(net / (1 - rate))
+
+
+def onsite_pre(rules: Rules, b: Benefit, s: Situation, net: int, tier: int) -> int:
+    """현장할인 조건을 판정할 할인 전 금액. 건당 금액 한도가 있으면 기록 금액 + 자른 할인액이다. 설계 3.6
+    ponytail: 날·달 한도로 줄어든 할인은 여기서 보지 않는다. 그런 카드가 생기면 한도를 센 뒤 조건을 다시 판정한다"""
+    pre = pre_discount(b, net, tier)
+    txn_caps = [caps(lim, tier, s)[0] for _, lim in limit_specs(rules, b) if lim.per == "txn"]
+    txn_caps = [c for c in txn_caps if c is not None]
+    return min(pre, net + min(txn_caps)) if txn_caps else pre
+
+
+def unranked_hit(rules: Rules, b: Benefit, s: Situation) -> bool:
+    """순위 조건을 빼면 걸리는지. 구간이 모자라 상위 개수가 0인 순위 혜택을 못 받는 혜택으로 보여 주려는 것이다. E37"""
+    if not any(c.ranked for c in b.when):
+        return False
+    skip, s.skip = s.skip, s.skip | {"ranked"}
+    hit = benefit_match(rules, b, s)[0] is True
+    s.skip = skip
+    return hit
 
 
 def caps(lim: Limit, tier: int, s: Situation) -> tuple[int | None, int | None, int | None, frozenset]:
     """한도 칸의 (금액, 횟수, 결제액, 모르는 것). 구간표와 adjust를 적용한다.
-    adjust 조건이 모름이면 적용하지 않고 무엇을 모르는지 돌려준다. 설계 3.1"""
+    adjust 조건이 모름이면 바꾼 한도와 원래 한도 중 작은 쪽을 쓰고 무엇을 모르는지 돌려준다. 부풀리지 않는 쪽이다.
+    2026-09-29 사용자가 정했다. 설계 3.1"""
     amount, count, base = at_tier(lim.amount, tier), at_tier(lim.count, tier), at_tier(lim.base, tier)
     needs: frozenset = frozenset()
     for a in lim.adjust:
         hit = check(a.when, s)
-        if hit[0] is None:
-            needs |= hit[1]
-        if hit[0] is not True:
+        if hit[0] is False:
             continue
         given = a.model_fields_set
-        if "amount" in given:
-            amount = at_tier(a.amount, tier)
-        if "count" in given:
-            count = at_tier(a.count, tier)
-        if "base" in given:
-            base = at_tier(a.base, tier)
-        if a.multiply is not None and amount is not None:
-            amount = math.floor(amount * frac(a.multiply))
-        if a.add is not None and amount is not None:
-            amount += a.add
+        new_amount = at_tier(a.amount, tier) if "amount" in given else amount
+        new_count = at_tier(a.count, tier) if "count" in given else count
+        new_base = at_tier(a.base, tier) if "base" in given else base
+        if a.multiply is not None and new_amount is not None:
+            new_amount = math.floor(new_amount * frac(a.multiply))
+        if a.add is not None and new_amount is not None:
+            new_amount += a.add
+        if hit[0] is None:
+            needs |= hit[1]
+            amount, count, base = smaller(amount, new_amount), smaller(count, new_count), smaller(base, new_base)
+        else:
+            amount, count, base = new_amount, new_count, new_base
     return amount, count, base, needs
+
+
+def smaller(a: int | None, b: int | None) -> int | None:
+    """한도 둘 중 작은 쪽. None은 제한 없음이다"""
+    return b if a is None else a if b is None else min(a, b)
 
 
 @dataclass
@@ -379,13 +412,15 @@ def price(ctx: Ctx, card: UserCard, p: Payment, ledger: Ledger, final_areas: dic
                 total = ledger.month_total(b.key, month) + mine
                 s.skip, s.month_total = frozenset(), total
             if b.reward.type == "onsite_discount":
-                s.amount = pre_discount(b, net, tier)
+                s.amount = onsite_pre(rules, b, s, net, tier)
             hit = benefit_match(rules, b, s)
             s.amount, s.month_total = net, None
-            if hit[0] is False:
-                continue
             lo = b.tiers.start if b.tiers and b.tiers.start is not None else rules.tiers[0]
             hi = b.tiers.end if b.tiers and b.tiers.end is not None else rules.tiers[-1]
+            if hit[0] is False:
+                if tier < lo and not b.tiers.waived_when and unranked_hit(rules, b, s):
+                    tier_short[b.key] = lo
+                continue
             if tier > hi:
                 continue
             if tier < lo:
@@ -492,8 +527,9 @@ def price_month(
     ledger = Ledger()
     results: list[PaymentResult] = []
     for q in ordered:
-        if q.benefits is None or (month is not None and month_of(local(q.paid_at).date()) == month):
-            result = price(ctx, card, q, ledger, final_areas).result
+        in_month = month is not None and month_of(local(q.paid_at).date()) == month
+        if q.benefits is None or in_month:
+            result = price(ctx, card, q, ledger, final_areas if in_month else None).result
             q = q.model_copy(update={"benefits": result.benefits})
             results.append(result)
         ledger.add(ctx, card, q)

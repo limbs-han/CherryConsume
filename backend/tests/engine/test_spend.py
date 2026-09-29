@@ -2,6 +2,9 @@
 
 from datetime import UTC, date, datetime
 
+import pytest
+from pydantic import ValidationError
+
 from .conftest import at, card, holder, pay, prev_month
 
 CAFE_10 = {
@@ -178,3 +181,40 @@ def test_basis_none_and_billing_cycle(engine):
     s = status(engine(card([CAFE_10], spend={"basis": "billing_cycle"})), prev_month(350000))
     assert (s.tier, s.tier_source) == (0, "unsupported")
     assert "spend_basis_unsupported" in [w.code for w in s.warnings]
+
+
+def test_partial_cancellation_counts_like_remaining_amount(engine):
+    # 혜택 받은 결제는 50%. 10,001원 중 5,000원 취소면 남은 5,001원의 50% 2,500.5 → 2,500. 5,000 − 2,500 = 2,500을 뺀다
+    flat = {k: v for k, v in CAFE_10.items() if k != "tiers"}
+    eng = engine(card([flat], tiers=(0,), spend={"exclude_applied": 0.5}))
+    p = pay(10001, "2026-09-02T08:00", merchant="starbucks", cancelled_amount=5000, cancelled_at=at("2026-09-03T08:00"))
+    r = eng.price_month(holder(), [p])[0]
+    assert sum(x.amount for x in r.spend) == 2500
+
+
+def test_cancellation_cannot_exceed_payment_and_needs_time():
+    # 결제보다 큰 취소와 시각 없는 취소는 받지 않는다. 취소한 달 기준 카드에서 달을 정할 수 없다. E5
+    with pytest.raises(ValidationError):
+        pay(30000, "2026-09-02T08:00", cancelled_amount=50000, cancelled_at=at("2026-09-03T08:00"))
+    with pytest.raises(ValidationError):
+        pay(30000, "2026-09-02T08:00", cancelled_amount=10000)
+
+
+def test_month_recompute_after_original_month_cancellation(engine):
+    # 8월 100만원 중 10만원을 9월 10일에 결제한 달 기준으로 취소하면 9월 구간이 100만에서 50만으로 내려간다.
+    # 서버가 9월을 다시 계산해 9월 5일 5% 5,000원이 1.5% 1,500원이 된다. 2026-09-29 사용자가 정했다. E5
+    rates = [
+        {**CAFE_10, "key": "cafe-5", "reward": {"type": "billing_discount", "rate": 5}, "tiers": {"from": 1000000}},
+        {**CAFE_10, "key": "cafe-15", "reward": {"type": "billing_discount", "rate": 1.5}, "tiers": {"to": 500000}},
+    ]
+    for r in rates:
+        r.pop("limits")
+    eng = engine(card(rates, tiers=(0, 500000, 1000000), spend={"cancellation": "original_month"}))
+    aug = [pay(900000, "2026-08-10T10:00", category="other"), pay(100000, "2026-08-20T10:00", category="other")]
+    sept = pay(100000, "2026-09-05T10:00", merchant="starbucks")
+    first = eng.price_month(holder(), aug + [sept])
+    assert [b.value for b in first[2].benefits] == [5000]
+    saved = [p.model_copy(update={"benefits": r.benefits}) for p, r in zip(aug + [sept], first)]
+    saved[1] = saved[1].model_copy(update={"cancelled_amount": 100000, "cancelled_at": at("2026-09-10T10:00")})
+    again = eng.price_month(holder(), saved, month=SEPT)
+    assert [b.value for b in again[0].benefits] == [1500]

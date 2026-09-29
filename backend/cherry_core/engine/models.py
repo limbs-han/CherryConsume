@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Annotated, Any, Literal
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
 from cherry_core.catalog.models import Billing, Region
 
@@ -64,6 +64,14 @@ class Payment(Base):
     cancelled_amount: Won = 0
     cancelled_at: AwareDatetime | None = None
     benefits: list[AppliedBenefit] | None = None
+
+    @model_validator(mode="after")
+    def _cancellation(self) -> Payment:
+        if self.cancelled_amount > self.amount:
+            raise ValueError("취소 금액이 결제 금액보다 크다")
+        if self.cancelled_amount and self.cancelled_at is None:
+            raise ValueError("취소 금액이 있으면 취소 시각도 있어야 한다. E5")
+        return self
 
 
 class Query(Base):

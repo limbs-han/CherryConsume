@@ -2,6 +2,10 @@
 
 from datetime import date
 
+import pytest
+
+from cherry_core.engine.models import Query
+
 from .conftest import at, card, codes, holder, pay, prev_month, values
 
 
@@ -576,3 +580,118 @@ def test_common_exclusion_skipped_only_for_listed_category(engine):
         ],
     )
     assert values(r) == [{}, {"gs-5": 2500}, {"tax-3": 3000}]
+
+
+def test_engine_refuses_catalog_with_rule_errors(engine):
+    # 검사 오류가 있는 카탈로그로는 계산하지 않는다. 설계 6.8. 셋 다 그대로 두면 계산 도중 예외가 나거나 한도가 사라진다
+    with pytest.raises(ValueError):
+        engine(card([b("cafe-10", CAFE, RATE10)], tiers=(300000, 600000)))  # 구간이 0부터 시작하지 않는다
+    vip = [{"key": "vip", "type": "bool", "scope": "card", "ask": "우수 고객인가요"}]
+    waived = b(
+        "all-10",
+        {"all": True},
+        RATE10,
+        tiers={"from": 300000, "waived_when": {"fact": "vip"}},
+        limits=[{"per": "month", "amount": {300000: 1000, 600000: 2000}}],
+    )
+    with pytest.raises(ValueError):
+        engine(card([waived], facts=vip))  # 하한을 풀면 0 구간인데 한도표에 0 구간 값이 없다
+    with pytest.raises(ValueError):
+        engine(card([b("gs", {"merchants": ["gs25"]}, {"type": "onsite_discount", "rate": 100})], tiers=(0,)))
+
+
+def test_onsite_amount_condition_uses_capped_discount(engine):
+    # 현장할인 20%, 건당 4만원, 할인 전 211,000원 미만. 기록 170,000원의 할인 전 금액은 170,000 + 40,000 = 210,000이라 대상.
+    # 비율로만 되짚은 212,500원으로 판정하지 않는다. 설계 3.6
+    t = b(
+        "outback",
+        {"categories": ["restaurant"]},
+        {"type": "onsite_discount", "rate": 20},
+        when=[{"amount": {"below": 211000}}],
+        limits=[{"per": "txn", "amount": 40000}],
+    )
+    r = run(engine(card([t], tiers=(0,))), [pay(170000, "2026-09-02T19:00", category="restaurant")])[0]
+    assert values([r]) == [{"outback": 40000}]
+
+
+def test_final_leaves_other_months_to_their_own_ranking(engine):
+    # 9월 final 계산에 저장값 없는 10월 결제가 섞여도 10월 결제는 10월 순위로 본다. 10월 배달 2만원이 1위라 6,000. 설계 3.5
+    benefits = [
+        b("coffee", {"merchants": ["ediya"]}, {"type": "billing_discount", "rate": 30}, when=[{"ranked": "top"}]),
+        b("delivery", {"merchants": ["baemin"]}, {"type": "billing_discount", "rate": 30}, when=[{"ranked": "top"}]),
+    ]
+    eng = engine(card(benefits, tiers=(0,), ranked=[{"key": "top", "top": 1}]))
+    pays = [pay(10000, "2026-09-02T10:00", merchant="ediya"), pay(20000, "2026-10-02T19:00", merchant="baemin")]
+    assert values(eng.price_month(holder(), pays, month=date(2026, 9, 1), final=True)) == [
+        {"coffee": 3000},
+        {"delivery": 6000},
+    ]
+
+
+def test_unknown_card_is_skipped_with_warning(engine):
+    # 카탈로그에 없는 카드의 결제는 계산하지 않고 경고를 남긴다. 예외를 던지지 않는다. 설계 6.8
+    eng = engine(card([b("cafe-10", CAFE, RATE10)], tiers=(0,)))
+    h = holder(card_id="test-gone")
+    r = run(eng, [pay(10000, "2026-09-02T10:00", merchant="ediya")], h)[0]
+    assert r.benefits == [] and codes(r) == ["no_revision"]
+    assert eng.spend_status(h, [], date(2026, 9, 1)).tier is None
+    assert eng.limit_status(h, [], at("2026-09-19T14:20")) == []
+    [rows] = eng.recommend([h], {}, [Query(merchant="ediya", amount=10000)], at("2026-09-19T14:20"))
+    assert rows[0].value == 0
+
+
+def test_narrow_common_exclusion_beats_parent_target(engine):
+    # 대상 음식점, 공통 제외 패스트푸드. 패스트푸드 1만원은 좁은 제외가 이겨 0원, 일반음식점은 1,000원.
+    # 대상이 제외 업종이나 더 좁은 업종을 적었을 때만 공통 제외를 무시한다. 2026-09-29 사용자가 정했다. 설계 3.2의 3
+    eng = engine(
+        card(
+            [b("food-10", {"categories": ["restaurant"]}, RATE10)],
+            tiers=(0,),
+            benefit_exclusions={"categories": ["restaurant.fastfood"]},
+        )
+    )
+    r = run(
+        eng,
+        [
+            pay(10000, "2026-09-02T12:00", category="restaurant.fastfood"),
+            pay(10000, "2026-09-03T12:00", category="restaurant.general"),
+        ],
+    )
+    assert values(r) == [{}, {"food-10": 1000}]
+
+
+def test_onsite_back_calculation_follows_rounding(engine):
+    # 10% 현장할인, 원 미만 버림. 기록 9,001원은 할인 전 10,001원에서 1,000원을 뺀 값이다.
+    # 올림으로 되짚은 10,002원은 할인 1,000원이라 기록이 9,002원이 되어 맞지 않는다. 2026-09-29 사용자가 정했다. 설계 3.6
+    t = b("gs", {"merchants": ["gs25"]}, {"type": "onsite_discount", "rate": 10})
+    r = run(engine(card([t], tiers=(0,))), [pay(9001, "2026-09-02T10:00", merchant="gs25")])[0]
+    assert values([r]) == [{"gs": 1000}] and r.benefits[0].base == 10001
+
+
+def test_unknown_adjust_uses_smaller_limit(engine):
+    # 카페 10% 월 1만원, 가족카드는 월 5천원. 가족카드인지 모르면 작은 한도로 보고 묻는다.
+    # 2만원 세 번이면 2,000 + 2,000 + 1,000 = 5,000. 아니라고 답하면 6,000. 2026-09-29 사용자가 정했다. 설계 3.1
+    family = [{"key": "family", "type": "bool", "scope": "card", "ask": "가족카드인가요"}]
+    cafe = b(
+        "cafe-10",
+        CAFE,
+        RATE10,
+        limits=[{"per": "month", "amount": 10000, "adjust": [{"when": {"fact": "family"}, "amount": 5000}]}],
+    )
+    eng = engine(card([cafe], tiers=(0,), facts=family))
+    pays = [pay(20000, f"2026-09-0{d}T10:00", merchant="ediya") for d in (2, 3, 4)]
+    r = run(eng, pays)
+    assert values(r) == [{"cafe-10": 2000}, {"cafe-10": 2000}, {"cafe-10": 1000}]
+    assert "needs_input" in codes(r[2])
+    assert values(run(eng, pays, holder(facts={"family": False})))[2] == {"cafe-10": 2000}
+
+
+def test_month_recompute_after_import(engine):
+    # 9월 3일 카페 결제가 월 1천원 한도를 다 쓴 뒤, 엑셀로 9월 2일 결제가 들어오면 서버가 그 달을 다시 계산한다.
+    # 카드사처럼 9월 2일이 1,000원, 9월 3일이 0원이다. 2026-09-29 사용자가 정했다. 설계 3.9
+    eng = engine(card([b("cafe-10", CAFE, RATE10, limits=[{"per": "month", "amount": 1000}])], tiers=(0,)))
+    later = pay(10000, "2026-09-03T10:00", merchant="ediya")
+    saved = later.model_copy(update={"benefits": run(eng, [later])[0].benefits})
+    imported = pay(10000, "2026-09-02T10:00", merchant="ediya")
+    again = eng.price_month(holder(), [saved, imported], month=date(2026, 9, 1))
+    assert {x.payment_id: sum(y.value for y in x.benefits) for x in again} == {imported.id: 1000, later.id: 0}

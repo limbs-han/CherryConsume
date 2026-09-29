@@ -191,6 +191,7 @@ def check_rules(rules: Rules, cat: Catalog, source_ids: set[str]) -> list[tuple[
                 err(f"{bp}.tiers", "from은 to 이하여야 한다")
             if b.tiers.waived_when:
                 cond(b.tiers.waived_when, f"{bp}.tiers.waived_when", b)
+        first = tiers[0] if b.tiers and b.tiers.waived_when else start  # 하한을 풀면 0 구간에서도 받는다
         cats(b.target.categories + b.target.exclude_categories, f"{bp}.target")
         bad = [m for m in b.target.merchants + b.target.exclude_merchants if m not in cat.merchants]
         if bad:
@@ -199,22 +200,22 @@ def check_rules(rules: Rules, cat: Catalog, source_ids: set[str]) -> list[tuple[
             cond(c, f"{bp}.when[{i}]", b)
             if c.ranked in ranked_keys:
                 ranked_areas.setdefault(c.ranked, set()).add(b.area or b.key)
-                ranked_first[c.ranked] = min(ranked_first.get(c.ranked, start), start)
+                ranked_first[c.ranked] = min(ranked_first.get(c.ranked, first), first)
         rw = b.reward
         if rw.program is not None and rw.program not in cat.point_programs:
             err(f"{bp}.reward.program", f"포인트 {rw.program}가 point_programs.yaml에 없다")
         if rw.per_liter is not None and FUEL_PRICE_KEY not in cat.reference:
             err(f"{bp}.reward.per_liter", f"reference.yaml에 {FUEL_PRICE_KEY}가 없다")
-        table(rw.rate, f"{bp}.reward.rate", start)
-        table(rw.fixed, f"{bp}.reward.fixed", start)
+        table(rw.rate, f"{bp}.reward.rate", first)
+        table(rw.fixed, f"{bp}.reward.fixed", first)
         for i, lim in enumerate(b.limits):
             lp = f"{bp}.limits[{i}]"
             if lim.shared is not None:
                 if lim.shared not in shared_keys:
                     err(f"{lp}.shared", f"공유 한도 {lim.shared}가 limits에 없다")
-                shared_first[lim.shared] = min(shared_first.get(lim.shared, start), start)
+                shared_first[lim.shared] = min(shared_first.get(lim.shared, first), first)
             for name in ("amount", "count", "base"):
-                table(getattr(lim, name), f"{lp}.{name}", start)
+                table(getattr(lim, name), f"{lp}.{name}", first)
             for j, a in enumerate(lim.adjust):
                 cond(a.when, f"{lp}.adjust[{j}].when", b)
         if b.stack not in stack_keys:
@@ -224,6 +225,8 @@ def check_rules(rules: Rules, cat: Catalog, source_ids: set[str]) -> list[tuple[
         rates = list(rw.rate.values()) if isinstance(rw.rate, dict) else [rw.rate] if rw.rate else []
         if rates and max(rates) >= 5 and not b.limits:
             warn(bp, "비율이 5% 이상인데 한도가 없다")
+        if rw.type == "onsite_discount" and rates and max(rates) >= 100:
+            err(f"{bp}.reward.rate", "현장할인 비율은 100 미만이어야 한다. 할인 전 금액을 되짚을 수 없다")
 
     for lim in rules.limits:
         lp = f"limits[{lim.key}]"

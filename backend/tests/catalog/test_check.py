@@ -129,6 +129,15 @@ def per_liter_without_price(f):
     benefit(f)["reward"] = {"type": "billing_discount", "per_liter": 60}
 
 
+def waived_table_starts_too_high(f):
+    rev(f)["facts"] = [{"key": "vip", "type": "bool", "scope": "card", "ask": "우수 고객인가요"}]
+    benefit(f)["tiers"] = {"from": 300000, "waived_when": {"fact": "vip"}}
+
+
+def onsite_rate_100(f):
+    benefit(f)["reward"] = {"type": "onsite_discount", "rate": 100}
+
+
 CASES = [
     (set_tiers, R + "tiers"),
     (table_key_not_in_tiers, R + "limits[integrated].amount: 구간표 키 [400000]"),
@@ -158,6 +167,8 @@ CASES = [
     (merchant_unknown_category, "merchants.yaml: [starbucks].category"),
     (billing_cycle_basis, R + "spend.basis"),
     (per_liter_without_price, R + "benefits[cafe-10].reward.per_liter"),
+    (waived_table_starts_too_high, R + "limits[integrated].amount: 구간표의 가장 작은 키 300000가 적용 첫 구간 0"),
+    (onsite_rate_100, R + "benefits[cafe-10].reward.rate: 현장할인 비율은 100 미만"),
 ]
 
 

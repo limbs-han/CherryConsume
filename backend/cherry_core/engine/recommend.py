@@ -136,7 +136,7 @@ def recommend(
         for card, ledger, status in prepared:
             p = query_payment(ctx, card, q, now)
             base = price(ctx, card, p, ledger)
-            warns = list(base.result.warnings)
+            warns = list(base.result.warnings) + [w for w in status.warnings if w.code == "option_unsupported"]
             if q.amount is None:
                 warns.append(Warn(code="default_amount_used"))
             rows.append(

@@ -165,3 +165,45 @@ def test_limit_status_period(engine):
     uses = {u.per: u for u in eng.limit_status(h, saved, at("2026-10-01T09:00"))}
     assert uses["month"].used_amount == 0 and uses["day"].used_count == 0
     assert date(2026, 10, 1)
+
+
+def test_unsupported_option_warns_in_recommendation(engine):
+    # KB Easy all의 DIY 모드처럼 계산하지 않는 선택지를 골랐으면 추천에도 option_unsupported를 붙인다. 설계 5.1
+    opt = {
+        "key": "mode",
+        "title": "모드",
+        "choices": [{"key": "auto", "title": "자동"}, {"key": "diy", "title": "DIY"}],
+        "change": "immediate",
+        "unsupported": ["diy"],
+    }
+    cafe = b(
+        "cafe-10",
+        {"categories": ["cafe"]},
+        {"type": "billing_discount", "rate": 10},
+        when=[{"option": {"mode": ["auto"]}}],
+        limits=[{"per": "txn", "amount": 1000}],
+    )
+    eng = engine(card([cafe], tiers=(0,), options=[opt]))
+    h = holder(id="k", options=[{"option": "mode", "choice": "diy", "effective_from": date(2026, 9, 1)}])
+    [rows] = eng.recommend([h], {}, [Query(merchant="starbucks")], NOW)
+    assert "option_unsupported" in [w.code for w in rows[0].warnings]
+
+
+def test_locked_ranked_benefit_when_top_is_zero_below_tier(engine):
+    # KB Easy all처럼 순위 상위 개수가 30만 구간부터면 0 구간에서는 순위 혜택을 못 받는 혜택으로 보여 준다.
+    # 30만 구간이면 1위 영역 하나라 스타벅스 1만원 × 10% = 1,000. E37
+    ranked = [
+        b(
+            key,
+            {"merchants": [m]},
+            {"type": "billing_discount", "rate": 10},
+            when=[{"ranked": "top"}],
+            tiers={"from": 300000},
+            limits=[{"per": "txn", "amount": 1000}],
+        )
+        for key, m in (("coffee", "starbucks"), ("delivery", "baemin"))
+    ]
+    eng = engine(card(ranked, ranked=[{"key": "top", "top": {300000: 1}}]))
+    h = holder(id="k")
+    [rows] = eng.recommend([h], {}, [Query(merchant="starbucks")], NOW)
+    assert [(x.benefit, x.required_tier, x.value_if_unlocked) for x in rows[0].locked] == [("coffee", 300000, 1000)]

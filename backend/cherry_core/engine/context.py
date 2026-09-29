@@ -63,6 +63,8 @@ class Ctx:
             self.assumed[cid] = by_benefit
 
     def rules_on(self, card_id: str, day: date) -> tuple[ResolvedRevision, Rules] | None:
+        if card_id not in self.catalog.cards:
+            return None  # 카탈로그에 없는 카드는 no_revision으로 건너뛴다. 설계 문서 6.8
         revisions = self.catalog.cards[card_id].revisions
         current = [r for r in revisions if r[0].effective_from <= day]
         if current:

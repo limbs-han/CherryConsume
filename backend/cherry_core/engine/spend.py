@@ -55,7 +55,7 @@ def spend_parts(
         for o in s.cancellation_overrides:
             if check(o.when, ctx.situation(card, p))[0] is True:
                 use = o.use
-        minus = math.floor(frac(p.cancelled_amount) * counted / p.amount)
+        minus = counted - math.floor((p.amount - p.cancelled_amount) * (1 - ratio))
         month = month_of(local(p.cancelled_at).date()) if use == "cancel_month" and p.cancelled_at else first
         parts.append(SpendPart(month=month, amount=-minus))
     return parts, warns
