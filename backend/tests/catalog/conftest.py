@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from cherry_core.catalog.canonical import canonical_text
+from cherry_core.catalog.check import check_catalog
 from cherry_core.catalog.load import load_catalog
 
 CARD = {
@@ -109,3 +110,8 @@ def benefit(files: dict) -> dict:
 def load_problems(root: Path) -> list[str]:
     """파일 읽기와 모델 검사에서 나온 문제."""
     return [str(p) for p in load_catalog(root).problems]
+
+
+def problems_of(root: Path, level: str = "error") -> list[str]:
+    """교차 검사까지 마친 문제 중 level인 것."""
+    return [str(p) for p in check_catalog(load_catalog(root)) if p.level == level]
