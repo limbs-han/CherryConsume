@@ -15,6 +15,10 @@ Databricks를 고른 가장 큰 이유는 개발자가 Databricks를 배워 보�
 | 데이터 레이크 | 파일을 원래 모양 그대로 쌓아 두는 저장소. 싸고 자유롭지만 정리와 관리를 직접 해야 한다 |
 | 데이터 웨어하우스 | 정리된 표로 넣어 두고 SQL로 분석하는 곳. 편하지만 파일을 그대로 두기 어렵다 |
 | 레이크하우스 | 파일 저장소 위에서 웨어하우스처럼 표로 다루는 방식. Databricks가 대표적이다 |
+| 작업 공간 | Databricks에서 표, 파일, 작업, 앱을 두고 쓰는 곳. 주소가 하나씩 있다 |
+| 계정 콘솔 | 작업 공간 위에서 계정 전체의 사용자, 청구, 예산을 관리하는 화면 |
+| 번들 | 작업, 표, 앱을 파일로 적어 두고 명령 한 번에 작업 공간으로 올리는 방식. 개발용과 운영용을 나눠 올린다 |
+| DBU | Databricks가 계산량을 세는 단위. 요금은 쓴 DBU에 단가를 곱한다 |
 
 ## 이 프로젝트에서 Databricks가 하는 일
 
@@ -68,8 +72,8 @@ Snowflake도 Postgres가 생겨 3번은 비슷해졌다. 하지만 무료로 배
 |---|---|---|---|
 | 상업 이용 | 금지 | 가능 | 출시하려면 유료가 필요하다. 개발 중에는 무료판으로 된다 |
 | Databricks 안에서 바깥 사이트 접속 | 신뢰 도메인 몇 곳만 | 기본으로 열려 있다 | 봇 접근을 막지 않는 카드사는 Databricks 안에서 바로 받을 수 있다 |
-| 브라우저가 필요한 사이트 | 안 된다 | 여전히 어렵다 | 롯데, 하나, 우리, NH는 결제해도 바깥 수집기가 필요하다 |
-| robots.txt로 막은 사이트 | 수동 | 수동 | 삼성, BC, IBK는 결제와 상관없이 사람이 받아 올린다 |
+| 브라우저가 필요한 사이트 | 안 된다 | 여전히 어렵다 | 하나, 우리, 현대, KB는 결제해도 바깥 수집기가 필요하다. 2026-09-30 수집 시험으로 고쳤다 |
+| robots.txt로 막은 사이트 | 수동 | 수동 | 삼성, BC, IBK, 롯데는 결제와 상관없이 사람이 받아 올린다. 롯데는 robots.txt를 확인할 수 없어 더했다 |
 | LLM 호출 | 일부 모델만, 한도가 있다 | 제한이 풀린다 | LLM 추출을 Databricks 안에서 돌릴 때만 중요하다 |
 | 사용량 한도 | 넘으면 그날 계산이 멈춘다 | 쓴 만큼 낸다 | 이 규모에서는 무료판 한도를 넘을 일이 드물다 |
 
@@ -90,13 +94,58 @@ Databricks가 필요해지는 때는 하위 프로젝트 3이다. 그때 Claude�
 - 단계마다 무엇을 누르고, 무엇이 보이면 성공인지 알려 준다. 끝나면 사용자가 붙여 준 결과로 Claude가 확인한다.
 - 토큰과 비밀번호는 사용자 PC의 Databricks CLI 설정이나 환경변수에만 두고 저장소에 넣지 않는다.
 
-안내할 순서의 미리 보기다. 실제로 할 때는 그때의 공식 문서로 다시 확인하고 고친다.
-1. 익스프레스 설정으로 체험 계정을 만든다. 체험 중에는 결제 정보를 넣지 않는다. 작업 003 설계 4절 9번.
-2. 작업 공간에서 Unity Catalog의 카탈로그와 스키마 이름을 정한다. 예: `cherry.catalog`, `cherry.logs`.
-3. 로그 파일은 작업 공간의 볼륨에 둔다.
-4. 자기 PC에 Databricks CLI를 설치하고 로그인한다. 성공하면 `databricks current-user me`가 자기 계정을 보여 준다.
-5. 이 저장소를 작업 공간의 Git 폴더로 연결한다.
-6. 수집 작업과 로그 적재 작업을 예약한다.
+안내할 순서다. 2026-09-30 아래 출처의 공식 문서로 확인했다. 굵은 글씨는 화면에 보이는 영어 이름 그대로다. 가입은 작업 003 과제 12를 시작하는 날 한다. 체험 크레딧 14일이 가입한 날부터 흐르기 때문이다.
+
+Claude는 계정과 비밀값을 다루는 명령을 돌리지 못하게 `.claude/settings.json`에서 막아 두었다. 로그인, 토큰, 서비스 주체 비밀값, 계정 관리, GitHub 비밀값 명령이다.
+
+### 1. 체험 계정 만들기
+
+익스프레스 설정은 AWS 같은 클라우드 계정 없이 이메일만으로 Databricks를 쓰게 해 주는 가입 방식이다.
+- 누를 곳: Databricks 가입 페이지에서 이메일을 넣고 **Start trial with express setup**을 누른다. 계정 이름을 넣는다. 같은 메일 주소를 쓰는 사람을 자동으로 들이는 설정이 나오면 끈다. 지역은 처음 골라진 그대로 두고 **Continue**를 누른다. 작업 003 설계 4절 11번.
+- 넣을 값: 사용자 메일, 계정 이름 `cherryconsume`. 결제 정보는 넣지 않는다. 작업 003 설계 4절 9번.
+- 성공하면 보이는 것: 첫 작업 공간이 열리고 위쪽 막대에 **Manage trial** 버튼이 있다.
+- Claude에게 붙여 줄 것: 가입한 날짜. 작업 공간 주소는 붙여 주지 않는다. 주소와 인증값은 저장소에 넣지 않기로 했다.
+- 알아 둘 것: 개인 메일로 가입하면 한 시간에 50 DBU까지 쓰고 바깥 사이트 접속이 제한된다. 원문 수집은 GitHub Actions에서 하므로 괜찮다.
+
+### 2. PC에 Databricks CLI 설치와 로그인
+
+CLI는 Databricks를 명령으로 다루는 프로그램이다. 번들 배포와 확인을 이 PC에서 한다.
+- 누를 곳: 명령 프롬프트에서 `winget install Databricks.DatabricksCLI`를 돌린다. 창을 닫고 새로 연 뒤 `databricks -v`를 돌린다. 그다음 `databricks auth login --host <작업 공간 주소>`를 돌린다. 브라우저가 열리면 로그인한다.
+- 넣을 값: 작업 공간 주소는 작업 공간을 연 브라우저 주소창의 `https://`부터 `.cloud.databricks.com`까지다. 프로필 이름을 물으면 `DEFAULT`를 넣는다. 그래야 명령마다 프로필을 적지 않는다.
+- 성공하면 보이는 것: `databricks -v`가 0.205.0 이상이다. `databricks current-user me`가 자기 메일이 든 결과를 보여 준다. 로그인 토큰은 Windows 자격 증명 관리자에 들어가고, `.databrickscfg` 파일에는 주소와 프로필 이름만 남는다.
+- Claude에게 붙여 줄 것: `databricks -v`와 `databricks current-user me`의 출력.
+
+### 3. 서비스 주체 만들기와 OAuth 비밀값 발급
+
+서비스 주체는 사람 대신 GitHub Actions가 쓰는 Databricks 계정이다. 사람 계정 토큰을 GitHub에 두면 그 토큰이 새었을 때 사람 계정 전체가 열리므로 권한이 좁은 계정을 따로 둔다. OAuth 비밀값은 이 계정의 비밀번호에 해당한다.
+- 누를 곳: 작업 공간 위쪽 막대에서 자기 이름을 누르고 **Settings**를 누른다. **Identity and access** 탭에서 **Service principals** 옆 **Manage**를 누른다. **Add service principal**, **Add new**를 누르고 이름을 넣은 뒤 **Add**를 누른다. 만든 서비스 주체를 눌러 **Secrets** 탭에서 **Generate secret**을 누른다. 기간을 넣고 **Scopes**에서 **all APIs**를 고른 뒤 **Generate**를 누른다.
+- 넣을 값: 이름 `cherry-github-actions`, 기간 365일. 기간은 최대 730일이다. API 범위를 전부 열어도 실제로 할 수 있는 일은 과제 12와 13에서 이 계정에 준 권한까지다.
+- 성공하면 보이는 것: 비밀값과 Client ID가 보인다. 비밀값은 창을 닫으면 다시 볼 수 없으니 창을 연 채로 바로 4단계로 간다.
+- Claude에게 붙여 줄 것: 서비스 주체 이름과 비밀값이 끝나는 날짜. Client ID와 비밀값은 붙여 주지 않는다. 끝나는 날은 진행 상황에 적어 두고 그 전에 새로 발급한다.
+
+### 4. GitHub 저장소 비밀값 등록
+
+GitHub 저장소 비밀값은 Actions가 실행될 때만 꺼내 쓰는 값이다. 실행 기록에는 가려서 찍힌다.
+- 누를 곳: GitHub 저장소 화면에서 **Settings**를 누른다. 왼쪽 **Security** 아래 **Secrets and variables**의 **Actions**를 누르고 **Secrets** 탭에서 **New repository secret**을 누른다. **Name**과 **Secret**을 넣고 **Add secret**을 누른다. 세 번 한다.
+- 넣을 값: `DATABRICKS_HOST`에 2단계의 작업 공간 주소, `DATABRICKS_CLIENT_ID`에 Client ID, `DATABRICKS_CLIENT_SECRET`에 비밀값.
+- 성공하면 보이는 것: 비밀값 목록에 세 이름이 보인다. 값은 다시 볼 수 없다.
+- Claude에게 붙여 줄 것: 세 이름의 목록만. 값은 붙여 주지 않는다.
+
+### 5. 예산과 알림 설정
+
+예산은 Databricks에 쓴 돈을 세다가 정한 금액을 넘으면 메일을 보내는 기능이다. 돈 쓰는 것을 멈추지는 않고, 메일은 최대 24시간 늦게 온다. 체험 크레딧도 빼지 않고 센다. 실제로 멈추는 것은 과제 13의 비용 차단 작업이다.
+- 누를 곳: 계정 콘솔 왼쪽 **Usage**를 누르고 **Budgets** 탭에서 **Add budget**을 누른다. **Name**을 넣고 **Add threshold**를 세 번 눌러 **Monthly threshold**와 **Email addresses**를 넣은 뒤 **Create**를 누른다.
+- 넣을 값: 이름 `cherry-monthly`. 알림 금액은 15달러, 30달러, 60달러다. 한 달 예산 30달러를 가운데에 두고 절반과 두 배에서도 알린다. 메일은 사용자 메일이다.
+- 성공하면 보이는 것: **Budgets** 목록에 `cherry-monthly`가 있다.
+- Claude에게 붙여 줄 것: 목록 화면에 보이는 예산 이름과 알림 금액 세 개.
+- 알아 둘 것: 익스프레스 설정 계정에서 계정 콘솔로 가는 길은 공식 문서에 없다. 가입한 날 작업 공간 화면에서 같이 찾는다.
+
+### 6. 체험이 끝나는 날 결제 정보 등록
+
+- 언제: 가입한 날부터 14일째다. 그날 Claude가 알린다.
+- 누를 곳: 작업 공간 위쪽 막대의 **Manage trial**에서 신용카드를 넣는다.
+- 알아 둘 것: 체험이 끝나거나 크레딧을 다 쓰면 쓴 만큼 내는 방식으로 바뀐다. 결제 정보를 넣지 않고 두면 작업 공간에 만든 것이 체험이 끝나고 60일 뒤 지워진다.
+- Claude에게 붙여 줄 것: 등록했다는 말만. 카드 정보는 붙여 주지 않는다.
 
 ## 출처
 
@@ -107,4 +156,10 @@ Databricks가 필요해지는 때는 하위 프로젝트 3이다. 그때 Claude�
 - [BigQuery sandbox](https://cloud.google.com/bigquery/docs/sandbox)
 - [Databricks express setup](https://docs.databricks.com/aws/en/getting-started/express-setup)
 - [Databricks free trial](https://docs.databricks.com/aws/en/getting-started/free-trial)
+- [Databricks CLI install](https://docs.databricks.com/aws/en/dev-tools/cli/install)
+- [Databricks CLI authentication](https://docs.databricks.com/aws/en/dev-tools/cli/authentication)
+- [Manage service principals](https://docs.databricks.com/aws/en/admin/users-groups/manage-service-principals)
+- [OAuth for service principals](https://docs.databricks.com/aws/en/dev-tools/auth/oauth-m2m)
+- [Budgets](https://docs.databricks.com/aws/en/admin/account-settings/budgets)
+- [Using secrets in GitHub Actions](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions)
 - [Databricks pricing guide 2026, Flexera](https://www.flexera.com/blog/finops/databricks-pricing-guide/)

@@ -1912,7 +1912,7 @@ git commit -m "feat: 신한카드 3장 혜택에 원문 근거 문장 추가" -m
 - Modify: `docs/databricks.md`의 "설정은 사용자가 직접 한다"
 - Modify: `.claude/settings.json`
 
-- [ ] **1단계: 안내서를 쓴다**
+- [x] **1단계: 안내서를 쓴다**
 
 `docs/databricks.md`의 "안내할 순서의 미리 보기"를 아래 단계로 바꾼다. 단계마다 "누를 곳", "넣을 값", "성공하면 보이는 것", "Claude에게 붙여 줄 것"을 쓴다. 공식 문서의 화면 이름을 그대로 쓴다.
 
@@ -1923,7 +1923,7 @@ git commit -m "feat: 신한카드 3장 혜택에 원문 근거 문장 추가" -m
 5. 예산과 알림 설정. 한 달 예산 30달러, 알림 15달러, 30달러, 60달러. 알림 메일 주소는 사용자 메일이다.
 6. 체험이 끝나는 날 결제 정보 등록. 가입 14일째에 Claude가 알린다.
 
-- [ ] **2단계: Claude가 돌리면 안 되는 명령을 막는다**
+- [x] **2단계: Claude가 돌리면 안 되는 명령을 막는다**
 
 `.claude/settings.json`의 `deny`에 더한다.
 
@@ -1936,16 +1936,18 @@ git commit -m "feat: 신한카드 3장 혜택에 원문 근거 문장 추가" -m
       "Bash(gh secret *)"
 ```
 
-- [ ] **3단계: 확인한다**
+- [x] **3단계: 확인한다**
 
 `python -c "import json; json.load(open('.claude/settings.json', encoding='utf-8'))"`로 JSON이 맞는지 본다. 안내서는 사용자가 읽어 보고 모르는 말이 없는지 확인받는다.
 
-- [ ] **4단계: 커밋 지점**
+- [x] **4단계: 커밋 지점**
 
 ```bash
 git add docs/databricks.md .claude/settings.json
 git commit -m "docs: Databricks 가입과 비밀값 등록 안내 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 공식 문서 7개로 화면 이름을 확인해 안내서 6단계를 썼다. 용어 표에 작업 공간, 계정 콘솔, 번들, DBU를 더했다. 과제 9 결과로 바뀐 비교표 두 줄도 고쳤다. `.claude/settings.json`은 JSON 검사를 통과했다. 사용자가 안내서를 읽고 확인했다. 확인하지 못한 것: 익스프레스 설정 계정에서 계정 콘솔로 가는 길은 공식 문서에 없어 가입한 날 같이 찾는다.
 
 ---
 

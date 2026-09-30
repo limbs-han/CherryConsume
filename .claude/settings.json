@@ -25,7 +25,13 @@
       "Bash(git push --force *)",
       "Bash(git push -f *)",
       "Bash(git commit --no-verify *)",
-      "Bash(rm -rf *)"
+      "Bash(rm -rf *)",
+      "Bash(databricks auth login *)",
+      "Bash(databricks auth token *)",
+      "Bash(databricks tokens *)",
+      "Bash(databricks service-principal-secrets *)",
+      "Bash(databricks account *)",
+      "Bash(gh secret *)"
     ]
   },
   "hooks": {
