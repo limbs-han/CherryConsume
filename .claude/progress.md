@@ -27,7 +27,9 @@
 - 2026-09-30 과제 12를 마쳤다. 번들 `pipeline/`을 개발용으로 배포했고 `ai_parse_document`가 된다. 카탈로그 `cherry`는 SQL로 한 번 만들었다. 다음은 과제 13 비용 차단 작업과 첫 운영 배포다. 사용자가 안내서 3, 4, 5단계를 먼저 한다
 - 2026-09-30 과제 12는 사용자가 직접 다시 했다. 카탈로그를 화면에서 만들고 개발용 배포와 `ai_parse_document`를 돌렸다
 - 2026-09-30 과제 13 파일을 두 번의 위험 검토 뒤 커밋했다. 비용 차단 코드 `pipeline/src/cost_guard.py`, 판단 규칙 `cherry_core.pipeline.cost`, 작업 정의, 배포 워크플로 `.github/workflows/deploy.yml`이다. 남은 것: 사용자의 개발용 차단 작업 실행 결과, 작업 공간 지역을 새로 정할지, 서비스 주체 권한 주기와 비밀값 `ALERT_EMAIL`, 첫 운영 배포 푸시. 멈춤과 다시 켜기 시험은 첫 태그 작업인 과제 15의 `cherry_refresh` 배포 뒤에 한다
-- 2026-09-30 다른 세션이 이 작업 공간 모델 목록에 Claude가 없다는 것을 찾았다. 기본 지역으로 만들었기 때문으로 보인다. 사용자가 다른 지역에 작업 공간을 새로 만들지 정하는 중이다. 새로 만들면 과제 12, 서비스 주체, GitHub 비밀값을 다시 한다
+- 2026-09-30 이 작업 공간 모델 목록에 Claude가 없다. Claude가 되는 서울 지역에 작업 공간을 새로 만들어 봤지만 `databricks-claude-haiku-4-5` 연결이 없다는 오류가 났다. 체험 계정이나 개인 메일 가입 제한일 수 있지만 문서로 확인하지 못했다. 사용자가 정할 것: 지금 목록의 모델로 갈지(`Qwen3.5 122B A10B`와 `GPT OSS 120B` 비교 추천), Gemini API 키를 받아 연결할지, 작업 공간을 원래 것과 서울 것 중 어느 쪽으로 남길지. Gemini API는 선불과 후불이 모두 되고 AI Studio에서 지출 상한을 걸 수 있다. 설계 4절 3번에 걸린다
+- 2026-09-30 과제 14 수집 워크플로 `.github/workflows/collect.yml`을 위험 검토 뒤 커밋했다. 푸시와 수동 실행은 첫 운영 배포 뒤에 한다
+- 2026-09-30 과제 15, 16 파일을 썼다. `pipeline/resources/ingest.yml`, `refresh.yml`, `pipeline/src/ingest.py`, `documents.py`, `changes.py`. 아직 커밋하지 않았다. 사용자가 개발용으로 배포하고 plan.md 과제 15, 16의 단계대로 시험한 뒤 커밋한다. 비교 규칙 `text.py`, 목록 비교 `lists.py`, 목록 카드사 현대, 하나, KB는 커밋했다. 카드 이름을 뽑을 모델 `list_model`은 모델이 정해지면 넣는다
 - 2026-09-30 사용자가 정했다. Databricks에 보내는 명령은 배포, 실행, SQL, 조회까지 모두 사용자가 돌린다. Claude는 파일만 쓰고 명령과 성공 기준을 알려 준다. 설계 4절 10번과 `.claude/CLAUDE.md`
 - 이 PC의 Git Bash에서 `databricks api`를 쓸 때는 `MSYS_NO_PATHCONV=1`을 켠다. PowerShell에서는 필요 없다. CLI는 winget으로 설치했다 체험 계정 가입은 과제 12를 시작하는 날 한다. 크레딧 14일이 가입한 날부터 흐른다
 
