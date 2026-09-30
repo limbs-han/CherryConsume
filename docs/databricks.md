@@ -132,6 +132,7 @@ CLI는 Databricks를 명령으로 다루는 프로그램이다. 번들 배포와
   GRANT USE CATALOG ON CATALOG system TO `<Application ID>`;
   GRANT USE SCHEMA, SELECT ON SCHEMA system.billing TO `<Application ID>`;
   ```
+- 먼저 할 것: 둘째와 셋째 줄은 메타스토어 관리자만 실행할 수 있다. 메타스토어는 Unity Catalog 전체를 담는 가장 위의 저장소다. 2026-09-30 가입한 계정은 이 역할이 없어 `PERMISSION_DENIED: User does not have MANAGE on Catalog 'system'`이 났다. 계정 콘솔의 **Catalog**에서 메타스토어 이름을 누르고 **Metastore Admin** 아래 **Edit**를 눌러, 로그인한 계정이 든 그룹을 고르고 **Save**를 누른다. 그런 그룹이 없으면 계정 콘솔의 사용자 관리에서 그룹을 만들고 자기 계정을 넣는다. 이 그룹에는 다른 사람이나 서비스 주체를 넣지 않는다.
 - 무엇을 주는지: 첫 줄은 `cherry` 카탈로그 안에 운영 스키마를 만드는 권한이다. 둘째와 셋째 줄은 청구 기록을 읽는 권한이다. 웨어하우스 권한은 비용이 한도를 넘었을 때 끄는 권한이다. 새로 만드는 웨어하우스와 앱에도 같은 권한을 줘야 차단 작업이 끌 수 있다.
 - 성공하면 보이는 것: SQL 세 줄이 모두 성공으로 끝난다. **Catalog**에서 `cherry`의 **Permissions** 탭에 서비스 주체가 보인다.
 - Claude에게 붙여 줄 것: SQL 세 줄의 성공 여부. 실패하면 오류 글. **Application ID**는 붙여 주지 않는다.
