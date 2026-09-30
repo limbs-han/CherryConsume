@@ -1298,7 +1298,7 @@ git commit -m "feat: 카드 규칙 추출 프롬프트와 답 형식 추가" -m 
 - Consumes: 두 값 모두 `clean_rules`를 거친 합친 규칙
 - Produces: `field_accuracy(expected, actual) -> dict[str, tuple[int, int]]`. 묶음 이름은 `tiers`, `spend`, `limits`, `benefits.reward`처럼 맨 위 칸이고, 혜택은 그 아래 칸까지 나눈다. `total_accuracy(per_card) -> dict[str, float]`. `all`은 모든 칸이다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/pipeline/test_score.py`:
 
@@ -1362,13 +1362,13 @@ def test_total_accuracy():
     assert got == {"all": pytest.approx(2 / 6), "benefits.reward": 0.25, "tiers": 0.5}
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_score.py
 ```
 
-- [ ] **3단계: 코드를 쓴다**
+- [x] **3단계: 코드를 쓴다**
 
 `backend/cherry_core/pipeline/score.py`:
 
@@ -1436,7 +1436,7 @@ def total_accuracy(per_card: list[dict[str, tuple[int, int]]]) -> dict[str, floa
     return {g: ok / total for g, (ok, total) in sorted(sums.items())}
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_score.py
@@ -1444,12 +1444,14 @@ uv run --project backend pytest -q backend/tests/pipeline/test_score.py
 
 기대: 5개 통과.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/pipeline/score.py backend/tests/pipeline/test_score.py
 git commit -m "feat: 추출 결과의 칸별 정확도 채점 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 5개가 모듈이 없어 먼저 실패하고 코드를 넣은 뒤 통과했다. 실제 카드 20장을 자기 자신과 채점하면 칸 1,616개, 묶음 19개가 모두 1.0이다. 전체 497개 통과, ruff 통과.
 
 ---
 

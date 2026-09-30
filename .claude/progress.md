@@ -16,7 +16,8 @@
 - 2026-09-30 과제 2를 마쳤다. `backend/cherry_core/pipeline/text.py`의 원문 글 뽑기, 본문 지문, 바뀐 줄이다.
 - 2026-09-30 과제 3을 마쳤다. `backend/cherry_core/pipeline/collect.py`의 수집기다. 실제로 받아 보는 것은 과제 9다.
 - 2026-09-30 과제 4를 마쳤다. `backend/cherry_core/pipeline/draft.py`의 초안 만들기와 검사다.
-- 2026-09-30 과제 5를 마쳤다. `backend/cherry_core/pipeline/prompt.py`의 추출 프롬프트와 답 형식이다. 답 형식을 ai_query가 받는지는 과제 18에서 본다. 전체 492개 통과. 다음은 과제 6 칸마다 정확도다. 체험 계정 가입은 과제 12를 시작하는 날 한다. 크레딧 14일이 가입한 날부터 흐른다
+- 2026-09-30 과제 5를 마쳤다. `backend/cherry_core/pipeline/prompt.py`의 추출 프롬프트와 답 형식이다. 답 형식을 ai_query가 받는지는 과제 18에서 본다.
+- 2026-09-30 과제 6을 마쳤다. `backend/cherry_core/pipeline/score.py`의 칸마다 정확도다. 전체 497개 통과. 다음은 과제 7 비용 차단 금액이다. 체험 계정 가입은 과제 12를 시작하는 날 한다. 크레딧 14일이 가입한 날부터 흐른다
 
 ## 끝난 것
 
