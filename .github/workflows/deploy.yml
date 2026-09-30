@@ -1,0 +1,80 @@
+# 운영 배포. 작업 003 설계 4절 10번. master에 파이프라인이나 cherry_core가 바뀐 푸시와 수동 실행에서 돈다
+# 비용 차단 작업이 운영 작업을 멈춘 달에는 배포하지 않는다. 배포가 멈춘 예약을 번들 설정대로 다시 켜기 때문이다
+# 배포한 뒤에는 차단 작업을 한 번 돌려 확인과 배포 사이에 한도를 넘긴 경우도 다시 멈추게 한다
+# 공개 저장소라 실행 기록은 누구나 본다. 비밀값은 Databricks와 통하는 단계에만 넘기고, 원문 내용은 찍지 않는다
+name: deploy
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "pipeline/**"
+      - "backend/cherry_core/**"
+      - "backend/pyproject.toml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    # 수동 실행도 master에서만 운영에 올린다. 설계 4절 10번
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      - uses: databricks/setup-cli@6a2e75f1f954d87503702c408deea63216c0799d # v1.18.0
+
+      - name: 테스트
+        run: uv run --project backend pytest -q
+
+      - name: 차단된 달인지 본다
+        id: guard
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+        run: |
+          # 오류 글에 https:// 없이 호스트만 찍혀도 가려지게 한다
+          h=${DATABRICKS_HOST#https://}; echo "::add-mask::${h%/}"
+          paused=$(databricks jobs list -o json | jq '[.[] | select(.settings.tags.cherry_guard == "prod" and (.settings.tags.cherry_guard_paused // "") != "")] | length')
+          if ! [[ "$paused" =~ ^[0-9]+$ ]]; then
+            echo "::error::작업 목록을 읽지 못했다"
+            exit 1
+          fi
+          echo "멈춘 운영 작업 ${paused}개"
+          if [ "$paused" != "0" ]; then
+            echo "::warning::차단된 달이라 배포하지 않는다. 차단이 풀린 뒤 이 워크플로를 수동으로 다시 돌린다"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 운영 배포와 차단 작업 한 번 실행
+        if: steps.guard.outputs.skip != 'true'
+        working-directory: pipeline
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+          BUNDLE_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          h=${DATABRICKS_HOST#https://}; echo "::add-mask::${h%/}"
+          # 비밀값이 없으면 GitHub이 빈 글자를 넣어 알림 주소가 비어도 배포된다. 여기서 막는다
+          if [ -z "$BUNDLE_VAR_alert_email" ]; then
+            echo "::error::비밀값 ALERT_EMAIL이 없다. docs/databricks.md 4단계"
+            exit 1
+          fi
+          databricks bundle deploy -t prod
+          # 차단 작업의 출력에는 쓴 금액이 있어 공개 실행 기록에 남기지 않는다. 결과는 성공 여부로만 보고 자세한 것은 Databricks에서 본다
+          databricks bundle run -t prod cherry_cost_guard > /dev/null
