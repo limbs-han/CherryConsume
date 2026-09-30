@@ -1568,7 +1568,7 @@ GitHub Actions가 내보내기 폴더 하나를 저장소의 `catalog/`에 복�
 **Interfaces:**
 - Produces: `apply_export(export_dir, repo) -> tuple[list[str], str]`, 명령 `python -m cherry_core.pipeline.export DIR --message-file FILE`. 내보내기 폴더는 `catalog/` 아래 파일과 `commit.json`이다. `commit.json`은 `{"subject", "review_id"}`이고 과제 20의 검수 앱이 쓴다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/pipeline/test_export.py`:
 
@@ -1626,13 +1626,13 @@ def test_cli_writes_message_file(dirs, tmp_path, capsys):
     assert "바뀐 파일 1개" in capsys.readouterr().out
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_export.py
 ```
 
-- [ ] **3단계: 코드를 쓴다**
+- [x] **3단계: 코드를 쓴다**
 
 `backend/cherry_core/pipeline/export.py`:
 
@@ -1691,7 +1691,7 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
-- [ ] **4단계: 전체를 확인한다**
+- [x] **4단계: 전체를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -1700,12 +1700,14 @@ uvx ruff check backend && uvx ruff format --check backend
 
 기대: 130개 통과. 시작할 때 테스트가 81개가 아니었으면 그 수에 49를 더한 값이다.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/pipeline/export.py backend/tests/pipeline/test_export.py
 git commit -m "feat: 승인된 카탈로그 파일을 저장소로 옮기는 명령 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 3개가 모듈이 없어 먼저 실패하고 코드를 넣은 뒤 통과했다. 전체 506개 통과로 시작할 때 457개에 49를 더한 값이다. ruff 통과, 카탈로그 오류 0. 내보내기 워크플로와 함께 과제 21에서 `risk-reviewer`로 검토한다.
 
 ---
 

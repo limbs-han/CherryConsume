@@ -18,7 +18,8 @@
 - 2026-09-30 과제 4를 마쳤다. `backend/cherry_core/pipeline/draft.py`의 초안 만들기와 검사다.
 - 2026-09-30 과제 5를 마쳤다. `backend/cherry_core/pipeline/prompt.py`의 추출 프롬프트와 답 형식이다. 답 형식을 ai_query가 받는지는 과제 18에서 본다.
 - 2026-09-30 과제 6을 마쳤다. `backend/cherry_core/pipeline/score.py`의 칸마다 정확도다.
-- 2026-09-30 과제 7을 마쳤다. `backend/cherry_core/pipeline/cost.py`의 비용 차단 금액이다. 과제 13에서 차단 작업과 함께 위험 검토를 받는다. 전체 503개 통과. 다음은 과제 8 승인된 파일을 저장소로 옮기기다. 체험 계정 가입은 과제 12를 시작하는 날 한다. 크레딧 14일이 가입한 날부터 흐른다
+- 2026-09-30 과제 7을 마쳤다. `backend/cherry_core/pipeline/cost.py`의 비용 차단 금액이다. 과제 13에서 차단 작업과 함께 위험 검토를 받는다. 
+- 2026-09-30 과제 8을 마쳤다. `backend/cherry_core/pipeline/export.py`의 내보내기 명령이다. 과제 21에서 위험 검토를 받는다. 과제 1~8 순수 코드가 모두 끝났고 전체 506개 통과. 다음은 과제 9 수집기 PC 시험이다. 체험 계정 가입은 과제 12를 시작하는 날 한다. 크레딧 14일이 가입한 날부터 흐른다
 
 ## 끝난 것
 
