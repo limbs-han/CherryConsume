@@ -1964,11 +1964,11 @@ git commit -m "docs: Databricks 가입과 비밀값 등록 안내 추가" -m "�
 **Files:**
 - Create: `pipeline/databricks.yml`, `pipeline/resources/storage.yml`
 
-- [ ] **1단계: 사용자가 안내서 1, 2단계를 한다**
+- [x] **1단계: 사용자가 안내서 1, 2단계를 한다**
 
 사용자가 붙여 준 `databricks current-user me` 출력에 자기 메일이 보이면 성공이다. 가입일을 progress.md에 적는다.
 
-- [ ] **2단계: 번들을 쓴다**
+- [x] **2단계: 번들을 쓴다**
 
 `pipeline/databricks.yml`에 둘 것:
 - 번들 이름 `cherry`
@@ -1982,7 +1982,7 @@ git commit -m "docs: Databricks 가입과 비밀값 등록 안내 추가" -m "�
 - 번들 밖 경로 `../backend`를 wheel 빌드 경로로 쓸 수 있는가. 안 되면 `databricks.yml`을 저장소 루트로 옮기고 `sync.include`로 필요한 폴더만 올린다.
 - 번들로 카탈로그를 만들 수 있는가. 안 되면 SQL `CREATE CATALOG IF NOT EXISTS cherry`로 만든다. 익스프레스 계정에서 카탈로그를 새로 못 만들면 작업 공간 기본 카탈로그 아래에 같은 스키마를 두고 design.md 2절의 이름을 고친다.
 
-- [ ] **3단계: 개발용으로 배포한다**
+- [x] **3단계: 개발용으로 배포한다**
 
 ```bash
 cd pipeline && databricks bundle validate && databricks bundle deploy -t dev
@@ -1991,7 +1991,7 @@ databricks schemas list cherry
 
 기대: validate에 오류가 없고, 스키마 목록에 개발자 이름이 붙은 bronze, silver, gold가 보인다.
 
-- [ ] **4단계: `ai_parse_document`가 되는지 본다**
+- [x] **4단계: `ai_parse_document`가 되는지 본다**
 
 작은 PDF 하나를 개발용 볼륨에 올리고 SQL 편집기나 `databricks` CLI로 돌린다.
 
@@ -2001,12 +2001,24 @@ SELECT ai_parse_document(content, map('version', '2.0')) FROM read_files('<볼�
 
 지역 때문에 안 되면 PDF는 `pypdf`로 글을 뽑는다. 그 경우 과제 15의 문서 코드가 PDF에 `pypdf`를 쓰고, design.md 1절 2단계에 결과를 적는다.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add pipeline
 git commit -m "build: Databricks 번들과 저장 공간 정의 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과
+
+- 1단계: 사용자가 2026-09-30 가입하고 CLI로 로그인했다. `databricks current-user me`가 사용자가 가입한 메일을 보여 줬다. CLI는 1.18.0이다
+- 2단계 확인할 것 두 가지
+  - 번들 밖 경로 `../backend`를 wheel 빌드 경로로 쓸 수 있다. 배포 때 `uv build --wheel`로 만든 wheel이 올라갔다
+  - 번들로 카탈로그를 만들 수 없다. 이 작업 공간은 Default Storage라 API가 "Metastore storage root URL does not exist"로 거절했다. 공식 문서대로 서버리스 작업 공간에서는 SQL이 되어 `CREATE CATALOG IF NOT EXISTS cherry`로 한 번 만들었다. 번들에서 카탈로그 정의를 뺐다. design.md 2절의 이름은 바꾸지 않았다
+  - 카탈로그 정의는 direct 배포 방식에서만 된다. 새 번들은 CLI 1.3.0부터 direct가 기본이지만 Actions의 CLI 판이 달라도 같게 `bundle.engine: direct`를 적었다
+- 3단계: 검사 통과. 개발용 배포로 개발자 이름이 붙은 bronze, silver, gold 스키마와 raw, export 볼륨이 생겼다
+- 4단계: `ai_parse_document`가 된다. 하나 원더카드 상품안내장 16쪽, 요소 172개, 표 24개. `parsed_text`가 이 모양을 그대로 읽고 표 281행을 한 줄씩 살렸다. `pypdf`는 쓰지 않는다
+- 알아 둘 것: Git Bash에서 `databricks api`처럼 `/`로 시작하는 경로를 넘기면 Git Bash가 Windows 경로로 바꿔 "Not Found"가 난다. `MSYS_NO_PATHCONV=1`을 켜고 돌린다
+- 시험용 PDF는 개발용 raw 볼륨의 `test/`에 남아 있다
 
 ---
 
