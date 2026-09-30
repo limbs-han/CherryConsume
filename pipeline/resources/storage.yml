@@ -1,0 +1,32 @@
+# 스키마와 볼륨. 이름은 docs/work/003-databricks-pipeline/plan.md의 "파일" 표를 따른다
+# 카탈로그 cherry는 번들로 만들지 않는다. 이 작업 공간은 Default Storage라 API로는 카탈로그를 만들 수 없어
+# 2026-09-30 SQL `CREATE CATALOG IF NOT EXISTS cherry`로 한 번 만들었다. 개발용과 운영용이 같은 카탈로그를 쓰고,
+# 개발용 스키마에는 번들이 개발자 이름을 앞에 붙인다
+resources:
+  schemas:
+    bronze:
+      catalog_name: cherry
+      name: bronze
+      comment: 받은 원문 그대로
+    silver:
+      catalog_name: cherry
+      name: silver
+      comment: 원문 글, 바뀐 줄, 초안, 검수 대기
+    gold:
+      catalog_name: cherry
+      name: gold
+      comment: 승인된 카드 개정. 카탈로그의 원본
+
+  volumes:
+    raw:
+      catalog_name: cherry
+      schema_name: ${resources.schemas.bronze.name}
+      name: raw
+      volume_type: MANAGED
+      comment: 수집기가 올린 원문 파일과 목록 파일
+    export:
+      catalog_name: cherry
+      schema_name: ${resources.schemas.gold.name}
+      name: export
+      volume_type: MANAGED
+      comment: 승인되어 저장소로 내보낼 YAML
