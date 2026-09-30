@@ -27,12 +27,14 @@ revisions:
     benefits:
       - key: all-0-5
         title: 국내외 가맹점 0.5% 할인
+        evidence: [국내외 가맹점 결제일 할인, 구분 | 지난달(1일 ~ 말일) 이용금액 | 할인율, 기본할인 | 150만원 미만 | 0.5%, 기본할인과 특별할인은 중복 제공되지 않습니다.]
         target: {all: true}
         reward: {type: billing_discount, rate: 0.5}
         tiers: {to: 0}
         notes: 지난달 1일~말일 이용금액 150만원 미만 기본할인. 특별할인과 중복 제공되지 않는다
       - key: all-1-0
         title: 국내외 가맹점 1.0% 할인
+        evidence: [국내외 가맹점 결제일 할인, 구분 | 지난달(1일 ~ 말일) 이용금액 | 할인율, 특별할인 | 150만원 이상 | 1.0%, 기본할인과 특별할인은 중복 제공되지 않습니다.]
         target: {all: true}
         reward: {type: billing_discount, rate: 1.0}
         tiers: {from: 1500000}
