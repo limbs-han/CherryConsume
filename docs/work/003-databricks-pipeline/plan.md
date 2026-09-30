@@ -762,7 +762,7 @@ LLM이 추출한 합친 규칙을 카드 파일의 개정으로 넣고, 카탈�
   - `make_draft(card: dict, issuer: dict | None, extracted: dict, fetched: date) -> dict | None`. `extracted`는 `{"rules", "effective_from", "source", "open_questions"}`다. 시행일이 마지막 개정보다 앞이면 `ValueError`
   - `check_draft(files: dict[str, str], path: str, card: dict) -> list[str]`. 결과는 `"error: <위치>: <내용>"` 모양이다
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/pipeline/test_draft.py`:
 
@@ -904,13 +904,13 @@ def test_bad_draft_reports_its_problems(files):
     assert problems and all(p.startswith("error: revisions@2026-11-01.benefits[cafe-10]") for p in problems)
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_draft.py
 ```
 
-- [ ] **3단계: 코드를 쓴다**
+- [x] **3단계: 코드를 쓴다**
 
 `backend/cherry_core/pipeline/draft.py`:
 
@@ -1049,7 +1049,7 @@ def check_draft(files: dict[str, str], path: str, card: dict) -> list[str]:
         return [f"{p.level}: {p.path}: {p.message}" for p in check_catalog(load_catalog(root)) if p.file == path]
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_draft.py
@@ -1057,7 +1057,7 @@ uv run --project backend pytest -q backend/tests/pipeline/test_draft.py
 
 기대: 11개 통과.
 
-- [ ] **5단계: 실제 카탈로그로 확인한다**
+- [x] **5단계: 실제 카탈로그로 확인한다**
 
 `$SCRATCH/real_drafts.py`로 저장하고 돌린다. `$SCRATCH`는 그 세션의 scratchpad 폴더다.
 
@@ -1104,12 +1104,14 @@ uv run --project backend python "$SCRATCH/real_drafts.py" catalog
 
 기대: 카드마다 `같은 규칙 초안 없음 True, 바꾼 초안 문제 0`이고 마지막 줄이 `문제 있는 카드 0`이다.
 
-- [ ] **6단계: 커밋 지점**
+- [x] **6단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/pipeline/draft.py backend/tests/pipeline/test_draft.py
 git commit -m "feat: 추출 결과로 카드 초안을 만들고 검사하는 기능 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 11개가 모듈이 없어 먼저 실패하고 코드를 넣은 뒤 통과했다. 실제 카탈로그 20장 모두 같은 규칙이면 초안이 없고 바꾼 초안은 문제 0이다. 전체 488개 통과, ruff 통과.
 
 ---
 
