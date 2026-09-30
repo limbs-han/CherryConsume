@@ -1,0 +1,164 @@
+# 검수에서 승인된 카탈로그 개정을 저장소에 커밋한다. 작업 003 설계 4절 7번
+# 검수 앱이 승인마다 운영 볼륨 cherry.gold.export의 pending/<폴더>에 catalog/ 아래 파일과 commit.json을 둔다
+# 폴더 하나가 커밋 하나다. 커밋 훅이 형식과 민감 정보를 검사하고, 저장소에 올라간 폴더만 done/으로 옮긴다
+# 쓰기 권한은 푸시하는 작업에만 주고, 그 작업은 GitHub이 만든 액션만 쓴다. 공개 저장소라 실행 기록은 누구나 본다
+name: export
+
+on:
+  schedule:
+    # GitHub은 정각에 실행이 몰려 늦어지므로 23분에 돈다
+    - cron: "23 19 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: export
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  EXPORT: /Volumes/cherry/gold/export
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      ok: ${{ steps.commit.outputs.ok }}
+      committed: ${{ steps.commit.outputs.committed }}
+      failed: ${{ steps.commit.outputs.failed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      - uses: databricks/setup-cli@6a2e75f1f954d87503702c408deea63216c0799d # v1.18.0
+
+      - name: 승인된 폴더 받기
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+        run: |
+          h=${DATABRICKS_HOST#https://}; echo "::add-mask::${h%/}"
+          databricks fs mkdir "dbfs:$EXPORT/pending"
+          # ponytail: 한 번에 한 쪽만 읽는다. 하루 승인이 수백 건이 되면 next_page_token을 따라간다
+          names=$(databricks api get "/api/2.0/fs/directories$EXPORT/pending/" | jq -r '.contents[]? | select(.is_directory) | .name')
+          mkdir -p export
+          for f in $names; do
+            # 폴더 이름은 검수 앱이 정한다. 경로로 쓰기 전에 모양을 막는다. 걸린 폴더만 건너뛰고 실패로 표시한다
+            if ! [[ "$f" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+              echo "::error::쓸 수 없는 폴더 이름이 있어 건너뛴다"
+              touch export/.bad-name
+              continue
+            fi
+            databricks fs cp -r "dbfs:$EXPORT/pending/$f" "export/$f" > /dev/null
+          done
+          echo "받은 폴더 $(wc -w <<< "$names")개"
+
+      - name: 폴더마다 검사하고 커밋
+        id: commit
+        run: |
+          git config core.hooksPath .githooks
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          base=$(git rev-parse HEAD)
+          ok=(); failed=0
+          [ -e export/.bad-name ] && failed=1
+          for d in export/*/; do
+            [ -d "$d" ] || continue
+            f=$(basename "$d")
+            # export는 catalog/ 밖이나 YAML이 아닌 파일, 빈 폴더, 잘못된 commit.json을 거부한다
+            # 검사나 커밋 훅이 막으면 마지막 커밋으로 통째로 되돌린다. git add로 올린 변경이 다음 폴더 커밋에 섞이지 않게 한다
+            if uv run --project backend python -m cherry_core.pipeline.export "$d" --repo . --message-file "export/$f.msg" \
+              && uv run --project backend python -m cherry_core.catalog check \
+              && { [ -z "$(git status --porcelain -- catalog)" ] || { git add catalog && git commit -q -F "export/$f.msg"; }; }; then
+              ok+=("$f")
+            else
+              echo "::error::커밋하지 못한 폴더가 있다. pending/에 남긴다"
+              git reset -q --hard HEAD
+              git clean -fdq -- catalog
+              failed=1
+            fi
+          done
+          committed=0
+          if [ "$(git rev-parse HEAD)" != "$base" ]; then
+            git branch export HEAD
+            git bundle create export.bundle "$base..export"
+            committed=1
+          fi
+          echo "커밋 $(git rev-list --count "$base..HEAD")개, 실패 ${failed}"
+          echo "ok=${ok[*]}" >> "$GITHUB_OUTPUT"
+          echo "committed=$committed" >> "$GITHUB_OUTPUT"
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+
+      - if: steps.commit.outputs.committed == '1'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: export-bundle
+          path: export.bundle
+          retention-days: 1
+
+  push:
+    needs: prepare
+    if: needs.prepare.outputs.committed == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: master
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: export-bundle
+      - name: 받은 커밋을 master에 올리기
+        run: |
+          # 커밋을 만든 사이 master가 앞서 갔으면 합치지 않고 실패한다. 폴더는 pending/에 남아 다음 실행에서 다시 한다
+          git fetch -q export.bundle export:export
+          # 받은 커밋이 catalog/만 바꾸고 모두 봇이 썼는지 본다. 준비 작업에서 도는 바깥 코드가 번들을 바꿔도 코드가 올라가지 않게 한다
+          outside=$(git diff --name-only HEAD export | grep -v '^catalog/' || true)
+          if [ -n "$outside" ]; then
+            echo "::error::catalog/ 밖을 바꾼 커밋이 있어 올리지 않는다"
+            exit 1
+          fi
+          authors=$(git log --format='%an <%ae>' HEAD..export | sort -u)
+          if [ "$authors" != "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" ]; then
+            echo "::error::봇이 아닌 작성자의 커밋이 있어 올리지 않는다"
+            exit 1
+          fi
+          git merge -q --ff-only export
+          git push -q origin HEAD:master
+
+  done:
+    needs: [prepare, push]
+    if: always() && needs.prepare.result == 'success' && (needs.push.result == 'success' || needs.push.result == 'skipped')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: databricks/setup-cli@6a2e75f1f954d87503702c408deea63216c0799d # v1.18.0
+      - name: 올린 폴더를 done/으로 옮기기
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+          OK: ${{ needs.prepare.outputs.ok }}
+        run: |
+          h=${DATABRICKS_HOST#https://}; echo "::add-mask::${h%/}"
+          for f in $OK; do
+            [[ "$f" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || exit 1
+            databricks fs cp -r "dbfs:$EXPORT/pending/$f" "dbfs:$EXPORT/done/$f" > /dev/null
+            databricks fs rm -r "dbfs:$EXPORT/pending/$f"
+          done
+      - name: 커밋하지 못한 폴더가 있으면 실패로 끝내기
+        if: needs.prepare.outputs.failed == '1'
+        run: |
+          echo "::error::커밋하지 못한 폴더가 pending/에 남았다. 실행 기록의 검사 결과를 보고 고친다"
+          exit 1
