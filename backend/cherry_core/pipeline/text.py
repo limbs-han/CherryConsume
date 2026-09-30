@@ -37,24 +37,36 @@ class _Text(HTMLParser):
         super().__init__()
         self.parts: list[str] = []
         self.skip = 0
+        self.cell = 0  # 표 칸 안인지. 칸 안에서는 블록 태그도 줄을 나누지 않아 한 행이 한 줄로 남는다
+
+    def _block(self, tag: str) -> None:
+        if tag in ("tr", "table"):
+            # 닫는 td를 빼먹은 HTML도 행마다 새로 센다
+            # ponytail: 칸 안에 표를 또 넣으면 바깥 행의 나머지가 줄로 나뉜다. 그런 페이지가 나오면 깊이를 쌓는다
+            self.cell = 0
+        self.parts.append(" " if self.cell else "\n")
 
     def handle_starttag(self, tag: str, attrs: list) -> None:
         if tag in _SKIP:
             self.skip += 1
         elif tag in ("td", "th"):
+            self.cell += 1
             self.parts.append(" | ")
         elif tag in _BLOCK:
-            self.parts.append("\n")
+            self._block(tag)
 
     def handle_endtag(self, tag: str) -> None:
         if tag in _SKIP:
             self.skip = max(0, self.skip - 1)
+        elif tag in ("td", "th"):
+            self.cell = max(0, self.cell - 1)
         elif tag in _BLOCK:
-            self.parts.append("\n")
+            self._block(tag)
 
     def handle_data(self, data: str) -> None:
+        # HTML 원본의 줄바꿈은 공백과 같다. 줄은 블록 태그만 나눈다
         if not self.skip:
-            self.parts.append(data)
+            self.parts.append(_SPACE.sub(" ", data))
 
 
 def html_text(html: str) -> str:
@@ -89,7 +101,7 @@ def _charset(content_type: str, head: bytes) -> str:
 
 
 def document_text(content: bytes, content_type: str, parsed: dict | None = None) -> str:
-    """받은 파일 하나의 글. PDF는 ai_parse_document 결과로, JSON은 들여쓰기로, HTML은 html_text로 뽑는다."""
+    """받은 파일 하나의 글. PDF는 ai_parse_document 결과로, JSON은 들여쓰기로, 일반 글은 줄 그대로, HTML은 html_text로 뽑는다."""
     if content.startswith(b"%PDF-"):
         if parsed is None:
             raise ValueError("PDF는 ai_parse_document 결과가 있어야 글을 뽑는다")
@@ -100,4 +112,6 @@ def document_text(content: bytes, content_type: str, parsed: dict | None = None)
         if isinstance(data, dict):
             data = {k: v for k, v in data.items() if k not in _VOLATILE}
         return json.dumps(data, ensure_ascii=False, indent=1)
+    if "text/plain" in content_type:
+        return "\n".join(lines(text))
     return html_text(text)

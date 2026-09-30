@@ -35,6 +35,16 @@ def test_html_text_keeps_table_rows_and_drops_scripts():
     assert html_text(html) == "혜택\n카페 10% 할인\n월 최대 1만원\n구분 | 할인\n카페 | 10%"
 
 
+def test_table_row_stays_one_line_in_real_html():
+    # 카드사 페이지는 칸 사이에 줄바꿈이 있고 칸 안에 p와 br을 쓴다. 롯데, 하나, 우리. 과제 10에서 찾았다
+    html = "<table>\n<tr>\n  <td>카페</td>\n  <td>\n    10%\n  </td>\n</tr>\n<tr><td><p>배달</p><p>커피</p></td><td>5%<br>월 1만원</td></tr>\n</table>"
+    assert html_text(html) == "카페 | 10%\n배달 커피 | 5% 월 1만원"
+
+
+def test_table_row_without_closing_cells():
+    assert html_text("<table><tr><td>카페<td>10%<tr><td>배달<td>5%</table><p>끝</p>") == "카페 | 10%\n배달 | 5%\n끝"
+
+
 def test_euc_kr_page_from_meta_or_header():
     body = "<html><head><meta charset='euc-kr'></head><body><p>카페 할인</p></body></html>".encode("euc-kr")
     assert document_text(body, "text/html") == "카페 할인"
@@ -45,6 +55,12 @@ def test_header_charset_wins_over_meta():
     # 브라우저가 돌려준 글은 UTF-8인데 meta에는 원래 페이지의 euc-kr이 남아 있다. 하나카드
     body = "<html><head><meta charset='euc-kr'></head><body><p>카페 할인</p></body></html>".encode()
     assert document_text(body, "text/html; charset=utf-8") == "카페 할인"
+
+
+def test_plain_text_keeps_its_lines():
+    # 카카오뱅크 상품안내장은 text/plain으로 온다. HTML처럼 읽으면 줄바꿈이 공백이 된다
+    body = "상품 개요   • 연회비 : 없음\n\n  • 브랜드 : 국내전용".encode()
+    assert document_text(body, "text/plain; charset=utf-8") == "상품 개요 • 연회비 : 없음\n• 브랜드 : 국내전용"
 
 
 def test_json_is_indented_text():
