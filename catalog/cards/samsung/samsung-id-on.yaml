@@ -148,7 +148,7 @@ revisions:
         title: 온라인 간편결제 3% 할인
         evidence: [온라인 간편결제·해외 3% 결제일할인, 업종 | 할인 대상, '온라인 간편결제 | 삼성페이, 네이버페이, 카카오페이, PAYCO, 스마일페이, coupay, SSGPAY, L.PAY', 전월 이용금액 | 30만원 미만 | 30만원 이상 | 60만원 이상, 할인율 | 1% | 3% | 3%, '할인 한도 | - | 5,000원 | 10,000원', '무이자할부, 삼성카드의 다른 행사 혜택이 적용된 일시불 및 할부 이용금액, 건강보험/국민연금/고용보험/산재보험 및 장애인 고용부담금, 국세/지방세/공과금, 초·중·고등학교 학교납입금, 대학 등록금, 교통·이동통신·스트리밍 10% 할인이 적용되지 않은 대중교통 및 택시 이용금액, 고속버스(차내 단말기 및 고속버스 앱 결제), 고속도로 통행요금, 부동산 임대료, 기프트/선불카드(포인트, 사이버머니 등 전자지급수단 포함) 구매 및 충전, 상품권 구매, 문자알림서비스, 스마트오토서비스 이용금액', 3% 할인 혜택의 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용, '온라인 간편결제는 국내 온라인 가맹점에 한하며, 오프라인 매장 결제건(바코드, QR코드, 스마트폰 NFC 등)은 제외', '본인카드와 가족카드의 이용실적, 할인한도는 합산하여 산정', '전월 이용금액 대상 산정 시, 온라인 간편결제·해외 3% 할인/교통·이동통신·스트리밍 10% 할인 혜택이 제공된 전체 이용금액, 건강보험/국민연금/고용보험/산재보험 및 장애인 고용부담금, 국세/지방세/공과금, 초·중·고등학교 학교납입금, 대학 등록금, 대중교통, 택시, 아파트 관리비, 부동산 임대료, 기프트/선불카드(포인트, 사이버머니 등 전자지급수단 포함) 구매 및 충전, 상품권 구매건은 제외']
         target:
-          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
           all: true
         when:
           - payment: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay]
@@ -165,7 +165,7 @@ revisions:
         title: 해외 3% 할인
         evidence: [온라인 간편결제·해외 3% 결제일할인, 업종 | 할인 대상, 해외 | 해외 가맹점 및 해외 직접구매 이용건, 전월 이용금액 | 30만원 미만 | 30만원 이상 | 60만원 이상, 할인율 | 1% | 3% | 3%, '할인 한도 | - | 5,000원 | 10,000원', '무이자할부, 삼성카드의 다른 행사 혜택이 적용된 일시불 및 할부 이용금액, 건강보험/국민연금/고용보험/산재보험 및 장애인 고용부담금, 국세/지방세/공과금, 초·중·고등학교 학교납입금, 대학 등록금, 교통·이동통신·스트리밍 10% 할인이 적용되지 않은 대중교통 및 택시 이용금액, 고속버스(차내 단말기 및 고속버스 앱 결제), 고속도로 통행요금, 부동산 임대료, 기프트/선불카드(포인트, 사이버머니 등 전자지급수단 포함) 구매 및 충전, 상품권 구매, 문자알림서비스, 스마트오토서비스 이용금액', 3% 할인 혜택의 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용, 해외는 해외겸용카드에 한해 제공, '본인카드와 가족카드의 이용실적, 할인한도는 합산하여 산정', '전월 이용금액 대상 산정 시, 온라인 간편결제·해외 3% 할인/교통·이동통신·스트리밍 10% 할인 혜택이 제공된 전체 이용금액, 건강보험/국민연금/고용보험/산재보험 및 장애인 고용부담금, 국세/지방세/공과금, 초·중·고등학교 학교납입금, 대학 등록금, 대중교통, 택시, 아파트 관리비, 부동산 임대료, 기프트/선불카드(포인트, 사이버머니 등 전자지급수단 포함) 구매 및 충전, 상품권 구매건은 제외']
         target:
-          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
           all: true
         when:
           - {region: overseas}
@@ -180,7 +180,7 @@ revisions:
         title: 온라인 간편결제 1% 할인
         evidence: [전월 이용금액 30만원 미만 시 또는 월 할인한도 초과 시에는 1% 결제일할인, 업종 | 할인 대상, '온라인 간편결제 | 삼성페이, 네이버페이, 카카오페이, PAYCO, 스마일페이, coupay, SSGPAY, L.PAY', 전월 이용금액 | 30만원 미만 | 30만원 이상 | 60만원 이상, 할인율 | 1% | 3% | 3%, '할인 한도 | - | 5,000원 | 10,000원', '무이자할부, 삼성카드의 다른 행사 혜택이 적용된 일시불 및 할부 이용금액, 건강보험/국민연금/고용보험/산재보험 및 장애인 고용부담금, 국세/지방세/공과금, 초·중·고등학교 학교납입금, 대학 등록금, 교통·이동통신·스트리밍 10% 할인이 적용되지 않은 대중교통 및 택시 이용금액, 고속버스(차내 단말기 및 고속버스 앱 결제), 고속도로 통행요금, 부동산 임대료, 기프트/선불카드(포인트, 사이버머니 등 전자지급수단 포함) 구매 및 충전, 상품권 구매, 문자알림서비스, 스마트오토서비스 이용금액', 3% 할인 혜택의 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용, '온라인 간편결제는 국내 온라인 가맹점에 한하며, 오프라인 매장 결제건(바코드, QR코드, 스마트폰 NFC 등)은 제외']
         target:
-          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
           all: true
         when:
           - payment: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay]
@@ -193,7 +193,7 @@ revisions:
         title: 해외 1% 할인
         evidence: [전월 이용금액 30만원 미만 시 또는 월 할인한도 초과 시에는 1% 결제일할인, 업종 | 할인 대상, 해외 | 해외 가맹점 및 해외 직접구매 이용건, 전월 이용금액 | 30만원 미만 | 30만원 이상 | 60만원 이상, 할인율 | 1% | 3% | 3%, '할인 한도 | - | 5,000원 | 10,000원', '무이자할부, 삼성카드의 다른 행사 혜택이 적용된 일시불 및 할부 이용금액, 건강보험/국민연금/고용보험/산재보험 및 장애인 고용부담금, 국세/지방세/공과금, 초·중·고등학교 학교납입금, 대학 등록금, 교통·이동통신·스트리밍 10% 할인이 적용되지 않은 대중교통 및 택시 이용금액, 고속버스(차내 단말기 및 고속버스 앱 결제), 고속도로 통행요금, 부동산 임대료, 기프트/선불카드(포인트, 사이버머니 등 전자지급수단 포함) 구매 및 충전, 상품권 구매, 문자알림서비스, 스마트오토서비스 이용금액', 3% 할인 혜택의 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용, 해외는 해외겸용카드에 한해 제공]
         target:
-          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+          exclude_categories: [education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
           all: true
         when:
           - {region: overseas}

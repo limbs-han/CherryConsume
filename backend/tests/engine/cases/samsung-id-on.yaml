@@ -163,3 +163,13 @@ cases:
       - {payment: 1, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
       - {payment: 2, benefits: {}, counted: 0, warnings: [not_counted_toward_spend]}
     calc: 무이자할부는 삼성 모든 혜택 공통 제외지만 실적에는 넣어 120,000. 아파트관리비는 걸리는 혜택이 없고 실적 제외 0. 상품권은 모든 혜택 공통 제외라 간편결제 3%도 없고 실적 제외 0
+
+  - name: 고속버스 앱에서 간편결제로 내면 할인 없음
+    prev_month_spend: 350000
+    payments:
+      - {at: 2026-09-12T08:00, amount: 30000, category: transit.bus_express, channel: online, payment_method: naver_pay}
+      - {at: 2026-09-13T08:00, amount: 30000, merchant: coupang, channel: online, payment_method: naver_pay}
+    expect:
+      - {payment: 0, benefits: {}, counted: 30000}
+      - {payment: 1, benefits: {easypay-overseas-3: 900}, counted: 0}
+    calc: 원문 할인 제외에 "고속버스(차내 단말기 및 고속버스 앱 결제)"가 있어 고속버스 30,000은 3%도 1%도 없다. 실적 제외는 아니라 30,000 전액 실적. 같은 간편결제로 쿠팡 30,000은 30만 구간 3%라 900이고 실적 0. 2026-09-30 과제 10 대조에서 찾았다
