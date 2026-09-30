@@ -444,7 +444,7 @@ git commit -m "feat: 원문 글 뽑기와 본문 지문 추가" -m "작업 003"
 - Produces: `Target(issuer, card_id, source_id, kind, url, browser)`, `targets(root, interval=30, issuers=None) -> list[Target]`, `raw_path(t, day, body, content_type) -> str`, `allowed(url, robots_txt) -> bool`, 명령 `python -m cherry_core.pipeline.collect --out DIR [--interval 14|30] [--issuer ID] [--add FILE --card ID --source ID]`
 - 저장 모양: `<out>/<YYYY-MM-DD>/<issuer>/<card_id 또는 _issuer>/<source_id>-<sha256 앞 12자>.<html|pdf|json>`과 `<out>/manifests/manifest-<UTC 시각>.jsonl`. 목록 한 줄은 `Target`의 칸에 `path`, `fetched_at`, `content_type`, `sha256`을 더한 JSON이다. 과제 15의 Auto Loader가 이 목록을 읽는다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/pipeline/test_collect.py`:
 
@@ -536,13 +536,13 @@ def test_add_manual_file_goes_to_same_layout_and_manifest(make_catalog, tmp_path
     )
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_collect.py
 ```
 
-- [ ] **3단계: 코드를 쓴다**
+- [x] **3단계: 코드를 쓴다**
 
 `backend/cherry_core/pipeline/collect.py`:
 
@@ -726,7 +726,7 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_collect.py
@@ -734,12 +734,14 @@ uv run --project backend pytest -q backend/tests/pipeline/test_collect.py
 
 기대: 8개 통과. 네트워크는 쓰지 않는다.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/pipeline/collect.py backend/tests/pipeline/test_collect.py
 git commit -m "feat: 카드사 원문 수집기 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 8개가 모듈이 없어 먼저 실패하고 코드를 넣은 뒤 통과했다. 전체 477개 통과, ruff 통과. 네트워크 없이 실제 카탈로그로 대상만 뽑아 보니 30일 주기 50곳, 그중 브라우저로 여는 곳 32곳, 14일 주기는 신한 10곳이다.
 
 ---
 
