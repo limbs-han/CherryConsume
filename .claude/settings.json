@@ -68,6 +68,12 @@
             "command": "uv",
             "args": ["run", "--script", "${CLAUDE_PROJECT_DIR}/.claude/hooks/on_stop.py"],
             "timeout": 300
+          },
+          {
+            "type": "command",
+            "command": "uv",
+            "args": ["run", "--script", "${CLAUDE_PROJECT_DIR}/.claude/hooks/korean_only.py"],
+            "timeout": 30
           }
         ]
       }
