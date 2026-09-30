@@ -86,3 +86,25 @@ def test_pdf_uses_parse_result_and_keeps_table_rows():
     assert document_text(b"%PDF-1.7 ...", "application/pdf", parsed) == "혜택 안내\n카페 | 10%"
     with pytest.raises(ValueError, match="ai_parse_document"):
         document_text(b"%PDF-1.7 ...", "application/pdf")
+
+
+def test_view_count_is_not_a_change():
+    # 과제 9에서 하나 공지 본문의 조회수가 받을 때마다 바뀌었다
+    old, new = "혜택 변경 안내\n등록일2025.07.01 조회33118", "혜택 변경 안내\n등록일2025.07.01 조회33119"
+    assert fingerprint(old, "notice") == fingerprint(new, "notice")
+    assert fingerprint(old, "product_page") == fingerprint(new, "product_page")
+    assert changed_lines(old, new, "product_page") == ([], [])
+
+
+def test_notice_and_list_compare_without_numbers():
+    # KB 공지 목록은 표 행 끝 칸이 조회수다. 공지와 목록은 새 글이 올라왔는지만 본다
+    old = "공지 | 홈페이지 오류 시 조치방법 안내 | 2021.12.20 | 18309"
+    new = "공지 | 홈페이지 오류 시 조치방법 안내 | 2021.12.20 | 18310"
+    assert fingerprint(old, "notice") == fingerprint(new, "notice")
+    added = new + "\n공지 | 부가서비스 변경 안내 | 2026.10.01 | 3"
+    assert changed_lines(old, added, "notice") == ([], ["공지 | 부가서비스 변경 안내 | 2026.10.01 | 3"])
+
+
+def test_product_page_numbers_still_count():
+    assert fingerprint("카페 10% 할인", "product_page") != fingerprint("카페 5% 할인", "product_page")
+    assert changed_lines("카페 10% 할인", "카페 5% 할인", "product_page") == (["카페 10% 할인"], ["카페 5% 할인"])

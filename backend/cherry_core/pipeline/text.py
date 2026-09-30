@@ -21,15 +21,37 @@ def lines(text: str) -> list[str]:
     return [s for s in (_SPACE.sub(" ", line).strip() for line in text.splitlines()) if s]
 
 
-def fingerprint(text: str) -> str:
-    return hashlib.sha256("\n".join(lines(text)).encode("utf-8")).hexdigest()
+# 받을 때마다 바뀌는 조회수. 과제 9에서 하나 공지 본문의 "조회33118"을 봤다
+_VIEWS = re.compile(r"조회\s*수?\s*:?\s*[\d,]+")
+_DIGITS = re.compile(r"\d+")
+# 새 글이나 새 카드가 올라왔는지만 보는 원문. KB 공지 목록은 행 끝 칸이 조회수라 숫자를 모두 가린다
+_NUMBERLESS_KINDS = {"notice", "list"}
 
 
-def changed_lines(old: str, new: str) -> tuple[list[str], list[str]]:
-    """(없어진 줄, 새로 생긴 줄). 자리만 옮긴 줄은 바뀐 것으로 보지 않는다."""
-    old_lines, new_lines = lines(old), lines(new)
-    old_set, new_set = set(old_lines), set(new_lines)
-    return [s for s in old_lines if s not in new_set], [s for s in new_lines if s not in old_set]
+def _compared(text: str, kind: str | None) -> list[tuple[str, str]]:
+    """(비교에 쓸 줄, 원래 줄). 공지와 목록은 숫자를 #으로 바꿔 비교하고, 상품 원문은 숫자까지 비교한다.
+
+    이미 올라온 공지의 숫자만 나중에 바뀌면 놓친다. 공지는 올린 뒤 거의 고치지 않아 받아들인다.
+    """
+    out = []
+    for line in lines(text):
+        key = _VIEWS.sub("조회", line)
+        if kind in _NUMBERLESS_KINDS:
+            key = _DIGITS.sub("#", key)
+        out.append((key, line))
+    return out
+
+
+def fingerprint(text: str, kind: str | None = None) -> str:
+    """바뀐 원문을 가리는 지문. kind는 카드 파일 sources의 kind이고, 카드사 목록은 list다."""
+    return hashlib.sha256("\n".join(k for k, _ in _compared(text, kind)).encode("utf-8")).hexdigest()
+
+
+def changed_lines(old: str, new: str, kind: str | None = None) -> tuple[list[str], list[str]]:
+    """(없어진 줄, 새로 생긴 줄). 자리만 옮긴 줄과 조회수만 바뀐 줄은 바뀐 것으로 보지 않는다."""
+    old_lines, new_lines = _compared(old, kind), _compared(new, kind)
+    old_keys, new_keys = {k for k, _ in old_lines}, {k for k, _ in new_lines}
+    return [s for k, s in old_lines if k not in new_keys], [s for k, s in new_lines if k not in old_keys]
 
 
 class _Text(HTMLParser):
