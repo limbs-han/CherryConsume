@@ -41,8 +41,21 @@ def test_euc_kr_page_from_meta_or_header():
     assert document_text("<p>카페 할인</p>".encode("euc-kr"), "text/html; charset=EUC-KR") == "카페 할인"
 
 
+def test_header_charset_wins_over_meta():
+    # 브라우저가 돌려준 글은 UTF-8인데 meta에는 원래 페이지의 euc-kr이 남아 있다. 하나카드
+    body = "<html><head><meta charset='euc-kr'></head><body><p>카페 할인</p></body></html>".encode()
+    assert document_text(body, "text/html; charset=utf-8") == "카페 할인"
+
+
 def test_json_is_indented_text():
     assert document_text('{"a": "카드"}'.encode(), "application/json") == '{\n "a": "카드"\n}'
+
+
+def test_json_response_time_is_not_text():
+    # 신한카드 상품 API는 받을 때마다 responseTime이 바뀐다. 지문이 매번 달라지지 않게 뺀다
+    a = document_text(b'{"responseTime": "2026-09-30 12:47:07", "payload": {"a": 1}}', "application/json")
+    b = document_text(b'{"responseTime": "2026-09-30 12:55:49", "payload": {"a": 1}}', "application/json")
+    assert a == b == '{\n "payload": {\n  "a": 1\n }\n}'
 
 
 def test_pdf_uses_parse_result_and_keeps_table_rows():

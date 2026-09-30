@@ -12,6 +12,8 @@ _SPACE = re.compile(r"\s+")
 _CHARSET = re.compile(r"charset=[\"']?([\w-]+)", re.IGNORECASE)
 _BLOCK = {"p", "div", "br", "li", "tr", "table", "section", "article", "dt", "dd", "h1", "h2", "h3", "h4", "h5", "h6"}
 _SKIP = {"script", "style", "noscript", "template"}
+# 받을 때마다 바뀌는 JSON 응답 칸. 남기면 원문이 그대로여도 지문이 매번 바뀐다. 신한카드 상품 API
+_VOLATILE = {"responseTime"}
 
 
 def lines(text: str) -> list[str]:
@@ -94,5 +96,8 @@ def document_text(content: bytes, content_type: str, parsed: dict | None = None)
         return parsed_text(parsed)
     text = content.decode(_charset(content_type, content[:2048]), "replace")
     if "json" in content_type:
-        return json.dumps(json.loads(text), ensure_ascii=False, indent=1)
+        data = json.loads(text)
+        if isinstance(data, dict):
+            data = {k: v for k, v in data.items() if k not in _VOLATILE}
+        return json.dumps(data, ensure_ascii=False, indent=1)
     return html_text(text)

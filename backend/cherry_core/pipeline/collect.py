@@ -152,13 +152,19 @@ def main(argv: list[str] | None = None) -> int:
                     continue
                 if t.browser:
                     if page is None:
+                        from playwright.sync_api import TimeoutError as PlaywrightTimeout
                         from playwright.sync_api import sync_playwright
 
                         browser = stack.enter_context(sync_playwright()).chromium.launch()
                         stack.callback(browser.close)
                         page = browser.new_page(user_agent=USER_AGENT)
-                    page.goto(t.url, wait_until="networkidle", timeout=60_000)
-                    body, ctype = page.content().encode("utf-8"), "text/html"
+                    page.goto(t.url, wait_until="load", timeout=60_000)
+                    try:
+                        page.wait_for_load_state("networkidle", timeout=15_000)
+                    except PlaywrightTimeout:
+                        pass  # 동영상을 넣은 페이지는 요청이 끊이지 않아 조용해지지 않는다. 현대카드 상품 목록
+                    # 브라우저가 돌려준 글은 UTF-8이다. meta의 charset은 원래 페이지 것이라 머리에 적어 이긴다
+                    body, ctype = page.content().encode("utf-8"), "text/html; charset=utf-8"
                 else:
                     body, ctype = _get(t.url)
             except Exception as e:  # noqa: BLE001 한 곳이 실패해도 나머지는 받는다
