@@ -40,9 +40,9 @@ cases:
     expect:
       - {payment: 0, benefits: {}, counted: 12000}
       - {payment: 1, benefits: {}, counted: 7000}
-      - {payment: 2, benefits: {transit-10: 2200}, counted: 3000}
-      - {payment: 3, benefits: {transit-10: 2800}, counted: 40000}
-    calc: 50만 구간, month_total. 누적 12,000과 19,000은 2만원 미만이라 0. 누적 22,000 × 10% = 2,200 − 0 = 2,200. 누적 62,000 × 10% = 6,200인데 월 5,000원 한도라 5,000 − 2,200 = 2,800. 실적은 month_offset으로 10월에 들어간다
+      - {payment: 2, benefits: {transit-10: 2200}, counted: 3000, warnings: [assumed_value]}
+      - {payment: 3, benefits: {transit-10: 2800}, counted: 40000, warnings: [assumed_value]}
+    calc: 50만 구간, month_total. 누적 12,000과 19,000은 2만원 미만이라 0. 누적 22,000 × 10% = 2,200 − 0 = 2,200. 누적 62,000 × 10% = 6,200인데 월 5,000원 한도라 5,000 − 2,200 = 2,800. 실적은 month_offset으로 10월에 들어간다. 원문 건당 2만원을 한 달 합산에 적용하는 것은 확인 필요 항목의 가정값
 
   - name: 보험료는 간편결제면 빠지고 실물카드면 5천원까지
     prev_month_spend: 600000
