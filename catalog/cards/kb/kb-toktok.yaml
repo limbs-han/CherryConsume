@@ -38,6 +38,7 @@ revisions:
     benefits:
       - key: starbucks-50
         title: 스타벅스 50% 청구할인
+        evidence: [할인서비스는 전월 이용실적 30만원 이상 시 제공됩니다., 스타벅스 청구할인 | 50% | 1만원 | 상품권 구매 및 건물 내 임대매장 이용금액은 서비스 제외]
         target:
           merchants: [starbucks]
         reward: {type: billing_discount, rate: 50}
@@ -48,6 +49,7 @@ revisions:
         notes: 상품권 구매 제외
       - key: burger-20
         title: 버거·패스트푸드 20% 청구할인
+        evidence: [할인서비스는 전월 이용실적 30만원 이상 시 제공됩니다., '버거/패스트푸드 업종 (맥도날드, 버거킹, 롯데리아, 쉐이크쉑 등) 청구할인 | 20% | 5천원 | 상품권 구매 및 건물 내 임대매장 이용금액은 서비스 제외']
         target:
           categories: [restaurant.fastfood]
           merchants: [burger_king, lotteria, mcdonalds, shake_shack]
@@ -59,6 +61,7 @@ revisions:
         notes: 버거·패스트푸드 업종(맥도날드, 버거킹, 롯데리아, 쉐이크쉑 등). 예시 가맹점은 merchants.yaml 업종이 음식점이라 따로 넣었다. 상품권 구매 제외
       - key: pay-10
         title: 간편결제 10% 청구할인
+        evidence: [할인서비스는 전월 이용실적 30만원 이상 시 제공됩니다., '간편결제(Pay) 청구할인 | 10% | 5천원 | 간편결제(Pay): 온/오프라인에서 이용되는 모든 간편결제로서, 삼성페이, 네이버페이, 카카오페이, KB국민 앱카드 등 (단, ISP, MISP 이용금액은 제외)', '간편결제(Pay) 할인서비스는 타 서비스와 중복적용 가능하며, 이 경우 할인한도는 각각 차감됩니다.', '※ 예시: 스타벅스에서 간편결제(Pay)로 10,000원 이용 시, → 스타벅스 50% 청구할인(5,000원) + 간편결제(Pay) 10% 청구할인(1,000원) = 60% (6,000원) 청구할인 → 스타벅스 월 할인한도 5,000원 차감 / 간편결제(Pay) 월 할인한도 1,000원 차감']
         target: {all: true}
         when:
           - payment_not: [mobile_tmoney, physical_card]
@@ -70,6 +73,7 @@ revisions:
         notes: 삼성페이, 네이버페이, 카카오페이, KB Pay 등 온·오프라인 모든 간편결제. ISP·MISP 결제는 실물카드 결제로 잡혀 빠진다. 다른 할인과 겹쳐 받고 한도는 각각 차감
       - key: basic-10
         title: 대중교통·택시 10% 청구할인
+        evidence: [할인서비스는 전월 이용실적 30만원 이상 시 제공됩니다., '대중교통, 택시/ 이동통신요금 청구할인 | 10% | 5천원 | SKT, KT olleh, LG U+ 이동통신요금 자동납부 * 인터넷, IPTV 등 결합상품 및 알뜰폰은 서비스 제외 • 시외버스, 고속버스, 모바일 티머니(후불형) 서비스 제외 * 버스/지하철 요금은 실제 카드 사용일이 아닌 이용대금 명세서 상 기재된 이용일 기준으로 서비스 제공']
         target:
           categories: [taxi, transit.bus_city, transit.subway]
         when:
@@ -82,6 +86,7 @@ revisions:
         notes: 대중교통, 택시. 시외·고속버스 제외. 이동통신 10%와 월 5천원 한도를 함께 쓴다
       - key: basic-telecom-10
         title: 이동통신요금 10% 청구할인
+        evidence: [할인서비스는 전월 이용실적 30만원 이상 시 제공됩니다., '대중교통, 택시/ 이동통신요금 청구할인 | 10% | 5천원 | SKT, KT olleh, LG U+ 이동통신요금 자동납부 * 인터넷, IPTV 등 결합상품 및 알뜰폰은 서비스 제외 • 시외버스, 고속버스, 모바일 티머니(후불형) 서비스 제외 * 버스/지하철 요금은 실제 카드 사용일이 아닌 이용대금 명세서 상 기재된 이용일 기준으로 서비스 제공']
         target:
           merchants: [kt, lg_uplus, skt]
         when:
