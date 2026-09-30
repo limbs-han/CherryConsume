@@ -3,6 +3,8 @@
 import json
 from datetime import date
 
+import pytest
+
 from cherry_core.pipeline.collect import Target, allowed, main, raw_path, targets
 
 
@@ -83,3 +85,22 @@ def test_add_manual_file_goes_to_same_layout_and_manifest(make_catalog, tmp_path
         "product_page",
         rel,
     )
+
+
+def test_host_whose_robots_failed_is_not_asked_again(make_catalog, tmp_path, monkeypatch, capsys):
+    # 롯데처럼 robots.txt 요청이 끊기면 60초씩 기다린다. 같은 호스트의 남은 주소는 다시 묻지 않고 실패로 센다
+    import cherry_core.pipeline.collect as collect_module
+
+    asked = []
+
+    def broken_robots(url):
+        asked.append(url)
+        raise TimeoutError
+
+    monkeypatch.setattr(collect_module, "_robots", broken_robots)
+    monkeypatch.setattr(collect_module, "_get", lambda url: pytest.fail("robots.txt를 모르는 호스트에서 받았다"))
+    monkeypatch.setattr(collect_module.time, "sleep", lambda s: None)
+    root = make_catalog(collect("api"))
+    assert main(["--root", str(root), "--out", str(tmp_path / "raw")]) == 1
+    assert len(asked) == 1  # 신한 주소 세 곳이 모두 같은 호스트다
+    assert "실패 0" not in capsys.readouterr().out

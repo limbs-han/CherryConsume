@@ -138,7 +138,7 @@ def main(argv: list[str] | None = None) -> int:
             print(save(args.out, out, _manual(args.root, args.card, args.source), body, ctype, now))
         return 0
 
-    robots: dict[str, str | None] = {}
+    robots: dict[str, str | None | Exception] = {}
     saved = skipped = failed = 0
     with ExitStack() as stack, manifest.open("w", encoding="utf-8") as out:
         page = None
@@ -146,7 +146,13 @@ def main(argv: list[str] | None = None) -> int:
             host = urlsplit(t.url).netloc
             try:
                 if host not in robots:
-                    robots[host] = _robots(t.url)
+                    try:
+                        robots[host] = _robots(t.url)
+                    except Exception as e:  # noqa: BLE001 받지 못한 까닭을 기억해 같은 호스트에 다시 묻지 않는다
+                        robots[host] = e
+                if isinstance(robots[host], Exception):
+                    # robots.txt를 모르는 호스트는 허용 여부를 모르는 것이라 받지 않는다. 롯데처럼 연결을 끊는 곳
+                    raise robots[host]
                 if not allowed(t.url, robots[host]):
                     skipped += 1
                     continue
