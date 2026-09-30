@@ -1466,7 +1466,7 @@ git commit -m "feat: 추출 결과의 칸별 정확도 채점 추가" -m "작업
 **Interfaces:**
 - Produces: `spend_window(today: date, signup: date) -> tuple[date, Decimal]`. 과제 13의 차단 작업이 쓴다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/pipeline/test_cost.py`:
 
@@ -1503,13 +1503,13 @@ def test_trial_across_months():
     assert spend_window(date(2026, 10, 9), signup) == (date(2026, 10, 9), Decimal(30))
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_cost.py
 ```
 
-- [ ] **3단계: 코드를 쓴다**
+- [x] **3단계: 코드를 쓴다**
 
 `backend/cherry_core/pipeline/cost.py`:
 
@@ -1538,7 +1538,7 @@ def spend_window(today: date, signup: date) -> tuple[date, Decimal]:
     return max(today.replace(day=1), trial_end), MONTH_LIMIT
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_cost.py
@@ -1546,12 +1546,14 @@ uv run --project backend pytest -q backend/tests/pipeline/test_cost.py
 
 기대: 6개 통과.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/pipeline/cost.py backend/tests/pipeline/test_cost.py
 git commit -m "feat: Databricks 비용 차단 금액 계산 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 6개가 모듈이 없어 먼저 실패하고 코드를 넣은 뒤 통과했다. 전체 503개 통과, ruff 통과. 차단 작업과 함께 과제 13에서 `risk-reviewer`로 검토한다.
 
 ---
 
