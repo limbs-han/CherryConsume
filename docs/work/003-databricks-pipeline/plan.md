@@ -1126,7 +1126,7 @@ git commit -m "feat: 추출 결과로 카드 초안을 만들고 검사하는 �
 **Interfaces:**
 - Produces: `VERSION`, `response_schema() -> dict`, `catalog_codes(cat) -> dict[str, list[str]]`, `build_prompt(card, current, docs, codes) -> str`, `parse_answer(text) -> dict`. `parse_answer`의 결과는 `make_draft`의 `extracted`로 그대로 들어간다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/pipeline/test_prompt.py`:
 
@@ -1172,13 +1172,13 @@ def test_parse_answer_treats_null_as_not_written():
     assert parse_answer(json.dumps(answer))["rules"] == {"tiers": [0], "benefits": [{"key": "a"}]}
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_prompt.py
 ```
 
-- [ ] **3단계: 코드를 쓴다**
+- [x] **3단계: 코드를 쓴다**
 
 `backend/cherry_core/pipeline/prompt.py`:
 
@@ -1267,7 +1267,7 @@ def parse_answer(text: str) -> dict:
     return {**data, "rules": _drop_nulls(data["rules"]), "effective_from": date.fromisoformat(day) if day else None}
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_prompt.py
@@ -1275,12 +1275,14 @@ uv run --project backend pytest -q backend/tests/pipeline/test_prompt.py
 
 기대: 4개 통과.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/pipeline/prompt.py backend/tests/pipeline/test_prompt.py
 git commit -m "feat: 카드 규칙 추출 프롬프트와 답 형식 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 4개가 모듈이 없어 먼저 실패하고 코드를 넣은 뒤 통과했다. 전체 492개 통과, ruff 통과. 실제 카탈로그로 만들면 원문을 뺀 프롬프트가 약 4,900자, 답 형식이 약 18,400자다. 목록은 업종 58, 가맹점 143, 결제수단 18, 포인트 7개다.
 
 ---
 
