@@ -2018,7 +2018,10 @@ git commit -m "build: Databricks 번들과 저장 공간 정의 추가" -m "작�
 - 3단계: 검사 통과. 개발용 배포로 개발자 이름이 붙은 bronze, silver, gold 스키마와 raw, export 볼륨이 생겼다
 - 4단계: `ai_parse_document`가 된다. 하나 원더카드 상품안내장 16쪽, 요소 172개, 표 24개. `parsed_text`가 이 모양을 그대로 읽고 표 281행을 한 줄씩 살렸다. `pypdf`는 쓰지 않는다
 - 알아 둘 것: Git Bash에서 `databricks api`처럼 `/`로 시작하는 경로를 넘기면 Git Bash가 Windows 경로로 바꿔 "Not Found"가 난다. `MSYS_NO_PATHCONV=1`을 켜고 돌린다
-- 시험용 PDF는 개발용 raw 볼륨의 `test/`에 남아 있다
+- 2026-09-30 사용자가 Databricks 명령을 직접 돌리기로 해, 앞서 만든 것을 지우고 과제 12를 다시 했다. 개발용 배포는 `bundle destroy`로, 카탈로그는 SQL `DROP CATALOG ... CASCADE`로 지웠다. 화면에서 **Create catalog**와 **Use default storage**로 카탈로그를 만들고, 개발용 배포, 화면에서 PDF 올리기, SQL Editor의 `ai_parse_document`까지 사용자가 했다
+- 다시 한 `ai_parse_document`는 같은 PDF에서 요소 173개가 나왔다. 처음은 172개였다. 같은 파일도 다시 읽으면 결과가 조금 다를 수 있어, 파일 내용이 같으면 다시 읽지 않아야 바뀌지 않은 원문이 바뀐 것으로 잡히지 않는다. 과제 15에 넘긴다
+- PDF 글에 한글을 잘못 읽은 곳이 있다. "혜택플러스"를 "헤탱플러스", "할인"을 "합인"으로 읽었다. 과제 18에서 PDF 원문의 추출 결과는 이름을 더 꼼꼼히 본다
+- 시험용 PDF는 개발용 raw 볼륨에 `cherry-test-leaflet.pdf`로 남아 있다
 
 ---
 
@@ -2037,24 +2040,31 @@ LLM을 부르기 전에 비용 차단이 서 있어야 한다. 설계 4절 8번�
 - Create: `pipeline/src/cost_guard.py`, `pipeline/resources/cost_guard.yml`, `.github/workflows/deploy.yml`
 
 **만들 것:**
-- `cost_guard.py`: `spend_window(오늘, signup_date)`로 합산 시작일과 한도를 정한다. 아래 SQL로 쓴 금액을 구한다. 한도 이상이면 태그 `cherry_guard`가 붙은 작업의 예약과 트리거를 멈추고, SQL 웨어하우스와 앱을 끈다. 한도 밑이면 멈춘 예약과 트리거를 다시 켠다. 시험용으로 `--limit` 인자를 받는다. 찍는 것은 합산 시작일, 쓴 금액, 한도, 멈춤 여부뿐이다.
+- `cost_guard.py`: `spend_window(오늘, signup_date)`로 합산 시작일과 한도를 정한다. 아래 SQL로 쓴 금액을 구한다. 한도 이상이면 태그 `cherry_guard`가 붙은 작업의 예약과 트리거를 멈추고, SQL 웨어하우스와 앱을 끈다. 한도 밑이면 멈춘 예약과 트리거를 다시 켠다. 시험용으로 `--limit` 인자를 받는다. 찍는 것은 합산 시작일, 쓴 금액, 한도, 멈춤 여부뿐이다. 2026-09-30 위험 검토로 바꾼 것: "한도 이상"이 아니라 한도를 넘으면 멈춘다. 가격 없는 사용량이 있거나 청구 기록을 읽지 못하면 넘은 것으로 본다. 찍는 것에 바꾼 작업, 끈 웨어하우스, 끈 앱 개수를 더했다. 새로 멈췄을 때와 무엇 하나 멈추지 못했을 때는 실행을 실패로 끝내 알린다.
 
 ```sql
-SELECT coalesce(sum(u.usage_quantity * p.pricing.effective_list.default), 0) AS spent
+SELECT
+  coalesce(sum(u.usage_quantity * p.pricing.effective_list.default), 0) AS spent,
+  count_if(p.pricing.effective_list.default IS NULL) AS unpriced
 FROM system.billing.usage u
-JOIN system.billing.list_prices p
+LEFT JOIN system.billing.list_prices p
   ON u.sku_name = p.sku_name AND u.cloud = p.cloud AND u.usage_unit = p.usage_unit
  AND u.usage_end_time >= p.price_start_time
  AND (p.price_end_time IS NULL OR u.usage_end_time < p.price_end_time)
-WHERE u.usage_date >= :start AND p.currency_code = 'USD'
+ AND p.currency_code = 'USD'
+WHERE u.usage_date >= :start
 ```
 
-- `cost_guard.yml`: 작업 `cherry_cost_guard`. 6시간마다 돈다. 이 작업에는 `cherry_guard` 태그를 붙이지 않는다. 자기 자신은 멈추지 않아야 새 달에 다시 켤 수 있다. 실행 시간 제한은 10분이다.
-- `deploy.yml`: master에 `pipeline/**`, `backend/cherry_core/**`, `backend/pyproject.toml`이 바뀐 푸시와 수동 실행에서 돈다. 비밀값 세 개를 환경변수로 받는다. 먼저 `cherry_guard` 태그가 붙은 운영 작업 중 멈춘 것이 있는지 보고, 있으면 "차단된 달이라 배포하지 않는다"를 찍고 성공으로 끝낸다. 없으면 `databricks bundle deploy -t prod`를 돌린다. 권한은 `contents: read`다.
+2026-09-30 위험 검토로 바꿨다. 처음 SQL은 INNER JOIN이라 가격을 못 찾은 사용량이 빠져 쓴 금액이 낮게 나왔다. 가격 없는 사용량이 있으면 넘은 것으로 본다. 나머지 바꾼 규칙은 design.md 4절 8번이다. 한도 판단 `is_over`와 멈춤 규칙 `guard_changes`는 `cherry_core.pipeline.cost`에 두고 손계산 테스트를 붙였다.
+
+- `cost_guard.yml`: 작업 `cherry_cost_guard`. 6시간마다 돈다. 이 작업에는 `cherry_guard` 태그를 붙이지 않는다. 자기 자신은 멈추지 않아야 새 달에 다시 켤 수 있다. 실행 시간 제한은 10분이다. 2026-09-30 실패 알림 메일 `alert_email`과 기다림 줄 `queue`를 더했다.
+- `deploy.yml`: master에 `pipeline/**`, `backend/cherry_core/**`, `backend/pyproject.toml`이 바뀐 푸시와 수동 실행에서 돈다. 비밀값 세 개를 환경변수로 받는다. 먼저 `cherry_guard` 태그가 붙은 운영 작업 중 멈춘 것이 있는지 보고, 있으면 "차단된 달이라 배포하지 않는다"를 찍고 성공으로 끝낸다. 없으면 `databricks bundle deploy -t prod`를 돌린다. 권한은 `contents: read`다. 2026-09-30 위험 검토로 바꾼 것: 비밀값은 네 개이고 Databricks와 통하는 단계에만 넘긴다. 호스트를 가린다. 배포 전에 테스트를 돌린다. 건너뛸 때는 경고를 남긴다. `ALERT_EMAIL`이 비면 멈춘다. 수동 실행도 master에서만 된다. 배포한 뒤 차단 작업을 한 번 돌리고, 그 출력은 쓴 금액이 있어 공개 기록에 남기지 않는다.
 
 - [ ] **1단계: 사용자가 안내서 3, 4, 5단계를 한다**
 
-사용자가 붙여 준 GitHub 비밀값 이름 목록에 세 이름이 모두 있으면 성공이다.
+사용자가 붙여 준 GitHub 비밀값 이름 목록에 세 이름이 모두 있으면 성공이다. 2026-09-30부터는 네 이름이다.
+
+2026-09-30 위험 검토로 운영 배포 전에 할 일 둘을 더했다. 안내서 3단계의 서비스 주체 권한 주기와 4단계의 네 번째 비밀값 `ALERT_EMAIL`이다. 권한이 없으면 운영의 차단 작업이 청구 기록을 읽지 못해 아무것도 멈추지 않는다.
 
 - [ ] **2단계: 차단 작업을 쓰고 개발용으로 돌린다**
 
@@ -2062,7 +2072,7 @@ WHERE u.usage_date >= :start AND p.currency_code = 'USD'
 cd pipeline && databricks bundle deploy -t dev && databricks bundle run -t dev cherry_cost_guard
 ```
 
-기대: 출력에 합산 시작일이 가입일이고 한도 400이다.
+기대: 출력에 합산 시작일이 가입일이고 한도 400이다. 청구 기록이 들어왔는데 가격 표가 비어 있으면 "가격을 찾지 못한 사용량"으로 실패하고, 그때 작업 공간의 웨어하우스와 앱이 모두 꺼진다. 운영 쪽 것도 포함된다.
 
 - [ ] **3단계: `risk-reviewer`로 검토한다**
 
@@ -2080,6 +2090,8 @@ git commit -m "deploy: 비용 차단 작업과 운영 배포 워크플로 추가
 - [ ] **5단계: 운영에서 멈춤과 다시 켜기를 시험한다**
 
 운영 작업 공간에서 `cherry_cost_guard`를 `--limit 0`으로 한 번 돌리면 태그가 붙은 운영 작업이 멈춰야 한다. 인자 없이 다시 돌리면 다시 켜져야 한다. 멈춘 동안 `deploy.yml`을 수동 실행하면 "차단된 달이라 배포하지 않는다"가 찍혀야 한다.
+
+2026-09-30 위험 검토: 지금 번들에는 `cherry_guard` 태그가 붙은 작업이 없어 멈춤과 다시 켜기를 시험할 수 없다. 첫 태그 작업은 과제 15의 `cherry_refresh`라 이 단계는 과제 15 운영 배포 뒤에 한다. 운영 작업은 PC의 `bundle run -t prod`로 돌릴 수 없다. `workspace.root_path`를 적지 않아 사람 계정의 운영 명령은 오류로 멈추기 때문이다. 화면의 작업 실행에서 매개변수를 바꿔 돌리고, 그때 `--signup`과 `--target`도 함께 넣는다. 사람이 차단을 푸는 순서는 `docs/databricks.md`의 "차단을 사람이 풀 때"다.
 
 ---
 
@@ -2108,7 +2120,7 @@ git commit -m "deploy: 카드사 원문 수집 워크플로 추가" -m "작업 0
 
 - [ ] **3단계: GitHub 서버에서 막힌 카드사를 가린다**
 
-과제 9의 PC 결과와 비교해 GitHub에서만 실패한 카드사를 찾는다. 그 카드사는 PC에서 같은 명령에 `--issuer`를 붙여 받고, Claude가 사용자 CLI 로그인으로 올린다. 삼성과 IBK는 사용자가 브라우저로 저장한 파일을 `--add`로 더해 올린다. 결과는 카드사 파일 `notes`와 design.md 4절 2번에 적는다.
+과제 9의 PC 결과와 비교해 GitHub에서만 실패한 카드사를 찾는다. 그 카드사는 PC에서 같은 명령에 `--issuer`를 붙여 받고, 사용자가 CLI로 올린다. 삼성과 IBK는 사용자가 브라우저로 저장한 파일을 `--add`로 더해 올린다. 결과는 카드사 파일 `notes`와 design.md 4절 2번에 적는다.
 
 ---
 

@@ -125,13 +125,24 @@ CLI는 Databricks를 명령으로 다루는 프로그램이다. 번들 배포와
 - 성공하면 보이는 것: 비밀값과 Client ID가 보인다. 비밀값은 창을 닫으면 다시 볼 수 없으니 창을 연 채로 바로 4단계로 간다.
 - Claude에게 붙여 줄 것: 서비스 주체 이름과 비밀값이 끝나는 날짜. Client ID와 비밀값은 붙여 주지 않는다. 끝나는 날은 진행 상황에 적어 두고 그 전에 새로 발급한다.
 
+**운영 배포 전에 서비스 주체에 권한 주기.** 과제 13에서 더했다. 운영 작업은 이 서비스 주체의 권한으로 돈다. 권한이 없으면 운영 스키마를 만들지 못하고, 비용 차단 작업이 청구 기록을 읽지 못해 아무것도 멈추지 않는다.
+- 누를 곳: **Settings**의 **Identity and access**에서 `cherry-github-actions`를 열고 **Application ID**를 복사한다. **SQL Editor**에서 **Serverless Starter Warehouse**를 고르고 아래 SQL의 `<Application ID>`를 바꿔 한 줄씩 실행한다. 이어서 **SQL Warehouses**에서 **Serverless Starter Warehouse**를 열고 **Permissions**에서 `cherry-github-actions`를 **Can manage**로 더한다.
+  ```sql
+  GRANT USE CATALOG, CREATE SCHEMA ON CATALOG cherry TO `<Application ID>`;
+  GRANT USE CATALOG ON CATALOG system TO `<Application ID>`;
+  GRANT USE SCHEMA, SELECT ON SCHEMA system.billing TO `<Application ID>`;
+  ```
+- 무엇을 주는지: 첫 줄은 `cherry` 카탈로그 안에 운영 스키마를 만드는 권한이다. 둘째와 셋째 줄은 청구 기록을 읽는 권한이다. 웨어하우스 권한은 비용이 한도를 넘었을 때 끄는 권한이다. 새로 만드는 웨어하우스와 앱에도 같은 권한을 줘야 차단 작업이 끌 수 있다.
+- 성공하면 보이는 것: SQL 세 줄이 모두 성공으로 끝난다. **Catalog**에서 `cherry`의 **Permissions** 탭에 서비스 주체가 보인다.
+- Claude에게 붙여 줄 것: SQL 세 줄의 성공 여부. 실패하면 오류 글. **Application ID**는 붙여 주지 않는다.
+
 ### 4. GitHub 저장소 비밀값 등록
 
 GitHub 저장소 비밀값은 Actions가 실행될 때만 꺼내 쓰는 값이다. 실행 기록에는 가려서 찍힌다.
-- 누를 곳: GitHub 저장소 화면에서 **Settings**를 누른다. 왼쪽 **Security** 아래 **Secrets and variables**의 **Actions**를 누르고 **Secrets** 탭에서 **New repository secret**을 누른다. **Name**과 **Secret**을 넣고 **Add secret**을 누른다. 세 번 한다.
-- 넣을 값: `DATABRICKS_HOST`에 2단계의 작업 공간 주소, `DATABRICKS_CLIENT_ID`에 Client ID, `DATABRICKS_CLIENT_SECRET`에 비밀값.
-- 성공하면 보이는 것: 비밀값 목록에 세 이름이 보인다. 값은 다시 볼 수 없다.
-- Claude에게 붙여 줄 것: 세 이름의 목록만. 값은 붙여 주지 않는다.
+- 누를 곳: GitHub 저장소 화면에서 **Settings**를 누른다. 왼쪽 **Security** 아래 **Secrets and variables**의 **Actions**를 누르고 **Secrets** 탭에서 **New repository secret**을 누른다. **Name**과 **Secret**을 넣고 **Add secret**을 누른다. 네 번 한다.
+- 넣을 값: `DATABRICKS_HOST`에 2단계의 작업 공간 주소, `DATABRICKS_CLIENT_ID`에 Client ID, `DATABRICKS_CLIENT_SECRET`에 비밀값, `ALERT_EMAIL`에 작업이 실패하면 알림을 받을 메일. `ALERT_EMAIL`은 과제 13에서 더했다. 메일 주소를 공개 저장소에 적지 않으려고 비밀값으로 둔다. 작업 공간 주소는 끝에 `/`를 붙이지 않는다. 실행 기록은 등록한 글자와 똑같을 때만 가려지기 때문이다.
+- 성공하면 보이는 것: 비밀값 목록에 네 이름이 보인다. 값은 다시 볼 수 없다.
+- Claude에게 붙여 줄 것: 네 이름의 목록만. 값은 붙여 주지 않는다.
 
 ### 5. 예산과 알림 설정
 
@@ -148,6 +159,18 @@ GitHub 저장소 비밀값은 Actions가 실행될 때만 꺼내 쓰는 값이�
 - 누를 곳: 작업 공간 위쪽 막대의 **Manage trial**에서 신용카드를 넣는다.
 - 알아 둘 것: 체험이 끝나거나 크레딧을 다 쓰면 쓴 만큼 내는 방식으로 바뀐다. 결제 정보를 넣지 않고 두면 작업 공간에 만든 것이 체험이 끝나고 60일 뒤 지워진다.
 - Claude에게 붙여 줄 것: 등록했다는 말만. 카드 정보는 붙여 주지 않는다.
+
+### 차단을 사람이 풀 때
+
+비용 차단 작업은 쓴 금액을 모르면 멈추는 쪽으로 만들었다. 그래서 한도를 넘지 않았는데도 멈출 수 있다. 가격 표가 늦게 들어오거나 서비스 주체 권한이 빠진 경우다. 과제 13 위험 검토에서 더했다. 화면 이름은 실제와 조금 다를 수 있다.
+- 알게 되는 길: 차단 작업이 "비용 차단 알림"으로 실패하면 알림 메일이 온다. 배포 워크플로가 "차단된 달이라 배포하지 않는다" 경고를 남기고 건너뛴다.
+- 원인 보기: **Jobs & Pipelines**에서 `cherry_cost_guard`를 열고 마지막 실행의 출력과 오류 글을 본다. 쓴 금액, 한도, 가격 없는 사용량, 조회 실패가 나온다.
+- 가격 표가 비어서라면 먼저 기다린다. 공식 문서는 새 작업 공간의 청구 기록이 늦게 들어온다고 한다.
+- 급하게 풀어야 하면 이 순서로 한다.
+  1. `cherry_cost_guard`의 예약을 화면에서 멈춘다. 그래야 6시간 뒤 다시 멈추지 않는다.
+  2. 멈춘 작업마다 태그 `cherry_guard_paused`를 지우고, 예약이나 트리거를 다시 켠다.
+  3. 원인을 고친 뒤 GitHub **Actions**의 `deploy` 워크플로를 수동으로 돌린다. 배포는 `cherry_cost_guard`의 예약도 파일대로 다시 켠다.
+- 운영 작업을 손으로 돌릴 때는 PC의 `databricks bundle run -t prod`를 쓰지 않는다. 운영 배포 경로를 사람 계정으로는 찾지 못해 오류로 멈춘다. 화면의 작업 실행에서 매개변수를 바꿔 돌리고, `--limit`을 넣을 때는 `--signup`과 `--target`도 함께 넣는다.
 
 ## 출처
 
