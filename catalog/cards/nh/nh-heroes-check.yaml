@@ -12,7 +12,7 @@ annual_fees:
   - {scope: global, brand: mastercard, amount: 0}
 sources:
   - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010518', fetched_at: 2026-09-29, review_no: 2026-3845, review_valid_until: 2027-06-30}
-  - {id: notices, kind: notice, url: 'https://card.nonghyup.com/servlet/IpCi9010I.act', fetched_at: 2026-09-29}
+  - {id: notices, kind: notice, url: 'https://card.nonghyup.com/servlet/IpCi9010I.act?pageNum=1&pageSize=50', fetched_at: 2026-09-29}
 checked_at: 2026-09-29
 revisions:
   - effective_from: 2024-07-16

@@ -1,9 +1,9 @@
 schema_version: 2
 id: lotte
 name: 롯데카드
-collect: {list_url: 'https://www.lottecard.co.kr/app/LPCDADA_V100.lc', method: browser, interval_days: 30, notice_url: 'https://www.lottecard.co.kr/app/LPEVNCA_V100.lc'}
+collect: {list_url: 'https://www.lottecard.co.kr/app/LPCDADA_V100.lc', method: blocked, interval_days: 30, notice_url: 'https://www.lottecard.co.kr/app/LPEVNCA_V100.lc'}
 defaults:
   - effective_from: 2020-07-10
     effective_from_estimated: true
     spend: {basis: prev_calendar_month, interest_free: exclude, installment: full_at_purchase, cancellation: original_month, exclude_applied: 0}
-notes: 'defaults 시작일은 공통 약관 시행일을 찾지 못해 롯데 카드 중 첫 개정이 가장 이른 LOCA CLASSIC 출시일로 두고 추정 표시. 수집: robots.txt 요청은 연결이 끊겨 봇 접근을 막는 것으로 보이나 상품 페이지와 목록은 브라우저로 열린다. 공지사항 목록은 페이지 안에서 POST /app/LPEVNCA_V101.lc로 받는다. 2026-09-29 기준 공지 71건(2019-11부터)을 끝까지 봤다.'
+notes: 'defaults 시작일은 공통 약관 시행일을 찾지 못해 롯데 카드 중 첫 개정이 가장 이른 LOCA CLASSIC 출시일로 두고 추정 표시. 수집: robots.txt 요청은 연결이 끊겨 봇 접근을 막는 것으로 보이나 상품 페이지와 목록은 브라우저로 열린다. 공지사항 목록은 페이지 안에서 POST /app/LPEVNCA_V101.lc로 받는다. 2026-09-29 기준 공지 71건(2019-11부터)을 끝까지 봤다. 2026-09-30 수집 시험: robots.txt 요청이 수집기와 브라우저 모두에서 연결이 끊겨 허용 여부를 확인할 수 없다. 확인하지 못한 사이트는 받지 않으므로 method를 blocked로 바꿨다. 원문은 사람이 받아 --add로 더한다.'
