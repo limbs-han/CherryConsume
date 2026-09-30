@@ -1,0 +1,95 @@
+# 카드사 원문 수집. 작업 003 설계 4절 2번. 매달 1일과 15일 UTC 18시 17분, 한국 시각으로 다음 날 새벽 3시 17분에 돈다
+# 1일에는 모든 카드사를, 15일에는 14일 주기 카드사만 받는다. 받은 원문은 운영 볼륨 cherry.bronze.raw에 올린다
+# 공개 저장소라 실행 기록은 누구나 본다. 수집기는 원문 내용을 찍지 않고 카드사 id, 개수, 실패 id만 찍는다
+# 예약 실행은 GitHub이 몰릴 때 늦어질 수 있어 정각을 피하고, 날짜 대신 어느 예약이 불렀는지로 주기를 고른다
+# 공개 저장소의 예약 실행은 저장소에 60일 동안 활동이 없으면 GitHub이 끈다
+name: collect
+
+on:
+  schedule:
+    - cron: "17 18 1 * *"
+    - cron: "17 18 15 * *"
+  workflow_dispatch:
+    inputs:
+      interval:
+        description: 받을 카드사의 갱신 주기. 30이면 모든 카드사, 14면 14일 주기 카드사만
+        type: choice
+        options: ["30", "14"]
+        default: "30"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.5"
+      - uses: databricks/setup-cli@6a2e75f1f954d87503702c408deea63216c0799d # v1.18.0
+
+      - name: 브라우저 설치
+        run: uv run --project backend --with playwright==1.63.0 python -m playwright install --with-deps chromium
+
+      - name: 원문 받기
+        id: collect
+        # 수집이 길어져도 받은 파일은 올릴 수 있게 작업 전체 30분보다 짧게 끊는다
+        timeout-minutes: 20
+        env:
+          INTERVAL_INPUT: ${{ inputs.interval }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          if [ -n "$INTERVAL_INPUT" ]; then interval="$INTERVAL_INPUT"
+          elif [ "$SCHEDULE" = "17 18 1 * *" ]; then interval=30
+          else interval=14; fi
+          echo "주기 ${interval}일"
+          status=0
+          uv run --project backend --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out raw --interval "$interval" || status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+      - name: 받은 원문 올리기
+        # 원문 받기가 시간 제한으로 끊겨도 받은 만큼은 올린다
+        if: ${{ !cancelled() }}
+        # 비밀값은 이 단계에만 넣는다. 다른 단계의 외부 액션 코드가 읽지 못하게 하려는 것이다
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+        run: |
+          # 오류 문구에 https:// 없이 찍히는 주소도 가린다
+          h=${DATABRICKS_HOST#https://}; echo "::add-mask::${h%/}"
+          if [ ! -d raw/manifests ]; then echo "받은 원문이 없다"; exit 0; fi
+          dest=dbfs:/Volumes/cherry/bronze/raw
+          # 원문을 먼저 올리고 목록 파일은 마지막에 올린다. 목록만 먼저 올라가면 적재 작업이 없는 파일을 찾는다
+          for d in raw/*/; do
+            name=$(basename "$d")
+            [ "$name" = manifests ] && continue
+            databricks fs cp -r "${d%/}" "$dest/$name" --overwrite > /dev/null
+          done
+          for f in raw/manifests/*.jsonl; do
+            databricks fs cp "$f" "$dest/manifests/$(basename "$f")" --overwrite > /dev/null
+            # 폴더째 한 단계 더 들어가 올라가지 않았는지 이번 목록 파일과 그 첫 원문의 자리로 확인한다
+            databricks fs ls "$dest/manifests" | grep -qF "$(basename "$f")"
+            p=$(head -1 "$f" | jq -r .path)
+            [ -z "$p" ] || databricks fs ls "$dest/$(dirname "$p")" | grep -qF "$(basename "$p")"
+          done
+          echo "올린 파일 $(find raw -type f | wc -l)개"
+
+      - name: 수집 실패가 있었으면 실패로 끝낸다
+        if: ${{ !cancelled() && steps.collect.outputs.status != '0' }}
+        run: |
+          echo "수집기가 일부 주소를 받지 못했거나 시간 안에 끝나지 않았다. 위 원문 받기 단계를 본다"
+          exit 1
