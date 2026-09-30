@@ -27,6 +27,7 @@
 - 2026-09-30 과제 12를 마쳤다. 번들 `pipeline/`을 개발용으로 배포했고 `ai_parse_document`가 된다. 카탈로그 `cherry`는 SQL로 한 번 만들었다. 다음은 과제 13 비용 차단 작업과 첫 운영 배포다. 사용자가 안내서 3, 4, 5단계를 먼저 한다
 - 2026-09-30 과제 12는 사용자가 직접 다시 했다. 카탈로그를 화면에서 만들고 개발용 배포와 `ai_parse_document`를 돌렸다
 - 2026-09-30 과제 13 파일을 두 번의 위험 검토 뒤 커밋했다. 비용 차단 코드 `pipeline/src/cost_guard.py`, 판단 규칙 `cherry_core.pipeline.cost`, 작업 정의, 배포 워크플로 `.github/workflows/deploy.yml`이다. 남은 것: 사용자의 개발용 차단 작업 실행 결과, 작업 공간 지역을 새로 정할지, 서비스 주체 권한 주기와 비밀값 `ALERT_EMAIL`, 첫 운영 배포 푸시. 멈춤과 다시 켜기 시험은 첫 태그 작업인 과제 15의 `cherry_refresh` 배포 뒤에 한다
+- 2026-09-30 개발용 차단 작업은 가격 표가 0행이라 가격 없는 사용량 3건으로 실패했다. 새 계정이라 가격 표가 늦게 들어오는 것으로 본다. 다음 날 `SELECT count(*) FROM system.billing.list_prices`를 다시 보고, 행이 생기면 개발용 차단 작업을 다시 돌려 성공을 확인한 뒤 첫 운영 배포를 푸시한다
 - 2026-09-30 기존 작업 공간의 모델로 가기로 했다. Claude는 이 계정에서 쓸 수 없었다. 서울 작업 공간은 쓰지 않으니 사용자가 계정 콘솔에서 지운다. `ai_query`는 `system.ai.<이름>`을 그대로 받는다
 - 2026-09-30 과제 14 수집 워크플로 `.github/workflows/collect.yml`을 위험 검토 뒤 커밋했다. 푸시와 수동 실행은 첫 운영 배포 뒤에 한다
 - 2026-09-30 과제 15, 16 파일을 썼다. `pipeline/resources/ingest.yml`, `refresh.yml`, `pipeline/src/ingest.py`, `documents.py`, `changes.py`. 아직 커밋하지 않았다. 사용자가 개발용으로 배포하고 plan.md 과제 15, 16의 단계대로 시험한 뒤 커밋한다. 비교 규칙 `text.py`, 목록 비교 `lists.py`, 목록 카드사 현대, 하나, KB는 커밋했다. 카드 이름을 뽑을 모델 `list_model`은 모델이 정해지면 넣는다
