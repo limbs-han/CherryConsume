@@ -197,7 +197,7 @@ uvx ruff check backend && uvx ruff format --check backend
 
 기대: 모두 통과. 카탈로그 오류 0, 경고 0.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/catalog backend/tests/catalog
@@ -219,7 +219,7 @@ git commit -m "feat: 혜택 근거 문장 칸과 제한 없음 null 보존 추�
 **Interfaces:**
 - Produces: `lines(text) -> list[str]`, `fingerprint(text) -> str`, `changed_lines(old, new) -> tuple[list[str], list[str]]`, `html_text(html) -> str`, `parsed_text(parsed: dict) -> str`, `document_text(content: bytes, content_type: str, parsed: dict | None = None) -> str`
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/pipeline/__init__.py`는 빈 파일이다. `backend/tests/pipeline/conftest.py`:
 
@@ -293,7 +293,7 @@ def test_pdf_uses_parse_result_and_keeps_table_rows():
         document_text(b"%PDF-1.7 ...", "application/pdf")
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_text.py
@@ -301,7 +301,7 @@ uv run --project backend pytest -q backend/tests/pipeline/test_text.py
 
 기대: `cherry_core.pipeline`이 없어 실패한다.
 
-- [ ] **3단계: 코드를 쓴다**
+- [x] **3단계: 코드를 쓴다**
 
 `backend/cherry_core/pipeline/__init__.py`:
 
@@ -412,7 +412,7 @@ def document_text(content: bytes, content_type: str, parsed: dict | None = None)
     return html_text(text)
 ```
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/pipeline/test_text.py
@@ -420,12 +420,14 @@ uv run --project backend pytest -q backend/tests/pipeline/test_text.py
 
 기대: 9개 통과.
 
-- [ ] **5단계: 커밋 지점**
+- [x] **5단계: 커밋 지점**
 
 ```bash
 git add backend/cherry_core/pipeline backend/tests/pipeline
 git commit -m "feat: 원문 글 뽑기와 본문 지문 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 9개가 모듈이 없어 먼저 실패하고 코드를 넣은 뒤 통과했다. 전체 469개 통과, ruff 통과.
 
 ---
 
