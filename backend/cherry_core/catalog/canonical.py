@@ -148,6 +148,7 @@ BENEFIT_ORDER = [
     "key",
     "title",
     "source",
+    "evidence",
     "target",
     "when",
     "area",

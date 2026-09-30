@@ -118,7 +118,7 @@ Databricks 안의 이름이다. 카탈로그는 `cherry`다. 개발용으로 배
 **Interfaces:**
 - Produces: `Benefit.evidence: list[str]`, 기본값 `[]`. 빈 글자는 받지 않는다. 고정 형식에서 `source` 바로 뒤에 온다.
 
-- [ ] **1단계: 실패하는 테스트를 쓴다**
+- [x] **1단계: 실패하는 테스트를 쓴다**
 
 `backend/tests/catalog/test_models.py` 맨 위 가져오기에 `Benefit`을 더한다.
 
@@ -150,7 +150,7 @@ def test_evidence_comes_after_source():
     assert list(yaml.safe_load(canonical_text(b))) == ["key", "source", "evidence", "reward"]
 ```
 
-- [ ] **2단계: 실패를 확인한다**
+- [x] **2단계: 실패를 확인한다**
 
 ```bash
 uv run --project backend pytest -q backend/tests/catalog
@@ -158,7 +158,7 @@ uv run --project backend pytest -q backend/tests/catalog
 
 기대: 새 테스트 3개가 실패한다. 근거 문장은 extra 칸이라 거부되고, null은 사라지고, 순서가 다르다.
 
-- [ ] **3단계: 모델을 고친다**
+- [x] **3단계: 모델을 고친다**
 
 `models.py`의 pydantic 가져오기에 `model_serializer`를 더한다.
 
@@ -187,7 +187,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_valid
 
 `canonical.py`의 `BENEFIT_ORDER`에서 `"source",` 다음 줄에 `"evidence",`를 더한다.
 
-- [ ] **4단계: 통과를 확인한다**
+- [x] **4단계: 통과를 확인한다**
 
 ```bash
 uv run --project backend pytest -q
@@ -203,6 +203,8 @@ uvx ruff check backend && uvx ruff format --check backend
 git add backend/cherry_core/catalog backend/tests/catalog
 git commit -m "feat: 혜택 근거 문장 칸과 제한 없음 null 보존 추가" -m "작업 003"
 ```
+
+2026-09-30 실행 결과: 새 테스트 3개가 먼저 실패하고 고친 뒤 통과했다. 전체 460개 통과, 카탈로그 오류 0, ruff 통과. 작업 004에서 더한 `test_mockup.py`가 ruff 형식에 맞지 않아 형식만 맞췄다.
 
 ---
 

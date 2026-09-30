@@ -6,7 +6,7 @@ from datetime import date
 from itertools import pairwise
 from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 Key = Annotated[str, Field(pattern=r"^[a-z0-9][a-z0-9_-]*$")]
 Money = Annotated[int, Field(strict=True, ge=0)]
@@ -158,6 +158,15 @@ class Adjust(Base):
             raise ValueError("amount, count, base, multiply, add 중 하나는 쓴다. null은 제한 없음이다")
         return self
 
+    @model_serializer(mode="wrap")
+    def keep_null_limit(self, handler: Any) -> dict:
+        """null은 제한 없음이라 기본값을 빼고 저장할 때도 적어 둔 null은 남긴다."""
+        data = handler(self)
+        for name in ("amount", "count", "base"):
+            if name in self.model_fields_set and getattr(self, name) is None:
+                data[name] = None
+        return data
+
 
 class Limit(Base):
     """혜택 하나의 한도. 공유 한도를 가리키거나 직접 적는다."""
@@ -303,6 +312,7 @@ class Benefit(Base):
     key: Key
     title: str
     source: Key | None = None
+    evidence: list[Annotated[str, Field(min_length=1)]] = []
     target: Target
     when: list[Condition] = []
     area: Key | None = None

@@ -79,3 +79,8 @@ def test_number_like_strings_stay_strings_in_any_yaml_reader():
     assert "'09256'" in text
     assert "'202404150001'" in text
     assert yaml.safe_load(text)["product_codes"] == ["09256", "12-11-296-0001", "202404150001"]
+
+
+def test_evidence_comes_after_source():
+    b = {"reward": {"type": "cashback", "fixed": 1000}, "evidence": ["월 1천원 캐시백"], "source": "page", "key": "k"}
+    assert list(yaml.safe_load(canonical_text(b))) == ["key", "source", "evidence", "reward"]

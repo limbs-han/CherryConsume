@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from cherry_core.catalog.models import Adjust, Condition, Fact, Limit, Option, Reward, SharedLimit, Target
+from cherry_core.catalog.models import Adjust, Benefit, Condition, Fact, Limit, Option, Reward, SharedLimit, Target
 
 
 def test_reward_needs_exactly_one_amount_rule():
@@ -121,3 +121,16 @@ def test_choice_fact_needs_choices():
 def test_unknown_field_is_rejected():
     with pytest.raises(ValidationError, match="Extra inputs"):
         Reward.model_validate({"type": "billing_discount", "rate": 10, "rat": 5})
+
+
+def test_evidence_sentences_are_not_empty():
+    base = {"key": "k", "title": "t", "target": {"all": True}, "reward": {"type": "cashback", "rate": 1}}
+    assert Benefit.model_validate(base).evidence == []
+    assert Benefit.model_validate({**base, "evidence": ["전 가맹점 1% 캐시백"]}).evidence == ["전 가맹점 1% 캐시백"]
+    with pytest.raises(ValidationError):
+        Benefit.model_validate({**base, "evidence": [""]})
+
+
+def test_null_limit_survives_dump_without_defaults():
+    limit = Limit(per="month", amount=10000, adjust=[{"when": {"region": "overseas"}, "amount": None}])
+    assert limit.model_dump(exclude_defaults=True)["adjust"] == [{"when": {"region": "overseas"}, "amount": None}]
