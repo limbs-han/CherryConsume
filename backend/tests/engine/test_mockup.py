@@ -132,6 +132,14 @@ def test_9_starbucks_recommendation(home):
     assert rows[0].counted
 
 
+
+def test_9b_naver_pay_conditional(home):
+    # 5b 추천 결과의 3위 IBK. 스타벅스 1만원을 네이버페이로 내면 10% 1,000P라, 실물카드 기본 0.2% 20원보다 980원 더
+    eng, cards, _, saved = home
+    [rows] = eng.recommend(list(cards.values()), saved, [Query(merchant="starbucks")], NOW)
+    ibk = next(r for r in rows if r.card_id == "mock-ibk")
+    assert [(c.benefit, c.needs, c.extra) for c in ibk.conditional] == [("npay-10", {"payment_method": "naver_pay"}, 980)]
+
 def test_10_import_preview_august():
     # 12쪽 8월 가져오기 미리보기. 스타벅스 6,100원 610원, 쿠팡 24,900원 혜택 없음, 자동차세 실적 제외
     eng = Engine.from_dir(ROOT)

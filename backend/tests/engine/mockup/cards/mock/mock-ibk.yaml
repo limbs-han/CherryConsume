@@ -37,3 +37,12 @@ revisions:
         limits:
           - {shared: integrated}
         tiers: {from: 200000}
+      - key: npay-10
+        title: 네이버페이 결제 10% 적립
+        target: {all: true}
+        when:
+          - payment: [naver_pay]
+        reward: {type: points, program: mock_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+        tiers: {from: 200000}
