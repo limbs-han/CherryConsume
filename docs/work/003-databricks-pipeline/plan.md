@@ -2074,7 +2074,7 @@ cd pipeline && databricks bundle deploy -t dev && databricks bundle run -t dev c
 
 기대: 출력에 합산 시작일이 가입일이고 한도 400이다. 청구 기록이 들어왔는데 가격 표가 비어 있으면 "가격을 찾지 못한 사용량"으로 실패하고, 그때 작업 공간의 웨어하우스와 앱이 모두 꺼진다. 운영 쪽 것도 포함된다.
 
-2026-09-30 사용자 실행 결과: 합산 시작일 2026-09-30, 한도 400달러로 맞게 잡혔다. 그러나 청구 기록에 사용량 3건이 먼저 들어오고 가격 표 `system.billing.list_prices`는 0행이라 가격 없는 사용량 3건으로 실패했다. 상품은 모두 `PREMIUM_SERVERLESS_REAL_TIME_INFERENCE_US_EAST_OHIO`, 합계 약 0.59 DBU로 `ai_parse_document`를 부른 몫이다. 설계대로 멈추고 실패로 알렸다. 배포 때 wheel 이름에 시각이 붙어 `dynamic_version`이 판 번호를 바꾸는 것도 확인했다. 가격 표가 들어온 뒤 다시 돌려 성공을 확인하고, 그 전에는 운영 배포를 하지 않는다.
+2026-09-30 사용자 실행 결과: 합산 시작일 2026-09-30, 한도 400달러로 맞게 잡혔다. 그러나 청구 기록에 사용량 3건이 먼저 들어오고 가격 표 `system.billing.list_prices`는 0행이라 가격 없는 사용량 3건으로 실패했다. 상품은 모두 `PREMIUM_SERVERLESS_REAL_TIME_INFERENCE_US_EAST_OHIO`, 합계 약 0.59 DBU로 `ai_parse_document`를 부른 몫이다. 설계대로 멈추고 실패로 알렸다. 배포 때 wheel 이름에 시각이 붙어 `dynamic_version`이 판 번호를 바꾸는 것도 확인했다. 가격 표가 들어온 뒤 다시 돌려 성공을 확인하고, 그 전에는 운영 배포를 하지 않는다. 실패 알림 메일이 사용자 로그인 메일로 왔다. 개발 대상의 `alert_email`이 로그인 메일로 풀리는 것을 확인했다.
 
 - [ ] **3단계: `risk-reviewer`로 검토한다**
 
