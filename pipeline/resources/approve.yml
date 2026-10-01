@@ -1,0 +1,57 @@
+# 사람이 승인한 카탈로그 파일을 골드에 넣는 작업. 작업 003 과제 20의 승인 부분, 설계 4절 7번. 코드는 src/approve.py
+# 검수 앱이 생기기 전에는 사람이 바뀐 파일을 incoming 볼륨 <이름>/catalog/에 올리고 돌린다. docs/databricks.md "손으로 승인하기"
+# 예약과 트리거가 없고 모델을 부르지 않아 비용 차단 태그를 붙이지 않는다
+resources:
+  jobs:
+    cherry_approve:
+      name: cherry_approve
+      max_concurrent_runs: 1
+      email_notifications:
+        on_failure: ["${var.alert_email}"]
+      parameters:
+        - name: incoming
+          default: ""
+        - name: label
+          default: ""
+        - name: subject
+          default: ""
+        - name: reviewer
+          default: ""
+        - name: note
+          default: ""
+        - name: expect_files
+          default: ""
+      tasks:
+        - task_key: approve
+          # 서버리스가 저절로 다시 돌리지 않게 한다. 끊긴 승인은 사람이 같은 매개변수로 다시 돌려 남은 단계를 한다
+          disable_auto_optimization: true
+          spark_python_task:
+            python_file: ../src/approve.py
+            parameters:
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
+              - "--incoming"
+              - "{{job.parameters.incoming}}"
+              - "--label"
+              - "{{job.parameters.label}}"
+              - "--subject"
+              - "{{job.parameters.subject}}"
+              - "--reviewer"
+              - "{{job.parameters.reviewer}}"
+              - "--note"
+              - "{{job.parameters.note}}"
+              - "--expect-files"
+              - "{{job.parameters.expect_files}}"
+              # {{job.run_id}}는 실행할 때 Databricks가 이 실행의 번호로 바꾼다
+              - "--run-id"
+              - "{{job.run_id}}"
+          environment_key: default
+          timeout_seconds: 900
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../../backend/dist/*.whl

@@ -154,7 +154,8 @@ jobs:
           h=${DATABRICKS_HOST#https://}; echo "::add-mask::${h%/}"
           for f in $OK; do
             [[ "$f" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || exit 1
-            databricks fs cp -r "dbfs:$EXPORT/pending/$f" "dbfs:$EXPORT/done/$f" > /dev/null
+            # 옮기다 끊긴 폴더는 done/에 일부가 있다. 내용이 같아 덮어쓴다
+            databricks fs cp -r "dbfs:$EXPORT/pending/$f" "dbfs:$EXPORT/done/$f" --overwrite > /dev/null
             databricks fs rm -r "dbfs:$EXPORT/pending/$f"
           done
       - name: 커밋하지 못한 폴더가 있으면 실패로 끝내기

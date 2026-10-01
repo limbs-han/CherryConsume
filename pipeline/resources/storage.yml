@@ -30,3 +30,10 @@ resources:
       name: export
       volume_type: MANAGED
       comment: 승인되어 저장소로 내보낼 YAML
+    incoming:
+      catalog_name: cherry
+      schema_name: ${resources.schemas.gold.name}
+      name: incoming
+      volume_type: MANAGED
+      # 사람에게는 이 볼륨 쓰기만 준다. export 볼륨 쓰기는 서비스 주체만 가져 사람이 pending/에 직접 넣지 못하게 한다
+      comment: 손으로 승인할 카탈로그 파일. cherry_approve가 읽는다
