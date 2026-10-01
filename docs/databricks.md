@@ -171,7 +171,7 @@ GitHub 저장소 비밀값은 Actions가 실행될 때만 꺼내 쓰는 값이�
 - 급하게 풀어야 하면 이 순서로 한다.
   1. `cherry_cost_guard`의 예약을 화면에서 멈춘다. 그래야 6시간 뒤 다시 멈추지 않는다.
   2. 멈춘 작업마다 태그 `cherry_guard_paused`를 지우고, 예약이나 트리거를 다시 켠다.
-  3. 원인을 고친 뒤 GitHub **Actions**의 `deploy` 워크플로를 수동으로 돌린다. 배포는 `cherry_cost_guard`의 예약도 파일대로 다시 켠다.
+  3. 원인을 고친 뒤 GitHub **Actions**의 `deploy` 워크플로를 수동으로 돌린다. 배포는 `cherry_cost_guard`의 예약도 파일대로 다시 켠다. 배포가 끝나면 화면에서 그 예약이 Paused가 아닌지 본다. 화면에서만 바꾼 설정을 배포가 되돌리는지는 아직 시험하지 않았다.
 - 운영 작업을 손으로 돌릴 때는 PC의 `databricks bundle run -t prod`를 쓰지 않는다. 운영 배포 경로를 사람 계정으로는 찾지 못해 오류로 멈춘다. 화면의 작업 실행에서 매개변수를 바꿔 돌리고, `--limit`을 넣을 때는 `--signup`과 `--target`도 함께 넣는다.
 
 ### 내보내기 폴더가 계속 실패할 때
