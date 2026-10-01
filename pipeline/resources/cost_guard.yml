@@ -5,10 +5,10 @@ resources:
   jobs:
     cherry_cost_guard:
       name: cherry_cost_guard
+      # pause_status를 여기 적으면 개발용에서도 예약이 켜진다. 운영용에서만 databricks.yml이 켠다
       schedule:
         quartz_cron_expression: "0 0 */6 * * ?"
         timezone_id: Asia/Seoul
-        pause_status: UNPAUSED
       timeout_seconds: 600
       max_concurrent_runs: 1
       # 6시간 예약 실행과 배포 뒤 실행이 겹치면 건너뛰지 않고 기다렸다 돈다
