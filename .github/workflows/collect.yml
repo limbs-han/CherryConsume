@@ -79,6 +79,8 @@ jobs:
             [ "$name" = manifests ] && continue
             databricks fs cp -r "${d%/}" "$dest/$name" --overwrite > /dev/null
           done
+          # 파일 하나를 올리는 cp는 없는 폴더를 만들지 않는다. 첫 수집에서 manifests/가 없어 실패했다
+          databricks fs mkdir "$dest/manifests"
           for f in raw/manifests/*.jsonl; do
             databricks fs cp "$f" "$dest/manifests/$(basename "$f")" --overwrite > /dev/null
             # 폴더째 한 단계 더 들어가 올라가지 않았는지 이번 목록 파일과 그 첫 원문의 자리로 확인한다
