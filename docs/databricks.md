@@ -185,6 +185,7 @@ GitHub 저장소 비밀값은 Actions가 실행될 때만 꺼내 쓰는 값이�
 
 GitHub 서버의 접속을 막는 카드사는 `collect` 워크플로가 `--exclude`로 빼고, 사용자가 이 PC에서 받아 운영 볼륨에 올린다. 설계 4절 2번. 2026-10-01 첫 수집에서 정했다. 지금은 신한이다. 뺀 카드사 목록은 `.github/workflows/collect.yml`의 `--exclude`가 기준이다. 거기에 카드사를 더하면 아래 받기 명령에도 `--issuer`를 하나 더 붙인다. 빠뜨리면 그 카드사는 어디서도 받지 않는다.
 - 잊지 않게: 뺀 카드사는 받기를 잊어도 실패 메일이 오지 않는다. 휴대폰 달력에 매달 2일과 16일 반복 알림을 둔다.
+- 처음 한 번: 운영 스키마는 서비스 주체가 만들어 사람 계정에는 권한이 없다. 2026-10-01 첫 올리기가 `User does not have USE SCHEMA privilege on SCHEMA 'cherry.bronze'`로 멈췄다. **SQL Editor**에서 ``GRANT USE SCHEMA ON SCHEMA cherry.bronze TO `cherry-admins`;``와 ``GRANT READ VOLUME, WRITE VOLUME ON VOLUME cherry.bronze.raw TO `cherry-admins`;``를 돌린다. 원문 볼륨 하나만 연다.
 - 언제: `collect`가 도는 매달 2일과 16일. 신한은 14일마다 받는 카드사라 두 번 다 받는다.
 - 어디서: PowerShell에서 저장소 맨 위 폴더 `cherryConsume`. 받은 원문은 저장소 밖 임시 폴더에 두어 커밋에 섞이지 않게 한다.
 - 받기: 아래 두 줄을 차례로 돌린다. 첫 줄은 이번에 쓸 폴더 이름을 정한다. 둘째 줄은 신한 원문을 받는다. 1분쯤 걸리고 마지막 줄이 `저장 10, robots.txt로 건너뜀 0, 실패 0, 뺌 0`처럼 실패 0이면 성공이다. 개수는 카드가 늘면 달라진다.
