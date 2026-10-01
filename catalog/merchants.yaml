@@ -70,11 +70,6 @@
   name: 쿠팡이츠
   category: delivery_app
   aliases: [쿠팡이츠, COUPANG EATS]
-- key: coupang_play
-  name: 쿠팡플레이
-  billing: subscription
-  category: streaming
-  aliases: [쿠팡플레이, COUPANG PLAY]
 - key: coupang_wow
   name: 쿠팡 와우 멤버십
   billing: subscription
@@ -434,10 +429,6 @@
   name: TOPIK 접수
   category: education.exam
   aliases: [토픽, TOPIK, 한국어능력시험]
-- key: traders
-  name: 이마트 트레이더스
-  category: grocery_mart
-  aliases: [이마트 트레이더스, 트레이더스, EMART TRADERS]
 - key: tving
   name: 티빙
   billing: subscription
