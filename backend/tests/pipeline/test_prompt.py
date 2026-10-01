@@ -4,17 +4,24 @@ import json
 from datetime import date
 
 from cherry_core.catalog.load import load_catalog
-from cherry_core.pipeline.prompt import build_prompt, catalog_codes, parse_answer, response_schema
+from cherry_core.pipeline.prompt import RESPONSE_FORMAT, answer_schema, build_prompt, catalog_codes, parse_answer
 from tests.catalog.conftest import FILES
 
 
 def test_schema_is_json_with_rules_and_shared_defs():
-    fmt = response_schema()
-    schema = fmt["json_schema"]["schema"]
-    json.dumps(fmt)
+    schema = answer_schema()
+    json.dumps(schema)
     assert {"tiers", "spend", "benefits"} <= set(schema["properties"]["rules"]["properties"])
     assert "$defs" not in schema["properties"]["rules"]
     assert {"Benefit", "Condition", "OpenQuestion"} <= set(schema["$defs"])
+
+
+def test_answer_is_json_only_and_schema_goes_in_the_prompt(make_catalog):
+    # 2026-10-01 구조화 출력이 $ref, anyOf, 64개 넘는 키를 받지 않아 JSON만 강제하고 형식은 글로 준다
+    assert json.loads(RESPONSE_FORMAT) == {"type": "json_object"}
+    card = FILES["cards/shinhan/shinhan-test.yaml"]
+    prompt = build_prompt(card, {}, [], catalog_codes(load_catalog(make_catalog())))
+    assert json.dumps(answer_schema(), ensure_ascii=False, separators=(",", ":")) in prompt
 
 
 def test_prompt_has_current_keys_codes_and_documents(make_catalog):

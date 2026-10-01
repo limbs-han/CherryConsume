@@ -1,5 +1,5 @@
-# 새 목록 파일이 오면 도는 작업. 작업 003 과제 15와 16. 과제 18의 추출은 그 과제에서 변경 감지 뒤에 더한다
-# 순서: 원문 적재, 글 뽑기, 변경 감지, 비용 차단. cherry_guard 태그가 있어 비용 차단 작업이 한도를 넘기면 멈춘다
+# 새 목록 파일이 오면 도는 작업. 작업 003 과제 15, 16, 18
+# 순서: 원문 적재, 글 뽑기, 변경 감지, 추출, 비용 차단. cherry_guard 태그가 있어 비용 차단 작업이 한도를 넘기면 멈춘다
 # 실행 시간 제한은 설계 4절 8번의 시작값이다. 과제 15와 18에서 잰 시간의 두 배로 고친다
 variables:
   list_model:
@@ -54,9 +54,28 @@ resources:
               - "${var.list_issuers}"
           environment_key: default
           timeout_seconds: 600
-        - task_key: guard
+        - task_key: extract
           depends_on:
             - task_key: changes
+          # 2026-10-01 과제 18. extract_model이 비면 추출하지 않고 끝난다. 과제 19에서 모델을 고른 뒤 넣는다
+          # 다시 돌면 모델 요금이 두 번 나와 자동 재시도를 끈다
+          disable_auto_optimization: true
+          spark_python_task:
+            python_file: ../src/extract.py
+            parameters:
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
+              - "--model"
+              - "${var.extract_model}"
+              - "--mode"
+              - "changes"
+          environment_key: default
+          timeout_seconds: 3600
+        - task_key: guard
+          depends_on:
+            - task_key: extract
           # 앞 단계가 실패해도 비용 차단 확인은 건너뛰지 않는다
           # 늘 마지막 단계로 둔다. 자기 실행은 취소하지 않아서, 이 단계와 함께 도는 단계가 있으면 한도를 넘어도 끝까지 돈다
           run_if: ALL_DONE

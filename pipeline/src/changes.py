@@ -75,7 +75,7 @@ def main(argv: list[str] | None = None) -> None:
         help="목록을 볼 카드사 id를 쉼표로 잇는다. 비면 목록은 보지 않는다",
     )
     args = ap.parse_args(argv)
-    if args.model and not MODEL.match(args.model):
+    if args.model and not MODEL.fullmatch(args.model):
         raise SystemExit("모델 이름에 쓸 수 없는 글자가 있다")
     spark = SparkSession.builder.getOrCreate()
     s = f"cherry.{args.silver}"

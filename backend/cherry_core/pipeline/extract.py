@@ -1,0 +1,74 @@
+"""추출 답 하나를 초안과 검수 대기로 바꾼다. 설계 1절 4단계와 5단계. Databricks의 extract.py가 부른다.
+
+답은 parse_answer, make_draft, check_draft 순서로 처리한다. 쓸 수 없는 답은 버리지 않고 사람이 정할 것으로 남긴다.
+카드가 바뀌었다는 신호를 아무도 모르게 되기 때문이다. 검사에 걸린 초안도 걸린 이유와 함께 남긴다.
+모델 호출이 실패한 것은 답이 아니라서 사람에게 넘기지 않고 다음 실행에서 다시 추출한다.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from datetime import date
+
+from pydantic import ValidationError
+
+from cherry_core.catalog.canonical import canonical_text
+from cherry_core.pipeline.draft import check_draft, make_draft
+from cherry_core.pipeline.prompt import parse_answer
+
+QUEUED = ("draft", "needs_human")  # 검수 대기에 오르는 결과
+
+
+@dataclass(frozen=True)
+class Outcome:
+    status: str  # no_change, draft, needs_human, model_error
+    reason: str | None = None
+    draft_yaml: str | None = None
+    problems: list[str] = field(default_factory=list)
+
+
+def process_answer(
+    files: dict[str, str],
+    path: str,
+    card: dict,
+    issuer: dict | None,
+    response: str | None,
+    error: str | None,
+    fetched: date,
+) -> Outcome:
+    """files는 카탈로그 파일 전체, path는 이 카드 파일 경로, response와 error는 ai_query의 failOnError false 결과다."""
+    if error or response is None:
+        return Outcome("model_error", f"모델 호출 실패: {error}")
+    try:
+        draft = make_draft(card, issuer, parse_answer(response), fetched)
+        if draft is None:
+            return Outcome("no_change")
+        return Outcome("draft", draft_yaml=canonical_text(draft), problems=check_draft(files, path, draft))
+    except ValidationError as e:
+        where = ", ".join(".".join(map(str, x["loc"])) for x in e.errors()[:3])
+        return Outcome("needs_human", f"규칙 형식 오류 {e.error_count()}곳: {where}")
+    except Exception as e:  # noqa: BLE001 모델의 답은 어떤 모양이든 올 수 있다. 무엇이든 사람이 본다
+        return Outcome("needs_human", f"답을 초안으로 바꾸지 못했다: {type(e).__name__}: {e}"[:500])
+
+
+def pending_changes(changes: list[tuple[str, str]], drafts: list[tuple[list[str], str]]) -> dict[str, list[str]]:
+    """카드마다 아직 추출하지 않은 변경 행의 새 경로.
+
+    changes는 silver.changes의 (카드, 새 경로), drafts는 changes 모드 silver.drafts의 (쓴 변경 경로, 결과)다.
+    모델 호출이 실패한 초안이 쓴 변경은 끝나지 않은 것으로 본다.
+    """
+    done = {p for paths, status in drafts if status != "model_error" for p in paths or []}
+    out: dict[str, list[str]] = {}
+    for card_id, path in changes:
+        if path not in done and path not in out.get(card_id, []):
+            out.setdefault(card_id, []).append(path)
+    return out
+
+
+def unqueued(drafts: list[tuple[str, str]], queued: set[str]) -> list[str]:
+    """검수 대기에 올라야 하는데 빠진 초안. drafts는 changes 모드의 (초안 번호, 결과)다.
+
+    초안을 쓴 뒤 검수 대기를 쓰기 전에 실행이 끊기면 그 변경은 끝난 것으로 남아 다시 추출되지 않는다.
+    다음 실행이 시작할 때 이 목록을 검수 대기에 다시 올린다. 모델 요금은 들지 않는다.
+    """
+    return [d for d, status in drafts if status in QUEUED and d not in queued]

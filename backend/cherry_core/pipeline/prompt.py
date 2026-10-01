@@ -9,7 +9,9 @@ from typing import Any
 from cherry_core.catalog.load import Catalog
 from cherry_core.catalog.models import OpenQuestion, Rules
 
-VERSION = "1"
+VERSION = "2"  # 2026-10-01 답 형식을 프롬프트 글로 넣었다
+# Databricks 구조화 출력은 $ref, anyOf, pattern과 64개 넘는 키를 받지 않아 JSON만 강제한다. 설계 1절 4단계
+RESPONSE_FORMAT = json.dumps({"type": "json_object"})
 INSTRUCTIONS = """\
 너는 한국 카드사의 공식 원문에서 카드 혜택 규칙을 옮긴다. 답은 주어진 JSON 형식으로만 쓴다.
 - 원문에 적힌 것만 옮긴다. 원문으로 확인하지 못한 값은 만들지 않고 open_questions에 무엇을 확인해야 하는지 적는다.
@@ -23,8 +25,8 @@ INSTRUCTIONS = """\
 """
 
 
-def response_schema() -> dict:
-    """ai_query의 responseFormat. 모델이 바뀌면 답 형식도 따라 바뀐다."""
+def answer_schema() -> dict:
+    """답의 JSON 스키마. 프롬프트에 글로 넣는다. 카탈로그 모델이 바뀌면 답 형식도 따라 바뀐다."""
     rules = Rules.model_json_schema(by_alias=True)
     defs = {**rules.pop("$defs", {}), "OpenQuestion": OpenQuestion.model_json_schema()}
     schema = {
@@ -38,7 +40,7 @@ def response_schema() -> dict:
         "required": ["rules", "effective_from", "source", "open_questions"],
         "$defs": defs,
     }
-    return {"type": "json_schema", "json_schema": {"name": "card_rules", "schema": schema, "strict": True}}
+    return schema
 
 
 def catalog_codes(cat: Catalog) -> dict[str, list[str]]:
@@ -58,6 +60,8 @@ def build_prompt(card: dict, current: dict, docs: list[tuple[str, str]], codes: 
         f"카드: {card['name']} ({card['id']})",
         "지금 혜택: " + json.dumps(benefits, ensure_ascii=False),
         *(f"{name}: {', '.join(keys)}" for name, keys in codes.items()),
+        "답 형식. 아래 JSON 스키마를 따르는 JSON 객체 하나로만 답한다.\n"
+        + json.dumps(answer_schema(), ensure_ascii=False, separators=(",", ":")),
         *(f'<원문 id="{sid}">\n{text}\n</원문>' for sid, text in docs),
     ]
     return "\n\n".join(parts)
@@ -74,7 +78,7 @@ def _drop_nulls(node: Any) -> Any:
 def parse_answer(text: str) -> dict:
     """ai_query의 답을 make_draft가 받는 모양으로 바꾼다.
 
-    답 형식을 엄격하게 두면 모델이 모르는 칸에도 null을 적는다. 그래서 규칙 안의 null은 안 적은 것으로 본다.
+    답 형식에 칸이 모두 보이면 모델이 모르는 칸에도 null을 적는다. 그래서 규칙 안의 null은 안 적은 것으로 본다.
     한도 조정의 '제한 없음' null은 이 때문에 LLM이 적을 수 없고, 검수에서 사람이 적는다.
     """
     data = json.loads(text)
