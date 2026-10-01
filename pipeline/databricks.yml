@@ -38,3 +38,6 @@ targets:
         cherry_cost_guard:
           schedule:
             pause_status: UNPAUSED
+        cherry_refresh:
+          trigger:
+            pause_status: UNPAUSED

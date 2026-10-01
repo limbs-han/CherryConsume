@@ -1,0 +1,72 @@
+# 새 목록 파일이 오면 도는 작업. 작업 003 과제 15와 16. 과제 18의 추출은 그 과제에서 변경 감지 뒤에 더한다
+# 순서: 원문 적재, 글 뽑기, 변경 감지, 비용 차단. cherry_guard 태그가 있어 비용 차단 작업이 한도를 넘기면 멈춘다
+# 실행 시간 제한은 설계 4절 8번의 시작값이다. 과제 15와 18에서 잰 시간의 두 배로 고친다
+variables:
+  list_model:
+    description: 카드사 목록에서 카드 이름을 뽑을 모델. 비면 목록은 보지 않는다. 과제 19에서 모델을 고른 뒤 다시 본다
+    default: "system.ai.gpt-oss-120b"
+  list_issuers:
+    description: 목록을 볼 카드사 id를 쉼표로 잇는다. 설계 1절 3단계. 2026-09-30 사용자가 정했다
+    default: "hyundai,hana,kb"
+
+resources:
+  jobs:
+    cherry_refresh:
+      name: cherry_refresh
+      tags:
+        cherry_guard: ${bundle.target}
+      # pause_status를 여기 적으면 개발용에서도 트리거가 켜진다. 운영용에서만 databricks.yml이 켠다
+      trigger:
+        file_arrival:
+          url: /Volumes/cherry/${resources.schemas.bronze.name}/raw/manifests/
+          min_time_between_triggers_seconds: 3600
+          wait_after_last_change_seconds: 300
+      max_concurrent_runs: 1
+      # 단계 하나라도 실패하면 알린다. 원문이 없거나 권한이 없거나 모델 호출이 실패한 경우다
+      email_notifications:
+        on_failure: ["${var.alert_email}"]
+      tasks:
+        - task_key: ingest
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.cherry_ingest.id}
+          timeout_seconds: 1800
+        - task_key: documents
+          depends_on:
+            - task_key: ingest
+          spark_python_task:
+            python_file: ../src/documents.py
+            parameters: ["--bronze", "${resources.schemas.bronze.name}", "--silver", "${resources.schemas.silver.name}"]
+          environment_key: default
+          timeout_seconds: 1800
+        - task_key: changes
+          depends_on:
+            - task_key: documents
+          spark_python_task:
+            python_file: ../src/changes.py
+            parameters:
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
+              - "--model"
+              - "${var.list_model}"
+              - "--list-issuers"
+              - "${var.list_issuers}"
+          environment_key: default
+          timeout_seconds: 600
+        - task_key: guard
+          depends_on:
+            - task_key: changes
+          # 앞 단계가 실패해도 비용 차단 확인은 건너뛰지 않는다
+          run_if: ALL_DONE
+          spark_python_task:
+            python_file: ../src/cost_guard.py
+            parameters: ["--signup", "${var.signup_date}", "--target", "${bundle.target}"]
+          environment_key: default
+          timeout_seconds: 600
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../../backend/dist/*.whl
