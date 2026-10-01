@@ -1,0 +1,15 @@
+# 개발과 테스트용 Postgres. 작업 005 설계 1절
+# 다른 Postgres와 부딪히지 않게 PC의 5433번에 연다. 운영 DB의 비밀번호와 섞이지 않게 개발용 값만 쓴다
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: cherry
+      POSTGRES_PASSWORD: cherry
+      POSTGRES_DB: cherry
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
