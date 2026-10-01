@@ -154,6 +154,7 @@ GitHub 저장소 비밀값은 Actions가 실행될 때만 꺼내 쓰는 값이�
 - 성공하면 보이는 것: **Budgets** 목록에 `cherry-monthly`가 있다.
 - Claude에게 붙여 줄 것: 목록 화면에 보이는 예산 이름과 알림 금액 세 개.
 - 알아 둘 것: 익스프레스 설정 계정에서 계정 콘솔로 가는 길은 공식 문서에 없다. 가입한 날 작업 공간 화면에서 같이 찾는다.
+- SQL 웨어하우스: 2026-10-01 첫 청구 기록에서 하루 14달러 가운데 SQL 웨어하우스가 96%였다. **SQL Warehouses**에서 쓰는 웨어하우스의 **Cluster size**를 **2X-Small**, **Auto stop**을 화면 최솟값인 5분으로 둔다. 2X-Small은 한 시간 4 DBU, 약 2.8달러다. 조회가 끝나도 자동 중지 시간만큼 켜져 있고 그동안도 돈이 나간다.
 
 ### 6. 체험이 끝나는 날 결제 정보 등록
 
@@ -219,6 +220,19 @@ Get-ChildItem "$raw\manifests\*.jsonl" | ForEach-Object { databricks fs cp $_.Fu
 
 - 성공하면 보이는 것: `databricks fs ls dbfs:/Volumes/cherry/bronze/raw/manifests`에 방금 받은 `manifest-날짜T시각Z.jsonl`이 보인다. 화면의 **Catalog**에서 `cherry` → `bronze` → `raw` 볼륨을 열어도 된다.
 - 실패가 있으면: 실패한 줄의 카드사와 오류 종류를 Claude에게 붙여 준다. 원문 내용은 찍히지 않는다.
+
+### 골드 첫 적재
+
+저장소의 `catalog/`를 골드 표에 처음 올린다. 작업 003 과제 17, 설계 4절 1번. 운영에서 이 작업이 끝나면 카탈로그의 원본은 골드이고, 그 뒤로 `catalog/`를 직접 고치지 않는다.
+- 만드는 표: `gold.catalog_files`는 카탈로그 파일마다 한 행이다. `gold.card_revisions`는 카드 개정마다 카드사 기본값까지 합친 규칙이다. 두 표의 검수 기록 번호는 `initial`이다. `silver.golden`은 정답 예시로, 카드마다 마지막 개정의 시행일과 규칙, 처음 받은 원문 경로다.
+- 지키는 것: 작업 `cherry_seed_gold`는 쓰기 전에 올린 카탈로그의 해시를 PC 값과 맞춘다. 올리기가 끊겨 카드 파일이 빠지면 검사는 통과하고 카드만 줄기 때문이다. 골드에 카탈로그가 이미 있으면 골드는 건드리지 않고 정답 예시만 다시 만든다. 다시 쓰면 그 뒤에 승인된 개정을 저장소 판으로 덮는다.
+- 해시 받기: Claude가 PC에서 먼저 확인한다. `git status --porcelain catalog`가 비어 있고 `git rev-parse HEAD`가 `origin/master`와 같아야 한다. 그다음 `uv run --project backend python -m cherry_core.pipeline.seed catalog`가 찍는 해시 두 개를 사용자에게 준다. 작업 폴더가 저장소와 다르면 해시가 같아도 골드와 master가 다르다.
+- 올리기: 저장소 맨 위 폴더에서 `catalog-seed` 폴더를 `databricks fs rm -r`로 지운 뒤 `databricks fs cp -r catalog <볼륨>/catalog-seed --overwrite`로 올린다. 지우지 않으면 저장소에서 지운 파일이 남는다. 처음이면 지우기 오류는 무시한다. 볼륨은 개발용이 `dbfs:/Volumes/cherry/dev_<개발자 이름>_bronze/raw`, 운영용이 `dbfs:/Volumes/cherry/bronze/raw`다.
+- 돌리기: 개발용은 `pipeline` 폴더에서 `databricks bundle run cherry_seed_gold --params expect_files=<파일 해시>,expect_revisions=<개정 해시>`다. 운영용은 푸시해 배포된 뒤 화면에서 운영 `cherry_seed_gold`를 열고, 매개변수를 바꿔 실행하는 메뉴에서 두 칸에 해시를 넣어 돌린다. 사람 계정으로는 `bundle run -t prod`를 쓸 수 없다.
+- 성공하면 보이는 것: 출력 세 줄. `골드 카탈로그 파일 35개 해시 …`, `골드 카드 개정 22개 해시 …`, `정답 예시 20장, 채점 전용 5장, 첫 수집 원문이 있는 카드 15장`. 앞의 두 해시가 넣은 해시와 같으면 골드와 저장소가 같다. 원문이 있는 카드는 GitHub이 받는 12장과 PC에서 받는 신한 3장이다. 삼성, 롯데, IBK는 사람이 원문을 더할 때까지 없다. 개수는 카드가 늘면 달라진다.
+- 정답 예시 다시 만들기: 삼성처럼 사람이 원문을 `--add`로 더한 뒤 같은 해시로 다시 돌린다. 골드는 그대로이고 정답 예시만 바뀐다. 그래서 `catalog-seed`는 지우지 않고 첫 카탈로그 그대로 둔다.
+- 운영 표를 SQL로 보려면: 운영 스키마는 서비스 주체가 만들어 사람 계정은 읽지 못한다. **SQL Editor**에서 ``GRANT USE SCHEMA, SELECT ON SCHEMA cherry.gold TO `cherry-admins`;``와 ``GRANT USE SCHEMA, SELECT ON SCHEMA cherry.silver TO `cherry-admins`;``를 한 번 돌린다. 읽기만 연다.
+- 개발용에서 처음부터 다시 시험하려면: 골드 표 두 개를 SQL `DROP TABLE`로 지운 뒤 돌린다. 운영에서는 하지 않는다.
 
 ## 출처
 

@@ -2178,6 +2178,8 @@ git commit -m "deploy: 카드사 원문 수집 워크플로 추가" -m "작업 0
 
 `cherry_cost_guard`를 돌려 쓴 금액이 얼마 늘었는지 적는다. PDF 쪽수와 함께 plan.md에 남긴다.
 
+2026-10-01 첫 확인: 청구 기록에는 아직 2026-09-30 하루치만 있다. 그날 정가 합계 약 14달러 가운데 SQL 웨어하우스가 13.40달러로 96%다. 미국 작업 공간 11.47달러, 지우기로 한 서울 작업 공간 1.93달러다. 서버리스 작업 0.52달러, `ai_parse_document`가 든 AI 함수 1.183 DBU 0.08달러, 저장 공간은 0달러에 가깝다. 그날 `ai_parse_document`는 과제 12에서 하나 원더카드 상품안내장 16쪽을 두 번 읽은 것이라 한 쪽에 약 0.0025달러다. 운영 원문 중 PDF는 이 상품안내장 하나다. 카카오뱅크 설명서는 웹 페이지이고 KB 상품설명서 PDF 6개는 robots.txt가 막는다. 2026-10-01 적재 몫은 청구 기록이 들어온 뒤 같은 조회로 다시 본다.
+
 - [x] **4단계: 커밋 지점**
 
 ```bash
@@ -2246,13 +2248,25 @@ git commit -m "feat: 바뀐 원문과 카드 목록 변화 감지 추가" -m "�
 - 같은 파일로 `load_catalog`를 돌려 카드 개정마다 `gold.card_revisions`에 쓴다. 규칙은 `clean_rules`를 거친 JSON이다.
 - `silver.golden`: 카드마다 가장 최근 개정의 규칙, 첫 수집 문서 경로를 쓴다. 채점 전용 5장은 `hana-travelog-check`, `hyundai-the-green-ed4`, `kb-my-wesh`, `samsung-taptap-o`, `shinhan-cheoeum`이다. 카드사가 겹치지 않게 골랐다. 나머지 15장은 다듬기용이다.
 
+2026-10-01 정한 것. 위험 검토 12건을 거쳤다.
+- 순수 계산은 `cherry_core.pipeline.seed`에 두고 PC에서 테스트한다. `seed_gold.py`는 그 행을 표에 쓰기만 한다.
+- 표 칸: `gold.catalog_files`는 path, yaml, review_id, updated_at. `gold.card_revisions`는 card_id, issuer, effective_from, effective_from_estimated, source, rules, review_id, updated_at. `silver.golden`은 card_id, issuer, split, effective_from, rules, sources, created_at이다. rules는 `clean_rules`를 거친 JSON 글이고, 읽을 때는 `int_keys`로 구간 키를 정수로 되돌려 Rules로 비교한다. 글끼리 비교하지 않는다.
+- 사용자가 `catalog/`를 raw 볼륨 `catalog-seed/`에 올린다. 원문 적재 트리거와 Auto Loader는 `manifests/`만 봐서 영향이 없다. 정답 예시를 다시 만들 때 쓰므로 지우지 않는다.
+- 작업은 쓰기 전에 올린 카탈로그의 해시를 매개변수로 받은 PC 값과 맞춘다. 골드에 카탈로그가 있으면 골드는 건드리지 않고 정답 예시만 다시 만든다. 삼성처럼 나중에 사람이 원문을 더한 카드도 정답 예시에 넣기 위해서다.
+- 정답은 마지막 개정이다. IBK는 2027-01-01 개정이 마지막이라 정답 예시에 시행일을 둔다. 과제 19에서 첫 수집일에 적용되는 개정과 다르면 어느 쪽으로 채점할지 정한다.
+- 남은 위험: `clean_rules`가 모델 기본값과 같은 칸을 뺀다. 현대 카드사 파일의 `exclude_applied: 0`이 JSON에서 사라진다. 계산은 같지만 나중에 모델 기본값을 바꾸면 이미 쓴 개정 행이 새 기본값으로 읽힌다. 하위 프로젝트 2에서 앱 DB로 옮길 때 기본값을 채운 전체 규칙으로 넣거나 `schema_version`을 함께 둔다.
+
 - [ ] **1단계: 개발용으로 돌리고 PC 결과와 맞춘다**
 
 `gold.card_revisions`의 규칙을 받아 PC에서 `load_catalog`로 만든 결과와 비교한다. 기대: 차이 0.
 
-- [ ] **2단계: 정답 예시와 첫 수집 원문을 대조한다**
+2026-10-01 개발용 결과: 사용자가 개발용으로 돌린 출력의 카탈로그 파일 35개와 카드 개정 22개 해시가 PC의 `python -m cherry_core.pipeline.seed catalog` 값 `17589ffc…`, `f0929eda…`와 같았다. 차이 0이다.
+
+- [x] **2단계: 정답 예시와 첫 수집 원문을 대조한다**
 
 첫 수집 원문의 글에 정답 규칙의 금액과 비율이 있는지 사람이 카드마다 훑는다. 수집과 작업 001 대조 사이에 카드사가 원문을 바꾼 카드는 여기서 찾는다. 바뀐 카드는 정답을 원문에 맞추는 개정을 `card-researcher`로 만들어 검수 과정을 거친다.
+
+2026-10-01 기계 대조: 같은 날 PC에서 자동 수집 카드사 원문을 받아, 카드마다 마지막 개정의 근거 문장 `evidence`가 글에 그대로 있는지 봤다. 표의 행은 칸마다 찾았다. 받은 원문이 있는 카드 15장 모두 받은 원문의 근거 문장이 남아 있었다. 못 찾은 문장은 카카오뱅크 4개와 KB 3장 21개인데, 모두 robots.txt가 막아 받지 않는 원문인 카카오뱅크 본 사이트와 KB 상품설명서 PDF의 문장으로 본다. 하나 원더카드 상품안내장 PDF는 PC에서 pypdf로 읽어 33개 모두 찾았다. 삼성, 롯데, IBK 5장은 자동 수집 원문이 없어 대조하지 못했다. 사용자가 사람이 훑는 것을 이 기계 대조로 갈음하기로 했다. 바뀐 카드가 없어 `card-researcher` 개정은 만들지 않는다.
 
 - [ ] **3단계: 운영에서 돌린다**
 
@@ -2356,6 +2370,7 @@ git commit -m "feat: 추출 정확도 채점 작업과 모델 선택 결과 추�
 **만들 것:** Streamlit 앱 `cherry_review`. 앱이 쓰는 SQL 웨어하우스는 가장 작은 크기로 두고, 쓰지 않으면 가장 짧은 시간 안에 멈추게 한다. 설계 4절 8번.
 - 목록: `silver.queue`의 대기 건. 종류, 카드, 만든 시각.
 - 초안 한 건: 바뀐 원문 줄, 바뀐 칸의 전과 후, 검사 결과, 고칠 수 있는 YAML 칸, 승인과 반려 버튼.
+- 2026-10-01 과제 17 위험 검토에서 더했다. 카드사 파일을 승인하면 그 카드사 카드의 `gold.card_revisions`를 모두 다시 만든다. 카드사 기본값이 모든 카드의 합친 규칙에 들어가기 때문이다. 다시 만들 때 바뀌지 않은 개정 행은 원래 review_id를 그대로 둔다.
 - 승인: 고친 YAML을 `check_draft`로 다시 검사한다. 오류가 있으면 승인 버튼이 듣지 않는다. 통과하면 한 번에 다음을 한다. `silver.reviews`에 기록, `gold.catalog_files`에 MERGE, 그 카드의 `gold.card_revisions`를 다시 만듦, `cherry.gold.export/pending/<검수 번호>/`에 바뀐 파일과 `commit.json`을 씀, 대기 건을 끝남으로 바꿈.
 - 반려: `silver.reviews`에만 기록한다.
 - 새 카드와 사라진 카드: 확인만 표시한다. 새 카드 조사는 `card-researcher`로 따로 한다.
