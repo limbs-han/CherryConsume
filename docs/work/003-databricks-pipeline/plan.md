@@ -2060,7 +2060,7 @@ WHERE u.usage_date >= :start
 - `cost_guard.yml`: 작업 `cherry_cost_guard`. 6시간마다 돈다. 이 작업에는 `cherry_guard` 태그를 붙이지 않는다. 자기 자신은 멈추지 않아야 새 달에 다시 켤 수 있다. 실행 시간 제한은 10분이다. 2026-09-30 실패 알림 메일 `alert_email`과 기다림 줄 `queue`를 더했다.
 - `deploy.yml`: master에 `pipeline/**`, `backend/cherry_core/**`, `backend/pyproject.toml`이 바뀐 푸시와 수동 실행에서 돈다. 비밀값 세 개를 환경변수로 받는다. 먼저 `cherry_guard` 태그가 붙은 운영 작업 중 멈춘 것이 있는지 보고, 있으면 "차단된 달이라 배포하지 않는다"를 찍고 성공으로 끝낸다. 없으면 `databricks bundle deploy -t prod`를 돌린다. 권한은 `contents: read`다. 2026-09-30 위험 검토로 바꾼 것: 비밀값은 네 개이고 Databricks와 통하는 단계에만 넘긴다. 호스트를 가린다. 배포 전에 테스트를 돌린다. 건너뛸 때는 경고를 남긴다. `ALERT_EMAIL`이 비면 멈춘다. 수동 실행도 master에서만 된다. 배포한 뒤 차단 작업을 한 번 돌리고, 그 출력은 쓴 금액이 있어 공개 기록에 남기지 않는다.
 
-- [ ] **1단계: 사용자가 안내서 3, 4, 5단계를 한다**
+- [x] **1단계: 사용자가 안내서 3, 4, 5단계를 한다**
 
 사용자가 붙여 준 GitHub 비밀값 이름 목록에 세 이름이 모두 있으면 성공이다. 2026-09-30부터는 네 이름이다.
 
@@ -2068,7 +2068,7 @@ WHERE u.usage_date >= :start
 
 2026-09-30 사용자가 둘 다 마쳤다. `system` 카탈로그 권한은 메타스토어 관리자만 줄 수 있어, 계정 콘솔에서 그룹 `cherry-admins`를 만들어 자기 계정을 넣고 메타스토어 관리자로 정한 뒤 `GRANT` 세 줄을 실행했다. 웨어하우스 **Can manage**와 비밀값 `ALERT_EMAIL`도 더했다.
 
-- [ ] **2단계: 차단 작업을 쓰고 개발용으로 돌린다**
+- [x] **2단계: 차단 작업을 쓰고 개발용으로 돌린다**
 
 ```bash
 cd pipeline && databricks bundle deploy -t dev && databricks bundle run -t dev cherry_cost_guard
@@ -2078,11 +2078,11 @@ cd pipeline && databricks bundle deploy -t dev && databricks bundle run -t dev c
 
 2026-09-30 사용자 실행 결과: 합산 시작일 2026-09-30, 한도 400달러로 맞게 잡혔다. 그러나 청구 기록에 사용량 3건이 먼저 들어오고 가격 표 `system.billing.list_prices`는 0행이라 가격 없는 사용량 3건으로 실패했다. 상품은 모두 `PREMIUM_SERVERLESS_REAL_TIME_INFERENCE_US_EAST_OHIO`, 합계 약 0.59 DBU로 `ai_parse_document`를 부른 몫이다. 설계대로 멈추고 실패로 알렸다. 배포 때 wheel 이름에 시각이 붙어 `dynamic_version`이 판 번호를 바꾸는 것도 확인했다. 가격 표가 들어온 뒤 다시 돌려 성공을 확인하고, 그 전에는 운영 배포를 하지 않는다. 실패 알림 메일이 사용자 로그인 메일로 왔다. 개발 대상의 `alert_email`이 로그인 메일로 풀리는 것을 확인했다.
 
-- [ ] **3단계: `risk-reviewer`로 검토한다**
+- [x] **3단계: `risk-reviewer`로 검토한다**
 
 `cost_guard.py`와 `deploy.yml`을 넘긴다. 비밀값이 실행 기록에 찍히는지, 차단이 풀리는 조건이 맞는지, 배포가 차단을 되살리는 길이 남았는지 본다.
 
-- [ ] **4단계: 커밋하고, 사용자에게 푸시를 요청받아 첫 운영 배포를 한다**
+- [x] **4단계: 커밋하고, 사용자에게 푸시를 요청받아 첫 운영 배포를 한다**
 
 ```bash
 git add pipeline .github/workflows/deploy.yml
@@ -2091,13 +2091,15 @@ git commit -m "deploy: 비용 차단 작업과 운영 배포 워크플로 추가
 
 푸시하면 운영 배포가 돈다고 사용자에게 먼저 말한다.
 
-- [ ] **5단계: 운영에서 멈춤과 다시 켜기를 시험한다**
+- [x] **5단계: 운영에서 멈춤과 다시 켜기를 시험한다**
 
 운영 작업 공간에서 `cherry_cost_guard`를 `--limit 0`으로 한 번 돌리면 태그가 붙은 운영 작업이 멈춰야 한다. 인자 없이 다시 돌리면 다시 켜져야 한다. 멈춘 동안 `deploy.yml`을 수동 실행하면 "차단된 달이라 배포하지 않는다"가 찍혀야 한다.
 
 2026-09-30 위험 검토: 지금 번들에는 `cherry_guard` 태그가 붙은 작업이 없어 멈춤과 다시 켜기를 시험할 수 없다. 첫 태그 작업은 과제 15의 `cherry_refresh`라 이 단계는 과제 15 운영 배포 뒤에 한다. 운영 작업은 PC의 `bundle run -t prod`로 돌릴 수 없다. `workspace.root_path`를 적지 않아 사람 계정의 운영 명령은 오류로 멈추기 때문이다. 화면의 작업 실행에서 매개변수를 바꿔 돌리고, 그때 `--signup`과 `--target`도 함께 넣는다. 사람이 차단을 푸는 순서는 `docs/databricks.md`의 "차단을 사람이 풀 때"다.
 
 2026-10-01 첫 시험: 과제 15, 16을 운영에 배포한 뒤 사용자가 화면에서 돌렸다. `--limit 0`으로 운영 `cherry_refresh` 트리거가 멈추고 표시 `cherry_guard_paused: trigger`가 붙었다. 멈춘 동안 `deploy` 워크플로를 수동 실행하자 경고를 남기고 배포를 건너뛰었다. 인자 없이 다시 돌리자 트리거는 켜졌지만 표시가 남았다. Jobs API의 update가 tags를 합쳐 지운 키가 남았기 때문이다. 표시가 남으면 배포 워크플로가 늘 차단된 달로 보고 배포를 건너뛴다. 서버가 준 설정 JSON을 그대로 고쳐 reset으로 통째로 덮게 고쳤다. SDK 형식을 거치면 SDK가 모르는 칸이 빠질 수 있다는 위험 검토를 따른 것이다. 설정 바꾸기가 실패해도 돌고 있는 실행은 따로 취소한다. 남은 표시는 사용자가 화면에서 지웠다. 고친 코드를 배포한 뒤 같은 시험을 다시 하고, 시험 전후의 작업 설정 JSON이 `pause_status`와 표시 말고는 같은지 본다
+
+2026-10-01 재시험: `1b3c43a`의 배포가 경고 없이 끝난 뒤 사용자가 화면에서 돌렸다. `--limit 0` 실행은 재시도 없이 실패로 끝나 알림 메일이 왔고, 운영 `cherry_refresh` 트리거가 멈추고 표시가 붙었다. 멈춘 동안 `deploy` 수동 실행은 경고를 남기고 배포를 건너뛰었다. 인자 없이 다시 돌리자 성공으로 끝나 트리거가 켜지고 표시가 사라졌다. 시험 전후 `databricks jobs get` 결과는 칸 하나까지 같았다. 과제 13을 마쳤다.
 
 ---
 
