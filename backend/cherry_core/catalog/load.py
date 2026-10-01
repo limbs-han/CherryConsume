@@ -53,6 +53,8 @@ class LoadedIssuer:
 class Catalog:
     root: Path
     categories: set[str] = field(default_factory=set)
+    # 화면의 업종 칩과 서버의 업종 표가 이름과 부모를 쓴다. 작업 005
+    category_tree: list[Category] = field(default_factory=list)
     merchants: dict[str, Merchant] = field(default_factory=dict)
     payment_methods: dict[str, PaymentMethod] = field(default_factory=dict)
     point_programs: dict[str, PointProgram] = field(default_factory=dict)
@@ -106,6 +108,7 @@ def load_catalog(root: Path) -> Catalog:
         return _validate(list[model], _read(path, name, p), name, p) or []
 
     categories = read_list("categories.yaml", Category)
+    cat.category_tree = categories
     cat.categories = {c.code for c in categories} | {f"{c.code}.{ch.code}" for c in categories for ch in c.children}
     cat.merchants = {m.key: m for m in read_list("merchants.yaml", Merchant)}
     cat.payment_methods = {m.key: m for m in read_list("payment_methods.yaml", PaymentMethod)}

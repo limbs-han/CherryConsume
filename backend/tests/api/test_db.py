@@ -87,3 +87,37 @@ def test_migration_number_rules(client, db, tmp_path, monkeypatch):
     (tmp_path / "001_twin.sql").write_text("SELECT 1;", encoding="utf-8")
     with pytest.raises(RuntimeError, match="번호가 겹친다"):
         migrate(db)
+
+
+def test_payment_catalog_tables(client, db):
+    cat = client.app.state.catalog
+    n = db.execute(
+        "SELECT (SELECT count(*) FROM categories) AS c, (SELECT count(*) FROM merchants) AS m,"
+        " (SELECT count(*) FROM payment_methods) AS p"
+    ).fetchone()
+    assert (n["c"], n["m"], n["p"]) == (len(cat.categories), len(cat.merchants), len(cat.payment_methods))
+
+
+def test_moved_alias_follows_the_catalog(client, db):
+    db.execute("UPDATE merchant_aliases SET merchant_key = 'emart' WHERE alias = 'gs25'")
+    sync_catalog(db, client.app.state.catalog)
+    row = db.execute("SELECT merchant_key FROM merchant_aliases WHERE alias = 'gs25'").fetchone()
+    assert row["merchant_key"] == "gs25"
+    db.rollback()
+
+
+def test_revision_changed_and_changed_back(client, db):
+    # 내용을 A에서 B로 고쳤다가 A로 되돌리면 행은 A와 B 둘이고, 결제는 지금 내용 A의 행을 가리킨다
+    from datetime import date
+
+    from cherry_api.catalog_sync import revision_ids
+
+    a = client.app.state.revision_ids[("shinhan-mrlife", date(2026, 7, 15))]
+    row = db.execute("SELECT * FROM card_revisions WHERE id = %s", (a,)).fetchone()
+    db.execute(
+        "INSERT INTO card_revisions (card_id, effective_from, rules, rules_sha256, schema_version)"
+        " VALUES ('shinhan-mrlife', '2026-07-15', '{}', 'b', 2)"
+    )
+    sync_catalog(db, client.app.state.catalog)
+    assert revision_ids(db, client.app.state.catalog)[("shinhan-mrlife", date(2026, 7, 15))] == row["id"]
+    db.rollback()

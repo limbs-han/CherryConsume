@@ -14,6 +14,7 @@ from cherry_core.engine.models import UserCard
 
 from ..auth import User
 from ..deps import Conn, today
+from ..payments import load_payments
 from .catalog import MAX_SPEND, benefits_at, registrable
 
 router = APIRouter(prefix="/me")
@@ -62,10 +63,19 @@ def home(request: Request, user: User, conn: Conn) -> dict:
         (user,),
     ).fetchall()
     engine = request.app.state.engine
+    payments = load_payments(conn, [str(r["id"]) for r in rows])
+    # 받은 혜택은 한국 시간으로 이번 달에 결제한 건의 저장된 혜택 원 가치 합이다. E13
+    total = sum(
+        b.value
+        for ps in payments.values()
+        for p in ps
+        if month_of(local(p.paid_at).date()) == month
+        for b in p.benefits
+    )
     cards = []
     for r in rows:
         card = engine_card(r)
-        status = engine.spend_status(card, [], month)
+        status = engine.spend_status(card, payments[str(r["id"])], month)
         found = engine.ctx.rules_on(r["card_id"], month)
         titles = benefits_at(found[1], card, month, status) if found and status.tier is not None else []
         cards.append(
@@ -81,4 +91,4 @@ def home(request: Request, user: User, conn: Conn) -> dict:
                 "spend": status.model_dump(mode="json", exclude={"user_card_id", "month"}),
             }
         )
-    return {"month": month.isoformat(), "benefit_total": 0, "cards": cards}
+    return {"month": month.isoformat(), "benefit_total": total, "cards": cards}

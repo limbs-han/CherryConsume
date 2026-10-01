@@ -25,9 +25,10 @@ from cherry_core.catalog.load import load_catalog
 from cherry_core.engine import Engine
 
 from . import auth
-from .catalog_sync import sync_catalog
+from .catalog_sync import revision_ids, sync_catalog
 from .db import migrate
-from .routes import catalog, me
+from .payments import alias_index
+from .routes import catalog, me, payments
 
 REPO = Path(__file__).resolve().parents[2]
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
@@ -35,7 +36,15 @@ LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
 
 async def validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
     """422 본문에서 받은 값을 뺀다. 카드번호 같은 값을 보내면 응답에 그대로 되돌아왔다. 2026-10-01 위험 검토"""
-    detail = [{k: v for k, v in e.items() if k not in ("input", "ctx")} for e in exc.errors()]
+    # 모르는 칸은 칸 이름에 값을 넣어 보낼 수도 있어 위치도 뺀다
+    detail = [
+        {
+            k: v
+            for k, v in e.items()
+            if k not in ("input", "ctx") and not (k == "loc" and e["type"] == "extra_forbidden")
+        }
+        for e in exc.errors()
+    ]
     return JSONResponse({"detail": detail}, status_code=422)
 
 
@@ -61,10 +70,16 @@ def create_app(
         # 카탈로그에 오류가 있으면 엔진이 만들어지지 않아 서버가 켜지지 않는다. 작업 002 설계
         app.state.catalog = load_catalog(catalog_dir)
         app.state.engine = Engine(app.state.catalog)
+        app.state.aliases = alias_index(app.state.catalog)
+        tree = app.state.catalog.category_tree
+        app.state.category_names = {c.code: c.name for c in tree} | {
+            f"{c.code}.{ch.code}": ch.name for c in tree for ch in c.children
+        }
         app.state.pool = ConnectionPool(database_url, kwargs={"row_factory": dict_row}, open=True)
         with app.state.pool.connection() as conn:
             migrate(conn)
             sync_catalog(conn, app.state.catalog)
+            app.state.revision_ids = revision_ids(conn, app.state.catalog)
             if not dev_login:
                 # 켜 둔 동안 받은 개발용 토큰이 끈 뒤에도 1년 동안 살아 있지 않게 한다
                 conn.execute(
@@ -83,4 +98,5 @@ def create_app(
         app.include_router(auth.dev_router)
     app.include_router(catalog.router)
     app.include_router(me.router)
+    app.include_router(payments.router)
     return app

@@ -68,6 +68,24 @@ def issuers(request: Request) -> list[dict]:
     return sorted(rows, key=lambda r: r["name"])
 
 
+@router.get("/categories")
+def categories(request: Request) -> list[dict]:
+    """업종 칩. 자식 업종 code는 부모 code를 붙인 값이다"""
+    return [
+        {
+            "code": c.code,
+            "name": c.name,
+            "children": [{"code": f"{c.code}.{ch.code}", "name": ch.name} for ch in c.children],
+        }
+        for c in request.app.state.catalog.category_tree
+    ]
+
+
+@router.get("/payment-methods")
+def payment_methods(request: Request) -> list[dict]:
+    return [{"key": m.key, "name": m.name} for m in request.app.state.catalog.payment_methods.values()]
+
+
 @router.get("/cards")
 def cards(request: Request, q: str = "", issuer: str | None = None) -> list[dict]:
     cat, engine = request.app.state.catalog, request.app.state.engine
