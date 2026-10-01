@@ -2,7 +2,7 @@
 
 6시간마다 작업 cherry_cost_guard로 돈다. 한도 밑으로 돌아오면 이 작업이 멈춘 예약과 트리거만 다시 켠다.
 청구 기록은 보통 12시간 늦게 들어오고 새 작업 공간은 더 늦어서, 한도를 넘긴 순간이 아니라 기록이 들어온 뒤에 멈춘다.
-가격을 찾지 못한 사용량이 있거나 청구 기록을 읽지 못하면 쓴 금액을 모르는 것이라 멈춘다.
+가격을 찾지 못한 사용량이 있거나 청구 기록을 읽지 못하면 쓴 금액을 모르는 것이라 멈춘다. Genie 무료 사용량은 세지 않는다.
 그때와 한도를 넘어 새로 멈춘 때, 무엇 하나 멈추지 못한 때는 실행을 실패로 끝내 알림 메일이 가게 한다.
 찍는 것은 합산 시작일, 쓴 금액, 한도, 멈춤 여부와 개수뿐이다.
 """
@@ -17,10 +17,12 @@ from databricks.sdk.service.jobs import JobSettings
 from pyspark.sql import SparkSession
 
 # 가격 행이 없거나 가격 칸이 비면 곱이 NULL이라 합계에서 빠진다. 그런 사용량은 unpriced로 센다
+# GENIE_FREE_USAGE는 공식 문서상 무료이고 가격 행이 없어 unpriced로 세지 않는다. 설계 4절 8번
+# 합계에서는 빼지 않아 나중에 가격이 붙으면 쓴 금액에 들어간다. <=>는 sku_name이 NULL인 행도 세게 한다
 SPENT = """
 SELECT
   coalesce(sum(u.usage_quantity * p.pricing.effective_list.default), 0) AS spent,
-  count_if(p.pricing.effective_list.default IS NULL) AS unpriced
+  count_if(p.pricing.effective_list.default IS NULL AND NOT (u.sku_name <=> 'GENIE_FREE_USAGE')) AS unpriced
 FROM system.billing.usage u
 LEFT JOIN system.billing.list_prices p
   ON u.sku_name = p.sku_name AND u.cloud = p.cloud AND u.usage_unit = p.usage_unit

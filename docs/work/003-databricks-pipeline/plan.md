@@ -2045,7 +2045,7 @@ LLM을 부르기 전에 비용 차단이 서 있어야 한다. 설계 4절 8번�
 ```sql
 SELECT
   coalesce(sum(u.usage_quantity * p.pricing.effective_list.default), 0) AS spent,
-  count_if(p.pricing.effective_list.default IS NULL) AS unpriced
+  count_if(p.pricing.effective_list.default IS NULL AND NOT (u.sku_name <=> 'GENIE_FREE_USAGE')) AS unpriced
 FROM system.billing.usage u
 LEFT JOIN system.billing.list_prices p
   ON u.sku_name = p.sku_name AND u.cloud = p.cloud AND u.usage_unit = p.usage_unit
@@ -2055,7 +2055,7 @@ LEFT JOIN system.billing.list_prices p
 WHERE u.usage_date >= :start
 ```
 
-2026-09-30 위험 검토로 바꿨다. 처음 SQL은 INNER JOIN이라 가격을 못 찾은 사용량이 빠져 쓴 금액이 낮게 나왔다. 가격 없는 사용량이 있으면 넘은 것으로 본다. 나머지 바꾼 규칙은 design.md 4절 8번이다. 한도 판단 `is_over`와 멈춤 규칙 `guard_changes`는 `cherry_core.pipeline.cost`에 두고 손계산 테스트를 붙였다.
+2026-09-30 위험 검토로 바꿨다. 처음 SQL은 INNER JOIN이라 가격을 못 찾은 사용량이 빠져 쓴 금액이 낮게 나왔다. 가격 없는 사용량이 있으면 넘은 것으로 본다. 나머지 바꾼 규칙은 design.md 4절 8번이다. 2026-10-01 Genie 무료 사용량 `GENIE_FREE_USAGE`를 가격 없는 사용량으로 세지 않게 했다. 가격 표가 찬 뒤에도 이 11건 때문에 멈췄다. 한도 판단 `is_over`와 멈춤 규칙 `guard_changes`는 `cherry_core.pipeline.cost`에 두고 손계산 테스트를 붙였다.
 
 - `cost_guard.yml`: 작업 `cherry_cost_guard`. 6시간마다 돈다. 이 작업에는 `cherry_guard` 태그를 붙이지 않는다. 자기 자신은 멈추지 않아야 새 달에 다시 켤 수 있다. 실행 시간 제한은 10분이다. 2026-09-30 실패 알림 메일 `alert_email`과 기다림 줄 `queue`를 더했다.
 - `deploy.yml`: master에 `pipeline/**`, `backend/cherry_core/**`, `backend/pyproject.toml`이 바뀐 푸시와 수동 실행에서 돈다. 비밀값 세 개를 환경변수로 받는다. 먼저 `cherry_guard` 태그가 붙은 운영 작업 중 멈춘 것이 있는지 보고, 있으면 "차단된 달이라 배포하지 않는다"를 찍고 성공으로 끝낸다. 없으면 `databricks bundle deploy -t prod`를 돌린다. 권한은 `contents: read`다. 2026-09-30 위험 검토로 바꾼 것: 비밀값은 네 개이고 Databricks와 통하는 단계에만 넘긴다. 호스트를 가린다. 배포 전에 테스트를 돌린다. 건너뛸 때는 경고를 남긴다. `ALERT_EMAIL`이 비면 멈춘다. 수동 실행도 master에서만 된다. 배포한 뒤 차단 작업을 한 번 돌리고, 그 출력은 쓴 금액이 있어 공개 기록에 남기지 않는다.
