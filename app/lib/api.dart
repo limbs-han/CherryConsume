@@ -218,6 +218,115 @@ typedef Category = ({
   List<({String code, String name})> children,
 });
 
+/// 기록 한 줄. 고치기 화면을 채우는 칸도 함께 온다
+class RecordRow {
+  RecordRow(Map<String, dynamic> j)
+    : id = j['id'],
+      paidAt = DateTime.parse(j['paid_at']).toLocal(),
+      merchantName = j['merchant_name'],
+      category = j['category'],
+      categoryName = j['category_name'],
+      userCardId = j['user_card_id'],
+      cardName = j['card_name'],
+      amount = j['amount'],
+      cancelledAmount = j['cancelled_amount'],
+      value = j['value'],
+      rewards = List<String>.from(j['rewards']),
+      counted = j['counted'],
+      channel = j['channel'],
+      region = j['region'],
+      installmentMonths = j['installment_months'],
+      interestFree = j['interest_free'],
+      paymentMethod = j['payment_method'],
+      billing = j['billing'];
+  final String id, userCardId, cardName, channel, region;
+  final DateTime paidAt;
+  final String? merchantName, category, categoryName, paymentMethod, billing;
+  final int amount, cancelledAmount, value, installmentMonths;
+  final List<String> rewards;
+  final bool counted, interestFree;
+
+  /// 고치기 화면의 처음 값
+  PaymentInput toInput() => PaymentInput()
+    ..amount = amount
+    ..merchantName = merchantName ?? ''
+    ..userCardId = userCardId
+    ..category = category
+    ..paidAt = paidAt
+    ..channel = channel
+    ..installmentMonths = installmentMonths
+    ..interestFree = interestFree
+    ..overseas = region == 'overseas'
+    ..paymentMethod = paymentMethod
+    ..billing = billing;
+}
+
+class Records {
+  Records(Map<String, dynamic> j)
+    : month = DateTime.parse(j['month']),
+      count = j['count'],
+      amount = j['amount'],
+      benefitTotal = j['benefit_total'],
+      cards = [
+        for (final c in j['cards'])
+          (id: c['id'] as String, name: c['name'] as String),
+      ],
+      payments = [for (final r in j['payments']) RecordRow(r)];
+  final DateTime month;
+  final int count, amount, benefitTotal;
+  final List<({String id, String name})> cards;
+  final List<RecordRow> payments;
+}
+
+class CardDetail {
+  CardDetail(Map<String, dynamic> j)
+    : id = j['id'],
+      name = j['name'],
+      tiers = List<int>.from(j['tiers']),
+      spend = Spend(j['spend']),
+      prevMonthCounted = j['spend']['prev_month_counted'],
+      limits = [
+        for (final l in j['limits'])
+          (
+            title: l['title'] as String,
+            usedAmount: l['used_amount'] as int,
+            capAmount: l['cap_amount'] as int?,
+            usedCount: l['used_count'] as int,
+            capCount: l['cap_count'] as int?,
+          ),
+      ],
+      locked = [
+        for (final l in j['locked'])
+          (
+            title: l['title'] as String,
+            requiredTier: l['required_tier'] as int,
+            remaining: l['remaining'] as int,
+          ),
+      ],
+      checkSentences = List<String>.from(j['check_sentences']),
+      assumedCount = j['assumed_count'],
+      startedOn = j['started_on'],
+      revisionFrom = j['revision_from'];
+  final String id, name;
+  final List<int> tiers;
+  final Spend spend;
+  final int? prevMonthCounted;
+  final List<
+    ({
+      String title,
+      int usedAmount,
+      int? capAmount,
+      int usedCount,
+      int? capCount,
+    })
+  >
+  limits;
+  final List<({String title, int requiredTier, int remaining})> locked;
+  final List<String> checkSentences;
+  final int assumedCount;
+  final String? startedOn, revisionFrom;
+}
+
 class Api {
   Api({
     http.Client? client,
@@ -373,6 +482,51 @@ class Api {
   );
 
   /// 저장하고 혜택이 바뀐 다른 결제 수를 돌려준다. 앞선 결제나 지난달 결제를 넣으면 생긴다. E52, E53
+  Future<Records> records({DateTime? month, String? card}) async => Records(
+    await _send(
+      'GET',
+      '/me/payments',
+      query: {
+        'month': ?(month == null
+            ? null
+            : '${month.year}-${month.month.toString().padLeft(2, '0')}'),
+        'card': ?card,
+      },
+    ),
+  );
+
+  /// 고치고 혜택이 바뀐 다른 결제 수를 돌려준다. E54
+  Future<int> editPayment(String id, PaymentInput input) async =>
+      (await _send(
+            'PATCH',
+            '/me/payments/$id',
+            body: input.toJson(),
+          ))['repriced']
+          as int;
+
+  Future<int> cancelPayment(
+    String id,
+    int cancelledAmount,
+    DateTime at,
+  ) async =>
+      (await _send(
+            'POST',
+            '/me/payments/$id/cancel',
+            body: {
+              'cancelled_amount': cancelledAmount,
+              'cancelled_at': at.toUtc().toIso8601String(),
+            },
+          ))['repriced']
+          as int;
+
+  Future<int> deletePayment(String id) async =>
+      (await _send('DELETE', '/me/payments/$id'))['repriced'] as int;
+
+  Future<CardDetail> cardDetail(String id) async =>
+      CardDetail(await _send('GET', '/me/cards/$id'));
+
+  Future<void> removeCard(String id) => _send('DELETE', '/me/cards/$id');
+
   Future<int> savePayment(PaymentInput input) async =>
       (await _send(
             'POST',

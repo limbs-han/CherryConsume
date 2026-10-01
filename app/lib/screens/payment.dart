@@ -29,9 +29,13 @@ class PaymentScreen extends StatefulWidget {
     required this.api,
     required this.cards,
     this.initial,
+    this.editing,
   });
   final Api api;
   final List<({String id, String name})> cards;
+
+  /// 기록에서 열면 고치는 결제다. 저장은 고치기이고 취소 기록과 지우기를 할 수 있다. S8
+  final RecordRow? editing;
 
   /// 추천 결과에서 열면 가게, 금액, 카드, 업종, 추천 요청이 채워져 있다. S4
   final PaymentInput? initial;
@@ -96,7 +100,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
       _input
         ..userCardId ??= d.pick
         ..paidAt ??= DateTime.now();
-      final repriced = await widget.api.savePayment(_input);
+      final editing = widget.editing;
+      final repriced = editing == null
+          ? await widget.api.savePayment(_input)
+          : await widget.api.editPayment(editing.id, _input);
       if (mounted) Navigator.of(context).pop(repriced);
     } catch (_) {
       if (mounted) {
@@ -106,6 +113,85 @@ class _PaymentScreenState extends State<PaymentScreen> {
       }
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// 카드사에서 취소된 금액을 적는다. 결제를 지우지 않고 남은 금액으로 다시 계산한다. E5
+  Future<void> _cancel() async {
+    final e = widget.editing!;
+    final text = TextEditingController(text: '${e.amount}');
+    final amount = await showDialog<int>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('취소된 금액'),
+        content: TextField(
+          key: const Key('cancel-amount'),
+          controller: text,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: const InputDecoration(
+            suffixText: '원',
+            helperText: '부분 취소가 여러 번이면 합을 적어요',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('닫기'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, int.tryParse(text.text)),
+            child: const Text('기록'),
+          ),
+        ],
+      ),
+    );
+    if (amount == null || amount <= 0 || !mounted) return;
+    try {
+      final repriced = await widget.api.cancelPayment(
+        e.id,
+        amount,
+        DateTime.now(),
+      );
+      if (mounted) Navigator.of(context).pop(repriced);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('취소를 기록하지 못했어요.')));
+      }
+    }
+  }
+
+  /// 결제를 지운다. 되돌릴 수 없어 한 번 더 묻는다. S8
+  Future<void> _delete() async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('이 결제를 지울까요?'),
+        content: const Text('지우면 실적과 받은 혜택에서 빠져요.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('닫기'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('지우기'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    try {
+      final repriced = await widget.api.deletePayment(widget.editing!.id);
+      if (mounted) Navigator.of(context).pop(repriced);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('지우지 못했어요.')));
+      }
     }
   }
 
@@ -143,7 +229,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final est = d?.estimate;
     final top = d != null && d.ranking.isNotEmpty ? d.ranking.first : null;
     return Scaffold(
-      appBar: AppBar(title: const Text('결제 기록')),
+      appBar: AppBar(
+        title: Text(widget.editing == null ? '결제 기록' : '결제 고치기'),
+        actions: [
+          if (widget.editing != null)
+            PopupMenuButton<String>(
+              onSelected: (v) => v == 'cancel' ? _cancel() : _delete(),
+              itemBuilder: (_) => const [
+                PopupMenuItem(value: 'cancel', child: Text('취소 기록')),
+                PopupMenuItem(value: 'delete', child: Text('지우기')),
+              ],
+            ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
         children: [

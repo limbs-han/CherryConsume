@@ -7,6 +7,7 @@ import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
 import 'add_card.dart';
+import 'card_detail.dart';
 import 'payment.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,6 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
         SnackBar(content: Text('다른 결제 $repriced건의 혜택도 다시 계산했어요.')),
       );
     }
+  }
+
+  Future<void> _detail(HomeCard c) async {
+    await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => CardDetailScreen(api: widget.api, id: c.id),
+      ),
+    );
+    _reload();
   }
 
   Future<void> _addCard() async {
@@ -101,7 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: C.sub,
                         ),
                       ),
-                      for (final c in home.cards) CardRow(card: c),
+                      for (final c in home.cards)
+                        CardRow(card: c, onTap: () => _detail(c)),
                     ],
                   ),
                 ),
@@ -272,72 +283,77 @@ class _FirstCard extends StatelessWidget {
 }
 
 class CardRow extends StatelessWidget {
-  const CardRow({super.key, required this.card});
+  const CardRow({super.key, required this.card, this.onTap});
   final HomeCard card;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final l = look(card);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 48,
-            height: 48,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CircularProgressIndicator(
-                  value: l.value,
-                  strokeWidth: 4,
-                  color: C.blue,
-                  backgroundColor: C.line,
-                ),
-                Text(
-                  l.ring,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: C.text,
+    // 누르면 카드 상세. 시안 보드 6
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 48,
+              height: 48,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    value: l.value,
+                    strokeWidth: 4,
+                    color: C.blue,
+                    backgroundColor: C.line,
                   ),
-                ),
-              ],
+                  Text(
+                    l.ring,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: C.text,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  card.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: C.text,
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    card.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: C.text,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  l.sub,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: l.chance ? C.amber : C.sub,
+                  const SizedBox(height: 2),
+                  Text(
+                    l.sub,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: l.chance ? C.amber : C.sub,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Pill(
-            l.badge,
-            fg: l.chance ? C.amber : C.blue,
-            bg: l.chance ? C.grey : C.blueSoft,
-          ),
-        ],
+            const SizedBox(width: 8),
+            Pill(
+              l.badge,
+              fg: l.chance ? C.amber : C.blue,
+              bg: l.chance ? C.grey : C.blueSoft,
+            ),
+          ],
+        ),
       ),
     );
   }
