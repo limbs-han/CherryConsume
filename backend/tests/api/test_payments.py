@@ -254,7 +254,11 @@ def test_merchant_names_that_must_not_match(client):
         "desktop shop",
         "Arnold",
         "스타벅스역삼점",
+        "쿠팡플레이",
+        "이마트트레이더스 월계점",
     ]
+    # 띄어 쓴 "이마트 트레이더스", "쿠팡 플레이"는 아직 이마트, 쿠팡으로 걸린다. 2026-10-01 사용자가 다른 가게로 보기로 했고
+    # 두 가맹점은 카탈로그 원본인 골드에 넣는다. 들어오면 여기서 traders, coupang_play로 시험한다
     for name in wrong:
         d = client.post("/me/payments/draft", json={"merchant_name": name}, headers=headers).json()
         assert d["merchant"] is None, name
@@ -264,11 +268,6 @@ def test_merchant_names_that_must_not_match(client):
         "이마트24 역삼점": "emart24",
         "LOTTE MART 잠실점": "lotte_mart",
         "쿠팡이츠": "coupang_eats",
-        # 2026-10-01 사용자가 이마트, 쿠팡과 다른 가게로 보기로 했다. 띄어 써도 이마트, 쿠팡으로 걸리지 않는다
-        "이마트 트레이더스 월계점": "traders",
-        "이마트트레이더스 월계점": "traders",
-        "쿠팡 플레이": "coupang_play",
-        "쿠팡플레이": "coupang_play",
     }
     for name, key in right.items():
         d = client.post("/me/payments/draft", json={"merchant_name": name}, headers=headers).json()
