@@ -27,7 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _pay(List<HomeCard> cards) async {
     final repriced = await Navigator.of(context).push<int>(
       MaterialPageRoute(
-        builder: (_) => PaymentScreen(api: widget.api, cards: cards),
+        builder: (_) => PaymentScreen(
+          api: widget.api,
+          cards: [for (final c in cards) (id: c.id, name: c.name)],
+        ),
       ),
     );
     if (repriced == null) return;

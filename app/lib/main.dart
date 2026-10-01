@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'api.dart';
-import 'screens/home.dart';
+import 'screens/shell.dart';
 import 'screens/start.dart';
 import 'theme.dart';
 
@@ -44,7 +44,7 @@ class _CherryAppState extends State<CherryApp> {
     theme: theme(),
     home: switch (_loggedIn) {
       null => const Scaffold(),
-      true => HomeScreen(api: widget.api),
+      true => Shell(api: widget.api),
       false => StartScreen(
         api: widget.api,
         devLogin: widget.devLogin,

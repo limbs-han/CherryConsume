@@ -54,6 +54,8 @@ class FakeServer {
       'category': b['category'] ?? (gs ? 'convenience' : null),
       'merchant_display': gs ? 'GS25' : null,
       'category_name': gs ? '편의점' : null,
+      // GS25의 기본 청구 방식을 자동납부로 꾸며 요약 줄에 서버 값이 보이는지 본다
+      'billing': gs ? 'autopay' : null,
       'channel': 'offline',
       'paid_at': '2026-09-15T12:00:00+00:00',
       'ranking': [
@@ -134,7 +136,7 @@ void main() {
     expect(find.text('이 가게에선 신한카드 Mr.Life가 가장 이득이라 골라 뒀어요'), findsOneWidget);
     expect(find.text('430원'), findsOneWidget);
     expect(find.text('편의점 10% 할인'), findsOneWidget);
-    expect(find.text('오프라인 · 일시불 · 실물카드'), findsOneWidget);
+    expect(find.text('오프라인 · 일시불 · 실물카드 · 자동납부'), findsOneWidget);
 
     await tester.tap(find.widgetWithText(FilledButton, '저장'));
     await tester.pumpAndSettle();

@@ -94,6 +94,12 @@ class PaymentInput {
   bool overseas = false;
   String? paymentMethod;
 
+  /// 추천 결과에서 연 결제 기록이면 그 추천 요청. 저장할 때만 보낸다. S4
+  String? recommendationRequestId;
+
+  /// 자동납부, 후불교통, 정기결제. 비우면 가맹점의 기본 청구 방식이다
+  String? billing;
+
   Map<String, Object?> toJson() => {
     'amount': amount,
     'merchant_name': merchantName.isEmpty ? null : merchantName,
@@ -106,7 +112,67 @@ class PaymentInput {
     'interest_free': installmentMonths > 1 && interestFree,
     'region': overseas ? 'overseas' : 'domestic',
     'payment_method': paymentMethod,
+    'billing': billing,
   };
+}
+
+class RecRow {
+  RecRow(Map<String, dynamic> j)
+    : userCardId = j['user_card_id'],
+      name = j['name'],
+      value = j['value'],
+      title = j['title'],
+      rewards = List<String>.from(j['rewards']),
+      payWith = [
+        for (final m in j['pay_with'])
+          (name: m['name'] as String, extra: m['extra'] as int),
+      ],
+      exhausted = j['exhausted'],
+      limited = j['limited'],
+      provisional = j['provisional'];
+  final String userCardId, name;
+  final int value;
+  final String? title;
+  final List<String> rewards;
+  final List<({String name, int extra})> payWith;
+  final bool exhausted, limited, provisional;
+
+  /// 할인, 적립, 캐시백. 함께 받으면 모두 보인다. 포인트는 원으로 바꾼 값이다. E13
+  String get kind => {
+    for (final r in rewards)
+      switch (r) {
+        'points' => '적립',
+        'cashback' => '캐시백',
+        _ => '할인',
+      },
+  }.join('·');
+}
+
+class TopRow {
+  TopRow(Map<String, dynamic> j)
+    : category = j['category'],
+      categoryName = j['category_name'],
+      row = RecRow(j);
+  final String category, categoryName;
+  final RecRow row;
+}
+
+class RecResult {
+  RecResult(Map<String, dynamic> j)
+    : requestId = j['request_id'],
+      amount = j['amount'],
+      unsupported = j['unsupported'],
+      merchantDisplay = j['merchant_display'],
+      category = j['category'],
+      categoryName = j['category_name'],
+      ranking = [for (final r in j['ranking']) RecRow(r)];
+  final String? requestId;
+  final int? amount;
+
+  /// 계산하지 않은 까닭. billing이면 청구 방식에 따라 혜택이 갈리는 업종을 가게 없이 물은 것이다
+  final String? unsupported;
+  final String? merchantDisplay, category, categoryName;
+  final List<RecRow> ranking;
 }
 
 class Estimate {
@@ -126,6 +192,7 @@ class Draft {
     : category = j['category'],
       merchantDisplay = j['merchant_display'],
       categoryName = j['category_name'],
+      billing = j['billing'],
       channel = j['channel'],
       paidAt = DateTime.parse(j['paid_at']).toLocal(),
       ranking = [
@@ -138,7 +205,7 @@ class Draft {
       ],
       pick = j['pick'],
       estimate = j['estimate'] == null ? null : Estimate(j['estimate']);
-  final String? category, merchantDisplay, categoryName, pick;
+  final String? category, merchantDisplay, categoryName, pick, billing;
   final String channel;
   final DateTime paidAt;
   final List<({String id, String name, int value})> ranking;
@@ -281,8 +348,39 @@ class Api {
   Future<Draft> draft(PaymentInput input) async =>
       Draft(await _send('POST', '/me/payments/draft', body: input.toJson()));
 
+  Future<List<TopRow>> top() async => [
+    for (final r in await _send('GET', '/me/recommendations/top')) TopRow(r),
+  ];
+
+  Future<List<String>> recentMerchants() async => [
+    for (final r in await _send('GET', '/me/recent-merchants')) r as String,
+  ];
+
+  Future<RecResult> recommend({
+    String? merchantName,
+    String? category,
+    int? amount,
+  }) async => RecResult(
+    await _send(
+      'POST',
+      '/me/recommendations',
+      body: {
+        'merchant_name': merchantName,
+        'category': category,
+        'amount': amount,
+      },
+    ),
+  );
+
   /// 저장하고 혜택이 바뀐 다른 결제 수를 돌려준다. 앞선 결제나 지난달 결제를 넣으면 생긴다. E52, E53
   Future<int> savePayment(PaymentInput input) async =>
-      (await _send('POST', '/me/payments', body: input.toJson()))['repriced']
+      (await _send(
+            'POST',
+            '/me/payments',
+            body: {
+              ...input.toJson(),
+              'recommendation_request_id': input.recommendationRequestId,
+            },
+          ))['repriced']
           as int;
 }

@@ -13,17 +13,35 @@ import '../theme.dart';
 
 String two(int n) => n.toString().padLeft(2, '0');
 
+/// 사용자가 아는 청구 방식. 카드 혜택 스물두 개가 자동납부나 후불교통 조건을 단다
+const billings = [
+  ('normal', '일반 결제'),
+  ('autopay', '자동납부'),
+  ('postpaid_transit', '후불교통'),
+  ('subscription', '정기결제'),
+  ('app_prepay', '앱 선결제'),
+  ('in_app', '앱 안 결제'),
+];
+
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key, required this.api, required this.cards});
+  const PaymentScreen({
+    super.key,
+    required this.api,
+    required this.cards,
+    this.initial,
+  });
   final Api api;
-  final List<HomeCard> cards;
+  final List<({String id, String name})> cards;
+
+  /// 추천 결과에서 열면 가게, 금액, 카드, 업종, 추천 요청이 채워져 있다. S4
+  final PaymentInput? initial;
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  final _input = PaymentInput();
+  late final _input = widget.initial ?? PaymentInput();
   late final Future<List<Category>> _categories = widget.api.categories();
   late final Future<Map<String, String>> _methods = widget.api.paymentMethods();
   Draft? _draft;
@@ -101,7 +119,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ..category ??= d.category
       ..channel ??= d.channel
       ..paidAt ??= d.paidAt
-      ..paymentMethod ??= d.estimate?.paymentMethod;
+      ..paymentMethod ??= d.estimate?.paymentMethod
+      ..billing ??= d.billing;
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -129,8 +148,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
         children: [
           const _Label('얼마 썼나요'),
-          TextField(
+          TextFormField(
             key: const Key('amount'),
+            initialValue: _input.amount?.toString(),
             autofocus: true,
             keyboardType: TextInputType.number,
             inputFormatters: [
@@ -150,14 +170,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           const SizedBox(height: 20),
           const _Label('어디서요'),
-          TextField(
+          TextFormField(
             key: const Key('merchant'),
+            initialValue: _input.merchantName,
             decoration: const InputDecoration(hintText: '가게 이름'),
             onChanged: (v) {
               _input
                 ..merchantName = v.trim()
                 ..category = null
-                ..channel = null;
+                ..channel = null
+                ..billing = null;
               _changed();
             },
           ),
@@ -301,6 +323,11 @@ class _Summary extends StatelessWidget {
         ? '일시불'
         : '${input.installmentMonths}개월 ${input.interestFree ? '무이자' : '할부'}';
     final region = input.overseas ? ' · 해외' : '';
+    final billing = [
+      for (final (key, name) in billings)
+        if (key == (input.billing ?? draft.billing) && key != 'normal')
+          ' · $name',
+    ].join();
     final method =
         methods[input.paymentMethod ?? draft.estimate?.paymentMethod] ?? '실물카드';
     return Column(
@@ -314,7 +341,7 @@ class _Summary extends StatelessWidget {
           style: const TextStyle(fontSize: 14, color: C.text),
         ),
         Text(
-          '$channel · $months · $method$region',
+          '$channel · $months · $method$region$billing',
           style: const TextStyle(fontSize: 14, color: C.text),
         ),
       ],
@@ -457,6 +484,17 @@ class _DetailsSheetState extends State<_DetailsSheet> {
               title: const Text('해외 결제'),
               value: i.overseas,
               onChanged: (v) => setState(() => i.overseas = v),
+            ),
+            const SizedBox(height: 16),
+            const _Label('청구 방식'),
+            DropdownButton<String>(
+              value: i.billing ?? 'normal',
+              isExpanded: true,
+              items: [
+                for (final (key, name) in billings)
+                  DropdownMenuItem(value: key, child: Text(name)),
+              ],
+              onChanged: (v) => setState(() => i.billing = v),
             ),
             const SizedBox(height: 16),
             const _Label('결제수단'),
