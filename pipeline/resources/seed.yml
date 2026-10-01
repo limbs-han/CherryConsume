@@ -1,0 +1,42 @@
+# 골드 첫 적재와 정답 예시. 작업 003 과제 17, 설계 4절 1번. 코드는 src/seed_gold.py
+# 사람이 돌린다. 예약과 트리거가 없어 비용 차단 태그도 붙이지 않는다. 골드에 카탈로그가 있으면 정답 예시만 다시 만든다
+# 돌리기 전에 사용자가 저장소의 catalog/를 raw 볼륨의 catalog-seed/에 올린다. docs/databricks.md "골드 첫 적재"
+resources:
+  jobs:
+    cherry_seed_gold:
+      name: cherry_seed_gold
+      max_concurrent_runs: 1
+      email_notifications:
+        on_failure: ["${var.alert_email}"]
+      # PC의 python -m cherry_core.pipeline.seed catalog가 찍은 해시. 올린 카탈로그가 이 값과 다르면 쓰기 전에 멈춘다
+      # 비워 두면 늘 멈춘다. 돌릴 때마다 넣는다
+      parameters:
+        - name: expect_files
+          default: ""
+        - name: expect_revisions
+          default: ""
+      tasks:
+        - task_key: seed
+          # 검사 오류나 이미 있는 골드로 멈춘 실행을 서버리스가 저절로 다시 돌리지 않게 한다
+          disable_auto_optimization: true
+          spark_python_task:
+            python_file: ../src/seed_gold.py
+            parameters:
+              - "--catalog-dir"
+              - "/Volumes/cherry/${resources.schemas.bronze.name}/raw/catalog-seed"
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
+              - "--expect-files"
+              - "{{job.parameters.expect_files}}"
+              - "--expect-revisions"
+              - "{{job.parameters.expect_revisions}}"
+          environment_key: default
+          timeout_seconds: 900
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../../backend/dist/*.whl
