@@ -13,7 +13,6 @@ from decimal import Decimal
 
 from cherry_core.pipeline.cost import GUARD_TAG, guard_changes, is_over, spend_window
 from databricks.sdk import WorkspaceClient
-from databricks.sdk.service.jobs import JobSettings
 from pyspark.sql import SparkSession
 
 # 가격 행이 없거나 가격 칸이 비면 곱이 NULL이라 합계에서 빠진다. 그런 사용량은 unpriced로 센다
@@ -76,16 +75,28 @@ def main(argv: list[str] | None = None) -> None:
         if tags.get(GUARD_TAG) != args.target:
             continue
         try:
-            new = guard_changes(
-                w.jobs.get(listed.job_id).settings.as_dict(), args.target, over
-            )
+            # update는 tags를 합쳐 지운 표시가 남는다. 2026-10-01 운영 시험에서 다시 켠 뒤에도 표시가 남아
+            # 배포 워크플로가 차단된 달로 보고 배포를 계속 건너뛸 뻔했다. reset으로 설정 전체를 덮어 표시까지 지운다
+            # SDK 형식을 거치면 SDK가 모르는 칸이 소리 없이 빠져 reset에서 지워질 수 있다. 서버가 준 JSON을 그대로 돌려보낸다
+            current = w.api_client.do(
+                "GET", "/api/2.2/jobs/get", query={"job_id": listed.job_id}
+            )["settings"]
+            new = guard_changes(current, args.target, over)
             if new:
-                w.jobs.update(listed.job_id, new_settings=JobSettings.from_dict(new))
+                w.api_client.do(
+                    "POST",
+                    "/api/2.2/jobs/reset",
+                    body={"job_id": listed.job_id, "new_settings": {**current, **new}},
+                )
                 changed += 1
-            if over:
-                w.jobs.cancel_all_runs(job_id=listed.job_id)
         except Exception as e:  # noqa: BLE001
             errors.append(f"작업 {type(e).__name__}")
+        if over:
+            # 설정 바꾸기가 실패해도 돌고 있는 실행은 멈춘다
+            try:
+                w.jobs.cancel_all_runs(job_id=listed.job_id)
+            except Exception as e:  # noqa: BLE001
+                errors.append(f"실행 취소 {type(e).__name__}")
     if over:
         # 목록에는 이 계정이 권한을 가진 웨어하우스만 나온다. 권한은 docs/databricks.md 3단계에서 준다
         for wh in listing("웨어하우스", w.warehouses.list):
