@@ -84,14 +84,15 @@ def _get(url: str) -> tuple[bytes, str]:
 
 
 def _robots(url: str) -> str | None:
-    """robotparser.read()와 같게 401, 403이면 전부 막힌 것으로, 그 밖의 4xx면 없는 것으로 본다."""
+    """401, 403, 429가 아닌 4xx면 robots.txt가 없는 것으로 본다. 그 밖의 오류는 그대로 던져 허용을 모르는 것으로 센다."""
     parts = urlsplit(url)
     try:
         body, _ = _get(f"{parts.scheme}://{parts.netloc}/robots.txt")
     except urllib.error.HTTPError as e:
-        if e.code in (401, 403):
-            return "User-agent: *\nDisallow: /"
-        if 400 <= e.code < 500:
+        # robotparser는 401, 403을 전부 막힌 것으로 읽지만 건너뜀으로 세면 실패 메일 없이 빠진다
+        # 2026-10-01 GitHub 서버에만 403을 준 카드사가 있었다. 연결이 끊긴 롯데처럼 실패로 센다
+        # 429는 요청이 많다며 거절한 것이라 robots.txt가 없는 것이 아니다
+        if e.code not in (401, 403, 429) and 400 <= e.code < 500:
             return None
         raise
     return body.decode("utf-8", "replace")
@@ -121,6 +122,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--interval", type=int, choices=[14, 30], default=30)
     ap.add_argument("--issuer", action="append", help="이 카드사만 받는다. 여러 번 쓸 수 있다")
+    ap.add_argument(
+        "--exclude", action="append", default=[], help="이 카드사는 받지 않는다. GitHub 서버를 막는 카드사에 쓴다"
+    )
     ap.add_argument("--add", type=Path, help="사람이 받아 온 파일을 더한다. --card와 --source를 함께 쓴다")
     ap.add_argument("--card")
     ap.add_argument("--source")
@@ -139,10 +143,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     robots: dict[str, str | None | Exception] = {}
-    saved = skipped = failed = 0
+    saved = skipped = failed = excluded = 0
     with ExitStack() as stack, manifest.open("w", encoding="utf-8") as out:
         page = None
         for t in targets(args.root, args.interval, set(args.issuer or []) or None):
+            if t.issuer in args.exclude:
+                excluded += 1
+                continue
             host = urlsplit(t.url).netloc
             try:
                 if host not in robots:
@@ -155,6 +162,7 @@ def main(argv: list[str] | None = None) -> int:
                     raise robots[host]
                 if not allowed(t.url, robots[host]):
                     skipped += 1
+                    print(f"건너뜀 {t.issuer} {t.card_id or '-'} {t.source_id}")
                     continue
                 if t.browser:
                     if page is None:
@@ -175,13 +183,14 @@ def main(argv: list[str] | None = None) -> int:
                     body, ctype = _get(t.url)
             except Exception as e:  # noqa: BLE001 한 곳이 실패해도 나머지는 받는다
                 failed += 1
-                print(f"실패 {t.issuer} {t.card_id or '-'} {t.source_id}: {type(e).__name__}")
+                code = f" {e.code}" if isinstance(e, urllib.error.HTTPError) else ""
+                print(f"실패 {t.issuer} {t.card_id or '-'} {t.source_id}: {type(e).__name__}{code}")
                 continue
             finally:
                 time.sleep(DELAY_SECONDS)
             save(args.out, out, t, body, ctype, now)
             saved += 1
-    print(f"저장 {saved}, robots.txt로 건너뜀 {skipped}, 실패 {failed}")
+    print(f"저장 {saved}, robots.txt로 건너뜀 {skipped}, 실패 {failed}, 뺌 {excluded}")
     return 1 if failed else 0
 
 

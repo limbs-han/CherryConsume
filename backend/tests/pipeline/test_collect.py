@@ -104,3 +104,62 @@ def test_host_whose_robots_failed_is_not_asked_again(make_catalog, tmp_path, mon
     assert main(["--root", str(root), "--out", str(tmp_path / "raw")]) == 1
     assert len(asked) == 1  # 신한 주소 세 곳이 모두 같은 호스트다
     assert "실패 0" not in capsys.readouterr().out
+
+
+def _offline(monkeypatch, get):
+    import cherry_core.pipeline.collect as collect_module
+
+    monkeypatch.setattr(collect_module, "_get", get)
+    monkeypatch.setattr(collect_module.time, "sleep", lambda s: None)
+
+
+@pytest.mark.parametrize("code", [401, 403, 429])
+def test_unconfirmed_robots_counts_as_failure(make_catalog, tmp_path, monkeypatch, capsys, code):
+    # 2026-10-01 GitHub 서버에만 robots.txt를 403으로 준 카드사가 건너뜀으로 세어져 실패 메일 없이 빠졌다
+    # 429는 요청이 많다며 거절한 것이라 robots.txt가 없는 것과 다르다
+    import urllib.error
+
+    def get(url):
+        if url.endswith("/robots.txt"):
+            raise urllib.error.HTTPError(url, code, "", {}, None)
+        pytest.fail("허용을 확인하지 못한 호스트에서 받았다")
+
+    _offline(monkeypatch, get)
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(tmp_path / "raw")]) == 1
+    out = capsys.readouterr().out
+    assert f"실패 shinhan - list: HTTPError {code}" in out
+    assert "저장 0, robots.txt로 건너뜀 0, 실패 3" in out
+
+
+def test_missing_robots_allows(make_catalog, tmp_path, monkeypatch, capsys):
+    import urllib.error
+
+    def get(url):
+        if url.endswith("/robots.txt"):
+            raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+        return b"<p>abc</p>", "text/html"
+
+    _offline(monkeypatch, get)
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(tmp_path / "raw")]) == 0
+    assert "저장 3, robots.txt로 건너뜀 0, 실패 0" in capsys.readouterr().out
+
+
+def test_skipped_address_is_printed(make_catalog, tmp_path, monkeypatch, capsys):
+    _offline(monkeypatch, lambda url: (b"User-agent: *\nDisallow: /\n", "text/plain"))
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(tmp_path / "raw")]) == 0
+    out = capsys.readouterr().out
+    assert "건너뜀 shinhan - list" in out
+    assert "건너뜀 shinhan shinhan-test page" in out
+
+
+def test_excluded_issuer_is_not_fetched(make_catalog, tmp_path, monkeypatch, capsys):
+    root = make_catalog(collect("api"))
+    _offline(monkeypatch, lambda url: pytest.fail("뺀 카드사에서 받았다"))
+    assert main(["--root", str(root), "--out", str(tmp_path / "raw"), "--exclude", "shinhan"]) == 0
+    # 뺀 개수를 요약에 찍어 기록에서 보이게 한다
+    assert "저장 0, robots.txt로 건너뜀 0, 실패 0, 뺌 3" in capsys.readouterr().out
+
+    # 다른 카드사를 빼면 신한은 그대로 받는다
+    _offline(monkeypatch, lambda url: (b"<p>abc</p>", "text/html"))
+    assert main(["--root", str(root), "--out", str(tmp_path / "raw2"), "--exclude", "kb"]) == 0
+    assert "저장 3, robots.txt로 건너뜀 0, 실패 0, 뺌 0" in capsys.readouterr().out
