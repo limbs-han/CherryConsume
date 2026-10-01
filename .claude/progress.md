@@ -36,6 +36,7 @@
 - 2026-09-30 과제 15, 16 파일을 썼다. `pipeline/resources/ingest.yml`, `refresh.yml`, `pipeline/src/ingest.py`, `documents.py`, `changes.py`. 아직 커밋하지 않았다. 사용자가 개발용으로 배포하고 plan.md 과제 15, 16의 단계대로 시험한 뒤 커밋한다. 비교 규칙 `text.py`, 목록 비교 `lists.py`, 목록 카드사 현대, 하나, KB는 커밋했다. 카드 이름을 뽑을 모델 `list_model`은 모델이 정해지면 넣는다
 - 2026-09-30 사용자가 정했다. Databricks에 보내는 명령은 배포, 실행, SQL, 조회까지 모두 사용자가 돌린다. Claude는 파일만 쓰고 명령과 성공 기준을 알려 준다. 설계 4절 10번과 `.claude/CLAUDE.md`
 - 2026-10-01 개발용 차단 작업이 밤사이 예약으로 돌며 실패했다. 작업 정의에 `pause_status: UNPAUSED`를 직접 적으면 개발 모드도 예약을 켠다. 기본 정의에서 빼고 운영 대상에서만 켰다. 가격 표는 887행으로 찼고, 남은 가격 없는 사용량은 무료인 `GENIE_FREE_USAGE`라 세지 않게 했다. 개발용 차단 작업이 성공했다. 쓴 금액 13.94달러. 커밋 `3b6125b`, `ddc287c`, `6a6462b`, `de53368`은 아직 푸시하지 않았다. 푸시하면 `pipeline/**`가 바뀌어 첫 운영 배포가 돈다. 배포 뒤 화면에서 운영 `cherry_cost_guard` 예약이 켜졌는지 보고 `collect`를 수동 실행한다. 다른 세션의 `refresh.yml`도 같은 방식으로 고쳐야 한다
+- 2026-10-01 첫 운영 배포가 성공했다. 처음에는 범위 9개만 연 서비스 주체 비밀값이라 인증에서 실패했다. CLI는 늘 `all-apis` 범위를 요청해서 모든 API 비밀값으로 새로 받았다. 남은 것: 운영 `cherry_cost_guard` 예약이 켜졌는지 화면 확인, `collect` 수동 실행, 실패한 배포 기록 지우기, 예전 비밀값 지우기, 새 비밀값이 끝나는 날짜 기록
 - 이 PC의 Git Bash에서 `databricks api`를 쓸 때는 `MSYS_NO_PATHCONV=1`을 켠다. PowerShell에서는 필요 없다. CLI는 winget으로 설치했다 체험 계정 가입은 과제 12를 시작하는 날 한다. 크레딧 14일이 가입한 날부터 흐른다
 
 ## 끝난 것
