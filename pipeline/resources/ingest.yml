@@ -1,0 +1,13 @@
+# 원문 적재 파이프라인. 작업 003 과제 15. 코드는 src/ingest.py
+resources:
+  pipelines:
+    cherry_ingest:
+      name: cherry_ingest
+      catalog: cherry
+      schema: ${resources.schemas.bronze.name}
+      serverless: true
+      libraries:
+        - file:
+            path: ../src/ingest.py
+      configuration:
+        cherry.raw: /Volumes/cherry/${resources.schemas.bronze.name}/raw
