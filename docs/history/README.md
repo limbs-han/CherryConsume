@@ -74,3 +74,5 @@
 | [31](31-cost-guard-overnight-failures.md) | 2026-10-01 | 개발용 비용 차단 작업의 밤사이 실패 |
 | [32](32-first-prod-deploy-and-collect.md) | 2026-10-01 | 첫 운영 배포와 첫 수집 |
 | [33](33-change-detection-and-model-choice.md) | 2026-10-01 | 수집, 변경 감지 파일과 추출 모델 다시 고르기 |
+| [34](34-databricks-handover-and-guard-retest.md) | 2026-10-01 | Databricks 일 이어 받기와 비용 차단 재시험 |
+| [35](35-gold-seed.md) | 2026-10-01 | 골드 카탈로그 첫 적재 |
