@@ -118,10 +118,10 @@ CLI는 Databricks를 명령으로 다루는 프로그램이다. 번들 배포와
 ### 3. 서비스 주체 만들기와 OAuth 비밀값 발급
 
 서비스 주체는 사람 대신 GitHub Actions가 쓰는 Databricks 계정이다. 사람 계정 토큰을 GitHub에 두면 그 토큰이 새었을 때 사람 계정 전체가 열리므로 권한이 좁은 계정을 따로 둔다. OAuth 비밀값은 이 계정의 비밀번호에 해당한다.
-- 누를 곳: 작업 공간 위쪽 막대에서 자기 이름을 누르고 **Settings**를 누른다. **Identity and access** 탭에서 **Service principals** 옆 **Manage**를 누른다. **Add service principal**, **Add new**를 누르고 이름을 넣은 뒤 **Add**를 누른다. 만든 서비스 주체를 눌러 권한을 확인한다. **Secrets** 탭에서 **Generate secret**을 누른다. 기간을 넣고 **Scopes**에서 아래 범위를 하나씩 더한 뒤 **Generate**를 누른다. 2026-09-30 화면에는 "BI 도구", "기타 API"와 "범위 추가" 드롭다운이 있었고, 앞의 둘은 고르지 않고 드롭다운으로 더했다.
+- 누를 곳: 작업 공간 위쪽 막대에서 자기 이름을 누르고 **Settings**를 누른다. **Identity and access** 탭에서 **Service principals** 옆 **Manage**를 누른다. **Add service principal**, **Add new**를 누르고 이름을 넣은 뒤 **Add**를 누른다. 만든 서비스 주체를 눌러 권한을 확인한다. **Secrets** 탭에서 **Generate secret**을 누른다. 기간을 넣고 **Scopes**에서 모든 API를 고른 뒤 **Generate**를 누른다.
 - 넣을 값: 이름 `cherry-github-actions`, 기간 365일. 기간은 최대 730일이다.
 - 권한: **Workspace access**와 **Databricks SQL access**만 켠다. 새 서비스 주체는 users 그룹을 통해 이 둘을 기본으로 받는다. **Consumer access**, **Allow unrestricted cluster creation**, **Allow pool creation**은 끈다. 서버리스만 쓰므로 서버를 만드는 권한이 필요 없고, 비밀값이 새면 비용이 커질 수 있다. 관리자 그룹에는 넣지 않는다.
-- 범위: `workspace`, `files`, `jobs`, `pipelines`, `unity-catalog`, `apps`, `sql`, `access-management`, `scim`. 공식 문서가 모든 API를 여는 것을 권하지 않아 GitHub Actions가 쓰는 것만 연다. `authentication`은 다른 범위의 토큰을 새로 만들 수 있어 결국 모든 API가 열리므로 넣지 않는다. `clusters`와 `command-execution`도 넣지 않는다. 번들 배포에 필요한 범위 목록은 공식 문서에 없어서, 배포가 범위 부족으로 실패하면 오류에 나온 범위를 더해 비밀값을 새로 발급하고 GitHub의 `DATABRICKS_CLIENT_SECRET`만 바꾼다.
+- 범위: 모든 API. 2026-10-01 바꿨다. 처음에는 `workspace`, `jobs`, `sql` 같은 범위 9개만 연 비밀값을 만들었는데, 첫 운영 배포가 인증에서 실패했다. Databricks CLI는 토큰을 받을 때 늘 모든 API 범위 `all-apis`를 달라고 하고 환경변수로 바꿀 수 없다. 공식 문서는 범위를 좁힌 비밀값의 토큰이 그 범위를 넘을 수 없다고 쓴다. 그래서 CLI로 배포하려면 모든 API 비밀값이어야 한다. 이 비밀값이 새도 할 수 있는 일은 아래 권한과 GRANT로 준 것까지다. 처음 9개 범위에도 작업 실행과 배포가 들어 있어 줄어드는 보호는 크지 않다.
 - 성공하면 보이는 것: 비밀값과 Client ID가 보인다. 비밀값은 창을 닫으면 다시 볼 수 없으니 창을 연 채로 바로 4단계로 간다.
 - Claude에게 붙여 줄 것: 서비스 주체 이름과 비밀값이 끝나는 날짜. Client ID와 비밀값은 붙여 주지 않는다. 끝나는 날은 진행 상황에 적어 두고 그 전에 새로 발급한다.
 
