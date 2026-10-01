@@ -73,3 +73,4 @@
 | [30](30-korean-only-hook.md) | 2026-09-30 | 답에 영어가 섞이면 막는 훅 |
 | [31](31-cost-guard-overnight-failures.md) | 2026-10-01 | 개발용 비용 차단 작업의 밤사이 실패 |
 | [32](32-first-prod-deploy-and-collect.md) | 2026-10-01 | 첫 운영 배포와 첫 수집 |
+| [33](33-change-detection-and-model-choice.md) | 2026-10-01 | 수집, 변경 감지 파일과 추출 모델 다시 고르기 |
