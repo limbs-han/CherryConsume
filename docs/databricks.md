@@ -234,6 +234,23 @@ Get-ChildItem "$raw\manifests\*.jsonl" | ForEach-Object { databricks fs cp $_.Fu
 - 운영 표를 SQL로 보려면: 운영 스키마는 서비스 주체가 만들어 사람 계정은 읽지 못한다. **SQL Editor**에서 ``GRANT USE SCHEMA, SELECT ON SCHEMA cherry.gold TO `cherry-admins`;``와 ``GRANT USE SCHEMA, SELECT ON SCHEMA cherry.silver TO `cherry-admins`;``를 한 번 돌린다. 읽기만 연다.
 - 개발용에서 처음부터 다시 시험하려면: 골드 표 두 개를 SQL `DROP TABLE`로 지운 뒤 돌린다. 운영에서는 하지 않는다.
 
+### 손으로 승인하기
+
+검수 앱이 생기기 전에 카탈로그를 바꾸는 길이다. 2026-10-01 서버 세션의 가맹점 요청으로 과제 20의 승인 부분만 먼저 만들었다. 작업 `cherry_approve`가 바뀐 파일을 골드 카탈로그에 넣어 검사하고, 통과하면 `silver.reviews`, `gold.catalog_files`, `gold.card_revisions`, `export` 볼륨 `pending/<검수 번호>/`의 파일과 `commit.json` 순서로 쓴다. 그 폴더는 `export` 워크플로가 다음 새벽에 저장소에 커밋한다. 저장소 카탈로그가 승인 전 골드와 같을 때만 커밋하고, 다르면 그 폴더를 거부한다.
+- 한 번에 하나: 앞 승인이 저장소에 커밋된 뒤 다음 승인 파일을 만든다. 승인은 골드 해시가 PC에서 저장소로 잰 해시와 같아야 돌아서, 커밋 전에 만든 파일은 멈춘다. 옛 판을 고친 파일로 앞선 승인을 덮지 않으려는 것이다. 끝나지 않은 손 승인이 있어도 다음 승인은 멈춘다.
+- 파일 만들기: Claude가 PC에서 저장소 카탈로그로 바뀐 파일을 저장 형식으로 만들고 검사한다. `git status --porcelain catalog`가 비고 `HEAD`가 `origin/master`와 같아야 한다. 해시는 `uv run --project backend python -m cherry_core.pipeline.seed catalog`의 카탈로그 파일 해시다. 저장소의 `catalog/`는 고치지 않는다.
+- 처음 한 번, 운영만: **SQL Editor**에서 ``GRANT USE SCHEMA ON SCHEMA cherry.gold TO `cherry-admins`;``와 ``GRANT READ VOLUME, WRITE VOLUME ON VOLUME cherry.gold.incoming TO `cherry-admins`;``를 돌린다. 사람 계정은 업로드 볼륨 `incoming`에만 쓴다. `export` 볼륨에는 쓰기를 주지 않아 사람이 `pending/`에 직접 넣지 못한다.
+- 올리기: `databricks fs cp -r <바뀐 파일 폴더>/catalog <incoming 볼륨>/<새 이름>/catalog --overwrite`. incoming 볼륨은 개발용이 `dbfs:/Volumes/cherry/dev_<개발자 이름>_gold/incoming`, 운영용이 `dbfs:/Volumes/cherry/gold/incoming`이다. 바꿀 파일만 넣는다. 이름은 승인마다 새로 쓴다. 끝난 이름을 다시 쓰면 멈춘다.
+- 돌리기: 개발용은 `pipeline` 폴더에서 아래처럼 `--params` 값 전체를 큰따옴표로 감싸 돌린다. 값 안에는 쉼표를 쓰지 않는다. `--params`가 쉼표로 칸을 나누기 때문이다. 운영용은 화면에서 운영 `cherry_approve`를 열고 매개변수를 바꿔 실행하는 메뉴에서 같은 칸을 넣는다. 커밋 제목은 `feat: `나 `fix: `로 시작하고 끝에 마침표를 쓰지 않는다.
+
+```powershell
+databricks bundle run cherry_approve --params "incoming=<이름>,label=<영문 소문자 이름>,subject=feat: <무엇을 바꿨는지>,reviewer=<승인한 사람>,note=<근거>,expect_files=<해시>"
+```
+
+- 성공하면 보이는 것: `1/5`부터 `5/5`까지 다섯 줄. 마지막 줄이 `5/5 commit.json. 검수 번호 r-…, 바뀐 파일 N개`다. 운영이면 다음 날 저장소에 봇의 커밋이 생긴다. 바로 보려면 GitHub **Actions**에서 `export`를 수동으로 돌린다.
+- 멈추는 경우: 저장 형식이 아니거나, 카탈로그 검사 오류가 있거나, 골드에 있던 카드, 개정, 혜택 key가 사라지거나, 커밋 훅이 막을 제목이나 비밀값 같은 줄이 있으면 아무것도 쓰지 않고 멈춘다. 바꾸지 않은 카드의 개정이 바뀌어도 멈춘다. 규칙을 만드는 코드가 바뀐 경우라 Claude에게 붙여 준다. 추정 시행일을 실제 날짜로 바로잡는 것도 "개정이 사라진다"로 멈춘다. 이때도 Claude에게 붙여 준다.
+- 중간에 끊기면: 같은 폴더 이름, 같은 제목으로 한 번 더 돌린다. 진행 상태는 사람이 고칠 수 없는 `silver.reviews`에 있어 남은 단계만 한다. 이미 쓴 곳은 다시 써도 결과가 같다. 올린 폴더는 지우거나 고치지 않는다. 그래도 멈추면 실패 메일의 마지막 단계 줄을 Claude에게 붙여 준다.
+
 ## 출처
 
 - [Databricks Free Edition limitations](https://docs.databricks.com/aws/en/getting-started/free-edition-limitations)

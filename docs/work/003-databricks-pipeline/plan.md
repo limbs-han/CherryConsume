@@ -2296,9 +2296,9 @@ git commit -m "feat: 골드 카탈로그 첫 적재와 정답 예시 추가" -m 
 **만들 것:**
 - `silver.changes`에 새 행이 있는 카드만 추출한다. 평가 모드에서는 `silver.golden`의 카드를 지정한 모델로 추출한다.
 - 카드마다 원문 id별 가장 최근 문서의 글을 모아 `build_prompt`에 넣는다. 지금 규칙은 `gold.card_revisions`의 마지막 개정이다. 코드 목록은 `gold.catalog_files`로 만든 카탈로그의 `catalog_codes`다.
-- `ai_query(모델, 프롬프트, responseFormat => response_schema())`를 `failOnError => false`로 부른다. 답은 `parse_answer`, `make_draft`, `check_draft` 순서로 처리한다.
+- `ai_query(모델, 프롬프트, responseFormat => RESPONSE_FORMAT)`를 `failOnError => false`로 부른다. 2026-10-01 바꿨다. 구조화 출력이 지금 규칙 형식을 받지 않아 `RESPONSE_FORMAT`은 `json_object`이고, 형식은 `answer_schema()`를 프롬프트에 글로 넣는다. design.md 1절 4단계. 답은 `parse_answer`, `make_draft`, `check_draft` 순서로 처리한다.
 - `silver.drafts`에 쓴다: 카드, 쓴 변경 행, 모델, 프롬프트 판 `VERSION`, 답 원문, 초안 YAML, 검사 결과, 만든 시각.
-- `silver.queue`에 올린다. 초안이 None이면 올리지 않는다. 검사에 걸린 초안도 걸린 이유와 함께 올린다. `make_draft`가 `ValueError`를 내거나 답이 오류면 "사람이 정할 것"으로 까닭과 함께 올린다.
+- `silver.queue`에 올린다. 초안이 None이면 올리지 않는다. 검사에 걸린 초안도 걸린 이유와 함께 올린다. `make_draft`가 `ValueError`를 내거나 답을 읽지 못하면 "사람이 정할 것"으로 까닭과 함께 올린다. 2026-10-01 위험 검토로 바꿨다. 처리량 초과나 시간 초과처럼 모델 호출 자체가 실패한 카드는 검수 대기에 올리지 않고 끝난 것으로 치지도 않는다. 다 쓴 뒤 실행을 실패로 끝내 알리고, 다음 실행이 다시 추출한다.
 
 - [ ] **1단계: 모델 이름을 확인한다**
 
@@ -2310,7 +2310,7 @@ databricks serving-endpoints list
 
 - [ ] **2단계: 카드 한 장으로 답 형식을 시험한다**
 
-`response_schema()`를 그대로 넘겨 본다. `$defs`나 재귀 참조를 거부하면 `prompt.py`에 참조를 펼치는 함수를 더하고 테스트를 쓴다. `Condition.any_of`처럼 자기 자신을 품는 칸은 두 단계까지만 펼친다. 결과를 design.md 1절 4단계에 적는다.
+`response_schema()`를 그대로 넘겨 본다. 2026-10-01 공식 문서로 확인해 넘기지 않기로 했다. 위 "만들 것"과 design.md 1절 4단계. `$defs`나 재귀 참조를 거부하면 `prompt.py`에 참조를 펼치는 함수를 더하고 테스트를 쓴다. `Condition.any_of`처럼 자기 자신을 품는 칸은 두 단계까지만 펼친다. 결과를 design.md 1절 4단계에 적는다.
 
 - [ ] **3단계: 다듬기용 15장을 두 모델로 추출한다**
 
@@ -2374,6 +2374,7 @@ git commit -m "feat: 추출 정확도 채점 작업과 모델 선택 결과 추�
 - 초안 한 건: 바뀐 원문 줄, 바뀐 칸의 전과 후, 검사 결과, 고칠 수 있는 YAML 칸, 승인과 반려 버튼.
 - 2026-10-01 과제 17 위험 검토에서 더했다. 카드사 파일을 승인하면 그 카드사 카드의 `gold.card_revisions`를 모두 다시 만든다. 카드사 기본값이 모든 카드의 합친 규칙에 들어가기 때문이다. 다시 만들 때 바뀌지 않은 개정 행은 원래 review_id를 그대로 둔다.
 - 승인: 고친 YAML을 `check_draft`로 다시 검사한다. 오류가 있으면 승인 버튼이 듣지 않는다. 통과하면 한 번에 다음을 한다. `silver.reviews`에 기록, `gold.catalog_files`에 MERGE, 그 카드의 `gold.card_revisions`를 다시 만듦, `cherry.gold.export/pending/<검수 번호>/`에 바뀐 파일과 `commit.json`을 씀, 대기 건을 끝남으로 바꿈.
+- 2026-10-01 서버 세션의 가맹점 요청으로 승인 부분을 먼저 만들었다. `cherry_core.pipeline.approve`와 작업 `cherry_approve`다. 검수 앱은 같은 함수를 부르고, 사람이 고친 YAML을 incoming 볼륨 대신 앱에서 받는다. 순서와 다시 돌리기는 `docs/databricks.md`의 "손으로 승인하기"다.
 - 반려: `silver.reviews`에만 기록한다.
 - 새 카드와 사라진 카드: 확인만 표시한다. 새 카드 조사는 `card-researcher`로 따로 한다. 2026-10-01 과제 17 뒤로 `catalog/`를 직접 고치지 않으므로, `card-researcher`가 쓴 새 카드 파일을 골드에 넣는 길을 이 과제에서 정한다. 예를 들어 새 카드 파일을 검수 대기에 올려 같은 승인을 거치게 한다.
 - 커밋 제목은 `feat: <카드 이름> <시행일> 개정 반영`이다. 발급 중단이면 `feat: <카드 이름> 발급 중단 반영`이다.
