@@ -181,7 +181,7 @@ cherryConsume/
     history/             # 작업 기록
 ```
 
-`backend/`는 뒤에 FastAPI 패키지 `cherry_api`가 추가될 자리다.
+`backend/cherry_api/`는 FastAPI 서버이고 `app/`은 Flutter 앱이다. 개발과 테스트용 Postgres는 저장소 맨 위의 `compose.yaml`이 띄운다. 서버 의존성은 `backend/pyproject.toml`의 의존성 묶음 `api`에 있어 파이프라인 wheel에는 들어가지 않는다. 2026-10-01 작업 005 설계 1절
 
 ### 6.3 데이터 모델
 
