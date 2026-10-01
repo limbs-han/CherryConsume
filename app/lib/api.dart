@@ -81,6 +81,76 @@ class Home {
   final List<HomeCard> cards;
 }
 
+/// 결제 기록 화면의 입력. 저장 전 결제와 저장에 같은 칸을 보낸다. 작업 005 설계 5b절
+class PaymentInput {
+  int? amount;
+  String merchantName = '';
+  String? userCardId;
+  String? category;
+  DateTime? paidAt;
+  String? channel;
+  int installmentMonths = 1;
+  bool interestFree = false;
+  bool overseas = false;
+  String? paymentMethod;
+
+  Map<String, Object?> toJson() => {
+    'amount': amount,
+    'merchant_name': merchantName.isEmpty ? null : merchantName,
+    'user_card_id': userCardId,
+    'category': category,
+    // 서버는 시간대가 붙은 시각만 받는다
+    'paid_at': paidAt?.toUtc().toIso8601String(),
+    'channel': channel,
+    'installment_months': installmentMonths,
+    'interest_free': installmentMonths > 1 && interestFree,
+    'region': overseas ? 'overseas' : 'domestic',
+    'payment_method': paymentMethod,
+  };
+}
+
+class Estimate {
+  Estimate(Map<String, dynamic> j)
+    : value = j['value'],
+      paymentMethod = j['payment_method'],
+      counted = j['counted'],
+      titles = [for (final b in j['benefits']) b['title'] as String];
+  final int value;
+  final String? paymentMethod;
+  final bool counted;
+  final List<String> titles;
+}
+
+class Draft {
+  Draft(Map<String, dynamic> j)
+    : category = j['category'],
+      merchantDisplay = j['merchant_display'],
+      categoryName = j['category_name'],
+      channel = j['channel'],
+      paidAt = DateTime.parse(j['paid_at']).toLocal(),
+      ranking = [
+        for (final r in j['ranking'])
+          (
+            id: r['user_card_id'] as String,
+            name: r['name'] as String,
+            value: r['value'] as int,
+          ),
+      ],
+      pick = j['pick'],
+      estimate = j['estimate'] == null ? null : Estimate(j['estimate']);
+  final String? category, merchantDisplay, categoryName, pick;
+  final String channel;
+  final DateTime paidAt;
+  final List<({String id, String name, int value})> ranking;
+  final Estimate? estimate;
+}
+
+typedef Category = ({
+  String code,
+  String name,
+  List<({String code, String name})> children,
+});
+
 class Api {
   Api({
     http.Client? client,
@@ -190,4 +260,29 @@ class Api {
       );
 
   Future<Home> home() async => Home(await _send('GET', '/me/home'));
+
+  Future<List<Category>> categories() async => [
+    for (final c in await _send('GET', '/catalog/categories'))
+      (
+        code: c['code'] as String,
+        name: c['name'] as String,
+        children: [
+          for (final ch in c['children'])
+            (code: ch['code'] as String, name: ch['name'] as String),
+        ],
+      ),
+  ];
+
+  Future<Map<String, String>> paymentMethods() async => {
+    for (final m in await _send('GET', '/catalog/payment-methods'))
+      m['key'] as String: m['name'] as String,
+  };
+
+  Future<Draft> draft(PaymentInput input) async =>
+      Draft(await _send('POST', '/me/payments/draft', body: input.toJson()));
+
+  /// 저장하고 혜택이 바뀐 다른 결제 수를 돌려준다. 앞선 결제나 지난달 결제를 넣으면 생긴다. E52, E53
+  Future<int> savePayment(PaymentInput input) async =>
+      (await _send('POST', '/me/payments', body: input.toJson()))['repriced']
+          as int;
 }

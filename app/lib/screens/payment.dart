@@ -1,0 +1,482 @@
+/// 시안 보드 4 결제 기록. 금액, 가게, 카드만 받고 나머지는 채워 한 줄로 접는다. S3
+/// 저장하면 혜택이 바뀐 다른 결제 수로 돌아간다
+library;
+
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../api.dart';
+import '../format.dart';
+import '../theme.dart';
+
+String two(int n) => n.toString().padLeft(2, '0');
+
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({super.key, required this.api, required this.cards});
+  final Api api;
+  final List<HomeCard> cards;
+
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
+  final _input = PaymentInput();
+  late final Future<List<Category>> _categories = widget.api.categories();
+  late final Future<Map<String, String>> _methods = widget.api.paymentMethods();
+  Draft? _draft;
+  bool _busy = false;
+  Timer? _wait;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+  @override
+  void dispose() {
+    _wait?.cancel();
+    super.dispose();
+  }
+
+  void _changed() {
+    _wait?.cancel();
+    _wait = Timer(const Duration(milliseconds: 300), _refresh);
+  }
+
+  Future<void> _refresh() async {
+    try {
+      final d = await widget.api.draft(_input);
+      if (mounted) setState(() => _draft = d);
+    } catch (_) {
+      // 저장 전 계산이 실패해도 입력은 계속 받는다. 저장할 때 다시 알린다
+    }
+  }
+
+  String? get _cardId => _input.userCardId ?? _draft?.pick;
+
+  Future<void> _save() async {
+    setState(() => _busy = true);
+    _wait?.cancel();
+    try {
+      // 마지막 입력으로 다시 계산한 1순위로 저장한다. 0.3초 전의 응답을 쓰면 고치기 전 가게의 카드로 저장될 수 있었다
+      // 업종과 채널은 사용자가 바꾸기에서 고른 것만 보낸다. 나머지는 서버가 가게 이름으로 채운다
+      final shown = _cardId;
+      final d = await widget.api.draft(_input);
+      if (!mounted) return;
+      if (_input.userCardId == null && d.pick != shown) {
+        // 사용자가 본 카드와 다른 카드로 저장하지 않는다. 화면을 바꾸고 다시 누르게 한다
+        setState(() => _draft = d);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('가장 이득인 카드가 바뀌었어요. 확인하고 다시 저장해 주세요.')),
+        );
+        return;
+      }
+      _input
+        ..userCardId ??= d.pick
+        ..paidAt ??= DateTime.now();
+      final repriced = await widget.api.savePayment(_input);
+      if (mounted) Navigator.of(context).pop(repriced);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('저장하지 못했어요.')));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _editDetails() async {
+    final d = _draft;
+    if (d == null) return;
+    final categories = await _categories;
+    final methods = await _methods;
+    if (!mounted) return;
+    _input
+      ..category ??= d.category
+      ..channel ??= d.channel
+      ..paidAt ??= d.paidAt
+      ..paymentMethod ??= d.estimate?.paymentMethod;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => _DetailsSheet(
+        input: _input,
+        categories: categories,
+        methods: methods,
+      ),
+    );
+    _refresh();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final d = _draft;
+    final est = d?.estimate;
+    final top = d != null && d.ranking.isNotEmpty ? d.ranking.first : null;
+    return Scaffold(
+      appBar: AppBar(title: const Text('결제 기록')),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        children: [
+          const _Label('얼마 썼나요'),
+          TextField(
+            key: const Key('amount'),
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(9),
+            ],
+            style: const TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w800,
+              color: C.text,
+            ),
+            decoration: const InputDecoration(suffixText: '원', hintText: '0'),
+            onChanged: (v) {
+              _input.amount = int.tryParse(v);
+              _changed();
+            },
+          ),
+          const SizedBox(height: 20),
+          const _Label('어디서요'),
+          TextField(
+            key: const Key('merchant'),
+            decoration: const InputDecoration(hintText: '가게 이름'),
+            onChanged: (v) {
+              _input
+                ..merchantName = v.trim()
+                ..category = null
+                ..channel = null;
+              _changed();
+            },
+          ),
+          const SizedBox(height: 20),
+          const _Label('어느 카드로요'),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final c in widget.cards)
+                ChoiceChip(
+                  label: Text(c.name),
+                  selected: _cardId == c.id,
+                  onSelected: (_) {
+                    setState(() => _input.userCardId = c.id);
+                    _refresh();
+                  },
+                ),
+            ],
+          ),
+          if (_input.userCardId == null && top != null && top.value > 0) ...[
+            const SizedBox(height: 8),
+            Text(
+              '이 가게에선 ${top.name}가 가장 이득이라 골라 뒀어요',
+              style: const TextStyle(fontSize: 13, color: C.sub),
+            ),
+          ],
+          const SizedBox(height: 20),
+          if (est != null)
+            Box(
+              color: C.greenSoft,
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '예상 혜택',
+                          style: TextStyle(fontSize: 13, color: C.sub),
+                        ),
+                        if (est.titles.isNotEmpty)
+                          Text(
+                            est.titles.join(', '),
+                            style: const TextStyle(fontSize: 13, color: C.sub),
+                          ),
+                      ],
+                    ),
+                  ),
+                  if (!est.counted) ...[
+                    const Pill('실적 제외', fg: C.sub, bg: Colors.white),
+                    const SizedBox(width: 8),
+                  ],
+                  Text(
+                    won(est.value),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: C.green,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (d != null) ...[
+            const SizedBox(height: 12),
+            Box(
+              padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: FutureBuilder(
+                      future: _methods,
+                      builder: (context, snap) => _Summary(
+                        draft: d,
+                        input: _input,
+                        methods: snap.data ?? {},
+                      ),
+                    ),
+                  ),
+                  TextButton(onPressed: _editDetails, child: const Text('바꾸기')),
+                ],
+              ),
+            ),
+          ],
+          const SizedBox(height: 24),
+          FilledButton(
+            onPressed: _busy || (_input.amount ?? 0) <= 0 || _cardId == null
+                ? null
+                : _save,
+            child: const Text('저장'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Label extends StatelessWidget {
+  const _Label(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 4),
+    child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        color: C.sub,
+      ),
+    ),
+  );
+}
+
+/// "자동으로 채웠어요" 한 줄. 업종, 시각, 채널, 할부, 결제수단
+class _Summary extends StatelessWidget {
+  const _Summary({
+    required this.draft,
+    required this.input,
+    required this.methods,
+  });
+  final Draft draft;
+  final PaymentInput input;
+  final Map<String, String> methods;
+
+  @override
+  Widget build(BuildContext context) {
+    final at = input.paidAt ?? draft.paidAt;
+    final now = DateTime.now();
+    final day =
+        at.year == now.year && at.month == now.month && at.day == now.day
+        ? '오늘'
+        : '${at.month}월 ${at.day}일';
+    final channel = (input.channel ?? draft.channel) == 'online'
+        ? '온라인'
+        : '오프라인';
+    final months = input.installmentMonths == 1
+        ? '일시불'
+        : '${input.installmentMonths}개월 ${input.interestFree ? '무이자' : '할부'}';
+    final region = input.overseas ? ' · 해외' : '';
+    final method =
+        methods[input.paymentMethod ?? draft.estimate?.paymentMethod] ?? '실물카드';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('자동으로 채웠어요', style: TextStyle(fontSize: 12, color: C.faint)),
+        const SizedBox(height: 2),
+        Text(
+          // 찾은 가맹점을 보여 별칭이 다른 가게에 걸렸으면 사용자가 알아보게 한다
+          '${draft.merchantDisplay == null ? '' : '${draft.merchantDisplay} · '}${draft.categoryName ?? '업종 미정'} · $day ${two(at.hour)}:${two(at.minute)}',
+          style: const TextStyle(fontSize: 14, color: C.text),
+        ),
+        Text(
+          '$channel · $months · $method$region',
+          style: const TextStyle(fontSize: 14, color: C.text),
+        ),
+      ],
+    );
+  }
+}
+
+class _DetailsSheet extends StatefulWidget {
+  const _DetailsSheet({
+    required this.input,
+    required this.categories,
+    required this.methods,
+  });
+  final PaymentInput input;
+  final List<Category> categories;
+  final Map<String, String> methods;
+
+  @override
+  State<_DetailsSheet> createState() => _DetailsSheetState();
+}
+
+class _DetailsSheetState extends State<_DetailsSheet> {
+  PaymentInput get i => widget.input;
+
+  Future<void> _pickTime() async {
+    final at = i.paidAt ?? DateTime.now();
+    final day = await showDatePicker(
+      context: context,
+      initialDate: at,
+      firstDate: DateTime(at.year - 1),
+      lastDate: DateTime.now(),
+    );
+    if (day == null || !mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(at),
+    );
+    if (time == null) return;
+    setState(
+      () => i.paidAt = DateTime(
+        day.year,
+        day.month,
+        day.day,
+        time.hour,
+        time.minute,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final parent = i.category?.split('.').first;
+    final children = widget.categories
+        .where((c) => c.code == parent)
+        .expand((c) => c.children)
+        .toList();
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        20,
+        24,
+        20,
+        16 +
+            MediaQuery.of(context).viewInsets.bottom +
+            MediaQuery.of(context).viewPadding.bottom,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const _Label('업종'),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final c in widget.categories)
+                  ChoiceChip(
+                    label: Text(c.name),
+                    selected: parent == c.code,
+                    onSelected: (_) => setState(() => i.category = c.code),
+                  ),
+              ],
+            ),
+            if (children.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final ch in children)
+                    ChoiceChip(
+                      label: Text(ch.name),
+                      selected: i.category == ch.code,
+                      onSelected: (_) => setState(() => i.category = ch.code),
+                    ),
+                ],
+              ),
+            ],
+            const SizedBox(height: 16),
+            const _Label('결제 시각'),
+            OutlinedButton(
+              onPressed: _pickTime,
+              child: Text(() {
+                final at = i.paidAt ?? DateTime.now();
+                return '${at.month}월 ${at.day}일 ${two(at.hour)}:${two(at.minute)}';
+              }()),
+            ),
+            const SizedBox(height: 16),
+            const _Label('어디서 결제했나요'),
+            SegmentedButton<String>(
+              segments: const [
+                ButtonSegment(value: 'offline', label: Text('오프라인')),
+                ButtonSegment(value: 'online', label: Text('온라인')),
+              ],
+              selected: {i.channel ?? 'offline'},
+              onSelectionChanged: (v) => setState(() => i.channel = v.first),
+            ),
+            const SizedBox(height: 16),
+            const _Label('할부'),
+            DropdownButton<int>(
+              value: i.installmentMonths,
+              items: [
+                for (final m in [1, 2, 3, 4, 5, 6, 10, 12])
+                  DropdownMenuItem(
+                    value: m,
+                    child: Text(m == 1 ? '일시불' : '$m개월'),
+                  ),
+              ],
+              onChanged: (v) => setState(() => i.installmentMonths = v ?? 1),
+            ),
+            // 무이자할부는 혜택이나 실적에서 빼는 카드가 많다. 일시불이면 묻지 않는다
+            if (i.installmentMonths > 1)
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('무이자할부'),
+                value: i.interestFree,
+                onChanged: (v) => setState(() => i.interestFree = v),
+              ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('해외 결제'),
+              value: i.overseas,
+              onChanged: (v) => setState(() => i.overseas = v),
+            ),
+            const SizedBox(height: 16),
+            const _Label('결제수단'),
+            DropdownButton<String>(
+              value: i.paymentMethod ?? 'physical_card',
+              isExpanded: true,
+              items: [
+                for (final e in widget.methods.entries)
+                  DropdownMenuItem(value: e.key, child: Text(e.value)),
+              ],
+              onChanged: (v) => setState(() => i.paymentMethod = v),
+            ),
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('확인'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

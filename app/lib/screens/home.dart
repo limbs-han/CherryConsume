@@ -7,6 +7,7 @@ import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
 import 'add_card.dart';
+import 'payment.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.api});
@@ -23,6 +24,21 @@ class _HomeScreenState extends State<HomeScreen> {
     _home = widget.api.home();
   });
 
+  Future<void> _pay(List<HomeCard> cards) async {
+    final repriced = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+        builder: (_) => PaymentScreen(api: widget.api, cards: cards),
+      ),
+    );
+    if (repriced == null) return;
+    _reload();
+    if (repriced > 0 && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('다른 결제 $repriced건의 혜택도 다시 계산했어요.')),
+      );
+    }
+  }
+
   Future<void> _addCard() async {
     final added = await Navigator.of(context).push<bool>(
       MaterialPageRoute(builder: (_) => AddCardScreen(api: widget.api)),
@@ -36,6 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
     builder: (context, snap) {
       final home = snap.data;
       return Scaffold(
+        floatingActionButton: home == null || home.cards.isEmpty
+            ? null
+            : FloatingActionButton.extended(
+                onPressed: () => _pay(home.cards),
+                icon: const Icon(Icons.edit),
+                label: const Text('결제 기록'),
+              ),
         appBar: AppBar(
           title: const Text('내 카드'),
           actions: [
