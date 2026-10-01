@@ -118,3 +118,40 @@ def priced_with(engine, card: UserCard, history: list[Payment], p: Payment, now:
         payments = _with(payments, results)
         m = add_months(m, 1)
     return out
+
+
+def base_tier(engine, card: UserCard, payments: list[Payment], month: date) -> int | None:
+    """새 카드 특례를 넣기 전의 기본 구간. 특례 구간은 결제와 상관없어 결제가 바꾸는 것은 기본 구간뿐이다"""
+    status = engine.spend_status(card, payments, month)
+    found = engine.ctx.rules_on(card.card_id, month)
+    prev = status.prev_month_counted
+    if found is None or prev is None:
+        return status.tier
+    return max(t for t in found[1].tiers if t <= prev)
+
+
+def changed_with(
+    engine, card: UserCard, before: list[Payment], changed: Payment | None, drop: str | None, start: date, now: datetime
+) -> dict[str, PaymentResult]:
+    """고치거나 취소한 결제 changed는 그 결제만 다시 계산한다. E50. drop은 이 카드에서 빠진 결제다
+
+    그 뒤 start 다음 달부터 이번 달까지 기본 구간이 저장된 상태와 다른 달을 다시 계산한다. E5, E54. 실적이 다음 달에
+    들어가는 결제가 있어 한 달을 건너 구간이 바뀔 수 있어 중간에 멈추지 않는다. 지나간 달은 달 끝 순위로 계산한다. E48
+    """
+    gone = {drop, changed.id if changed else None}
+    others = [q for q in before if q.id not in gone]
+    out: dict[str, PaymentResult] = {}
+    payments = others
+    if changed is not None:
+        out[changed.id] = engine.price_payment(card, others, changed)
+        payments = [*others, changed.model_copy(update={"benefits": out[changed.id].benefits})]
+    this_month = month_of(local(now).date())
+    m = start
+    while m < this_month:
+        m = add_months(m, 1)
+        if base_tier(engine, card, before, m) == base_tier(engine, card, payments, m):
+            continue
+        results = {r.payment_id: r for r in engine.price_month(card, payments, month=m, final=m < this_month)}
+        out |= results
+        payments = _with(payments, results)
+    return out
