@@ -72,3 +72,4 @@
 | [29](29-databricks-pipeline-prep.md) | 2026-09-30 | Databricks 파이프라인 가입 전 준비 |
 | [30](30-korean-only-hook.md) | 2026-09-30 | 답에 영어가 섞이면 막는 훅 |
 | [31](31-cost-guard-overnight-failures.md) | 2026-10-01 | 개발용 비용 차단 작업의 밤사이 실패 |
+| [32](32-first-prod-deploy-and-collect.md) | 2026-10-01 | 첫 운영 배포와 첫 수집 |
