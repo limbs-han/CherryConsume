@@ -39,6 +39,9 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--signup", type=date.fromisoformat, required=True)
     ap.add_argument("--target", required=True)
     ap.add_argument("--limit", type=Decimal, help="시험용. 한도를 이 금액으로 바꾼다")
+    ap.add_argument(
+        "--run-id", type=int, help="이 단계가 든 실행. 이 실행은 취소하지 않는다"
+    )
     args = ap.parse_args(argv)
 
     # 청구 기록의 usage_date는 UTC 날짜라 오늘도 UTC로 잡는다. 카드 계산의 한국 시간 규칙과 다르다
@@ -92,11 +95,20 @@ def main(argv: list[str] | None = None) -> None:
         except Exception as e:  # noqa: BLE001
             errors.append(f"작업 {type(e).__name__}")
         if over:
-            # 설정 바꾸기가 실패해도 돌고 있는 실행은 멈춘다
-            try:
-                w.jobs.cancel_all_runs(job_id=listed.job_id)
-            except Exception as e:  # noqa: BLE001
-                errors.append(f"실행 취소 {type(e).__name__}")
+            # 설정 바꾸기가 실패해도 돌고 있는 실행과 기다리는 실행은 멈춘다
+            # cherry_refresh의 마지막 단계로 돌 때 자기 실행까지 취소하면 웨어하우스와 앱을 끄기 전에 끝난다
+            # 앞 단계는 이미 끝났고, 새로 멈췄으면 이 실행은 아래에서 실패로 끝나 알림을 보낸다
+            runs = listing(
+                "실행",
+                lambda j=listed.job_id: w.jobs.list_runs(job_id=j, active_only=True),
+            )
+            for run in runs:
+                if run.run_id == args.run_id:
+                    continue
+                try:
+                    w.jobs.cancel_run(run_id=run.run_id)
+                except Exception as e:  # noqa: BLE001
+                    errors.append(f"실행 취소 {type(e).__name__}")
     if over:
         # 목록에는 이 계정이 권한을 가진 웨어하우스만 나온다. 권한은 docs/databricks.md 3단계에서 준다
         for wh in listing("웨어하우스", w.warehouses.list):

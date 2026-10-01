@@ -58,10 +58,15 @@ resources:
           depends_on:
             - task_key: changes
           # 앞 단계가 실패해도 비용 차단 확인은 건너뛰지 않는다
+          # 늘 마지막 단계로 둔다. 자기 실행은 취소하지 않아서, 이 단계와 함께 도는 단계가 있으면 한도를 넘어도 끝까지 돈다
           run_if: ALL_DONE
+          # 서버리스는 실패한 단계를 저절로 다시 돌린다. 새로 멈춘 실행은 알림을 보내려고 실패로 끝나는데,
+          # 다시 돈 시도가 이미 멈춘 것을 보고 성공으로 끝나 알림이 오지 않았다. 2026-10-01 운영 시험
+          disable_auto_optimization: true
           spark_python_task:
             python_file: ../src/cost_guard.py
-            parameters: ["--signup", "${var.signup_date}", "--target", "${bundle.target}"]
+            # {{job.run_id}}는 실행할 때 Databricks가 이 실행의 번호로 바꾼다
+            parameters: ["--signup", "${var.signup_date}", "--target", "${bundle.target}", "--run-id", "{{job.run_id}}"]
           environment_key: default
           timeout_seconds: 600
       environments:

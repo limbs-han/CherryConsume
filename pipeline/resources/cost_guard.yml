@@ -19,6 +19,9 @@ resources:
         on_failure: ["${var.alert_email}"]
       tasks:
         - task_key: guard
+          # 서버리스는 실패한 단계를 저절로 다시 돌린다. 새로 멈춘 실행은 알림을 보내려고 실패로 끝나는데,
+          # 다시 돈 시도가 이미 멈춘 것을 보고 성공으로 끝나 알림이 오지 않았다. 2026-10-01 운영 시험
+          disable_auto_optimization: true
           spark_python_task:
             python_file: ../src/cost_guard.py
             parameters: ["--signup", "${var.signup_date}", "--target", "${bundle.target}"]
