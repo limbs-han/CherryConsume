@@ -9,6 +9,7 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
+from cherry_core.catalog.models import Billing
 from cherry_core.engine.cond import local
 from cherry_core.engine.models import Payment, PaymentResult, Query, Recommendation
 from cherry_core.engine.recommend import DEFAULT_AMOUNT, order
@@ -37,6 +38,8 @@ class PaymentFields(BaseModel):
     installment_months: Annotated[int, Field(strict=True, ge=1, le=36)] = 1
     interest_free: bool = False
     payment_method: str | None = None
+    # 자동납부, 후불교통, 정기결제는 사용자가 안다. 비우면 가맹점의 기본 청구 방식이다. 카드 혜택 스물두 개가 이 조건을 단다
+    billing: Billing | None = None
 
     @model_validator(mode="after")
     def _check(self) -> PaymentFields:
@@ -54,9 +57,11 @@ class NewPayment(PaymentFields):
     amount: Amount
     user_card_id: str
     paid_at: AwareDatetime
+    # 추천 결과에서 "이 카드로 결제 기록"을 누르면 채워진다. 추천을 따랐는지 본다. S4, 설계 문서 4.1
+    recommendation_request_id: str | None = None
 
 
-def filled(request: Request, body: PaymentFields) -> dict:
+def filled(request: Request, body) -> dict:
     """가게 이름으로 가맹점과 업종을 채우고 채널과 시각의 기본값을 넣는다. S3"""
     cat = request.app.state.catalog
     if body.category is not None and body.category not in cat.categories:
@@ -64,13 +69,14 @@ def filled(request: Request, body: PaymentFields) -> dict:
     if body.payment_method is not None and body.payment_method not in cat.payment_methods:
         raise HTTPException(422, "모르는 결제수단이다")
     now = request.app.state.clock()
-    paid_at = body.paid_at or now
+    # 추천 요청에는 시각 칸이 없어 지금이다
+    paid_at = getattr(body, "paid_at", None) or now
     if paid_at > now + timedelta(days=1):
         raise HTTPException(422, "결제 시각이 지금보다 하루 넘게 뒤다")
     merchant = match_merchant(request.app.state.aliases, body.merchant_name)
     category = body.category or (cat.merchants[merchant].category if merchant else None)
     # 청구 방식은 저장할 때 정해 둔다. 카탈로그의 가맹점 청구 방식이 바뀌어도 저장한 결제는 그대로다. E18
-    billing = cat.merchants[merchant].billing if merchant else None
+    billing = getattr(body, "billing", None) or (cat.merchants[merchant].billing if merchant else None)
     channel = body.channel or ("online" if category and category.split(".")[0] in ONLINE else "offline")
     return {
         "merchant": merchant,
@@ -92,13 +98,13 @@ def my_cards(conn, user) -> list[dict]:
     ).fetchall()
 
 
-def checked_id(value: str | None) -> str | None:
+def checked_id(value: str | None, what: str = "보유 카드가 아니다") -> str | None:
     if value is None:
         return None
     try:
         return str(uuid.UUID(value))
     except ValueError:
-        raise HTTPException(404, "보유 카드가 아니다") from None
+        raise HTTPException(404, what) from None
 
 
 def payment_of(row: dict, body: PaymentFields, amount: int, f: dict, pid: str) -> Payment:
@@ -194,6 +200,14 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
     ).fetchone()
     if row is None:
         raise HTTPException(404, "보유 카드가 아니다")
+    request_id = None
+    if body.recommendation_request_id is not None:
+        request_id = checked_id(body.recommendation_request_id, "추천 요청이 아니다")
+        mine = conn.execute(
+            "SELECT 1 FROM recommendation_requests WHERE id = %s AND user_id = %s", (request_id, user)
+        ).fetchone()
+        if mine is None:
+            raise HTTPException(404, "추천 요청이 아니다")
     engine = request.app.state.engine
     pid = new_id()
     p = payment_of(row, body, body.amount, f, pid)
@@ -210,8 +224,9 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
         """
         INSERT INTO transactions (id, user_id, user_card_id, amount, merchant_name, merchant_key, category_code, paid_at,
                                   installment_months, interest_free_installment, channel, region, payment_method,
-                                  billing, card_revision_id, source, created_at, updated_at)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'manual', %s, %s)
+                                  billing, card_revision_id, recommendation_request_id, source, created_at,
+                                  updated_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'manual', %s, %s)
         """,
         (
             pid,
@@ -229,6 +244,7 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
             p.payment_method,
             p.billing,
             revision_of(p.paid_at),
+            request_id,
             now,
             now,
         ),

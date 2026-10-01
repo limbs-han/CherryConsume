@@ -371,3 +371,26 @@ def test_draft_shows_the_merchant_found(client):
     headers, _ = setup(client)
     d = client.post("/me/payments/draft", json={"merchant_name": "GS25 테헤란점"}, headers=headers).json()
     assert d["merchant_display"] == "GS25"
+
+
+def test_postpaid_transit_billing(client):
+    # IBK 나라사랑 25만 구간 대중교통 20%는 후불교통으로 탄 시내버스, 지하철만이다. 청구 방식을 고르면 1만 원에 2,000원
+    # 고르지 않으면 일반 결제라 0원이다. 사용자가 아는 값이라 결제 화면에서 고른다
+    headers, [ibk] = setup(client, {"card_id": "ibk-narasarang", "assumed_prev_month_spend": 300000})
+    base = {"category": "transit.subway"}
+    assert pay(client, headers, ibk, 10000, "지하철", **base)["value"] == 0
+    later = "2026-09-15T21:30:00+09:00"
+    assert pay(client, headers, ibk, 10000, "지하철", at=later, billing="postpaid_transit", **base)["value"] == 2000
+
+
+def test_repricing_keeps_the_saved_billing(client, db):
+    # 후불교통으로 저장한 지하철 2,000원은 앞선 결제를 넣어 9월을 다시 계산해도 저장한 청구 방식으로 계산돼 2,000원이다
+    headers, [ibk] = setup(client, {"card_id": "ibk-narasarang", "assumed_prev_month_spend": 300000})
+    pay(client, headers, ibk, 10000, "지하철", category="transit.subway", billing="postpaid_transit")
+    pay(client, headers, ibk, 5000, "GS25", at="2026-09-15T10:00:00+09:00")
+    row = db.execute(
+        "SELECT t.billing, coalesce(sum(b.value), 0) AS v FROM transactions t"
+        " LEFT JOIN transaction_benefits b ON b.transaction_id = t.id WHERE t.category_code = 'transit.subway'"
+        " GROUP BY t.billing"
+    ).fetchone()
+    assert (row["billing"], row["v"]) == ("postpaid_transit", 2000)

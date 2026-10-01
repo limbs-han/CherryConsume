@@ -28,7 +28,7 @@ from . import auth
 from .catalog_sync import revision_ids, sync_catalog
 from .db import migrate
 from .payments import alias_index
-from .routes import catalog, me, payments
+from .routes import catalog, me, payments, recommend
 
 REPO = Path(__file__).resolve().parents[2]
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
@@ -71,6 +71,7 @@ def create_app(
         app.state.catalog = load_catalog(catalog_dir)
         app.state.engine = Engine(app.state.catalog)
         app.state.aliases = alias_index(app.state.catalog)
+        app.state.billing_bound = recommend.billing_bound(app.state.catalog)
         tree = app.state.catalog.category_tree
         app.state.category_names = {c.code: c.name for c in tree} | {
             f"{c.code}.{ch.code}": ch.name for c in tree for ch in c.children
@@ -99,4 +100,5 @@ def create_app(
     app.include_router(catalog.router)
     app.include_router(me.router)
     app.include_router(payments.router)
+    app.include_router(recommend.router)
     return app
