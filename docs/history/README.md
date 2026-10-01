@@ -76,3 +76,4 @@
 | [33](33-change-detection-and-model-choice.md) | 2026-10-01 | 수집, 변경 감지 파일과 추출 모델 다시 고르기 |
 | [34](34-databricks-handover-and-guard-retest.md) | 2026-10-01 | Databricks 일 이어 받기와 비용 차단 재시험 |
 | [35](35-gold-seed.md) | 2026-10-01 | 골드 카탈로그 첫 적재 |
+| [36](36-manual-approval-merchants.md) | 2026-10-01 | 손 승인 작업과 가맹점 두 개 추가 |
