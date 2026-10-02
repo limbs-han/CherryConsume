@@ -14,3 +14,5 @@ key.properties
 **/*.jks
 # Kotlin 데몬의 세션 파일
 .kotlin/
+# 빌드가 실패하면 Gradle이 남기는 보고서
+/build/
