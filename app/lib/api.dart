@@ -2,6 +2,7 @@
 library;
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -245,6 +246,7 @@ class RecordRow {
       cancelledAt = j['cancelled_at'] == null
           ? null
           : DateTime.parse(j['cancelled_at']).toLocal(),
+      timeKnown = j['time_known'] ?? true,
       value = j['value'],
       rewards = List<String>.from(j['rewards']),
       counted = j['counted'],
@@ -257,6 +259,9 @@ class RecordRow {
   final String id, userCardId, cardName, channel, region;
   final DateTime paidAt;
   final DateTime? cancelledAt;
+
+  /// 엑셀에 날짜만 있던 결제는 시각을 모른다. 기록에서 시각을 고치면 안다. E57
+  final bool timeKnown;
   final String? merchantName, category, categoryName, paymentMethod, billing;
   final int amount, cancelledAmount, value, installmentMonths;
   final List<String> rewards;
@@ -389,6 +394,33 @@ class OptionQuestion {
   final String? answer, pendingValue, pendingFrom;
 }
 
+/// 엑셀 가져오기 미리보기. 열을 못 찾으면 needsMapping과 열 이름이다
+class ImportPreview {
+  ImportPreview(Map<String, dynamic> j)
+    : needsMapping = j['needs_mapping'],
+      headerRow = j['header_row'],
+      headers = List<String>.from(j['headers']),
+      mapping = j['mapping'] == null
+          ? null
+          : Map<String, int>.from(j['mapping'] as Map),
+      signature = j['signature'],
+      topRows = [
+        for (final r in j['top_rows'] ?? const []) List<String>.from(r as List),
+      ],
+      rows = [for (final r in j['rows']) r as Map<String, dynamic>],
+      summary = j['summary'] as Map<String, dynamic>?;
+  final bool needsMapping;
+  final int headerRow;
+  final List<String> headers;
+  final Map<String, int>? mapping;
+  final String? signature;
+
+  /// 머리 줄을 고를 위 10줄. 앱이 올린 파일의 줄이다
+  final List<List<String>> topRows;
+  final List<Map<String, dynamic>> rows;
+  final Map<String, dynamic>? summary;
+}
+
 /// 저장한 결제. 업종이 부모까지만 있으면 자식 업종을 묻는다. E47
 class Saved {
   Saved(Map<String, dynamic> j)
@@ -443,7 +475,11 @@ class Api {
     final uri = Uri.parse('$baseUrl$path').replace(queryParameters: query);
     final request = http.Request(method, uri);
     if (_token != null) request.headers['Authorization'] = 'Bearer $_token';
-    if (body != null) {
+    if (body is Uint8List) {
+      // 엑셀 가져오기의 파일은 몸통에 그대로 보낸다. 서버는 읽고 바로 버린다. E35
+      request.headers['Content-Type'] = 'application/octet-stream';
+      request.bodyBytes = body;
+    } else if (body != null) {
       request.headers['Content-Type'] = 'application/json';
       request.body = jsonEncode(body);
     }
@@ -457,6 +493,52 @@ class Api {
     if (response.statusCode >= 400) throw ApiError(response.statusCode, text);
     return text.isEmpty ? null : jsonDecode(text);
   }
+
+  /// 엑셀 가져오기 미리보기. 카드를 고르면 그 카드로, 안 고르면 파일의 카드 이름 열로 나눈다. 파일 이름은 보내지 않는다.
+  /// 이름과 카드번호 끝자리가 들어 있을 수 있다. columns는 사용자가 짝지은 {칸: 열 번호}다. E30
+  Future<ImportPreview> importPreview(
+    Uint8List data, {
+    String? userCardId,
+    int? headerRow,
+    Map<String, int>? columns,
+  }) async => ImportPreview(
+    await _send(
+      'POST',
+      '/me/imports/preview',
+      query: {
+        'user_card_id': ?userCardId,
+        if (columns != null)
+          'mapping': jsonEncode({'row': headerRow, 'columns': columns}),
+      },
+      body: data,
+    ),
+  );
+
+  /// 미리보기의 새 결제와 취소 행을 저장한다. 서버가 다시 판정한다. 짝지은 열은 이때 남긴다
+  Future<Map<String, dynamic>> saveImport(
+    List<Map<String, dynamic>> rows, {
+    String? signature,
+    Map<String, int>? columns,
+  }) async =>
+      await _send(
+            'POST',
+            '/me/imports',
+            body: {
+              'rows': rows,
+              'mapping': columns == null
+                  ? null
+                  : {'signature': signature, 'columns': columns},
+            },
+          )
+          as Map<String, dynamic>;
+
+  Future<List<Map<String, dynamic>>> imports() async => [
+    for (final b in await _send('GET', '/me/imports'))
+      b as Map<String, dynamic>,
+  ];
+
+  /// 가져온 묶음 되돌리기. E34
+  Future<void> undoImport(int id) => _send('DELETE', '/me/imports/$id');
 
   Future<void> devLogin(String name) async {
     final r = await _send('POST', '/auth/dev', body: {'name': name});

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
+import 'import.dart';
 import 'payment.dart';
 
 const _days = ['월', '화', '수', '목', '금', '토', '일'];
@@ -63,6 +64,28 @@ class _RecordsScreenState extends State<RecordsScreen> {
     }
   }
 
+  /// 이용 내역 가져오기. 저장하면 가져온 건수를 알리고 다시 불러온다. S11
+  Future<void> _import(Records r) async {
+    final imported = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+        builder: (_) => ImportScreen(api: widget.api, cards: r.cards),
+      ),
+    );
+    if (imported == null || !mounted) return;
+    _reload();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('결제 $imported건을 가져왔어요.')));
+  }
+
+  /// 가져온 묶음과 되돌리기. 되돌렸으면 다시 불러온다. E34
+  Future<void> _batches() async {
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => ImportsScreen(api: widget.api)),
+    );
+    if (changed == true && mounted) _reload();
+  }
+
   @override
   Widget build(BuildContext context) => FutureBuilder(
     future: _records,
@@ -72,8 +95,13 @@ class _RecordsScreenState extends State<RecordsScreen> {
         appBar: AppBar(
           title: const Text('기록'),
           actions: [
+            IconButton(
+              tooltip: '가져온 묶음',
+              onPressed: r == null ? null : _batches,
+              icon: const Icon(Icons.history),
+            ),
             TextButton(
-              onPressed: () => notReady(context, '이용 내역 가져오기'),
+              onPressed: r == null ? null : () => _import(r),
               child: const Text('가져오기'),
             ),
           ],
@@ -245,7 +273,8 @@ class _Row extends StatelessWidget {
         ],
       ),
       subtitle: Text(
-        '${row.categoryName ?? '업종 미정'} · ${row.cardName} · ${two(row.paidAt.hour)}:${two(row.paidAt.minute)}',
+        '${row.categoryName ?? '업종 미정'} · ${row.cardName} · '
+        '${row.timeKnown ? '${two(row.paidAt.hour)}:${two(row.paidAt.minute)}' : '시각 모름'}',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(color: C.sub),

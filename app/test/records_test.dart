@@ -51,6 +51,7 @@ class FakeServer {
   final drafts = <Map<String, dynamic>>[];
   final cancels = <Map<String, dynamic>>[];
   final answers = <String, Map<String, dynamic>>{};
+  bool undone = false;
   bool removed = false;
 
   Future<http.Response> call(http.Request req) async {
@@ -231,6 +232,21 @@ class FakeServer {
           'revision_from': '2026-07-15',
           'checked_at': '2026-09-29',
         });
+      case ('GET', '/me/imports'):
+        return ok([
+          {
+            'id': 7,
+            'row_count': 3,
+            'imported_count': 2,
+            'duplicate_count': 0,
+            'cancel_count': 1,
+            'created_at': '2026-09-15T12:00:00+00:00',
+            'undone_at': undone ? '2026-09-15T13:00:00+00:00' : null,
+          },
+        ]);
+      case ('DELETE', '/me/imports/7'):
+        undone = true;
+        return ok({'id': 7, 'repriced': 0});
       case ('PUT', '/me/cards/u1/answers'):
         answers['card'] = jsonDecode(req.body) as Map<String, dynamic>;
         return ok({'repriced': 2});
@@ -382,6 +398,29 @@ void main() {
     });
     expect(find.text('답을 적었어요.'), findsOneWidget);
     expect(find.text('답을 적지 못했어요.'), findsNothing);
+  });
+
+  testWidgets('가져온 묶음을 되돌리면 기록을 다시 불러온다', (tester) async {
+    final server = await start(tester);
+    await tester.tap(find.text('기록'));
+    await tester.pumpAndSettle();
+    final before = server.calls.where((c) => c == 'GET /me/payments').length;
+    await tester.tap(find.byTooltip('가져온 묶음'));
+    await tester.pumpAndSettle();
+    expect(find.text('2026-09-15 가져오기'), findsOneWidget);
+    expect(find.text('결제 2건 · 취소 1건'), findsOneWidget);
+    await tester.tap(find.text('되돌리기'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '되돌리기'));
+    await tester.pumpAndSettle();
+    expect(server.calls, contains('DELETE /me/imports/7'));
+    expect(find.text('결제 2건 · 취소 1건 · 되돌림'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(
+      server.calls.where((c) => c == 'GET /me/payments').length,
+      before + 1,
+    );
   });
 
   testWidgets('홈의 카드를 누르면 카드 상세에 남은 한도가 보이고 해지하면 홈에서 빠진다', (tester) async {
