@@ -1,0 +1,15 @@
+# gcloud run deploy --source .가 올릴 것만 남긴다. 없으면 맨 위 .gitignore만 따라 app/build, key.properties까지 올라간다
+# 작업 005 설계 5h. 올라갈 목록은 gcloud meta list-files-for-upload .로 본다
+/*
+!/Dockerfile
+!/.dockerignore
+!/catalog/
+!/backend/
+/backend/*
+!/backend/pyproject.toml
+!/backend/uv.lock
+!/backend/cherry_core/
+!/backend/cherry_api/
+**/__pycache__/
+# 허용한 폴더 안에 둔 비밀값 파일도 뺀다. 마지막 줄이 이긴다
+**/.env

@@ -142,6 +142,20 @@ def test_withdraw_blocks_at_once_and_purges_after_30_days(social, db_url, clock)
     assert social.get("/me/home", headers=fresh).json()["cards"] == []
 
 
+def test_purge_also_drops_expired_sessions(social, db_url, clock):
+    # 설계 5h. 1년이 지난 세션은 쓸 수 없고 지우기 때 함께 지운다
+    bearer(kakao(social, "kakao-a"))
+    with connect(db_url) as conn:
+
+        def sessions():
+            return conn.execute("SELECT count(*) AS n FROM sessions").fetchone()["n"]
+
+        purge_deleted(conn, clock() + timedelta(days=364))
+        assert sessions() == 1
+        purge_deleted(conn, clock() + timedelta(days=365))
+        assert sessions() == 0
+
+
 def test_not_configured_is_503(db_url, clock, client):
     with TestClient(create_app(database_url=db_url, dev_login=True, clock=clock)) as c:
         assert kakao(c, "kakao-a").status_code == 503

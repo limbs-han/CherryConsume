@@ -1,0 +1,10 @@
+# 이미지에 넣을 것만 남긴다. .env나 사용자 명세서가 들어가지 않게 한다. 작업 005 설계 5h
+*
+!backend/pyproject.toml
+!backend/uv.lock
+!backend/cherry_core
+!backend/cherry_api
+!catalog
+**/__pycache__
+# 허용한 폴더 안에 둔 비밀값 파일도 뺀다. 마지막 줄이 이긴다
+**/.env

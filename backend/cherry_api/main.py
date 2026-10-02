@@ -85,7 +85,10 @@ def create_app(
         app.state.category_names = {c.code: c.name for c in tree} | {
             f"{c.code}.{ch.code}": ch.name for c in tree for ch in c.children
         }
-        app.state.pool = ConnectionPool(database_url, kwargs={"row_factory": dict_row}, open=True)
+        # Cloud Run은 쉬는 동안 밖으로 난 연결을 끊을 수 있다. 꺼낼 때마다 살아 있는지 본다. 작업 005 설계 5h
+        app.state.pool = ConnectionPool(
+            database_url, kwargs={"row_factory": dict_row}, check=ConnectionPool.check_connection, open=True
+        )
         with app.state.pool.connection() as conn:
             migrate(conn)
             sync_catalog(conn, app.state.catalog)
@@ -101,7 +104,7 @@ def create_app(
         app.state.pool.close()
 
     async def purge_daily(app: FastAPI) -> None:
-        """켜질 때와 24시간마다 탈퇴하고 30일이 지난 사용자를 지운다. E27"""
+        """켜질 때와 24시간마다 탈퇴하고 30일이 지난 사용자와 만료된 세션을 지운다. E27"""
 
         def once() -> None:
             with app.state.pool.connection() as conn:

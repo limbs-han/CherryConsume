@@ -121,3 +121,12 @@ def test_revision_changed_and_changed_back(client, db):
     sync_catalog(db, client.app.state.catalog)
     assert revision_ids(db, client.app.state.catalog)[("shinhan-mrlife", date(2026, 7, 15))] == row["id"]
     db.rollback()
+
+
+def test_every_table_has_row_security(client, db):
+    # 설계 5h. Supabase의 Data API가 다시 켜져도 표의 행이 보이지 않는다. 새 표도 그 마이그레이션에서 켠다
+    rows = db.execute(
+        "SELECT c.relname FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace"
+        " WHERE n.nspname = 'public' AND c.relkind IN ('r', 'p') AND NOT c.relrowsecurity ORDER BY 1"
+    ).fetchall()
+    assert [r["relname"] for r in rows] == []

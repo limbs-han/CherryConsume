@@ -99,7 +99,7 @@ def login_as(request: Request, provider: str, uid: str) -> dict:
 def ask(request: Request, method: str, url: str, **kw) -> httpx.Response:
     """카카오와 Google을 부른다. 닿지 않으면 502다
 
-    ponytail: 5초는 연결, 쓰기, 읽기마다 걸린다. 로그인 횟수 제한은 배포 슬라이스에서 앞단에 둔다
+    ponytail: 5초는 연결, 쓰기, 읽기마다 걸린다. 로그인 횟수 제한은 1차에 두지 않는다. 설계 5h
     """
     try:
         return request.app.state.http.request(method, url, timeout=5, **kw)
@@ -181,7 +181,8 @@ def google_login(body: GoogleLogin, request: Request) -> dict:
 
 
 def purge_deleted(conn: psycopg.Connection, now: datetime) -> int:
-    """탈퇴하고 30일이 지난 사용자를 지운다. 사용자 표는 모두 연쇄로 지워진다. 지운 사용자 수. E27"""
+    """탈퇴하고 30일이 지난 사용자와 만료된 세션을 지운다. 사용자 표는 모두 연쇄로 지워진다. 지운 사용자 수. E27"""
+    conn.execute("DELETE FROM sessions WHERE expires_at <= %s", (now,))
     cur = conn.execute(
         "DELETE FROM users WHERE deleted_at IS NOT NULL AND deleted_at <= %s", (now - timedelta(days=PURGE_DAYS),)
     )
