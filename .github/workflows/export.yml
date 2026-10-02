@@ -122,14 +122,16 @@ jobs:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: export-bundle
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
       - name: 받은 커밋을 master에 올리기
         run: |
           # 커밋을 만든 사이 master가 앞서 갔으면 합치지 않고 실패한다. 폴더는 pending/에 남아 다음 실행에서 다시 한다
           git fetch -q export.bundle export:export
-          # 받은 커밋이 catalog/만 바꾸고 모두 봇이 썼는지 본다. 준비 작업에서 도는 바깥 코드가 번들을 바꿔도 코드가 올라가지 않게 한다
-          outside=$(git diff --name-only HEAD export | grep -v '^catalog/' || true)
+          # 받은 커밋이 catalog/와 그것으로 만든 app/assets/catalog.json만 바꾸고 모두 봇이 썼는지 본다. 준비 작업에서 도는
+          # 바깥 코드가 번들을 바꿔도 코드가 올라가지 않게 한다
+          outside=$(git diff --name-only HEAD export | grep -v -e '^catalog/' -e '^app/assets/catalog\.json$' || true)
           if [ -n "$outside" ]; then
-            echo "::error::catalog/ 밖을 바꾼 커밋이 있어 올리지 않는다"
+            echo "::error::catalog/와 app/assets/catalog.json 밖을 바꾼 커밋이 있어 올리지 않는다"
             exit 1
           fi
           authors=$(git log --format='%an <%ae>' HEAD..export | sort -u)
@@ -138,6 +140,13 @@ jobs:
             exit 1
           fi
           git merge -q --ff-only export
+          # 폰이 받는 파일이 받은 catalog/로 다시 만든 것과 같은지 본다. 번들을 바꿔 그 파일만 고쳐도 폰에 가지 않게 한다.
+          # 만드는 코드는 위에서 바뀌지 않은 것을 본 master의 것이다. 작업 006 단계 3 위험 검토
+          uv run --project backend python -m cherry_core.catalog json --out "$RUNNER_TEMP/catalog.json"
+          if ! cmp -s "$RUNNER_TEMP/catalog.json" app/assets/catalog.json; then
+            echo "::error::app/assets/catalog.json이 catalog/로 다시 만든 것과 달라 올리지 않는다"
+            exit 1
+          fi
           git push -q origin HEAD:master
 
   done:
