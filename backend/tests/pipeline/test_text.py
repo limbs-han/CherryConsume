@@ -2,7 +2,7 @@
 
 import pytest
 
-from cherry_core.pipeline.text import changed_lines, document_text, fingerprint, html_text, lines
+from cherry_core.pipeline.text import changed_lines, document_text, fingerprint, html_text, lines, method_and_text
 
 
 def test_lines_ignore_spacing_and_blank_lines():
@@ -86,6 +86,15 @@ def test_pdf_uses_parse_result_and_keeps_table_rows():
     assert document_text(b"%PDF-1.7 ...", "application/pdf", parsed) == "혜택 안내\n카페 | 10%"
     with pytest.raises(ValueError, match="ai_parse_document"):
         document_text(b"%PDF-1.7 ...", "application/pdf")
+
+
+def test_method_and_text_for_each_kind_of_file():
+    # Spark 작업이 파일마다 부른다. PDF의 해석 결과는 표에서 JSON 글로 온다. 작업 007 설계 2절
+    parsed = '{"document": {"elements": [{"type": "title", "content": "혜택 안내"}]}}'
+    assert method_and_text(b"%PDF-1.7 ...", "application/pdf", parsed) == ("ai_parse_document", "혜택 안내")
+    assert method_and_text('{"a": "카드"}'.encode(), "application/json", None) == ("json", '{\n "a": "카드"\n}')
+    assert method_and_text("카페\n 할인".encode(), "text/plain", None) == ("text", "카페\n할인")
+    assert method_and_text("<p>카페</p><p>할인</p>".encode(), "text/html", None) == ("html", "카페\n할인")
 
 
 def test_view_count_is_not_a_change():

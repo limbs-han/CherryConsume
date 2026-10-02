@@ -137,3 +137,19 @@ def document_text(content: bytes, content_type: str, parsed: dict | None = None)
     if "text/plain" in content_type:
         return "\n".join(lines(text))
     return html_text(text)
+
+
+def method_and_text(content: bytes, content_type: str, parsed: str | None) -> tuple[str, str]:
+    """(글을 뽑은 방법, 글). parsed는 ai_parse_document 결과의 JSON 글이다. 방법은 나중에 방법별로 글 품질을 보려고 남긴다.
+
+    Spark 작업이 파일마다 부른다. 작업 007 설계 2절.
+    """
+    if content.startswith(b"%PDF-"):
+        how = "ai_parse_document"
+    elif "json" in content_type:
+        how = "json"
+    elif "text/plain" in content_type:
+        how = "text"
+    else:
+        how = "html"
+    return how, document_text(content, content_type, json.loads(parsed) if parsed else None)
