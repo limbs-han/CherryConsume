@@ -44,6 +44,25 @@ def engine_card(row: dict) -> UserCard:
     )
 
 
+@router.get("/account")
+def account(user: User, conn: Conn) -> dict:
+    """설정 맨 위의 계정. 로그인 수단과 가입한 날만 준다. 이메일과 이름은 받지 않는다. 작업 005 설계 5g"""
+    row = conn.execute(
+        "SELECT a.provider, u.created_at FROM users u JOIN auth_identities a ON a.user_id = u.id WHERE u.id = %s"
+        " ORDER BY a.id LIMIT 1",
+        (user,),
+    ).fetchone()
+    return {"provider": row["provider"], "created_at": row["created_at"].isoformat()}
+
+
+@router.delete("")
+def withdraw(request: Request, user: User, conn: Conn) -> dict:
+    """탈퇴. 바로 로그인을 막고 30일 뒤 사용자 영역을 지운다. 모든 기기의 세션을 지운다. E27"""
+    conn.execute("UPDATE users SET deleted_at = %s WHERE id = %s", (request.app.state.clock(), user))
+    conn.execute("DELETE FROM sessions WHERE user_id = %s", (user,))
+    return {"deleted": True}
+
+
 @router.post("/cards", status_code=201)
 def add_card(body: NewUserCard, request: Request, user: User, conn: Conn) -> dict:
     registrable(request, body.card_id)
