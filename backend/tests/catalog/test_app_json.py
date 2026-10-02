@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from cherry_core.catalog.__main__ import main
-from cherry_core.catalog.app_json import SCHEMA, app_catalog_text, rules_sha256
+from cherry_core.catalog.app_json import SCHEMA, app_catalog_text, number_errors, rules_sha256
 from cherry_core.catalog.load import load_catalog
 
 from .conftest import benefit, rev
@@ -109,11 +109,17 @@ def test_json_refuses_numbers_the_app_cannot_hold(make_catalog, tmp_path, capsys
     def rate(x):
         return lambda f: benefit(f).update(reward={"type": "billing_discount", "rate": x})
 
-    assert main(["json", "--root", str(make_catalog(rate(12.3456))), "--out", str(out)]) == 0
-    out.unlink()
+    for ok in (12.3456, 1.0001):
+        assert main(["json", "--root", str(make_catalog(rate(ok))), "--out", str(out)]) == 0, ok
+        out.unlink()
     capsys.readouterr()
-    assert main(["json", "--root", str(make_catalog(rate(12.34567))), "--out", str(out)]) == 1
-    assert not out.exists() and "reward.rate" in capsys.readouterr().out
+    for bad in (12.34567, 1.00015):
+        assert main(["json", "--root", str(make_catalog(rate(bad))), "--out", str(out)]) == 1, bad
+        assert not out.exists() and "reward.rate" in capsys.readouterr().out
+    # 비율 말고도 모든 수를 본다. 크기 경계는 비율 규칙 검사보다 커서 함수로 본다
+    assert number_errors({"a": 10**12 - 1, "b": True, "c": 99999.9999}) == []
+    assert number_errors({"c": 100000.0}) == ["c: 앱이 정확히 계산하지 못하는 소수 100000.0"]
+    assert number_errors({"a": [10**12]}) == ["a[0]: 앱이 정확히 계산하지 못하는 정수 1000000000000"]
 
 
 def test_billing_cycle_spend_is_written_like_the_engine_took_it(make_catalog, tmp_path):

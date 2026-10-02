@@ -20,6 +20,8 @@ HOLIDAY_YEARS = range(2020, 2037)
 # 앱 엔진은 64비트 정수 분수로 계산한다. 소수가 이 안이면 금액 계산이 넘치지 않는다. 2026-10-02 작업 006 단계 2 위험 검토
 MAX_DENOMINATOR = 10_000
 MAX_DECIMAL = 100_000
+# 금액과 구간처럼 정수로 적힌 수의 끝. 2^53을 넘으면 Dart가 소수로 읽고, 분수와 곱하면 넘친다
+MAX_INTEGER = 10**12
 
 
 def rules_sha256(data: dict) -> str:
@@ -43,13 +45,15 @@ def rule_errors(cat: Catalog) -> list[str]:
 
 
 def number_errors(data: dict) -> list[str]:
-    """앱이 정확히 담지 못하는 소수. 소수 넷째 자리를 넘거나 10만 이상이면 Dart 분수가 넘쳐 조용히 틀린 금액이 될 수 있다"""
+    """앱이 정확히 담지 못하는 수. 소수 넷째 자리를 넘거나 10만 이상인 소수, 1조 이상인 정수면 Dart 분수가 넘쳐 조용히 틀린 금액이 될 수 있다"""
     errors: list[str] = []
 
     def walk(x, path: str) -> None:
         if isinstance(x, float):
             if Fraction(repr(x)).denominator > MAX_DENOMINATOR or abs(x) >= MAX_DECIMAL:
                 errors.append(f"{path}: 앱이 정확히 계산하지 못하는 소수 {x!r}")
+        elif isinstance(x, int) and not isinstance(x, bool) and abs(x) >= MAX_INTEGER:
+            errors.append(f"{path}: 앱이 정확히 계산하지 못하는 정수 {x!r}")
         elif isinstance(x, dict):
             for k, v in x.items():
                 walk(v, f"{path}.{k}" if path else k)
