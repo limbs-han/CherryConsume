@@ -52,7 +52,8 @@ void pay(Database db, Map<String, Object?> row) {
 }
 
 void main() {
-  test('빈 DB에 표가 생기고 다시 열어도 그대로다', () {
+  test('test_migrations_run_once', () {
+    // 빈 DB에 표가 생기고 다시 열어도 표 정의를 다시 돌리지 않아 그대로다
     final dir = Directory.systemTemp.createTempSync('cherry');
     try {
       final path = '${dir.path}/cherry.db';
@@ -155,13 +156,19 @@ void main() {
     );
   });
 
-  test('해지하지 않은 같은 카드는 하나뿐이다', () {
-    // E21. 해지한 카드는 다시 등록할 수 있다
+  test('test_same_card_twice_is_refused', () {
+    // E21. 가족카드도 같은 카드 한 장이다
+    final db = openDb();
+    card(db, 'u1');
+    expect(() => card(db, 'u2'), throwsA(isA<SqliteException>()));
+    card(db, 'u3', cardId: 'kb-toktok');
+  });
+
+  test('test_removed_card_can_be_added_again', () {
     final db = openDb();
     card(db, 'u1', removedAt: 5);
     card(db, 'u2');
-    expect(() => card(db, 'u3'), throwsA(isA<SqliteException>()));
-    card(db, 'u4', cardId: 'kb-toktok');
+    expect(db.select('select * from user_cards'), hasLength(2));
   });
 
   test('같은 카드의 같은 승인번호는 한 번만 들어가고 지운 결제는 다시 넣는다', () {
@@ -228,7 +235,37 @@ void main() {
     expect([...ids]..sort(), ids);
     expect(ids.toSet(), hasLength(50));
     // 앞 48비트가 UTC 밀리초다
-    final ms = t.millisecondsSinceEpoch.toRadixString(16).padLeft(12, '0');
-    expect(newId(t).replaceAll('-', '').substring(0, 12), ms);
+    // 다른 시험이 앞서 큰 id를 만들어도 기대지 않게 먼 미래로 본다
+    final later = DateTime.utc(2200);
+    final ms = later.millisecondsSinceEpoch.toRadixString(16).padLeft(12, '0');
+    expect(newId(later).replaceAll('-', '').substring(0, 12), ms);
+    // 시계가 멈춰 있어도 뒤에 만든 id가 크다. 같은 시각의 결제가 넣은 순서대로 선다
+    final stuck = [for (var i = 0; i < 50; i++) newId(later)];
+    expect([...stuck]..sort(), stuck);
+  });
+
+  test('다시 연 DB의 새 결제 id는 저장된 id보다 크다', () {
+    // 2026-10-02 위험 검토. 앱을 다시 켜면 앞 id를 잊었다. 시계가 앞서던 폰에서 가져온 2100년 id가 있어도 새 id가 크다
+    final dir = Directory.systemTemp.createTempSync('cherry');
+    try {
+      final path = '${dir.path}/cherry.db';
+      final db = openDb(path);
+      card(db, 'u1');
+      final future = DateTime.utc(
+        2100,
+      ).millisecondsSinceEpoch.toRadixString(16).padLeft(12, '0');
+      final stored =
+          '${future.substring(0, 8)}-${future.substring(8)}-7000-8000-000000000000';
+      pay(db, {'id': stored});
+      db.close();
+      forgetIds();
+      openDb(path).close();
+      expect(
+        newId(DateTime.utc(2026, 9, 15)).compareTo(stored),
+        greaterThan(0),
+      );
+    } finally {
+      dir.deleteSync(recursive: true);
+    }
   });
 }

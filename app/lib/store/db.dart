@@ -6,6 +6,7 @@ library;
 
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:sqlite3/sqlite3.dart';
 
 const migrations = <String>[
@@ -174,6 +175,7 @@ Database openDb([String? path, List<String> steps = migrations]) {
     }
     // SQLite는 외래 키 검사가 기본으로 꺼져 있다
     db.execute('pragma foreign_keys = on');
+    _seenIds(db);
     return db;
   } catch (_) {
     db.close();
@@ -185,12 +187,39 @@ final _random = Random.secure();
 
 /// 시각 순서 uuid. RFC 9562의 7판. 서버 `payments.py`의 new_id를 옮겼다. 엔진은 같은 시각의 결제를 id 순서로 세워
 /// 먼저 넣은 결제가 앞이 된다. 설계 4절
-// ponytail: 폰 시계를 쓴다. 시계가 뒤로 가면 순서가 뒤집힐 수 있다. 서버도 같은 한계였다
+///
+/// 같은 밀리초에 둘을 만들거나 시계가 멈춰 있어도 앞 id보다 크게 만든다. 앞 id의 밀리초에 1을 더한다. 서버는 밀리초가
+/// 같으면 순서가 무작위였다. 2026-10-02 시험 시계로 같은 시각 결제를 넣다가 찾았다
 String newId(DateTime now) {
   String hex(int x, int len) => x.toRadixString(16).padLeft(len, '0');
   String rand(int len) =>
       [for (var i = 0; i < len; i++) hex(_random.nextInt(16), 1)].join();
-  final ms = hex(now.millisecondsSinceEpoch, 12);
+  final t = now.millisecondsSinceEpoch;
+  _lastMs = t > _lastMs ? t : _lastMs + 1;
+  final ms = hex(_lastMs, 12);
   final variant = hex(8 + _random.nextInt(4), 1);
   return '${ms.substring(0, 8)}-${ms.substring(8)}-7${rand(3)}-$variant${rand(3)}-${rand(12)}';
+}
+
+var _lastMs = 0;
+
+/// 앱을 다시 켠 것처럼 앞 id를 잊는다
+@visibleForTesting
+void forgetIds() => _lastMs = 0;
+
+/// 저장된 가장 큰 결제 id의 밀리초를 기억한다. 앱을 다시 켠 뒤에도 새 id가 저장된 id보다 크다. 폰 시계가 뒤로 갔거나
+/// 시계가 앞서던 폰에서 가져온 기록이 있어도 같은 시각 결제의 순서가 뒤집히지 않는다. 2026-10-02 위험 검토
+void _seenIds(Database db) {
+  final has = db.select(
+    "select 1 from sqlite_master where type = 'table' and name = 'transactions'",
+  );
+  if (has.isEmpty) return;
+  final top = db.select('select max(id) as m from transactions').first['m'];
+  final ms = top is String
+      ? int.tryParse(
+          top.replaceAll('-', '').padRight(12).substring(0, 12),
+          radix: 16,
+        )
+      : null;
+  if (ms != null && ms > _lastMs) _lastMs = ms;
 }
