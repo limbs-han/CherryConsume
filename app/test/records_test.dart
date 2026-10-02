@@ -46,6 +46,7 @@ Map<String, dynamic> row(
 
 class FakeServer {
   final calls = <String>[];
+  final drafts = <Map<String, dynamic>>[];
   bool removed = false;
 
   Future<http.Response> call(http.Request req) async {
@@ -102,6 +103,7 @@ class FakeServer {
           {'key': 'physical_card', 'name': '실물카드'},
         ]);
       case ('POST', '/me/payments/draft'):
+        drafts.add(jsonDecode(req.body) as Map<String, dynamic>);
         return ok({
           'merchant': 'gs25',
           'merchant_display': 'GS25',
@@ -192,6 +194,8 @@ void main() {
     await tester.tap(find.text('GS25'));
     await tester.pumpAndSettle();
     expect(find.text('결제 고치기'), findsOneWidget);
+    // 고치는 화면의 예상 혜택은 이 결제의 옛 값을 빼고 계산한다
+    expect(server.drafts.last['editing'], 't1');
     await tester.tap(find.byType(PopupMenuButton<String>));
     await tester.pumpAndSettle();
     await tester.tap(find.text('지우기'));

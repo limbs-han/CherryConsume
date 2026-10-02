@@ -17,7 +17,7 @@ from ..auth import User
 from ..deps import Conn, today
 from ..payments import PAYMENTS, changed_with, load_payments, to_payment
 from .me import engine_card, month_range
-from .payments import Amount, PaymentFields, checked_id, filled, payment_of
+from .payments import Amount, PaymentFields, checked_id, filled, mine, payment_of
 
 router = APIRouter(prefix="/me/payments")
 
@@ -46,15 +46,6 @@ def lock_cards(conn, user, ids: set[str]) -> dict[str, dict]:
         "SELECT * FROM user_cards WHERE user_id = %s AND id = ANY(%s) ORDER BY id FOR UPDATE", (user, sorted(ids))
     ).fetchall()
     return {str(r["id"]): r for r in rows}
-
-
-def mine(conn, user, tid: str) -> dict:
-    row = conn.execute(
-        "SELECT * FROM transactions WHERE id = %s AND user_id = %s AND deleted_at IS NULL", (tid, user)
-    ).fetchone()
-    if row is None:
-        raise HTTPException(404, "결제가 아니다")
-    return row
 
 
 def store(

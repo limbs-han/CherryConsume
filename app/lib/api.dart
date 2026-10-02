@@ -454,8 +454,14 @@ class Api {
       m['key'] as String: m['name'] as String,
   };
 
-  Future<Draft> draft(PaymentInput input) async =>
-      Draft(await _send('POST', '/me/payments/draft', body: input.toJson()));
+  /// 고치는 화면이면 editing에 그 결제 id를 넣는다. 서버가 옛 값을 빼고 계산한다
+  Future<Draft> draft(PaymentInput input, {String? editing}) async => Draft(
+    await _send(
+      'POST',
+      '/me/payments/draft',
+      body: {...input.toJson(), 'editing': ?editing},
+    ),
+  );
 
   Future<List<TopRow>> top() async => [
     for (final r in await _send('GET', '/me/recommendations/top')) TopRow(r),

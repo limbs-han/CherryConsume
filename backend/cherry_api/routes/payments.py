@@ -51,6 +51,8 @@ class PaymentFields(BaseModel):
 class Draft(PaymentFields):
     amount: Amount | None = None
     user_card_id: str | None = None
+    # 고치는 결제의 id. 그 결제의 옛 값을 이력에서 빼고 계산한다. 작업 005 슬라이스 4 위험 검토 3번
+    editing: str | None = None
 
 
 class NewPayment(PaymentFields):
@@ -96,6 +98,15 @@ def my_cards(conn, user) -> list[dict]:
         " WHERE uc.user_id = %s AND uc.removed_at IS NULL ORDER BY uc.added_at",
         (user,),
     ).fetchall()
+
+
+def mine(conn, user, tid: str) -> dict:
+    row = conn.execute(
+        "SELECT * FROM transactions WHERE id = %s AND user_id = %s AND deleted_at IS NULL", (tid, user)
+    ).fetchone()
+    if row is None:
+        raise HTTPException(404, "결제가 아니다")
+    return row
 
 
 def checked_id(value: str | None, what: str = "보유 카드가 아니다") -> str | None:
@@ -149,10 +160,22 @@ def draft(body: Draft, request: Request, user: User, conn: Conn) -> dict:
     f = filled(request, body)
     engine = request.app.state.engine
     rows = my_cards(conn, user)
-    if not rows:
-        return {**f, "paid_at": f["paid_at"].isoformat(), "ranking": [], "pick": None, "estimate": None}
     cards = {str(r["id"]): r for r in rows}
-    payments = load_payments(conn, list(cards))
+    old = None
+    if body.editing is not None:
+        old = mine(conn, user, checked_id(body.editing, "결제가 아니다"))
+        if body.amount is not None and old["cancelled_amount"] > body.amount:
+            raise HTTPException(422, "취소한 금액보다 작게 고칠 수 없다")
+        card = str(old["user_card_id"])
+        if card not in cards:
+            # 해지한 카드의 결제는 그 카드로 예상 혜택만 낸다. 순위에는 넣지 않는다. 위험 검토 8번
+            cards[card] = conn.execute(
+                "SELECT uc.*, c.name FROM user_cards uc JOIN cards c ON c.id = uc.card_id WHERE uc.id = %s", (card,)
+            ).fetchone()
+    if not cards:
+        return {**f, "paid_at": f["paid_at"].isoformat(), "ranking": [], "pick": None, "estimate": None}
+    editing = str(old["id"]) if old else None
+    payments = {k: [q for q in v if q.id != editing] for k, v in load_payments(conn, list(cards)).items()}
     query = Query(
         merchant=f["merchant"],
         category=f["category"],
@@ -166,17 +189,23 @@ def draft(body: Draft, request: Request, user: User, conn: Conn) -> dict:
     # 1순위 카드의 순위 금액과 예상 혜택이 다를 수 있었다. 줄 세우기는 엔진의 order 그대로다. 같은 금액이면
     # 실적이 모자란 카드가 앞이다. 설계 4.2, S5
     amount = body.amount or DEFAULT_AMOUNT
-    priced = {}
-    for r in ranked:
-        row = cards[r.user_card_id]
-        p = payment_of(row, body, amount, f, DRAFT_ID)
-        priced[r.user_card_id] = (p, engine.price_payment(engine_card(row), payments[r.user_card_id], p))
+
+    def priced_on(uid: str) -> tuple[Payment, PaymentResult]:
+        # 고치는 결제는 저장 경로 edit처럼 그 결제의 id와 취소를 그대로 둔다. 같은 시각 결제와의 순서와 남은 금액이 같다
+        p = payment_of(cards[uid], body, amount, f, editing or DRAFT_ID)
+        if old is not None and body.amount is not None:
+            p = p.model_copy(update={"cancelled_amount": old["cancelled_amount"], "cancelled_at": old["cancelled_at"]})
+        return p, engine.price_payment(engine_card(cards[uid]), payments[uid], p)
+
+    priced = {r.user_card_id: priced_on(r.user_card_id) for r in ranked}
     ranking = [r.user_card_id for r in sorted((again(r, priced[r.user_card_id][1]) for r in ranked), key=order)]
-    pick = checked_id(body.user_card_id) or ranking[0]
+    pick = checked_id(body.user_card_id) or (ranking[0] if ranking else None)
     if pick not in cards:
         raise HTTPException(404, "보유 카드가 아니다")
     estimate = None
     if body.amount is not None:
+        if pick not in priced:
+            priced[pick] = priced_on(pick)
         p, result = priced[pick]
         estimate = {"user_card_id": pick, "payment_method": p.payment_method}
         estimate |= described(request, cards[pick]["card_id"], p.paid_at, result)
@@ -203,10 +232,10 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
     request_id = None
     if body.recommendation_request_id is not None:
         request_id = checked_id(body.recommendation_request_id, "추천 요청이 아니다")
-        mine = conn.execute(
+        asked = conn.execute(
             "SELECT 1 FROM recommendation_requests WHERE id = %s AND user_id = %s", (request_id, user)
         ).fetchone()
-        if mine is None:
+        if asked is None:
             raise HTTPException(404, "추천 요청이 아니다")
     engine = request.app.state.engine
     pid = new_id()

@@ -71,7 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Future<void> _refresh() async {
     try {
-      final d = await widget.api.draft(_input);
+      final d = await widget.api.draft(_input, editing: widget.editing?.id);
       if (mounted) setState(() => _draft = d);
     } catch (_) {
       // 저장 전 계산이 실패해도 입력은 계속 받는다. 저장할 때 다시 알린다
@@ -87,7 +87,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       // 마지막 입력으로 다시 계산한 1순위로 저장한다. 0.3초 전의 응답을 쓰면 고치기 전 가게의 카드로 저장될 수 있었다
       // 업종과 채널은 사용자가 바꾸기에서 고른 것만 보낸다. 나머지는 서버가 가게 이름으로 채운다
       final shown = _cardId;
-      final d = await widget.api.draft(_input);
+      final d = await widget.api.draft(_input, editing: widget.editing?.id);
       if (!mounted) return;
       if (_input.userCardId == null && d.pick != shown) {
         // 사용자가 본 카드와 다른 카드로 저장하지 않는다. 화면을 바꾸고 다시 누르게 한다

@@ -70,7 +70,7 @@ compose.yaml            # 개발과 테스트용 Postgres
 |---|---|
 | `GET /catalog/categories` | 업종 칩. 부모와 자식 업종 |
 | `GET /catalog/payment-methods` | 결제수단 목록 |
-| `POST /me/payments/draft` | 저장 전 결제. 가게 이름으로 업종을 채우고, 보유 카드 순위와 고른 카드의 예상 혜택을 준다 |
+| `POST /me/payments/draft` | 저장 전 결제. 가게 이름으로 업종을 채우고, 보유 카드 순위와 고른 카드의 예상 혜택을 준다. 고치는 화면은 `editing`에 결제 id를 보낸다. 그 결제의 옛 값을 이력에서 빼고, 그 결제의 id와 취소를 그대로 둬 저장 경로와 같게 계산한다. 그 결제의 카드가 해지한 카드면 그 카드로 예상 혜택만 내고 순위에는 넣지 않는다 |
 | `POST /me/payments` | 결제 저장. 엔진이 혜택을 계산해 `transaction_benefits`에 둔다 |
 | `GET /me/home` | 슬라이스 1에 더해 결제를 엔진에 넘기고, 이번 달 받은 혜택 합계를 준다 |
 

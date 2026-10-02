@@ -396,3 +396,58 @@ def test_repricing_keeps_the_saved_billing(client, db):
         " GROUP BY t.billing"
     ).fetchone()
     assert (row["billing"], row["v"]) == ("postpaid_transit", 2000)
+
+
+def test_draft_for_an_edit_leaves_out_the_payment_being_edited(client):
+    # 작업 005 슬라이스 4 위험 검토 3번. Mr.Life 편의점 10%는 하루 1회다. GS25 4,300원 430원을 1만 원으로 고치는
+    # 화면의 예상 혜택은 옛 4,300원이 하루 1회를 쓴 것으로 보지 않아 1,000원이다
+    headers, [mrlife] = setup(client)
+    tid = pay(client, headers, mrlife, 4300, "GS25")["id"]
+    body = {"amount": 10000, "merchant_name": "GS25", "user_card_id": mrlife, "paid_at": "2026-09-15T21:00:00+09:00"}
+    plain = client.post("/me/payments/draft", json=body, headers=headers).json()
+    assert plain["estimate"]["value"] == 0
+    d = client.post("/me/payments/draft", json={**body, "editing": tid}, headers=headers).json()
+    assert d["estimate"]["value"] == 1000
+    other = login(client, "other")
+    assert client.post("/me/payments/draft", json={**body, "editing": tid}, headers=other).status_code == 404
+
+
+def test_draft_for_an_edit_on_a_removed_card(client):
+    # 위험 검토 8번. 해지한 카드의 결제를 고치는 화면도 그 카드로 예상 혜택을 낸다. 순위에는 넣지 않는다
+    headers, [mrlife] = setup(client)
+    tid = pay(client, headers, mrlife, 4300, "GS25")["id"]
+    assert client.delete(f"/me/cards/{mrlife}", headers=headers).status_code == 200
+    body = {"amount": 10000, "merchant_name": "GS25", "user_card_id": mrlife, "paid_at": "2026-09-15T21:00:00+09:00"}
+    d = client.post("/me/payments/draft", json={**body, "editing": tid}, headers=headers).json()
+    assert (d["ranking"], d["pick"], d["estimate"]["value"]) == ([], mrlife, 1000)
+    # 고치는 결제 id가 없으면 해지한 카드는 보유 카드가 아니다. 남은 카드가 없어 빈 결과다
+    assert client.post("/me/payments/draft", json=body, headers=headers).json()["estimate"] is None
+
+
+def test_draft_for_an_edit_matches_the_saved_value(client):
+    # 3번 재검토. GS25 1만 원 가운데 6,000원을 취소하면 남은 4,000원의 10%로 400원이다. 고치는 화면의 예상 혜택도
+    # 그 취소를 넣어 400원이고 저장한 값과 같다. 취소한 금액보다 작게 고치면 저장처럼 422다
+    headers, [mrlife] = setup(client)
+    tid = pay(client, headers, mrlife, 10000, "GS25")["id"]
+    cancel = {"cancelled_amount": 6000, "cancelled_at": "2026-09-15T21:10:00+09:00"}
+    assert client.post(f"/me/payments/{tid}/cancel", json=cancel, headers=headers).json()["value"] == 400
+    body = {"amount": 10000, "merchant_name": "GS25", "user_card_id": mrlife, "paid_at": "2026-09-15T21:00:00+09:00"}
+    d = client.post("/me/payments/draft", json={**body, "editing": tid}, headers=headers).json()
+    assert d["estimate"]["value"] == 400
+    assert client.patch(f"/me/payments/{tid}", json=body, headers=headers).json()["value"] == 400
+    small = {**body, "amount": 5000, "editing": tid}
+    assert client.post("/me/payments/draft", json=small, headers=headers).status_code == 422
+
+
+def test_draft_for_an_edit_refuses_other_payments_and_cards(client):
+    # 지운 결제는 고칠 수 없어 404다. 고치는 결제의 카드가 아닌 해지한 카드는 보유 카드가 아니라 404다
+    headers, [mrlife, zero] = setup(client, MRLIFE, {"card_id": "hyundai-zero-edition3-discount"})
+    tid = pay(client, headers, mrlife, 4300, "GS25")["id"]
+    gone = pay(client, headers, mrlife, 4300, "GS25", at="2026-09-14T21:00:00+09:00")["id"]
+    assert client.delete(f"/me/payments/{gone}", headers=headers).status_code == 200
+    assert client.delete(f"/me/cards/{zero}", headers=headers).status_code == 200
+    body = {"amount": 10000, "merchant_name": "GS25", "paid_at": "2026-09-15T21:00:00+09:00"}
+    deleted = {**body, "user_card_id": mrlife, "editing": gone}
+    assert client.post("/me/payments/draft", json=deleted, headers=headers).status_code == 404
+    other = {**body, "user_card_id": zero, "editing": tid}
+    assert client.post("/me/payments/draft", json=other, headers=headers).status_code == 404
