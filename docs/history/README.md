@@ -77,3 +77,4 @@
 | [34](34-databricks-handover-and-guard-retest.md) | 2026-10-01 | Databricks 일 이어 받기와 비용 차단 재시험 |
 | [35](35-gold-seed.md) | 2026-10-01 | 골드 카탈로그 첫 적재 |
 | [36](36-manual-approval-merchants.md) | 2026-10-01 | 손 승인 작업과 가맹점 두 개 추가 |
+| [37](37-slice4-review-fixes.md) | 2026-10-02 | 슬라이스 4 위험 검토 지적 고치기 |
