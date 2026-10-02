@@ -40,6 +40,12 @@ for line in git("diff", "--cached", "-U0", "--no-color").splitlines():
             if re.search(pat, line):
                 errors.append(f"{current}: {label}로 보이는 값이 있다")
 
+# 폰이 받는 app/assets/catalog.json이 stage한 catalog/로 다시 만든 것과 같은지 본다. catalog_json.py
+staged = git("diff", "--cached", "--name-only").splitlines()
+if any(f == "app/assets/catalog.json" or f.startswith("catalog/") for f in staged):
+    from catalog_json import errors as catalog_json_errors
+    errors += catalog_json_errors(git("rev-parse", "--show-toplevel").strip())
+
 if errors:
     print("커밋을 막았다\n- " + "\n- ".join(dict.fromkeys(errors)), file=sys.stderr)
     sys.exit(1)
