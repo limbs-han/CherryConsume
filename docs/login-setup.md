@@ -43,10 +43,16 @@ REST API 키, 어드민 키, 클라이언트 보안 비밀은 쓰지 않는다. 
    kakao.nativeAppKey=카카오_네이티브_앱_키
    ```
 
-2. 서버를 켤 때 환경변수를 준다. backend 폴더에서 돌린다
+2. PC에서 서버를 켠다. 파일에 넣는 것이 아니라 PowerShell에 붙여 넣어 돌리는 명령이다. 저장소 맨 위에서 DB를 먼저 켠다
 
-   ```bash
-   CHERRY_DEV_LOGIN=1 CHERRY_KAKAO_APP_ID=카카오_앱_ID CHERRY_GOOGLE_CLIENT_ID=웹_클라이언트_ID CHERRY_DATABASE_URL=postgresql://cherry:cherry@127.0.0.1:5433/cherry uv run uvicorn cherry_api.main:create_app --factory --port 8000
+   ```powershell
+   docker compose up -d db
+   ```
+
+   backend 폴더로 옮겨 아래를 돌린다. `카카오_앱_ID`와 `웹_클라이언트_ID`는 1과 2에서 적어 둔 값으로 바꾼다. `Uvicorn running on http://127.0.0.1:8000`이 보이면 성공이다. 4를 마칠 때까지 이 창을 닫지 않고, 4는 새 창에서 한다. 끌 때는 Ctrl+C다
+
+   ```powershell
+   $env:CHERRY_DEV_LOGIN="1"; $env:CHERRY_KAKAO_APP_ID="카카오_앱_ID"; $env:CHERRY_GOOGLE_CLIENT_ID="웹_클라이언트_ID"; $env:CHERRY_DATABASE_URL="postgresql://cherry:cherry@127.0.0.1:5433/cherry"; uv run uvicorn cherry_api.main:create_app --factory --port 8000
    ```
 
 ## 4. 실제 폰에서 해 보기
@@ -54,13 +60,13 @@ REST API 키, 어드민 키, 클라이언트 보안 비밀은 쓰지 않는다. 
 1. 폰의 개발자 옵션에서 USB 디버깅을 켜고 PC에 USB로 잇는다. `flutter devices`에 폰이 보이면 성공이다
 2. 폰이 PC의 서버에 닿게 한다. app 폴더에서 돌린다
 
-   ```bash
+   ```powershell
    adb reverse tcp:8000 tcp:8000
    ```
 
 3. 앱을 폰에 깐다. app 폴더에서 돌린다
 
-   ```bash
+   ```powershell
    flutter run --dart-define=API_URL=http://127.0.0.1:8000 --dart-define=KAKAO_NATIVE_APP_KEY=카카오_네이티브_앱_키 --dart-define=GOOGLE_SERVER_CLIENT_ID=웹_클라이언트_ID
    ```
 
@@ -69,6 +75,7 @@ REST API 키, 어드민 키, 클라이언트 보안 비밀은 쓰지 않는다. 
 6. 안 되면 앱 화면은 "로그인하지 못했어요"만 보인다. `flutter run`을 돌린 창의 "로그인 실패:"로 시작하는 줄과 서버 창의 마지막 몇 줄을 붙여 준다. 디버그 빌드에서만 까닭을 찍는다
 
 자주 나는 것
+- 카카오 KOE101: 빌드 옵션 `KAKAO_NATIVE_APP_KEY`에 네이티브 앱 키가 아닌 값을 넣었다. 같은 화면의 REST API 키, JavaScript 키, 앱 ID와 헷갈리기 쉽다. 빌드 옵션을 바꾸면 `q`로 끄고 `flutter run`을 다시 돌린다
 - 카카오 키 해시 오류: 1의 5에 넣은 키 해시와 이 PC의 키가 다르다
 - Google `GoogleSignInException`의 설정 오류: 2의 4의 SHA-1이나 패키지 이름이 다르거나, 빌드 옵션의 웹 클라이언트 ID가 다르다
 - "GOOGLE_SERVER_CLIENT_ID 없이 빌드했다"나 "KAKAO_NATIVE_APP_KEY 없이 빌드했다": `flutter run`에 그 빌드 옵션을 빠뜨렸다
