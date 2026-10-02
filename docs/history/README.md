@@ -96,3 +96,4 @@
 | [52](52-success-criteria-and-wrap-up.md) | 2026-10-02 | 작업 003 성공 기준 확인과 마무리 |
 | [53](53-lineage-one-job.md) | 2026-10-02 | Unity Catalog 계보를 작업 하나로 살려 보기 |
 | [51](51-on-device-step4-store.md) | 2026-10-02 | 작업 006 단계 4의 1~6 폰 안 저장소 |
+| [54](54-on-device-step4-screens.md) | 2026-10-02 | 작업 006 단계 4의 7~9 화면을 폰 저장소로 바꿔 끼우기 |
