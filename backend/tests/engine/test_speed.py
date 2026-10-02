@@ -4,11 +4,11 @@
 
 import random
 import statistics
+import subprocess
+import sys
 import time
 from datetime import date, timedelta
 from pathlib import Path
-
-import pytest
 
 from cherry_core.catalog.load import load_catalog
 from cherry_core.engine import Engine
@@ -34,7 +34,6 @@ CATEGORIES = [
 ]
 
 
-@pytest.fixture(scope="module")
 def heavy():
     cat = load_catalog(ROOT)
     eng = Engine(cat)
@@ -74,14 +73,31 @@ def median_ms(fn, runs=7) -> float:
     return statistics.median(times)
 
 
-def test_one_recommendation_under_50ms(heavy):
-    eng, cards, payments = heavy
-    ms = median_ms(lambda: eng.recommend(cards, payments, [Query(merchant="starbucks", amount=12000)], NOW))
+def measure(kind: str) -> float:
+    eng, cards, payments = heavy()
+    if kind == "one":
+        queries = [Query(merchant="starbucks", amount=12000)]
+    else:
+        queries = [Query(category=c) for c in CATEGORIES]
+    return median_ms(lambda: eng.recommend(cards, payments, queries, NOW))
+
+
+def alone(kind: str) -> float:
+    # ponytail: 다른 시험 모듈 뒤에 같은 프로세스에서 재면 해시 씨앗에 따라 세 배쯤 느려진다. 2026-10-02 씨앗 1과 3은
+    # test_statement.py 뒤에서 늘 실패하고 2는 늘 통과했다. 엔진이 부르는 함수 수는 같아 계산 탓은 아니다. 원인을
+    # 찾기보다 새 프로세스에서 잰다. 작업 006 단계 7에서 Python 엔진과 함께 지운다
+    code = f"from tests.engine.test_speed import measure; print(measure({kind!r}))"
+    out = subprocess.run(
+        [sys.executable, "-c", code], cwd=ROOT.parent / "backend", capture_output=True, text=True, check=True
+    )
+    return float(out.stdout.split()[-1])
+
+
+def test_one_recommendation_under_50ms():
+    ms = alone("one")
     assert ms < 50, f"{ms:.1f}ms"
 
 
-def test_category_tops_under_200ms(heavy):
-    eng, cards, payments = heavy
-    queries = [Query(category=c) for c in CATEGORIES]
-    ms = median_ms(lambda: eng.recommend(cards, payments, queries, NOW))
+def test_category_tops_under_200ms():
+    ms = alone("tops")
     assert ms < 200, f"{ms:.1f}ms"
