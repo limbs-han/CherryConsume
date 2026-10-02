@@ -127,7 +127,15 @@ def make_draft(
         revisions[-1] = entry
     else:
         revisions.append(entry)
-    questions = list(out.get("open_questions", []))
+    # 같은 시행일이라 마지막 개정을 갈아 끼우면 그 안을 가리키던 옛 질문의 주소가 깨질 수 있다
+    # 질문은 버리지 않고 주소만 그 개정으로 옮긴다. 옛 주소는 질문 글 앞에 붙인다. 2026-10-02 카카오뱅크
+    replaced = f"revisions[{len(revisions) - 1}]"
+    questions = [
+        q
+        if path_exists(out, q["path"]) or not (q["path"] + ".").startswith(replaced + ".")
+        else {**q, "path": replaced, "question": f"{q['path']}: {q['question']}"}
+        for q in out.get("open_questions", [])
+    ]
     if estimated:
         entry["effective_from_estimated"] = True
         path = f"revisions[{len(revisions) - 1}].effective_from"

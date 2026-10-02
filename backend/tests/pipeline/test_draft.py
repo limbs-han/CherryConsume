@@ -189,3 +189,17 @@ def test_changes_mode_flags_spend_the_model_read_differently():
     draft = make_draft(card_with_own_spend(), ISSUER, answer, FETCHED, keep_current=True)
     asked = [q["question"] for q in draft["open_questions"]]
     assert "spend의 cancellation: 원문에서 읽은 값이 지금 값과 다르다" in asked
+
+
+def test_existing_question_into_a_replaced_revision_keeps_its_text(files):
+    # 2026-10-02 카카오뱅크. 같은 시행일이라 마지막 개정을 갈아 끼우면 그 안을 가리키던 옛 질문의 주소가 깨졌다
+    card = card_with_own_spend()
+    card["open_questions"] = [{"path": "revisions[0].spend.interest_free", "question": "무이자 할부가 빠지는가", "assumed": "exclude"}]
+    draft = make_draft(card, ISSUER, extracted(date(2026, 7, 1), rate=5), FETCHED)  # 원문은 무이자 할부를 말하지 않는다
+    assert "interest_free" not in draft["revisions"][0].get("spend", {})
+    assert draft["open_questions"][0] == {
+        "path": "revisions[0]",
+        "question": "revisions[0].spend.interest_free: 무이자 할부가 빠지는가",
+        "assumed": "exclude",
+    }
+    assert check_draft(files, PATH, draft) == []
