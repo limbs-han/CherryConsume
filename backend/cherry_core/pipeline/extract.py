@@ -35,12 +35,16 @@ def process_answer(
     response: str | None,
     error: str | None,
     fetched: date,
+    keep_current: bool = False,
 ) -> Outcome:
-    """files는 카탈로그 파일 전체, path는 이 카드 파일 경로, response와 error는 ai_query의 failOnError false 결과다."""
+    """files는 카탈로그 파일 전체, path는 이 카드 파일 경로, response와 error는 ai_query의 failOnError false 결과다.
+
+    keep_current는 바뀐 원문 추출에서 켠다. draft.make_draft와 같다.
+    """
     if error or response is None:
         return Outcome("model_error", f"모델 호출 실패: {error}")
     try:
-        draft = make_draft(card, issuer, parse_answer(response), fetched)
+        draft = make_draft(card, issuer, parse_answer(response), fetched, keep_current)
         if draft is None:
             return Outcome("no_change")
         return Outcome("draft", draft_yaml=canonical_text(draft), problems=check_draft(files, path, draft))

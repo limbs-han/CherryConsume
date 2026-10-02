@@ -2,14 +2,20 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from datetime import date
 from typing import Any
 
 from cherry_core.catalog.load import Catalog
 from cherry_core.catalog.models import OpenQuestion, Rules
+from cherry_core.catalog.resolve import resolve_card
+from cherry_core.pipeline.draft import clean_rules
 
-VERSION = "2"  # 2026-10-01 답 형식을 프롬프트 글로 넣었다
+VERSION = "3"  # 2026-10-01 답 형식을 프롬프트 글로 넣었다. 2026-10-02 형식 예시와 자주 틀린 형식 규칙 넷을 더했다
+# 형식 예시로 보여 줄 다듬기용 카드. 형식 요소를 고루 가진 짧은 카드다. 앞의 것을 쓰고, 자기 자신을 추출할 때는 다음 것을 쓴다
+# 채점 전용 카드가 없는 카드사에서 골랐다. 같은 카드사 카드는 규칙이 닮아 예시를 베끼면 채점 점수가 부푼다. 2026-10-02 위험 검토
+EXAMPLE_CARDS = ("nh-heroes-check", "lotte-loca365")
 # Databricks 구조화 출력은 $ref, anyOf, pattern과 64개 넘는 키를 받지 않아 JSON만 강제한다. 설계 1절 4단계
 RESPONSE_FORMAT = json.dumps({"type": "json_object"})
 INSTRUCTIONS = """\
@@ -22,6 +28,10 @@ INSTRUCTIONS = """\
 - 혜택마다 값을 옮긴 원문 문장을 evidence에 원문 그대로 적는다.
 - 시행일은 원문에 적힌 날짜만 effective_from에 YYYY-MM-DD로 쓴다. 없으면 null이다.
 - source는 가장 많이 근거로 삼은 원문의 id다.
+- 원문에 없는 칸은 아예 적지 않는다. null, 빈 목록, 빈 객체, false로 채우지 않는다.
+- 혜택의 target에는 all: true, categories, merchants 가운데 하나 이상을 적는다.
+- 혜택 limits의 shared는 규칙 맨 위 limits에 key로 정의한 한도만 가리킨다. 정의하지 않은 이름을 쓰지 않는다.
+- reward.type처럼 정해진 값이 있는 칸은 답 형식의 enum 가운데 하나만 쓴다.
 """
 
 
@@ -52,8 +62,33 @@ def catalog_codes(cat: Catalog) -> dict[str, list[str]]:
     }
 
 
-def build_prompt(card: dict, current: dict, docs: list[tuple[str, str]], codes: dict[str, list[str]]) -> str:
-    """card는 카드 파일, current는 지금 합친 규칙, docs는 (원문 id, 글) 목록이다."""
+def example_for(cat: Catalog, card_id: str) -> tuple[str, dict, str] | None:
+    """(카드 이름, 합친 규칙, 꼬리표) 형식 예시. 추출하는 카드 자신과 채점 전용 카드는 보여 주지 않는다.
+
+    합친 규칙을 그대로 보여 준다. 답의 rules가 합친 규칙이고, 카드 칸만 남기면 필수 칸이 빠져 예시가 형식에 맞지 않는다.
+    꼬리표는 예시 카드, 개정 시행일, 예시 내용 해시 앞 8자리다. 예시가 바뀌면 프롬프트도 바뀌어 초안의 프롬프트 판에 붙인다.
+    """
+    for cid in EXAMPLE_CARDS:
+        if cid != card_id and cid in cat.cards:
+            lc = cat.cards[cid]
+            issuer = cat.issuers[lc.card.issuer].raw if lc.card.issuer in cat.issuers else None
+            rev = resolve_card(lc.raw, issuer)[-1]
+            rules = clean_rules(rev.data)
+            sha = hashlib.sha256(
+                json.dumps(rules, ensure_ascii=False, sort_keys=True, default=str).encode()
+            ).hexdigest()
+            return lc.card.name, rules, f"{cid}@{rev.effective_from}#{sha[:8]}"
+    return None
+
+
+def build_prompt(
+    card: dict,
+    current: dict,
+    docs: list[tuple[str, str]],
+    codes: dict[str, list[str]],
+    example: tuple[str, dict] | None = None,
+) -> str:
+    """card는 카드 파일, current는 지금 합친 규칙, docs는 (원문 id, 글) 목록, example은 example_for의 값이다."""
     benefits = [{"key": b["key"], "title": b["title"]} for b in current.get("benefits", [])]
     parts = [
         INSTRUCTIONS,
@@ -62,8 +97,14 @@ def build_prompt(card: dict, current: dict, docs: list[tuple[str, str]], codes: 
         *(f"{name}: {', '.join(keys)}" for name, keys in codes.items()),
         "답 형식. 아래 JSON 스키마를 따르는 JSON 객체 하나로만 답한다.\n"
         + json.dumps(answer_schema(), ensure_ascii=False, separators=(",", ":")),
-        *(f'<원문 id="{sid}">\n{text}\n</원문>' for sid, text in docs),
     ]
+    if example:
+        name, rules = example
+        parts.append(
+            f"형식 예시. 다른 카드 {name}의 규칙이다. 값은 따라 하지 말고 모양만 본다. 이 모양이 답의 rules 칸에 들어간다.\n"
+            + json.dumps(rules, ensure_ascii=False, default=str)
+        )
+    parts += [f'<원문 id="{sid}">\n{text}\n</원문>' for sid, text in docs]
     return "\n\n".join(parts)
 
 

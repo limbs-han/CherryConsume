@@ -80,3 +80,14 @@ def test_pending_changes_skip_done_ones_but_retry_model_errors():
 def test_drafts_missing_from_the_queue_are_put_back():
     drafts = [("d1", "draft"), ("d2", "needs_human"), ("d3", "no_change"), ("d4", "model_error"), ("d5", "draft")]
     assert unqueued(drafts, {"d5"}) == ["d1", "d2"]
+
+
+def test_changes_mode_keeps_current_spend_through_process_answer(files):
+    rules = copy.deepcopy(CURRENT)
+    rules["benefits"][0]["reward"]["rate"] = 5
+    del rules["spend"]  # 공지처럼 실적 규칙이 없는 원문
+    response = json.dumps({"rules": rules, "effective_from": None, "source": "page", "open_questions": []})
+    kept = process_answer(files, PATH, CARD, ISSUER, response, None, FETCHED, keep_current=True)
+    assert kept.status == "draft" and "원문에서 찾지 못해 지금 값을 두었다" in kept.draft_yaml
+    graded = process_answer(files, PATH, CARD, ISSUER, response, None, FETCHED)  # 채점은 채우지 않는다
+    assert graded.status == "needs_human"

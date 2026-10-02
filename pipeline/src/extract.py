@@ -30,6 +30,7 @@ from cherry_core.pipeline.prompt import (
     VERSION,
     build_prompt,
     catalog_codes,
+    example_for,
 )
 from pyspark.sql import SparkSession, Window
 from pyspark.sql import functions as F
@@ -198,11 +199,18 @@ def main(argv: list[str] | None = None) -> None:
             cat.issuers[lc.card.issuer].raw if lc.card.issuer in cat.issuers else None
         )
         current = resolve_card(lc.raw, issuer)[-1].data
+        example = example_for(cat, cid)
+        # 예시 카드가 개정되면 프롬프트도 바뀌어 판 번호에 예시 카드와 개정 시행일을 붙인다
+        version = f"{VERSION}+{example[2]}" if example else VERSION
         prompts.append(
             (
                 cid,
                 build_prompt(
-                    lc.raw, current, [(r.source_id, r.text) for r in card_docs], codes
+                    lc.raw,
+                    current,
+                    [(r.source_id, r.text) for r in card_docs],
+                    codes,
+                    example[:2] if example else None,
                 ),
             )
         )
@@ -212,6 +220,7 @@ def main(argv: list[str] | None = None) -> None:
             issuer,
             [r.path for r in card_docs],
             min(days) if days else max(r.day for r in card_docs),
+            version,
         )
     if not prompts:
         print(
@@ -231,12 +240,14 @@ def main(argv: list[str] | None = None) -> None:
 
     drafts, queue, counts = [], [], defaultdict(int)
     for a in answers:
-        lc, issuer, doc_paths, day = meta[a.card_id]
+        lc, issuer, doc_paths, day, version = meta[a.card_id]
         # 답 칸의 이름이 문서와 달라 이름에 기대지 않는다. errorMessage가 아닌 칸이 답이다. 2026-10-01 개발용 시험
         result = a.out.asDict()
         error = result.pop("errorMessage", None)
         response = next(iter(result.values()), None)
-        out = process_answer(files, lc.file, lc.raw, issuer, response, error, day)
+        out = process_answer(
+            files, lc.file, lc.raw, issuer, response, error, day, args.mode == "changes"
+        )
         draft_id = str(uuid.uuid4())
         counts[out.status] += 1
         counts["problems"] += bool(out.problems)
@@ -248,7 +259,7 @@ def main(argv: list[str] | None = None) -> None:
                 lc.card.issuer,
                 args.mode,
                 args.model,
-                VERSION,
+                version,
                 changed.get(a.card_id, []),
                 doc_paths,
                 response,

@@ -11,10 +11,10 @@ from typing import Any
 from pydantic import BaseModel
 
 from cherry_core.catalog.canonical import canonical_text, normalize
-from cherry_core.catalog.check import check_catalog
+from cherry_core.catalog.check import check_catalog, path_exists
 from cherry_core.catalog.load import load_catalog
 from cherry_core.catalog.models import BenefitExclusions, NewCard, Rules, Spend
-from cherry_core.catalog.resolve import DEFAULT_KEYS, resolve_card
+from cherry_core.catalog.resolve import DEFAULT_KEYS, resolve_card, revision_for
 
 SECTIONS: dict[str, type[BaseModel]] = {"spend": Spend, "new_card": NewCard, "benefit_exclusions": BenefitExclusions}
 
@@ -80,14 +80,38 @@ def card_content(rules: dict, defaults: dict) -> dict:
     return out
 
 
-def make_draft(card: dict, issuer: dict | None, extracted: dict, fetched: date) -> dict | None:
+def make_draft(
+    card: dict, issuer: dict | None, extracted: dict, fetched: date, keep_current: bool = False
+) -> dict | None:
     """추출 결과를 카드 파일의 개정으로 넣는다. 지금 규칙과 같으면 None.
 
     extracted는 {"rules": 합친 규칙, "effective_from": 날짜나 None, "source": 원문 id, "open_questions": [...]}다.
     시행일이 마지막 개정과 같으면 그 개정을 고치고, 뒤면 새 개정을 더한다. 앞이면 사람이 정하도록 ValueError를 낸다.
+    keep_current는 바뀐 원문 추출에서 켠다. 모델이 적지 않은 실적 규칙 칸을 그 카드의 지금 값으로 채우고
+    채운 묶음마다 확인 필요 항목을 단다. 공지처럼 실적 규칙이 없는 원문이 많아서다.
+    카드사 기본값으로 채우면 카드가 따로 정한 실적 규칙이 조용히 사라진다. 2026-10-02 위험 검토.
+    정답 예시 채점에서는 끈다. 채운 값이 정답에서 와서 점수가 부풀기 때문이다. 그때 빠진 칸은 모델 기본값이다.
     """
-    rules = clean_rules(int_keys(extracted["rules"]))
-    if rules == clean_rules(resolve_card(card, issuer)[-1].data):
+    raw = int_keys(extracted["rules"])
+    resolved = resolve_card(card, issuer)
+    current = resolved[-1].data
+    notes = []
+    if keep_current:
+        # 실적 규칙에는 근거 문장 칸이 없어 바뀐 칸마다 확인 필요 항목을 단다. 형식 예시를 베낀 값도 여기서 드러난다
+        then = (revision_for(resolved, extracted.get("effective_from") or fetched) or resolved[-1]).data
+        for k in SECTIONS:
+            now, mine = then.get(k), raw.get(k)
+            if not isinstance(now, dict) or (mine is not None and not isinstance(mine, dict)):
+                continue
+            missing = sorted(set(now) - set(mine or {}))
+            moved = sorted(f for f, v in (mine or {}).items() if f in now and normalize(v, f) != normalize(now[f], f))
+            if missing:
+                raw[k] = {**now, **(mine or {})}
+                notes.append(f"{k}의 {', '.join(missing)}: 원문에서 찾지 못해 지금 값을 두었다")
+            if moved:
+                notes.append(f"{k}의 {', '.join(moved)}: 원문에서 읽은 값이 지금 값과 다르다")
+    rules = clean_rules(raw)
+    if rules == clean_rules(current):
         return None
     out = copy.deepcopy(card)
     revisions = out["revisions"]
@@ -108,7 +132,22 @@ def make_draft(card: dict, issuer: dict | None, extracted: dict, fetched: date) 
         entry["effective_from_estimated"] = True
         path = f"revisions[{len(revisions) - 1}].effective_from"
         questions.append({"path": path, "question": "원문에서 시행일을 찾지 못해 수집한 날로 두었다"})
-    questions += [q for q in extracted.get("open_questions", []) if q not in questions]
+    here = f"revisions[{len(revisions) - 1}]"
+    asks = [{"path": here, "question": note} for note in notes]
+    for q in extracted.get("open_questions", []):
+        q = q if isinstance(q, dict) else {"question": str(q)}
+        if not q.get("question"):
+            continue
+        # 모델이 준 주소가 새 개정 안에 있으면 쓴다. 지은 주소면 질문 글 앞에 붙이고 주소는 새 개정으로 둔다
+        given = str(q.get("path") or "").removeprefix("rules.")
+        if given and path_exists(out, f"{here}.{given}"):
+            asked = {"path": f"{here}.{given}", "question": q["question"]}
+        else:
+            asked = {"path": here, "question": f"{given}: {q['question']}" if given else q["question"]}
+        if q.get("assumed") is not None:
+            asked["assumed"] = q["assumed"]
+        asks.append(asked)
+    questions += [a for a in asks if a not in questions]
     if questions:
         out["open_questions"] = questions
     for s in out["sources"]:
