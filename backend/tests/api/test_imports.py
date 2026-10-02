@@ -275,13 +275,16 @@ def test_bad_files_and_requests(client):
 
 
 def test_past_month_cancel_on_a_ranked_card_without_the_cancel_month(client):
-    # 중간 11번, E55. 삼성 iD ON은 순위 영역의 취소 달 칸이 비어 있다. 지나간 8월 스타벅스의 취소를 가져오면 순위를 다시
-    # 매기지 않으려 넣지 않고 기록에서 직접 적게 한다
-    headers, [ion] = setup(client, {"card_id": "samsung-id-on"})
-    pay(client, headers, ion, 300000, "이마트", at="2026-07-10T12:00:00+09:00")
-    pay(client, headers, ion, 10000, "스타벅스", at="2026-08-05T12:00:00+09:00")
-    p = preview(client, headers, csv("2026.08.20,10:00,스타벅스,-5000,,,취소"), user_card_id=ion)
+    # 중간 11번, E55. KB 이지올은 순위 영역의 취소 달 칸이 비어 있다. 지나간 8월 결제의 취소를 가져오면 순위를 다시
+    # 매기지 않으려 넣지 않고 기록에서 직접 적게 한다. 2026-10-02 삼성 iD ON은 골드에 cancel_month가 들어가 정상으로 붙는다
+    headers, [easy, ion] = setup(client, {"card_id": "kb-easy-all-titanium"}, {"card_id": "samsung-id-on"})
+    for card in (easy, ion):
+        pay(client, headers, card, 600000, "이마트", at="2026-07-10T12:00:00+09:00")
+        pay(client, headers, card, 10000, "스타벅스", at="2026-08-05T12:00:00+09:00")
+    p = preview(client, headers, csv("2026.08.20,10:00,스타벅스,-5000,,,취소"), user_card_id=easy)
     assert statuses(p) == [("orphan", "이 카드는 순위 혜택의 취소 달을 몰라요. 기록에서 직접 적어 주세요")]
+    p = preview(client, headers, csv("2026.08.20,10:00,스타벅스,-5000,,,취소"), user_card_id=ion)
+    assert statuses(p) == [("cancel", None)]
 
 
 def test_save_matches_the_preview(client):
