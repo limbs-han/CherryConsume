@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 서버와 이야기하려면 출시 빌드에도 필요하다 -->
+    <!-- 새 카탈로그를 받으려면 출시 빌드에도 필요하다 -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="체리컨슘"

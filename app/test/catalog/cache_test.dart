@@ -12,8 +12,12 @@ final bundled = File('assets/catalog.json').readAsStringSync();
 final Json base = jsonDecode(bundled);
 final ids = [for (final c in base['cards'] as List) c['id'] as String];
 
-InUse holding(String card) =>
-    (cards: {card}, merchants: <String>{}, categories: <String>{});
+InUse holding(String card) => (
+  cards: {card},
+  merchants: <String>{},
+  categories: <String>{},
+  methods: <String>{},
+);
 
 /// 담긴 카탈로그에서 카드 하나를 뺀 것. 받아 둔 파일과 담긴 파일을 카드 수로 가른다
 String withoutCard(String text, [int index = 0]) {

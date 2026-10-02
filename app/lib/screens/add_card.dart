@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../api.dart';
+import '../clock.dart' as clock;
 import '../format.dart';
 import '../theme.dart';
 
@@ -115,7 +116,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
             future: _cards,
             builder: (context, snap) {
               if (snap.hasError) {
-                return const Center(child: Text('서버에 연결하지 못했어요.'));
+                return const Center(child: Text('카드 목록을 불러오지 못했어요.'));
               }
               if (!snap.hasData) {
                 return const Center(child: CircularProgressIndicator());
@@ -205,7 +206,7 @@ class _RegisterSheetState extends State<RegisterSheet> {
     if (!_isNew) return null;
     // 달 경계는 한국 시간이다. 폰이 다른 나라 시간이어도 한국 날짜로 센다. E7
     final now =
-        widget.today ?? DateTime.now().toUtc().add(const Duration(hours: 9));
+        widget.today ?? clock.now().toUtc().add(const Duration(hours: 9));
     return DateTime(now.year, now.month - _monthsAgo);
   }
 
@@ -240,7 +241,7 @@ class _RegisterSheetState extends State<RegisterSheet> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('서버에 연결하지 못했어요.')));
+        ).showSnackBar(const SnackBar(content: Text('등록하지 못했어요.')));
       }
     } finally {
       if (mounted) setState(() => _busy = false);

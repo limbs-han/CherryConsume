@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../api.dart';
+import '../clock.dart' as clock;
 import '../format.dart';
 import '../theme.dart';
 
@@ -51,8 +52,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Draft? _draft;
   bool _busy = false;
 
-  /// 서버에 닿지 못해 추천 없이 기록한다. E24
-  bool _offline = false;
+  /// 입력이 0.3초 멈추면 다시 계산한다
   Timer? _wait;
 
   @override
@@ -75,21 +75,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> _refresh() async {
     try {
       final d = await widget.api.draft(_input, editing: widget.editing?.id);
-      if (mounted) {
-        setState(() {
-          _draft = d;
-          _offline = false;
-        });
-      }
-    } catch (e) {
-      // 저장 전 계산이 실패해도 입력은 계속 받는다. 저장할 때 다시 알린다. 닿지 못하면 앞 가게의 1순위가
-      // 남지 않게 비운다. 사용자가 고른 카드만 쓴다
-      if (mounted && unreachable(e)) {
-        setState(() {
-          _offline = true;
-          _draft = null;
-        });
-      }
+      if (mounted) setState(() => _draft = d);
+    } catch (_) {
+      // 저장 전 계산이 실패해도 입력은 계속 받는다. 저장할 때 다시 알린다
     }
   }
 
@@ -100,7 +88,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     _wait?.cancel();
     try {
       // 마지막 입력으로 다시 계산한 1순위로 저장한다. 0.3초 전의 응답을 쓰면 고치기 전 가게의 카드로 저장될 수 있었다
-      // 업종과 채널은 사용자가 바꾸기에서 고른 것만 보낸다. 나머지는 서버가 가게 이름으로 채운다
+      // 업종과 채널은 사용자가 바꾸기에서 고른 것만 보낸다. 나머지는 저장소가 가게 이름으로 채운다
       final shown = _cardId;
       final d = await widget.api.draft(_input, editing: widget.editing?.id);
       if (!mounted) return;
@@ -114,7 +102,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       }
       _input
         ..userCardId ??= d.pick
-        ..paidAt ??= DateTime.now();
+        ..paidAt ??= clock.now();
       final editing = widget.editing;
       final saved = editing == null
           ? await widget.api.savePayment(_input)
@@ -136,46 +124,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
         }
       }
       if (mounted) Navigator.of(context).pop(repriced);
-    } catch (e) {
+    } catch (_) {
       if (!mounted) return;
-      if (widget.editing == null && unreachable(e)) return _queue();
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('저장하지 못했어요.')));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
-  }
-
-  /// 서버에 닿지 못하면 결제를 폰에 모아 둔다. 홈을 불러올 때 같은 번호로 보낸다. E24
-  Future<void> _queue() async {
-    // 추천 없이는 사용자가 고른 카드만 쓴다. 닿기 전 다른 가게에서 받은 1순위로 넣지 않는다
-    final card = _input.userCardId;
-    final messenger = ScaffoldMessenger.of(context);
-    if (card == null) {
-      setState(() {
-        _offline = true;
-        _draft = null;
-      });
-      messenger.showSnackBar(
-        const SnackBar(content: Text('서버에 닿지 못했어요. 카드를 골라 주세요.')),
-      );
-      return;
-    }
-    _input.paidAt ??= DateTime.now();
-    try {
-      await widget.api.queue(
-        _input,
-        widget.cards.firstWhere((c) => c.id == card).name,
-      );
-    } catch (_) {
-      messenger.showSnackBar(const SnackBar(content: Text('저장하지 못했어요.')));
-      return;
-    }
-    messenger.showSnackBar(
-      const SnackBar(content: Text('서버에 닿지 못해 폰에 모아 뒀어요. 닿으면 보내고 혜택을 계산해요.')),
-    );
-    if (mounted) Navigator.of(context).pop(0);
   }
 
   /// 업종이 부모까지만 있어 혜택을 가리지 못하면 저장한 자리에서 한 번 묻는다. 모르면 닫는다. E47
@@ -213,7 +169,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final e = widget.editing!;
     final text = TextEditingController();
     // 날짜는 늘 오늘에서 시작한다. 옛 취소일로 채우면 다른 달에 더 취소된 금액이 옛 달로 조용히 들어간다
-    final today = DateUtils.dateOnly(DateTime.now());
+    final today = DateUtils.dateOnly(clock.now());
     final first = DateUtils.dateOnly(e.paidAt);
     final last = first.isAfter(today) ? first : today;
     var day = last;
@@ -291,7 +247,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     // 고른 날의 한국 시간 23:59로 적는다. 실적의 달은 한국 시간으로 가른다. E7. 지금보다 뒤면 지금, 결제보다 앞서면
     // 결제 시각이다
     var at = DateTime.utc(on.year, on.month, on.day, 14, 59);
-    final now = DateTime.now();
+    final now = clock.now();
     if (at.isAfter(now)) at = now;
     if (at.isBefore(e.paidAt)) at = e.paidAt;
     try {
@@ -299,7 +255,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       if (mounted) Navigator.of(context).pop(repriced);
     } on ApiError catch (err) {
       if (!mounted) return;
-      // 취소 시각은 하나라 다른 달에 더 취소된 금액은 담지 못한다. 서버가 422로 막는다. 위험 검토 5번
+      // 취소 시각은 하나라 다른 달에 더 취소된 금액은 담지 못한다. 저장소가 422로 막는다. 위험 검토 5번
       final otherMonth = err.status == 422 && err.body.contains('다른 달');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -452,13 +408,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
             ],
           ),
-          if (_offline) ...[
-            const SizedBox(height: 8),
-            const Text(
-              '서버에 닿지 못해 추천 없이 기록해요. 카드를 골라 주세요.',
-              style: TextStyle(fontSize: 13, color: C.amber),
-            ),
-          ],
           if (_input.userCardId == null && top != null && top.value > 0) ...[
             const SizedBox(height: 8),
             Text(
@@ -570,7 +519,7 @@ class _Summary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final at = input.paidAt ?? draft.paidAt;
-    final now = DateTime.now();
+    final now = clock.now();
     final day =
         at.year == now.year && at.month == now.month && at.day == now.day
         ? '오늘'
@@ -626,12 +575,12 @@ class _DetailsSheetState extends State<_DetailsSheet> {
   PaymentInput get i => widget.input;
 
   Future<void> _pickTime() async {
-    final at = i.paidAt ?? DateTime.now();
+    final at = i.paidAt ?? clock.now();
     final day = await showDatePicker(
       context: context,
       initialDate: at,
       firstDate: DateTime(at.year - 1),
-      lastDate: DateTime.now(),
+      lastDate: clock.now(),
     );
     if (day == null || !mounted) return;
     final time = await showTimePicker(
@@ -703,7 +652,7 @@ class _DetailsSheetState extends State<_DetailsSheet> {
             OutlinedButton(
               onPressed: _pickTime,
               child: Text(() {
-                final at = i.paidAt ?? DateTime.now();
+                final at = i.paidAt ?? clock.now();
                 return '${at.month}월 ${at.day}일 ${two(at.hour)}:${two(at.minute)}';
               }()),
             ),

@@ -124,13 +124,15 @@ class _ImportScreenState extends State<ImportScreen> {
         _remap = p.needsMapping;
       });
     } on ApiError catch (e) {
-      // 서버가 준 까닭을 그대로 보인다. 옛 xls, 카드를 고르지 않음 같은 것이다
-      final detail = RegExp(r'"detail":"([^"]*)"').firstMatch(e.body)?.group(1);
+      // 서버가 준 까닭을 그대로 보인다. 옛 xls, 카드를 고르지 않음 같은 것이다. 501은 아직 열지 않은 가져오기다
+      final detail = e.status == 501
+          ? e.body
+          : RegExp(r'"detail":"([^"]*)"').firstMatch(e.body)?.group(1);
       if (mounted && seq == _seq) {
         setState(() => _error = detail ?? '파일을 읽지 못했어요.');
       }
     } catch (_) {
-      if (mounted && seq == _seq) setState(() => _error = '서버에 연결하지 못했어요.');
+      if (mounted && seq == _seq) setState(() => _error = '파일을 읽지 못했어요.');
     } finally {
       if (mounted && seq == _seq) setState(() => _busy = false);
     }
@@ -440,7 +442,7 @@ class _ImportsScreenState extends State<ImportsScreen> {
         future: _batches,
         builder: (context, snap) => switch (snap) {
           AsyncSnapshot(hasError: true) => const Center(
-            child: Text('서버에 연결하지 못했어요.'),
+            child: Text('가져온 묶음을 불러오지 못했어요.'),
           ),
           AsyncSnapshot(:final data?) when data.isEmpty => const Center(
             child: Text('가져온 묶음이 없어요.'),

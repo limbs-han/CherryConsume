@@ -110,7 +110,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
           AsyncSnapshot(hasError: true) => Center(
             child: TextButton(
               onPressed: _reload,
-              child: const Text('서버에 연결하지 못했어요. 다시 시도'),
+              child: const Text('기록을 불러오지 못했어요. 다시 시도'),
             ),
           ),
           AsyncSnapshot(hasData: false) => const Center(

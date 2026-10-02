@@ -2,7 +2,7 @@
 ///
 /// 받아 둔 것이 있으면 그것을, 없으면 앱에 담긴 것을 쓴다. 받을 때 담긴 파일의 지문을 함께 적고, 켤 때 담긴 파일이
 /// 그때와 다르면 앱이 새 판이라 담긴 것을 먼저 본다. 어느 쪽이든 끝까지 읽히고 보유 카드와 저장한 결제의 카드,
-/// 가맹점, 업종이 다 있어야 쓴다. 규칙 검사는 Python이 JSON을 만들 때 했고 커밋 훅이 맞춰 본다. 설계 3절
+/// 가맹점, 업종, 결제수단이 다 있어야 쓴다. 규칙 검사는 Python이 JSON을 만들 때 했고 커밋 훅이 맞춰 본다. 설계 3절
 library;
 
 import 'dart:convert';
@@ -13,11 +13,13 @@ import '../engine/engine.dart';
 import '../engine/frac.dart';
 import 'models.dart';
 
-/// 보유 카드의 카드 id, 저장한 결제의 가맹점과 업종. 카탈로그에 하나라도 없으면 그 카탈로그를 쓰지 않는다. 설계 4절
+/// 보유 카드의 카드 id, 저장한 결제의 가맹점, 업종, 결제수단. 카탈로그에 하나라도 없으면 그 카탈로그를 쓰지 않는다.
+/// 설계 4절
 typedef InUse = ({
   Set<String> cards,
   Set<String> merchants,
   Set<String> categories,
+  Set<String> methods,
 });
 
 /// Python `app_json.py`의 MAX_DENOMINATOR, MAX_DECIMAL, MAX_INTEGER와 같다. 앱 엔진은 64비트 정수 분수로 계산한다
@@ -53,7 +55,8 @@ Catalog? _read(String body, InUse inUse) {
     final ok =
         cat.cards.keys.toSet().containsAll(inUse.cards) &&
         cat.merchants.keys.toSet().containsAll(inUse.merchants) &&
-        cat.categories.containsAll(inUse.categories);
+        cat.categories.containsAll(inUse.categories) &&
+        cat.paymentMethods.keys.toSet().containsAll(inUse.methods);
     return ok ? cat : null;
   } catch (_) {
     return null;
@@ -114,6 +117,7 @@ const nothing = (
   cards: <String>{},
   merchants: <String>{},
   categories: <String>{},
+  methods: <String>{},
 );
 
 /// 받은 카탈로그를 둔다. 다음에 앱을 켤 때부터 쓴다

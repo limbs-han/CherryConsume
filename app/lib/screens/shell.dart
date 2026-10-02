@@ -4,16 +4,14 @@ library;
 import 'package:flutter/material.dart';
 
 import '../api.dart';
-import '../social.dart';
 import 'home.dart';
 import 'records.dart';
 import 'recommend.dart';
 import 'settings.dart';
 
 class Shell extends StatefulWidget {
-  const Shell({super.key, required this.api, this.social = const Social()});
+  const Shell({super.key, required this.api});
   final Api api;
-  final Social social;
 
   @override
   State<Shell> createState() => _ShellState();
@@ -29,7 +27,7 @@ class _ShellState extends State<Shell> {
       0 => HomeScreen(api: widget.api),
       1 => RecommendScreen(api: widget.api),
       2 => RecordsScreen(api: widget.api),
-      _ => SettingsScreen(api: widget.api, social: widget.social),
+      _ => SettingsScreen(api: widget.api),
     },
     bottomNavigationBar: NavigationBar(
       selectedIndex: _tab,

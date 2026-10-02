@@ -5,6 +5,7 @@ library;
 
 import 'package:sqlite3/sqlite3.dart';
 
+import '../catalog/cache.dart' show InUse;
 import '../catalog/models.dart';
 import '../engine/cond.dart';
 import '../engine/engine.dart';
@@ -89,3 +90,31 @@ DateTime? strictDay(Object? v) {
   final [y, mo, d] = [for (var i = 1; i <= 3; i++) int.parse(m.group(i)!)];
   return _realDay(y, mo, d) ? DateTime.utc(y, mo, d) : null;
 }
+
+/// 보유 카드와 결제가 쓰는 카드, 가맹점, 업종, 결제수단. 해지한 카드와 지운 결제도 넣는다. 기록과 사람 사실 답하기가
+/// 해지한 카드 이름을 카탈로그에서 읽고, 옛 결제를 고칠 때 그 결제수단을 카탈로그에서 찾는다. 받은 카탈로그와 담긴 카탈로그에 이것이 다 있어야 쓴다. 작업 006 설계 2절, 4절
+InUse inUse(Database db) => (
+  cards: {
+    for (final r in db.select('select distinct card_id from user_cards'))
+      r['card_id'] as String,
+  },
+  merchants: {
+    for (final r in db.select(
+      'select distinct merchant_key from transactions where merchant_key is not null',
+    ))
+      r['merchant_key'] as String,
+  },
+  categories: {
+    for (final r in db.select(
+      'select distinct category_code from transactions where category_code is not null',
+    ))
+      r['category_code'] as String,
+  },
+  methods: {
+    for (final r in db.select(
+      'select payment_method as m from transactions where payment_method is not null '
+      'union select last_payment_method from user_cards where last_payment_method is not null',
+    ))
+      r['m'] as String,
+  },
+);

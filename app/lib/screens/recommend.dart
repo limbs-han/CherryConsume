@@ -71,11 +71,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
           return Center(
             child: TextButton(
               onPressed: _reload,
-              child: Text(
-                unreachable(snap.error!)
-                    ? '서버에 닿으면 추천을 볼 수 있어요. 다시 시도'
-                    : '추천을 불러오지 못했어요. 다시 시도',
-              ),
+              child: const Text('추천을 불러오지 못했어요. 다시 시도'),
             ),
           );
         }
@@ -297,7 +293,7 @@ class _ResultScreenState extends State<ResultScreen> {
       ..merchantName = widget.merchantName ?? ''
       ..userCardId = row.userCardId
       ..category = _category
-      ..recommendationRequestId = r.requestId;
+      ..fromRecommendation = true;
     final saved = await Navigator.of(context).push<int>(
       MaterialPageRoute(
         builder: (_) => PaymentScreen(
@@ -342,7 +338,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 hintText: '1만 원 기준',
                 suffixText: '원',
               ),
-              // 금액을 다 적고 확인을 누를 때만 다시 추천한다. 칠 때마다 부르면 추천 요청 기록이 사용자 의도보다 많이 쌓인다
+              // 금액을 다 적고 확인을 누를 때만 다시 추천한다. 칠 때마다 다시 계산하면 순위가 계속 흔들린다
               textInputAction: TextInputAction.done,
               onSubmitted: (v) {
                 _amount = int.tryParse(v);
@@ -351,12 +347,7 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
             const SizedBox(height: 16),
             if (snap.hasError)
-              Text(
-                unreachable(snap.error!)
-                    ? '서버에 닿으면 추천을 볼 수 있어요.'
-                    : '추천을 불러오지 못했어요.',
-                style: const TextStyle(color: C.sub),
-              ),
+              const Text('추천을 불러오지 못했어요.', style: TextStyle(color: C.sub)),
             if (r == null && !snap.hasError)
               const Center(child: CircularProgressIndicator()),
             // E16. 가게를 못 찾으면 업종을 골라 추천한다

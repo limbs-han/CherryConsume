@@ -84,7 +84,7 @@ void main() {
     }
   });
 
-  test('보유 카드나 저장한 결제의 카드, 가맹점, 업종이 빠진 파일은 버린다', () async {
+  test('보유 카드나 저장한 결제의 카드, 가맹점, 업종, 결제수단이 빠진 파일은 버린다', () async {
     // 설계 4절. 카탈로그에서 지우지 않는 것이 규칙이지만 빠진 파일을 쓰면 기록이 깨진다
     final db = openDb();
     final noCard = jsonEncode({
@@ -100,12 +100,20 @@ void main() {
           if (c['code'] != 'transit') c else {...c, 'children': []},
       ],
     });
+    final noMethod = jsonEncode({
+      ...base,
+      'payment_methods': [
+        for (final m in base['payment_methods'] as List)
+          if (m['key'] != 'naver_pay') m,
+      ],
+    });
     final inUse = (
       cards: {firstCard},
       merchants: {merchants.first['key'] as String},
       categories: {'cafe', 'transit.subway'},
+      methods: {'naver_pay'},
     );
-    for (final bad in [noCard, noMerchant, noCategory]) {
+    for (final bad in [noCard, noMerchant, noCategory, noMethod]) {
       expect(
         await refreshCatalog(db, bundled, inUse, client: answer(200, bad)),
         Refresh.rejected,

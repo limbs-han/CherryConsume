@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../api.dart';
+import '../clock.dart' as clock;
 import '../format.dart';
 import '../theme.dart';
 import 'answer.dart';
@@ -42,7 +43,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
   }
 
   Future<void> _pickStart(CardDetail d) async {
-    final today = DateUtils.dateOnly(DateTime.now());
+    final today = DateUtils.dateOnly(clock.now());
     final day = await showDatePicker(
       context: context,
       initialDate: d.startedOn == null ? today : DateTime.parse(d.startedOn!),
@@ -108,7 +109,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
         ),
         body: switch (snap) {
           AsyncSnapshot(hasError: true) => const Center(
-            child: Text('서버에 연결하지 못했어요.'),
+            child: Text('카드 정보를 불러오지 못했어요.'),
           ),
           AsyncSnapshot(hasData: false) => const Center(
             child: CircularProgressIndicator(),

@@ -19,8 +19,8 @@ final calls = RegExp(
   r'InternetAddress|NetworkImage|NetworkAssetBundle|FadeInImage)\b|Image\.network',
 );
 
-/// 서버 호출과 로그인. 계획 단계 7에서 지우면 여기서도 뺀다
-const untilStep7 = {'lib/api.dart', 'lib/social.dart'};
+/// 로그인. 계획 단계 7에서 지우면 여기서도 뺀다
+const untilStep7 = {'lib/social.dart'};
 
 /// 앱이 쓰는 패키지. 새 패키지가 밖으로 나가지 않는지 확인하고 여기에 더한다. 예를 들어 google_fonts는 실행 중에
 /// 글꼴을 받는다. 2026-10-02 위험 검토

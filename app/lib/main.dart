@@ -1,61 +1,89 @@
+/// 앱 시작. 폰 안 DB를 열고 쓸 카탈로그를 고른 뒤 바로 홈이다. 로그인은 없다. 작업 006 설계 2절, 4절
+library;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sqlite3/sqlite3.dart' show Database;
 
 import 'api.dart';
-import 'social.dart';
+import 'catalog/cache.dart';
+import 'clock.dart' as clock;
+import 'catalog/download.dart';
+import 'files.dart';
 import 'screens/shell.dart';
-import 'screens/start.dart';
+import 'store/db.dart';
+import 'store/store.dart';
 import 'theme.dart';
 
-void main() => runApp(CherryApp(api: Api()));
-
-class CherryApp extends StatefulWidget {
-  const CherryApp({
-    super.key,
-    required this.api,
-    this.devLogin = const bool.fromEnvironment('DEV_LOGIN'),
-    this.social = const Social(),
-  });
-  final Api api;
-
-  /// 카카오와 Google 로그인. 시험에서는 바꿔 끼운다
-  final Social social;
-
-  /// 개발용 로그인 버튼. `--dart-define=DEV_LOGIN=true`로 빌드할 때만 보인다. 작업 005 설계 3절
-  final bool devLogin;
-
-  @override
-  State<CherryApp> createState() => _CherryAppState();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final path = '${await filesDir()}/cherry.db';
+  final bundled = await rootBundle.loadString('assets/catalog.json');
+  // 받기는 화면을 막지 않게 기다리지 않는다. 실패해도 던지지 않고 가진 것을 쓴다
+  final (app, _) = boot(path, bundled);
+  runApp(app);
 }
 
-class _CherryAppState extends State<CherryApp> {
-  bool? _loggedIn;
-  final _nav = GlobalKey<NavigatorState>();
-
-  @override
-  void initState() {
-    super.initState();
-    widget.api.onSignedOut = () {
-      // 위에 열어 둔 카드 추가 화면과 시트까지 닫아야 시작 화면이 보인다
-      _nav.currentState?.popUntil((r) => r.isFirst);
-      if (mounted) setState(() => _loggedIn = false);
-    };
-    widget.api.restore().then((ok) => setState(() => _loggedIn = ok));
+/// DB를 열고 쓸 카탈로그를 고른 뒤 새 카탈로그 받기를 건다. 받은 카탈로그는 다음에 켤 때부터 쓴다. 시험이 받기를
+/// 기다릴 수 있게 그 Future도 돌려준다. 시험은 가짜 응답을 주는 받기를 넣는다
+(Widget, Future<Refresh>?) boot(
+  String path,
+  String bundled, {
+  Future<Refresh> Function(Database, String, InUse) refresh = refreshCatalog,
+}) {
+  try {
+    final db = openDb(path);
+    final used = inUse(db);
+    final store = Store(
+      db,
+      chooseCatalog(db, bundled, used),
+      clock: () => clock.now(),
+    );
+    return (CherryApp(api: Api(store)), refresh(db, bundled, used));
+  } catch (e, st) {
+    // 앱보다 새 판이 만든 DB, 깨진 파일, 가득 찬 저장 공간. 이 DB가 기록의 하나뿐인 사본이라 지우라고 하지 않는다
+    debugPrint('$e\n$st');
+    return (const _CannotOpen(), null);
   }
+}
+
+class _CannotOpen extends StatelessWidget {
+  const _CannotOpen();
 
   @override
   Widget build(BuildContext context) => MaterialApp(
     title: '체리컨슘',
-    navigatorKey: _nav,
     theme: theme(),
-    home: switch (_loggedIn) {
-      null => const Scaffold(),
-      true => Shell(api: widget.api, social: widget.social),
-      false => StartScreen(
-        api: widget.api,
-        devLogin: widget.devLogin,
-        social: widget.social,
-        onLoggedIn: () => setState(() => _loggedIn = true),
+    home: const Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '기록을 열지 못했어요',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(height: 12),
+              Text('앱을 최신 판으로 올린 뒤 다시 켜 주세요. 앱을 지우거나 앱 데이터를 지우면 기록이 모두 사라져요.'),
+            ],
+          ),
+        ),
       ),
-    },
+    ),
+  );
+}
+
+class CherryApp extends StatelessWidget {
+  const CherryApp({super.key, required this.api});
+  final Api api;
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    title: '체리컨슘',
+    theme: theme(),
+    home: Shell(api: api),
   );
 }

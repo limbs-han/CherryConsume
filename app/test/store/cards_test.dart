@@ -6,6 +6,8 @@ import 'package:cherry_consume/api.dart' show ApiError;
 import 'package:cherry_consume/catalog/models.dart';
 import 'package:cherry_consume/store/routes/catalog.dart';
 import 'package:cherry_consume/store/routes/me.dart';
+import 'package:cherry_consume/store/routes/records.dart' show delete;
+import 'package:cherry_consume/store/store.dart' show inUse;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'helpers.dart';
@@ -201,5 +203,32 @@ void main() {
   test('test_unknown_card_is_404', () {
     final (:s, clock: _) = fresh();
     expect(() => addCard(s, 'nope-card'), throwsA(status(404)));
+  });
+
+  test('카탈로그가 빠뜨리면 안 되는 것에 해지한 카드와 지운 결제도 든다', () {
+    // 작업 006 단계 4 위험 검토. 해지한 카드 이름을 기록이 읽고, 지운 결제도 되돌리면 다시 계산한다. 카드의 마지막
+    // 결제수단은 다음 결제의 기본값이라 결제에 없어도 든다
+    final (:s, clock: _) = fresh();
+    final mr = addCard(s, 'shinhan-mrlife')['id'] as String;
+    final ibk = addCard(s, 'ibk-narasarang')['id'] as String;
+    pay(s, mr, 4300, 'GS25');
+    final cafe = pay(
+      s,
+      ibk,
+      10000,
+      '스타벅스 역삼점',
+      more: {'payment_method': 'naver_pay'},
+    );
+    delete(s, cafe['id'] as String);
+    removeCard(s, mr);
+    s.db.execute(
+      "update user_cards set last_payment_method = 'kakao_pay' where id = ?",
+      [ibk],
+    );
+    final used = inUse(s.db);
+    expect(used.cards, {'shinhan-mrlife', 'ibk-narasarang'});
+    expect(used.merchants, {'gs25', 'starbucks'});
+    expect(used.categories, {'convenience', 'cafe'});
+    expect(used.methods, {'physical_card', 'naver_pay', 'kakao_pay'});
   });
 }
