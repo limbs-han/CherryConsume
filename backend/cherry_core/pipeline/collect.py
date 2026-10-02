@@ -28,6 +28,7 @@ DEFAULT_ROOT = Path(__file__).resolve().parents[3] / "catalog"
 AGENT = "cherryconsume-collector"
 USER_AGENT = f"{AGENT} (+https://github.com/limbs-han/CherryConsume)"
 DELAY_SECONDS = 2
+TRIES = 3  # 연결이 끊겼을 때 묻는 횟수
 PLAIN_KINDS = {"manual_pdf", "terms_pdf", "api"}
 
 
@@ -78,9 +79,24 @@ def allowed(url: str, robots_txt: str | None) -> bool:
 
 
 def _get(url: str) -> tuple[bytes, str]:
+    """연결이 잠깐 끊긴 것은 모두 세 번까지 묻는다. 서버가 HTTP로 답한 것은 다시 물어도 같아 그대로 던진다.
+
+    60초 시간 초과는 다시 묻지 않는다. 응답 없는 곳을 세 번 기다리면 원문 받기 20분 제한에 걸릴 수 있다.
+
+    2026-10-02 GitHub 수집에서 실행마다 다른 카드사 하나가 연결 실패였다. 호스트의 robots.txt가 한 번 끊기면 그 호스트 주소가 모두 실패로 남는다.
+    """
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read(), r.headers.get("Content-Type", "")
+    for attempt in range(TRIES):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return r.read(), r.headers.get("Content-Type", "")
+        except urllib.error.HTTPError:
+            raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            timed_out = isinstance(e, TimeoutError) or isinstance(getattr(e, "reason", None), TimeoutError)
+            if timed_out or attempt == TRIES - 1:
+                raise
+            time.sleep(10 * (attempt + 1))
 
 
 def _robots(url: str) -> str | None:

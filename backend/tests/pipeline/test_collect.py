@@ -163,3 +163,74 @@ def test_excluded_issuer_is_not_fetched(make_catalog, tmp_path, monkeypatch, cap
     _offline(monkeypatch, lambda url: (b"<p>abc</p>", "text/html"))
     assert main(["--root", str(root), "--out", str(tmp_path / "raw2"), "--exclude", "kb"]) == 0
     assert "저장 3, robots.txt로 건너뜀 0, 실패 0, 뺌 0" in capsys.readouterr().out
+
+
+class _Answer:
+    def __init__(self):
+        self.headers = {"Content-Type": "text/html"}
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self):
+        return b"ok"
+
+
+def _flaky(monkeypatch, failures):
+    """앞의 failures번은 failures의 오류를 내고 그 뒤로는 답한다."""
+    import cherry_core.pipeline.collect as collect_module
+
+    calls = []
+
+    def urlopen(req, timeout):
+        calls.append(req.full_url)
+        if len(calls) <= len(failures):
+            raise failures[len(calls) - 1]
+        return _Answer()
+
+    monkeypatch.setattr(collect_module.urllib.request, "urlopen", urlopen)
+    monkeypatch.setattr(collect_module.time, "sleep", lambda s: None)
+    return collect_module, calls
+
+
+def test_connection_error_is_retried(monkeypatch):
+    # 2026-10-02 예약 실행에서 하나 7곳, 수동 실행에서 현대 5곳이 연결 실패였다. 호스트의 robots.txt 한 번 실패가 그 호스트 전체 실패가 된다
+    import urllib.error
+
+    collect_module, calls = _flaky(monkeypatch, [urllib.error.URLError("reset"), ConnectionResetError()])
+    assert collect_module._get("https://x.com/robots.txt") == (b"ok", "text/html")
+    assert len(calls) == 3
+
+
+def test_gives_up_after_three_tries(monkeypatch):
+    import urllib.error
+
+    collect_module, calls = _flaky(monkeypatch, [urllib.error.URLError("reset")] * 5)
+    with pytest.raises(urllib.error.URLError):
+        collect_module._get("https://x.com/a")
+    assert len(calls) == 3
+
+
+def test_http_answer_is_not_retried(monkeypatch):
+    # 서버가 403이나 404로 답한 것은 다시 물어도 같다
+    import urllib.error
+
+    forbidden = urllib.error.HTTPError("https://x.com/a", 403, "", {}, None)
+    collect_module, calls = _flaky(monkeypatch, [forbidden])
+    with pytest.raises(urllib.error.HTTPError):
+        collect_module._get("https://x.com/a")
+    assert len(calls) == 1
+
+
+def test_timeout_is_not_retried(monkeypatch):
+    # 응답 없는 곳을 60초씩 세 번 기다리면 원문 받기 20분 제한에 걸릴 수 있다
+    import urllib.error
+
+    for timeout in (TimeoutError(), urllib.error.URLError(TimeoutError())):
+        collect_module, calls = _flaky(monkeypatch, [timeout])
+        with pytest.raises((TimeoutError, urllib.error.URLError)):
+            collect_module._get("https://x.com/a")
+        assert len(calls) == 1
