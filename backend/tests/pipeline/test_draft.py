@@ -240,3 +240,37 @@ def test_changes_mode_odd_limits_stay_a_format_error(limits):
     answer["rules"]["limits"] = limits
     with pytest.raises(ValidationError):
         make_draft(card_with_own_spend(), ISSUER, answer, FETCHED, keep_current=True)
+
+
+def card_with_ranked():
+    card = card_with_own_spend()
+    # 사람이 넣은 순위 영역 취소 달이다. Ranked는 key와 top만 있으면 형식에 맞는다
+    card["revisions"][0]["ranked"] = [{"key": "top-area", "top": 1, "cancellation": "cancel_month"}]
+    return card
+
+
+def test_changes_mode_keeps_current_ranked_cancellation_the_model_left_out():
+    # 2026-10-02 E55 위험 검토. 모델이 cancellation을 빼면 사람이 넣은 순위 영역 취소 달이 조용히 지워진다
+    answer = extracted(rate=5)
+    answer["rules"]["ranked"] = [{"key": "top-area", "top": 1}]
+    draft = make_draft(card_with_ranked(), ISSUER, answer, FETCHED, keep_current=True)
+    assert draft["revisions"][-1]["ranked"] == [{"key": "top-area", "top": 1, "cancellation": "cancel_month"}]
+    assert answer["rules"]["ranked"] == [{"key": "top-area", "top": 1}]  # 추출 결과는 그대로다
+    asked = [q["question"] for q in draft["open_questions"]]
+    assert "ranked[top-area]의 cancellation: 원문에서 찾지 못해 지금 값을 두었다" in asked
+
+
+def test_changes_mode_flags_ranked_cancellation_the_model_read_differently():
+    answer = extracted(rate=5)
+    answer["rules"]["ranked"] = [{"key": "top-area", "top": 1, "cancellation": "original_month"}]
+    draft = make_draft(card_with_ranked(), ISSUER, answer, FETCHED, keep_current=True)
+    assert draft["revisions"][-1]["ranked"] == [{"key": "top-area", "top": 1, "cancellation": "original_month"}]
+    asked = [q["question"] for q in draft["open_questions"]]
+    assert "ranked[top-area]의 cancellation: 원문에서 읽은 값이 지금 값과 다르다" in asked
+
+
+def test_changes_mode_flags_ranked_the_model_dropped():
+    draft = make_draft(card_with_ranked(), ISSUER, extracted(rate=5), FETCHED, keep_current=True)
+    assert "ranked" not in draft["revisions"][-1]
+    asked = [q["question"] for q in draft["open_questions"]]
+    assert "ranked의 top-area: 원문에서 찾지 못해 초안에서 빠졌다" in asked

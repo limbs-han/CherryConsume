@@ -145,3 +145,13 @@ def test_second_ask_shows_the_previous_answer_and_each_error():
     assert text.startswith("처음 프롬프트\n\n")
     assert '<이전 답>\n{"rules": {}}\n</이전 답>' in text
     assert text.endswith("\n- " + errors[0] + "\n- " + errors[1])
+
+
+def test_instructions_explain_ranked_cancellation():
+    # 2026-10-02 E55 검토. 칸 이름이 spend.cancellation과 같아 모델이 실적 규칙을 베낄 수 있다
+    from cherry_core.pipeline.prompt import INSTRUCTIONS
+
+    assert (
+        "- ranked의 cancellation은 순위 영역 이용금액의 취소를 어느 달에 반영하는지다. "
+        "원문에 순위 영역의 취소를 따로 적었을 때만 쓰고, spend.cancellation을 옮겨 적지 않는다.\n"
+    ) in INSTRUCTIONS

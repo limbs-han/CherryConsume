@@ -161,6 +161,20 @@ def make_draft(
                     f"benefits[{b['key']}]의 limits {', '.join(sorted(lost))}: 지금 한도가 초안에 없다. "
                     "이대로 승인하면 그 한도 없이 계산한다"
                 )
+        # 순위 영역의 취소 달도 근거 문장 칸이 없다. 모델이 빼면 사람이 넣은 값이 조용히 지워진다. E55 위험 검토
+        # raw는 int_keys가 새로 만든 것이라 고쳐도 extracted는 그대로다
+        mine_ranked = {x["key"]: x for x in _dicts(raw.get("ranked")) if isinstance(x.get("key"), str)}
+        for x in then.get("ranked", []):
+            mine = mine_ranked.get(x["key"])
+            if mine is None:
+                notes.append(f"ranked의 {x['key']}: 원문에서 찾지 못해 초안에서 빠졌다")
+            elif x.get("cancellation") is None:
+                continue
+            elif mine.get("cancellation") is None:
+                mine["cancellation"] = x["cancellation"]
+                notes.append(f"ranked[{x['key']}]의 cancellation: 원문에서 찾지 못해 지금 값을 두었다")
+            elif mine["cancellation"] != x["cancellation"]:
+                notes.append(f"ranked[{x['key']}]의 cancellation: 원문에서 읽은 값이 지금 값과 다르다")
     rules = clean_rules(raw)
     if rules == clean_rules(current):
         return None
