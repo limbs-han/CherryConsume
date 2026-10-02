@@ -28,7 +28,7 @@ from . import auth
 from .catalog_sync import revision_ids, sync_catalog
 from .db import migrate
 from .payments import alias_index
-from .routes import answers, catalog, me, payments, recommend, records
+from .routes import answers, catalog, imports, me, payments, recommend, records
 
 REPO = Path(__file__).resolve().parents[2]
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
@@ -103,4 +103,5 @@ def create_app(
     app.include_router(recommend.router)
     app.include_router(records.router)
     app.include_router(answers.router)
+    app.include_router(imports.router)
     return app

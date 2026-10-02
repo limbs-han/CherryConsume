@@ -43,6 +43,7 @@ def to_payment(row: dict) -> Payment:
         billing=row["billing"],
         cancelled_amount=row["cancelled_amount"],
         cancelled_at=row["cancelled_at"],
+        time_known=row["time_known"],
         benefits=[AppliedBenefit(**b) for b in row["benefits"]],
     )
 

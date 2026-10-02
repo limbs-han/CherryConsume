@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta
 from typing import Annotated
 
+import psycopg
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 
@@ -146,6 +147,8 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
                 "amount": p.amount,
                 "cancelled_amount": p.cancelled_amount,
                 "cancelled_at": p.cancelled_at.isoformat() if p.cancelled_at else None,
+                # 엑셀에 날짜만 있던 결제는 시각을 모른다. 고치면 시각을 안다. E57
+                "time_known": p.time_known,
                 "value": sum(b.value for b in p.benefits or []),
                 "rewards": rewards,
                 "counted": counted,
@@ -187,7 +190,12 @@ def edit(tid: str, body: EditPayment, request: Request, user: User, conn: Conn) 
     now, engine = request.app.state.clock(), request.app.state.engine
     loaded = load_payments(conn, sorted({old_card, new_card}))
     p = payment_of(rows[new_card], body, body.amount, f, tid).model_copy(
-        update={"cancelled_amount": old["cancelled_amount"], "cancelled_at": old["cancelled_at"]}
+        update={
+            "cancelled_amount": old["cancelled_amount"],
+            "cancelled_at": old["cancelled_at"],
+            # 시각을 모르던 결제는 시각을 바꿔야 안다. 다른 칸만 고치면 12시가 진짜 시각이 되지 않는다. E57
+            "time_known": old["time_known"] or f["paid_at"] != old["paid_at"],
+        }
     )
     start = min(month_of(local(old["paid_at"]).date()), month_of(local(p.paid_at).date()))
     results: dict[str, dict[str, PaymentResult]] = {}
@@ -196,31 +204,36 @@ def edit(tid: str, body: EditPayment, request: Request, user: User, conn: Conn) 
     else:
         results[old_card] = changed_with(engine, engine_card(rows[old_card]), loaded[old_card], None, tid, start, now)
         results[new_card] = changed_with(engine, engine_card(rows[new_card]), loaded[new_card], p, None, start, now)
-    conn.execute(
-        """
-        UPDATE transactions SET user_card_id = %s, amount = %s, merchant_name = %s, merchant_key = %s, category_code = %s,
-            paid_at = %s, installment_months = %s, interest_free_installment = %s, channel = %s, region = %s,
-            payment_method = %s, billing = %s, card_revision_id = %s, updated_at = %s
-        WHERE id = %s
-        """,
-        (
-            new_card,
-            p.amount,
-            body.merchant_name,
-            p.merchant,
-            p.category,
-            p.paid_at,
-            p.installment_months,
-            p.interest_free,
-            p.channel,
-            p.region,
-            p.payment_method,
-            p.billing,
-            revision_for(request, rows[new_card]["card_id"], p.paid_at),
-            now,
-            tid,
-        ),
-    )
+    try:
+        conn.execute(
+            """
+            UPDATE transactions SET user_card_id = %s, amount = %s, merchant_name = %s, merchant_key = %s, category_code = %s,
+                paid_at = %s, time_known = %s, installment_months = %s, interest_free_installment = %s, channel = %s, region = %s,
+                payment_method = %s, billing = %s, card_revision_id = %s, updated_at = %s
+            WHERE id = %s
+            """,
+            (
+                new_card,
+                p.amount,
+                body.merchant_name,
+                p.merchant,
+                p.category,
+                p.paid_at,
+                p.time_known,
+                p.installment_months,
+                p.interest_free,
+                p.channel,
+                p.region,
+                p.payment_method,
+                p.billing,
+                revision_for(request, rows[new_card]["card_id"], p.paid_at),
+                now,
+                tid,
+            ),
+        )
+    except psycopg.errors.UniqueViolation:
+        # 옮길 카드에 같은 승인번호의 결제가 이미 있다. E31
+        raise HTTPException(409, "옮길 카드에 같은 승인번호의 결제가 있다") from None
     repriced = 0
     for cid, res in results.items():
         before = {q.id: q for q in loaded[cid]}
