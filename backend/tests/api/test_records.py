@@ -154,3 +154,36 @@ def test_remove_card(client):
     assert client.get(f"/me/cards/{mrlife}", headers=headers).status_code == 404
     body = {"user_card_id": mrlife, "amount": 1000, "merchant_name": "GS25", "paid_at": "2026-09-15T21:00:00+09:00"}
     assert client.post("/me/payments", json=body, headers=headers).status_code == 404
+
+
+def test_cancel_keeps_the_month_spend_of_a_benefit_payment(client):
+    # E5. KB 톡톡은 혜택 받은 결제를 실적에서 빼고 취소한 달 기준이다. 7월 30만으로 8월 30만 구간
+    # 8/10 스타벅스 2만 원은 50%가 월 1만 원 한도를 채워 1만 원 할인, 실적 0. 8/20 기타 29만이라 8월 실적 29만, 9월 0원 구간
+    # 9/3에 8월 스타벅스를 전액 취소해도 처음 실적이 0이라 8월은 29만 그대로다. 9월은 0원 구간이고 다시 계산할 결제도 없다
+    headers, [kb] = setup(client, {"card_id": "kb-toktok"})
+    method = {"payment_method": "physical_card"}
+    pay(client, headers, kb, 300000, "기타", at="2026-07-20T12:00:00+09:00", category="other", **method)
+    sb = pay(client, headers, kb, 20000, "스타벅스", at="2026-08-10T08:30:00+09:00", **method)
+    assert sb["value"] == 10000
+    pay(client, headers, kb, 290000, "기타", at="2026-08-20T12:00:00+09:00", category="other", **method)
+    assert pay(client, headers, kb, 10000, "스타벅스", at="2026-09-05T08:30:00+09:00", **method)["value"] == 0
+    body = {"cancelled_amount": 20000, "cancelled_at": "2026-09-03T10:00:00+09:00"}
+    r = client.post(f"/me/payments/{sb['id']}/cancel", json=body, headers=headers).json()
+    assert (r["value"], r["repriced"]) == (0, 0)
+    # 저장된 기록으로 다시 세도 9월은 0원 구간이다. 엔진이 취소하지 않은 결제로 다시 계산해 처음 실적을 센다
+    spend = client.get("/me/home", headers=headers).json()["cards"][0]["spend"]
+    assert (spend["tier"], spend["prev_month_counted"]) == (0, 290000)
+
+
+def test_records_show_spend_like_the_engine_after_cancel(client):
+    # 삼성 taptap O는 혜택 받은 결제를 실적에서 뺀다. 7월 30만으로 8월 30만 구간. 8/10 CGV 15,000원은 1만 원 이상 5,000원 할인으로 실적 0
+    # 9/3에 6,000원을 부분 취소하면 남은 9,000원은 1만 원 미만이라 할인이 없다. 취소로 실적을 늘리지 않아 엔진은 8월 0원이다
+    # 기록 목록도 엔진처럼 실적 제외로 보여야 한다
+    headers, [card] = setup(client, {"card_id": "samsung-taptap-o"})
+    pay(client, headers, card, 300000, "기타", at="2026-07-20T12:00:00+09:00", category="other")
+    cgv = pay(client, headers, card, 15000, "CGV 강남", at="2026-08-10T19:00:00+09:00")
+    assert cgv["value"] == 5000
+    body = {"cancelled_amount": 6000, "cancelled_at": "2026-09-03T10:00:00+09:00"}
+    assert client.post(f"/me/payments/{cgv['id']}/cancel", json=body, headers=headers).json()["value"] == 0
+    rows = client.get("/me/payments", params={"month": "2026-08"}, headers=headers).json()["payments"]
+    assert [(x["merchant_name"], x["counted"]) for x in rows] == [("CGV 강남", False)]

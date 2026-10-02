@@ -10,6 +10,7 @@ from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 
 from cherry_core.engine.cond import local, month_of
 from cherry_core.engine.models import Payment, PaymentResult
+from cherry_core.engine.price import before_cancel, build_ledger
 from cherry_core.engine.spend import spend_parts
 
 from ..auth import User
@@ -107,6 +108,7 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
     rows = conn.execute(sql, (user, start, end, card_id, card_id)).fetchall()
     engine, names = request.app.state.engine, request.app.state.category_names
     out = []
+    history: dict[str, list[Payment]] = {}
     for row in rows:
         p = to_payment(row)
         uc = cards[str(row["user_card_id"])]
@@ -114,7 +116,15 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
         counted = True
         rewards: list[str] = []
         if found is not None:
-            parts, _ = spend_parts(engine.ctx, engine_card(uc), p, found[1], p.benefits or [])
+            card_ = engine_card(uc)
+            before = None
+            if p.cancelled_amount:
+                # 취소한 결제는 엔진처럼 취소하지 않았다면 받았을 혜택으로 처음 실적을 센다. 설계 문서 6.5
+                if p.user_card_id not in history:
+                    history |= load_payments(conn, [p.user_card_id])
+                prior = [q for q in history[p.user_card_id] if (q.paid_at, q.id) < (p.paid_at, p.id)]
+                before = before_cancel(engine.ctx, card_, p, build_ledger(engine.ctx, card_, prior))
+            parts, _ = spend_parts(engine.ctx, card_, p, found[1], p.benefits or [], before)
             # 어느 달 실적에도 넣지 않으면 실적 제외다. 취소로 0원이 된 결제는 취소로 보인다
             counted = any(part.amount > 0 for part in parts) or p.cancelled_amount == p.amount
             types = {b.key: b.reward.type for b in found[1].benefits}
