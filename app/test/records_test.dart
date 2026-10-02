@@ -143,6 +143,8 @@ class FakeServer {
               'cap_amount': null,
               'used_count': 1,
               'cap_count': 5,
+              'used_base': 4300,
+              'cap_base': null,
             },
             {
               'title': '통합 한도',
@@ -151,6 +153,38 @@ class FakeServer {
               'cap_amount': 10000,
               'used_count': 1,
               'cap_count': null,
+              'used_base': 4300,
+              'cap_base': null,
+            },
+            {
+              'title': '주말 주유 리터당 60원 할인',
+              'per': 'month',
+              'used_amount': 0,
+              'cap_amount': null,
+              'used_count': 0,
+              'cap_count': null,
+              'used_base': 100000,
+              'cap_base': 300000,
+            },
+            {
+              'title': 'PX 할인',
+              'per': 'month',
+              'used_amount': 6000,
+              'cap_amount': 50000,
+              'used_count': 2,
+              'cap_count': 2,
+              'used_base': 60000,
+              'cap_base': null,
+            },
+            {
+              'title': '영화 할인',
+              'per': 'year',
+              'used_amount': 0,
+              'cap_amount': null,
+              'used_count': 5,
+              'cap_count': 4,
+              'used_base': 0,
+              'cap_base': null,
             },
           ],
           'locked': [],
@@ -213,8 +247,12 @@ void main() {
     await tester.pumpAndSettle();
 
     // 편의점 월 5회 가운데 1회를 써 4회, 통합 한도 1만 원 가운데 430원을 써 9,570원이 남았다
-    expect(find.text('4회 남음'), findsOneWidget);
-    expect(find.text('9,570원 남음'), findsOneWidget);
+    expect(find.text('이번 달 4회 남음'), findsOneWidget);
+    expect(find.text('이번 달 9,570원 남음'), findsOneWidget);
+    // 결제액 한도만 있는 줄도 보이고, 한도를 넘겨 쓴 줄은 0으로 보인다. 금액과 횟수가 함께 있으면 먼저 끝나는 쪽이다
+    expect(find.text('이번 달 결제액 200,000원 남음'), findsOneWidget);
+    expect(find.text('올해 0회 남음'), findsOneWidget);
+    expect(find.text('이번 달 0회 남음'), findsOneWidget);
     expect(find.text('지금 적용 중 · 30만 구간 · 전월 41만 기준'), findsOneWidget);
     expect(find.text('카드사 공식 문구로 확인하지 못한 값 2개는 추정으로 계산해요.'), findsOneWidget);
 

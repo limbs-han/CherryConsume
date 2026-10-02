@@ -16,7 +16,7 @@ from cherry_core.engine.models import UserCard
 from ..auth import User
 from ..deps import Conn, today
 from ..payments import load_payments
-from .catalog import MAX_SPEND, benefits_at, registrable
+from .catalog import MAX_SPEND, benefits_at, in_period, option_picked, registrable
 
 router = APIRouter(prefix="/me")
 
@@ -78,7 +78,8 @@ def home(request: Request, user: User, conn: Conn) -> dict:
         card = engine_card(r)
         status = engine.spend_status(card, payments[str(r["id"])], month)
         found = engine.ctx.rules_on(r["card_id"], month)
-        titles = benefits_at(found[1], card, month, status) if found and status.tier is not None else []
+        got = benefits_at(found[1], card, month, status, today(request)) if found and status.tier is not None else []
+        titles = [b.title for b in got]
         cards.append(
             {
                 "id": str(r["id"]),
@@ -124,18 +125,31 @@ def card_detail(uid: str, request: Request, user: User, conn: Conn) -> dict:
     if row is None:
         raise HTTPException(404, "보유 카드가 아니다")
     engine, now = request.app.state.engine, request.app.state.clock()
-    month = month_of(today(request))
+    day = today(request)
+    month = month_of(day)
     card = engine_card(row)
     payments = load_payments(conn, [uid])[uid]
     status = engine.spend_status(card, payments, month)
-    found = engine.ctx.rules_on(row["card_id"], month)
+    # 엔진 limit_status처럼 오늘의 개정을 본다
+    found = engine.ctx.rules_on(row["card_id"], day)
     limits, locked = [], []
+    available: set[str] = set()
+    sentences = [s for w in status.warnings if w.code == "check_conditions" for s in w.data.get("sentences", [])]
     if found is not None:
         rules = found[1]
         titles = {b.key: b.title for b in rules.benefits}
-        # 1회와 하루 한도는 남은 양이 아니라 조건이라 보이지 않는다
+        got = benefits_at(rules, card, month, status, day)
+        available = {b.key for b in got}
+        # 받는 혜택에 달린 문장 조건도 보인다. 실적 현황의 경고에는 카드 전체 문장만 있다
+        sentences += [s for b in got for s in b.unmodeled]
+        # 함께 쓰는 한도는 그 한도를 쓰는 혜택 가운데 하나라도 받으면 보인다
+        sharing = {lim.shared for b in got for lim in b.limits if lim.shared}
+        # 1회와 하루 한도는 남은 양이 아니라 조건이라 보이지 않는다. 지금 구간과 옵션에서 못 받는 혜택의 한도도 뺀다
         for use in engine.limit_status(card, payments, now):
-            if use.per in ("txn", "day") or (use.cap_amount is None and use.cap_count is None):
+            if use.per in ("txn", "day") or (use.cap_amount is None and use.cap_count is None and use.cap_base is None):
+                continue
+            shown = use.benefit in available if use.benefit else use.key in sharing
+            if not shown:
                 continue
             limits.append(
                 {
@@ -145,18 +159,23 @@ def card_detail(uid: str, request: Request, user: User, conn: Conn) -> dict:
                     "cap_amount": use.cap_amount,
                     "used_count": use.used_count,
                     "cap_count": use.cap_count,
+                    # 할인받는 결제액의 한도. 신한 Mr.Life 주말 주유처럼 이것만 있는 한도가 있다. 위험 검토 15번
+                    "used_base": use.used_base,
+                    "cap_base": use.cap_base,
                 }
             )
         prev = status.prev_month_counted
         base = max(t for t in rules.tiers if t <= prev) if prev is not None else (status.tier or 0)
-        available = set(benefits_at(rules, card, month, status))
+        picked = option_picked(rules, card, month)
         for b in rules.benefits:
             lo = b.tiers.start if b.tiers and b.tiers.start is not None else rules.tiers[0]
             # 구간이 모자라 못 받는 혜택. 필요 금액은 그 구간 하한 빼기 이번 달 인정 실적, 받는 때는 다음 달이다. E37
-            if lo > base and b.title not in available:
+            # 고르지 않은 옵션의 혜택과 다음 달 전에 끝나는 행사는 구간이 올라도 받지 못해 넣지 않는다. 위험 검토 10번
+            if lo > base and b.key not in available and picked(b) and in_period(b, add_months(month, 1)):
                 locked.append({"title": b.title, "required_tier": lo, "remaining": max(lo - status.counted, 0)})
-    sentences = [s for w in status.warnings if w.code == "check_conditions" for s in w.data.get("sentences", [])]
-    assumed = sum(len(w.data.get("paths", [])) for w in status.warnings if w.code == "assumed_value")
+    # 카드 전체 항목과 이번 달 받는 혜택의 항목을 센다. 안내가 "추정으로 계산해요"라 계산에 쓰는 것만 센다. 위험 검토 14번
+    paths = engine.ctx.assumed.get(row["card_id"], {})
+    assumed = sum(len(paths.get(k, [])) for k in {None} | available)
     return {
         "id": uid,
         "card_id": row["card_id"],

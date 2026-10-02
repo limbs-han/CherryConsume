@@ -289,10 +289,13 @@ class CardDetail {
         for (final l in j['limits'])
           (
             title: l['title'] as String,
+            per: l['per'] as String,
             usedAmount: l['used_amount'] as int,
             capAmount: l['cap_amount'] as int?,
             usedCount: l['used_count'] as int,
             capCount: l['cap_count'] as int?,
+            usedBase: l['used_base'] as int,
+            capBase: l['cap_base'] as int?,
           ),
       ],
       locked = [
@@ -314,10 +317,13 @@ class CardDetail {
   final List<
     ({
       String title,
+      String per,
       int usedAmount,
       int? capAmount,
       int usedCount,
       int? capCount,
+      int usedBase,
+      int? capBase,
     })
   >
   limits;

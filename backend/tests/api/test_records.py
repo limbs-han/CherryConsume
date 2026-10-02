@@ -190,6 +190,9 @@ def test_card_detail(client):
     limits = {x["title"]: x for x in d["limits"]}
     assert (limits["편의점 10% 할인"]["used_count"], limits["편의점 10% 할인"]["cap_count"]) == (1, 5)
     assert (limits["통합 한도"]["used_amount"], limits["통합 한도"]["cap_amount"]) == (430, 10000)
+    # 위험 검토 15번. 주말 주유는 할인받는 결제액 월 30만 원 한도만 있다. 그래도 한도 줄에 보인다
+    fuel = [x for x in d["limits"] if x["cap_base"] is not None]
+    assert [(x["per"], x["used_base"], x["cap_base"]) for x in fuel] == [("month", 0, 300000)]
     # 30만 구간에서 받는 혜택은 모두 30만부터라 못 받는 혜택이 없다
     assert d["locked"] == []
     assert d["revision_from"] == "2026-07-15" and d["check_sentences"]
@@ -202,6 +205,62 @@ def test_card_detail_locked_benefits(client):
     locked = client.get(f"/me/cards/{mrlife}", headers=headers).json()["locked"]
     assert len(locked) == 10
     assert {(x["required_tier"], x["remaining"]) for x in locked} == {(300000, 295700)}
+
+
+def test_card_detail_hides_what_the_card_does_not_give(client):
+    # 위험 검토 9번과 10번. 삼성 taptap O를 추정값 없이 등록하면 0원 구간이다. 혜택은 모두 30만 구간부터라 받는 혜택의
+    # 한도가 없다. 패키지 옵션은 고르지 않았고 기본값이 없어 패키지 혜택 6개는 구간이 올라도 받지 못한다. 못 받는 혜택은
+    # 대중교통, 택시, 이동통신, 영화 4개다
+    headers, [tap] = setup(client, {"card_id": "samsung-taptap-o"})
+    d = client.get(f"/me/cards/{tap}", headers=headers).json()
+    assert d["limits"] == []
+    assert len(d["locked"]) == 4
+    assert not [x for x in d["locked"] if "패키지" in x["title"]]
+
+
+def test_card_detail_counts_unconfirmed_values_it_uses(client):
+    # 위험 검토 14번. Mr.Life의 확인 필요 항목은 카드 전체 2개와 혜택별 3개다. 혜택별 3개는 모두 30만 구간부터라
+    # 0원 구간이면 2개, 30만 구간이면 5개를 센다
+    for card, count in ((NO_GUESS, 2), (MRLIFE, 5)):
+        headers, [uid] = setup(client, card, name=f"count{count}")
+        assert client.get(f"/me/cards/{uid}", headers=headers).json()["assumed_count"] == count
+
+
+def test_card_detail_hides_limits_of_unpicked_options(client):
+    # 위험 검토 10번 재검토. taptap O를 지난달 30만 원으로 등록하면 30만 구간이다. 대중교통과 택시가 함께 쓰는 월 5천 원,
+    # 이동통신 월 5천 원, 영화 월 2회와 연 12회가 보인다. 패키지는 고르지 않아 패키지 혜택과 그 한도는 숨는다
+    headers, [tap] = setup(client, {"card_id": "samsung-taptap-o", "assumed_prev_month_spend": 300000})
+    d = client.get(f"/me/cards/{tap}", headers=headers).json()
+    assert sorted(((x["per"], x["cap_amount"], x["cap_count"]) for x in d["limits"]), key=str) == [
+        ("month", 5000, None),
+        ("month", 5000, None),
+        ("month", None, 2),
+        ("year", None, 12),
+    ]
+    assert d["locked"] == []
+
+
+def test_card_detail_tells_apart_benefits_with_the_same_title(client):
+    # 재검토 중간 1번. IBK 나라사랑에는 "편의점 10% 청구할인"이 둘이다. 하나는 8만~20만 구간 월 2회, 하나는 25만 구간부터
+    # 월 10회다. 8만 구간이면 월 2회만 보이고 25만 구간 혜택은 못 받는 혜택에 있다. 25만 구간이면 월 10회만 보인다
+    title = "편의점 10% 청구할인"
+    low_headers, [low] = setup(client, {"card_id": "ibk-narasarang", "assumed_prev_month_spend": 80000})
+    high_headers, [high] = setup(client, {"card_id": "ibk-narasarang", "assumed_prev_month_spend": 250000}, name="b")
+    d = client.get(f"/me/cards/{low}", headers=low_headers).json()
+    assert [x["cap_count"] for x in d["limits"] if x["title"] == title] == [2]
+    assert [x["required_tier"] for x in d["locked"] if x["title"] == title] == [250000]
+    d = client.get(f"/me/cards/{high}", headers=high_headers).json()
+    assert [x["cap_count"] for x in d["limits"] if x["title"] == title] == [10]
+    assert not [x for x in d["locked"] if x["title"] == title]
+
+
+def test_card_detail_leaves_out_ended_events(client, clock):
+    # 재검토 중간 2번. IBK 슈마커 1만 원 청구할인은 2026-09-30에 끝난다. 10월 2일 카드 상세에는 그 한도가 없다
+    headers, [nara] = setup(client, {"card_id": "ibk-narasarang", "assumed_prev_month_spend": 80000})
+    shoe = [b for b in client.get(f"/me/cards/{nara}", headers=headers).json()["limits"] if "슈마커" in b["title"]]
+    clock.now = datetime(2026, 10, 2, 3, 0, tzinfo=UTC)
+    d = client.get(f"/me/cards/{nara}", headers=headers).json()
+    assert shoe and not [b for b in d["limits"] if "슈마커" in b["title"]]
 
 
 def test_remove_card(client):

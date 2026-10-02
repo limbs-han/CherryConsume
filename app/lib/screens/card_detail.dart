@@ -1,6 +1,8 @@
 /// 시안 보드 6 카드 상세. 실적, 구간, 혜택별 남은 한도, 구간이 모자라 못 받는 혜택. S7, S9, E37
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../api.dart';
@@ -145,7 +147,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
         ),
       ),
       if (d.limits.isNotEmpty) ...[
-        const _Heading('이번 달 혜택'),
+        const _Heading('남은 한도'),
         Box(
           child: Column(
             children: [
@@ -161,9 +163,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                         ),
                       ),
                       Text(
-                        l.capAmount != null
-                            ? '${won(l.capAmount! - l.usedAmount)} 남음'
-                            : '${l.capCount! - l.usedCount}회 남음',
+                        _left(l),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           color: C.green,
@@ -283,4 +283,39 @@ class _Heading extends StatelessWidget {
       ),
     ),
   );
+}
+
+const _periods = {
+  'month': '이번 달',
+  'quarter': '이번 분기',
+  'year': '올해',
+  'period': '행사 기간',
+  'lifetime': '전체 기간',
+};
+
+/// 한도 한 줄의 남은 양. 금액, 횟수, 결제액 한도 가운데 남은 비율이 가장 작은 것을 보인다. 먼저 끝나는 쪽이다.
+/// 다 써도 0 아래로 내려가지 않는다
+String _left(
+  ({
+    String title,
+    String per,
+    int usedAmount,
+    int? capAmount,
+    int usedCount,
+    int? capCount,
+    int usedBase,
+    int? capBase,
+  })
+  l,
+) {
+  final per = _periods[l.per] ?? '';
+  final options = [
+    if (l.capAmount != null) (l.capAmount!, l.usedAmount, (int n) => won(n)),
+    if (l.capCount != null) (l.capCount!, l.usedCount, (int n) => '$n회'),
+    if (l.capBase != null) (l.capBase!, l.usedBase, (int n) => '결제액 ${won(n)}'),
+  ];
+  double share((int, int, String Function(int)) o) =>
+      o.$1 == 0 ? 0 : max(0, o.$1 - o.$2) / o.$1;
+  final o = options.reduce((a, b) => share(b) < share(a) ? b : a);
+  return '$per ${o.$3(max(0, o.$1 - o.$2))} 남음';
 }

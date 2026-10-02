@@ -9,7 +9,7 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Query, Request
 
 from cherry_core.catalog.load import LoadedCard
-from cherry_core.catalog.models import Rules
+from cherry_core.catalog.models import Benefit, Rules
 from cherry_core.engine.cond import month_of
 from cherry_core.engine.models import SpendStatus, UserCard
 from cherry_core.engine.spend import new_card_tier
@@ -34,29 +34,41 @@ def registrable(request: Request, card_id: str) -> LoadedCard:
     return loaded
 
 
-def benefits_at(rules: Rules, card: UserCard, month: date, status: SpendStatus) -> list[str]:
-    """그 달에 받는 혜택 제목. 엔진처럼 새 카드 특례 구간을 혜택마다 본다. 하한과 상한을 모두 넣는다
+def option_picked(rules: Rules, card: UserCard, month: date):
+    """혜택이 고른 옵션에 맞는지 보는 함수. 엔진처럼 고르지 않은 옵션은 기본값으로 본다. 기본값이 없으면 그 옵션의 혜택은 뺀다"""
+    chosen = {o.key: o.default for o in rules.options}
+    chosen |= {
+        p.option: p.choice for p in sorted(card.options, key=lambda p: p.effective_from) if p.effective_from <= month
+    }
+    # ponytail: when의 첫 단계만 본다. any_of 안의 옵션 조건은 놓친다. 지금 카탈로그에는 없다
+    return lambda b: not any(c.option and not all(chosen.get(k) in v for k, v in c.option.items()) for c in b.when)
+
+
+def in_period(b: Benefit, day: date) -> bool:
+    """행사 기간 안인가. 엔진 benefit_match와 같다"""
+    return not ((b.valid_from and day < b.valid_from) or (b.valid_until and day > b.valid_until))
+
+
+def benefits_at(rules: Rules, card: UserCard, month: date, status: SpendStatus, day: date) -> list[Benefit]:
+    """그 달에 받는 혜택. 엔진처럼 새 카드 특례 구간을 혜택마다 본다. 하한과 상한을 모두 넣는다. 행사 기간은 day로 본다
+
+    제목은 한 개정 안에서 겹칠 수 있어 혜택으로 돌려준다. IBK 나라사랑의 편의점 10% 청구할인 둘이 그렇다
 
     옵션을 골라야 받는 혜택은 고른 선택지나 기본값에 맞을 때만 넣는다. 고르지 않은 패키지끼리는 서로 배타라 함께 보이면 안 된다.
     옵션은 슬라이스 5에서 묻는다.
     """
     prev = status.prev_month_counted
     base = max(t for t in rules.tiers if t <= prev) if prev is not None else (status.tier or 0)
-    # 엔진처럼 고르지 않은 옵션은 기본값으로 본다. 기본값이 없으면 그 옵션의 혜택은 뺀다
-    chosen = {o.key: o.default for o in rules.options}
-    chosen |= {
-        p.option: p.choice for p in sorted(card.options, key=lambda p: p.effective_from) if p.effective_from <= month
-    }
+    picked = option_picked(rules, card, month)
     out = []
     for b in rules.benefits:
-        # ponytail: when의 첫 단계만 본다. any_of 안의 옵션 조건은 놓친다. 지금 카탈로그에는 없다
-        if any(c.option and not all(chosen.get(k) in v for k, v in c.option.items()) for c in b.when):
+        if not picked(b) or not in_period(b, day):
             continue
         tier, _ = new_card_tier(card, month, rules, b.key, base)
         lo = b.tiers.start if b.tiers and b.tiers.start is not None else rules.tiers[0]
         hi = b.tiers.end if b.tiers and b.tiers.end is not None else rules.tiers[-1]
         if lo <= tier <= hi:
-            out.append(b.title)
+            out.append(b)
     return out
 
 
@@ -135,6 +147,8 @@ def preview(
         "tier": status.tier,
         "tier_source": status.tier_source,
         "tiers": [t for t in found[1].tiers if t > 0] if found else [],
-        "benefits": benefits_at(found[1], card, month, status) if found and status.tier is not None else [],
+        "benefits": [b.title for b in benefits_at(found[1], card, month, status, day)]
+        if found and status.tier is not None
+        else [],
         "warnings": [w.code for w in status.warnings],
     }
