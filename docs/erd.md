@@ -118,6 +118,7 @@ erDiagram
         text billing
         bigint card_revision_id FK "계산에 쓴 개정"
         text approval_no "카드사 승인번호. 중복 판정"
+        boolean time_known "엑셀에 날짜만 있으면 거짓. E57"
         bigint import_batch_id FK "엑셀 가져오기 배치"
         text source "manual | excel | notification"
         uuid recommendation_request_id FK "추천에서 바로 기록했으면"
@@ -149,12 +150,26 @@ erDiagram
     import_batches {
         bigint id PK
         uuid user_id FK
-        text source "카드사 코드 또는 toss, banksalad"
-        text file_name
-        int row_count
+        text source "카드사 코드 또는 toss, banksalad. 매핑 표가 생기기 전에는 비어 있다"
+        int row_count "앱이 보낸 행 수"
         int imported_count
         int duplicate_count
+        int cancel_count
         timestamptz created_at
+        timestamptz undone_at
+    }
+    import_cancels {
+        bigint id PK
+        bigint import_batch_id FK
+        uuid transaction_id FK
+        int amount "취소 한 줄의 금액"
+        timestamptz cancelled_at
+    }
+    import_mappings {
+        uuid user_id PK,FK
+        text signature PK "머리 줄 모양의 해시"
+        jsonb mapping "칸마다 열 번호"
+        timestamptz updated_at
     }
     card_requests {
         bigint id PK
@@ -229,6 +244,9 @@ erDiagram
     recommendation_requests o|--o{ transactions : "추천 따라 기록"
     users ||--o{ card_requests : "카드 추가 요청"
     users ||--o{ import_batches : "엑셀 가져오기"
+    users ||--o{ import_mappings : "짝지은 열"
+    import_batches ||--o{ import_cancels : "붙인 취소"
+    transactions ||--o{ import_cancels : "가져온 취소"
     import_batches o|--o{ transactions : "가져온 결제"
 ```
 
