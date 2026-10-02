@@ -37,7 +37,7 @@ REST API 키, 어드민 키, 클라이언트 보안 비밀은 쓰지 않는다. 
 
 ## 3. 키 넣기
 
-1. `app/android/local.properties`에 한 줄을 더한다. 이 파일은 저장소에 올라가지 않는다
+1. `app/android/local.properties`에 한 줄을 더한다. 이 파일은 저장소에 올라가지 않는다. 앞 줄 끝에 붙지 않게 새 줄에 쓴다. 붙으면 Flutter가 빌드할 때 그 줄을 지운다
 
    ```
    kakao.nativeAppKey=카카오_네이티브_앱_키
