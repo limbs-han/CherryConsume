@@ -34,11 +34,12 @@ def registrable(request: Request, card_id: str) -> LoadedCard:
     return loaded
 
 
-def option_picked(rules: Rules, card: UserCard, month: date):
-    """혜택이 고른 옵션에 맞는지 보는 함수. 엔진처럼 고르지 않은 옵션은 기본값으로 본다. 기본값이 없으면 그 옵션의 혜택은 뺀다"""
+def option_picked(rules: Rules, card: UserCard, day: date):
+    """혜택이 day에 고른 옵션에 맞는지 보는 함수. 엔진처럼 고르지 않은 옵션은 기본값으로 본다. 기본값이 없으면 그 옵션의
+    혜택은 뺀다. 오늘부터 바뀌는 옵션이 있어 달 첫날이 아니라 그날로 본다"""
     chosen = {o.key: o.default for o in rules.options}
     chosen |= {
-        p.option: p.choice for p in sorted(card.options, key=lambda p: p.effective_from) if p.effective_from <= month
+        p.option: p.choice for p in sorted(card.options, key=lambda p: p.effective_from) if p.effective_from <= day
     }
     # ponytail: when의 첫 단계만 본다. any_of 안의 옵션 조건은 놓친다. 지금 카탈로그에는 없다
     return lambda b: not any(c.option and not all(chosen.get(k) in v for k, v in c.option.items()) for c in b.when)
@@ -59,7 +60,7 @@ def benefits_at(rules: Rules, card: UserCard, month: date, status: SpendStatus, 
     """
     prev = status.prev_month_counted
     base = max(t for t in rules.tiers if t <= prev) if prev is not None else (status.tier or 0)
-    picked = option_picked(rules, card, month)
+    picked = option_picked(rules, card, day)
     out = []
     for b in rules.benefits:
         if not picked(b) or not in_period(b, day):

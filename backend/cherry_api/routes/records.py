@@ -13,11 +13,12 @@ from cherry_core.engine.models import Payment, PaymentResult
 from cherry_core.engine.price import before_cancel, build_ledger
 from cherry_core.engine.spend import spend_parts
 
+from ..answers import attach_answers
 from ..auth import User
 from ..deps import Conn, today
 from ..payments import PAYMENTS, changed_with, load_payments, to_payment
 from .me import engine_card, month_range
-from .payments import Amount, PaymentFields, checked_id, filled, mine, payment_of
+from .payments import Amount, PaymentFields, ask_category, checked_id, filled, mine, payment_of
 
 router = APIRouter(prefix="/me/payments")
 
@@ -53,7 +54,7 @@ def lock_cards(conn, user, ids: set[str]) -> dict[str, dict]:
     rows = conn.execute(
         "SELECT * FROM user_cards WHERE user_id = %s AND id = ANY(%s) ORDER BY id FOR UPDATE", (user, sorted(ids))
     ).fetchall()
-    return {str(r["id"]): r for r in rows}
+    return {str(r["id"]): r for r in attach_answers(conn, rows)}
 
 
 def store(
@@ -95,9 +96,13 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
     start, end = month_range(m)
     cards = {
         str(r["id"]): r
-        for r in conn.execute(
-            "SELECT uc.*, c.name FROM user_cards uc JOIN cards c ON c.id = uc.card_id WHERE uc.user_id = %s", (user,)
-        ).fetchall()
+        for r in attach_answers(
+            conn,
+            conn.execute(
+                "SELECT uc.*, c.name FROM user_cards uc JOIN cards c ON c.id = uc.card_id WHERE uc.user_id = %s",
+                (user,),
+            ).fetchall(),
+        )
     }
     sql = PAYMENTS.replace(
         "WHERE t.user_card_id = ANY(%s) AND t.deleted_at IS NULL",
@@ -220,7 +225,8 @@ def edit(tid: str, body: EditPayment, request: Request, user: User, conn: Conn) 
     for cid, res in results.items():
         before = {q.id: q for q in loaded[cid]}
         repriced += store(conn, request, rows[cid]["card_id"], res, before, {tid} if cid == new_card else set(), now)
-    return {"id": tid, "value": results[new_card][tid].value, "repriced": repriced}
+    result = results[new_card][tid]
+    return {"id": tid, "value": result.value, "repriced": repriced, "ask_category": ask_category(request, result)}
 
 
 @router.post("/{tid}/cancel")

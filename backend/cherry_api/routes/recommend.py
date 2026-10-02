@@ -70,6 +70,30 @@ class Ask(BaseModel):
     payment_method: str | None = None
 
 
+def asks(rules, conditional: list) -> list[dict]:
+    """조건부 혜택 가운데 사실과 옵션의 답. 같은 질문은 더 받는 금액이 가장 큰 것 하나다"""
+    if rules is None:
+        return []
+    facts = {f.key: f for f in rules.facts}
+    options = {o.key: o for o in rules.options}
+    out, seen = [], set()
+    for c in sorted(conditional, key=lambda c: -c.extra):
+        if set(c.needs) == {"fact"} and c.needs["fact"] in facts:
+            f = facts[c.needs["fact"]]
+            item = {"kind": "fact", "key": f.key, "scope": f.scope, "question": f.ask, "extra": c.extra}
+        elif set(c.needs) == {"option", "choice"} and c.needs["option"] in options:
+            o = options[c.needs["option"]]
+            title = next(ch.title for ch in o.choices if ch.key == c.needs["choice"])
+            item = {"kind": "option", "key": o.key, "choice": c.needs["choice"], "question": f"{o.title} · {title}"}
+            item["extra"] = c.extra
+        else:
+            continue
+        if (item["kind"], item["key"]) not in seen:
+            seen.add((item["kind"], item["key"]))
+            out.append(item)
+    return out
+
+
 def rows_of(request: Request, cards: dict, recs: list[Recommendation], at: datetime) -> list[dict]:
     """카드마다 순위, 혜택 금액, 이유 한 줄, 할인과 적립 구분, 결제수단을 바꾸면 더 받는 금액"""
     engine, cat = request.app.state.engine, request.app.state.catalog
@@ -86,7 +110,6 @@ def rows_of(request: Request, cards: dict, recs: list[Recommendation], at: datet
         # 받는 혜택의 종류를 모두 준다. 할인과 적립을 함께 받으면 둘 다 보인다. E13
         rewards = sorted({benefits[x.key].reward.type for x in r.benefits if x.key in benefits and x.value > 0})
         pay_with = []
-        # 사실과 옵션의 조건부 혜택은 슬라이스 5에서 보인다. 작업 004의 추천 결과는 결제수단만 보인다
         for c in r.conditional:
             method = c.needs.get("payment_method") if set(c.needs) == {"payment_method"} else None
             if method in cat.payment_methods:
@@ -100,6 +123,8 @@ def rows_of(request: Request, cards: dict, recs: list[Recommendation], at: datet
                 "title": b.title if b else None,
                 "rewards": rewards,
                 "pay_with": pay_with,
+                # 사실이나 옵션을 답하면 더 받는 금액과 그 질문. 앱은 카드 상세나 설정으로 보낸다. 작업 005 설계 5e
+                "ask": asks(found[1] if found else None, r.conditional),
                 # 한도를 다 써 0원이 된 카드. E10
                 "exhausted": r.value == 0 and "limit_exhausted" in codes,
                 # 한도가 남은 만큼만 받는 카드. 작업 004 의도 성공 기준 3대로 한도 때문에 줄었을 때 이유로 보인다

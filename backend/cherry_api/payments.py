@@ -126,9 +126,16 @@ def priced_with(engine, card: UserCard, history: list[Payment], p: Payment, now:
     later = any((q.paid_at, q.id) > (p.paid_at, p.id) for q in history)
     if not later and not ranked_past(engine, card, _month(p), now):
         return {p.id: engine.price_payment(card, history, p)}
+    return repriced_from(engine, card, [*history, p], _month(p), now)
+
+
+def repriced_from(
+    engine, card: UserCard, payments: list[Payment], start: date, now: datetime
+) -> dict[str, PaymentResult]:
+    """start 달부터 마지막 결제가 든 달까지 달마다 결제 시각 순서로 다시 계산한다. 지나간 달은 달 끝 순위다. E48, E52, E56"""
     this_month = month_of(local(now).date())
-    payments, out = [*history, p], {}
-    m, last = _month(p), max(_month(q) for q in [*history, p])
+    out: dict[str, PaymentResult] = {}
+    m, last = start, max((_month(q) for q in payments), default=start)
     while m <= last:
         results = {r.payment_id: r for r in engine.price_month(card, payments, month=m, final=m < this_month)}
         out |= results

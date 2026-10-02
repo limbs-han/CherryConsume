@@ -13,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from cherry_core.engine.cond import KST, add_months, local, month_of
 from cherry_core.engine.models import UserCard
 
+from ..answers import at_day, attach_answers
 from ..auth import User
 from ..deps import Conn, today
 from ..payments import load_payments
@@ -30,6 +31,7 @@ class NewUserCard(BaseModel):
 
 
 def engine_card(row: dict) -> UserCard:
+    """보유 카드 행을 엔진 카드로. 행에는 attach_answers로 붙인 답이 있어야 한다. 빠뜨리면 KeyError라 시험이 잡는다"""
     return UserCard(
         id=str(row["id"]),
         card_id=row["card_id"],
@@ -37,6 +39,8 @@ def engine_card(row: dict) -> UserCard:
         started_on=row["started_on"],
         assumed_prev_month_spend=row["assumed_prev_month_spend"],
         last_payment_method=row["last_payment_method"],
+        options=row["options"],
+        fact_picks=row["fact_picks"],
     )
 
 
@@ -63,6 +67,7 @@ def home(request: Request, user: User, conn: Conn) -> dict:
         " WHERE uc.user_id = %s AND uc.removed_at IS NULL ORDER BY uc.added_at",
         (user,),
     ).fetchall()
+    attach_answers(conn, rows)
     engine = request.app.state.engine
     payments = load_payments(conn, [str(r["id"]) for r in rows])
     # 받은 혜택은 한국 시간으로 이번 달에 결제한 건의 저장된 혜택 원 가치 합이다. E13
@@ -124,6 +129,7 @@ def card_detail(uid: str, request: Request, user: User, conn: Conn) -> dict:
     ).fetchone()
     if row is None:
         raise HTTPException(404, "보유 카드가 아니다")
+    attach_answers(conn, [row])
     engine, now = request.app.state.engine, request.app.state.clock()
     day = today(request)
     month = month_of(day)
@@ -166,7 +172,7 @@ def card_detail(uid: str, request: Request, user: User, conn: Conn) -> dict:
             )
         prev = status.prev_month_counted
         base = max(t for t in rules.tiers if t <= prev) if prev is not None else (status.tier or 0)
-        picked = option_picked(rules, card, month)
+        picked = option_picked(rules, card, day)
         for b in rules.benefits:
             lo = b.tiers.start if b.tiers and b.tiers.start is not None else rules.tiers[0]
             # 구간이 모자라 못 받는 혜택. 필요 금액은 그 구간 하한 빼기 이번 달 인정 실적, 받는 때는 다음 달이다. E37
@@ -181,6 +187,7 @@ def card_detail(uid: str, request: Request, user: User, conn: Conn) -> dict:
         "card_id": row["card_id"],
         "name": row["name"],
         "issuer_name": row["issuer_name"],
+        "questions": questions(found[1] if found else None, row, day),
         "tiers": [t for t in found[1].tiers if t > 0] if found else [],
         "spend": status.model_dump(mode="json", exclude={"user_card_id", "month"}),
         "limits": limits,
@@ -193,6 +200,40 @@ def card_detail(uid: str, request: Request, user: User, conn: Conn) -> dict:
         "revision_from": found[0].effective_from.isoformat() if found else None,
         "checked_at": row["checked_at"].isoformat(),
     }
+
+
+def questions(rules, row: dict, day: date) -> dict:
+    """카드 정보에서 묻는 카드 사실과 옵션, 지금 답. 다음 달부터 바뀌는 옵션은 pending이다. 작업 005 설계 5e"""
+    if rules is None:
+        return {"facts": [], "options": []}
+    facts = [
+        {
+            "key": f.key,
+            "type": f.type,
+            "ask": f.ask,
+            "choices": f.choices,
+            "answer": at_day([(p.effective_from, p.value) for p in row["fact_picks"] if p.key == f.key], day),
+        }
+        for f in rules.facts
+        if f.scope == "card"
+    ]
+    options = []
+    for o in rules.options:
+        picks = [(p.effective_from, p.choice) for p in row["options"] if p.option == o.key]
+        later = sorted(x for x in picks if x[0] > day)
+        options.append(
+            {
+                "key": o.key,
+                "title": o.title,
+                "choices": [{"key": c.key, "title": c.title} for c in o.choices],
+                "default": o.default,
+                "unsupported": o.unsupported,
+                "change": o.change,
+                "answer": at_day(picks, day),
+                "pending": {"value": later[0][1], "from": later[0][0].isoformat()} if later else None,
+            }
+        )
+    return {"facts": facts, "options": options}
 
 
 @router.delete("/cards/{uid}")

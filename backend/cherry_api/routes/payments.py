@@ -14,6 +14,7 @@ from cherry_core.engine.cond import local
 from cherry_core.engine.models import Payment, PaymentResult, Query, Recommendation
 from cherry_core.engine.recommend import DEFAULT_AMOUNT, order
 
+from ..answers import attach_answers
 from ..auth import User
 from ..deps import Conn
 from ..payments import DRAFT_ID, load_payments, match_merchant, new_id, priced_with
@@ -93,11 +94,15 @@ def filled(request: Request, body) -> dict:
 
 
 def my_cards(conn, user) -> list[dict]:
-    return conn.execute(
-        "SELECT uc.*, c.name FROM user_cards uc JOIN cards c ON c.id = uc.card_id"
-        " WHERE uc.user_id = %s AND uc.removed_at IS NULL ORDER BY uc.added_at",
-        (user,),
-    ).fetchall()
+    """해지하지 않은 보유 카드와 그 답"""
+    return attach_answers(
+        conn,
+        conn.execute(
+            "SELECT uc.*, c.name FROM user_cards uc JOIN cards c ON c.id = uc.card_id"
+            " WHERE uc.user_id = %s AND uc.removed_at IS NULL ORDER BY uc.added_at",
+            (user,),
+        ).fetchall(),
+    )
 
 
 def mine(conn, user, tid: str) -> dict:
@@ -149,6 +154,20 @@ def described(request: Request, card_id: str, at: datetime, result: PaymentResul
     }
 
 
+def ask_category(request: Request, result: PaymentResult) -> dict | None:
+    """업종이 부모까지만 있어 혜택이나 실적 제외를 가리지 못하면 자식 업종을 묻는다. 결제를 저장한 자리에서 한 번이다. E47"""
+    needs = [n for w in result.warnings if w.code == "needs_input" for n in w.data.get("needs", [])]
+    parents = sorted({n[1] for n in needs if n[0] == "category"})
+    if not parents:
+        return None
+    names, children = request.app.state.category_names, request.app.state.engine.ctx.children
+    return {
+        "parent": parents[0],
+        "parent_name": names.get(parents[0]),
+        "children": [{"code": c, "name": names.get(c)} for c in sorted(children.get(parents[0], []))],
+    }
+
+
 def again(r: Recommendation, result: PaymentResult) -> Recommendation:
     """추천 줄을 다시 계산한 금액과 실적 인정 여부로 바꾼다. 무이자할부를 실적에서 빼는 카드가 실적 인정으로 앞에 서지 않게 한다"""
     return r.model_copy(update={"value": result.value, "counted": any(part.amount > 0 for part in result.spend)})
@@ -169,9 +188,12 @@ def draft(body: Draft, request: Request, user: User, conn: Conn) -> dict:
         card = str(old["user_card_id"])
         if card not in cards:
             # 해지한 카드의 결제는 그 카드로 예상 혜택만 낸다. 순위에는 넣지 않는다. 위험 검토 8번
-            cards[card] = conn.execute(
-                "SELECT uc.*, c.name FROM user_cards uc JOIN cards c ON c.id = uc.card_id WHERE uc.id = %s", (card,)
-            ).fetchone()
+            [cards[card]] = attach_answers(
+                conn,
+                conn.execute(
+                    "SELECT uc.*, c.name FROM user_cards uc JOIN cards c ON c.id = uc.card_id WHERE uc.id = %s", (card,)
+                ).fetchall(),
+            )
     if not cards:
         return {**f, "paid_at": f["paid_at"].isoformat(), "ranking": [], "pick": None, "estimate": None}
     editing = str(old["id"]) if old else None
@@ -229,6 +251,7 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
     ).fetchone()
     if row is None:
         raise HTTPException(404, "보유 카드가 아니다")
+    attach_answers(conn, [row])
     request_id = None
     if body.recommendation_request_id is not None:
         request_id = checked_id(body.recommendation_request_id, "추천 요청이 아니다")
@@ -305,4 +328,9 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
             )
     conn.execute("UPDATE user_cards SET last_payment_method = %s WHERE id = %s", (p.payment_method, card_id))
     # 혜택이 바뀐 다른 결제 수. 앱이 알린다
-    return {"id": pid, "repriced": len(changed), **described(request, row["card_id"], p.paid_at, result)}
+    return {
+        "id": pid,
+        "repriced": len(changed),
+        **described(request, row["card_id"], p.paid_at, result),
+        "ask_category": ask_category(request, result),
+    }
