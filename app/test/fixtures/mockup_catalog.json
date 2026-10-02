@@ -1,0 +1,1169 @@
+{
+ "schema": 1,
+ "holidays": [
+  "2020-01-01",
+  "2020-01-24",
+  "2020-01-25",
+  "2020-01-26",
+  "2020-01-27",
+  "2020-03-01",
+  "2020-04-15",
+  "2020-04-30",
+  "2020-05-05",
+  "2020-06-06",
+  "2020-08-15",
+  "2020-08-17",
+  "2020-09-30",
+  "2020-10-01",
+  "2020-10-02",
+  "2020-10-03",
+  "2020-10-09",
+  "2020-12-25",
+  "2021-01-01",
+  "2021-02-11",
+  "2021-02-12",
+  "2021-02-13",
+  "2021-03-01",
+  "2021-05-05",
+  "2021-05-19",
+  "2021-06-06",
+  "2021-08-15",
+  "2021-08-16",
+  "2021-09-20",
+  "2021-09-21",
+  "2021-09-22",
+  "2021-10-03",
+  "2021-10-04",
+  "2021-10-09",
+  "2021-10-11",
+  "2021-12-25",
+  "2022-01-01",
+  "2022-01-31",
+  "2022-02-01",
+  "2022-02-02",
+  "2022-03-01",
+  "2022-03-09",
+  "2022-05-05",
+  "2022-05-08",
+  "2022-06-01",
+  "2022-06-06",
+  "2022-08-15",
+  "2022-09-09",
+  "2022-09-10",
+  "2022-09-11",
+  "2022-09-12",
+  "2022-10-03",
+  "2022-10-09",
+  "2022-10-10",
+  "2022-12-25",
+  "2023-01-01",
+  "2023-01-21",
+  "2023-01-22",
+  "2023-01-23",
+  "2023-01-24",
+  "2023-03-01",
+  "2023-05-05",
+  "2023-05-27",
+  "2023-05-29",
+  "2023-06-06",
+  "2023-08-15",
+  "2023-09-28",
+  "2023-09-29",
+  "2023-09-30",
+  "2023-10-02",
+  "2023-10-03",
+  "2023-10-09",
+  "2023-12-25",
+  "2024-01-01",
+  "2024-02-09",
+  "2024-02-10",
+  "2024-02-11",
+  "2024-02-12",
+  "2024-03-01",
+  "2024-04-10",
+  "2024-05-05",
+  "2024-05-06",
+  "2024-05-15",
+  "2024-06-06",
+  "2024-08-15",
+  "2024-09-16",
+  "2024-09-17",
+  "2024-09-18",
+  "2024-10-01",
+  "2024-10-03",
+  "2024-10-09",
+  "2024-12-25",
+  "2025-01-01",
+  "2025-01-27",
+  "2025-01-28",
+  "2025-01-29",
+  "2025-01-30",
+  "2025-03-01",
+  "2025-03-03",
+  "2025-05-05",
+  "2025-05-06",
+  "2025-06-03",
+  "2025-06-06",
+  "2025-08-15",
+  "2025-10-03",
+  "2025-10-05",
+  "2025-10-06",
+  "2025-10-07",
+  "2025-10-08",
+  "2025-10-09",
+  "2025-12-25",
+  "2026-01-01",
+  "2026-02-16",
+  "2026-02-17",
+  "2026-02-18",
+  "2026-03-01",
+  "2026-03-02",
+  "2026-05-01",
+  "2026-05-05",
+  "2026-05-24",
+  "2026-05-25",
+  "2026-06-03",
+  "2026-06-06",
+  "2026-07-17",
+  "2026-08-15",
+  "2026-08-17",
+  "2026-09-24",
+  "2026-09-25",
+  "2026-09-26",
+  "2026-10-03",
+  "2026-10-05",
+  "2026-10-09",
+  "2026-12-25",
+  "2027-01-01",
+  "2027-02-06",
+  "2027-02-07",
+  "2027-02-08",
+  "2027-02-09",
+  "2027-03-01",
+  "2027-05-01",
+  "2027-05-03",
+  "2027-05-05",
+  "2027-05-13",
+  "2027-06-06",
+  "2027-07-17",
+  "2027-07-19",
+  "2027-08-15",
+  "2027-08-16",
+  "2027-09-14",
+  "2027-09-15",
+  "2027-09-16",
+  "2027-10-03",
+  "2027-10-04",
+  "2027-10-09",
+  "2027-10-11",
+  "2027-12-25",
+  "2027-12-27",
+  "2028-01-01",
+  "2028-01-26",
+  "2028-01-27",
+  "2028-01-28",
+  "2028-03-01",
+  "2028-04-12",
+  "2028-05-01",
+  "2028-05-02",
+  "2028-05-05",
+  "2028-06-06",
+  "2028-07-17",
+  "2028-08-15",
+  "2028-10-02",
+  "2028-10-03",
+  "2028-10-04",
+  "2028-10-05",
+  "2028-10-09",
+  "2028-12-25",
+  "2029-01-01",
+  "2029-02-12",
+  "2029-02-13",
+  "2029-02-14",
+  "2029-03-01",
+  "2029-05-01",
+  "2029-05-05",
+  "2029-05-07",
+  "2029-05-20",
+  "2029-05-21",
+  "2029-06-06",
+  "2029-07-17",
+  "2029-08-15",
+  "2029-09-21",
+  "2029-09-22",
+  "2029-09-23",
+  "2029-09-24",
+  "2029-10-03",
+  "2029-10-09",
+  "2029-12-25",
+  "2030-01-01",
+  "2030-02-02",
+  "2030-02-03",
+  "2030-02-04",
+  "2030-02-05",
+  "2030-03-01",
+  "2030-04-03",
+  "2030-05-01",
+  "2030-05-05",
+  "2030-05-06",
+  "2030-05-09",
+  "2030-06-06",
+  "2030-06-12",
+  "2030-07-17",
+  "2030-08-15",
+  "2030-09-11",
+  "2030-09-12",
+  "2030-09-13",
+  "2030-10-03",
+  "2030-10-09",
+  "2030-12-25",
+  "2031-01-01",
+  "2031-01-22",
+  "2031-01-23",
+  "2031-01-24",
+  "2031-03-01",
+  "2031-03-03",
+  "2031-05-01",
+  "2031-05-05",
+  "2031-05-28",
+  "2031-06-06",
+  "2031-07-17",
+  "2031-08-15",
+  "2031-09-30",
+  "2031-10-01",
+  "2031-10-02",
+  "2031-10-03",
+  "2031-10-09",
+  "2031-12-25",
+  "2032-01-01",
+  "2032-02-10",
+  "2032-02-11",
+  "2032-02-12",
+  "2032-03-01",
+  "2032-04-14",
+  "2032-05-01",
+  "2032-05-03",
+  "2032-05-05",
+  "2032-05-16",
+  "2032-05-17",
+  "2032-06-06",
+  "2032-07-17",
+  "2032-07-19",
+  "2032-08-15",
+  "2032-08-16",
+  "2032-09-18",
+  "2032-09-19",
+  "2032-09-20",
+  "2032-09-21",
+  "2032-10-03",
+  "2032-10-04",
+  "2032-10-09",
+  "2032-10-11",
+  "2032-12-25",
+  "2032-12-27",
+  "2033-01-01",
+  "2033-01-30",
+  "2033-01-31",
+  "2033-02-01",
+  "2033-02-02",
+  "2033-03-01",
+  "2033-05-01",
+  "2033-05-02",
+  "2033-05-05",
+  "2033-05-06",
+  "2033-06-06",
+  "2033-07-17",
+  "2033-07-18",
+  "2033-08-15",
+  "2033-09-07",
+  "2033-09-08",
+  "2033-09-09",
+  "2033-10-03",
+  "2033-10-09",
+  "2033-10-10",
+  "2033-12-25",
+  "2033-12-26",
+  "2034-01-01",
+  "2034-02-18",
+  "2034-02-19",
+  "2034-02-20",
+  "2034-02-21",
+  "2034-03-01",
+  "2034-05-01",
+  "2034-05-05",
+  "2034-05-25",
+  "2034-06-06",
+  "2034-06-14",
+  "2034-07-17",
+  "2034-08-15",
+  "2034-09-26",
+  "2034-09-27",
+  "2034-09-28",
+  "2034-10-03",
+  "2034-10-09",
+  "2034-12-25",
+  "2035-01-01",
+  "2035-02-07",
+  "2035-02-08",
+  "2035-02-09",
+  "2035-03-01",
+  "2035-04-04",
+  "2035-05-01",
+  "2035-05-05",
+  "2035-05-07",
+  "2035-05-15",
+  "2035-06-06",
+  "2035-07-17",
+  "2035-08-15",
+  "2035-09-15",
+  "2035-09-16",
+  "2035-09-17",
+  "2035-09-18",
+  "2035-10-03",
+  "2035-10-09",
+  "2035-12-25",
+  "2036-01-01",
+  "2036-01-27",
+  "2036-01-28",
+  "2036-01-29",
+  "2036-01-30",
+  "2036-03-01",
+  "2036-03-03",
+  "2036-04-09",
+  "2036-05-01",
+  "2036-05-03",
+  "2036-05-05",
+  "2036-05-06",
+  "2036-06-06",
+  "2036-07-17",
+  "2036-08-15",
+  "2036-10-03",
+  "2036-10-04",
+  "2036-10-05",
+  "2036-10-06",
+  "2036-10-07",
+  "2036-10-09",
+  "2036-12-25"
+ ],
+ "categories": [
+  {
+   "code": "cafe",
+   "name": "카페",
+   "kakao": null,
+   "children": []
+  },
+  {
+   "code": "convenience",
+   "name": "편의점",
+   "kakao": null,
+   "children": []
+  },
+  {
+   "code": "restaurant",
+   "name": "음식점",
+   "kakao": null,
+   "children": []
+  },
+  {
+   "code": "online_shopping",
+   "name": "온라인 쇼핑",
+   "kakao": null,
+   "children": []
+  },
+  {
+   "code": "transit",
+   "name": "대중교통",
+   "kakao": null,
+   "children": []
+  },
+  {
+   "code": "tax",
+   "name": "세금",
+   "kakao": null,
+   "children": []
+  },
+  {
+   "code": "other",
+   "name": "기타",
+   "kakao": null,
+   "children": []
+  }
+ ],
+ "merchants": [
+  {
+   "key": "starbucks",
+   "name": "스타벅스",
+   "category": "cafe",
+   "aliases": [
+    "스타벅스"
+   ],
+   "billing": "normal"
+  },
+  {
+   "key": "ediya",
+   "name": "이디야",
+   "category": "cafe",
+   "aliases": [
+    "이디야"
+   ],
+   "billing": "normal"
+  },
+  {
+   "key": "gs25",
+   "name": "GS25",
+   "category": "convenience",
+   "aliases": [
+    "GS25"
+   ],
+   "billing": "normal"
+  },
+  {
+   "key": "coupang",
+   "name": "쿠팡",
+   "category": "online_shopping",
+   "aliases": [
+    "쿠팡"
+   ],
+   "billing": "normal"
+  }
+ ],
+ "payment_methods": [
+  {
+   "key": "naver_pay",
+   "name": "네이버페이",
+   "statement_names": []
+  },
+  {
+   "key": "physical_card",
+   "name": "실물카드",
+   "statement_names": []
+  }
+ ],
+ "point_programs": [
+  {
+   "key": "mock_point",
+   "name": "시안 포인트",
+   "won_per_point": 1.0
+  }
+ ],
+ "reference": [
+  {
+   "key": "fuel_price_gasoline",
+   "value": 1700.0,
+   "unit": "원/L",
+   "as_of": "2026-09-01",
+   "source": "시안"
+  }
+ ],
+ "issuers": [
+  {
+   "id": "mock",
+   "name": "시안 카드사"
+  }
+ ],
+ "cards": [
+  {
+   "schema_version": 2,
+   "id": "mock-ibk",
+   "issuer": "mock",
+   "name": "시안 IBK 나라사랑카드",
+   "search_names": [],
+   "kind": "check",
+   "product_codes": [
+    "MOCK2"
+   ],
+   "status": "on_sale",
+   "status_since": null,
+   "annual_fees": [],
+   "sources": [
+    {
+     "id": "page",
+     "kind": "product_page",
+     "url": "https://example.com/mock",
+     "fetched_at": "2026-09-01",
+     "text_sha256": null,
+     "review_no": null,
+     "review_valid_until": null
+    }
+   ],
+   "checked_at": "2026-09-01",
+   "open_questions": [],
+   "notes": null,
+   "revisions": [
+    {
+     "effective_from": "2026-01-01",
+     "effective_from_estimated": false,
+     "source": "page",
+     "sha256": "be55b2ebce84eeccb11b3a7d29296006849e284581bb63ac5b3051bb2a42fe94",
+     "rules": {
+      "tiers": [
+       0,
+       200000
+      ],
+      "spend": {
+       "basis": "prev_calendar_month",
+       "regions": [
+        "domestic",
+        "overseas"
+       ],
+       "exclude_categories": [
+        "tax"
+       ],
+       "interest_free": "count",
+       "installment": "full_at_purchase",
+       "cancellation": "cancel_month",
+       "cancellation_overrides": [],
+       "month_offset": {},
+       "exclude_applied": 0
+      },
+      "new_card": null,
+      "benefit_exclusions": {
+       "categories": [],
+       "when_any": [],
+       "unmodeled": []
+      },
+      "facts": [],
+      "options": [],
+      "ranked": [],
+      "limits": [
+       {
+        "key": "integrated",
+        "per": "month",
+        "amount": {
+         "200000": 5000
+        },
+        "count": null,
+        "base": null,
+        "adjust": []
+       }
+      ],
+      "stacks": [],
+      "benefits": [
+       {
+        "key": "cvs-10",
+        "title": "편의점 10% 할인",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": false,
+         "categories": [
+          "convenience"
+         ],
+         "merchants": [],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [],
+        "area": null,
+        "reward": {
+         "type": "billing_discount",
+         "program": null,
+         "rate": 10.0,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [
+         {
+          "shared": "integrated",
+          "per": null,
+          "amount": null,
+          "count": null,
+          "base": null,
+          "adjust": []
+         }
+        ],
+        "tiers": {
+         "from": 200000,
+         "to": null,
+         "waived_when": null
+        },
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       },
+       {
+        "key": "base-0-2",
+        "title": "기본 0.2% 적립",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": true,
+         "categories": [],
+         "merchants": [],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [],
+        "area": null,
+        "reward": {
+         "type": "points",
+         "program": "mock_point",
+         "rate": 0.2,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [
+         {
+          "shared": "integrated",
+          "per": null,
+          "amount": null,
+          "count": null,
+          "base": null,
+          "adjust": []
+         }
+        ],
+        "tiers": {
+         "from": 200000,
+         "to": null,
+         "waived_when": null
+        },
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       },
+       {
+        "key": "npay-10",
+        "title": "네이버페이 결제 10% 적립",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": true,
+         "categories": [],
+         "merchants": [],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [
+         {
+          "amount": null,
+          "day": null,
+          "time": null,
+          "months": null,
+          "region": null,
+          "channel": null,
+          "interest_free": null,
+          "lump_sum": null,
+          "payment": [
+           "naver_pay"
+          ],
+          "payment_not": null,
+          "billing": null,
+          "billing_not": null,
+          "option": null,
+          "fact": null,
+          "ranked": null,
+          "card_month": null,
+          "month_total": null,
+          "any_of": null
+         }
+        ],
+        "area": null,
+        "reward": {
+         "type": "points",
+         "program": "mock_point",
+         "rate": 10.0,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [
+         {
+          "shared": null,
+          "per": "txn",
+          "amount": 1000,
+          "count": null,
+          "base": null,
+          "adjust": []
+         }
+        ],
+        "tiers": {
+         "from": 200000,
+         "to": null,
+         "waived_when": null
+        },
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       }
+      ],
+      "unmodeled": []
+     }
+    }
+   ]
+  },
+  {
+   "schema_version": 2,
+   "id": "mock-mrlife",
+   "issuer": "mock",
+   "name": "시안 신한 Mr.Life",
+   "search_names": [],
+   "kind": "credit",
+   "product_codes": [
+    "MOCK1"
+   ],
+   "status": "on_sale",
+   "status_since": null,
+   "annual_fees": [],
+   "sources": [
+    {
+     "id": "page",
+     "kind": "product_page",
+     "url": "https://example.com/mock",
+     "fetched_at": "2026-09-01",
+     "text_sha256": null,
+     "review_no": null,
+     "review_valid_until": null
+    }
+   ],
+   "checked_at": "2026-09-01",
+   "open_questions": [],
+   "notes": null,
+   "revisions": [
+    {
+     "effective_from": "2026-01-01",
+     "effective_from_estimated": false,
+     "source": "page",
+     "sha256": "3837d5351f2775da1d5a1e5fa2440920041f87097c532075f180428f1764f629",
+     "rules": {
+      "tiers": [
+       0,
+       300000,
+       600000,
+       900000
+      ],
+      "spend": {
+       "basis": "prev_calendar_month",
+       "regions": [
+        "domestic",
+        "overseas"
+       ],
+       "exclude_categories": [
+        "tax"
+       ],
+       "interest_free": "exclude",
+       "installment": "full_at_purchase",
+       "cancellation": "cancel_month",
+       "cancellation_overrides": [],
+       "month_offset": {},
+       "exclude_applied": 0
+      },
+      "new_card": null,
+      "benefit_exclusions": {
+       "categories": [],
+       "when_any": [],
+       "unmodeled": []
+      },
+      "facts": [],
+      "options": [],
+      "ranked": [],
+      "limits": [
+       {
+        "key": "integrated",
+        "per": "month",
+        "amount": {
+         "300000": 10000,
+         "600000": 20000,
+         "900000": 30000
+        },
+        "count": null,
+        "base": null,
+        "adjust": []
+       }
+      ],
+      "stacks": [],
+      "benefits": [
+       {
+        "key": "cafe-10",
+        "title": "카페 10% 할인",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": false,
+         "categories": [
+          "cafe"
+         ],
+         "merchants": [],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [
+         {
+          "amount": {
+           "min": 5000,
+           "below": null
+          },
+          "day": null,
+          "time": null,
+          "months": null,
+          "region": null,
+          "channel": null,
+          "interest_free": null,
+          "lump_sum": null,
+          "payment": null,
+          "payment_not": null,
+          "billing": null,
+          "billing_not": null,
+          "option": null,
+          "fact": null,
+          "ranked": null,
+          "card_month": null,
+          "month_total": null,
+          "any_of": null
+         }
+        ],
+        "area": null,
+        "reward": {
+         "type": "billing_discount",
+         "program": null,
+         "rate": 10.0,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [
+         {
+          "shared": null,
+          "per": "txn",
+          "amount": 1000,
+          "count": null,
+          "base": null,
+          "adjust": []
+         },
+         {
+          "shared": null,
+          "per": "day",
+          "amount": null,
+          "count": 1,
+          "base": null,
+          "adjust": []
+         },
+         {
+          "shared": null,
+          "per": "month",
+          "amount": 5000,
+          "count": null,
+          "base": null,
+          "adjust": []
+         },
+         {
+          "shared": "integrated",
+          "per": null,
+          "amount": null,
+          "count": null,
+          "base": null,
+          "adjust": []
+         }
+        ],
+        "tiers": {
+         "from": 300000,
+         "to": null,
+         "waived_when": null
+        },
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       },
+       {
+        "key": "cvs-5",
+        "title": "편의점 5% 할인",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": false,
+         "categories": [
+          "convenience"
+         ],
+         "merchants": [],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [],
+        "area": null,
+        "reward": {
+         "type": "billing_discount",
+         "program": null,
+         "rate": 5.0,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [
+         {
+          "shared": null,
+          "per": "month",
+          "amount": 5000,
+          "count": null,
+          "base": null,
+          "adjust": []
+         },
+         {
+          "shared": "integrated",
+          "per": null,
+          "amount": null,
+          "count": null,
+          "base": null,
+          "adjust": []
+         }
+        ],
+        "tiers": {
+         "from": 300000,
+         "to": null,
+         "waived_when": null
+        },
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       },
+       {
+        "key": "transit-10",
+        "title": "대중교통 10% 할인",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": false,
+         "categories": [
+          "transit"
+         ],
+         "merchants": [],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [],
+        "area": null,
+        "reward": {
+         "type": "billing_discount",
+         "program": null,
+         "rate": 10.0,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [
+         {
+          "shared": null,
+          "per": "month",
+          "amount": 5000,
+          "count": null,
+          "base": null,
+          "adjust": []
+         },
+         {
+          "shared": "integrated",
+          "per": null,
+          "amount": null,
+          "count": null,
+          "base": null,
+          "adjust": []
+         }
+        ],
+        "tiers": {
+         "from": 600000,
+         "to": null,
+         "waived_when": null
+        },
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       },
+       {
+        "key": "sb-20",
+        "title": "스타벅스 20% 할인",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": false,
+         "categories": [],
+         "merchants": [
+          "starbucks"
+         ],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [],
+        "area": null,
+        "reward": {
+         "type": "billing_discount",
+         "program": null,
+         "rate": 20.0,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [
+         {
+          "shared": null,
+          "per": "month",
+          "amount": 5000,
+          "count": null,
+          "base": null,
+          "adjust": []
+         },
+         {
+          "shared": "integrated",
+          "per": null,
+          "amount": null,
+          "count": null,
+          "base": null,
+          "adjust": []
+         }
+        ],
+        "tiers": {
+         "from": 900000,
+         "to": null,
+         "waived_when": null
+        },
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       }
+      ],
+      "unmodeled": []
+     }
+    }
+   ]
+  },
+  {
+   "schema_version": 2,
+   "id": "mock-zero",
+   "issuer": "mock",
+   "name": "시안 현대 ZERO Edition3",
+   "search_names": [],
+   "kind": "credit",
+   "product_codes": [
+    "MOCK3"
+   ],
+   "status": "on_sale",
+   "status_since": null,
+   "annual_fees": [],
+   "sources": [
+    {
+     "id": "page",
+     "kind": "product_page",
+     "url": "https://example.com/mock",
+     "fetched_at": "2026-09-01",
+     "text_sha256": null,
+     "review_no": null,
+     "review_valid_until": null
+    }
+   ],
+   "checked_at": "2026-09-01",
+   "open_questions": [],
+   "notes": null,
+   "revisions": [
+    {
+     "effective_from": "2026-01-01",
+     "effective_from_estimated": false,
+     "source": "page",
+     "sha256": "f1610a66c639316259b085153b39de441d7d7c21e89cfe7434a7222ebb7cb639",
+     "rules": {
+      "tiers": [
+       0
+      ],
+      "spend": {
+       "basis": "none",
+       "regions": [
+        "domestic",
+        "overseas"
+       ],
+       "exclude_categories": [
+        "tax"
+       ],
+       "interest_free": "count",
+       "installment": "full_at_purchase",
+       "cancellation": "cancel_month",
+       "cancellation_overrides": [],
+       "month_offset": {},
+       "exclude_applied": 0
+      },
+      "new_card": null,
+      "benefit_exclusions": {
+       "categories": [
+        "tax"
+       ],
+       "when_any": [],
+       "unmodeled": []
+      },
+      "facts": [],
+      "options": [],
+      "ranked": [],
+      "limits": [],
+      "stacks": [],
+      "benefits": [
+       {
+        "key": "base-0-7",
+        "title": "기본 0.7% 할인",
+        "source": null,
+        "evidence": [],
+        "target": {
+         "all": true,
+         "categories": [],
+         "merchants": [],
+         "exclude_categories": [],
+         "exclude_merchants": []
+        },
+        "when": [],
+        "area": null,
+        "reward": {
+         "type": "billing_discount",
+         "program": null,
+         "rate": 0.7,
+         "fixed": null,
+         "per_unit": null,
+         "per_liter": null,
+         "round": "floor",
+         "basis": "txn"
+        },
+        "limits": [],
+        "tiers": null,
+        "stack": "main",
+        "exclude_applied": null,
+        "valid_from": null,
+        "valid_until": null,
+        "unmodeled": [],
+        "notes": null
+       }
+      ],
+      "unmodeled": []
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -6,13 +6,12 @@ ERD의 외래 키가 카탈로그 표를 가리켜서 서버가 켜질 때 맞�
 
 from __future__ import annotations
 
-import hashlib
-import json
 from datetime import date
 
 import psycopg
 from psycopg.types.json import Jsonb
 
+from cherry_core.catalog.app_json import rules_sha256
 from cherry_core.catalog.load import Catalog
 
 from .db import LOCK
@@ -20,11 +19,6 @@ from .db import LOCK
 
 def rules_json(rules) -> dict:
     return rules.model_dump(mode="json", by_alias=True)
-
-
-def rules_sha256(data: dict) -> str:
-    text = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(text.encode()).hexdigest()
 
 
 def alias_key(alias: str) -> str:
