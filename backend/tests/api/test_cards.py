@@ -4,6 +4,7 @@
 시계는 2026-09-15 21:00 한국 시간이다.
 """
 
+import re
 from datetime import UTC, datetime
 
 from .conftest import login
@@ -161,6 +162,15 @@ def test_unknown_field_is_422(client):
     r = client.post("/me/cards", json=body, headers=headers)
     assert r.status_code == 422
     assert "1234" not in r.text
+
+
+def test_no_request_field_looks_like_a_card_number(client):
+    # 의도 성공 기준 6. 모든 경로의 요청 칸과 쿼리 칸 이름에 카드번호, 끝자리, 유효기간, CVC처럼 보이는 것이 없다
+    schema = client.app.openapi()
+    names = {k for s in schema["components"]["schemas"].values() for k in s.get("properties", {})}
+    names |= {p["name"] for path in schema["paths"].values() for op in path.values() for p in op.get("parameters", [])}
+    looks = re.compile(r"card_?(no|num)|number|^pan$|cvc|cvv|expir|last_?4|digits", re.IGNORECASE)
+    assert "user_card_id" in names and [n for n in names if looks.search(n)] == []
 
 
 def test_unknown_card_is_404(client):

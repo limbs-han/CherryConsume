@@ -5,7 +5,12 @@
 현대 ZERO Edition3 할인형은 구간 없이 모든 가맹점 0.8% 할인이다. 시계는 2026-09-15 21:00 한국 시간이다.
 """
 
+import shutil
 from datetime import UTC, datetime
+
+from fastapi.testclient import TestClient
+
+from cherry_api.main import REPO, create_app
 
 from .conftest import login
 
@@ -473,3 +478,29 @@ def test_same_client_id_saves_once(client, db):
     assert client.post("/me/payments", json=clash, headers=other).status_code == 409
     # 카탈로그에 없는 업종을 실어 다시 보내도 이미 들어간 결제다
     pay(client, headers, mrlife, 4300, "GS25", client_id=cid, category="gone")
+
+
+def test_catalog_change_keeps_saved_benefits(client, db, db_url, clock, tmp_path):
+    # 의도 성공 기준 4, E18. 저장한 결제의 혜택은 카탈로그가 바뀌어도 그대로다. 새 결제만 바뀐 규칙을 쓴다
+    headers, [mrlife] = setup(client)
+    assert pay(client, headers, mrlife, 4300, "GS25")["value"] == 430
+    last = db.execute("SELECT max(id) AS m FROM card_revisions").fetchone()["m"]
+    db.commit()
+    changed = tmp_path / "catalog"
+    shutil.copytree(REPO / "catalog", changed)
+    f = changed / "cards/shinhan/shinhan-mrlife.yaml"
+    text = f.read_text(encoding="utf-8")
+    at = text.index("rate: 10}", text.index("key: time-convenience"))
+    f.write_text(text[:at] + "rate: 20}" + text[at + len("rate: 10}") :], encoding="utf-8")
+    try:
+        with TestClient(create_app(database_url=db_url, catalog_dir=changed, dev_login=True, clock=clock)) as other:
+            assert other.get("/me/home", headers=headers).json()["benefit_total"] == 430
+            # 다음 날 GS25 4,300원은 바뀐 편의점 20%로 860원이다. 430 + 860 = 1,290원
+            assert pay(other, headers, mrlife, 4300, "GS25", at="2026-09-16T10:00:00+09:00")["value"] == 860
+            assert other.get("/me/home", headers=headers).json()["benefit_total"] == 1290
+    finally:
+        # 바뀐 카탈로그로 생긴 개정 행을 지워 다른 시험의 카탈로그 표를 그대로 둔다
+        db.execute("DELETE FROM transaction_benefits")
+        db.execute("DELETE FROM transactions")
+        db.execute("DELETE FROM card_revisions WHERE id > %s", (last,))
+        db.commit()
