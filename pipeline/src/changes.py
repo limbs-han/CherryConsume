@@ -107,27 +107,35 @@ def main(argv: list[str] | None = None) -> None:
     }
 
     changes = []
-    for (issuer, card_id, source_id), docs in pairs.items():
+    for docs in pairs.values():
         new, old = docs[1], docs.get(2)
         if old is None or new.path in done or new.fingerprint == old.fingerprint:
             continue
         removed, added = changed_lines(old.text, new.text, new.kind)
         if removed or added:
-            changes.append(
-                (
-                    issuer,
-                    card_id,
-                    source_id,
-                    new.kind,
-                    old.path,
-                    new.path,
-                    removed,
-                    added,
-                )
-            )
+            changes.append((new.path, old.path, removed, added))
     if changes:
+        # 계산한 줄만 Python에서 만들고, 카드와 원문 칸은 문서 표와 맞붙여 가져와 쓴다
+        # Python에서 만든 값만 쓰면 Unity Catalog 계보에 documents에서 changes로 가는 선이 남지 않는다
+        # 작업 003 과제 22 2단계. 2026-10-02 사용자가 이 작업 하나로 계보 살리기를 시험하기로 했다
+        found = spark.createDataFrame(
+            changes,
+            "new_path STRING, old_path STRING, removed ARRAY<STRING>, added ARRAY<STRING>",
+        )
         (
-            spark.createDataFrame(changes, CHANGES.rsplit(", detected_at", 1)[0])
+            spark.table(f"{s}.documents")
+            .alias("d")
+            .join(found.alias("f"), F.col("d.path") == F.col("f.new_path"))
+            .select(
+                "d.issuer",
+                "d.card_id",
+                "d.source_id",
+                "d.kind",
+                "f.old_path",
+                "f.new_path",
+                "f.removed",
+                "f.added",
+            )
             .withColumn("detected_at", F.current_timestamp())
             .write.mode("append")
             .saveAsTable(f"{s}.changes")
