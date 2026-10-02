@@ -19,11 +19,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<Home> _home = widget.api.home();
+  late Future<Home> _home = _load();
 
   void _reload() => setState(() {
-    _home = widget.api.home();
+    _home = _load();
   });
+
+  /// 모아 둔 결제를 보냈으면 알린다. 늦게 들어가 다른 결제의 혜택이 바뀌었으면 그것도다. E24, E52
+  Future<Home> _load() async {
+    final h = await widget.api.home();
+    if (h.sent > 0 && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            h.repriced > 0
+                ? '모아 둔 결제 ${h.sent}건을 보냈어요. 다른 결제 ${h.repriced}건의 혜택도 다시 계산했어요.'
+                : '모아 둔 결제 ${h.sent}건을 보냈어요.',
+          ),
+        ),
+      );
+    }
+    return h;
+  }
 
   Future<void> _pay(List<HomeCard> cards) async {
     final repriced = await Navigator.of(context).push<int>(
@@ -49,6 +66,35 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (_) => CardDetailScreen(api: widget.api, id: c.id),
       ),
     );
+    _reload();
+  }
+
+  /// 아직 보내지 않은 결제를 지운다. 서버에는 없어 되돌릴 수 없다. E24
+  Future<void> _drop(Pending p) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('이 결제를 지울까요?'),
+        content: const Text('아직 서버에 보내지 않은 결제라 지우면 남지 않아요.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('닫기'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('지우기'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    await widget.api.dropPending(p.clientId);
+    _reload();
+  }
+
+  Future<void> _retry(Pending p) async {
+    await widget.api.retryPending(p.clientId);
     _reload();
   }
 
@@ -93,7 +139,15 @@ class _HomeScreenState extends State<HomeScreen> {
           _ => ListView(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
             children: [
-              _Total(total: home!.benefitTotal, empty: home.cards.isEmpty),
+              if (home!.cachedAt != null) ...[
+                _Stale(at: home.cachedAt!, onRetry: _reload),
+                const SizedBox(height: 12),
+              ],
+              if (home.pending.isNotEmpty) ...[
+                _Pending(items: home.pending, onDrop: _drop, onRetry: _retry),
+                const SizedBox(height: 12),
+              ],
+              _Total(total: home.benefitTotal, empty: home.cards.isEmpty),
               const SizedBox(height: 12),
               if (home.cards.isEmpty)
                 _FirstCard(onAdd: _addCard)
@@ -144,6 +198,84 @@ class _Failed extends StatelessWidget {
       children: [
         const Text('서버에 연결하지 못했어요.', style: TextStyle(color: C.sub)),
         TextButton(onPressed: onRetry, child: const Text('다시 시도')),
+      ],
+    ),
+  );
+}
+
+/// 서버에 닿지 못해 폰에 둔 홈을 보일 때 맨 위. E26
+class _Stale extends StatelessWidget {
+  const _Stale({required this.at, required this.onRetry});
+  final DateTime at;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) => Box(
+    color: C.grey,
+    padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            '서버에 연결하지 못해 ${at.month}월 ${at.day}일 ${two(at.hour)}:${two(at.minute)}에 받은 내용을 보여 줘요',
+            style: const TextStyle(fontSize: 13, color: C.text),
+          ),
+        ),
+        TextButton(onPressed: onRetry, child: const Text('다시 시도')),
+      ],
+    ),
+  );
+}
+
+/// 아직 보내지 못한 결제. 혜택은 서버가 받은 뒤 계산한다. E24
+class _Pending extends StatelessWidget {
+  const _Pending({
+    required this.items,
+    required this.onDrop,
+    required this.onRetry,
+  });
+  final List<Pending> items;
+  final void Function(Pending) onDrop, onRetry;
+
+  @override
+  Widget build(BuildContext context) => Box(
+    padding: const EdgeInsets.fromLTRB(20, 16, 8, 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '보내지 못한 결제',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            color: C.sub,
+          ),
+        ),
+        for (final p in items)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text('${p.merchant ?? '가게 미정'} · ${won(p.amount)}'),
+            subtitle: Text(
+              p.error == null ? '${p.card} · 계산 대기' : '보내지 못했어요. ${p.error}',
+              style: TextStyle(color: p.error == null ? C.sub : C.amber),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (p.canRetry)
+                  IconButton(
+                    tooltip: '다시 보내기',
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () => onRetry(p),
+                  ),
+                IconButton(
+                  tooltip: '지우기',
+                  icon: const Icon(Icons.close),
+                  onPressed: () => onDrop(p),
+                ),
+              ],
+            ),
+          ),
       ],
     ),
   );

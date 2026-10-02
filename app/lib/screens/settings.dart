@@ -47,6 +47,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _logout(String? provider) async {
+    // 모아 둔 결제는 로그아웃하면 지워진다. 보내지 못한 것이 있으면 묻는다. 설계 5i
+    final waiting = (await widget.api.pending()).length;
+    if (waiting > 0 && mounted) {
+      final ok = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('로그아웃할까요?'),
+          content: Text('아직 보내지 못한 결제 $waiting건이 지워져요.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('닫기'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('로그아웃'),
+            ),
+          ],
+        ),
+      );
+      if (ok != true) return;
+    }
     try {
       await widget.api.logout();
     } catch (_) {

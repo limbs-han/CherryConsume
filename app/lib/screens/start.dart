@@ -29,6 +29,21 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   bool _busy = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // 서버가 401을 줘 보내지 못한 결제를 지웠으면 한 번 알린다. 작업 005 설계 5i
+    final n = widget.api.dropped;
+    if (n == 0) return;
+    widget.api.dropped = 0;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('다시 로그인해야 해서 보내지 못한 결제 $n건을 지웠어요.')),
+      );
+    });
+  }
+
   /// 카카오나 Google에서 토큰을 받아 서버에 로그인한다. 사용자가 그만두면 아무것도 하지 않는다
   Future<void> _login(String provider) async {
     setState(() => _busy = true);

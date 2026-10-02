@@ -71,7 +71,11 @@ class _RecommendScreenState extends State<RecommendScreen> {
           return Center(
             child: TextButton(
               onPressed: _reload,
-              child: const Text('서버에 연결하지 못했어요. 다시 시도'),
+              child: Text(
+                unreachable(snap.error!)
+                    ? '서버에 닿으면 추천을 볼 수 있어요. 다시 시도'
+                    : '추천을 불러오지 못했어요. 다시 시도',
+              ),
             ),
           );
         }
@@ -347,7 +351,12 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
             const SizedBox(height: 16),
             if (snap.hasError)
-              const Text('서버에 연결하지 못했어요.', style: TextStyle(color: C.sub)),
+              Text(
+                unreachable(snap.error!)
+                    ? '서버에 닿으면 추천을 볼 수 있어요.'
+                    : '추천을 불러오지 못했어요.',
+                style: const TextStyle(color: C.sub),
+              ),
             if (r == null && !snap.hasError)
               const Center(child: CircularProgressIndicator()),
             // E16. 가게를 못 찾으면 업종을 골라 추천한다
