@@ -25,6 +25,14 @@ class OptionPick(Base):
     effective_from: date
 
 
+class FactPick(Base):
+    """바꾼 날이 있는 사실 답. 처음 답은 date.min부터다. 작업 005 설계 5e"""
+
+    key: str
+    value: bool | int | str
+    effective_from: date
+
+
 class UserCard(Base):
     """보유 카드 한 장. 사실은 사람 사실과 카드 사실을 합쳐 넣는다."""
 
@@ -34,6 +42,8 @@ class UserCard(Base):
     started_on: date | None = None
     options: list[OptionPick] = []
     facts: dict[str, bool | int | str] = {}
+    # 결제일에 맞는 가장 늦은 답을 facts보다 먼저 쓴다
+    fact_picks: list[FactPick] = []
     assumed_prev_month_spend: Won | None = None
     last_payment_method: str | None = None
     removed: bool = False

@@ -4,7 +4,7 @@ from datetime import UTC, date
 
 from cherry_core.catalog.models import Condition
 from cherry_core.engine.cond import Situation, all_of, any_of, category_match, check, is_holiday, unknown
-from cherry_core.engine.models import OptionPick, UserCard
+from cherry_core.engine.models import FactPick, OptionPick, UserCard
 
 from .conftest import at
 
@@ -82,6 +82,25 @@ def test_option_choice_by_date_and_default():
     assert check(c, sit(card=card, at=at("2026-10-01T00:00")))[0] is True
     assert check(c, sit()) == unknown("option", "pkg")
     assert check(c, sit(defaults={"pkg": "p2"}))[0] is True
+
+
+def test_fact_picks_follow_the_payment_day():
+    # 작업 005 슬라이스 5. 처음 답은 0001-01-01부터, 바꾼 답은 바꾼 날부터다. 9월 결제는 처음 답 참, 10월 결제는 바꾼 답
+    # 거짓이다. 답이 없는 날이면 facts를 보고, 그것도 없으면 모른다
+    picks = [
+        FactPick(key="salary", value=True, effective_from=date.min),
+        FactPick(key="salary", value=False, effective_from=date(2026, 10, 1)),
+    ]
+    card = UserCard(id="u", card_id="c", fact_picks=picks, facts={"soldier": True})
+    assert check(cond(fact="salary"), sit(card=card))[0] is True
+    assert check(cond(fact="salary"), sit(card=card, at=at("2026-10-01T00:00")))[0] is False
+    assert check(cond(fact="soldier"), sit(card=card))[0] is True
+    late = UserCard(
+        id="u", card_id="c", fact_picks=[FactPick(key="salary", value=True, effective_from=date(2026, 10, 1))]
+    )
+    assert check(cond(fact="salary"), sit(card=late)) == unknown("fact", "salary")
+    month = [FactPick(key="birth_month", value=9, effective_from=date.min)]
+    assert check(cond(fact="birth_month_now"), sit(card=UserCard(id="u", card_id="c", fact_picks=month)))[0] is True
 
 
 def test_facts_and_birth_month():

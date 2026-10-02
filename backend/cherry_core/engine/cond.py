@@ -189,7 +189,10 @@ def check(c: Condition, s: Situation) -> Tri:
 
 
 def fact(key: str, s: Situation) -> Tri:
-    facts = s.card.facts
+    facts = dict(s.card.facts)
+    # 결제일에 맞는 가장 늦은 답이 facts를 덮는다. 작업 005 설계 5e
+    for p in sorted((p for p in s.card.fact_picks if p.effective_from <= s.day), key=lambda p: p.effective_from):
+        facts[p.key] = p.value
     if key == "birth_month_now":
         if "birth_month" not in facts:
             return unknown("fact", "birth_month")
