@@ -86,3 +86,4 @@
 | [43](43-extraction-scoring-and-model.md) | 2026-10-02 | 추출 채점, 프롬프트 다듬기, 운영 모델 고르기 |
 | [44](44-criteria-and-ci.md) | 2026-10-02 | 작업 005 성공 기준 확인과 서버 테스트 CI |
 | [45](45-phone-check-and-on-device.md) | 2026-10-02 | 슬라이스 7 실제 폰 확인과 폰 안 구조로 바꾸기 |
+| [46](46-ranked-cancel-gold.md) | 2026-10-02 | 순위 영역 취소 달을 골드에 넣기 |
