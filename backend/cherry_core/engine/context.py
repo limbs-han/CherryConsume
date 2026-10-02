@@ -96,4 +96,5 @@ class Ctx:
             payment_method=p.payment_method,
             billing=self.billing(p),
             card=card,
+            time_known=p.time_known,
         )

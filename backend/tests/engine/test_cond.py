@@ -103,6 +103,14 @@ def test_fact_picks_follow_the_payment_day():
     assert check(cond(fact="birth_month_now"), sit(card=UserCard(id="u", card_id="c", fact_picks=month)))[0] is True
 
 
+def test_unknown_time_makes_time_conditions_unknown():
+    # E57. 시각을 모르는 결제는 시각 조건이 모름이다. 날짜로 정해지는 달 조건은 그대로다
+    night = cond(time={"from": "21:00", "to": "09:00"})
+    assert check(night, sit(at=at("2026-09-19T22:00")))[0] is True
+    assert check(night, sit(at=at("2026-09-19T22:00"), time_known=False)) == unknown("time")
+    assert check(cond(months=[9]), sit(time_known=False))[0] is True
+
+
 def test_facts_and_birth_month():
     assert check(cond(fact="soldier"), sit()) == unknown("fact", "soldier")
     card = UserCard(id="u", card_id="c", facts={"soldier": False, "birth_month": 9})

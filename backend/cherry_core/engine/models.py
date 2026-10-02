@@ -73,6 +73,8 @@ class Payment(Base):
     billing: Billing | None = None
     cancelled_amount: Won = 0
     cancelled_at: AwareDatetime | None = None
+    # 시각을 아는가. 엑셀에 날짜만 있으면 그날 12시로 두고 거짓이다. 시각 조건이 모름이 된다. E57
+    time_known: bool = True
     benefits: list[AppliedBenefit] | None = None
 
     @model_validator(mode="after")

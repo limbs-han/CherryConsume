@@ -107,6 +107,7 @@ class Situation:
     area: str | None = None
     month_total: int | None = None
     skip: frozenset[str] = frozenset()
+    time_known: bool = True
 
     @property
     def day(self) -> date:
@@ -140,7 +141,9 @@ def check(c: Condition, s: Situation) -> Tri:
             "only": holiday,
         }[c.day.holidays]
         add(TRUE if ok else FALSE)
-    if c.time is not None:
+    if c.time is not None and not s.time_known:
+        add(unknown("time"))
+    elif c.time is not None:
         t = local(s.at).strftime("%H:%M")
         start, end = c.time.start, c.time.end
         ok = start <= t < end if start <= end else (t >= start or t < end)
