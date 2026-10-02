@@ -1,0 +1,37 @@
+# 정답 예시 채점. 작업 003 과제 19, 설계 1절 7단계. 코드는 src/evaluate.py
+# cherry_extract를 mode golden, split all로 돌린 뒤 같은 모델 이름으로 돌린다. 모델을 부르지 않아 비용 차단 태그를 붙이지 않는다
+# 결과는 MLflow 실험 <번들 폴더>/cherry_eval에 실행 하나로 남는다. 화면 왼쪽 Experiments에서 본다
+resources:
+  jobs:
+    cherry_evaluate:
+      name: cherry_evaluate
+      max_concurrent_runs: 1
+      email_notifications:
+        on_failure: ["${var.alert_email}"]
+      parameters:
+        - name: model
+          default: ""
+        - name: prompt_version
+          default: ""
+      tasks:
+        - task_key: evaluate
+          spark_python_task:
+            python_file: ../src/evaluate.py
+            parameters:
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--model"
+              - "{{job.parameters.model}}"
+              - "--prompt-version"
+              - "{{job.parameters.prompt_version}}"
+              - "--experiment"
+              - "${workspace.root_path}/cherry_eval"
+          environment_key: default
+          timeout_seconds: 900
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../../backend/dist/*.whl
+              - mlflow-skinny

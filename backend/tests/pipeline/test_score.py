@@ -55,3 +55,71 @@ def test_tier_table_keys_are_separate_fields():
 def test_total_accuracy():
     got = total_accuracy([{"tiers": (1, 1), "benefits.reward": (1, 4)}, {"tiers": (0, 1)}])
     assert got == {"all": pytest.approx(2 / 6), "benefits.reward": 0.25, "tiers": 0.5}
+
+
+VALID = {
+    **EXPECTED,
+    "spend": {"basis": "prev_calendar_month", "installment": "full_at_purchase", "cancellation": "cancel_month"},
+}
+
+
+def _answer(rules) -> str:
+    import json
+
+    return json.dumps({"rules": rules, "effective_from": None, "source": "page", "open_questions": []})
+
+
+def test_answer_is_scored_against_the_golden_rules_json():
+    # 과제 19. 정답은 silver.golden의 규칙 JSON이고 답은 cherry_extract가 남긴 모델 답 원문이다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    golden = json.dumps(clean_rules(VALID))
+    wrong = {**VALID, "tiers": [0, 500000]}
+    assert score_answer(golden, _answer(VALID)) == field_accuracy(clean_rules(VALID), clean_rules(VALID))
+    assert score_answer(golden, _answer(wrong))["tiers"] == (0, 1)
+
+
+@pytest.mark.parametrize("answer", [None, "답을 못 하겠다", '{"source": "page"}', '{"rules": {"tiers": "많이"}}'])
+def test_unusable_answer_scores_zero_on_every_golden_field(answer):
+    # 형식 오류로 초안을 못 만든 답도 채점에서 빠지지 않고 모든 칸이 틀린 것이다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    expected = clean_rules(VALID)
+    result = score_answer(json.dumps(expected), answer)
+    assert result == field_accuracy(expected, {})
+    assert all(ok == 0 for ok, _ in result.values())
+
+
+def test_summary_splits_tune_and_holdout():
+    from cherry_core.pipeline.score import summarize
+
+    full = {"tiers": (1, 1), "benefits.reward": (2, 2)}
+    half = {"tiers": (0, 1), "benefits.reward": (1, 2)}
+    out = summarize([("tune", full), ("tune", half), ("test", half)])
+    assert out == {
+        "tune.all": 4 / 6,
+        "tune.benefits.reward": 3 / 4,
+        "tune.tiers": 1 / 2,
+        "holdout.all": 1 / 3,
+        "holdout.benefits.reward": 1 / 2,
+        "holdout.tiers": 0.0,
+    }
+
+
+def test_golden_null_that_a_model_cannot_write_is_not_scored():
+    # 한도 조정의 "제한 없음" null은 모델 답에서 안 적은 것으로 지워진다. 설계 1절. 정답 쪽도 같게 지워 채점하지 않는다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    golden = clean_rules(VALID)
+    golden["benefits"][0]["note_cap"] = None  # 모델이 적을 수 없는 null 칸
+    result = score_answer(json.dumps(golden), _answer(VALID))
+    assert all(ok == total for ok, total in result.values())
