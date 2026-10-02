@@ -19,10 +19,10 @@
 - [x] 3. 시험 파일을 만들어 커밋한다. 2026-10-02 `backend/tools/make_import_fixtures.py`가 `app/test/fixtures/imports/`에 여섯 파일을 만든다. 지금 읽기 코드가 커밋된 파일로도 같은 결과를 낸다. `.gitattributes`로 바이트 그대로 둔다
   - 지금 Python 시험이 그 자리에서 만드는 xlsx와 csv, 그리고 cp949로 쓴 csv를 스크립트 하나로 `app/test/fixtures/`에 만든다
   - 검증: Python 파일 읽기 시험이 커밋된 파일로도 같은 결과를 낸다. xlsx는 만들 때마다 안의 시각이 달라 다시 만든 파일과 바이트로 비교하지 않는다
-- [ ] 4. CI `test.yml`에 앱 시험 잡을 더한다. 2026-10-02 써 두었다. 푸시한 뒤 GitHub에서 확인한다
+- [x] 4. CI `test.yml`에 앱 시험 잡을 더한다. 2026-10-02 GitHub 실행 36986421084에서 서버 시험 잡과 앱 시험 잡이 모두 통과했다
   - Flutter를 깔아 분석기와 `flutter test`를 돌린다. 서버 시험 잡은 단계 7까지 둔다. `app/`도 바뀌면 돌게 한다
   - 검증: GitHub에서 두 잡이 통과한다
-- [ ] 5. `export.yml`에 JSON 다시 만들기 단계를 더한다. 2026-10-02 써 두었다. 다시 만들어도 JSON이 그대로인 것을 PC에서 봤다. 푸시한 뒤 Databricks 세션에 알리고 다음 봇 커밋을 본다
+- [ ] 5. `export.yml`에 JSON 다시 만들기 단계를 더한다. 2026-10-02 써 두었다. 다시 만들어도 JSON이 그대로인 것을 PC에서 봤다. 푸시했고 Databricks 세션이 검토해 문제없다고 했다. 대기 중인 승인이 없어 다음 봇 커밋에 JSON이 함께 들어가는지는 그쪽이 알려 준다
   - 승인 폴더마다 `export.py`와 검사 뒤 커밋 전에 만들고 `catalog`와 함께 add한다. 되돌릴 때 `git clean` 경로에 `app/assets/catalog.json`을 넣는다. 실패하면 그 폴더만 되돌리고 대기열에 남긴다. 설계 2절
   - 검증: 같은 명령을 PC에서 돌려 카탈로그를 바꾸면 JSON도 바뀌고, 안 바꾸면 그대로다. 푸시한 뒤 Databricks 세션에 알리고, 다음 승인의 봇 커밋에 JSON이 함께 들어갔는지 본다
 
