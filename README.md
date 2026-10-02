@@ -85,9 +85,11 @@ cherryConsume/
 │   ├── work/      작업 단위별 의도, 설계, 계획
 │   └── history/   요청과 수정 요청, 결과를 작업마다 남긴 기록
 ├── design/        와이어프레임, 아이콘
-├── backend/       예정. 계산 엔진과 API
-├── app/           예정. Flutter
-├── catalog/       예정. 카드 상품 정의 파일
+├── backend/       계산 엔진과 API
+├── app/           Flutter 앱
+├── catalog/       카드 상품 정의 파일. 원본은 Databricks 골드이고 승인된 개정을 봇이 커밋한다
+├── pipeline/      Databricks 번들. 카드 상품 수집 파이프라인과 검수 앱
+├── .github/       GitHub Actions. 원문 수집, 배포, 내보내기, 시험
 ├── .claude/       AI 작업 규칙, 스킬, 자동 검사
 └── .githooks/     커밋 메시지와 민감 정보 검사
 ```
