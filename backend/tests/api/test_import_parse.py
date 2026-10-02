@@ -3,6 +3,7 @@
 import io
 import zipfile
 from datetime import date, datetime, time
+from pathlib import Path
 
 import openpyxl
 import pytest
@@ -144,3 +145,17 @@ def test_other_zip_methods_and_trailing_minus():
     start, mapping = find_header(table)
     [row] = parse_rows(table, start, mapping)
     assert (row.amount, row.cancel) == (4500, True)
+
+
+FIXTURES = Path(__file__).resolve().parents[3] / "app" / "test" / "fixtures" / "imports"
+
+
+def test_committed_fixtures_read_the_same():
+    # 작업 006 계획 단계 1의 3. Dart 시험이 읽을 파일을 지금 읽기 코드가 위 시험들과 같게 읽는다
+    for name in ("utf8.csv", "cp949.csv", "dates_and_numbers.xlsx"):
+        assert rows_of((FIXTURES / name).read_bytes(), "내역." + name.rsplit(".", 1)[1]) == WANT
+    table = read_table((FIXTURES / "far_cell.xlsx").read_bytes(), "x.xlsx")
+    assert len(table) == 2 and max(len(r) for r in table) <= 60
+    for name in ("unzip_bomb.xlsx", "bzip2.xlsx"):
+        with pytest.raises(Unreadable):
+            read_table((FIXTURES / name).read_bytes(), "x.xlsx")

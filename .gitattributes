@@ -2,3 +2,6 @@
 *.pdf binary
 *.png binary
 *.webp binary
+# 엑셀 가져오기 시험 파일은 바이트 그대로 둔다. 글자 방식과 줄 끝을 시험한다. 작업 006
+app/test/fixtures/imports/** binary
+*.xlsx binary
