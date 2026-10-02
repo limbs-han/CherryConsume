@@ -451,3 +451,25 @@ def test_draft_for_an_edit_refuses_other_payments_and_cards(client):
     assert client.post("/me/payments/draft", json=deleted, headers=headers).status_code == 404
     other = {**body, "user_card_id": zero, "editing": tid}
     assert client.post("/me/payments/draft", json=other, headers=headers).status_code == 404
+
+
+def test_same_client_id_saves_once(client, db):
+    # E24. 저장은 됐는데 답이 끊겨 앱이 다시 보내도 한 건이다. 다른 사용자의 같은 번호는 따로 들어간다
+    cid = "0b7e9a52-6c1d-4a7e-9a3f-2f4c1b8d9e10"
+    headers, [mrlife] = setup(client)
+    first = pay(client, headers, mrlife, 4300, "GS25", client_id=cid)
+    again = pay(client, headers, mrlife, 4300, "GS25", client_id=cid)
+    assert (again["id"], again["repriced"], again["ask_category"]) == (first["id"], 0, None)
+    other, [card] = setup(client, name="other")
+    assert pay(client, other, card, 4300, "GS25", client_id=cid)["id"] != first["id"]
+    assert db.execute("SELECT count(*) AS n FROM transactions").fetchone()["n"] == 2
+    # 다시 보내기 전에 카드를 해지했어도 이미 들어간 결제다
+    client.delete(f"/me/cards/{mrlife}", headers=headers)
+    assert pay(client, headers, mrlife, 4300, "GS25", client_id=cid)["id"] == first["id"]
+    bad = {"user_card_id": card, "amount": 4300, "paid_at": "2026-09-15T21:00:00+09:00", "client_id": "x"}
+    assert client.post("/me/payments", json=bad, headers=other).status_code == 422
+    # 같은 번호에 금액이 다른 결제는 삼키지 않고 409다
+    clash = {**bad, "amount": 5000, "client_id": cid}
+    assert client.post("/me/payments", json=clash, headers=other).status_code == 409
+    # 카탈로그에 없는 업종을 실어 다시 보내도 이미 들어간 결제다
+    pay(client, headers, mrlife, 4300, "GS25", client_id=cid, category="gone")

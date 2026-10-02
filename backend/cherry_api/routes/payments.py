@@ -62,6 +62,8 @@ class NewPayment(PaymentFields):
     paid_at: AwareDatetime
     # 추천 결과에서 "이 카드로 결제 기록"을 누르면 채워진다. 추천을 따랐는지 본다. S4, 설계 문서 4.1
     recommendation_request_id: str | None = None
+    # 앱이 결제마다 만든 번호. 답이 끊겨 다시 보내도 한 건만 들어간다. E24, 설계 5i
+    client_id: uuid.UUID | None = None
 
 
 def filled(request: Request, body) -> dict:
@@ -243,14 +245,35 @@ def draft(body: Draft, request: Request, user: User, conn: Conn) -> dict:
 @router.post("", status_code=201)
 def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
     """결제 저장. 엔진이 계산한 혜택을 저장한다. 앞선 결제나 지난달 결제로 다시 계산할 결제가 생기면 함께 바꾼다. E52, E53"""
-    f = filled(request, body)
     card_id = checked_id(body.user_card_id)
+
+    def resent() -> dict | None:
+        """이미 들어간 번호면 그 결제. 다시 보내기 전에 카드를 해지했거나 카탈로그가 바뀌었어도 그 결제다"""
+        if body.client_id is None:
+            return None
+        row = conn.execute(
+            "SELECT id, user_card_id, amount FROM transactions WHERE user_id = %s AND client_id = %s",
+            (user, body.client_id),
+        ).fetchone()
+        if row is None:
+            return None
+        # 앱이 번호를 잘못 다시 쓰면 다른 결제를 조용히 삼키지 않는다
+        if (str(row["user_card_id"]), row["amount"]) != (card_id, body.amount):
+            raise HTTPException(409, "같은 번호의 다른 결제가 있다")
+        return {"id": str(row["id"]), "repriced": 0, "ask_category": None}
+
+    if (done := resent()) is not None:
+        return done
+    f = filled(request, body)
     # 같은 카드의 결제 저장을 줄 세운다. 두 결제가 같은 한도를 함께 쓰지 않게 한다
     row = conn.execute(
         "SELECT * FROM user_cards WHERE id = %s AND user_id = %s AND removed_at IS NULL FOR UPDATE", (card_id, user)
     ).fetchone()
     if row is None:
         raise HTTPException(404, "보유 카드가 아니다")
+    # 같은 번호가 동시에 둘 오면 먼저 잡은 쪽이 넣고 뒤쪽은 줄을 선 뒤 그 결제를 받는다
+    if (done := resent()) is not None:
+        return done
     attach_answers(conn, [row])
     request_id = None
     if body.recommendation_request_id is not None:
@@ -277,8 +300,8 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
         INSERT INTO transactions (id, user_id, user_card_id, amount, merchant_name, merchant_key, category_code, paid_at,
                                   installment_months, interest_free_installment, channel, region, payment_method,
                                   billing, card_revision_id, recommendation_request_id, source, created_at,
-                                  updated_at)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'manual', %s, %s)
+                                  updated_at, client_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'manual', %s, %s, %s)
         """,
         (
             pid,
@@ -299,6 +322,7 @@ def save(body: NewPayment, request: Request, user: User, conn: Conn) -> dict:
             request_id,
             now,
             now,
+            body.client_id,
         ),
     )
     # 다시 계산한 결제 가운데 혜택이 바뀐 것만 저장된 혜택과 계산에 쓴 개정 행을 바꾼다. E52, E53
