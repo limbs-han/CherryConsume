@@ -4,17 +4,18 @@ from __future__ import annotations
 
 import copy
 import tempfile
+from collections import Counter
 from datetime import date
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from cherry_core.catalog.canonical import canonical_text, normalize
 from cherry_core.catalog.check import check_catalog, path_exists
 from cherry_core.catalog.load import load_catalog
 from cherry_core.catalog.models import BenefitExclusions, NewCard, Rules, Spend
-from cherry_core.catalog.resolve import DEFAULT_KEYS, resolve_card, revision_for
+from cherry_core.catalog.resolve import DEFAULT_KEYS, merge, resolve_card, revision_for
 
 SECTIONS: dict[str, type[BaseModel]] = {"spend": Spend, "new_card": NewCard, "benefit_exclusions": BenefitExclusions}
 
@@ -46,6 +47,32 @@ def issuer_defaults(issuer: dict | None, day: date) -> dict:
     """day에 적용되는 카드사 기본값. resolve_card와 같이 마지막 항목 하나만 쓴다."""
     current = [d for d in (issuer or {}).get("defaults", []) if d["effective_from"] <= day]
     return {k: current[-1][k] for k in DEFAULT_KEYS if current and current[-1].get(k) is not None}
+
+
+def fill_defaults(raw: dict, defaults: dict | None) -> dict:
+    """모델이 적지 않은 실적 규칙, 신규 회원, 혜택 제외 칸을 카드사 기본값으로 채운다. 채점과 정답 예시 다시 묻기가 쓴다.
+
+    카드 파일을 합칠 때와 같이 맵 안까지 합치고, 모델이 적은 값은 덮지 않는다.
+    채워도 그 묶음이 형식에 맞지 않으면 채우지 않는다. 신한 신규 회원 기본값은 구간 금액이 없어 카드가 채운다.
+    2026-10-02 판 3에서 이것 하나로 신한 Point Plan 전체가 0점이 됐다.
+    """
+    out = dict(raw)
+    for k, base in (defaults or {}).items():
+        merged = merge(base, out.get(k) or {}, k)
+        try:
+            SECTIONS[k].model_validate(merged)
+        except ValidationError:
+            continue
+        out[k] = merged
+    return out
+
+
+def _dicts(node: Any) -> list[dict]:
+    return [x for x in node if isinstance(x, dict)] if isinstance(node, list) else []
+
+
+def _limit_kind(limit: dict) -> str:
+    return str(limit.get("shared") or limit.get("per"))
 
 
 def _top_level(model: type[BaseModel], data: dict) -> dict:
@@ -90,7 +117,8 @@ def make_draft(
     keep_current는 바뀐 원문 추출에서 켠다. 모델이 적지 않은 실적 규칙 칸을 그 카드의 지금 값으로 채우고
     채운 묶음마다 확인 필요 항목을 단다. 공지처럼 실적 규칙이 없는 원문이 많아서다.
     카드사 기본값으로 채우면 카드가 따로 정한 실적 규칙이 조용히 사라진다. 2026-10-02 위험 검토.
-    정답 예시 채점에서는 끈다. 채운 값이 정답에서 와서 점수가 부풀기 때문이다. 그때 빠진 칸은 모델 기본값이다.
+    정답 예시 채점에서는 끈다. 채운 값이 정답에서 와서 점수가 부풀기 때문이다. 그때 빠진 칸은 모델 기본값이고
+    필수 칸이 빠지면 형식 오류다. 채점은 카드사 기본값으로 따로 채워 잰다. score.score_answer
     """
     raw = int_keys(extracted["rules"])
     resolved = resolve_card(card, issuer)
@@ -110,6 +138,29 @@ def make_draft(
                 notes.append(f"{k}의 {', '.join(missing)}: 원문에서 찾지 못해 지금 값을 두었다")
             if moved:
                 notes.append(f"{k}의 {', '.join(moved)}: 원문에서 읽은 값이 지금 값과 다르다")
+        # 프롬프트 판 6과 7은 금액을 못 찾은 한도를 빼라고 한다. 빠진 한도는 승인하면 한도 없이 계산된다. 2026-10-02 위험 검토
+        # 이상한 모양의 답은 건너뛰어 형식 검사가 형식 오류로 잡게 한다. 그래야 한 번 더 묻는다
+        mine_limits = {x.get("key") for x in _dicts(raw.get("limits")) if isinstance(x.get("key"), str)}
+        gone = [x["key"] for x in then.get("limits", []) if x["key"] not in mine_limits]
+        if gone:
+            notes.append(
+                f"limits의 {', '.join(gone)}: 원문에서 찾지 못해 초안에서 빠졌다. 이대로 승인하면 이 한도 없이 계산한다"
+            )
+        mine_benefits = {b["key"]: b for b in _dicts(raw.get("benefits")) if isinstance(b.get("key"), str)}
+        for b in then.get("benefits", []):
+            mine = mine_benefits.get(b["key"])
+            if mine is None:
+                notes.append(f"benefits의 {b['key']}: 원문에서 찾지 못해 초안에서 빠졌다")
+                continue
+            # 공유 한도는 이름, 직접 적은 한도는 기간으로 센다. 같은 기간이 둘일 수 있어 개수로 센다
+            lost = Counter(map(_limit_kind, b.get("limits", []))) - Counter(
+                map(_limit_kind, _dicts(mine.get("limits")))
+            )
+            if lost:
+                notes.append(
+                    f"benefits[{b['key']}]의 limits {', '.join(sorted(lost))}: 지금 한도가 초안에 없다. "
+                    "이대로 승인하면 그 한도 없이 계산한다"
+                )
     rules = clean_rules(raw)
     if rules == clean_rules(current):
         return None

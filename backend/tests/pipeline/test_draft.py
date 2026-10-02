@@ -203,3 +203,40 @@ def test_existing_question_into_a_replaced_revision_keeps_its_text(files):
         "assumed": "exclude",
     }
     assert check_draft(files, PATH, draft) == []
+
+
+def test_changes_mode_flags_limits_the_model_dropped():
+    # 2026-10-02 위험 검토. 판 6과 7은 금액을 못 찾은 한도를 빼라고 한다. 이대로 승인하면 한도 없이 계산해 혜택이 부푼다
+    answer = extracted(rate=5)
+    answer["rules"]["limits"] = []
+    answer["rules"]["benefits"][0]["limits"] = []
+    draft = make_draft(card_with_own_spend(), ISSUER, answer, FETCHED, keep_current=True)
+    asked = [q["question"] for q in draft["open_questions"]]
+    assert "limits의 integrated: 원문에서 찾지 못해 초안에서 빠졌다. 이대로 승인하면 이 한도 없이 계산한다" in asked
+    assert "benefits[cafe-10]의 limits integrated, txn: 지금 한도가 초안에 없다. 이대로 승인하면 그 한도 없이 계산한다" in asked
+
+
+def test_changes_mode_flags_benefits_the_model_dropped():
+    answer = extracted(rate=5)
+    answer["rules"]["benefits"][0]["key"] = "cafe-5"  # 지금 혜택 cafe-10이 초안에 없다
+    draft = make_draft(card_with_own_spend(), ISSUER, answer, FETCHED, keep_current=True)
+    asked = [q["question"] for q in draft["open_questions"]]
+    assert "benefits의 cafe-10: 원문에서 찾지 못해 초안에서 빠졌다" in asked
+
+
+def test_changes_mode_flags_a_benefit_limit_dropped_among_others():
+    # 2026-10-02 다시 검토. 공유 한도만 남고 건당 1천원 한도가 빠지면 5만원 결제에 5% 할인이 1천원이 아니라 2천5백원이 된다
+    answer = extracted(rate=5)
+    answer["rules"]["benefits"][0]["limits"] = [{"shared": "integrated"}]
+    draft = make_draft(card_with_own_spend(), ISSUER, answer, FETCHED, keep_current=True)
+    asked = [q["question"] for q in draft["open_questions"]]
+    assert "benefits[cafe-10]의 limits txn: 지금 한도가 초안에 없다. 이대로 승인하면 그 한도 없이 계산한다" in asked
+
+
+@pytest.mark.parametrize("limits", [5, True, [{"key": ["integrated"], "per": "month", "amount": 1}]])
+def test_changes_mode_odd_limits_stay_a_format_error(limits):
+    # 이상한 모양의 답도 바뀐 원문 모드에서 형식 오류가 되어야 한 번 더 묻는다
+    answer = extracted(rate=5)
+    answer["rules"]["limits"] = limits
+    with pytest.raises(ValidationError):
+        make_draft(card_with_own_spend(), ISSUER, answer, FETCHED, keep_current=True)

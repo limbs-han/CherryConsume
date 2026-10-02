@@ -3,6 +3,8 @@
 import json
 from datetime import date
 
+import pytest
+
 from cherry_core.catalog.load import load_catalog
 from cherry_core.pipeline.prompt import RESPONSE_FORMAT, answer_schema, build_prompt, catalog_codes, parse_answer
 from tests.catalog.conftest import FILES
@@ -88,3 +90,58 @@ def test_every_example_is_valid_rules():
     cat = load_catalog(Path(__file__).resolve().parents[3] / "catalog")
     for cid in cat.cards:
         Rules.model_validate(int_keys(json.loads(json.dumps(example_for(cat, cid)[1], default=str))))
+
+
+def test_field_guide_names_the_real_fields():
+    # 2026-10-02 운영 채점에서 모델이 when.amount.max, when.days, target.region 같은 없는 칸을 지어냈다
+    from cherry_core.pipeline.prompt import field_guide
+
+    guide = field_guide()
+    assert "AmountRange: min, below" in guide
+    assert "channel(online|offline)" in guide
+    assert "day(Days)" in guide and "Days: in(" in guide
+    assert "Target: all, categories, merchants, exclude_categories, exclude_merchants" in guide
+    assert "type(billing_discount|onsite_discount|points|cashback)" in guide
+    # Rules에서 닿는 모델은 모두 나온다. 한도 조정과 맨 위 칸도 빠지지 않는다
+    for name in ("Rules", "SharedLimit", "Adjust", "PerUnit", "CardMonth", "CancellationOverride", "Option", "Fact"):
+        assert any(line.startswith(f"{name}: ") for line in guide.splitlines()), name
+
+
+def test_prompt_shows_current_limit_keys_only(make_catalog):
+    # 공유 한도 이름은 정답을 만든 사람이 지은 것이다. 알려 주지 않으면 금액이 맞아도 다른 한도가 된다
+    # 2026-10-02 판 4에서 key와 기간을 주었더니 모델이 그 모양을 베껴 금액 없는 한도를 적었다. 기간은 정답도 샌다
+    card = FILES["cards/shinhan/shinhan-test.yaml"]
+    current = {"limits": [{"key": "integrated", "per": "month", "amount": {300000: 10000}}], "benefits": []}
+    prompt = build_prompt(card, current, [], catalog_codes(load_catalog(make_catalog())))
+    line = next(x for x in prompt.splitlines() if x.startswith("지금 한도"))
+    assert line == "지금 한도 key: integrated"
+    assert "칸 안내." in prompt
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        '```json\n{"rules": {}, "effective_from": null, "source": "page"}\n```',
+        '답은 아래와 같다.\n{"rules": {}, "effective_from": null, "source": "page"}',
+    ],
+)
+def test_parse_answer_strips_text_around_the_json(text):
+    # 2026-10-02 qwen 답 두 장이 JSON으로 시작하지 않아 읽지 못했다
+    assert parse_answer(text)["source"] == "page"
+
+
+def test_parse_answer_refuses_two_objects():
+    # 앞뒤 글을 걷어 낼 때 객체 둘을 하나로 읽지 않는다. 읽지 못한 답은 사람이 정할 것으로 간다
+    with pytest.raises(json.JSONDecodeError):
+        parse_answer('{"rules": {}} 그리고 {"rules": {}}')
+
+
+def test_second_ask_shows_the_previous_answer_and_each_error():
+    # 2026-10-02 판 7. 형식 검사에 걸린 카드만 이전 답과 오류를 붙여 한 번 더 묻는다
+    from cherry_core.pipeline.prompt import retry_prompt
+
+    errors = ["limits.0: Value error, amount, count, base 중 하나 이상을 쓴다", "spend.installment: Field required"]
+    text = retry_prompt("처음 프롬프트", '{"rules": {}}', errors)
+    assert text.startswith("처음 프롬프트\n\n")
+    assert '<이전 답>\n{"rules": {}}\n</이전 답>' in text
+    assert text.endswith("\n- " + errors[0] + "\n- " + errors[1])

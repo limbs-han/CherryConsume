@@ -13,7 +13,7 @@ from datetime import date
 from pydantic import ValidationError
 
 from cherry_core.catalog.canonical import canonical_text
-from cherry_core.pipeline.draft import check_draft, make_draft
+from cherry_core.pipeline.draft import check_draft, clean_rules, fill_defaults, int_keys, make_draft
 from cherry_core.pipeline.prompt import parse_answer
 
 QUEUED = ("draft", "needs_human")  # 검수 대기에 오르는 결과
@@ -25,6 +25,7 @@ class Outcome:
     reason: str | None = None
     draft_yaml: str | None = None
     problems: list[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)  # 규칙 형식 오류의 칸마다 문구. 있으면 한 번 더 묻는다
 
 
 def process_answer(
@@ -50,9 +51,32 @@ def process_answer(
         return Outcome("draft", draft_yaml=canonical_text(draft), problems=check_draft(files, path, draft))
     except ValidationError as e:
         where = ", ".join(".".join(map(str, x["loc"])) for x in e.errors()[:3])
-        return Outcome("needs_human", f"규칙 형식 오류 {e.error_count()}곳: {where}")
+        return Outcome("needs_human", f"규칙 형식 오류 {e.error_count()}곳: {where}", errors=_errors(e))
     except Exception as e:  # noqa: BLE001 모델의 답은 어떤 모양이든 올 수 있다. 무엇이든 사람이 본다
         return Outcome("needs_human", f"답을 초안으로 바꾸지 못했다: {type(e).__name__}: {e}"[:500])
+
+
+def _errors(e: ValidationError) -> list[str]:
+    """칸마다 오류 문구. 입력값은 넣지 않는다. 다시 묻는 프롬프트에 붙인다."""
+    return [f"{'.'.join(map(str, x['loc']))}: {x['msg']}" for x in e.errors()[:20]]
+
+
+def retry_errors(out: Outcome, response: str | None, defaults: dict | None) -> list[str]:
+    """한 번 더 물을 때 알려 줄 규칙 형식 오류. 비면 다시 묻지 않는다. 설계 1절 4단계 판 7.
+
+    defaults는 정답 예시 모드에서 넘기는 카드사 기본값이다. 채점처럼 채워 보고 남는 오류만 돌려준다.
+    채울 수 있는 칸의 오류까지 알려 주면 모델이 값을 지어 기본값을 덮는다. 2026-10-02 다시 검토.
+    바뀐 원문 모드는 빠진 실적 규칙을 이미 지금 값으로 채웠으므로 None이다. 두 모드가 같은 누락에 같이 움직이게 한다.
+    """
+    if not out.errors or not defaults:
+        return out.errors
+    try:
+        clean_rules(fill_defaults(int_keys(parse_answer(response)["rules"]), defaults))
+    except ValidationError as e:
+        return _errors(e)
+    except Exception:  # noqa: BLE001 채워 보지도 못하면 처음 오류를 그대로 알려 준다
+        return out.errors
+    return []
 
 
 def pending_changes(changes: list[tuple[str, str]], drafts: list[tuple[list[str], str]]) -> dict[str, list[str]]:

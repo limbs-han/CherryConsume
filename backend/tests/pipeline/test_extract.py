@@ -91,3 +91,47 @@ def test_changes_mode_keeps_current_spend_through_process_answer(files):
     assert kept.status == "draft" and "원문에서 찾지 못해 지금 값을 두었다" in kept.draft_yaml
     graded = process_answer(files, PATH, CARD, ISSUER, response, None, FETCHED)  # 채점은 채우지 않는다
     assert graded.status == "needs_human"
+
+
+def test_format_error_lists_each_field_for_a_second_ask(files):
+    # 2026-10-02 판 6. 모델이 지금 한도 key만 보고 금액 없는 한도를 적었다. 칸마다 오류 문구를 모아 한 번 더 묻는다
+    out = run(files, answer(rate=5, limits=[{"key": "integrated", "per": "month"}]))
+    assert out.status == "needs_human"
+    assert out.errors == ["limits.0: Value error, amount, count, base 중 하나 이상을 쓴다"]
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        "답을 못 하겠다",  # JSON이 아니다. 잘린 답은 다시 물어도 같이 잘린다
+        answer(rate=5, effective_from="2026-06-01"),  # 마지막 개정보다 앞선 시행일은 사람이 정할 일이다
+    ],
+)
+def test_only_format_errors_are_asked_again(files, response):
+    out = run(files, response)
+    assert out.status == "needs_human"
+    assert out.errors == []
+
+
+def test_golden_mode_asks_again_only_what_issuer_defaults_cannot_fill(files):
+    # 2026-10-02 위험 검토. 운영은 빠진 실적 규칙을 지금 값으로 채워 다시 묻지 않는다. 정답 예시 모드는 채점처럼
+    # 카드사 기본값으로 채워 보고, 그래도 남는 형식 오류만 알려 주고 다시 묻는다
+    from cherry_core.pipeline.extract import retry_errors
+
+    def without_installment(**patch):
+        rules = json.loads(answer(rate=5, **patch))["rules"]
+        del rules["spend"]["installment"]
+        return json.dumps({"rules": rules, "effective_from": None, "source": "page", "open_questions": []})
+
+    full = {"spend": {"basis": "prev_calendar_month", "installment": "full_at_purchase", "cancellation": "cancel_month"}}
+    response = without_installment()
+    out = run(files, response)
+    assert out.errors == ["spend.installment: Field required"]
+    assert retry_errors(out, response, full) == []  # 기본값으로 채우면 맞는다
+    assert retry_errors(out, response, {"spend": {"basis": "prev_calendar_month"}}) == out.errors  # 기본값에도 없다
+    assert retry_errors(out, response, None) == out.errors  # 바뀐 원문 모드는 지금 값으로 채운 뒤의 오류다
+    assert retry_errors(run(files, answer(rate=5)), answer(rate=5), None) == []  # 형식 오류가 없다
+    # 채울 수 있는 칸의 오류는 빼고 남는 오류만 알려 준다. 모델이 할부 값을 지어 기본값을 덮지 않게 한다
+    response = without_installment(limits=[{"key": "integrated", "per": "month"}])
+    out = run(files, response)
+    assert retry_errors(out, response, full) == ["limits.0: Value error, amount, count, base 중 하나 이상을 쓴다"]
