@@ -211,15 +211,16 @@ $raw = "$env:TEMP\cherry-raw-$(Get-Date -Format yyyyMMddHHmm)"
 uv run --project backend --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out $raw --interval 30 --issuer shinhan
 ```
 
-- 올리기: 같은 창에서 아래를 한 덩어리씩 돌린다. 원문 폴더를 먼저 올리고, 제자리에 올라갔는지 본 뒤, 목록 파일을 마지막에 올린다. 목록이 먼저 올라가면 적재 작업이 아직 없는 원문을 찾는다. PowerShell은 명령 하나가 실패해도 다음 줄로 넘어가므로, 오류 글이 보이면 거기서 멈추고 Claude에게 붙여 준다.
+- 올리기: 같은 창에서 아래를 한 덩어리씩 돌린다. 원문 파일을 먼저 올리고, 목록 파일을 마지막에 올린다. 목록이 먼저 올라가면 적재 작업이 아직 없는 원문을 찾는다. PowerShell은 명령 하나가 실패해도 다음 줄로 넘어가므로, 오류 글이 보이면 거기서 멈추고 Claude에게 붙여 준다.
+- 폴더째 `cp -r`로 올리지 않는다. 볼륨에 같은 날짜 폴더가 이미 있으면 그 안에 한 단계 더 들어가 올라가고, 목록 파일이 그 원문을 찾지 못한다. 2026-10-02 계보 시험에서 겪었다. 그래서 파일 하나하나를 PC 폴더의 상대 경로 그대로 올린다.
 
-원문 폴더 올리기:
+원문 파일 올리기:
 
 ```powershell
-Get-ChildItem $raw -Directory | Where-Object Name -ne manifests | ForEach-Object { databricks fs cp -r $_.FullName "dbfs:/Volumes/cherry/bronze/raw/$($_.Name)" --overwrite }
+Get-ChildItem $raw -Recurse -File | Where-Object { $_.FullName -notlike "*\manifests\*" } | ForEach-Object { $rel = $_.FullName.Substring("$raw\".Length).Replace('\', '/'); databricks fs cp $_.FullName "dbfs:/Volumes/cherry/bronze/raw/$rel" --overwrite }
 ```
 
-제자리 확인. `list-`로 시작하는 파일이 보이면 성공이다. 날짜 폴더 아래 한 단계 더 들어가 올라갔으면 보이지 않는다.
+제자리 확인. `list-`로 시작하는 파일이 보이면 성공이다.
 
 ```powershell
 $day = (Get-ChildItem $raw -Directory | Where-Object Name -ne manifests).Name
