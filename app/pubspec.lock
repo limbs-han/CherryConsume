@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  archive:
+    dependency: "direct main"
+    description:
+      name: archive
+      sha256: "6c5bcd986e06b94e3c40244af471750840a3d2341d1f9763a1100a14add517b4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.0"
   args:
     dependency: transitive
     description:
@@ -81,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  cp949_codec:
+    dependency: "direct main"
+    description:
+      name: cp949_codec
+      sha256: a381b062b0727a22ac022a6562c49ea6e2eed487d6cb8a676b44cdc593716782
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   cross_file:
     dependency: transitive
     description:
@@ -90,13 +106,21 @@ packages:
     source: hosted
     version: "0.3.5+5"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       sha256: c8ea0233063ba03258fbcf2ca4d6dadfefe14f02fab57702265467a19f27fadf
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      sha256: "09bad715f418841f976c77db72d5398dc1253c21fb9c0c7f0b0b985860b2d58e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   dbus:
     dependency: transitive
     description:
@@ -354,6 +378,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  html:
+    dependency: "direct main"
+    description:
+      name: html
+      sha256: "43b67b8f43321ab066817dfac5619596c98bb1b61624e77203bb4351785f9699"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.7"
   http:
     dependency: "direct main"
     description:
@@ -631,6 +663,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.9.1"
+  posix:
+    dependency: transitive
+    description:
+      name: posix
+      sha256: bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.5.2"
   process:
     dependency: transitive
     description:
@@ -869,7 +909,7 @@ packages:
     source: hosted
     version: "1.1.0"
   xml:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: xml
       sha256: "67f0aff7be013d107995e9b75bf4e7f2c3ef2dfdb2c8e68024bba0a7fd5756a4"

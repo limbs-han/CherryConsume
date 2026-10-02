@@ -29,6 +29,12 @@ const allowed = {
   'file_picker',
   'http',
   'sqlite3',
+  // 엑셀 가져오기. 2026-10-02 소스에서 네트워크 호출이 없는 것을 봤다. 작업 006 설계 5절
+  'archive',
+  'cp949_codec',
+  'crypto',
+  'html',
+  'xml',
   // 계획 단계 7에서 지운다
   'flutter_secure_storage',
   'google_sign_in',
