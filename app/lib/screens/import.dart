@@ -78,7 +78,7 @@ class _ImportScreenState extends State<ImportScreen> {
   ({String name, Uint8List bytes})? _file;
   ImportPreview? _preview;
   int? _headerRow;
-  // 사용자가 짝지은 {칸: 열 번호}. 비우면 서버가 찾는다
+  // 사용자가 짝지은 {칸: 열 번호}. 비우면 저장소가 찾는다
   Map<String, int>? _columns;
   bool _remap = false;
   String? _error;
@@ -124,10 +124,8 @@ class _ImportScreenState extends State<ImportScreen> {
         _remap = p.needsMapping;
       });
     } on ApiError catch (e) {
-      // 서버가 준 까닭을 그대로 보인다. 옛 xls, 카드를 고르지 않음 같은 것이다. 501은 아직 열지 않은 가져오기다
-      final detail = e.status == 501
-          ? e.body
-          : RegExp(r'"detail":"([^"]*)"').firstMatch(e.body)?.group(1);
+      // 저장소가 준 까닭을 그대로 보인다. 옛 xls, 2MB 넘는 파일, 카드를 고르지 않음 같은 것이다
+      final detail = e.status == 413 || e.status == 422 ? e.body : null;
       if (mounted && seq == _seq) {
         setState(() => _error = detail ?? '파일을 읽지 못했어요.');
       }
@@ -141,7 +139,7 @@ class _ImportScreenState extends State<ImportScreen> {
   Future<void> _save(ImportPreview p) async {
     setState(() => _busy = true);
     try {
-      // 판정받은 행을 모두 보낸다. 서버가 같은 행으로 다시 판정한다. 겹친 행이 빠지면 결제나 취소가 사라진다
+      // 판정받은 행을 모두 보낸다. 저장소가 같은 행으로 다시 판정한다. 겹친 행이 빠지면 결제나 취소가 사라진다
       final rows = [
         for (final r in p.rows)
           if (r.containsKey('paid_at')) r,
@@ -423,7 +421,7 @@ class _ImportsScreenState extends State<ImportsScreen> {
     }
   }
 
-  /// 가져온 날. 서버 시각을 폰 시간으로 바꿔 보인다
+  /// 가져온 날. 저장한 시각을 폰 시간으로 바꿔 보인다
   String _day(String at) {
     final d = DateTime.parse(at).toLocal();
     String two(int n) => n.toString().padLeft(2, '0');

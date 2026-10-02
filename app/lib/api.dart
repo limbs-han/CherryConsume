@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'catalog/models.dart' show day;
 import 'store/routes/answers.dart' as answers;
 import 'store/routes/catalog.dart' as catalog_routes;
+import 'store/routes/imports.dart' as import_routes;
 import 'store/routes/me.dart' as me;
 import 'store/routes/payments.dart' as payments;
 import 'store/routes/recommend.dart' as recommend_routes;
@@ -580,23 +581,37 @@ class Api {
     }),
   );
 
-  // 엑셀 가져오기는 작업 006 계획 단계 5에서 폰 안으로 옮긴다. 그때까지 화면이 알린다
-  static ApiError _notYet() => ApiError(501, '엑셀 가져오기는 다음 판에서 다시 열어요');
-
+  /// 파일을 읽어 미리보기를 준다. 파일은 메모리에서 읽고 바로 버린다. E35. 짝지은 열이 있으면 그 짝으로 읽는다. E30
+  /// ponytail: 읽기와 판정이 화면과 같은 isolate에서 돈다. 2MB 파일이 화면을 눈에 띄게 멈추면 읽기를 Isolate.run으로 옮긴다
   Future<ImportPreview> importPreview(
     Uint8List data, {
     String? userCardId,
     int? headerRow,
     Map<String, int>? columns,
-  }) async => throw _notYet();
+  }) async => ImportPreview(
+    import_routes.preview(
+      store,
+      data,
+      userCardId: userCardId,
+      mapping: columns == null ? null : {'row': headerRow, 'columns': columns},
+    ),
+  );
 
+  /// 미리보기의 행을 저장한다. 저장소가 다시 판정한다. 짝지은 열은 이때 남긴다
   Future<Map<String, dynamic>> saveImport(
     List<Map<String, dynamic>> rows, {
     String? signature,
     Map<String, int>? columns,
-  }) async => throw _notYet();
+  }) async => import_routes.save(store, {
+    'rows': rows,
+    'mapping': columns == null
+        ? null
+        : {'signature': signature, 'columns': columns},
+  });
 
-  Future<List<Map<String, dynamic>>> imports() async => [];
+  Future<List<Map<String, dynamic>>> imports() async =>
+      import_routes.batches(store);
 
-  Future<void> undoImport(int id) async => throw _notYet();
+  /// 가져온 묶음 되돌리기. E34
+  Future<void> undoImport(int id) async => import_routes.undo(store, id);
 }
