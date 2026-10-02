@@ -178,17 +178,22 @@ erDiagram
         uuid user_card_id FK
         text option_key
         text choice_key
-        date effective_from
+        date effective_from "처음 답은 0001-01-01"
+        timestamptz answered_at
     }
     user_facts {
         uuid user_id PK,FK
         text key PK
-        text value
+        date effective_from PK "처음 답은 0001-01-01"
+        text value "JSON. 참과 거짓, 달, 선택지"
+        timestamptz answered_at
     }
     user_card_facts {
         uuid user_card_id PK,FK
         text key PK
-        text value
+        date effective_from PK "처음 답은 0001-01-01"
+        text value "JSON. 참과 거짓, 달, 선택지"
+        timestamptz answered_at
     }
     transaction_benefits {
         uuid transaction_id PK,FK
