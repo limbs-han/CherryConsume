@@ -123,3 +123,72 @@ def test_golden_null_that_a_model_cannot_write_is_not_scored():
     golden["benefits"][0]["note_cap"] = None  # 모델이 적을 수 없는 null 칸
     result = score_answer(json.dumps(golden), _answer(VALID))
     assert all(ok == total for ok, total in result.values())
+
+
+def test_issuer_defaults_fill_what_the_model_left_out_when_scoring():
+    # 카드사 공통 규칙은 카드 원문에 없을 때가 많다. 카드사 기본값은 카드의 정답이 아니라 공통 규칙이라 채워서 채점한다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    golden = clean_rules({**VALID, "spend": {**VALID["spend"], "exclude_categories": ["tax"]}})
+    answer = {k: v for k, v in VALID.items() if k != "spend"}  # 모델이 실적 규칙을 적지 않았다
+    defaults = {"spend": {**VALID["spend"], "exclude_categories": ["tax"]}}
+    assert all(ok == total for ok, total in score_answer(json.dumps(golden), _answer(answer), defaults).values())
+    assert score_answer(json.dumps(golden), _answer(answer))["spend"][0] == 0  # 채우지 않으면 형식 오류다
+
+
+def test_issuer_defaults_merge_inside_maps_like_card_files():
+    # 카드 파일을 합칠 때와 같이 맵 안까지 합친다. 모델이 month_offset 키 하나만 적어도 다른 키는 기본값을 쓴다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    spend = {**VALID["spend"], "month_offset": {"a": 1, "b": 2}}
+    golden = clean_rules({**VALID, "spend": spend})
+    answer = {**VALID, "spend": {"month_offset": {"a": 1}}}
+    result = score_answer(json.dumps(golden), _answer(answer), {"spend": spend})
+    assert result["spend"] == (5, 5)  # basis, installment, cancellation, month_offset.a, month_offset.b
+
+
+def test_issuer_defaults_never_overwrite_what_the_model_wrote():
+    # 모델이 interest_free를 exclude로 적었다. 정답은 기본값 count라 칸 하나가 더 있고 틀린다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    golden = clean_rules(VALID)
+    answer = {**VALID, "spend": {**VALID["spend"], "interest_free": "exclude"}}
+    defaults = {"spend": {**VALID["spend"], "interest_free": "count"}}
+    assert score_answer(json.dumps(golden), _answer(answer), defaults)["spend"] == (3, 4)
+
+
+def test_card_rule_unlike_the_issuer_default_is_still_wrong_when_left_out():
+    # 카드가 세금을 실적에서 따로 뺀다. 모델이 실적 규칙을 적지 않으면 기본값으로 채워도 그 칸은 틀린다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    golden = clean_rules({**VALID, "spend": {**VALID["spend"], "exclude_categories": ["tax"]}})
+    answer = {k: v for k, v in VALID.items() if k != "spend"}
+    assert score_answer(json.dumps(golden), _answer(answer), {"spend": VALID["spend"]})["spend"] == (3, 4)
+
+
+def test_partial_issuer_default_does_not_break_the_whole_answer():
+    # 2026-10-02 신한 신규 회원 기본값은 구간 금액 tier가 없다. 모델이 신규 회원을 안 적은 답에 채우면 필수 칸이 빠져
+    # 카드 전체가 0점이 됐다. 채워도 형식이 안 되는 묶음은 채우지 않는다. 신규 회원 3칸만 틀리고 나머지는 맞는다
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules
+    from cherry_core.pipeline.score import score_answer
+
+    new_card = {"from": "registration", "until": "next_month_end", "tier": 300000}
+    golden = clean_rules({**VALID, "new_card": new_card})
+    defaults = {"new_card": {"from": "registration", "until": "next_month_end"}}
+    result = score_answer(json.dumps(golden), _answer(VALID), defaults)
+    assert result["new_card"] == (0, 3)
+    assert result["benefits.reward"] == (2, 2) and result["spend"] == (3, 3) and result["tiers"] == (1, 1)

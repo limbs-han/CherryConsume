@@ -1,5 +1,6 @@
 # 정답 예시 채점. 작업 003 과제 19, 설계 1절 7단계. 코드는 src/evaluate.py
-# cherry_extract를 mode golden, split all로 돌린 뒤 같은 모델 이름으로 돌린다. 모델을 부르지 않아 비용 차단 태그를 붙이지 않는다
+# cherry_evaluate는 cherry_extract가 남긴 정답 예시 추출을 채점한다. 모델을 부르지 않아 비용 차단 태그를 붙이지 않는다
+# cherry_tune은 프롬프트를 다듬을 때 쓴다. 정답 예시 전체를 추출하고 이어서 채점한다. 모델을 불러 비용 차단 태그를 붙인다
 # 결과는 MLflow 실험 <번들 폴더>/cherry_eval에 실행 하나로 남는다. 화면 왼쪽 Experiments에서 본다
 resources:
   jobs:
@@ -20,10 +21,72 @@ resources:
             parameters:
               - "--silver"
               - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
               - "--model"
               - "{{job.parameters.model}}"
               - "--prompt-version"
               - "{{job.parameters.prompt_version}}"
+              - "--experiment"
+              - "${workspace.root_path}/cherry_eval"
+          environment_key: default
+          timeout_seconds: 900
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../../backend/dist/*.whl
+              - mlflow-skinny
+
+    cherry_tune:
+      name: cherry_tune
+      tags:
+        cherry_guard: ${bundle.target}
+      max_concurrent_runs: 1
+      email_notifications:
+        on_failure: ["${var.alert_email}"]
+      parameters:
+        - name: model
+          default: ""
+        - name: max_tokens
+          default: "25000"
+      tasks:
+        - task_key: extract
+          # 서버리스가 실패한 단계를 저절로 다시 돌리면 모델 요금이 두 번 나온다
+          disable_auto_optimization: true
+          spark_python_task:
+            python_file: ../src/extract.py
+            parameters:
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
+              - "--model"
+              - "{{job.parameters.model}}"
+              - "--mode"
+              - "golden"
+              - "--split"
+              - "all"
+              - "--max-tokens"
+              - "{{job.parameters.max_tokens}}"
+          environment_key: default
+          timeout_seconds: 3600
+        - task_key: evaluate
+          depends_on:
+            - task_key: extract
+          # 카드 하나의 모델 호출이 실패해도 나머지로 채점한다. 다시 돌리면 15장을 모두 다시 불러 요금이 두 번 든다
+          run_if: ALL_DONE
+          spark_python_task:
+            python_file: ../src/evaluate.py
+            parameters:
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
+              - "--model"
+              - "{{job.parameters.model}}"
+              # 판 번호를 비워 방금 추출한 가장 최근 판을 채점한다. 추출과 다른 판을 채점하지 않게 인자로 받지 않는다
               - "--experiment"
               - "${workspace.root_path}/cherry_eval"
           environment_key: default

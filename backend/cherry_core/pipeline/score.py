@@ -10,7 +10,7 @@ import re
 from typing import Any
 
 from cherry_core.catalog.canonical import normalize
-from cherry_core.pipeline.draft import clean_rules, int_keys
+from cherry_core.pipeline.draft import clean_rules, fill_defaults, int_keys
 from cherry_core.pipeline.prompt import _drop_nulls, parse_answer
 
 # 돈과 무관한 글. 4절 4번
@@ -63,16 +63,21 @@ def total_accuracy(per_card: list[dict[str, tuple[int, int]]]) -> dict[str, floa
     return {g: ok / total for g, (ok, total) in sorted(sums.items())}
 
 
-def score_answer(golden_rules: str, answer: str | None) -> dict[str, tuple[int, int]]:
+def score_answer(golden_rules: str, answer: str | None, defaults: dict | None = None) -> dict[str, tuple[int, int]]:
     """정답 예시 규칙 JSON과 모델 답 원문을 칸마다 비교한다. 과제 19.
 
     golden_rules는 silver.golden의 rules다. answer는 cherry_extract가 silver.drafts에 남긴 답 원문이다.
     답을 읽지 못하거나 규칙 형식에 맞지 않으면 정답의 모든 칸을 틀린 것으로 센다. 형식 오류도 모델의 실력이다.
     정답의 null 칸은 채점하지 않는다. 한도 조정의 "제한 없음" null은 모델 답에서 안 적은 것으로 지워져 모델이 맞힐 수 없다.
+    defaults는 그 카드사의 실적 규칙, 신규 회원, 혜택 제외 기본값이다. 모델이 적지 않은 칸을 이 값으로 채워 채점한다.
+    카드 원문에 없는 카드사 공통 규칙을 맞힌 것으로 본다. 카드가 기본값과 다르게 정했는데 모델이 못 적었으면 틀린 것이다.
+    기본값을 그 카드사 카드들의 상품 페이지에서 옮긴 곳이 있어 이 세 묶음 점수는 부풀 수 있다.
+    그래서 채점 작업은 채우지 않은 점수도 같이 남긴다. 2026-10-02 위험 검토
     """
     expected = _drop_nulls(int_keys(json.loads(golden_rules)))
     try:
-        actual = clean_rules(int_keys(parse_answer(answer)["rules"])) if answer else {}
+        raw = int_keys(parse_answer(answer)["rules"]) if answer else None
+        actual = clean_rules(fill_defaults(raw, defaults)) if raw is not None else {}
     except Exception:  # noqa: BLE001 모델의 답은 어떤 모양이든 올 수 있다
         actual = {}
     return field_accuracy(expected, actual)
