@@ -114,6 +114,18 @@ def main(argv: list[str] | None = None) -> None:
     codes = catalog_codes(cat)
     now = F.current_timestamp()
 
+    def to_queue(rows: list[tuple]) -> None:
+        # 검수 대기는 초안 표의 그 초안 행과 맞붙여 카드사 칸을 가져와 쓴다. 계보에 drafts에서 queue로 가는 선이 남는다
+        # 작업 007 설계 2절
+        (
+            spark.createDataFrame(rows, QUEUE_ROW)
+            .drop("issuer")
+            .join(spark.table(f"{s}.drafts").select("draft_id", "issuer"), "draft_id")
+            .withColumn("created_at", now)
+            .write.mode("append")
+            .saveAsTable(f"{s}.queue")
+        )
+
     docs = (
         spark.table(f"{s}.documents")
         .where("card_id IS NOT NULL")
@@ -156,9 +168,7 @@ def main(argv: list[str] | None = None) -> None:
                 )
             )
         if refill:
-            spark.createDataFrame(refill, QUEUE_ROW).withColumn(
-                "created_at", now
-            ).write.mode("append").saveAsTable(f"{s}.queue")
+            to_queue(refill)
         changed = pending_changes(
             [
                 tuple(r)
@@ -332,14 +342,29 @@ def main(argv: list[str] | None = None) -> None:
                 )
             )
 
+    # 초안은 Python에서 만들고, 카드사 칸은 원문 표에서 가져오고 카드는 바뀐 원문 표나 정답 예시 표와 맞붙여 쓴다
+    # 그래야 계보에 그 표들에서 drafts로 가는 선이 남는다. 작업 007 설계 2절
+    cards = (
+        docs.groupBy("card_id")
+        .agg(F.first("issuer").alias("issuer"))
+        .join(
+            (golden if args.mode == "golden" else spark.table(f"{s}.changes"))
+            .select("card_id")
+            .distinct(),
+            "card_id",
+        )
+    )
     columns = DRAFTS.replace(", created_at TIMESTAMP", "")
-    spark.createDataFrame(drafts, columns).withColumn("created_at", now).write.mode(
-        "append"
-    ).saveAsTable(f"{s}.drafts")
+    (
+        spark.createDataFrame(drafts, columns)
+        .drop("issuer")
+        .join(cards, "card_id")
+        .withColumn("created_at", now)
+        .write.mode("append")
+        .saveAsTable(f"{s}.drafts")
+    )
     if queue:
-        spark.createDataFrame(queue, QUEUE_ROW).withColumn(
-            "created_at", now
-        ).write.mode("append").saveAsTable(f"{s}.queue")
+        to_queue(queue)
 
     # 정답 예시 모드는 실적 규칙 빈칸만 남은 답도 고쳐진 것으로 센다. 운영은 그 빈칸을 지금 값으로 채워 초안을 만든다
     # 2026-10-02 판 9에서 다시 물은 9장 중 2장만 고쳐졌다고 찍혔지만 4장은 이런 카드였다
