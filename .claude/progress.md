@@ -27,6 +27,9 @@
 - 2026-10-01 사용자가 이마트 트레이더스와 쿠팡플레이를 이마트, 쿠팡과 다른 가게로 보기로 했다. `catalog/`를 직접 고치지 않는 규칙에 따라 Databricks 세션이 골드에 가맹점 `traders`, `coupang_play`를 넣는다. 아직 안 들어갔다
 - 개발 DB는 `docker compose up -d db`. 이 PC의 Docker Desktop은 꺼져 있을 수 있어 먼저 켠다. 에뮬레이터는 `wj_local`을 창 없이 켰다
 
+작업 007 Databricks 운영 대시보드와 Spark 계산. `docs/work/007-dashboard-spark/`
+- 2026-10-02 사용자가 의도와 설계 두 절을 확인했다. 대시보드에 수집 상태, 검수 대기, 쓴 금액을 담고, 글 뽑기, 바뀐 것 고르기의 목록 부분, 추출, 승인 네 작업이 Spark 안에서 계산하게 바꿔 계보를 잇는다. 같은 날 개발용 대시보드가 떴고 숫자가 SQL과 같았다. 다음은 계획 3단계 커밋과 푸시, 그다음 4단계 판 11 기준 점수
+
 Databricks 운영. 작업 003은 2026-10-02 끝났다. 아래는 다음 일을 할 때 기억할 것이다
 - Databricks에 보내는 명령은 배포, 실행, SQL, 조회까지 모두 사용자가 돌린다. Claude는 파일만 쓰고 명령과 성공 기준을 알려 준다. 2026-09-30 사용자가 정했다. 설계 4절 10번과 `.claude/CLAUDE.md`
 - 카탈로그의 원본은 골드 표 `cherry.gold.catalog_files`다. 바뀐 카탈로그는 검수 앱 `cherry-review-prod`나 손 승인 `cherry_approve`로 골드에 넣고, `export` 워크플로가 저장소에 봇 커밋한다. 새 카드는 `card-researcher`가 임시 사본에 쓰고 손 승인으로 넣는다. 지금 골드 카탈로그 파일 해시는 `55c7370146849f75871129b874fccb4348abc58ca552b06c582c31dbdb44defc`이고 다음 손 승인의 `expect_files`다
