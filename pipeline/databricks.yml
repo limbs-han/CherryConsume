@@ -44,3 +44,10 @@ targets:
         cherry_refresh:
           trigger:
             pause_status: UNPAUSED
+      apps:
+        cherry_review:
+          # 운영 앱은 서비스 주체가 배포한다. 사람 계정이 화면에서 켜고 끄고 코드를 올리게 관리 권한을 준다
+          # 그룹에는 사용자 계정만 있다. 2026-10-02 사용자가 정했다. 개발용은 배포한 사람이 주인이다
+          permissions:
+            - group_name: cherry-admins
+              level: CAN_MANAGE

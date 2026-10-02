@@ -1,0 +1,62 @@
+# 검수 앱. 작업 003 과제 20, 설계 4절 5번. 코드는 apps/review/app.py
+# 앱은 표를 읽기만 하고, 승인과 반려는 작업 cherry_approve가 한다. 그래서 앱의 권한은 읽기, incoming 볼륨 쓰기, 그 작업 실행뿐이다
+# 표와 볼륨을 앱 자원으로 두면 카탈로그와 스키마 사용 권한은 Databricks가 저절로 준다
+# 배포만으로는 켜지지 않는다. 켜져 있는 동안 요금이 나와 검수할 때 켜고 끝나면 끈다. 비용 차단은 한도에서 모든 앱을 끈다
+variables:
+  review_warehouse_id:
+    description: 검수 앱이 쓰는 SQL 웨어하우스. 작업 공간마다 id가 달라 이름으로 찾는다
+    lookup:
+      warehouse: Serverless Starter Warehouse
+
+resources:
+  apps:
+    cherry_review:
+      # 개발용과 운영이 같은 작업 공간이라 이름이 겹치지 않게 대상 이름을 붙인다
+      name: cherry-review-${bundle.target}
+      description: 카드 개정 초안 검수
+      source_code_path: ../apps/review
+      config:
+        command: ["streamlit", "run", "app.py"]
+        env:
+          - name: DATABRICKS_WAREHOUSE_ID
+            value_from: sql-warehouse
+          - name: APPROVE_JOB_ID
+            value_from: approve-job
+          - name: CHERRY_SILVER
+            value: ${resources.schemas.silver.name}
+          - name: CHERRY_GOLD
+            value: ${resources.schemas.gold.name}
+      resources:
+        - name: sql-warehouse
+          sql_warehouse:
+            id: ${var.review_warehouse_id}
+            permission: CAN_USE
+        - name: approve-job
+          job:
+            id: ${resources.jobs.cherry_approve.id}
+            permission: CAN_MANAGE_RUN
+        - name: incoming
+          uc_securable:
+            securable_full_name: cherry.${resources.schemas.gold.name}.incoming
+            securable_type: VOLUME
+            permission: WRITE_VOLUME
+        - name: queue
+          uc_securable:
+            securable_full_name: cherry.${resources.schemas.silver.name}.queue
+            securable_type: TABLE
+            permission: SELECT
+        - name: drafts
+          uc_securable:
+            securable_full_name: cherry.${resources.schemas.silver.name}.drafts
+            securable_type: TABLE
+            permission: SELECT
+        - name: changes
+          uc_securable:
+            securable_full_name: cherry.${resources.schemas.silver.name}.changes
+            securable_type: TABLE
+            permission: SELECT
+        - name: catalog-files
+          uc_securable:
+            securable_full_name: cherry.${resources.schemas.gold.name}.catalog_files
+            securable_type: TABLE
+            permission: SELECT
