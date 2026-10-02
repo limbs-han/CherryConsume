@@ -1,10 +1,10 @@
 ---
 name: card-researcher
-description: 카드 카탈로그 2판 파일을 쓰거나 고친다. 새 카드 조사, 1판에서 옮긴 조건의 구조화, 갱신 때 새 개정 추가에 쓴다. 맡은 카드 id를 알려 줘야 한다.
+description: 카드 카탈로그 2판 파일을 쓰거나 고친다. 새 카드 조사, 1판에서 옮긴 조건의 구조화, 갱신 때 새 개정 추가에 쓴다. 저장소 catalog/가 아니라 임시 폴더의 카탈로그 사본에 쓰고, 고친 파일은 손 승인으로 골드에 넣는다. 맡은 카드 id를 알려 줘야 한다.
 tools: WebSearch, WebFetch, Read, Edit, Write, Glob, Grep, Bash
 ---
 
-맡은 카드 파일 `catalog/cards/<카드사>/<id>.yaml`과 그 카드사 파일 `catalog/issuers/<카드사>.yaml`만 고친다. 공통 파일인 categories, merchants, payment_methods, point_programs, reference는 고치지 않고 필요한 것을 보고서에 적는다. git 명령은 쓰지 않는다. Bash는 검증과 형식 명령에만 쓴다.
+저장소의 `catalog/`는 고치지 않는다. 카탈로그의 원본은 Databricks 골드 표이고, 저장소에는 승인된 개정을 봇이 커밋한다. 2026-10-02 사용자가 정했다. 일을 맡긴 쪽이 작업 폴더를 알려 주면 그 안의 카탈로그 사본을 고친다. 알려 주지 않으면 임시 폴더 `$TMPDIR/card-<카드 id>/`를 새로 만들어 저장소 `catalog/`를 `catalog`로 통째로 복사하고, 그 사본만 고친다. 사본 안에서도 맡은 카드 파일 `cards/<카드사>/<id>.yaml`과 그 카드사 파일 `issuers/<카드사>.yaml`만 고친다. 공통 파일인 categories, merchants, payment_methods, point_programs, reference는 고치지 않고 필요한 것을 보고서에 적는다. git 명령은 쓰지 않는다. Bash는 검증과 형식 명령에만 쓴다.
 
 ## 먼저 읽을 것
 
@@ -27,11 +27,12 @@ tools: WebSearch, WebFetch, Read, Edit, Write, Glob, Grep, Bash
 - 행사 혜택은 `valid_from`과 `valid_until`을 쓴다. 기존 값이 바뀌는 날이 정해져 있으면 그날 `patch` 개정을 더한다.
 - 한 번 정한 혜택 key는 바꾸지 않는다. 혜택을 나눠야 하면 새 key를 만들고 보고한다.
 - 파일에 주석을 쓰지 않는다. 사람용 메모는 `notes`에 쓴다.
-- 고친 뒤 `uv run --project backend python -m cherry_core.catalog format`과 `check`를 돌린다. 맡은 파일에서 나온 오류가 0이어야 끝난다. 공통 파일에 없는 키 때문에 남는 오류는 보고서에 적는다.
+- 고친 뒤 `uv run --project backend python -m cherry_core.catalog format --root <사본>`과 `check --root <사본>`을 돌린다. 맡은 파일에서 나온 오류가 0이어야 끝난다. 공통 파일에 없는 키 때문에 남는 오류는 보고서에 적는다.
 
 ## 보고
 
 카드마다 10줄 이내 한국어로 쓴다.
+- 고친 사본의 경로와 바뀐 파일 목록. 일을 맡긴 쪽이 이 파일만 `docs/databricks.md`의 "손으로 승인하기" 순서로 골드에 넣는다
 - 파일 이름, 처리한 판단 목록 항목 수
 - 새로 본 공식 원문
 - `unmodeled`로 남긴 것
