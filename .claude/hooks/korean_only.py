@@ -4,6 +4,7 @@
 코드 블록, 인라인 코드, 주소는 빼고 본다. 한글이 한 글자도 없고 영어 낱말이 4개 이상인 줄을 영어 문장으로 본다.
 화면의 영어 메뉴 이름이 섞인 한국어 문장은 한글이 있어 걸리지 않는다.
 같은 줄로 두 번 막지 않는다. 막은 줄은 임시 파일에 적어 두고, 그 줄만 남았으면 통과시킨다.
+영어 줄이 한 줄뿐이면 막지 않는다. 2026-10-02 사용자가 정했다. 도구 사이 진행 문장 한 줄로 답 전체를 다시 쓰게 하면 낭비가 크다.
 """
 
 import hashlib
@@ -21,6 +22,7 @@ FENCE = re.compile(r"```.*?```", re.DOTALL)
 INLINE = re.compile(r"`[^`\n]*`")
 URL = re.compile(r"https?://\S+|\]\([^)]*\)")
 MIN_WORDS = 4
+MIN_LINES = 2  # 이 줄 수부터 막는다
 
 
 def turn_texts(transcript: str) -> list[str]:
@@ -65,7 +67,7 @@ def main() -> int:
     if not transcript or not os.path.exists(transcript):
         return 0
     lines = [line for text in turn_texts(transcript) for line in english_lines(text)]
-    if not lines:
+    if len(lines) < MIN_LINES:
         return 0
     state = os.path.join(
         tempfile.gettempdir(), f"korean_only_{data.get('session_id', 'x')}.txt"
