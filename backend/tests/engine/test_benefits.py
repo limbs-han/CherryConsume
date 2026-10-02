@@ -380,7 +380,7 @@ def test_ranked_area_and_final(engine):
     ],
 )
 def test_ranked_area_cancellation_month(engine, way, expected):
-    # E55. 삼성 iD ON은 "영역 이용금액의 취소는 매출취소전표 접수월에 반영"이다. 순위 영역 이용액에서 취소를 빼는 달은
+    # E55. 삼성 iD ON은 "결제 취소건의 경우, 매출취소전표 접수월의 3개 영역 합산 이용금액 및 영역별 이용금액에 반영"이다. 순위 영역 이용액에서 취소를 빼는 달은
     # 카드 칸 ranked[].cancellation을 따른다. 8월 2일 이디야 1만 원 가운데 5천 원을 9월 3일 취소했다
     benefits = [
         b(
