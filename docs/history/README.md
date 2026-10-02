@@ -78,3 +78,5 @@
 | [35](35-gold-seed.md) | 2026-10-01 | 골드 카탈로그 첫 적재 |
 | [36](36-manual-approval-merchants.md) | 2026-10-01 | 손 승인 작업과 가맹점 두 개 추가 |
 | [37](37-slice4-review-fixes.md) | 2026-10-02 | 슬라이스 4 위험 검토 지적 고치기 |
+| [38](38-ranked-cancel-month-and-unknown-answers.md) | 2026-10-02 | 순위 영역 취소 달 칸과 슬라이스 5 모르는 값 묻기 |
+| [39](39-excel-import.md) | 2026-10-02 | 슬라이스 6 이용 내역 엑셀 가져오기 |
