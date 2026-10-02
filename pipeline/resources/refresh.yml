@@ -3,7 +3,7 @@
 # 실행 시간 제한은 설계 4절 8번의 시작값이다. 과제 15와 18에서 잰 시간의 두 배로 고친다
 variables:
   list_model:
-    description: 카드사 목록에서 카드 이름을 뽑을 모델. 비면 목록은 보지 않는다. 과제 19에서 모델을 고른 뒤 다시 본다
+    description: 카드사 목록에서 카드 이름을 뽑을 모델. 비면 목록은 보지 않는다. 과제 19에서 추출과 같은 모델로 정했다
     default: "system.ai.gpt-oss-120b"
   list_issuers:
     description: 목록을 볼 카드사 id를 쉼표로 잇는다. 설계 1절 3단계. 2026-09-30 사용자가 정했다
@@ -57,7 +57,7 @@ resources:
         - task_key: extract
           depends_on:
             - task_key: changes
-          # 2026-10-01 과제 18. extract_model이 비면 추출하지 않고 끝난다. 과제 19에서 모델을 고른 뒤 넣는다
+          # 2026-10-01 과제 18. extract_model이 비면 추출하지 않고 끝난다. 개발용은 비어 있다
           # 다시 돌면 모델 요금이 두 번 나와 자동 재시도를 끈다
           disable_auto_optimization: true
           spark_python_task:

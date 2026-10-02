@@ -33,6 +33,9 @@ targets:
     # 운영 배포는 GitHub Actions가 서비스 주체로만 한다. alert_email은 비밀값 ALERT_EMAIL에서 받는다
     # workspace.root_path를 적지 않는다. 적지 않으면 사람 계정으로 운영 배포할 때 오류로 멈춘다
     mode: production
+    variables:
+      # 2026-10-02 과제 19 3단계에서 사용자가 골랐다. 설계 4절 3번
+      extract_model: system.ai.gpt-oss-120b
     resources:
       jobs:
         cherry_cost_guard:
