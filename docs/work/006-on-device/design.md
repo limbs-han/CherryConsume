@@ -139,6 +139,7 @@ Python 엔진 `backend/cherry_core/engine/` 1,491줄을 Dart로 옮긴다. 시�
 
 열 때
 - 표 정의는 번호 붙은 SQL 목록으로 앱 코드에 둔다. `PRAGMA user_version`에 돌린 번호를 적고 열 때마다 남은 것을 한 트랜잭션에서 돌린다. 이미 낸 번호의 SQL은 고치지 않고 새 번호로 더한다. 서버 마이그레이션과 같은 규칙이다
+- DB 파일은 Android 앱 전용 폴더 `filesDir`에 둔다. Dart만으로는 그 폴더를 몰라 MainActivity의 Kotlin 몇 줄이 알려 준다. 경로 패키지를 더 넣지 않는다. 앱을 지우면 함께 지워지고 자동 백업은 끈다. 2026-10-02 사용자가 정했다
 - 열 때마다 `PRAGMA foreign_keys = ON`을 켠다. SQLite는 기본이 꺼져 있다
   - 표를 바꾸는 동안은 끄고, 커밋 전에 `PRAGMA foreign_key_check`로 어긋난 것이 없는지 본 뒤 켠다. SQLite 권장 순서다. 외래 키는 트랜잭션 안에서 끌 수 없어, 켠 채로 표를 다시 만들면 옛 표를 지울 때 결제가 함께 지워지거나 실패한다
   - `begin immediate`로 시작한다. 앱보다 큰 번호의 DB는 열지 않는다. 모르는 표 모양에 쓰면 기록이 깨진다
