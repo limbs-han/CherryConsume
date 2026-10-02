@@ -117,6 +117,11 @@ def resume_or_start(mine: dict | None, unfinished: list[dict], gold_digest: str,
     others = [r for r in unfinished if not mine or r["review_id"] != mine["review_id"]]
     if others:
         r = others[0]
+        if r.get("draft_id"):
+            # 끊긴 앱 승인을 손 승인으로 이으면 저장 형식 맞추기와 대기 건 닫기가 빠진다. 2026-10-02 다시 검토
+            raise ValueError(
+                f"끊긴 앱 승인 {r['review_id']}이 있다. 검수 앱에서 초안 {r['draft_id']}을 다시 승인해 먼저 끝낸다"
+            )
         raise ValueError(
             f"끊긴 승인 {r['review_id']}이 있다. 폴더 이름 {r['source']}, 제목 '{r['subject']}'로 다시 돌려 먼저 끝낸다"
         )
@@ -140,3 +145,58 @@ def commit_json(subject: str, review_id: str, base: str, result: str) -> str:
     """export가 읽을 commit.json. base와 result는 승인 전과 후의 골드 카탈로그 해시다. 커밋 훅이 막을 제목이면 ValueError."""
     commit_message(subject, review_id)
     return json.dumps({"subject": subject, "review_id": review_id, "base": base, "result": result}, ensure_ascii=False)
+
+
+def draft_subject(text: str, old: str | None = None) -> str:
+    """검수 앱이 승인한 카드 파일의 커밋 제목. 작업 003 과제 20. old는 승인 전 골드의 같은 파일이다.
+
+    판매 중이던 카드가 멈췄으면 발급 중단으로 적는다. 아니면 바뀐 개정 가운데 마지막 것의 시행일을 쓴다.
+    바뀐 개정이 없으면 마지막 개정의 시행일이다. 2026-10-02 위험 검토.
+    """
+    card = yaml.safe_load(text)
+    before = yaml.safe_load(old) if old else {}
+    if card.get("status") != "on_sale" and before.get("status", "on_sale") == "on_sale":
+        return f"feat: {card['name']} 발급 중단 반영"
+    olds = before.get("revisions", [])
+    # 순번이 아니라 들어 있는지로 견준다. 과거 개정을 가운데 끼우면 뒤 순번이 밀리기 때문이다. 다시 검토
+    changed = [r for r in card["revisions"] if r not in olds]
+    return f"feat: {card['name']} {(changed or card['revisions'])[-1]['effective_from']} 개정 반영"
+
+
+def draft_plan(decision: str, records: list[dict]) -> tuple[str, str | None]:
+    """검수 앱이 초안 하나를 승인하거나 반려할 때 할 일과 이어 할 incoming 폴더 이름. 작업 003 과제 20.
+
+    records는 그 초안의 검수 기록 {decision, source, finished}다. 할 일은 start, resume, close, reject다.
+    앱은 버튼마다 새 폴더 이름을 만들어서, 끊긴 앱 승인은 기록의 폴더로 이어 한다. 끝났으면 대기 건만 닫는다.
+    같은 초안에 승인과 반려가 함께 남지 않게 막는다. 2026-10-02 위험 검토.
+    """
+    approved = [r for r in records if r["decision"] == "approved"]
+    if decision == "reject":
+        if approved:
+            raise ValueError("승인한 초안이다. 반려하지 않는다. 대기 건이 열려 있으면 승인을 다시 누르면 닫힌다")
+        return ("close", None) if any(r["decision"] == "rejected" for r in records) else ("reject", None)
+    if any(r["decision"] == "rejected" for r in records):
+        raise ValueError(
+            "반려한 초안이다. 대기 건이 열려 있으면 반려를 다시 누르면 닫힌다. 다시 넣으려면 지금 골드 판에 손 승인으로 넣는다"
+        )
+    if not approved:
+        return "start", None
+    return ("close", None) if approved[-1]["finished"] else ("resume", approved[-1]["source"])
+
+
+def stale_exports(names: list[str], now: datetime, hours: int = 36) -> list[str]:
+    """내보내기 pending/에 hours보다 오래 남은 폴더. export는 매일 돌아 이런 폴더가 있으면 커밋에 실패한 것이다.
+
+    그 위에 앱 승인을 쌓으면 뒤 폴더가 모두 걸린다. 2026-10-02 사용자가 정했다. 검수 번호 모양이 아닌 이름도 남은 것으로 본다.
+    예약 실행이 늦거나 한 번 건너뛸 수 있어 하루가 아니라 36시간을 넘은 것만 센다.
+    """
+    out = []
+    for name in names:
+        try:
+            made = datetime.strptime(name[2:18], "%Y%m%dT%H%M%SZ").replace(tzinfo=now.tzinfo)
+        except ValueError:
+            out.append(name)
+            continue
+        if not name.startswith("r-") or (now - made).total_seconds() > hours * 3600:
+            out.append(name)
+    return out

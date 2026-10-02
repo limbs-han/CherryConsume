@@ -199,3 +199,71 @@ def test_resume_or_start(mine, unfinished, gold, expect, outcome):
             resume_or_start(mine, unfinished, gold, expect)
     else:
         assert resume_or_start(mine, unfinished, gold, expect) == outcome
+
+
+def test_draft_subject_names_the_card_and_the_changed_revision():
+    # 과제 20. 검수 앱 승인은 제목을 비워 보내고 작업이 카드 파일로 만든다. 삼성 iD ON의 마지막 개정은 2026-07-30이다
+    from cherry_core.pipeline.approve import draft_subject
+
+    text = GOLD["cards/samsung/samsung-id-on.yaml"]
+    card = yaml.safe_load(text)
+    assert draft_subject(text) == "feat: 삼성 iD ON 카드 2026-07-30 개정 반영"
+    assert SUBJECT.fullmatch(draft_subject(text))
+    # 2026-10-02 위험 검토. 바뀐 개정의 시행일을 쓰고, 판매 중이던 카드가 멈췄을 때만 발급 중단이다
+    first = canonical_text({**card, "revisions": [{**card["revisions"][0], "source": "disclosure"}, *card["revisions"][1:]]})
+    assert draft_subject(first, text) == "feat: 삼성 iD ON 카드 2021-09-01 개정 반영"
+    gone = canonical_text({**card, "status": "discontinued"})
+    assert draft_subject(gone, text) == "feat: 삼성 iD ON 카드 발급 중단 반영"
+    assert draft_subject(gone, gone) == "feat: 삼성 iD ON 카드 2026-07-30 개정 반영"  # 이미 멈춘 카드
+    # 과거 개정을 가운데 끼우면 뒤 개정의 순번이 밀려도 끼운 개정의 시행일을 쓴다. 다시 검토
+    middle = {**card["revisions"][1], "effective_from": "2024-03-01"}
+    inserted = canonical_text({**card, "revisions": [card["revisions"][0], middle, card["revisions"][1]]})
+    assert draft_subject(inserted, text) == "feat: 삼성 iD ON 카드 2024-03-01 개정 반영"
+
+
+@pytest.mark.parametrize(
+    ("decision", "records", "plan"),
+    [
+        ("approve", [], ("start", None)),
+        ("approve", [{"decision": "approved", "source": "app-1", "finished": False}], ("resume", "app-1")),
+        ("approve", [{"decision": "approved", "source": "app-1", "finished": True}], ("close", None)),
+        ("reject", [], ("reject", None)),
+        ("reject", [{"decision": "rejected", "source": None, "finished": True}], ("close", None)),
+    ],
+)
+def test_draft_plan_resumes_or_closes_instead_of_doing_it_twice(decision, records, plan):
+    # 2026-10-02 위험 검토. 앱은 버튼마다 새 폴더 이름을 만든다. 끊긴 앱 승인은 그 기록의 폴더로 이어 하고, 끝났으면 대기 건만 닫는다
+    from cherry_core.pipeline.approve import draft_plan
+
+    assert draft_plan(decision, records) == plan
+
+
+@pytest.mark.parametrize(
+    ("decision", "records", "reason"),
+    [
+        ("reject", [{"decision": "approved", "source": "app-1", "finished": False}], "승인한 초안"),
+        ("approve", [{"decision": "rejected", "source": None, "finished": True}], "반려한 초안"),
+    ],
+)
+def test_draft_plan_never_leaves_approval_and_rejection_together(decision, records, reason):
+    from cherry_core.pipeline.approve import draft_plan
+
+    with pytest.raises(ValueError, match=reason):
+        draft_plan(decision, records)
+
+
+def test_resume_message_sends_an_app_approval_back_to_the_app():
+    # 다시 검토. 끊긴 앱 승인을 손 승인으로 이으면 저장 형식 맞추기와 대기 건 닫기가 빠진다
+    unfinished = [{"review_id": "r-20261002T090000Z-draft", "source": "app-1", "subject": "feat: 카드 개정 반영", "draft_id": "d-1"}]
+    with pytest.raises(ValueError, match="검수 앱에서 초안 d-1을 다시 승인"):
+        resume_or_start(None, unfinished, "x", "x")
+
+
+def test_stale_exports_are_pending_folders_older_than_a_day_and_a_half():
+    # 2026-10-02 사용자가 정했다. export는 매일 돌아 오래 남은 폴더는 실패한 것이다. 그 위에 앱 승인을 쌓지 않는다
+    # 예약 실행이 늦을 수 있어 36시간을 넘은 것만 센다. 다시 검토
+    from cherry_core.pipeline.approve import stale_exports
+
+    now = datetime(2026, 10, 3, 21, 0, tzinfo=UTC)
+    names = ["r-20261002T080459Z-ranked-cancel", "r-20261003T083000Z-draft", "bad-name"]
+    assert stale_exports(names, now) == ["r-20261002T080459Z-ranked-cancel", "bad-name"]
