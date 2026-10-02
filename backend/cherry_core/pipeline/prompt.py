@@ -21,8 +21,9 @@ from cherry_core.pipeline.draft import clean_rules
 # 7: 형식 검사에 걸린 답은 오류를 알려 주고 한 번 더 묻기. retry_prompt
 # 8: 다시 물을 때 필수 칸은 빼지 않고 그대로 두기, 정답 예시는 기본값으로 채워 맞으면 다시 묻지 않기
 # 9: 정답 예시는 카드사 기본값으로 채운 뒤 남는 오류만 알려 주기
-# 10: 순위 영역 취소 달 설명. 2026-10-02 주 개발 세션 E55 검토
-VERSION = "10"
+# 10: 순위 영역 취소 달 설명
+# 11: 정답 예시 추출은 지금 혜택의 제목을 주지 않기. 2026-10-02 사용자가 정했다
+VERSION = "11"
 # 형식 예시로 보여 줄 다듬기용 카드. 형식 요소를 고루 가진 짧은 카드다. 앞의 것을 쓰고, 자기 자신을 추출할 때는 다음 것을 쓴다
 # 채점 전용 카드가 없는 카드사에서 골랐다. 같은 카드사 카드는 규칙이 닮아 예시를 베끼면 채점 점수가 부푼다. 2026-10-02 위험 검토
 EXAMPLE_CARDS = ("nh-heroes-check", "lotte-loca365")
@@ -147,13 +148,19 @@ def build_prompt(
     docs: list[tuple[str, str]],
     codes: dict[str, list[str]],
     example: tuple[str, dict] | None = None,
+    titles: bool = True,
 ) -> str:
-    """card는 카드 파일, current는 지금 합친 규칙, docs는 (원문 id, 글) 목록, example은 example_for의 값이다."""
+    """card는 카드 파일, current는 지금 합친 규칙, docs는 (원문 id, 글) 목록, example은 example_for의 값이다.
+
+    titles는 정답 예시 추출에서 끈다. 그때 지금 혜택은 정답 카드의 혜택이고, 제목에 비율과 대상이 들어 있어 베끼면 점수가 부푼다.
+    """
     benefits = [{"key": b["key"], "title": b["title"]} for b in current.get("benefits", [])]
     parts = [
         INSTRUCTIONS,
         f"카드: {card['name']} ({card['id']})",
-        "지금 혜택: " + json.dumps(benefits, ensure_ascii=False),
+        "지금 혜택: " + json.dumps(benefits, ensure_ascii=False)
+        if titles
+        else "지금 혜택 key: " + (", ".join(b["key"] for b in benefits) or "없음"),
         # 이름만 준다. 2026-10-02 판 4에서 key와 기간을 주었더니 모델이 그 모양을 베껴 금액 없는 한도를 적었다
         # 기간은 정답 예시 채점에서 정답이 그대로 샌다. 위험 검토
         "지금 한도 key: " + (", ".join(x["key"] for x in current.get("limits", [])) or "없음"),

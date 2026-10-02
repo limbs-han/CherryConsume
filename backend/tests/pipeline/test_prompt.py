@@ -155,3 +155,14 @@ def test_instructions_explain_ranked_cancellation():
         "- ranked의 cancellation은 순위 영역 이용금액의 취소를 어느 달에 반영하는지다. "
         "원문에 순위 영역의 취소를 따로 적었을 때만 쓰고, spend.cancellation을 옮겨 적지 않는다.\n"
     ) in INSTRUCTIONS
+
+
+def test_golden_prompt_shows_benefit_keys_without_titles(make_catalog):
+    # 2026-10-02 정답 예시 채점에서 지금 혜택은 정답 카드의 혜택이다. 제목에 비율과 대상이 들어 있어 베끼면 점수가 부푼다
+    card = FILES["cards/shinhan/shinhan-test.yaml"]
+    current = {"benefits": [{"key": "cafe-10", "title": "카페 10% 할인"}]}
+    codes = catalog_codes(load_catalog(make_catalog()))
+    prompt = build_prompt(card, current, [], codes, titles=False)
+    assert "지금 혜택 key: cafe-10" in prompt.splitlines()
+    assert "카페 10% 할인" not in prompt
+    assert "카페 10% 할인" in build_prompt(card, current, [], codes)  # 바뀐 원문 추출은 제목도 준다

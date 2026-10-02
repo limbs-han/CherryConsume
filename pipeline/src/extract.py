@@ -216,6 +216,8 @@ def main(argv: list[str] | None = None) -> None:
                     [(r.source_id, r.text) for r in card_docs],
                     codes,
                     example[:2] if example else None,
+                    # 정답 예시는 혜택 제목을 주지 않는다. 제목이 정답을 알려 준다. 설계 1절 4단계 판 11
+                    titles=args.mode == "changes",
                 ),
             )
         )
