@@ -38,7 +38,7 @@ Databricks AI/BI 대시보드 하나를 번들 자원으로 둔다. 화면 한 �
 
 ### 원칙
 
-1. **행이나 카드마다 하는 계산은 pandas UDF로 Spark 안에서 한다.** pandas UDF는 Python 함수를 Spark가 나눠 돌리게 하는 장치다. `mapInPandas`는 행 묶음마다, `applyInPandas`는 카드처럼 같은 값끼리 묶어 돌린다. 판단 코드는 `cherry_core` 그대로 두고, pandas 표를 받아 pandas 표를 돌려주는 얇은 감싸개만 `cherry_core.pipeline`에 새로 둔다. 감싸개는 Spark 없이 테스트한다.
+1. **행이나 카드마다 하는 계산은 pandas UDF로 Spark 안에서 한다.** pandas UDF는 Python 함수를 Spark가 나눠 돌리게 하는 장치다. `mapInPandas`는 행 묶음마다, `applyInPandas`는 카드처럼 같은 값끼리 묶어 돌린다. 판단 코드는 `cherry_core` 그대로 두고, 행 하나를 받아 쓸 값을 돌려주는 얇은 감싸개만 `cherry_core.pipeline`에 새로 둔다. 감싸개는 Spark 없이 테스트한다. 2026-10-02 5단계에서 고쳤다. pandas는 서버리스 작업 환경에는 있지만 `cherry_core`의 의존성에는 없다. 그래서 pandas 표를 다루는 몇 줄은 작업 파일에 둔다.
 2. **모델과 문서 해석은 한 번만 부른다.** 서버리스는 DataFrame 캐시를 쓸 수 없다. 공식 문서의 서버리스 제한이다. Spark는 같은 DataFrame을 두 번 쓰면 계산을 처음부터 다시 해서 `ai_query`와 `ai_parse_document`를 또 부른다. 그래서 그 결과는 쓰기 한 번으로 먼저 표에 넣고, 다음 단계는 그 표를 다시 읽는다. 개수를 세는 것도 다시 읽은 표에서 한다.
 3. **카탈로그 전체를 보는 판단은 Python에 둔다.** 승인 검사는 카드 하나가 아니라 카탈로그 전체를 함께 봐야 한다. 그래서 계산은 지금처럼 하고, 쓸 때 원래 표와 맞붙여 선만 잇는다. 2026-10-02 바뀐 것 고르기에서 쓴 방법이다.
 
@@ -46,14 +46,12 @@ Databricks AI/BI 대시보드 하나를 번들 자원으로 둔다. 화면 한 �
 
 | 작업 | 바꾸는 것 | 생기는 선 |
 |---|---|---|
-| 글 뽑기 `documents.py` | 새 원문은 `bronze.fetches`에서 Spark로 고른다. 파일은 `binaryFile`로 읽고, HTML 글 뽑기와 지문은 `mapInPandas`, PDF는 지금처럼 `ai_parse_document`다. 같은 내용은 처음 경로 하나만 해석하고 나머지는 이미 뽑은 글과 맞붙인다. 쓰기는 한 번이다 | `fetches` → `documents` |
-| 바뀐 것 고르기의 목록 부분 `changes.py` | 목록 원문의 바뀐 줄을 `mapInPandas`로 구하고, 이름 뽑기 `ai_query`를 그 DataFrame에 건다. `card_lists`에 먼저 쓰고, 검수 대기에 올릴 새 카드와 사라진 카드는 다시 읽은 `card_lists`와 골드 카탈로그 이름으로 고른다 | `documents` → `card_lists` → `queue` |
-| 추출 `extract.py` | 카드마다 원문을 묶어 `applyInPandas`로 프롬프트를 만들고, `ai_query`를 걸고, `mapInPandas`로 답을 검사해 `drafts`에 한 번에 쓴다. 다시 물을 카드는 다시 읽은 `drafts`의 오류와 같은 감싸개로 다시 만든 프롬프트로 한 번 더 묻고, 결과를 `drafts`에 MERGE한다. 검수 대기는 다시 읽은 `drafts`에서 고른다 | `documents`, `changes`, `golden` → `drafts` → `queue` |
+| 글 뽑기 `documents.py` | 새 원문은 `bronze.fetches`에서 Spark로 고른다. 파일은 `binaryFile`로 읽고, 글 뽑기와 지문은 열 하나를 계산하는 pandas UDF, PDF 해석은 지금처럼 `ai_parse_document`다. 같은 내용은 처음 경로 하나만 해석하고 나머지는 이미 뽑은 글과 맞붙인다. 쓰기는 한 번이다 | `fetches` → `documents` |
+| 바뀐 것 고르기의 목록 부분 `changes.py` | 바뀐 줄과 이름 뽑기는 지금처럼 카드사마다 한다. 뽑은 이름은 문서 표와 맞붙여 `card_lists`에 쓰고, 새 카드와 사라진 카드는 방금 쓴 `card_lists` 행과 맞붙여 검수 대기에 쓴다. 2026-10-02 6단계에서 원칙 3의 방법으로 고쳤다. 목록은 하루에 카드사 셋이라 Spark로 나눠 돌릴 것이 없고, 모델 호출 수와 선은 같다 | `documents` → `card_lists` → `queue` |
+| 추출 `extract.py` | 프롬프트 만들기, `ai_query`, 답 검사, 다시 묻기는 지금 그대로다. 초안은 카드사 칸을 원문 표에서 가져오고, 바뀐 원문 표나 정답 예시 표의 카드와 맞붙여 쓴다. 검수 대기는 방금 쓴 초안 행과 맞붙여 쓴다. 2026-10-02 사용자가 이 방법을 골랐다. 프롬프트와 판단이 그대로라 점수가 바뀔 일이 없고, 골드와 모델 요금에 닿는 코드를 크게 고치지 않는다 | `documents`, `changes`, `golden` → `drafts` → `queue` |
 | 승인 `approve.py` | 검사와 쓰기 순서는 그대로다. 검수 앱 승인일 때 골드에 쓸 행을 그 초안의 `drafts` 행과 맞붙여 쓴다 | `drafts` → `catalog_files`, `card_revisions` |
 
-- `drafts`에 칸 둘을 더한다. 한 번 실행을 묶는 `batch_id`와, 다시 묻기에 쓸 칸마다의 오류 `errors`다. 기존 행은 비어 있다.
-- 카탈로그는 감싸개가 쓰도록 파일 내용을 넘긴다. 각 Python 작업자는 카탈로그를 한 번만 읽어 둔다. 카드 20장이라 1GB인 UDF 메모리 한도와는 거리가 멀다.
-- 프롬프트는 표에 남기지 않는다. 다시 물을 때는 같은 감싸개로 다시 만든다. 같은 입력이면 같은 프롬프트다.
+- 2026-10-02 추출을 맞붙이기로 바꿔, `drafts`에 칸을 더하지 않는다. 처음 설계는 한 번 실행을 묶는 `batch_id`와 다시 묻기에 쓸 오류 `errors` 칸을 더하고, 프롬프트는 표에 남기지 않고 같은 감싸개로 다시 만들기로 했다.
 
 ### 확인
 
