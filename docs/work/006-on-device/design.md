@@ -18,7 +18,8 @@ catalog/  카탈로그 모델, 앱에 담은 파일 읽기, 새 파일 내려받
 - 엔진은 지금 Python 엔진처럼 DB도 화면도 모르는 순수 Dart다. 입력은 카탈로그와 결제 목록, 출력은 실적 현황과 추천 순위다. 현재 시각은 인자로 받는다. 같은 입력은 늘 같은 출력이다
 - 달 경계는 한국 시간이다. 한국은 서머타임이 없어 UTC에 9시간을 더해 센다. 시간대 패키지를 넣지 않는다
 - 새로 넣는 패키지는 `sqlite3`와 시험에서 YAML 표를 읽는 `yaml` 둘이다. 엑셀 읽기는 5절에서 정한다
-- 처음에는 `sqflite`와 `sqflite_common_ffi`였다. 2026-10-02 사용자가 `sqlite3` 하나로 바꾸기로 했다. `sqflite`는 폰에 든 SQLite를 써서 Android 판마다 SQLite 판이 다르다. 오래된 폰에는 서버가 쓰던 `ON CONFLICT DO UPDATE`, `RETURNING`, `FILTER`가 없을 수 있다. 그런데 PC 시험은 새 SQLite로 돌아 그 차이를 잡지 못한다. `sqlite3` 3.7은 SQLite를 앱에 함께 묶어 Android와 Windows 시험에서 같은 판이 돈다. 묶는 데 Flutter의 빌드 훅을 쓰고 이 PC의 Flutter 3.44가 받는다. 앱이 1MB쯤 커진다. 실제로 PC 시험과 폰에서 판이 같은지는 계획 첫 단계에서 확인한다
+- 처음에는 `sqflite`와 `sqflite_common_ffi`였다. 2026-10-02 사용자가 `sqlite3` 하나로 바꾸기로 했다. `sqflite`는 폰에 든 SQLite를 써서 Android 판마다 SQLite 판이 다르다. 오래된 폰에는 서버가 쓰던 `ON CONFLICT DO UPDATE`, `RETURNING`, `FILTER`가 없을 수 있다. 그런데 PC 시험은 새 SQLite로 돌아 그 차이를 잡지 못한다. `sqlite3`는 SQLite를 앱에 함께 묶어 Android와 Windows 시험에서 같은 판이 돈다. 묶는 데 Flutter의 빌드 훅을 쓴다. 앱이 1MB쯤 커진다
+- 판은 3.5.2다. 3.6부터는 `meta` 1.19가 필요한데 Flutter 3.44가 `meta` 1.18에 묶여 있다. Flutter를 올리면 함께 올린다. 2026-10-02 PC 시험과 에뮬레이터 Android 16에서 둘 다 SQLite 3.53.4로 돌고, 서버가 쓰던 세 문법이 된다. `test/sqlite_test.dart`, `integration_test/sqlite_test.dart`
 - 로그인이 없어 시작 화면은 바로 홈으로 간다. 카드가 없으면 빈 홈이다
 
 ## 2. 카탈로그 파일과 내려받기
@@ -29,7 +30,7 @@ catalog/  카탈로그 모델, 앱에 담은 파일 읽기, 새 파일 내려받
 
 - Python이 `catalog/`를 읽고 검사한 뒤 `app/assets/catalog.json` 한 파일로 쓴다. 명령은 `uv run --project backend python -m cherry_core.catalog json`이다
 - JSON에는 카드사 기본값과 패치를 이미 합친 모양을 쓴다. 카드마다 개정 목록이 있고 개정마다 완성된 규칙이 있다. Dart는 합치는 규칙을 몰라도 된다
-- 한국 공휴일도 JSON에 넣는다. Python의 `holidays` 패키지로 2020년부터 만든 해의 10년 뒤까지 적는다. Dart에 공휴일 패키지를 넣지 않는다. 범위 밖의 날은 엔진이 모름으로 본다. 정부가 임시공휴일을 정하면 `holidays` 패키지를 올리고 JSON을 다시 만들어야 폰에 간다
+- 한국 공휴일도 JSON에 넣는다. Python의 `holidays` 패키지로 2020년부터 2036년까지 적는다. 만든 해로 정하면 해가 바뀔 때 다시 만든 파일이 커밋된 파일과 달라져, 끝 해를 코드에 두고 다가오면 올린다. Dart에 공휴일 패키지를 넣지 않는다. 범위 밖의 날은 엔진이 모름으로 본다. 정부가 임시공휴일을 정하면 `holidays` 패키지를 올리고 JSON을 다시 만들어야 폰에 간다
 - 근거 문장과 메모도 그대로 둔다. 카드 20장에 918KB이고 내려받을 때 압축돼 90KB다. 빼도 압축하면 75KB라 나눌 값이 없다
 - 만든 시각은 넣지 않는다. 넣으면 다시 만들 때마다 값이 달라져 아래의 같은지 검사가 늘 실패한다
 - 맨 위에 `schema` 번호를 둔다. 앱이 아는 번호보다 크면 그 파일은 쓰지 않는다. 새 칸이 생긴 카탈로그를 옛 앱이 잘못 읽지 않게 한다

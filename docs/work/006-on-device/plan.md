@@ -10,19 +10,19 @@
 
 ## 단계 1. 준비
 
-- [ ] 1. `sqlite3` 3.7을 앱에 넣고 SQLite 판을 본다
+- [x] 1. `sqlite3`를 앱에 넣고 SQLite 판을 본다. 2026-10-02 `sqlite3` 3.5.2. 3.6부터는 Flutter 3.44의 `meta` 1.18과 맞지 않는다. PC와 에뮬레이터 Android 16 모두 SQLite 3.53.4이고 세 문법이 된다
   - 검증: PC의 `flutter test`와 에뮬레이터에서 `select sqlite_version()`이 같은 판이고 3.35 이상이다. `ON CONFLICT DO UPDATE`, `RETURNING`, `FILTER`를 쓰는 시험이 PC에서 통과한다. 실제 폰은 단계 8에서 다시 본다
-- [ ] 2. JSON 만들기 명령 `uv run --project backend python -m cherry_core.catalog json`
+- [x] 2. JSON 만들기 명령 `uv run --project backend python -m cherry_core.catalog json`. 2026-10-02 `cherry_core/catalog/app_json.py`. `catalog.json` 974KB, 시안 23KB. 개정 지문 함수를 서버와 함께 쓴다. 시험 `tests/catalog/test_app_json.py` 6개
   - `catalog/`를 검사하고 `app/assets/catalog.json`을 만든다. 시안 카탈로그로 `app/test/fixtures/mockup_catalog.json`도 만든다
-  - 형식 번호, 합친 개정, 2020년부터 만든 해의 10년 뒤까지의 공휴일을 넣고 들여 써서 줄을 나눈다. 만든 시각은 넣지 않는다
+  - 형식 번호, 합친 개정, 2020~2036년 공휴일을 넣고 들여 써서 줄을 나눈다. 만든 시각은 넣지 않는다
   - 검증: Python 시험. 다시 만든 JSON이 커밋된 두 파일과 같다. 규칙 오류가 있는 카탈로그는 만들지 않는다. 엔진이 오류 카탈로그를 거절하던 시험을 옮긴 것이다. 공휴일에 2026-10-03 개천절과 2026-10-05 대체공휴일이 있다. Mr.Life의 개정 규칙이 `load_catalog`의 합친 결과와 같다
-- [ ] 3. 시험 파일을 만들어 커밋한다
+- [x] 3. 시험 파일을 만들어 커밋한다. 2026-10-02 `backend/tools/make_import_fixtures.py`가 `app/test/fixtures/imports/`에 여섯 파일을 만든다. 지금 읽기 코드가 커밋된 파일로도 같은 결과를 낸다. `.gitattributes`로 바이트 그대로 둔다
   - 지금 Python 시험이 그 자리에서 만드는 xlsx와 csv, 그리고 cp949로 쓴 csv를 스크립트 하나로 `app/test/fixtures/`에 만든다
   - 검증: Python 파일 읽기 시험이 커밋된 파일로도 같은 결과를 낸다. xlsx는 만들 때마다 안의 시각이 달라 다시 만든 파일과 바이트로 비교하지 않는다
-- [ ] 4. CI `test.yml`에 앱 시험 잡을 더한다
+- [ ] 4. CI `test.yml`에 앱 시험 잡을 더한다. 2026-10-02 써 두었다. 푸시한 뒤 GitHub에서 확인한다
   - Flutter를 깔아 분석기와 `flutter test`를 돌린다. 서버 시험 잡은 단계 7까지 둔다. `app/`도 바뀌면 돌게 한다
   - 검증: GitHub에서 두 잡이 통과한다
-- [ ] 5. `export.yml`에 JSON 다시 만들기 단계를 더한다
+- [ ] 5. `export.yml`에 JSON 다시 만들기 단계를 더한다. 2026-10-02 써 두었다. 다시 만들어도 JSON이 그대로인 것을 PC에서 봤다. 푸시한 뒤 Databricks 세션에 알리고 다음 봇 커밋을 본다
   - 승인 폴더마다 `export.py`와 검사 뒤 커밋 전에 만들고 `catalog`와 함께 add한다. 되돌릴 때 `git clean` 경로에 `app/assets/catalog.json`을 넣는다. 실패하면 그 폴더만 되돌리고 대기열에 남긴다. 설계 2절
   - 검증: 같은 명령을 PC에서 돌려 카탈로그를 바꾸면 JSON도 바뀌고, 안 바꾸면 그대로다. 푸시한 뒤 Databricks 세션에 알리고, 다음 승인의 봇 커밋에 JSON이 함께 들어갔는지 본다
 
