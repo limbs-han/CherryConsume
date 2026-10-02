@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'api.dart';
+import 'social.dart';
 import 'screens/shell.dart';
 import 'screens/start.dart';
 import 'theme.dart';
@@ -12,8 +13,12 @@ class CherryApp extends StatefulWidget {
     super.key,
     required this.api,
     this.devLogin = const bool.fromEnvironment('DEV_LOGIN'),
+    this.social = const Social(),
   });
   final Api api;
+
+  /// 카카오와 Google 로그인. 시험에서는 바꿔 끼운다
+  final Social social;
 
   /// 개발용 로그인 버튼. `--dart-define=DEV_LOGIN=true`로 빌드할 때만 보인다. 작업 005 설계 3절
   final bool devLogin;
@@ -44,10 +49,11 @@ class _CherryAppState extends State<CherryApp> {
     theme: theme(),
     home: switch (_loggedIn) {
       null => const Scaffold(),
-      true => Shell(api: widget.api),
+      true => Shell(api: widget.api, social: widget.social),
       false => StartScreen(
         api: widget.api,
         devLogin: widget.devLogin,
+        social: widget.social,
         onLoggedIn: () => setState(() => _loggedIn = true),
       ),
     },

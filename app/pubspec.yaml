@@ -11,7 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^11.2.0
+  google_sign_in: ^7.2.0
   http: ^1.6.0
+  kakao_flutter_sdk_user: ^2.0.1
 
 dev_dependencies:
   flutter_test:

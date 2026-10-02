@@ -1,3 +1,16 @@
+import java.util.Properties
+
+// 카카오 네이티브 앱 키. android/local.properties의 kakao.nativeAppKey다. 저장소에 올리지 않는다. 작업 005 설계 5g
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+val kakaoNativeAppKey: String = localProperties.getProperty("kakao.nativeAppKey", "missing")
+// 출시 빌드에 키가 없으면 카카오 계정 로그인이 앱으로 돌아오지 못한다. 조용히 나오지 않게 멈춘다
+if (kakaoNativeAppKey == "missing" && gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }) {
+    throw GradleException("android/local.properties에 kakao.nativeAppKey가 없다. docs/login-setup.md")
+}
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -23,6 +36,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["kakaoNativeAppKey"] = kakaoNativeAppKey
     }
 
     buildTypes {

@@ -540,6 +540,33 @@ class Api {
   /// 가져온 묶음 되돌리기. E34
   Future<void> undoImport(int id) => _send('DELETE', '/me/imports/$id');
 
+  /// 카카오나 Google에서 받은 토큰을 서버가 확인하고 우리 토큰을 준다. provider는 kakao나 google이다. 작업 005 설계 5g
+  Future<void> socialLogin(String provider, String token) async {
+    final r = await _send(
+      'POST',
+      '/auth/$provider',
+      body: provider == 'kakao' ? {'access_token': token} : {'id_token': token},
+    );
+    _token = r['token'];
+    await storage.write(key: _tokenKey, value: _token);
+  }
+
+  /// 설정 맨 위의 계정. 로그인 수단과 가입한 날
+  Future<({String provider, DateTime createdAt})> account() async {
+    final r = await _send('GET', '/me/account');
+    return (
+      provider: r['provider'] as String,
+      createdAt: DateTime.parse(r['created_at']).toLocal(),
+    );
+  }
+
+  /// 탈퇴. 서버가 모든 기기의 세션을 지워 바로 로그인을 막는다. E27
+  Future<void> withdraw() async {
+    await _send('DELETE', '/me');
+    _token = null;
+    await storage.delete(key: _tokenKey);
+  }
+
   Future<void> devLogin(String name) async {
     final r = await _send('POST', '/auth/dev', body: {'name': name});
     _token = r['token'];
