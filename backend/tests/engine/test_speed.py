@@ -1,5 +1,6 @@
 """추천 속도. 설계 4.4와 6.5. 카드 10장, 이번 달 결제 300건, 조건부 혜택 포함으로 추천 한 번 50ms,
-업종 12개의 업종별 1순위 200ms 안이다. 컴퓨터마다 속도가 달라 여러 번 재서 가운데 값을 쓴다."""
+업종 12개의 업종별 1순위 200ms 안이다. 컴퓨터마다 속도가 달라 여러 번 재서 가운데 값을 쓴다.
+결제 10건에 1건은 반을 취소한다. 취소한 결제는 처음 실적을 셀 때 한 번 더 계산해 느리다. 설계 6.5"""
 
 import random
 import statistics
@@ -54,6 +55,8 @@ def heavy():
             channel=rng.choice(["online", "offline"]),
             payment_method=rng.choice(["physical_card", "naver_pay", "kakao_pay"]),
         )
+        if n % 10 == 0:
+            p = p.model_copy(update={"cancelled_amount": p.amount // 2, "cancelled_at": when + timedelta(hours=1)})
         payments.setdefault(c.id, []).append(p)
     for c in cards:
         results = {r.payment_id: r.benefits for r in eng.price_month(c, payments.get(c.id, []))}

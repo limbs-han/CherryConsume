@@ -159,7 +159,7 @@ class Ledger:
         if found is None:
             return
         rules = found[1]
-        parts, _ = spend_parts(ctx, card, p, rules, p.benefits or [])
+        parts, _ = spend_parts(ctx, card, p, rules, p.benefits or [], before_cancel(ctx, card, p, self))
         for part in parts:
             self.counted[part.month] += part.amount
         by_key = {b.key: b for b in rules.benefits}
@@ -377,6 +377,21 @@ class Priced:
     tier_short: dict[str, int] = field(default_factory=dict)
 
 
+def before_cancel(
+    ctx: Ctx, card: UserCard, p: Payment, ledger: Ledger, final_areas: dict | None = None
+) -> list[AppliedBenefit] | None:
+    """취소한 결제가 취소하지 않았다면 받았을 혜택. 결제한 달의 처음 실적을 이 혜택의 비율로 센다. 설계 문서 6.5, E5
+
+    ledger는 이 결제보다 앞선 결제들의 사용량 표라 그때의 구간과 한도로 다시 계산한다. 사용량 표는 읽기만 한다.
+    따로 남겨 두지 않는다. 남겨 두면 결제한 달의 구간이 다시 계산으로 바뀌어도 옛 값이 남는다. 2026-10-02 위험 검토
+    """
+    if not p.cancelled_amount:
+        return None
+    # ponytail: 취소한 결제마다 price를 한 번 더 부른다. 취소가 흔해져 느려지면 (결제 id, 사용량 표 판) 열쇠로 기억한다
+    whole = p.model_copy(update={"cancelled_amount": 0, "cancelled_at": None, "benefits": None})
+    return price(ctx, card, whole, ledger, final_areas).result.benefits
+
+
 def price(ctx: Ctx, card: UserCard, p: Payment, ledger: Ledger, final_areas: dict | None = None) -> Priced:
     """결제 한 건의 혜택과 실적. ledger는 이 결제보다 앞선 결제들의 사용량 표다"""
     day = local(p.paid_at).date()
@@ -438,7 +453,7 @@ def price(ctx: Ctx, card: UserCard, p: Payment, ledger: Ledger, final_areas: dic
             candidates.setdefault(b.stack, []).append((b, tier, total))
         got, exhausted, limit_needs = choose(ctx, rules, s, candidates, ledger)
     applied = [o.applied() for o in got]
-    parts, spend_warns = spend_parts(ctx, card, p, rules, applied)
+    parts, spend_warns = spend_parts(ctx, card, p, rules, applied, before_cancel(ctx, card, p, ledger, final_areas))
     unknown = {**unknown, **limit_needs}
     warns += spend_warns + notes(ctx, card, got, unknown, tier_short, exhausted, final_areas is not None)
     result = PaymentResult(payment_id=p.id, benefits=applied, spend=parts, warnings=warns)

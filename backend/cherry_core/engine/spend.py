@@ -12,10 +12,31 @@ from .context import Ctx, frac
 from .models import AppliedBenefit, Payment, SpendPart, UserCard, Warn
 
 
+def applied_ratio(rules: Rules, benefits: list[AppliedBenefit]) -> object:
+    """받은 혜택 가운데 가장 큰 실적 제외 비율. 한도가 차서 0원이 된 혜택은 받은 것으로 보지 않는다"""
+    ratio = frac(0)
+    by_key = {b.key: b for b in rules.benefits}
+    for got in benefits:
+        if got.value > 0 and got.key in by_key:
+            own = by_key[got.key].exclude_applied
+            ratio = max(ratio, frac(own if own is not None else rules.spend.exclude_applied))
+    return ratio
+
+
 def spend_parts(
-    ctx: Ctx, card: UserCard, p: Payment, rules: Rules, benefits: list[AppliedBenefit]
+    ctx: Ctx,
+    card: UserCard,
+    p: Payment,
+    rules: Rules,
+    benefits: list[AppliedBenefit],
+    before: list[AppliedBenefit] | None = None,
 ) -> tuple[list[SpendPart], list[Warn]]:
-    """결제 한 건이 실적에 넣는 금액과 달. 설계 2.2, 2.3. 실적에서 빠지면 그 이유를 경고로 돌려준다"""
+    """결제 한 건이 실적에 넣는 금액과 달. 설계 2.2, 2.3. 실적에서 빠지면 그 이유를 경고로 돌려준다
+
+    취소한 결제면 benefits는 남은 금액이 받는 혜택이고 before는 취소하지 않았다면 받았을 혜택이다. 결제한 달의 처음 실적은 before의
+    비율로, 남은 금액의 실적은 benefits의 비율로 센다. 취소 뒤 혜택이 0원이라고 처음 실적을 원금으로 다시 세면
+    결제한 달 실적이 늘어 다음 달 구간이 올랐다. 설계 문서 6.5, E5
+    """
     s = rules.spend
     paid_month = month_of(local(p.paid_at).date())
     category = ctx.category(p)
@@ -30,33 +51,31 @@ def spend_parts(
     if s.interest_free == "exclude" and p.interest_free:
         return [], [Warn(code="not_counted_toward_spend", data={"reason": "interest_free"})]
 
-    ratio = frac(0)
-    by_key = {b.key: b for b in rules.benefits}
-    for got in benefits:
-        if got.value > 0 and got.key in by_key:
-            own = by_key[got.key].exclude_applied
-            ratio = max(ratio, frac(own if own is not None else s.exclude_applied))
-    counted = math.floor(p.amount * (1 - ratio))
+    ratio = applied_ratio(rules, benefits)
+    first = applied_ratio(rules, before) if p.cancelled_amount and before is not None else ratio
+    counted = math.floor(p.amount * (1 - first))
     warns = [Warn(code="not_counted_toward_spend", data={"reason": "benefit_applied"})] if counted == 0 else []
 
     offset = max((n for cat, n in s.month_offset.items() if categories_match(category, [cat])[0] is True), default=0)
-    first = add_months(paid_month, offset)
+    start = add_months(paid_month, offset)
     parts: list[SpendPart] = []
     if s.installment == "per_installment_month" and p.installment_months > 1:
         each = counted // p.installment_months
         for i in range(p.installment_months):
             last = i == p.installment_months - 1
-            parts.append(SpendPart(month=add_months(first, i), amount=counted - each * i if last else each))
+            parts.append(SpendPart(month=add_months(start, i), amount=counted - each * i if last else each))
     else:
-        parts.append(SpendPart(month=first, amount=counted))
+        parts.append(SpendPart(month=start, amount=counted))
 
-    if p.cancelled_amount and counted:
+    minus = counted - math.floor((p.amount - p.cancelled_amount) * (1 - ratio)) if p.cancelled_amount else 0
+    # 남은 금액이 혜택을 잃어 처음보다 실적이 커지면 취소로 실적을 늘려야 하는지 카드사 문구가 없다. 늘리지 않는다
+    # 모르면 부풀리지 않는 쪽이다. 설계 3.1과 같다. 확인 필요. 2026-10-02 위험 검토
+    if minus > 0:
         use = s.cancellation
         for o in s.cancellation_overrides:
             if check(o.when, ctx.situation(card, p))[0] is True:
                 use = o.use
-        minus = counted - math.floor((p.amount - p.cancelled_amount) * (1 - ratio))
-        month = month_of(local(p.cancelled_at).date()) if use == "cancel_month" and p.cancelled_at else first
+        month = month_of(local(p.cancelled_at).date()) if use == "cancel_month" and p.cancelled_at else start
         parts.append(SpendPart(month=month, amount=-minus))
     return parts, warns
 

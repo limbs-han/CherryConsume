@@ -83,3 +83,16 @@ cases:
     expect:
       - {payment: 0, benefits: {starbucks-50: 5000}, counted: 0}
     calc: 특례 기간은 쓰기 시작한 8월부터 9월 말일까지라 new_card.tier 300,000이 전월 추정 0의 0 구간보다 큼. 10,000 × 50% = 5,000
+  - name: 혜택 받아 실적에서 뺀 결제를 다음 달에 전액 취소해도 결제한 달 실적은 그대로
+    prev_month_spend: 300000
+    payments:
+      - {at: 2026-07-20T12:00, amount: 300000, category: other, payment_method: physical_card}
+      - {at: 2026-08-10T08:30, amount: 20000, merchant: starbucks, payment_method: physical_card, cancelled_amount: 20000, cancelled_at: 2026-09-03T10:00}
+      - {at: 2026-08-20T12:00, amount: 290000, category: other, payment_method: physical_card}
+      - {at: 2026-09-05T08:30, amount: 10000, merchant: starbucks, payment_method: physical_card}
+    expect:
+      - {payment: 0, benefits: {}, counted: 300000}
+      - {payment: 1, benefits: {}, counted: 0}
+      - {payment: 2, benefits: {}, counted: 290000}
+      - {payment: 3, benefits: {}, counted: 10000}
+    calc: E5. 7월 30만으로 8월은 30만 구간. 취소 전 8월 스타벅스는 20,000 × 50% = 10,000이 월 한도를 채워 exclude_applied 1로 실적 0. 9월 3일 전액 취소는 취소한 달 기준인데 처음 실적이 0이라 뺄 것도 0. 8월 실적은 290,000이라 9월은 0원 구간이고 9월 스타벅스는 혜택 없이 실적 10,000

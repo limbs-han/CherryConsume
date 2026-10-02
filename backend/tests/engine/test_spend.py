@@ -218,3 +218,59 @@ def test_month_recompute_after_original_month_cancellation(engine):
     saved[1] = saved[1].model_copy(update={"cancelled_amount": 100000, "cancelled_at": at("2026-09-10T10:00")})
     again = eng.price_month(holder(), saved, month=SEPT)
     assert [b.value for b in again[0].benefits] == [1500]
+
+
+CAFE_MIN_5 = {
+    "key": "cafe-min-5",
+    "target": {"categories": ["cafe"]},
+    "when": [{"amount": {"min": 10000}}],
+    "reward": {"type": "billing_discount", "rate": 5},
+    "tiers": {"from": 300000},
+}
+
+
+def cancel_on(amount: int, when: str = "2026-09-03T10:00") -> dict:
+    return {"cancelled_amount": amount, "cancelled_at": at(when)}
+
+
+def test_cancelled_benefit_payment_keeps_paid_month_spend(engine):
+    # E5, 설계 문서 6.5. 혜택 받은 결제를 실적에서 다 빼고 취소한 달 기준인 카드. 7월 30만으로 8월 30만 구간
+    # 8월 카페 2만 원은 10% 2,000원을 받아 실적 0. 기타 29만 원으로 8월 실적 29만. 9월 3일 카페 전액 취소에도 처음 실적이 0이라
+    # 뺄 것이 없다. 저장된 기록으로 다시 세도 8월 29만, 9월 0원 구간이다. 취소 뒤 빈 혜택으로 세면 8월이 31만이 되었다
+    eng = engine(card([CAFE_10], spend={"exclude_applied": 1, "cancellation": "cancel_month"}))
+    payments = [
+        *prev_month(300000, "2026-07"),
+        pay(20000, "2026-08-10T10:00", category="cafe", **cancel_on(20000)),
+        pay(290000, "2026-08-20T10:00", category="other"),
+    ]
+    s = status(eng, payments)
+    assert (s.prev_month_counted, s.tier) == (290000, 0)
+
+
+def test_cancel_half_excluded_benefit_payment(engine):
+    # 혜택 받은 결제를 반만 빼는 카드. 8월 카페 2만 원은 10% 2,000원을 받아 실적 1만
+    # 9월 전액 취소면 8월에 1만을 넣고 9월에서 1만을 뺀다
+    eng = engine(card([CAFE_10], spend={"exclude_applied": 0.5, "cancellation": "cancel_month"}))
+    payments = [*prev_month(300000, "2026-07"), pay(20000, "2026-08-10T10:00", category="cafe", **cancel_on(20000))]
+    r = eng.price_month(holder(), payments)[1]
+    assert [(p.month.month, p.amount) for p in r.spend] == [(8, 10000), (9, -10000)]
+
+
+def test_partial_cancel_never_adds_spend(engine):
+    # 8월 카페 12,000원은 1만 원 이상 5%로 600원을 받고 반만 빼 실적 6,000. 9월에 5,000원을 취소하면 남은 7,000원은 혜택을 잃어
+    # 실적이 7,000이 되어야 하는지 카드사 문구가 없다. 취소로 실적을 늘리지 않는다. 부풀리지 않는 쪽이다. 확인 필요
+    eng = engine(card([CAFE_MIN_5], spend={"exclude_applied": 0.5, "cancellation": "cancel_month"}))
+    payments = [*prev_month(300000, "2026-07"), pay(12000, "2026-08-10T10:00", category="cafe", **cancel_on(5000))]
+    r = eng.price_month(holder(), payments)[1]
+    assert [(p.month.month, p.amount) for p in r.spend] == [(8, 6000)]
+
+
+def test_cancel_benefit_payment_in_paid_month_basis(engine):
+    # 결제한 달 기준이어도 혜택 받아 실적 0인 결제는 전액 취소로 뺄 것이 없다. 8월은 기타 29만 그대로
+    eng = engine(card([CAFE_10], spend={"exclude_applied": 1, "cancellation": "original_month"}))
+    payments = [
+        *prev_month(300000, "2026-07"),
+        pay(20000, "2026-08-10T10:00", category="cafe", **cancel_on(20000)),
+        pay(290000, "2026-08-20T10:00", category="other"),
+    ]
+    assert status(eng, payments).prev_month_counted == 290000
