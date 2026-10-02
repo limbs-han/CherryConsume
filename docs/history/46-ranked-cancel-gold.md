@@ -3,6 +3,7 @@
 - 날짜: 2026-10-02
 - 결과물: [삼성 iD ON](../../catalog/cards/samsung/samsung-id-on.yaml), [KB 이지올](../../catalog/cards/kb/kb-easy-all-titanium.yaml)
 - 커밋: `7ccc60c` feat: 삼성 iD ON 순위 영역 취소 달과 KB 이지올 확인 항목 추가. `export` 워크플로의 봇 커밋이다
+- 커밋: `52d852f` test: 순위 취소 달이 빈 카드 시험을 KB 이지올로 바꿈
 
 ## 요청
 
@@ -21,6 +22,13 @@
 업로드 출력, 승인 다섯 줄, export 초록 체크를 붙였다.
 
 반영: 봇 커밋의 두 파일이 준비한 파일과 같고 다른 카탈로그 파일은 그대로임을 확인했다.
+
+### 수정 요청 2
+> docs:작업기록 44, 45 와 번호 맞추기 tset 실패했는데
+
+CI 테스트 출력을 붙였다. 서버 테스트 하나가 실패했다.
+
+반영: 삼성 iD ON은 순위 영역 취소 달을 모른다는 전제로 쓴 서버 테스트였다. 취소 달이 들어가 지나간 달 취소가 정상으로 붙었다. 취소 달이 빈 KB 이지올로 바꾸고, 삼성 iD ON은 취소가 붙는지 같이 확인하게 했다. 이 PC에는 시험 DB가 없어 푸시해 CI로 확인했고 통과했다.
 
 ## 최종 결과
 삼성 iD ON 순위 영역 `top-area`의 `cancellation`은 `cancel_month`다. 근거 문장은 혜택 `top-area-30`의 evidence에 더했다. KB 이지올 `easy-all-a`~`d`는 비워 두고 `revisions[0].ranked`에 확인 필요 항목을 달았다. 검수 번호는 `r-20261002T080459Z-ranked-cancel`이다. 지금 골드 카탈로그 파일 해시 `55c73701…`가 다음 손 승인의 기준이다.
