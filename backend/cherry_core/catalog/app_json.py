@@ -5,16 +5,21 @@ from __future__ import annotations
 import hashlib
 import json
 from datetime import date
+from fractions import Fraction
 
 import holidays
 
 from .check import check_rules
 from .load import Catalog
+from .models import Rules
 
 # 앱이 아는 형식 번호. 칸의 뜻이 바뀌면 올린다. 앱은 자기보다 큰 번호의 파일을 쓰지 않는다
 SCHEMA = 1
 # 만든 해로 정하면 해가 바뀔 때 다시 만든 파일이 커밋된 파일과 달라진다. 끝 해가 다가오면 올린다
 HOLIDAY_YEARS = range(2020, 2037)
+# 앱 엔진은 64비트 정수 분수로 계산한다. 소수가 이 안이면 금액 계산이 넘치지 않는다. 2026-10-02 작업 006 단계 2 위험 검토
+MAX_DENOMINATOR = 10_000
+MAX_DECIMAL = 100_000
 
 
 def rules_sha256(data: dict) -> str:
@@ -37,6 +42,39 @@ def rule_errors(cat: Catalog) -> list[str]:
     return errors
 
 
+def number_errors(data: dict) -> list[str]:
+    """앱이 정확히 담지 못하는 소수. 소수 넷째 자리를 넘거나 10만 이상이면 Dart 분수가 넘쳐 조용히 틀린 금액이 될 수 있다"""
+    errors: list[str] = []
+
+    def walk(x, path: str) -> None:
+        if isinstance(x, float):
+            if Fraction(repr(x)).denominator > MAX_DENOMINATOR or abs(x) >= MAX_DECIMAL:
+                errors.append(f"{path}: 앱이 정확히 계산하지 못하는 소수 {x!r}")
+        elif isinstance(x, dict):
+            for k, v in x.items():
+                walk(v, f"{path}.{k}" if path else k)
+        elif isinstance(x, list):
+            for i, v in enumerate(x):
+                walk(v, f"{path}[{i}]")
+
+    walk(data, "")
+    return errors
+
+
+def app_rules(rules: Rules) -> dict:
+    """한도 조정은 적어 둔 칸만 쓴다. null은 제한 없음이라 칸을 안 쓴 것과 다르고 엔진은 적힌 칸으로 가린다"""
+    data = rules.model_dump(mode="json", by_alias=True)
+
+    def adjusts(models: list, dumps: list) -> None:
+        for limit, d in zip(models, dumps, strict=True):
+            d["adjust"] = [a.model_dump(mode="json", by_alias=True, exclude_unset=True) for a in limit.adjust]
+
+    adjusts(rules.limits, data["limits"])
+    for b, d in zip(rules.benefits, data["benefits"], strict=True):
+        adjusts(b.limits, d["limits"])
+    return data
+
+
 def app_catalog(cat: Catalog) -> dict:
     def dump(model, **kw) -> dict:
         return model.model_dump(mode="json", by_alias=True, **kw)
@@ -45,14 +83,14 @@ def app_catalog(cat: Catalog) -> dict:
     for card in sorted(cat.cards.values(), key=lambda c: c.card.id):
         revisions = []
         for r, rules in card.revisions:
-            data = dump(rules)
             revisions.append(
                 {
                     "effective_from": r.effective_from.isoformat(),
                     "effective_from_estimated": r.effective_from_estimated,
                     "source": r.source,
-                    "sha256": rules_sha256(data),
-                    "rules": data,
+                    # 서버의 card_revisions와 같은 값이 되게 규칙 전체의 덤프로 만든다
+                    "sha256": rules_sha256(dump(rules)),
+                    "rules": app_rules(rules),
                 }
             )
         cards.append({**dump(card.card, exclude={"revisions"}), "revisions": revisions})

@@ -34,12 +34,26 @@ def test_revisions_are_the_merged_rules():
         for r, rules in cat.cards["shinhan-mrlife"].revisions
     ]
     assert [(r["effective_from"], r["effective_from_estimated"], r["rules"]) for r in card["revisions"]] == want
-    assert all(r["sha256"] == rules_sha256(r["rules"]) for r in card["revisions"])
+    # 지문은 서버의 card_revisions와 같게 규칙 전체의 덤프로 만든다
+    assert [r["sha256"] for r in card["revisions"]] == [rules_sha256(w[2]) for w in want]
     # 개정에는 패치가 아니라 완성된 규칙만 있다
     assert all(
         set(r) == {"effective_from", "effective_from_estimated", "source", "sha256", "rules"} for r in card["revisions"]
     )
     assert data["schema"] == SCHEMA
+
+
+def test_adjust_keeps_only_written_fields():
+    # 한도 조정의 null은 제한 없음이고 칸을 안 쓴 것과 다르다. 엔진은 적힌 칸으로 가린다. 앱이 같은 것을 보게 한다
+    data = json.loads(app_catalog_text(load_catalog(REPO / "catalog")))
+    [ibk] = [c for c in data["cards"] if c["id"] == "ibk-narasarang"]
+    limits = [lim for r in ibk["revisions"] for lim in r["rules"]["limits"]]
+    limits += [lim for r in ibk["revisions"] for b in r["rules"]["benefits"] for lim in b["limits"]]
+    adjusts = [a for lim in limits for a in lim["adjust"]]
+    # IBK의 조정은 모두 횟수만 바꾼다. 둘은 횟수 제한을 없애는 null이다
+    assert {tuple(sorted(a)) for a in adjusts} == {("count", "when")}
+    assert sorted(a["count"] for a in adjusts if a["count"] is not None) == [2, 2, 6, 6]
+    assert [a["count"] for a in adjusts].count(None) == 2
 
 
 def test_holidays_are_listed():
@@ -63,6 +77,43 @@ def test_json_command_writes_and_refuses_rule_errors(make_catalog, tmp_path, cap
     assert not out.exists() and "오류" in capsys.readouterr().out
     root = make_catalog(lambda f: benefit(f).update(stack="pay"))
     assert main(["json", "--root", str(root), "--out", str(out)]) == 1
+
+
+def test_json_refuses_what_the_engine_refused(make_catalog, tmp_path, capsys):
+    # 엔진 시험 test_engine_refuses_catalog_with_rule_errors의 나머지 둘을 옮겼다. 그대로 두면 계산 도중 예외가 나거나
+    # 한도가 사라진다. 설계 문서 6.8, 작업 006 설계 3절
+    out = tmp_path / "catalog.json"
+
+    def waived(f):
+        # 하한을 풀면 0 구간인데 한도표에 0 구간 값이 없다
+        rev(f)["facts"] = [{"key": "vip", "type": "bool", "scope": "card", "ask": "우수 고객인가요"}]
+        benefit(f).update(
+            tiers={"from": 300000, "waived_when": {"fact": "vip"}},
+            limits=[{"per": "month", "amount": {300000: 1000, 500000: 2000}}],
+        )
+
+    def onsite_100(f):
+        benefit(f).update(reward={"type": "onsite_discount", "rate": 100})
+
+    for edit, where in ((waived, "limits"), (onsite_100, "reward.rate")):
+        assert main(["json", "--root", str(make_catalog(edit)), "--out", str(out)]) == 1, edit.__name__
+        assert not out.exists()
+        assert where in capsys.readouterr().out, edit.__name__
+
+
+def test_json_refuses_numbers_the_app_cannot_hold(make_catalog, tmp_path, capsys):
+    # 앱 엔진은 64비트 정수 분수로 계산해 Python Fraction처럼 한계가 없지 않다. 소수 넷째 자리를 넘거나 10만 이상인 소수는
+    # 계산 중 넘쳐 조용히 틀린 금액이 될 수 있어 JSON을 만들지 않는다. 2026-10-02 작업 006 단계 2 위험 검토
+    out = tmp_path / "catalog.json"
+
+    def rate(x):
+        return lambda f: benefit(f).update(reward={"type": "billing_discount", "rate": x})
+
+    assert main(["json", "--root", str(make_catalog(rate(12.3456))), "--out", str(out)]) == 0
+    out.unlink()
+    capsys.readouterr()
+    assert main(["json", "--root", str(make_catalog(rate(12.34567))), "--out", str(out)]) == 1
+    assert not out.exists() and "reward.rate" in capsys.readouterr().out
 
 
 def test_billing_cycle_spend_is_written_like_the_engine_took_it(make_catalog, tmp_path):

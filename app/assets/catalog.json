@@ -5043,30 +5043,9 @@
         "adjust": [
          {
           "when": {
-           "amount": null,
-           "day": null,
-           "time": null,
-           "months": null,
-           "region": null,
-           "channel": null,
-           "interest_free": null,
-           "lump_sum": null,
-           "payment": null,
-           "payment_not": null,
-           "billing": null,
-           "billing_not": null,
-           "option": null,
-           "fact": "salary_transfer",
-           "ranked": null,
-           "card_month": null,
-           "month_total": null,
-           "any_of": null
+           "fact": "salary_transfer"
           },
-          "amount": null,
-          "count": null,
-          "base": null,
-          "multiply": null,
-          "add": null
+          "count": null
          }
         ]
        },
@@ -6139,30 +6118,9 @@
           "adjust": [
            {
             "when": {
-             "amount": null,
-             "day": null,
-             "time": null,
-             "months": null,
-             "region": null,
-             "channel": null,
-             "interest_free": null,
-             "lump_sum": null,
-             "payment": null,
-             "payment_not": null,
-             "billing": null,
-             "billing_not": null,
-             "option": null,
-             "fact": "salary_transfer",
-             "ranked": null,
-             "card_month": null,
-             "month_total": null,
-             "any_of": null
+             "fact": "salary_transfer"
             },
-            "amount": null,
-            "count": 6,
-            "base": null,
-            "multiply": null,
-            "add": null
+            "count": 6
            }
           ]
          }
@@ -6798,30 +6756,9 @@
           "adjust": [
            {
             "when": {
-             "amount": null,
-             "day": null,
-             "time": null,
-             "months": null,
-             "region": null,
-             "channel": null,
-             "interest_free": null,
-             "lump_sum": null,
-             "payment": null,
-             "payment_not": null,
-             "billing": null,
-             "billing_not": null,
-             "option": null,
-             "fact": "salary_transfer",
-             "ranked": null,
-             "card_month": null,
-             "month_total": null,
-             "any_of": null
+             "fact": "salary_transfer"
             },
-            "amount": null,
-            "count": 2,
-            "base": null,
-            "multiply": null,
-            "add": null
+            "count": 2
            }
           ]
          }
@@ -9311,30 +9248,9 @@
         "adjust": [
          {
           "when": {
-           "amount": null,
-           "day": null,
-           "time": null,
-           "months": null,
-           "region": null,
-           "channel": null,
-           "interest_free": null,
-           "lump_sum": null,
-           "payment": null,
-           "payment_not": null,
-           "billing": null,
-           "billing_not": null,
-           "option": null,
-           "fact": "salary_transfer",
-           "ranked": null,
-           "card_month": null,
-           "month_total": null,
-           "any_of": null
+           "fact": "salary_transfer"
           },
-          "amount": null,
-          "count": null,
-          "base": null,
-          "multiply": null,
-          "add": null
+          "count": null
          }
         ]
        },
@@ -10397,30 +10313,9 @@
           "adjust": [
            {
             "when": {
-             "amount": null,
-             "day": null,
-             "time": null,
-             "months": null,
-             "region": null,
-             "channel": null,
-             "interest_free": null,
-             "lump_sum": null,
-             "payment": null,
-             "payment_not": null,
-             "billing": null,
-             "billing_not": null,
-             "option": null,
-             "fact": "salary_transfer",
-             "ranked": null,
-             "card_month": null,
-             "month_total": null,
-             "any_of": null
+             "fact": "salary_transfer"
             },
-            "amount": null,
-            "count": 6,
-            "base": null,
-            "multiply": null,
-            "add": null
+            "count": 6
            }
           ]
          }
@@ -11056,30 +10951,9 @@
           "adjust": [
            {
             "when": {
-             "amount": null,
-             "day": null,
-             "time": null,
-             "months": null,
-             "region": null,
-             "channel": null,
-             "interest_free": null,
-             "lump_sum": null,
-             "payment": null,
-             "payment_not": null,
-             "billing": null,
-             "billing_not": null,
-             "option": null,
-             "fact": "salary_transfer",
-             "ranked": null,
-             "card_month": null,
-             "month_total": null,
-             "any_of": null
+             "fact": "salary_transfer"
             },
-            "amount": null,
-            "count": 2,
-            "base": null,
-            "multiply": null,
-            "add": null
+            "count": 2
            }
           ]
          }
@@ -18340,33 +18214,12 @@
         "adjust": [
          {
           "when": {
-           "amount": null,
-           "day": null,
-           "time": null,
-           "months": null,
-           "region": null,
-           "channel": null,
-           "interest_free": null,
-           "lump_sum": null,
-           "payment": null,
-           "payment_not": null,
-           "billing": null,
-           "billing_not": null,
-           "option": null,
            "fact": "birth_month_now",
-           "ranked": null,
            "card_month": {
-            "min": 1,
-            "max": null
-           },
-           "month_total": null,
-           "any_of": null
+            "min": 1
+           }
           },
-          "amount": null,
-          "count": null,
-          "base": null,
-          "multiply": 2.0,
-          "add": null
+          "multiply": 2.0
          }
         ]
        },
@@ -18379,33 +18232,12 @@
         "adjust": [
          {
           "when": {
-           "amount": null,
-           "day": null,
-           "time": null,
-           "months": null,
-           "region": null,
-           "channel": null,
-           "interest_free": null,
-           "lump_sum": null,
-           "payment": null,
-           "payment_not": null,
-           "billing": null,
-           "billing_not": null,
-           "option": null,
            "fact": "birth_month_now",
-           "ranked": null,
            "card_month": {
-            "min": 1,
-            "max": null
-           },
-           "month_total": null,
-           "any_of": null
+            "min": 1
+           }
           },
-          "amount": null,
-          "count": null,
-          "base": null,
-          "multiply": 2.0,
-          "add": null
+          "multiply": 2.0
          }
         ]
        }
@@ -18870,33 +18702,12 @@
           "adjust": [
            {
             "when": {
-             "amount": null,
-             "day": null,
-             "time": null,
-             "months": null,
-             "region": null,
-             "channel": null,
-             "interest_free": null,
-             "lump_sum": null,
-             "payment": null,
-             "payment_not": null,
-             "billing": null,
-             "billing_not": null,
-             "option": null,
              "fact": "birth_month_now",
-             "ranked": null,
              "card_month": {
-              "min": 1,
-              "max": null
-             },
-             "month_total": null,
-             "any_of": null
+              "min": 1
+             }
             },
-            "amount": null,
-            "count": null,
-            "base": null,
-            "multiply": 2.0,
-            "add": null
+            "multiply": 2.0
            }
           ]
          }
@@ -28915,32 +28726,11 @@
         "adjust": [
          {
           "when": {
-           "amount": null,
-           "day": null,
-           "time": null,
            "months": [
             5,
             12
-           ],
-           "region": null,
-           "channel": null,
-           "interest_free": null,
-           "lump_sum": null,
-           "payment": null,
-           "payment_not": null,
-           "billing": null,
-           "billing_not": null,
-           "option": null,
-           "fact": null,
-           "ranked": null,
-           "card_month": null,
-           "month_total": null,
-           "any_of": null
+           ]
           },
-          "amount": null,
-          "count": null,
-          "base": null,
-          "multiply": null,
           "add": 10000
          }
         ]

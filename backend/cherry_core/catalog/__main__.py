@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from .app_json import app_catalog_text, rule_errors
+from .app_json import app_catalog, app_catalog_text, number_errors, rule_errors
 from .canonical import catalog_files, format_file
 from .check import check_catalog
 from .load import load_catalog
@@ -35,7 +35,7 @@ def main(argv: list[str] | None = None) -> int:
     cat = load_catalog(args.root)
     if args.command == "json":
         # 엔진이 계산을 거절하던 카탈로그로는 만들지 않는다. 앱은 규칙 검사를 다시 하지 않는다
-        errors = rule_errors(cat)
+        errors = rule_errors(cat) or number_errors(app_catalog(cat))
         if errors:
             print(f"오류 {len(errors)}. JSON을 만들지 않았다")
             for e in errors:
