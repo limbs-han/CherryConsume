@@ -19,7 +19,7 @@
 
 1. https://supabase.com 에 가입하고 New project를 누른다
 2. 이름은 `cherryconsume`, Region은 **Northeast Asia (Seoul)** 이다. Database Password는 Generate a password로 만든다. 특수문자가 있으면 주소에 넣을 때 깨지니 영문과 숫자만 있는 값을 쓴다. 비밀번호 관리자에 적어 둔다
-3. 만들 때 연결 방식을 묻는 칸이 있으면 **Only Connection String**을 고른다. Data API는 표를 인터넷 API로 공개하는 기능이라 우리는 쓰지 않는다
+3. 만들 때 Security의 세 칸을 모두 끈다. **Enable Data API**, **Automatically expose new tables**, **Enable automatic RLS**다. Data API는 표를 인터넷 API로 공개하는 기능이라 우리는 쓰지 않는다. 새 표의 행 단위 보안은 우리 마이그레이션이 켠다
 4. 만든 뒤 Integrations → Data API → Overview에서 **Enable Data API**를 끈다. 화면이 다르면 Project Settings → Data API에서 찾는다. 꺼짐으로 보이면 성공이다. 3에서 이미 껐어도 꺼졌는지 본다
 5. 위쪽의 Connect를 누르고 Connection String에서 Method를 **Session pooler**로 바꾼다. `postgresql://postgres.영문:[YOUR-PASSWORD]@aws-...-ap-northeast-2.pooler.supabase.com:5432/postgres` 꼴의 주소가 보인다. Direct connection 주소인 `db.영문.supabase.co`는 Cloud Run에서 닿지 않는다
 6. 그 주소의 `[YOUR-PASSWORD]`를 2의 비밀번호로 바꾸고 끝에 `?sslmode=require`를 붙인다. 이것이 DB 주소다
@@ -174,7 +174,7 @@ mkdir -p ~/cherry-backups && docker run --rm postgres:17 pg_dump "$DB" -n public
 
 ## 다시 배포할 때
 
-서버 코드나 카탈로그가 바뀌면 저장소 맨 위에서 다시 배포한다. 환경변수와 비밀은 그대로 남는다.
+서버 코드나 카탈로그가 바뀌면 저장소 맨 위에서 다시 배포한다. 환경변수와 비밀은 그대로 남는다. 서버와 앱이 함께 바뀌었으면 서버를 먼저 배포하고 앱을 나중에 깐다. 옛 서버는 새 앱이 싣는 칸을 몰라 저장을 거절한다.
 
 ```bash
 gcloud run deploy cherry-api --source . --region asia-northeast3
