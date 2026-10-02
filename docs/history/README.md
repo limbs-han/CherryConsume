@@ -81,3 +81,4 @@
 | [38](38-ranked-cancel-month-and-unknown-answers.md) | 2026-10-02 | 순위 영역 취소 달 칸과 슬라이스 5 모르는 값 묻기 |
 | [39](39-excel-import.md) | 2026-10-02 | 슬라이스 6 이용 내역 엑셀 가져오기 |
 | [40](40-social-login.md) | 2026-10-02 | 슬라이스 7 카카오와 Google 로그인 |
+| [41](41-deploy-prep.md) | 2026-10-02 | E36 한계와 슬라이스 8 배포 준비 |
