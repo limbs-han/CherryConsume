@@ -42,14 +42,20 @@ def main(argv: list[str] | None = None) -> None:
                 "이 모델의 정답 예시 추출이 없다. cherry_extract를 mode golden으로 먼저 돌린다"
             )
         version = last.prompt_version
+    # 판 번호까지만 맞춘다. 예시 카드 자신을 추출할 때는 다른 예시를 써서 꼬리표가 다르다. 2026-10-02 NH 히어로즈가 빠졌다
+    base = version.split("+")[0]
     latest = Window.partitionBy("card_id").orderBy(F.col("created_at").desc())
     answers = {
         r.card_id: r
-        for r in drafts.where(F.col("prompt_version") == version)
+        for r in drafts.where(
+            (F.col("prompt_version") == base)
+            | F.col("prompt_version").startswith(base + "+")
+        )
         .withColumn("n", F.row_number().over(latest))
         .where("n = 1")
         .collect()
     }
+    tags = sorted({r.prompt_version for r in answers.values()})
 
     cards, per_card, missing = [], {}, []
     for g in spark.table(f"{s}.golden").collect():
@@ -75,11 +81,12 @@ def main(argv: list[str] | None = None) -> None:
     mlflow.set_tracking_uri("databricks")
     # 작업 공간 경로의 /Workspace 앞붙이는 MLflow 실험 이름에 쓰지 않는다
     mlflow.set_experiment(args.experiment.removeprefix("/Workspace"))
-    with mlflow.start_run(run_name=f"{args.model} {version}"):
+    with mlflow.start_run(run_name=f"{args.model} 판 {base}"):
         mlflow.log_params(
             {
                 "model": args.model,
-                "prompt_version": version,
+                "prompt_version": base,
+                "prompt_tags": ", ".join(tags),
                 "tune_cards": tune,
                 "holdout_cards": holdout,
                 "missing": len(missing),
@@ -88,9 +95,18 @@ def main(argv: list[str] | None = None) -> None:
         mlflow.log_metrics(metrics)
         mlflow.log_dict({"cards": per_card, "missing": sorted(missing)}, "cards.json")
     print(
-        f"모델 {args.model}, 프롬프트 판 {version}, 다듬기용 {tune}장 {metrics.get('tune.all', 0):.1%}, "
+        f"모델 {args.model}, 프롬프트 판 {base}, 다듬기용 {tune}장 {metrics.get('tune.all', 0):.1%}, "
         f"채점 전용 {holdout}장 {metrics.get('holdout.all', 0):.1%}, 추출이 없는 카드 {len(missing)}장"
     )
+    # 프롬프트를 다듬는 데 쓰는 것은 다듬기용뿐이다. 채점 전용은 합친 숫자만 찍는다. 계획 과제 19 2단계
+    for g, v in sorted(metrics.items()):
+        if g.startswith("tune.") and g != "tune.all":
+            print(f"  {g} {v:.1%}")
+    for cid, c in sorted(per_card.items()):
+        if c["split"] == "tune":
+            ok = sum(v[0] for v in c["groups"].values())
+            total = sum(v[1] for v in c["groups"].values())
+            print(f"  {cid} {c['status']} {ok}/{total}")
 
 
 if __name__ == "__main__":
