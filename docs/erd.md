@@ -122,6 +122,7 @@ erDiagram
         bigint import_batch_id FK "엑셀 가져오기 배치"
         text source "manual | excel | notification"
         uuid recommendation_request_id FK "추천에서 바로 기록했으면"
+        uuid client_id "앱이 결제마다 만든 번호. E24"
         timestamptz created_at
         timestamptz updated_at
         timestamptz deleted_at
@@ -253,7 +254,7 @@ erDiagram
 ## 설계 메모
 
 - 카탈로그는 카드마다 개정 행을 쌓는다. 서버가 카드사 기본값과 패치를 합친 개정 전체를 `card_revisions.rules`에 넣는다. 옛 개정은 지우지 않는다. 같은 날의 개정이 고쳐지면 새 행을 더해 결제가 가리키는 행이 그때 계산에 쓴 규칙으로 남는다. 지난달 실적은 지난달 규칙으로 계산하기 때문이다.
-- 결제는 계산에 쓴 개정을 `card_revision_id`로, 받은 혜택을 `transaction_benefits`의 혜택 key로 가리킨다. 혜택 key는 갱신해도 바꾸지 않는다. 한도 사용량은 기간 안의 `transaction_benefits`를 모아 계산한다. 저장한 혜택은 다시 계산하지 않는다. 예외는 달이 끝난 순위 카드, 결제한 달 기준 취소로 구간이 바뀐 달, 엑셀이나 손으로 앞선 결제가 들어온 달, 지난달 결제로 구간이 바뀐 달이다. E48, E5, E51, E52, E53
+- 결제는 계산에 쓴 개정을 `card_revision_id`로, 받은 혜택을 `transaction_benefits`의 혜택 key로 가리킨다. 혜택 key는 갱신해도 바꾸지 않는다. 한도 사용량은 기간 안의 `transaction_benefits`를 모아 계산한다. 저장한 혜택은 다시 계산하지 않는다. 예외는 달이 끝난 순위 카드, 결제한 달 기준 취소로 구간이 바뀐 달, 엑셀이나 손으로 앞선 결제가 들어온 달, 지난달 결제로 구간이 바뀐 달, 결제를 고치거나 지우거나 취소해 구간이 바뀐 다음 달, 카드 사실이나 옵션을 답한 카드다. E48, E5, E51, E52, E53, E54, E56
 - `user_cards`는 같은 사용자가 같은 카드를 두 번 보유할 수 없게 `(user_id, card_id)`에 `removed_at IS NULL` 조건의 부분 유니크 인덱스를 둔다.
 - 실적 계산은 `transactions`를 `(user_card_id, paid_at)`으로 읽는다. 이 두 컬럼의 복합 인덱스가 핵심 인덱스다.
 - `transaction_benefits`는 `(transaction_id)`로 읽고 결제의 `(user_card_id, paid_at)` 인덱스와 함께 쓴다.
@@ -264,4 +265,7 @@ erDiagram
 - `transactions.source`는 결제가 어디서 들어왔는지다. 결제 알림으로 들어온 결제는 승인번호가 없어 중복 판정을 같은 카드, 같은 금액, 시각 10분 이내로 한다. 알림 초안과 카드번호 끝 4자리 짝은 폰 안에만 두고 서버 테이블에 넣지 않는다. 설계 문서 9절
 - 내보내기는 `export_runs`로 하루 한 번 기록하고, 실패하면 다음 날 재실행이 전날 분까지 다시 내보낸다.
 - 엑셀 가져오기 중복 판정은 `approval_no`가 있으면 `(user_card_id, approval_no)` 유니크로, 없으면 `(user_card_id, paid_at, amount, merchant_name)` 일치로 본다. 승인번호 유니크는 부분 인덱스(`approval_no IS NOT NULL`)로 건다.
+- 앱이 서버에 닿지 못해 모았다가 다시 보낸 결제가 두 건이 되지 않게 `transactions`의 `(user_id, client_id)`에 `client_id IS NOT NULL` 조건의 부분 유니크 인덱스를 둔다. 마이그레이션 007, 작업 005 설계 5i
+- 모든 표에 행 단위 보안을 켠다. 정책은 두지 않는다. 서버는 표 주인 역할로 붙어 영향이 없고, Supabase의 Data API가 켜져도 행이 보이지 않는다. 새 표도 그 마이그레이션에서 켠다. 마이그레이션 006, 작업 005 설계 5h
+- 만료된 세션은 탈퇴한 사용자를 지울 때 함께 지운다
 - 카드 플레이트 임베딩 벡터는 DB에 넣지 않는다. 파이프라인이 오브젝트 스토리지에 파일로 발행하고 앱이 내려받는다.
