@@ -1,0 +1,712 @@
+{
+  "datasets": [
+    {
+      "name": "cost_total",
+      "displayName": "쓴 금액 합계",
+      "queryLines": [
+        "-- 합산 기간과 한도는 cherry_core.pipeline.cost.spend_window와 같다. 가입일이나 한도를 바꾸면 두 곳을 같이 고친다\n",
+        "-- 가입일 2026-09-30부터 14일은 400달러, 그 뒤로는 달마다 30달러다. 날짜는 비용 차단처럼 UTC다\n",
+        "WITH w AS (\n",
+        "  SELECT\n",
+        "    CASE WHEN current_date() < DATE'2026-10-14' THEN DATE'2026-09-30'\n",
+        "         ELSE greatest(trunc(current_date(), 'MM'), DATE'2026-10-14') END AS start,\n",
+        "    CASE WHEN current_date() < DATE'2026-10-14' THEN 400 ELSE 30 END AS limit_usd\n",
+        "),\n",
+        "spent AS (\n",
+        "  SELECT coalesce(sum(u.usage_quantity * p.pricing.effective_list.default), 0) AS usd\n",
+        "  FROM system.billing.usage u\n",
+        "LEFT JOIN system.billing.list_prices p\n",
+        "  ON u.sku_name = p.sku_name AND u.cloud = p.cloud AND u.usage_unit = p.usage_unit\n",
+        " AND u.usage_end_time >= p.price_start_time\n",
+        " AND (p.price_end_time IS NULL OR u.usage_end_time < p.price_end_time)\n",
+        " AND p.currency_code = 'USD'\n",
+        "  WHERE u.usage_date >= (SELECT start FROM w)\n",
+        ")\n",
+        "SELECT w.start, w.limit_usd, round(spent.usd, 2) AS spent_usd, round(w.limit_usd - spent.usd, 2) AS left_usd\n",
+        "FROM w CROSS JOIN spent"
+      ]
+    },
+    {
+      "name": "cost_daily",
+      "displayName": "날짜와 쓴 곳별 금액",
+      "queryLines": [
+        "SELECT u.usage_date AS day, u.billing_origin_product AS product,\n",
+        "  round(sum(u.usage_quantity * p.pricing.effective_list.default), 2) AS usd\n",
+        "FROM system.billing.usage u\n",
+        "LEFT JOIN system.billing.list_prices p\n",
+        "  ON u.sku_name = p.sku_name AND u.cloud = p.cloud AND u.usage_unit = p.usage_unit\n",
+        " AND u.usage_end_time >= p.price_start_time\n",
+        " AND (p.price_end_time IS NULL OR u.usage_end_time < p.price_end_time)\n",
+        " AND p.currency_code = 'USD'\n",
+        "WHERE u.usage_date >= current_date() - INTERVAL 60 DAYS\n",
+        "GROUP BY ALL"
+      ]
+    },
+    {
+      "name": "queue_total",
+      "displayName": "열린 검수 대기 합계",
+      "queryLines": [
+        "SELECT count(*) AS open_items FROM queue WHERE status = 'open'"
+      ]
+    },
+    {
+      "name": "queue_kinds",
+      "displayName": "종류별 열린 검수 대기",
+      "queryLines": [
+        "SELECT kind, count(*) AS open_items, min(created_at) AS oldest\n",
+        "FROM queue WHERE status = 'open'\n",
+        "GROUP BY kind ORDER BY kind"
+      ]
+    },
+    {
+      "name": "queue_list",
+      "displayName": "열린 검수 대기 목록",
+      "queryLines": [
+        "SELECT created_at, kind, issuer, card_id, subject\n",
+        "FROM queue WHERE status = 'open'\n",
+        "ORDER BY created_at"
+      ]
+    },
+    {
+      "name": "collect_cards",
+      "displayName": "카드별 마지막 수집",
+      "queryLines": [
+        "-- 자동 수집이 없는 삼성, 롯데, IBK 다섯 장은 나오지 않는다\n",
+        "SELECT issuer, card_id, max(fetched_at) AS last_fetched,\n",
+        "  datediff(current_date(), to_date(max(fetched_at))) AS days_ago\n",
+        "FROM documents WHERE card_id IS NOT NULL\n",
+        "GROUP BY ALL ORDER BY last_fetched"
+      ]
+    },
+    {
+      "name": "collect_daily",
+      "displayName": "날짜와 카드사별 받은 원문",
+      "queryLines": [
+        "SELECT to_date(fetched_at) AS day, issuer, count(*) AS docs\n",
+        "FROM documents\n",
+        "WHERE fetched_at >= current_date() - INTERVAL 60 DAYS\n",
+        "GROUP BY ALL"
+      ]
+    },
+    {
+      "name": "changes_daily",
+      "displayName": "날짜별 바뀐 원문",
+      "queryLines": [
+        "SELECT to_date(detected_at) AS day, issuer, card_id, source_id\n",
+        "FROM changes WHERE card_id IS NOT NULL\n",
+        "ORDER BY day DESC"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "ops",
+      "displayName": "운영",
+      "layout": [
+        {
+          "widget": {
+            "name": "h_cost",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 쓴 금액"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "c_spent",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cost_total",
+                  "fields": [
+                    {
+                      "name": "spent_usd",
+                      "expression": "`spent_usd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "spent_usd",
+                  "displayName": "이번 합산 기간에 쓴 달러"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "이번 합산 기간에 쓴 달러"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "c_limit",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cost_total",
+                  "fields": [
+                    {
+                      "name": "limit_usd",
+                      "expression": "`limit_usd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "limit_usd",
+                  "displayName": "비용 차단 한도 달러"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "비용 차단 한도 달러"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 1,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "c_left",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cost_total",
+                  "fields": [
+                    {
+                      "name": "left_usd",
+                      "expression": "`left_usd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "left_usd",
+                  "displayName": "한도까지 남은 달러"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "한도까지 남은 달러"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 1,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "b_cost",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cost_daily",
+                  "fields": [
+                    {
+                      "name": "day",
+                      "expression": "`day`"
+                    },
+                    {
+                      "name": "usd",
+                      "expression": "`usd`"
+                    },
+                    {
+                      "name": "product",
+                      "expression": "`product`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "day",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "날짜"
+                },
+                "y": {
+                  "fieldName": "usd",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "달러"
+                },
+                "color": {
+                  "fieldName": "product",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "쓴 곳"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "최근 60일 날짜와 쓴 곳별 금액"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "h_queue",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 검수 대기"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "c_queue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "queue_total",
+                  "fields": [
+                    {
+                      "name": "open_items",
+                      "expression": "`open_items`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "open_items",
+                  "displayName": "열린 검수 대기"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "열린 검수 대기"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "t_kinds",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "queue_kinds",
+                  "fields": [
+                    {
+                      "name": "kind",
+                      "expression": "`kind`"
+                    },
+                    {
+                      "name": "open_items",
+                      "expression": "`open_items`"
+                    },
+                    {
+                      "name": "oldest",
+                      "expression": "`oldest`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "kind",
+                    "displayName": "종류"
+                  },
+                  {
+                    "fieldName": "open_items",
+                    "displayName": "열린 건"
+                  },
+                  {
+                    "fieldName": "oldest",
+                    "displayName": "가장 오래 기다린 건"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "종류별"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 11,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "t_queue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "queue_list",
+                  "fields": [
+                    {
+                      "name": "created_at",
+                      "expression": "`created_at`"
+                    },
+                    {
+                      "name": "kind",
+                      "expression": "`kind`"
+                    },
+                    {
+                      "name": "issuer",
+                      "expression": "`issuer`"
+                    },
+                    {
+                      "name": "card_id",
+                      "expression": "`card_id`"
+                    },
+                    {
+                      "name": "subject",
+                      "expression": "`subject`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "created_at",
+                    "displayName": "올라온 시각"
+                  },
+                  {
+                    "fieldName": "kind",
+                    "displayName": "종류"
+                  },
+                  {
+                    "fieldName": "issuer",
+                    "displayName": "카드사"
+                  },
+                  {
+                    "fieldName": "card_id",
+                    "displayName": "카드"
+                  },
+                  {
+                    "fieldName": "subject",
+                    "displayName": "내용"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "열린 건 목록"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "h_collect",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 수집 상태"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "t_cards",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "collect_cards",
+                  "fields": [
+                    {
+                      "name": "issuer",
+                      "expression": "`issuer`"
+                    },
+                    {
+                      "name": "card_id",
+                      "expression": "`card_id`"
+                    },
+                    {
+                      "name": "last_fetched",
+                      "expression": "`last_fetched`"
+                    },
+                    {
+                      "name": "days_ago",
+                      "expression": "`days_ago`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "issuer",
+                    "displayName": "카드사"
+                  },
+                  {
+                    "fieldName": "card_id",
+                    "displayName": "카드"
+                  },
+                  {
+                    "fieldName": "last_fetched",
+                    "displayName": "마지막으로 받은 시각"
+                  },
+                  {
+                    "fieldName": "days_ago",
+                    "displayName": "지난 날"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "카드별 마지막 수집. 오래된 순"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 21,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "b_collect",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "collect_daily",
+                  "fields": [
+                    {
+                      "name": "day",
+                      "expression": "`day`"
+                    },
+                    {
+                      "name": "docs",
+                      "expression": "`docs`"
+                    },
+                    {
+                      "name": "issuer",
+                      "expression": "`issuer`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "day",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "날짜"
+                },
+                "y": {
+                  "fieldName": "docs",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "원문 수"
+                },
+                "color": {
+                  "fieldName": "issuer",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "카드사"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "최근 60일 날짜와 카드사별 받은 원문"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 21,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "t_changes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "changes_daily",
+                  "fields": [
+                    {
+                      "name": "day",
+                      "expression": "`day`"
+                    },
+                    {
+                      "name": "issuer",
+                      "expression": "`issuer`"
+                    },
+                    {
+                      "name": "card_id",
+                      "expression": "`card_id`"
+                    },
+                    {
+                      "name": "source_id",
+                      "expression": "`source_id`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "day",
+                    "displayName": "날짜"
+                  },
+                  {
+                    "fieldName": "issuer",
+                    "displayName": "카드사"
+                  },
+                  {
+                    "fieldName": "card_id",
+                    "displayName": "카드"
+                  },
+                  {
+                    "fieldName": "source_id",
+                    "displayName": "원문"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "바뀐 원문"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 29,
+            "width": 6,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ]
+}

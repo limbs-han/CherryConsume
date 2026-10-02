@@ -51,3 +51,9 @@ targets:
           permissions:
             - group_name: cherry-admins
               level: CAN_MANAGE
+      dashboards:
+        cherry_ops:
+          # 운영 대시보드는 서비스 주체가 배포한다. 사람 계정이 열어 조회하게 한다. 작업 007
+          permissions:
+            - group_name: cherry-admins
+              level: CAN_RUN
