@@ -1,4 +1,4 @@
-# 서버와 엔진 테스트. master에 서버, 엔진, 카탈로그가 바뀐 푸시와 수동 실행에서 돈다. 작업 005
+# 서버와 엔진 테스트, 앱 테스트. master에 서버, 엔진, 카탈로그, 앱이 바뀐 푸시와 수동 실행에서 돈다. 작업 005, 006
 # 서버 테스트는 Postgres가 있어야 돌아 서비스로 띄운다. 값은 compose.yaml과 같은 시험용이다
 name: test
 
@@ -8,6 +8,7 @@ on:
     paths:
       - "backend/**"
       - "catalog/**"
+      - "app/**"
       - ".github/workflows/test.yml"
   workflow_dispatch:
 
@@ -21,12 +22,14 @@ concurrency:
 defaults:
   run:
     shell: bash
-    working-directory: backend
 
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
     services:
       db:
         image: postgres:17
@@ -60,3 +63,28 @@ jobs:
             echo "::error::서버 테스트를 건너뛰었다"
             exit 1
           fi
+
+  # 앱 분석기와 위젯 테스트. Flutter 판은 이 PC와 같게 둔다. 작업 006 계획 단계 1의 4
+  app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.44.8
+          channel: stable
+
+      - name: 패키지
+        run: flutter pub get
+
+      - name: 분석기
+        run: flutter analyze
+
+      - name: 테스트
+        run: flutter test
