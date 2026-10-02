@@ -173,21 +173,46 @@ def main(argv: list[str] | None = None) -> None:
         removed, added = changed_lines(old.text, new.text, "list")
         removed_names, added_names = names_in(removed), names_in(added)
         extracted += 1
-        spark.createDataFrame(
-            [(issuer, new.path, old.path, removed_names, added_names, args.model)],
-            CARD_LISTS.rsplit(", extracted_at", 1)[0],
-        ).withColumn("extracted_at", F.current_timestamp()).write.mode(
-            "append"
-        ).saveAsTable(f"{s}.card_lists")
+        # 바뀐 원문과 같은 방법으로, 뽑은 이름만 Python에서 만들고 카드사와 경로는 문서 표와 맞붙여 쓴다
+        # 그래야 계보에 documents에서 card_lists로 가는 선이 남는다. 작업 007 설계 2절
+        names = spark.createDataFrame(
+            [(new.path, old.path, removed_names, added_names)],
+            "path STRING, old_path STRING, removed_names ARRAY<STRING>, added_names ARRAY<STRING>",
+        )
+        (
+            spark.table(f"{s}.documents")
+            .join(names, "path")
+            .select("issuer", "path", "old_path", "removed_names", "added_names")
+            .withColumn("model", F.lit(args.model))
+            .withColumn("extracted_at", F.current_timestamp())
+            .write.mode("append")
+            .saveAsTable(f"{s}.card_lists")
+        )
         new_cards, gone_cards = list_changes(
             old.text, new.text, removed_names, added_names, known
         )
-        rows = [("new_card", issuer, None, n, new.path, "open") for n in new_cards]
-        rows += [("gone_card", issuer, None, n, new.path, "open") for n in gone_cards]
+        rows = [(new.path, "new_card", n) for n in new_cards]
+        rows += [(new.path, "gone_card", n) for n in gone_cards]
         if rows:
-            spark.createDataFrame(rows, QUEUE.rsplit(", created_at", 1)[0]).withColumn(
-                "created_at", F.current_timestamp()
-            ).write.mode("append").saveAsTable(f"{s}.queue")
+            # 검수 대기도 방금 쓴 card_lists 행과 맞붙여 쓴다. 계보에 card_lists에서 queue로 가는 선이 남는다
+            picked = spark.createDataFrame(
+                rows, "path STRING, kind STRING, subject STRING"
+            )
+            (
+                spark.table(f"{s}.card_lists")
+                .join(picked, "path")
+                .select(
+                    "kind",
+                    "issuer",
+                    F.lit(None).cast("string").alias("card_id"),
+                    "subject",
+                    F.col("path").alias("source_path"),
+                    F.lit("open").alias("status"),
+                )
+                .withColumn("created_at", F.current_timestamp())
+                .write.mode("append")
+                .saveAsTable(f"{s}.queue")
+            )
             queued += len(rows)
     print(
         f"바뀐 원문 {len(changes)}개, 목록을 뽑은 카드사 {extracted}곳, 검수 대기에 올린 카드 {queued}건"
