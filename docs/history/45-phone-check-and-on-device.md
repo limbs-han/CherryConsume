@@ -2,8 +2,8 @@
 
 - 날짜: 2026-10-02
 - 결과물: [로그인 준비](../login-setup.md), [배포 안내서](../deploy-setup.md), [작업 006 의도](../work/006-on-device/intent.md), [작업 006 설계](../work/006-on-device/design.md), [작업 005 계획](../work/005-app-mvp/plan.md)
-- 커밋: `5382543` docs: 작업 006 폰 안 저장과 계산의 의도와 설계 1~3절
-- 커밋: `3d8c833` docs: 로그인 준비와 배포 안내서 명령을 PowerShell로 바꿈
+- 커밋: `d920658` docs: 작업 006 폰 안 저장과 계산의 의도와 설계 1~3절
+- 커밋: `6ddde41` docs: 로그인 준비와 배포 안내서 명령을 PowerShell로 바꿈
 
 ## 요청
 
