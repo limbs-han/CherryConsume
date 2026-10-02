@@ -2338,6 +2338,8 @@ git commit -m "feat: LLM 규칙 추출과 초안 검사 작업 추가" -m "작�
 **Files:**
 - Create: `pipeline/src/evaluate.py`, `pipeline/resources/evaluate.yml`
 
+2026-10-02 사용자가 바꿨다. 채점 작업은 다시 추출하지 않고 `cherry_extract`가 남긴 정답 예시 추출을 읽는다. 프롬프트를 고칠 때마다 `cherry_extract`를 split all로 한 번, `cherry_evaluate`를 한 번 돌린다. 계산은 `cherry_core.pipeline.score`의 `score_answer`와 `summarize`다. MLflow 실험은 번들 폴더 아래 `cherry_eval`이다.
+
 **만들 것:** 작업 `cherry_evaluate`. 인자는 모델과 프롬프트 판이다. `silver.golden`의 20장을 추출하고, 카드마다 `field_accuracy(clean_rules(정답), clean_rules(추출))`를 구한다. 다듬기용 15장과 채점 전용 5장을 따로 `total_accuracy`로 합친다. MLflow 실행 하나에 모델, 프롬프트 판을 인자로, `tune.<묶음>`과 `holdout.<묶음>`을 지표로, 카드별 결과표를 파일로 남긴다. 검수에서 사람이 고친 값이 있으면 그 카드의 정답을 고친 값으로 바꿔 채점한다. 설계 4절 5번.
 
 - [ ] **1단계: 세 모델을 채점한다**
