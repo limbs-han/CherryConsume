@@ -30,14 +30,22 @@ class EditPayment(PaymentFields):
 
 class Cancel(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    # 지금까지 취소한 금액의 합이다. 부분 취소가 여러 번이면 합을 보낸다. E5
-    cancelled_amount: Annotated[int, Field(strict=True, gt=0)]
+    # 지금까지 취소한 금액의 합이다. 부분 취소가 여러 번이면 합을 보낸다. 0이면 취소 기록을 되돌린다. E5
+    cancelled_amount: Annotated[int, Field(strict=True, ge=0)]
     cancelled_at: AwareDatetime
 
 
 def revision_for(request: Request, card_id: str, at: datetime) -> int | None:
     found = request.app.state.engine.ctx.rules_on(card_id, local(at).date())
     return request.app.state.revision_ids[(card_id, found[0].effective_from)] if found else None
+
+
+def locked_payment(conn, user, tid: str, rows: dict[str, dict]) -> dict:
+    """카드를 잠근 뒤 결제를 다시 읽는다. 잠그기 전에 다른 요청이 이 결제를 바꾸거나 옮겼을 수 있다. 위험 검토 11번"""
+    old = mine(conn, user, tid)
+    if str(old["user_card_id"]) not in rows:
+        raise HTTPException(409, "다른 요청이 이 결제를 바꿨다. 다시 시도한다")
+    return old
 
 
 def lock_cards(conn, user, ids: set[str]) -> dict[str, dict]:
@@ -104,7 +112,8 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
         p = to_payment(row)
         uc = cards[str(row["user_card_id"])]
         found = engine.ctx.rules_on(uc["card_id"], local(p.paid_at).date())
-        counted = True
+        # 결제일에 맞는 개정이 없으면 엔진이 계산하지 않아 실적에도 넣지 않는다. 위험 검토 17번
+        counted = False
         rewards: list[str] = []
         if found is not None:
             card_ = engine_card(uc)
@@ -131,6 +140,7 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
                 "card_name": uc["name"],
                 "amount": p.amount,
                 "cancelled_amount": p.cancelled_amount,
+                "cancelled_at": p.cancelled_at.isoformat() if p.cancelled_at else None,
                 "value": sum(b.value for b in p.benefits or []),
                 "rewards": rewards,
                 "counted": counted,
@@ -157,13 +167,15 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
 def edit(tid: str, body: EditPayment, request: Request, user: User, conn: Conn) -> dict:
     """결제 고치기. 그 결제만 다시 계산한다. E50. 구간이 바뀐 달이 있으면 처음 바뀐 달부터 마지막 결제가 든 달까지 다시 계산한다. E54"""
     tid = checked_id(tid, "결제가 아니다")
-    old = mine(conn, user, tid)
-    if old["cancelled_amount"] > body.amount:
-        raise HTTPException(422, "취소한 금액보다 작게 고칠 수 없다")
     f = filled(request, body)
     new_card = checked_id(body.user_card_id)
+    rows = lock_cards(conn, user, {str(mine(conn, user, tid)["user_card_id"]), new_card})
+    old = locked_payment(conn, user, tid, rows)
     old_card = str(old["user_card_id"])
-    rows = lock_cards(conn, user, {old_card, new_card})
+    if old["cancelled_amount"] > body.amount:
+        raise HTTPException(422, "취소한 금액보다 작게 고칠 수 없다")
+    if old["cancelled_at"] is not None and f["paid_at"] > old["cancelled_at"]:
+        raise HTTPException(422, "결제 시각이 취소 시각보다 뒤다")
     # 새로 고른 카드는 해지하지 않은 카드여야 한다. 해지한 카드의 결제는 그 카드 그대로만 고친다
     if new_card not in rows or (new_card != old_card and rows[new_card]["removed_at"] is not None):
         raise HTTPException(404, "보유 카드가 아니다")
@@ -215,22 +227,39 @@ def edit(tid: str, body: EditPayment, request: Request, user: User, conn: Conn) 
 def cancel(tid: str, body: Cancel, request: Request, user: User, conn: Conn) -> dict:
     """취소 기록. 남은 금액으로 그 결제를 다시 계산하고 전액 취소면 혜택은 0이다. 구간이 처음 바뀐 달부터 다시 계산한다. E5, E54"""
     tid = checked_id(tid, "결제가 아니다")
-    old = mine(conn, user, tid)
     now = request.app.state.clock()
-    if body.cancelled_amount > old["amount"]:
-        raise HTTPException(422, "결제 금액보다 많이 취소할 수 없다")
-    if body.cancelled_at < old["paid_at"] or body.cancelled_at > now + timedelta(days=1):
-        raise HTTPException(422, "취소 시각이 결제 시각보다 앞서거나 지금보다 하루 넘게 뒤다")
+    rows = lock_cards(conn, user, {str(mine(conn, user, tid)["user_card_id"])})
+    old = locked_payment(conn, user, tid, rows)
     card_id = str(old["user_card_id"])
-    rows = lock_cards(conn, user, {card_id})
+    amount = body.cancelled_amount
+    at = body.cancelled_at if amount else None
+    if amount > old["amount"]:
+        raise HTTPException(422, "결제 금액보다 많이 취소할 수 없다")
+    if amount == 0 and old["cancelled_amount"] == 0:
+        raise HTTPException(422, "되돌릴 취소 기록이 없다")
+    if at is not None and (at < old["paid_at"] or at > now + timedelta(days=1)):
+        raise HTTPException(422, "취소 시각이 결제 시각보다 앞서거나 지금보다 하루 넘게 뒤다")
+    # 취소 시각은 하나라 다른 달에 더 취소한 금액은 담지 못한다. 취소한 달 기준 카드에서 앞 달 취소분까지 뒤 달 실적에서
+    # 빼게 된다. 미지원으로 막는다. 금액을 그대로 두고 시각만 고치는 것은 받는다. 위험 검토 5번
+    # ponytail: 결제한 달 기준 카드는 취소 시각이 실적에 쓰이지 않아 담을 수 있지만 함께 막는다. 카드마다 풀면 그때 연다
+    first = old["cancelled_at"]
+    moved = first is not None and at is not None and month_of(local(first).date()) != month_of(local(at).date())
+    if moved and amount != old["cancelled_amount"]:
+        raise HTTPException(422, "다른 달에 더 취소한 금액은 아직 담지 못한다")
     loaded = load_payments(conn, [card_id])[card_id]
     before = {q.id: q for q in loaded}
-    p = before[tid].model_copy(update={"cancelled_amount": body.cancelled_amount, "cancelled_at": body.cancelled_at})
+    p = before[tid].model_copy(update={"cancelled_amount": amount, "cancelled_at": at})
     engine = request.app.state.engine
-    res = changed_with(engine, engine_card(rows[card_id]), loaded, p, None, month_of(local(p.paid_at).date()), now)
+    # 순위 영역 이용액의 취소를 어느 달에 반영하는지 카드마다 다르고 담을 칸이 없다. 삼성 iD ON은 취소 접수월이다.
+    # 엔진은 결제한 달에서 빼므로 취소로 지나간 달 순위를 다시 매기지 않는다. 확인 필요. 2026-10-02 위험 검토
+    res = changed_with(
+        engine, engine_card(rows[card_id]), loaded, p, None, month_of(local(p.paid_at).date()), now, rerank=False
+    )
+    # 지금 카탈로그로 다시 계산했으니 개정 연결도 지금 결제일의 개정으로 맞춘다. 위험 검토 12번
     conn.execute(
-        "UPDATE transactions SET cancelled_amount = %s, cancelled_at = %s, updated_at = %s WHERE id = %s",
-        (body.cancelled_amount, body.cancelled_at, now, tid),
+        "UPDATE transactions SET cancelled_amount = %s, cancelled_at = %s, card_revision_id = %s, updated_at = %s"
+        " WHERE id = %s",
+        (amount, at, revision_for(request, rows[card_id]["card_id"], old["paid_at"]), now, tid),
     )
     repriced = store(conn, request, rows[card_id]["card_id"], res, before, {tid}, now)
     return {"id": tid, "value": res[tid].value, "repriced": repriced}
@@ -240,10 +269,10 @@ def cancel(tid: str, body: Cancel, request: Request, user: User, conn: Conn) -> 
 def delete(tid: str, request: Request, user: User, conn: Conn) -> dict:
     """결제 지우기. 행은 남기고 지운 시각만 찍는다. S8. 구간이 처음 바뀐 달부터 마지막 결제가 든 달까지 다시 계산한다. E54"""
     tid = checked_id(tid, "결제가 아니다")
-    old = mine(conn, user, tid)
     now = request.app.state.clock()
+    rows = lock_cards(conn, user, {str(mine(conn, user, tid)["user_card_id"])})
+    old = locked_payment(conn, user, tid, rows)
     card_id = str(old["user_card_id"])
-    rows = lock_cards(conn, user, {card_id})
     loaded = load_payments(conn, [card_id])[card_id]
     before = {q.id: q for q in loaded}
     engine = request.app.state.engine

@@ -308,3 +308,137 @@ def test_records_show_spend_like_the_engine_after_cancel(client):
     assert client.post(f"/me/payments/{cgv['id']}/cancel", json=body, headers=headers).json()["value"] == 0
     rows = client.get("/me/payments", params={"month": "2026-08"}, headers=headers).json()["payments"]
     assert [(x["merchant_name"], x["counted"]) for x in rows] == [("CGV 강남", False)]
+
+
+def records_of(client, headers, month="2026-09"):
+    return client.get("/me/payments", params={"month": month}, headers=headers).json()["payments"]
+
+
+def test_edit_cannot_move_a_payment_after_its_cancel(client):
+    # 위험 검토 6번. 9월 14일 21시 결제를 22시에 일부 취소했다. 결제 시각을 15일로 고치면 취소보다 뒤라 422다
+    headers, [mrlife] = setup(client, MRLIFE)
+    tid = pay(client, headers, mrlife, 10000, "GS25", at="2026-09-14T21:00:00+09:00")["id"]
+    cancel = {"cancelled_amount": 5000, "cancelled_at": "2026-09-14T22:00:00+09:00"}
+    assert client.post(f"/me/payments/{tid}/cancel", json=cancel, headers=headers).status_code == 200
+    body = {"user_card_id": mrlife, "amount": 10000, "merchant_name": "GS25", "paid_at": "2026-09-15T21:00:00+09:00"}
+    assert client.patch(f"/me/payments/{tid}", json=body, headers=headers).status_code == 422
+    edit(client, headers, tid, mrlife, 10000, "GS25", at="2026-09-14T20:00:00+09:00")
+
+
+def test_more_cancel_in_another_month_is_unsupported(client):
+    # 위험 검토 5번. 8월 결제를 8월에 3,000원 취소했다. 9월에 더 취소해 합을 5,000원으로 올리면 취소 시각이 하나라
+    # 담지 못해 422다. 금액을 그대로 두고 시각만 9월로 고치는 것은 받는다
+    headers, [mrlife] = setup(client, MRLIFE)
+    tid = pay(client, headers, mrlife, 10000, "이마트", at="2026-08-20T12:00:00+09:00")["id"]
+    url = f"/me/payments/{tid}/cancel"
+    aug = {"cancelled_amount": 3000, "cancelled_at": "2026-08-25T12:00:00+09:00"}
+    assert client.post(url, json=aug, headers=headers).status_code == 200
+    more = {"cancelled_amount": 5000, "cancelled_at": "2026-09-10T12:00:00+09:00"}
+    assert client.post(url, json=more, headers=headers).status_code == 422
+    # 합 대신 이번 취소 2,000원만 적어 달을 바꾸면 8월 3,000원 취소가 사라진다. 이것도 막는다
+    less = {"cancelled_amount": 2000, "cancelled_at": "2026-09-10T12:00:00+09:00"}
+    assert client.post(url, json=less, headers=headers).status_code == 422
+    moved = {"cancelled_amount": 3000, "cancelled_at": "2026-09-10T12:00:00+09:00"}
+    assert client.post(url, json=moved, headers=headers).status_code == 200
+    # 취소한 적 없는 결제는 되돌릴 것이 없어 422다
+    other = pay(client, headers, mrlife, 4300, "GS25")["id"]
+    zero = {"cancelled_amount": 0, "cancelled_at": "2026-09-15T21:10:00+09:00"}
+    assert client.post(f"/me/payments/{other}/cancel", json=zero, headers=headers).status_code == 422
+
+
+def test_cancel_zero_undoes_the_cancel(client):
+    # 위험 검토 16번. GS25 4,300원을 전액 취소하면 0원이다. 0원 취소로 되돌리면 다시 430원이고 취소 시각도 지운다
+    headers, [mrlife] = setup(client, MRLIFE)
+    tid = pay(client, headers, mrlife, 4300, "GS25")["id"]
+    url = f"/me/payments/{tid}/cancel"
+    full = {"cancelled_amount": 4300, "cancelled_at": "2026-09-15T21:10:00+09:00"}
+    assert client.post(url, json=full, headers=headers).json()["value"] == 0
+    assert records_of(client, headers)[0]["cancelled_at"] is not None
+    undo = {"cancelled_amount": 0, "cancelled_at": "2026-09-15T21:20:00+09:00"}
+    assert client.post(url, json=undo, headers=headers).json()["value"] == 430
+    row = records_of(client, headers)[0]
+    assert (row["cancelled_amount"], row["cancelled_at"], row["value"]) == (0, None, 430)
+
+
+def test_payment_without_a_revision_is_not_counted(client):
+    # 위험 검토 17번. Mr.Life 개정은 2026-07-15부터다. 7월 1일 결제는 맞는 개정이 없어 계산하지 않고 실적에도 넣지 않는다
+    headers, [mrlife] = setup(client, NO_GUESS)
+    pay(client, headers, mrlife, 10000, "이마트", at="2026-07-01T12:00:00+09:00")
+    [row] = records_of(client, headers, "2026-07")
+    assert (row["value"], row["counted"]) == (0, False)
+
+
+def test_past_month_ranked_benefit_uses_the_month_end_rank(client):
+    # 위험 검토 7번, E48. 삼성 iD ON은 30만 구간부터 그 달 이용액 1위 영역만 30% 할인, 월 1만 원까지다. 7월 이마트
+    # 30만 원으로 8월이 30만 구간이다. 8월 5일 스타벅스 1만 원은 그때 커피가 1위라 3,000원이었다. 8월 20일 배민 2만 원이
+    # 들어오면 8월 끝 1위는 배달이라 스타벅스 0원, 배민 6,000원이다. 배민을 5,000원으로 고치면 다시 커피가 1위라
+    # 스타벅스 3,000원, 배민 0원이다
+    headers, [ion] = setup(client, {"card_id": "samsung-id-on"})
+    pay(client, headers, ion, 300000, "이마트", at="2026-07-10T12:00:00+09:00")
+    assert pay(client, headers, ion, 10000, "스타벅스", at="2026-08-05T12:00:00+09:00")["value"] == 3000
+    baemin = pay(client, headers, ion, 20000, "배민", at="2026-08-20T12:00:00+09:00")
+    assert baemin["value"] == 6000
+
+    def august():
+        return {r["merchant_name"]: r["value"] for r in records_of(client, headers, "2026-08")}
+
+    assert august() == {"스타벅스": 0, "배민": 6000}
+    edit(client, headers, baemin["id"], ion, 5000, "배민", at="2026-08-20T12:00:00+09:00")
+    assert august() == {"스타벅스": 3000, "배민": 0}
+
+
+def total_of(client, headers, month="2026-09"):
+    return client.get("/me/payments", params={"month": month}, headers=headers).json()["benefit_total"]
+
+
+def test_cancel_does_not_rerank_a_past_month(client):
+    # 재검토 중간 3번. 삼성 iD ON은 영역 이용액의 취소를 취소 접수월에 넣는데 엔진은 결제한 달에서 뺀다. 담을 칸이 없어
+    # 취소로 지나간 달 순위를 다시 매기지 않는다. 8월 스타벅스 1만 5천 원 4,500원, 배민 1만 2천 원 0원이다. 9월 3일 스타벅스
+    # 5,000원 취소를 적으면 스타벅스만 남은 1만 원의 30%로 3,000원이고 배민은 0원 그대로다
+    headers, [ion] = setup(client, {"card_id": "samsung-id-on"})
+    pay(client, headers, ion, 300000, "이마트", at="2026-07-10T12:00:00+09:00")
+    star = pay(client, headers, ion, 15000, "스타벅스", at="2026-08-05T12:00:00+09:00")
+    assert star["value"] == 4500
+    assert pay(client, headers, ion, 12000, "배민", at="2026-08-20T12:00:00+09:00")["value"] == 0
+    cancel = {"cancelled_amount": 5000, "cancelled_at": "2026-09-03T12:00:00+09:00"}
+    assert client.post(f"/me/payments/{star['id']}/cancel", json=cancel, headers=headers).status_code == 200
+    august = {r["merchant_name"]: r["value"] for r in records_of(client, headers, "2026-08")}
+    assert august == {"스타벅스": 3000, "배민": 0}
+
+
+def test_move_last_month_payment_into_this_month(client):
+    # 위험 검토 19번. 8월 이마트 30만 원으로 9월이 30만 구간이라 GS25 4,300원 430원이다. 이마트를 9월 1일로 옮기면
+    # 8월 실적이 0원이라 9월이 0원 구간이고 GS25도 0원이다
+    headers, [mrlife] = setup(client, NO_GUESS)
+    aug = pay(client, headers, mrlife, 300000, "이마트", at="2026-08-20T12:00:00+09:00")["id"]
+    pay(client, headers, mrlife, 4300, "GS25")
+    edit(client, headers, aug, mrlife, 300000, "이마트", at="2026-09-01T12:00:00+09:00")
+    assert total_of(client, headers) == 0
+
+
+def test_tier_boundary_299999_and_300000(client):
+    # 위험 검토 19번. 8월 실적 299,999원이면 9월이 0원 구간이라 GS25 0원, 30만 원으로 고치면 30만 구간이라 430원이다
+    headers, [mrlife] = setup(client, NO_GUESS)
+    aug = pay(client, headers, mrlife, 299999, "이마트", at="2026-08-20T12:00:00+09:00")["id"]
+    pay(client, headers, mrlife, 4300, "GS25")
+    assert total_of(client, headers) == 0
+    edit(client, headers, aug, mrlife, 300000, "이마트", at="2026-08-20T12:00:00+09:00")
+    assert total_of(client, headers) == 430
+
+
+def test_edit_a_cancelled_payment_keeps_the_cancel(client):
+    # 위험 검토 19번. GS25 1만 원 가운데 5,000원을 취소해 500원이다. 1만 2,000원으로 고치면 취소는 그대로라 남은
+    # 7,000원의 10%로 700원이다
+    headers, [mrlife] = setup(client, MRLIFE)
+    tid = pay(client, headers, mrlife, 10000, "GS25", at="2026-09-14T21:00:00+09:00")["id"]
+    cancel = {"cancelled_amount": 5000, "cancelled_at": "2026-09-14T22:00:00+09:00"}
+    assert client.post(f"/me/payments/{tid}/cancel", json=cancel, headers=headers).json()["value"] == 500
+    assert edit(client, headers, tid, mrlife, 12000, "GS25", at="2026-09-14T21:00:00+09:00")["value"] == 700
+
+
+def test_edit_a_payment_on_a_removed_card(client):
+    # 위험 검토 19번. 해지한 카드의 결제도 그 카드 그대로 고친다. GS25 4,300원을 1만 원으로 고치면 1,000원이다
+    headers, [mrlife] = setup(client, MRLIFE)
+    tid = pay(client, headers, mrlife, 4300, "GS25")["id"]
+    assert client.delete(f"/me/cards/{mrlife}", headers=headers).status_code == 200
+    assert edit(client, headers, tid, mrlife, 10000, "GS25")["value"] == 1000

@@ -23,6 +23,7 @@ Map<String, dynamic> row(
   int value, {
   bool counted = true,
   String? category,
+  int cancelled = 0,
 }) => {
   'id': id,
   'paid_at': '2026-09-15T21:00:00+09:00',
@@ -32,7 +33,8 @@ Map<String, dynamic> row(
   'user_card_id': 'u1',
   'card_name': '신한카드 Mr.Life',
   'amount': amount,
-  'cancelled_amount': 0,
+  'cancelled_amount': cancelled,
+  'cancelled_at': cancelled > 0 ? '2026-09-15T21:10:00+09:00' : null,
   'value': value,
   'rewards': value > 0 ? ['billing_discount'] : <String>[],
   'counted': counted,
@@ -47,6 +49,7 @@ Map<String, dynamic> row(
 class FakeServer {
   final calls = <String>[];
   final drafts = <Map<String, dynamic>>[];
+  final cancels = <Map<String, dynamic>>[];
   bool removed = false;
 
   Future<http.Response> call(http.Request req) async {
@@ -89,9 +92,15 @@ class FakeServer {
           ],
           'payments': [
             row('t1', 'GS25', 4300, 430, category: 'convenience'),
-            row('t2', '상품권', 10000, 0, counted: false),
+            row('t2', '상품권', 10000, 0, counted: false, cancelled: 3000),
           ],
         });
+      case ('POST', '/me/payments/t1/cancel'):
+        cancels.add(jsonDecode(req.body) as Map<String, dynamic>);
+        return ok({'detail': '다른 달에 더 취소한 금액은 아직 담지 못한다'}, 422);
+      case ('POST', '/me/payments/t2/cancel'):
+        cancels.add(jsonDecode(req.body) as Map<String, dynamic>);
+        return ok({'id': 't2', 'value': 0, 'repriced': 0});
       case ('DELETE', '/me/payments/t1'):
         return ok({'id': 't1', 'repriced': 1});
       case ('GET', '/catalog/categories'):
@@ -239,6 +248,63 @@ void main() {
 
     expect(server.calls, contains('DELETE /me/payments/t1'));
     expect(find.text('다른 결제 1건의 혜택도 다시 계산했어요.'), findsOneWidget);
+  });
+
+  testWidgets('취소 기록은 빈 칸에서 시작하고 다른 달 추가 취소는 담지 못한다고 알린다', (tester) async {
+    final server = await start(tester);
+    await tester.tap(find.text('기록'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('GS25'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(PopupMenuButton<String>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('취소 기록'));
+    await tester.pumpAndSettle();
+
+    // 처음 값이 전액이면 누르기만 해도 전액 취소가 된다. 비워 둔다. 위험 검토 16번
+    final field = tester.widget<TextField>(
+      find.byKey(const Key('cancel-amount')),
+    );
+    expect(field.controller!.text, '');
+    expect(find.textContaining('취소한 날'), findsOneWidget);
+    await tester.enterText(find.byKey(const Key('cancel-amount')), '2000');
+    await tester.tap(find.widgetWithText(FilledButton, '기록'));
+    await tester.pumpAndSettle();
+
+    // 오늘을 고르면 지금보다 뒤가 아닌 시각을 보낸다
+    expect(server.cancels.single['cancelled_amount'], 2000);
+    final at = DateTime.parse(server.cancels.single['cancelled_at']);
+    expect(at.isAfter(DateTime.now()), isFalse);
+    expect(find.text('다른 달에 더 취소된 금액은 아직 담지 못해요.'), findsOneWidget);
+  });
+
+  testWidgets('이미 취소된 결제는 이번 금액을 더해 보내고 취소 기록을 지울 수 있다', (tester) async {
+    final server = await start(tester);
+    await tester.tap(find.text('기록'));
+    await tester.pumpAndSettle();
+
+    Future<void> openCancel() async {
+      await tester.tap(find.text('상품권'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(PopupMenuButton<String>));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('취소 기록'));
+      await tester.pumpAndSettle();
+    }
+
+    // 지금까지 3,000원이 취소됐다. 이번에 2,000원이 더 취소되면 합 5,000원을 보낸다
+    await openCancel();
+    expect(find.textContaining('지금까지 3,000원 취소'), findsOneWidget);
+    await tester.enterText(find.byKey(const Key('cancel-amount')), '2000');
+    await tester.tap(find.widgetWithText(FilledButton, '기록'));
+    await tester.pumpAndSettle();
+    expect(server.cancels.last['cancelled_amount'], 5000);
+
+    // 위험 검토 16번. 취소 기록 지우기는 0원을 보낸다
+    await openCancel();
+    await tester.tap(find.byKey(const Key('cancel-undo')));
+    await tester.pumpAndSettle();
+    expect(server.cancels.last['cancelled_amount'], 0);
   });
 
   testWidgets('홈의 카드를 누르면 카드 상세에 남은 한도가 보이고 해지하면 홈에서 빠진다', (tester) async {

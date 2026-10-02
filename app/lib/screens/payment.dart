@@ -116,44 +116,107 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  /// 카드사에서 취소된 금액을 적는다. 결제를 지우지 않고 남은 금액으로 다시 계산한다. E5
+  /// 카드사에서 이번에 취소된 금액과 날짜를 적는다. 지금까지의 합에 더해 보낸다. 결제를 지우지 않고 남은 금액으로
+  /// 다시 계산한다. 이미 적은 취소는 지울 수 있다. E5
   Future<void> _cancel() async {
     final e = widget.editing!;
-    final text = TextEditingController(text: '${e.amount}');
-    final amount = await showDialog<int>(
+    final text = TextEditingController();
+    // 날짜는 늘 오늘에서 시작한다. 옛 취소일로 채우면 다른 달에 더 취소된 금액이 옛 달로 조용히 들어간다
+    final today = DateUtils.dateOnly(DateTime.now());
+    final first = DateUtils.dateOnly(e.paidAt);
+    final last = first.isAfter(today) ? first : today;
+    var day = last;
+    final before = e.cancelledAt;
+    final picked = await showDialog<(int, DateTime)>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('취소된 금액'),
-        content: TextField(
-          key: const Key('cancel-amount'),
-          controller: text,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: const InputDecoration(
-            suffixText: '원',
-            helperText: '부분 취소가 여러 번이면 합을 적어요',
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialog) => AlertDialog(
+          title: const Text('이번에 취소된 금액'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (e.cancelledAmount > 0 && before != null)
+                Text(
+                  '지금까지 ${won(e.cancelledAmount)} 취소 · ${before.month}월 ${before.day}일',
+                  style: const TextStyle(color: C.sub),
+                ),
+              TextField(
+                key: const Key('cancel-amount'),
+                controller: text,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: const InputDecoration(
+                  suffixText: '원',
+                  hintText: '0',
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(child: Text('취소한 날 ${day.month}월 ${day.day}일')),
+                  TextButton(
+                    key: const Key('cancel-day'),
+                    onPressed: () async {
+                      final d = await showDatePicker(
+                        context: context,
+                        initialDate: day,
+                        firstDate: first,
+                        lastDate: last,
+                      );
+                      if (d != null) setDialog(() => day = d);
+                    },
+                    child: const Text('바꾸기'),
+                  ),
+                ],
+              ),
+            ],
           ),
+          actions: [
+            if (e.cancelledAmount > 0)
+              TextButton(
+                key: const Key('cancel-undo'),
+                onPressed: () => Navigator.pop(context, (0, day)),
+                child: const Text('취소 기록 지우기'),
+              ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('닫기'),
+            ),
+            FilledButton(
+              onPressed: () {
+                final n = int.tryParse(text.text);
+                Navigator.pop(context, n == null || n <= 0 ? null : (n, day));
+              },
+              child: const Text('기록'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('닫기'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, int.tryParse(text.text)),
-            child: const Text('기록'),
-          ),
-        ],
       ),
     );
-    if (amount == null || amount <= 0 || !mounted) return;
+    if (picked == null || !mounted) return;
+    final (added, on) = picked;
+    final total = added == 0 ? 0 : e.cancelledAmount + added;
+    // 고른 날의 한국 시간 23:59로 적는다. 실적의 달은 한국 시간으로 가른다. E7. 지금보다 뒤면 지금, 결제보다 앞서면
+    // 결제 시각이다
+    var at = DateTime.utc(on.year, on.month, on.day, 14, 59);
+    final now = DateTime.now();
+    if (at.isAfter(now)) at = now;
+    if (at.isBefore(e.paidAt)) at = e.paidAt;
     try {
-      final repriced = await widget.api.cancelPayment(
-        e.id,
-        amount,
-        DateTime.now(),
-      );
+      final repriced = await widget.api.cancelPayment(e.id, total, at);
       if (mounted) Navigator.of(context).pop(repriced);
+    } on ApiError catch (err) {
+      if (!mounted) return;
+      // 취소 시각은 하나라 다른 달에 더 취소된 금액은 담지 못한다. 서버가 422로 막는다. 위험 검토 5번
+      final otherMonth = err.status == 422 && err.body.contains('다른 달');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            otherMonth ? '다른 달에 더 취소된 금액은 아직 담지 못해요.' : '취소를 기록하지 못했어요.',
+          ),
+        ),
+      );
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(

@@ -11,6 +11,7 @@ import psycopg
 
 from cherry_core.engine.cond import add_months, local, month_of
 from cherry_core.engine.models import AppliedBenefit, Payment, PaymentResult, UserCard
+from cherry_core.engine.price import ranked_areas
 
 from .catalog_sync import alias_key
 
@@ -99,6 +100,15 @@ def _with(payments: list[Payment], results: dict[str, PaymentResult]) -> list[Pa
     return [q.model_copy(update={"benefits": results[q.id].benefits}) if q.id in results else q for q in payments]
 
 
+def ranked_past(engine, card: UserCard, month: date, now: datetime) -> bool:
+    """지나간 달이고 그 달 개정에 순위 혜택이 있으면 참이다. 그 달은 달 끝 순위로 계산한다. E48
+
+    ponytail: 달 첫날의 개정만 본다. 달 중간에 순위 혜택이 생기는 개정이 오면 그 달 결제마다 본다
+    """
+    found = engine.ctx.rules_on(card.card_id, month)
+    return month < month_of(local(now).date()) and found is not None and bool(ranked_areas(found[1]))
+
+
 def priced_with(engine, card: UserCard, history: list[Payment], p: Payment, now: datetime) -> dict[str, PaymentResult]:
     """새 결제 p의 혜택과, p 때문에 다시 계산한 결제의 혜택. 작업 005 설계 5b절
 
@@ -107,11 +117,12 @@ def priced_with(engine, card: UserCard, history: list[Payment], p: Payment, now:
     실적이 다음 달에 들어가는 결제의 연쇄가 모두 이 순서 계산으로 맞는다. 2026-10-01 사용자가 정했다
     지나간 달은 달 끝 순위로 계산한다. E48
     """
-    if not any((q.paid_at, q.id) > (p.paid_at, p.id) for q in history):
+    later = any((q.paid_at, q.id) > (p.paid_at, p.id) for q in history)
+    if not later and not ranked_past(engine, card, _month(p), now):
         return {p.id: engine.price_payment(card, history, p)}
     this_month = month_of(local(now).date())
     payments, out = [*history, p], {}
-    m, last = _month(p), max(_month(q) for q in history)
+    m, last = _month(p), max(_month(q) for q in [*history, p])
     while m <= last:
         results = {r.payment_id: r for r in engine.price_month(card, payments, month=m, final=m < this_month)}
         out |= results
@@ -131,7 +142,14 @@ def base_tier(engine, card: UserCard, payments: list[Payment], month: date) -> i
 
 
 def changed_with(
-    engine, card: UserCard, before: list[Payment], changed: Payment | None, drop: str | None, start: date, now: datetime
+    engine,
+    card: UserCard,
+    before: list[Payment],
+    changed: Payment | None,
+    drop: str | None,
+    start: date,
+    now: datetime,
+    rerank: bool = True,
 ) -> dict[str, PaymentResult]:
     """고치거나 취소한 결제 changed는 그 결제만 다시 계산한다. E50. drop은 이 카드에서 빠진 결제다
 
@@ -148,6 +166,13 @@ def changed_with(
         out[changed.id] = engine.price_payment(card, others, changed)
         payments = [*others, changed.model_copy(update={"benefits": out[changed.id].benefits})]
     this_month = month_of(local(now).date())
+    # 고친 결제가 들거나 빠진 지나간 달에 순위 혜택이 있으면 그 달 전체를 달 끝 순위로 다시 계산한다. E48
+    touched = {_month(q) for q in before if q.id in gone} | ({_month(changed)} if changed is not None else set())
+    for m in sorted(touched):
+        if rerank and ranked_past(engine, card, m, now):
+            results = {r.payment_id: r for r in engine.price_month(card, payments, month=m, final=True)}
+            out |= results
+            payments = _with(payments, results)
     last = max((_month(q) for q in payments), default=start)
     m, redo = start, False
     while m < last:

@@ -230,6 +230,9 @@ class RecordRow {
       cardName = j['card_name'],
       amount = j['amount'],
       cancelledAmount = j['cancelled_amount'],
+      cancelledAt = j['cancelled_at'] == null
+          ? null
+          : DateTime.parse(j['cancelled_at']).toLocal(),
       value = j['value'],
       rewards = List<String>.from(j['rewards']),
       counted = j['counted'],
@@ -241,6 +244,7 @@ class RecordRow {
       billing = j['billing'];
   final String id, userCardId, cardName, channel, region;
   final DateTime paidAt;
+  final DateTime? cancelledAt;
   final String? merchantName, category, categoryName, paymentMethod, billing;
   final int amount, cancelledAmount, value, installmentMonths;
   final List<String> rewards;
@@ -493,7 +497,7 @@ class Api {
     ),
   );
 
-  /// 저장하고 혜택이 바뀐 다른 결제 수를 돌려준다. 앞선 결제나 지난달 결제를 넣으면 생긴다. E52, E53
+  /// 그 달 기록. 비우면 이번 달이다. card를 주면 그 카드만 본다. S7
   Future<Records> records({DateTime? month, String? card}) async => Records(
     await _send(
       'GET',
@@ -516,6 +520,7 @@ class Api {
           ))['repriced']
           as int;
 
+  /// 지금까지 취소된 금액의 합과 취소한 때를 적고 혜택이 바뀐 다른 결제 수를 돌려준다. 0이면 취소를 되돌린다. E5, E54
   Future<int> cancelPayment(
     String id,
     int cancelledAmount,
@@ -539,6 +544,7 @@ class Api {
 
   Future<void> removeCard(String id) => _send('DELETE', '/me/cards/$id');
 
+  /// 저장하고 혜택이 바뀐 다른 결제 수를 돌려준다. 앞선 결제나 지난달 결제를 넣으면 생긴다. E52, E53
   Future<int> savePayment(PaymentInput input) async =>
       (await _send(
             'POST',
