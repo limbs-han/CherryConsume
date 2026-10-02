@@ -1,4 +1,4 @@
-/// 아래 탭. 홈, 추천, 기록. 설정은 그 슬라이스에서 더한다. 작업 005 설계 8절
+/// 아래 탭. 홈, 추천, 기록, 설정. 작업 005 설계 8절
 library;
 
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import '../api.dart';
 import 'home.dart';
 import 'records.dart';
 import 'recommend.dart';
+import 'settings.dart';
 
 class Shell extends StatefulWidget {
   const Shell({super.key, required this.api});
@@ -25,7 +26,8 @@ class _ShellState extends State<Shell> {
     body: switch (_tab) {
       0 => HomeScreen(api: widget.api),
       1 => RecommendScreen(api: widget.api),
-      _ => RecordsScreen(api: widget.api),
+      2 => RecordsScreen(api: widget.api),
+      _ => SettingsScreen(api: widget.api),
     },
     bottomNavigationBar: NavigationBar(
       selectedIndex: _tab,
@@ -40,6 +42,7 @@ class _ShellState extends State<Shell> {
           icon: Icon(Icons.receipt_long_outlined),
           label: '기록',
         ),
+        NavigationDestination(icon: Icon(Icons.settings_outlined), label: '설정'),
       ],
     ),
   );

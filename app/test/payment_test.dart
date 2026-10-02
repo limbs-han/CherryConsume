@@ -22,6 +22,12 @@ class FakeServer {
   /// 켜면 저장 직전의 저장 전 결제가 다른 1순위를 준다
   bool flip = false;
 
+  /// 켜면 저장 응답이 자식 업종을 묻는다. E47
+  bool askCategory = false;
+  bool failEdit = false;
+  Map<String, dynamic>? edited;
+  int saves = 0;
+
   Map<String, dynamic> home() => {
     'month': '2026-09-01',
     'benefit_total': saved == null ? 0 : 430,
@@ -100,6 +106,7 @@ class FakeServer {
       case ('POST', '/me/payments/draft'):
         return ok(draft(jsonDecode(req.body)));
       case ('POST', '/me/payments'):
+        saves++;
         saved = jsonDecode(req.body);
         return ok({
           'id': 't1',
@@ -108,7 +115,26 @@ class FakeServer {
           'benefits': [],
           'counted': true,
           'warnings': [],
+          'ask_category': askCategory
+              ? {
+                  'parent': 'telecom',
+                  'parent_name': '통신요금',
+                  'children': [
+                    {'code': 'telecom.internet_tv', 'name': '인터넷·TV'},
+                    {'code': 'telecom.mobile', 'name': '이동통신'},
+                  ],
+                }
+              : null,
         }, 201);
+      case ('PATCH', '/me/payments/t1'):
+        if (failEdit) return ok({'detail': 'down'}, 500);
+        edited = jsonDecode(req.body);
+        return ok({
+          'id': 't1',
+          'value': 2000,
+          'repriced': 0,
+          'ask_category': null,
+        });
     }
     return ok({'detail': 'not found'}, 404);
   }
@@ -182,5 +208,59 @@ void main() {
     await tester.pumpAndSettle();
     expect(server.saved, isNull);
     expect(find.text('가장 이득인 카드가 바뀌었어요. 확인하고 다시 저장해 주세요.'), findsOneWidget);
+  });
+
+  testWidgets('업종이 부모까지만 있으면 저장한 자리에서 자식 업종을 묻는다', (tester) async {
+    FlutterSecureStorage.setMockInitialValues({'token': 't'});
+    final server = FakeServer()..askCategory = true;
+    final api = Api(
+      client: MockClient((r) => server(r)),
+      baseUrl: 'http://test',
+    );
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('결제 기록'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('amount')), '50000');
+    await tester.enterText(find.byKey(const Key('merchant')), 'KT 요금');
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '저장'));
+    await tester.pumpAndSettle();
+
+    // E47. 한 번 묻고, 답하면 그 결제의 업종만 고친다
+    expect(find.text('KT 요금은 통신요금 가운데 어느 쪽인가요'), findsOneWidget);
+    await tester.tap(find.text('이동통신'));
+    await tester.pumpAndSettle();
+    expect(server.edited!['category'], 'telecom.mobile');
+    expect(find.text('KT 요금은 통신요금 가운데 어느 쪽인가요'), findsNothing);
+  });
+
+  testWidgets('자식 업종 고치기가 실패해도 저장한 결제라 화면을 닫는다', (tester) async {
+    FlutterSecureStorage.setMockInitialValues({'token': 't'});
+    final server = FakeServer()
+      ..askCategory = true
+      ..failEdit = true;
+    final api = Api(
+      client: MockClient((r) => server(r)),
+      baseUrl: 'http://test',
+    );
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('결제 기록'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('amount')), '50000');
+    await tester.enterText(find.byKey(const Key('merchant')), 'KT 요금');
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '저장'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('이동통신'));
+    await tester.pumpAndSettle();
+
+    // 재검토 중간 1번. 남겨 두면 다시 눌러 같은 결제가 두 건이 된다
+    expect(find.text('저장했지만 업종은 고치지 못했어요. 기록에서 고쳐 주세요.'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, '저장'), findsNothing);
+    expect(server.saves, 1);
   });
 }

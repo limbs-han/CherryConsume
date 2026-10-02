@@ -101,9 +101,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ..userCardId ??= d.pick
         ..paidAt ??= DateTime.now();
       final editing = widget.editing;
-      final repriced = editing == null
+      final saved = editing == null
           ? await widget.api.savePayment(_input)
           : await widget.api.editPayment(editing.id, _input);
+      var repriced = saved.repriced;
+      final code = await _askCategory(saved);
+      if (code != null) {
+        // 자식 업종을 답하면 그 결제만 다시 계산한다. E47, E50. 결제는 이미 저장됐으니 고치기가 실패해도 화면을 닫는다.
+        // 남겨 두면 다시 눌러 같은 결제가 두 건이 된다
+        _input.category = code;
+        try {
+          repriced += (await widget.api.editPayment(saved.id, _input)).repriced;
+        } catch (_) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('저장했지만 업종은 고치지 못했어요. 기록에서 고쳐 주세요.')),
+            );
+          }
+        }
+      }
       if (mounted) Navigator.of(context).pop(repriced);
     } catch (_) {
       if (mounted) {
@@ -114,6 +130,35 @@ class _PaymentScreenState extends State<PaymentScreen> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// 업종이 부모까지만 있어 혜택을 가리지 못하면 저장한 자리에서 한 번 묻는다. 모르면 닫는다. E47
+  Future<String?> _askCategory(Saved saved) async {
+    if (saved.askChildren.isEmpty || !mounted) return null;
+    final shown = _input.merchantName.isEmpty ? '이 결제' : _input.merchantName;
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('$shown은 ${saved.askParent} 가운데 어느 쪽인가요'),
+        content: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final c in saved.askChildren)
+              ActionChip(
+                label: Text(c.name),
+                onPressed: () => Navigator.pop(context, c.code),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('모르겠어요'),
+          ),
+        ],
+      ),
+    );
   }
 
   /// 카드사에서 이번에 취소된 금액과 날짜를 적는다. 지금까지의 합에 더해 보낸다. 결제를 지우지 않고 남은 금액으로

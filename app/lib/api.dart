@@ -127,6 +127,15 @@ class RecRow {
         for (final m in j['pay_with'])
           (name: m['name'] as String, extra: m['extra'] as int),
       ],
+      asks = [
+        for (final a in j['ask'] ?? const [])
+          (
+            kind: a['kind'] as String,
+            scope: a['scope'] as String?,
+            question: a['question'] as String,
+            extra: a['extra'] as int,
+          ),
+      ],
       exhausted = j['exhausted'],
       limited = j['limited'],
       provisional = j['provisional'];
@@ -135,6 +144,9 @@ class RecRow {
   final String? title;
   final List<String> rewards;
   final List<({String name, int extra})> payWith;
+
+  /// 사실이나 옵션을 답하면 더 받는 금액. 사람 사실은 설정, 나머지는 카드 상세에서 답한다. 작업 005 설계 5e
+  final List<({String kind, String? scope, String question, int extra})> asks;
   final bool exhausted, limited, provisional;
 
   /// 할인, 적립, 캐시백. 함께 받으면 모두 보인다. 포인트는 원으로 바꾼 값이다. E13
@@ -313,7 +325,9 @@ class CardDetail {
       checkSentences = List<String>.from(j['check_sentences']),
       assumedCount = j['assumed_count'],
       startedOn = j['started_on'],
-      revisionFrom = j['revision_from'];
+      revisionFrom = j['revision_from'],
+      facts = [for (final q in j['questions']['facts']) FactQuestion(q)],
+      options = [for (final q in j['questions']['options']) OptionQuestion(q)];
   final String id, name;
   final List<int> tiers;
   final Spend spend;
@@ -335,6 +349,60 @@ class CardDetail {
   final List<String> checkSentences;
   final int assumedCount;
   final String? startedOn, revisionFrom;
+  final List<FactQuestion> facts;
+  final List<OptionQuestion> options;
+}
+
+/// 카드 사실이나 사람 사실 하나. bool은 참과 거짓, month는 1~12, choice는 선택지다. 작업 005 설계 5e
+class FactQuestion {
+  FactQuestion(Map<String, dynamic> j)
+    : key = j['key'],
+      type = j['type'],
+      ask = j['ask'],
+      choices = j['choices'] == null ? null : List<String>.from(j['choices']),
+      answer = j['answer'],
+      cards = List<String>.from(j['cards'] ?? const []);
+  final String key, type, ask;
+  final List<String>? choices;
+  final Object? answer;
+
+  /// 설정에서만 온다. 이 답을 쓰는 카드 이름
+  final List<String> cards;
+}
+
+/// 카드 옵션 하나. 다음 달부터 바뀌는 답은 pending이다
+class OptionQuestion {
+  OptionQuestion(Map<String, dynamic> j)
+    : key = j['key'],
+      title = j['title'],
+      choices = [
+        for (final c in j['choices'])
+          (key: c['key'] as String, title: c['title'] as String),
+      ],
+      unsupported = List<String>.from(j['unsupported']),
+      answer = j['answer'] ?? j['default'],
+      pendingValue = j['pending']?['value'],
+      pendingFrom = j['pending']?['from'];
+  final String key, title;
+  final List<({String key, String title})> choices;
+  final List<String> unsupported;
+  final String? answer, pendingValue, pendingFrom;
+}
+
+/// 저장한 결제. 업종이 부모까지만 있으면 자식 업종을 묻는다. E47
+class Saved {
+  Saved(Map<String, dynamic> j)
+    : id = j['id'],
+      repriced = j['repriced'],
+      askParent = j['ask_category']?['parent_name'],
+      askChildren = [
+        for (final c in j['ask_category']?['children'] ?? const [])
+          (code: c['code'] as String, name: c['name'] as String),
+      ];
+  final String id;
+  final int repriced;
+  final String? askParent;
+  final List<({String code, String name})> askChildren;
 }
 
 class Api {
@@ -511,13 +579,22 @@ class Api {
     ),
   );
 
-  /// 고치고 혜택이 바뀐 다른 결제 수를 돌려준다. E54
-  Future<int> editPayment(String id, PaymentInput input) async =>
-      (await _send(
-            'PATCH',
-            '/me/payments/$id',
-            body: input.toJson(),
-          ))['repriced']
+  /// 고치고 혜택이 바뀐 다른 결제 수와 자식 업종 질문을 돌려준다. E54, E47
+  Future<Saved> editPayment(String id, PaymentInput input) async =>
+      Saved(await _send('PATCH', '/me/payments/$id', body: input.toJson()));
+
+  /// 카드 사실, 옵션, 쓰기 시작한 날을 답하고 혜택이 바뀐 결제 수를 돌려준다. E56
+  Future<int> answerCard(String id, Map<String, Object?> body) async =>
+      (await _send('PUT', '/me/cards/$id/answers', body: body))['repriced']
+          as int;
+
+  /// 설정의 혜택 계산에 쓰는 답. 가진 카드들의 사람 사실이다
+  Future<List<FactQuestion>> userFacts() async => [
+    for (final q in await _send('GET', '/me/facts')) FactQuestion(q),
+  ];
+
+  Future<int> answerFacts(Map<String, Object> facts) async =>
+      (await _send('PUT', '/me/facts', body: {'facts': facts}))['repriced']
           as int;
 
   /// 지금까지 취소된 금액의 합과 취소한 때를 적고 혜택이 바뀐 다른 결제 수를 돌려준다. 0이면 취소를 되돌린다. E5, E54
@@ -545,14 +622,14 @@ class Api {
   Future<void> removeCard(String id) => _send('DELETE', '/me/cards/$id');
 
   /// 저장하고 혜택이 바뀐 다른 결제 수를 돌려준다. 앞선 결제나 지난달 결제를 넣으면 생긴다. E52, E53
-  Future<int> savePayment(PaymentInput input) async =>
-      (await _send(
-            'POST',
-            '/me/payments',
-            body: {
-              ...input.toJson(),
-              'recommendation_request_id': input.recommendationRequestId,
-            },
-          ))['repriced']
-          as int;
+  Future<Saved> savePayment(PaymentInput input) async => Saved(
+    await _send(
+      'POST',
+      '/me/payments',
+      body: {
+        ...input.toJson(),
+        'recommendation_request_id': input.recommendationRequestId,
+      },
+    ),
+  );
 }

@@ -50,6 +50,7 @@ class FakeServer {
   final calls = <String>[];
   final drafts = <Map<String, dynamic>>[];
   final cancels = <Map<String, dynamic>>[];
+  final answers = <String, Map<String, dynamic>>{};
   bool removed = false;
 
   Future<http.Response> call(http.Request req) async {
@@ -200,10 +201,53 @@ class FakeServer {
           'check_sentences': ['일부 혜택은 원문 조건을 문장으로만 담았어요'],
           'assumed_count': 2,
           'started_on': null,
+          'questions': {
+            'facts': [
+              {
+                'key': 'instant_pay',
+                'type': 'bool',
+                'ask': '이 카드로 쓴 일시불 금액을 그 달 안에 즉시결제하나요',
+                'choices': null,
+                'answer': null,
+              },
+            ],
+            'options': [
+              {
+                'key': 'package',
+                'title': '라이프스타일 옵션 패키지',
+                'choices': [
+                  {'key': 'p1', 'title': '패키지 1'},
+                  {'key': 'p4', 'title': '패키지 4'},
+                ],
+                'default': null,
+                'unsupported': <String>[],
+                'change': 'next_month',
+                'answer': 'p1',
+                'pending': {'value': 'p4', 'from': '2026-10-01'},
+              },
+            ],
+          },
           'registered_on': '2026-09-15',
           'revision_from': '2026-07-15',
           'checked_at': '2026-09-29',
         });
+      case ('PUT', '/me/cards/u1/answers'):
+        answers['card'] = jsonDecode(req.body) as Map<String, dynamic>;
+        return ok({'repriced': 2});
+      case ('GET', '/me/facts'):
+        return ok([
+          {
+            'key': 'soldier',
+            'type': 'bool',
+            'ask': '현역병으로 인정되었나요?',
+            'choices': null,
+            'answer': null,
+            'cards': ['IBK나라사랑카드'],
+          },
+        ]);
+      case ('PUT', '/me/facts'):
+        answers['user'] = jsonDecode(req.body) as Map<String, dynamic>;
+        return ok({'repriced': 0});
       case ('DELETE', '/me/cards/u1'):
         removed = true;
         return ok({'id': 'u1'});
@@ -305,6 +349,39 @@ void main() {
     await tester.tap(find.byKey(const Key('cancel-undo')));
     await tester.pumpAndSettle();
     expect(server.cancels.last['cancelled_amount'], 0);
+  });
+
+  testWidgets('카드 정보에서 카드 사실과 옵션을 답하고 설정에서 사람 사실을 답한다', (tester) async {
+    final server = await start(tester);
+    await tester.tap(find.text('신한카드 Mr.Life'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('카드 정보'), 300);
+    await tester.pumpAndSettle();
+
+    // 다음 달부터 바뀌는 옵션은 그 날과 함께 보인다. E56
+    expect(find.text('쓰기 시작한 날을 몰라요'), findsOneWidget);
+    expect(find.text('10월 1일부터 패키지 4'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('예'), 100);
+    await tester.tap(find.text('예'));
+    await tester.pumpAndSettle();
+    expect(server.answers['card'], {
+      'facts': {'instant_pay': true},
+    });
+    expect(find.text('결제 2건의 혜택을 다시 계산했어요.'), findsOneWidget);
+    expect(find.text('답을 적지 못했어요.'), findsNothing);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('설정'));
+    await tester.pumpAndSettle();
+    expect(find.text('쓰는 카드 · IBK나라사랑카드'), findsOneWidget);
+    await tester.tap(find.text('예'));
+    await tester.pumpAndSettle();
+    expect(server.answers['user'], {
+      'facts': {'soldier': true},
+    });
+    expect(find.text('답을 적었어요.'), findsOneWidget);
+    expect(find.text('답을 적지 못했어요.'), findsNothing);
   });
 
   testWidgets('홈의 카드를 누르면 카드 상세에 남은 한도가 보이고 해지하면 홈에서 빠진다', (tester) async {

@@ -32,6 +32,7 @@ class FakeServer {
   FakeServer({this.cards = true});
   final bool cards;
   Map<String, dynamic>? saved;
+  int recommends = 0;
 
   Future<http.Response> call(http.Request req) async {
     switch ((req.method, req.url.path)) {
@@ -51,7 +52,10 @@ class FakeServer {
         );
       case ('GET', '/me/recent-merchants'):
         return ok(['GS25 테헤란점']);
+      case ('GET', '/me/facts'):
+        return ok(<Object>[]);
       case ('POST', '/me/recommendations'):
+        recommends++;
         return ok({
           'request_id': 'r1',
           'merchant': null,
@@ -65,6 +69,15 @@ class FakeServer {
               ...rec('u2', '현대카드 ZERO Edition3', 80, '국내외 가맹점 0.8% 할인'),
               'pay_with': [
                 {'payment_method': 'naver_pay', 'name': '네이버페이', 'extra': 1000},
+              ],
+              'ask': [
+                {
+                  'kind': 'fact',
+                  'key': 'soldier',
+                  'scope': 'user',
+                  'question': '현역병으로 인정되었나요?',
+                  'extra': 3000,
+                },
               ],
             },
           ],
@@ -137,6 +150,16 @@ void main() {
     expect(find.text('1,000원 할인'), findsOneWidget);
     expect(find.text('80원 할인'), findsOneWidget);
     expect(find.text('네이버페이로 내면 1,000원 더 받아요'), findsOneWidget);
+    // 사실을 답하면 더 받는 금액. 누르면 답하는 곳으로 가고, 돌아오면 다시 추천한다. 작업 005 설계 5e
+    final ask = find.text('답하면 3,000원 더 받아요 · 현역병으로 인정되었나요?');
+    expect(ask, findsOneWidget);
+    final before = server.recommends;
+    await tester.tap(ask);
+    await tester.pumpAndSettle();
+    expect(find.text('혜택 계산에 쓰는 답'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(server.recommends, before + 1);
 
     await tester.tap(find.text('이 카드로 결제 기록'));
     await tester.pumpAndSettle();

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
+import 'answer.dart';
 import 'records.dart';
 
 class CardDetailScreen extends StatefulWidget {
@@ -20,7 +21,40 @@ class CardDetailScreen extends StatefulWidget {
 }
 
 class _CardDetailScreenState extends State<CardDetailScreen> {
-  late final Future<CardDetail> _detail = widget.api.cardDetail(widget.id);
+  late Future<CardDetail> _detail = widget.api.cardDetail(widget.id);
+
+  /// 카드 사실, 옵션, 쓰기 시작한 날을 답하고 다시 불러온다. 처음 답은 모든 결제에, 바꾼 답은 바뀌는 날부터다. E56
+  Future<void> _answer(Map<String, Object?> body) async {
+    try {
+      final repriced = await widget.api.answerCard(widget.id, body);
+      if (!mounted) return;
+      answered(context, repriced);
+      setState(() {
+        _detail = widget.api.cardDetail(widget.id);
+      });
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('답을 적지 못했어요.')));
+      }
+    }
+  }
+
+  Future<void> _pickStart(CardDetail d) async {
+    final today = DateUtils.dateOnly(DateTime.now());
+    final day = await showDatePicker(
+      context: context,
+      initialDate: d.startedOn == null ? today : DateTime.parse(d.startedOn!),
+      firstDate: DateTime(today.year - 5),
+      lastDate: today,
+    );
+    if (day == null) return;
+    String two(int n) => n.toString().padLeft(2, '0');
+    await _answer({
+      'started_on': '${day.year}-${two(day.month)}-${two(day.day)}',
+    });
+  }
 
   /// 카드 해지. 결제와 기록은 남고 홈과 추천에서만 빠진다. S9
   Future<void> _remove(CardDetail d) async {
@@ -242,12 +276,47 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
           ),
         ),
       ],
-      const SizedBox(height: 16),
-      if (d.startedOn != null)
-        Text(
-          '쓰기 시작한 달 · ${d.startedOn!.substring(0, 7)}',
-          style: const TextStyle(color: C.sub),
+      // 카드 사실과 옵션은 여기서 묻는다. 없는 카드는 쓰기 시작한 날만 있다. 작업 004 설계 3.1
+      const _Heading('카드 정보'),
+      Box(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    d.startedOn == null
+                        ? '쓰기 시작한 날을 몰라요'
+                        : '쓰기 시작한 날 · ${d.startedOn}',
+                    style: const TextStyle(color: C.text),
+                  ),
+                ),
+                TextButton(
+                  key: const Key('started-on'),
+                  onPressed: () => _pickStart(d),
+                  child: const Text('바꾸기'),
+                ),
+              ],
+            ),
+            for (final q in d.facts)
+              FactAnswer(
+                q: q,
+                onAnswer: (v) => _answer({
+                  'facts': {q.key: v},
+                }),
+              ),
+            for (final q in d.options)
+              OptionAnswer(
+                q: q,
+                onAnswer: (c) => _answer({
+                  'options': {q.key: c},
+                }),
+              ),
+          ],
         ),
+      ),
+      const SizedBox(height: 16),
       if (d.revisionFrom != null)
         Text(
           '이 카드의 실적 규칙 갱신 ${d.revisionFrom}',

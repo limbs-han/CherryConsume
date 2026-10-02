@@ -8,7 +8,9 @@ import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
 import 'add_card.dart';
+import 'card_detail.dart';
 import 'payment.dart';
+import 'settings.dart';
 
 class RecommendScreen extends StatefulWidget {
   const RecommendScreen({super.key, required this.api});
@@ -262,6 +264,19 @@ class _ResultScreenState extends State<ResultScreen> {
     super.dispose();
   }
 
+  /// 답하면 더 받는 질문을 누르면 답하는 곳으로 간다. 사람 사실은 설정, 나머지는 카드 상세다. 돌아오면 답이 바뀌었을 수
+  /// 있어 다시 추천한다. 작업 005 설계 5e
+  Future<void> _answerAt(RecRow row, String? scope) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => scope == 'user'
+            ? SettingsScreen(api: widget.api)
+            : CardDetailScreen(api: widget.api, id: row.userCardId),
+      ),
+    );
+    if (mounted) _refresh();
+  }
+
   Future<void> _pay(RecResult r, RecRow row) async {
     // 금액칸이 순위를 계산한 금액과 다르면 먼저 다시 추천한다. 1만 원 순위로 15만 원 결제를 열지 않게 한다
     final typed = int.tryParse(_amountText.text);
@@ -405,6 +420,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 _RankRow(
                   rank: i + 1,
                   row: row,
+                  onAsk: (scope) => _answerAt(row, scope),
                   // 다시 계산하는 동안에는 누를 수 없다. 이전 순위의 추천 요청으로 결제를 열지 않게 한다
                   onPay: i == 0 && snap.connectionState == ConnectionState.done
                       ? () => _pay(r, row)
@@ -424,10 +440,16 @@ class _ResultScreenState extends State<ResultScreen> {
 }
 
 class _RankRow extends StatelessWidget {
-  const _RankRow({required this.rank, required this.row, this.onPay});
+  const _RankRow({
+    required this.rank,
+    required this.row,
+    this.onPay,
+    this.onAsk,
+  });
   final int rank;
   final RecRow row;
   final VoidCallback? onPay;
+  final ValueChanged<String?>? onAsk;
 
   @override
   Widget build(BuildContext context) => Box(
@@ -497,6 +519,17 @@ class _RankRow extends StatelessWidget {
             child: Text(
               '${m.name}로 내면 ${won(m.extra)} 더 받아요',
               style: const TextStyle(fontSize: 13, color: C.amber),
+            ),
+          ),
+        for (final a in row.asks)
+          Padding(
+            padding: const EdgeInsets.only(left: 24, top: 4),
+            child: InkWell(
+              onTap: onAsk == null ? null : () => onAsk!(a.scope),
+              child: Text(
+                '답하면 ${won(a.extra)} 더 받아요 · ${a.question}',
+                style: const TextStyle(fontSize: 13, color: C.blue),
+              ),
             ),
           ),
         if (onPay != null) ...[
