@@ -135,8 +135,10 @@ def changed_with(
 ) -> dict[str, PaymentResult]:
     """고치거나 취소한 결제 changed는 그 결제만 다시 계산한다. E50. drop은 이 카드에서 빠진 결제다
 
-    그 뒤 start 다음 달부터 이번 달까지 기본 구간이 저장된 상태와 다른 달을 다시 계산한다. E5, E54. 실적이 다음 달에
-    들어가는 결제가 있어 한 달을 건너 구간이 바뀔 수 있어 중간에 멈추지 않는다. 지나간 달은 달 끝 순위로 계산한다. E48
+    그 뒤 start 다음 달부터 기본 구간이 저장된 상태와 처음 다른 달을 찾아 그 달부터 마지막 결제가 든 달까지 달마다
+    결제 시각 순서로 다시 계산한다. 구간이 그대로인 뒤 달도 연, 분기, 행사 기간 한도가 바뀌어 함께 계산한다. E5, E54.
+    2026-10-01 사용자가 정했다. 실적이 다음 달에 들어가는 결제가 있어 한 달을 건너 구간이 바뀔 수 있어 마지막 결제가 든
+    달까지 찾는다. 지나간 달은 달 끝 순위로 계산한다. E48
     """
     gone = {drop, changed.id if changed else None}
     others = [q for q in before if q.id not in gone]
@@ -146,11 +148,13 @@ def changed_with(
         out[changed.id] = engine.price_payment(card, others, changed)
         payments = [*others, changed.model_copy(update={"benefits": out[changed.id].benefits})]
     this_month = month_of(local(now).date())
-    m = start
-    while m < this_month:
+    last = max((_month(q) for q in payments), default=start)
+    m, redo = start, False
+    while m < last:
         m = add_months(m, 1)
-        if base_tier(engine, card, before, m) == base_tier(engine, card, payments, m):
+        if not redo and base_tier(engine, card, before, m) == base_tier(engine, card, payments, m):
             continue
+        redo = True
         results = {r.payment_id: r for r in engine.price_month(card, payments, month=m, final=m < this_month)}
         out |= results
         payments = _with(payments, results)

@@ -4,6 +4,8 @@
 통합 한도는 30만 구간에서 월 1만 원. 상품권은 실적에서 빠진다. 시계는 2026-09-15 21:00 한국 시간이다.
 """
 
+from datetime import UTC, datetime
+
 from .conftest import login
 from .test_payments import MRLIFE, pay
 
@@ -80,6 +82,66 @@ def test_delete_last_month_reprices_this_month(client):
     assert client.delete(f"/me/payments/{aug}", headers=headers).json()["repriced"] == 1
     assert total(client, headers) == 0
     assert client.get("/me/payments", params={"month": "2026-08"}, headers=headers).json()["count"] == 0
+
+
+def nara_year(client, *more):
+    """IBK 나라사랑 철도 5%는 8만 구간부터 월 2회, 연 4회, 1회 2천 원까지. 취소는 취소한 달 실적에서 뺀다.
+    5월 이마트 8만 원으로 6월이 8만 구간이다. 6월과 7월은 이마트 4만 원과 KTX 2만 원 두 번으로 실적 8만이고 KTX는
+    5%로 1,000원씩이다. 연 4회를 다 써 8월 KTX 2만 원은 0원이다. 6월, 7월, 8월 혜택 합은 2,000, 2,000, 0원이다"""
+    headers, ids = setup(client, {"card_id": "ibk-narasarang"}, *more)
+    may = pay(client, headers, ids[0], 80000, "이마트", at="2026-05-20T12:00:00+09:00")["id"]
+    for month in ("06", "07"):
+        pay(client, headers, ids[0], 40000, "이마트", at=f"2026-{month}-02T12:00:00+09:00")
+        pay(client, headers, ids[0], 20000, "KTX", at=f"2026-{month}-10T12:00:00+09:00")
+        pay(client, headers, ids[0], 20000, "KTX", at=f"2026-{month}-20T12:00:00+09:00")
+    pay(client, headers, ids[0], 20000, "KTX", at="2026-08-10T12:00:00+09:00")
+
+    def totals():
+        months = ("2026-06", "2026-07", "2026-08")
+        return [
+            client.get("/me/payments", params={"month": m}, headers=headers).json()["benefit_total"] for m in months
+        ]
+
+    assert totals() == [2000, 2000, 0]
+    return headers, ids, may, totals
+
+
+def test_edit_reprices_every_month_after_the_first_changed_tier(client):
+    # E54 범위. 5월을 79,999원으로 고치면 6월만 0원 구간이 되어 6월 KTX 2건이 0원이다. 7월과 8월 구간은 그대로지만
+    # 연 횟수가 2회 남아 8월 KTX가 1,000원이다. 다시 계산해 혜택이 바뀐 다른 결제는 6월 2건과 8월 1건이다
+    headers, [nara], may, totals = nara_year(client)
+    r = edit(client, headers, may, nara, 79999, "이마트", at="2026-05-20T12:00:00+09:00")
+    assert totals() == [0, 2000, 1000]
+    assert r["repriced"] == 3
+
+
+def test_cancel_in_cancel_month_reprices_from_the_month_after(client):
+    # E5, E54. 5월 이마트 8만 원 가운데 1만 원을 6월 5일 취소하면 6월 실적에서 빠져 6월 실적이 7만이다. 6월 구간은 5월
+    # 실적 그대로 8만이고 7월만 0원 구간이다. 7월 KTX가 0원, 연 2회가 남아 8월 KTX가 1,000원이다
+    headers, _, may, totals = nara_year(client)
+    body = {"cancelled_amount": 10000, "cancelled_at": "2026-06-05T12:00:00+09:00"}
+    assert client.post(f"/me/payments/{may}/cancel", json=body, headers=headers).status_code == 200
+    assert totals() == [2000, 0, 1000]
+
+
+def test_move_payment_reprices_the_old_card(client):
+    # E54. 5월 이마트를 현대카드ZERO로 옮기면 나라사랑의 5월 실적이 0원이라 6월이 0원 구간이다. 6월 KTX가 0원,
+    # 8월 KTX가 1,000원이다
+    headers, [_, zero], may, totals = nara_year(client, ZERO)
+    edit(client, headers, may, zero, 80000, "이마트", at="2026-05-20T12:00:00+09:00")
+    assert totals() == [0, 2000, 1000]
+
+
+def test_edit_reprices_a_payment_in_next_month(client, clock):
+    # 위험 검토 13번. 시계가 9월 30일 21시면 하루 뒤인 10월 1일 결제까지 받는다. 9월 이마트 30만 원으로 10월이
+    # 30만 구간이라 GS25 4,300원이 430원이다. 9월을 20만 원으로 고치면 10월이 0원 구간이라 0원이다
+    clock.now = datetime(2026, 9, 30, 12, 0, tzinfo=UTC)
+    headers, [mrlife] = setup(client, NO_GUESS)
+    sep = pay(client, headers, mrlife, 300000, "이마트", at="2026-09-20T12:00:00+09:00")["id"]
+    assert pay(client, headers, mrlife, 4300, "GS25", at="2026-10-01T10:00:00+09:00")["value"] == 430
+    edit(client, headers, sep, mrlife, 200000, "이마트", at="2026-09-20T12:00:00+09:00")
+    october = client.get("/me/payments", params={"month": "2026-10"}, headers=headers).json()
+    assert october["benefit_total"] == 0
 
 
 def test_cancel_full_and_partial(client):

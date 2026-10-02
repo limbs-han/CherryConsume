@@ -164,7 +164,7 @@ def records(request: Request, user: User, conn: Conn, month: str | None = None, 
 
 @router.patch("/{tid}")
 def edit(tid: str, body: EditPayment, request: Request, user: User, conn: Conn) -> dict:
-    """결제 고치기. 그 결제만 다시 계산한다. E50. 다음 달 구간이 바뀌면 그 달도 다시 계산한다. E54"""
+    """결제 고치기. 그 결제만 다시 계산한다. E50. 구간이 바뀐 달이 있으면 처음 바뀐 달부터 마지막 결제가 든 달까지 다시 계산한다. E54"""
     tid = checked_id(tid, "결제가 아니다")
     old = mine(conn, user, tid)
     if old["cancelled_amount"] > body.amount:
@@ -222,7 +222,7 @@ def edit(tid: str, body: EditPayment, request: Request, user: User, conn: Conn) 
 
 @router.post("/{tid}/cancel")
 def cancel(tid: str, body: Cancel, request: Request, user: User, conn: Conn) -> dict:
-    """취소 기록. 남은 금액으로 그 결제를 다시 계산하고 전액 취소면 혜택은 0이다. 구간이 바뀐 달은 다시 계산한다. E5, E54"""
+    """취소 기록. 남은 금액으로 그 결제를 다시 계산하고 전액 취소면 혜택은 0이다. 구간이 처음 바뀐 달부터 다시 계산한다. E5, E54"""
     tid = checked_id(tid, "결제가 아니다")
     old = mine(conn, user, tid)
     now = request.app.state.clock()
@@ -247,7 +247,7 @@ def cancel(tid: str, body: Cancel, request: Request, user: User, conn: Conn) -> 
 
 @router.delete("/{tid}")
 def delete(tid: str, request: Request, user: User, conn: Conn) -> dict:
-    """결제 지우기. 행은 남기고 지운 시각만 찍는다. S8. 구간이 바뀐 달은 다시 계산한다. E54"""
+    """결제 지우기. 행은 남기고 지운 시각만 찍는다. S8. 구간이 처음 바뀐 달부터 마지막 결제가 든 달까지 다시 계산한다. E54"""
     tid = checked_id(tid, "결제가 아니다")
     old = mine(conn, user, tid)
     now = request.app.state.clock()
