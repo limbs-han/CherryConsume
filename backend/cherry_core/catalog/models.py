@@ -244,6 +244,9 @@ class Ranked(Base):
     key: Key
     top: CountOrTable
     by: Literal["month_amount"] = "month_amount"
+    # 영역 이용액에서 취소를 빼는 달. cancel_month면 취소한 달, original_month면 결제한 달이다. 비우면 확인 필요라
+    # 결제한 달에서 빼고 서버는 취소로 지나간 달 순위를 다시 매기지 않는다. E55
+    cancellation: Literal["cancel_month", "original_month"] | None = None
 
 
 class Fact(Base):

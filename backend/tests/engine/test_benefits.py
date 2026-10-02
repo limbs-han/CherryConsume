@@ -1,6 +1,6 @@
 """혜택 계산 규칙. 설계 3절. 기대값은 손계산이고 계산을 주석에 한 줄로 적는다."""
 
-from datetime import date
+from datetime import UTC, date, datetime
 
 import pytest
 
@@ -363,6 +363,124 @@ def test_ranked_area_and_final(engine):
     final = eng.price_month(h, saved, month=date(2026, 9, 1), final=True)
     assert values(final) == [{"coffee": 3000}, {}, {"coffee-sb": 4500}]
     assert "ranked_provisional" not in codes(final[0])
+
+
+@pytest.mark.parametrize(
+    ("way", "expected"),
+    [
+        # 취소한 달: 8월 커피는 이디야 1만 원 전부와 스타벅스 5천 원으로 1만 5천 원이라 배달 1만 2천 원을 넘는다. 이디야는 남은
+        # 5천 원의 30%로 1,500원, 스타벅스 1,500원. 9월 커피는 취소 -5천 원에 이디야 6천 원으로 1천 원이라 배달 4천 원이
+        # 1위다. 배민 1,200원, 이디야 0원
+        ("cancel_month", [{"coffee": 1500}, {}, {"coffee-sb": 1500}, {"delivery": 1200}, {}]),
+        # 결제한 달: 8월 커피는 남은 5천 원과 5천 원으로 1만 원이라 배달이 1위다. 배민 1만 2천 원의 30%로 3,600원.
+        # 9월은 배민 4천 원 1,200원, 이디야 6천 원이 커피 6천 원으로 1위라 1,800원
+        ("original_month", [{}, {"delivery": 3600}, {}, {"delivery": 1200}, {"coffee": 1800}]),
+        # 칸이 없으면 지금처럼 결제한 달에서 뺀다. 확인 필요
+        (None, [{}, {"delivery": 3600}, {}, {"delivery": 1200}, {"coffee": 1800}]),
+    ],
+)
+def test_ranked_area_cancellation_month(engine, way, expected):
+    # E55. 삼성 iD ON은 "영역 이용금액의 취소는 매출취소전표 접수월에 반영"이다. 순위 영역 이용액에서 취소를 빼는 달은
+    # 카드 칸 ranked[].cancellation을 따른다. 8월 2일 이디야 1만 원 가운데 5천 원을 9월 3일 취소했다
+    benefits = [
+        b(
+            "coffee",
+            {"merchants": ["ediya"]},
+            {"type": "billing_discount", "rate": 30},
+            when=[{"ranked": "top"}],
+            area="coffee",
+            stack="area",
+        ),
+        b(
+            "coffee-sb",
+            {"merchants": ["starbucks"]},
+            {"type": "billing_discount", "rate": 30},
+            when=[{"ranked": "top"}],
+            area="coffee",
+            stack="area",
+        ),
+        b(
+            "delivery",
+            {"merchants": ["baemin"]},
+            {"type": "billing_discount", "rate": 30},
+            when=[{"ranked": "top"}],
+            stack="area",
+        ),
+    ]
+    ranked = {"key": "top", "top": 1} | ({"cancellation": way} if way else {})
+    eng = engine(card(benefits, tiers=(0,), ranked=[ranked], stacks=[{"key": "area"}]))
+    pays = [
+        pay(10000, "2026-08-02T10:00", merchant="ediya", cancelled_amount=5000, cancelled_at=at("2026-09-03T10:00")),
+        pay(12000, "2026-08-03T19:00", merchant="baemin"),
+        pay(5000, "2026-08-04T10:00", merchant="starbucks"),
+        pay(4000, "2026-09-05T10:00", merchant="baemin"),
+        pay(6000, "2026-09-06T10:00", merchant="ediya"),
+    ]
+    assert values(eng.price_month(holder(), pays, month=date(2026, 8, 1), final=True)) == expected
+
+
+def area_card(engine, way):
+    benefits = [
+        b(
+            "coffee",
+            {"merchants": ["ediya"]},
+            {"type": "billing_discount", "rate": 30},
+            when=[{"ranked": "top"}],
+            area="coffee",
+            stack="area",
+        ),
+        b(
+            "coffee-sb",
+            {"merchants": ["starbucks"]},
+            {"type": "billing_discount", "rate": 30},
+            when=[{"ranked": "top"}],
+            area="coffee",
+            stack="area",
+        ),
+        b(
+            "delivery",
+            {"merchants": ["baemin"]},
+            {"type": "billing_discount", "rate": 30},
+            when=[{"ranked": "top"}],
+            stack="area",
+        ),
+    ]
+    return engine(
+        card(benefits, tiers=(0,), ranked=[{"key": "top", "top": 1, "cancellation": way}], stacks=[{"key": "area"}])
+    )
+
+
+def test_ranked_area_cancellation_month_end_of_cancel_month(engine):
+    # E55. 같은 결제로 9월 달 끝을 계산한다. 9월 커피는 취소 -5천 원과 이디야 6천 원으로 1천 원이라 배달 4천 원이 1위다.
+    # 배민 1,200원, 이디야 0원. 달 끝 합계에 8월 결제의 9월 취소가 들어가야 나오는 값이다
+    eng = area_card(engine, "cancel_month")
+    pays = [
+        pay(10000, "2026-08-02T10:00", merchant="ediya", cancelled_amount=5000, cancelled_at=at("2026-09-03T10:00")),
+        pay(4000, "2026-09-05T10:00", merchant="baemin"),
+        pay(6000, "2026-09-06T10:00", merchant="ediya"),
+    ]
+    r = eng.price_month(holder(), pays, month=date(2026, 9, 1), final=True)
+    assert values(r) == [{"coffee": 1500}, {"delivery": 1200}, {}]
+
+
+def test_ranked_area_full_cancel_and_korean_month(engine):
+    # E55. 이디야 1만 원을 다음 달에 전액 취소해도 8월 커피에는 1만 원이 남아 스타벅스 5천 원과 1만 5천 원이다. 배달 1만
+    # 2천 원보다 커 스타벅스 1,500원, 배민 0원. 취소 시각 8월 31일 15시 30분 UTC는 한국 시간 9월 1일 0시 30분이라 9월
+    # 취소다
+    eng = area_card(engine, "cancel_month")
+    pays = [
+        pay(
+            10000,
+            "2026-08-02T10:00",
+            merchant="ediya",
+            cancelled_amount=10000,
+            cancelled_at=datetime(2026, 8, 31, 15, 30, tzinfo=UTC),
+        ),
+        pay(12000, "2026-08-03T19:00", merchant="baemin"),
+        pay(5000, "2026-08-04T10:00", merchant="starbucks"),
+    ]
+    r = eng.price_month(holder(), pays, month=date(2026, 8, 1), final=True)
+    assert values(r) == [{}, {}, {"coffee-sb": 1500}]
 
 
 def test_onsite_discount_back_calculation(engine):

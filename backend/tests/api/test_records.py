@@ -392,8 +392,8 @@ def total_of(client, headers, month="2026-09"):
 
 
 def test_cancel_does_not_rerank_a_past_month(client):
-    # 재검토 중간 3번. 삼성 iD ON은 영역 이용액의 취소를 취소 접수월에 넣는데 엔진은 결제한 달에서 뺀다. 담을 칸이 없어
-    # 취소로 지나간 달 순위를 다시 매기지 않는다. 8월 스타벅스 1만 5천 원 4,500원, 배민 1만 2천 원 0원이다. 9월 3일 스타벅스
+    # 재검토 중간 3번, E55. 삼성 iD ON은 영역 이용액의 취소를 취소 접수월에 넣는다. 카드 칸 ranked[].cancellation이 아직
+    # 비어 있어 취소로 지나간 달 순위를 다시 매기지 않는다. 8월 스타벅스 1만 5천 원 4,500원, 배민 1만 2천 원 0원이다. 9월 3일 스타벅스
     # 5,000원 취소를 적으면 스타벅스만 남은 1만 원의 30%로 3,000원이고 배민은 0원 그대로다
     headers, [ion] = setup(client, {"card_id": "samsung-id-on"})
     pay(client, headers, ion, 300000, "이마트", at="2026-07-10T12:00:00+09:00")

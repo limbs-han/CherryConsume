@@ -109,6 +109,12 @@ def ranked_past(engine, card: UserCard, month: date, now: datetime) -> bool:
     return month < month_of(local(now).date()) and found is not None and bool(ranked_areas(found[1]))
 
 
+def cancel_month_ranked(engine, card: UserCard, p: Payment) -> bool:
+    """결제일 개정에 취소한 달 기준 순위 그룹이 있는가. E55"""
+    found = engine.ctx.rules_on(card.card_id, local(p.paid_at).date())
+    return found is not None and any(r.cancellation == "cancel_month" for r in found[1].ranked)
+
+
 def priced_with(engine, card: UserCard, history: list[Payment], p: Payment, now: datetime) -> dict[str, PaymentResult]:
     """새 결제 p의 혜택과, p 때문에 다시 계산한 결제의 혜택. 작업 005 설계 5b절
 
@@ -167,7 +173,11 @@ def changed_with(
         payments = [*others, changed.model_copy(update={"benefits": out[changed.id].benefits})]
     this_month = month_of(local(now).date())
     # 고친 결제가 들거나 빠진 지나간 달에 순위 혜택이 있으면 그 달 전체를 달 끝 순위로 다시 계산한다. E48
-    touched = {_month(q) for q in before if q.id in gone} | ({_month(changed)} if changed is not None else set())
+    # 취소한 달 기준 순위 카드는 취소가 든 달의 영역 이용액도 바뀌어 그 달도 본다. E55
+    moved = [q for q in before if q.id in gone] + ([changed] if changed is not None else [])
+    touched = {_month(q) for q in moved} | {
+        month_of(local(q.cancelled_at).date()) for q in moved if q.cancelled_at and cancel_month_ranked(engine, card, q)
+    }
     for m in sorted(touched):
         if rerank and ranked_past(engine, card, m, now):
             results = {r.payment_id: r for r in engine.price_month(card, payments, month=m, final=True)}

@@ -250,10 +250,12 @@ def cancel(tid: str, body: Cancel, request: Request, user: User, conn: Conn) -> 
     before = {q.id: q for q in loaded}
     p = before[tid].model_copy(update={"cancelled_amount": amount, "cancelled_at": at})
     engine = request.app.state.engine
-    # 순위 영역 이용액의 취소를 어느 달에 반영하는지 카드마다 다르고 담을 칸이 없다. 삼성 iD ON은 취소 접수월이다.
-    # 엔진은 결제한 달에서 빼므로 취소로 지나간 달 순위를 다시 매기지 않는다. 확인 필요. 2026-10-02 위험 검토
+    # 순위 영역 이용액에서 취소를 빼는 달은 카드 칸 ranked[].cancellation이다. 칸이 빈 카드는 확인 필요라 취소로
+    # 지나간 달 순위를 다시 매기지 않는다. E55
+    found = engine.ctx.rules_on(rows[card_id]["card_id"], local(old["paid_at"]).date())
+    known = found is not None and all(r.cancellation for r in found[1].ranked)
     res = changed_with(
-        engine, engine_card(rows[card_id]), loaded, p, None, month_of(local(p.paid_at).date()), now, rerank=False
+        engine, engine_card(rows[card_id]), loaded, p, None, month_of(local(p.paid_at).date()), now, rerank=known
     )
     # 지금 카탈로그로 다시 계산했으니 개정 연결도 지금 결제일의 개정으로 맞춘다. 위험 검토 12번
     conn.execute(

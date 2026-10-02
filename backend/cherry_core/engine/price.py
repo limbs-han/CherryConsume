@@ -166,20 +166,44 @@ class Ledger:
         for got in p.benefits or []:
             if got.key in by_key:
                 self.add_benefit(rules, by_key[got.key], got, p.paid_at)
-        if p.amount > p.cancelled_amount:
-            self.add_totals(ctx, card, rules, p, month)
+        self.add_totals(ctx, card, rules, p, month)
 
     def add_totals(self, ctx: Ctx, card: UserCard, rules: Rules, p: Payment, month: date) -> None:
-        """순위 영역 이용액과 달 합계 혜택의 대상 이용액. 설계 3.4, 3.5"""
+        """순위 영역 이용액과 달 합계 혜택의 대상 이용액. 설계 3.4, 3.5
+
+        순위 영역에서 취소를 빼는 달은 ranked[].cancellation을 따른다. 취소한 달이면 결제한 달에는 결제 전액을 넣고
+        취소한 달에서 취소액을 뺀다. 결제한 달이거나 칸이 비거나 같은 달 취소면 결제한 달에 남은 금액을 넣는다. E55
+
+        ponytail: 취소액은 결제 시각 자리에서 취소한 달 칸에 들어가 그 달의 취소 시각 전 결제의 잠정 순위에도 빠진다.
+        결제일 개정의 그룹과 영역 이름으로 쌓는다. 달 중간 잠정값이고 달 끝 순위는 맞다. 취소 시각 순서가 필요하면
+        취소를 따로 쌓는다
+        """
         s = situation(ctx, card, rules, p)
         s.skip = SKIP_TOTALS
-        for b in rules.benefits:
-            if b.reward.basis == "month_total" and benefit_match(rules, b, s)[0] is True:
-                self.month_base[(b.key, month)] += s.amount
+        if s.amount > 0:
+            for b in rules.benefits:
+                if b.reward.basis == "month_total" and benefit_match(rules, b, s)[0] is True:
+                    self.month_base[(b.key, month)] += s.amount
+        ways = {r.key: r.cancellation for r in rules.ranked}
         for group, areas in ranked_areas(rules).items():
+            later = (
+                ways.get(group) == "cancel_month"
+                and p.cancelled_amount > 0
+                and month_of(local(p.cancelled_at).date()) != month
+            )
+            if later:
+                # 달을 건너는 취소는 영역에 드는지를 취소 전 결제로 본다. 더할 때와 뺄 때 같은 판정이어야 한다.
+                # 전액 취소여도 결제한 달에는 들어간다
+                whole = situation(ctx, card, rules, p.model_copy(update={"cancelled_amount": 0, "cancelled_at": None}))
+                whole.skip = SKIP_TOTALS
+                cancel_month = month_of(local(p.cancelled_at).date())
+                adds, by = [(month, p.amount), (cancel_month, -p.cancelled_amount)], whole
+            else:
+                adds, by = [(month, s.amount)] if s.amount > 0 else [], s
             for area, members in areas.items():
-                if any(benefit_match(rules, b, s)[0] is True for b in members):
-                    self.area[(group, area, month)] += s.amount
+                if any(benefit_match(rules, b, by)[0] is True for b in members):
+                    for m, x in adds:
+                        self.area[(group, area, m)] += x
 
 
 def build_ledger(ctx: Ctx, card: UserCard, payments: list[Payment]) -> Ledger:
@@ -532,12 +556,13 @@ def price_month(
     ordered = sorted(payments, key=lambda q: (q.paid_at, q.id))
     final_areas = None
     if final and month is not None:
+        # 다른 달 결제의 취소도 이 달 영역 이용액에서 빠질 수 있어 모든 결제를 넣는다. E55
         totals = Ledger()
         for q in ordered:
             day = local(q.paid_at).date()
             found = ctx.rules_on(card.card_id, day)
-            if month_of(day) == month and found and q.amount > q.cancelled_amount:
-                totals.add_totals(ctx, card, found[1], q, month)
+            if found:
+                totals.add_totals(ctx, card, found[1], q, month_of(day))
         final_areas = dict(totals.area)
     ledger = Ledger()
     results: list[PaymentResult] = []
