@@ -175,6 +175,7 @@ class Payment {
     Object? paymentMethod = _keep,
     int? cancelledAmount,
     Object? cancelledAt = _keep,
+    bool? timeKnown,
     Object? benefits = _keep,
   }) => Payment(
     id: id,
@@ -195,7 +196,7 @@ class Payment {
     cancelledAt: identical(cancelledAt, _keep)
         ? this.cancelledAt
         : cancelledAt as DateTime?,
-    timeKnown: timeKnown,
+    timeKnown: timeKnown ?? this.timeKnown,
     benefits: identical(benefits, _keep)
         ? this.benefits
         : benefits as List<AppliedBenefit>?,
@@ -309,6 +310,18 @@ class SpendStatus {
   final String tierSource;
   final int? prevMonthCounted, toKeep, nextTier, toNext;
   final List<Warn> warnings;
+
+  /// 서버가 주던 모양. Python `model_dump(mode="json", exclude={"user_card_id", "month"})`
+  Map<String, Object?> toJson() => {
+    'counted': counted,
+    'tier': tier,
+    'tier_source': tierSource,
+    'prev_month_counted': prevMonthCounted,
+    'to_keep': toKeep,
+    'next_tier': nextTier,
+    'to_next': toNext,
+    'warnings': [for (final w in warnings) w.toJson()],
+  };
 }
 
 class LimitUse {
