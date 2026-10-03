@@ -98,7 +98,3 @@ class Pill extends StatelessWidget {
     ),
   );
 }
-
-void notReady(BuildContext context, String what) => ScaffoldMessenger.of(
-  context,
-).showSnackBar(SnackBar(content: Text('$what은 아직 준비 중이에요.')));

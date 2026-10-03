@@ -214,17 +214,12 @@ class _FirstCard extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         const Text(
-          '카드사와 이름으로 찾거나\n카드 앞면을 찍으면 됩니다.\n사진은 폰 밖으로 나가지 않습니다.',
+          '카드사와 이름으로 찾으면 됩니다.',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 14, height: 1.5, color: C.sub),
         ),
         const SizedBox(height: 16),
         FilledButton(onPressed: onAdd, child: const Text('카드 추가')),
-        const SizedBox(height: 8),
-        OutlinedButton(
-          onPressed: () => notReady(context, '카메라 인식'),
-          child: const Text('카메라로 인식'),
-        ),
       ],
     ),
   );

@@ -164,14 +164,6 @@ class _AddCardScreenState extends State<AddCardScreen> {
             },
           ),
         ),
-        SafeArea(
-          minimum: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
-            onPressed: () => notReady(context, '카메라 인식'),
-            child: const Text('카메라로 카드 인식'),
-          ),
-        ),
       ],
     ),
   );
