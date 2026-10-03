@@ -175,7 +175,7 @@ Database openDb([String? path, List<String> steps = migrations]) {
     }
     // SQLite는 외래 키 검사가 기본으로 꺼져 있다
     db.execute('pragma foreign_keys = on');
-    _seenIds(db);
+    seenIds(db);
     return db;
   } catch (_) {
     db.close();
@@ -209,7 +209,7 @@ void forgetIds() => _lastMs = 0;
 
 /// 저장된 가장 큰 결제 id의 밀리초를 기억한다. 앱을 다시 켠 뒤에도 새 id가 저장된 id보다 크다. 폰 시계가 뒤로 갔거나
 /// 시계가 앞서던 폰에서 가져온 기록이 있어도 같은 시각 결제의 순서가 뒤집히지 않는다. 2026-10-02 위험 검토
-void _seenIds(Database db) {
+void seenIds(Database db) {
   final has = db.select(
     "select 1 from sqlite_master where type = 'table' and name = 'transactions'",
   );

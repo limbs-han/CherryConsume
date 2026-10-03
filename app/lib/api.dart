@@ -6,6 +6,7 @@ library;
 import 'dart:typed_data';
 
 import 'catalog/models.dart' show day;
+import 'store/backup.dart' as backup;
 import 'store/routes/answers.dart' as answers;
 import 'store/routes/catalog.dart' as catalog_routes;
 import 'store/routes/imports.dart' as import_routes;
@@ -614,4 +615,16 @@ class Api {
 
   /// 가져온 묶음 되돌리기. E34
   Future<void> undoImport(int id) async => import_routes.undo(store, id);
+
+  /// 기록을 JSON 한 파일로. 작업 006 설계 6절
+  /// ponytail: 내보내기와 가져오기가 화면과 같은 isolate에서 돈다. 결제 수만 건에서 화면이 눈에 띄게 멈추면 JSON 읽기와
+  /// 쓰기를 Isolate.run으로 옮긴다. 단계 6 위험 검토 9번
+  Future<String> exportRecords() async => backup.exportAll(store);
+
+  /// 보유 카드나 결제가 있으면 가져오기 전에 바꿀지 묻는다
+  Future<bool> hasRecords() async => backup.hasRecords(store);
+
+  /// 지금 기록을 지우고 파일의 기록으로 바꾼다. 받지 않는 파일이면 지금 기록이 그대로다
+  Future<void> importRecords(Uint8List data) async =>
+      backup.importAll(store, data);
 }
