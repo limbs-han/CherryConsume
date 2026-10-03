@@ -27,10 +27,13 @@
 - 2026-10-01 사용자가 이마트 트레이더스와 쿠팡플레이를 이마트, 쿠팡과 다른 가게로 보기로 했다. `catalog/`를 직접 고치지 않는 규칙에 따라 Databricks 세션이 골드에 가맹점 `traders`, `coupang_play`를 넣는다. 아직 안 들어갔다
 - 개발 DB는 `docker compose up -d db`. 이 PC의 Docker Desktop은 꺼져 있을 수 있어 먼저 켠다. 에뮬레이터는 `wj_local`을 창 없이 켰다
 
+작업 008 카탈로그 전체로 넓히기. `docs/work/008-catalog-all-cards/`
+- 2026-10-03 사용자가 지금 파는 카드 전부를 막힌 카드사까지 담기로 했다. 의도와 설계 여섯 절을 확인했고 계획을 썼다. 정한 것: 카드사 상품공시실로 색인, 집 PC에 GitHub 자체 호스팅 러너, 삼성과 IBK는 robots.txt를 무시하되 이름을 밝히고 차단 신호에 멈춤, 롯데는 Playwright 시험, 최근 3년 단종만, 요청은 Google 설문, 검수는 카드다모아 추천 46장과 요청 먼저. 첫 전체 추출은 11월. 다음은 계획 1단계 공시실 주소 조사
+
 Databricks 운영. 작업 003은 2026-10-02 끝났다. 아래는 다음 일을 할 때 기억할 것이다
 - 2026-10-03부터 Databricks CLI와 API 명령은 Claude가 돌리고, 웹 화면에서만 할 수 있는 일만 사용자에게 부탁한다. 운영에 쓰거나 운영 작업을 돌리는 명령은 먼저 묻는다. 사람 계정으로는 `bundle run -t prod`를 쓸 수 없어 운영 작업은 화면에서 돌린다. `.claude/CLAUDE.md`. SQL은 웨어하우스 `5afff488b4580670`에 문 실행 API로, 계보는 `/api/2.0/lineage-tracking/table-lineage`로 본다
 - 카탈로그의 원본은 골드 표 `cherry.gold.catalog_files`다. 바뀐 카탈로그는 검수 앱 `cherry-review-prod`나 손 승인 `cherry_approve`로 골드에 넣고, `export` 워크플로가 저장소에 봇 커밋한다. 새 카드는 `card-researcher`가 임시 사본에 쓰고 손 승인으로 넣는다. 지금 골드 카탈로그 파일 해시는 `55c7370146849f75871129b874fccb4348abc58ca552b06c582c31dbdb44defc`이고 다음 손 승인의 `expect_files`다
-- 다음 승인 전에 주 개발 세션의 `export.yml` 푸시 단계 고치기가 master에 있는지 본다. 없으면 `app/assets/catalog.json`이 든 봇 커밋이 막힌다
+- 주 개발 세션의 `export.yml` 푸시 단계 고치기는 6925ce1로 master에 있다. 2026-10-03 확인했다. 다음 승인의 봇 커밋에 `app/assets/catalog.json`이 함께 들어가는지 그때 본다
 - 운영 추출 모델은 `system.ai.gpt-oss-120b`, 프롬프트 판 11이다. 운영 `cherry_refresh`는 바뀐 원문의 카드만 추출해 검수 대기에 올린다. 운영에서 바뀐 원문 추출이 실제로 초안을 만든 적은 아직 없다. 첫 초안이 생기면 검수 앱에서 반려도 한 번 시험한다
 - 신한 3장은 GitHub 서버의 접속을 끊어 사용자가 PC에서 받아 올린다. 매달 2일과 16일, `docs/databricks.md`의 "PC에서 받는 카드사". 삼성, 롯데, IBK 다섯 장은 자동 수집이 없다. 현대와 농협은 GitHub에서 가끔 연결 오류가 난다
 - 서비스 주체 비밀값은 2027-10-01 09:36:11 KST에 끝난다. 2027-09-01쯤 새로 받아 GitHub `DATABRICKS_CLIENT_SECRET`을 바꾸라고 알린다
