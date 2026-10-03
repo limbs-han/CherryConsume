@@ -1,5 +1,6 @@
 """고정 저장 형식. 설계 4.2와 4.3."""
 
+import re
 from datetime import date
 
 import yaml
@@ -41,6 +42,29 @@ def test_key_order_and_set_like_lists():
     assert data["target"]["merchants"] == ["a", "b"]
     assert data["when"][0]["day"]["in"] == ["sat", "sun"]
     assert data["tiers"] == [0, 500000, 300000]
+
+
+def test_collect_keys_in_reading_order():
+    # 작업 008. disclosure_url은 notice_url 뒤에 온다. collect는 한 줄 흐름 형식으로 저장된다
+    text = canonical_text(
+        {
+            "collect": {
+                "disclosure_url": "https://d",
+                "notice_url": "https://n",
+                "method": "api",
+                "list_url": "https://l",
+                "interval_days": 30,
+            }
+        }
+    )
+    assert re.findall(r"(\w+): ", text) == [
+        "collect",
+        "list_url",
+        "method",
+        "interval_days",
+        "notice_url",
+        "disclosure_url",
+    ]
 
 
 def test_tier_table_keys_sorted_and_strings_kept():

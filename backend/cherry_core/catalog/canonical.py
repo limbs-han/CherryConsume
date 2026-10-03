@@ -43,6 +43,7 @@ KEY_ORDER = [
     "method",
     "interval_days",
     "notice_url",
+    "disclosure_url",
     "defaults",
     "revisions",
     "effective_from",

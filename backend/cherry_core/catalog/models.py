@@ -433,6 +433,9 @@ class Collect(Base):
     method: Literal["api", "browser", "manual", "blocked"]
     interval_days: Literal[14, 30]
     notice_url: Annotated[str, Field(pattern=r"^https://")] | None = None
+    # 지금 파는 카드 전부를 나열하는 상품공시실 주소. 색인은 이 주소에서 만든다. 공시실에 목록이 없는 카드사는 비우고
+    # list_url을 쓴다. 작업 008 설계 1절
+    disclosure_url: Annotated[str, Field(pattern=r"^https://")] | None = None
 
 
 class IssuerDefaults(Base):

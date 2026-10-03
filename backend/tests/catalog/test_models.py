@@ -3,7 +3,18 @@
 import pytest
 from pydantic import ValidationError
 
-from cherry_core.catalog.models import Adjust, Benefit, Condition, Fact, Limit, Option, Reward, SharedLimit, Target
+from cherry_core.catalog.models import (
+    Adjust,
+    Benefit,
+    Collect,
+    Condition,
+    Fact,
+    Limit,
+    Option,
+    Reward,
+    SharedLimit,
+    Target,
+)
 
 
 def test_reward_needs_exactly_one_amount_rule():
@@ -116,6 +127,16 @@ def test_choice_fact_needs_choices():
     Fact(key="grade", type="choice", scope="user", ask="등급은", choices=["a", "b"])
     with pytest.raises(ValidationError, match="choices"):
         Fact(key="grade", type="choice", scope="user", ask="등급은")
+
+
+def test_collect_disclosure_url_is_optional_https():
+    # 작업 008 설계 1절. 상품공시실 주소는 있으면 https여야 하고, 공시실에 목록이 없는 카드사는 비운다
+    base = {"list_url": "https://a.example/list", "method": "api", "interval_days": 30}
+    assert Collect.model_validate(base).disclosure_url is None
+    ok = Collect.model_validate({**base, "disclosure_url": "https://a.example/disclosure"})
+    assert ok.disclosure_url == "https://a.example/disclosure"
+    with pytest.raises(ValidationError, match="disclosure_url"):
+        Collect.model_validate({**base, "disclosure_url": "http://a.example/disclosure"})
 
 
 def test_unknown_field_is_rejected():
