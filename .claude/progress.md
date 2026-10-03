@@ -54,6 +54,7 @@ Databricks 운영. 작업 003은 2026-10-02 끝났다. 아래는 다음 일을 �
 - Databricks를 고른 이유와 설정 방침: `docs/databricks.md`. 설정은 사용자가 직접 한다
 - 작업 003 Databricks 카드 상품 수집 파이프라인: 2026-10-02 끝났다. `pipeline/`, `backend/cherry_core/pipeline/`, 워크플로 `collect`, `deploy`, `export`. 성공 기준은 통과 다섯, 일부 둘, 미룸 하나다. 결과는 `docs/work/003-databricks-pipeline/plan.md` 끝의 "성공 기준 확인", 과정은 `docs/history/` 31~36, 43, 46, 50, 51
 - 작업 007 Databricks 운영 대시보드와 Spark 계산: 2026-10-03 끝났다. 대시보드 "체리컨슘 운영"과 원문에서 골드까지의 표 단위 계보다. 글 뽑기는 pandas UDF, 목록과 추출과 승인은 쓸 때만 원래 표와 맞붙인다. 성공 기준 열넷이 모두 통과했다. 결과는 `docs/work/007-dashboard-spark/plan.md` 끝, 과정은 `docs/history/57-dashboard-spark.md`
+- 작업 009 카메라 카드 인식: 2026-10-03 중단했다. 의도와 설계를 확인하고 계획 단계 1을 하던 중 사용자가 일이 너무 크다고 보고 카메라 기능을 제품에서 뺐다. 앱의 "카메라로 인식" 버튼 둘도 지웠다. 설계 문서 2절과 5절, 시나리오 S2, E20, E23을 고쳤다. 시안의 카메라 화면은 고치지 않고 만들지 않는다고만 적었다. 작업 008의 색인 표 `image_url` 칸은 카메라 인식용이라 이제 필요 없다. `docs/work/009-camera-card-recognition/`은 다시 꺼낼 때를 위한 기록이다
 
 ## 사용자 확인이 필요한 것
 
