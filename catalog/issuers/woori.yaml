@@ -1,9 +1,9 @@
 schema_version: 2
 id: woori
 name: 우리카드
-collect: {list_url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd02/H1CRD202S00.do?ctgrCd=S000017&hiPrdCtgrCd=M110018', method: browser, interval_days: 30, notice_url: 'https://pc.wooricard.com/dcpc/yh1/cct/cct11/prdagrmchgadv/H1CCT211S18.do'}
+collect: {list_url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd02/H1CRD202S00.do?ctgrCd=S000017&hiPrdCtgrCd=M110018', method: browser, interval_days: 30, notice_url: 'https://pc.wooricard.com/dcpc/yh1/cct/cct11/prdagrmchgadv/H1CCT211S18.do', disclosure_url: 'https://pc.wooricard.com/dcpc/yh1/cct/cct11/prdntc/H1CCT211S09.do'}
 defaults:
   - effective_from: 2024-02-26
     effective_from_estimated: true
     spend: {basis: prev_calendar_month, installment: full_at_purchase, cancellation: cancel_month}
-notes: 'defaults 시작일은 공통 약관 시행일을 찾지 못해 우리 카드 중 첫 개정이 가장 이른 EVERY POINT 출시일로 두고 추정 표시. 수집: 상품 목록과 공지는 자바스크립트로 그린다. 목록 주소는 신용카드 목록이고 체크카드는 hiPrdCtgrCd=M110019다. 서비스 변경 게시판은 POST /dcpc/yh1/cmn/bbs/searchBbsList.pwkjson에 scBbsCode 1010으로 본문까지 받는다. 2026-09-29 기준 317건을 끝까지 봤다.'
+notes: 'defaults 시작일은 공통 약관 시행일을 찾지 못해 우리 카드 중 첫 개정이 가장 이른 EVERY POINT 출시일로 두고 추정 표시. 수집: 상품 목록과 공지는 자바스크립트로 그린다. 목록 주소는 신용카드 목록이고 체크카드는 hiPrdCtgrCd=M110019다. 서비스 변경 게시판은 POST /dcpc/yh1/cmn/bbs/searchBbsList.pwkjson에 scBbsCode 1010으로 본문까지 받는다. 2026-09-29 기준 317건을 끝까지 봤다. 2026-10-03 작업 008 색인: 상품공시실 약관 탭이 색인이다. 발급 중단 여부와 발급 중단일이 있다. 표를 채우는 getMainDataList.pwkjson은 요청을 암호화해 브라우저로만 받는다. 상품설명서는 다운로드 솔루션 팝업이라 직접 주소가 없다.'
