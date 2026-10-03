@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 자동 백업 끄기. 결제 기록이 사용자 모르게 Google 계정이나 다른 폰으로 가지 않는다. 작업 006 설계 6절
+     규칙이 없는 방식은 모두 켜진다고 공식 문서가 적어 칸마다 앱 폴더와 기기 보호 저장소를 모두 뺀다. 기록은 설정의 내보내기로 옮긴다 -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" path="./" />
+        <exclude domain="file" path="./" />
+        <exclude domain="database" path="./" />
+        <exclude domain="sharedpref" path="./" />
+        <exclude domain="external" path="./" />
+        <exclude domain="device_root" path="./" />
+        <exclude domain="device_file" path="./" />
+        <exclude domain="device_database" path="./" />
+        <exclude domain="device_sharedpref" path="./" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" path="./" />
+        <exclude domain="file" path="./" />
+        <exclude domain="database" path="./" />
+        <exclude domain="sharedpref" path="./" />
+        <exclude domain="external" path="./" />
+        <exclude domain="device_root" path="./" />
+        <exclude domain="device_file" path="./" />
+        <exclude domain="device_database" path="./" />
+        <exclude domain="device_sharedpref" path="./" />
+    </device-transfer>
+    <!-- Android 16 QPR2부터 iOS 기기로 옮기기 -->
+    <cross-platform-transfer platform="ios">
+        <exclude domain="root" path="./" />
+        <exclude domain="file" path="./" />
+        <exclude domain="database" path="./" />
+        <exclude domain="sharedpref" path="./" />
+        <exclude domain="external" path="./" />
+        <exclude domain="device_root" path="./" />
+        <exclude domain="device_file" path="./" />
+        <exclude domain="device_database" path="./" />
+        <exclude domain="device_sharedpref" path="./" />
+    </cross-platform-transfer>
+</data-extraction-rules>
