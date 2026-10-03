@@ -35,7 +35,7 @@ Databricks 운영. 작업 003은 2026-10-02 끝났다. 아래는 다음 일을 �
 - 신한 3장은 GitHub 서버의 접속을 끊어 사용자가 PC에서 받아 올린다. 매달 2일과 16일, `docs/databricks.md`의 "PC에서 받는 카드사". 삼성, 롯데, IBK 다섯 장은 자동 수집이 없다. 현대와 농협은 GitHub에서 가끔 연결 오류가 난다
 - 서비스 주체 비밀값은 2027-10-01 09:36:11 KST에 끝난다. 2027-09-01쯤 새로 받아 GitHub `DATABRICKS_CLIENT_SECRET`을 바꾸라고 알린다
 - 체험 14일째인 2026-10-13에 결제 정보 등록을 알린다. 2026-10-03 비용 차단이 센 쓴 금액이 53.36달러다. 체험 뒤 한 달 30달러 한도를 그때 다시 본다. 2026-10-03 청구 기록에서 본 것 둘을 그때 함께 정한다. 하나, SQL 웨어하우스가 하루 7~13달러로 가장 크다. SQL 편집기, 대시보드, Claude의 조회가 모두 쓰고 켜지면 5분은 돈이 나온다. 둘, 운영 비용 차단은 6시간마다와 배포마다 돌고 한 번에 7센트쯤이라 한 달 8달러쯤이다
-- Unity Catalog 표 단위 계보는 2026-10-03 작업 007로 `fetches`에서 골드까지 이었다. 운영 배포 뒤 첫 `cherry_refresh` 성공은 아직 못 봤다. 다음 수집 때 본다. 운영 `card_lists`의 `new_cards`, `gone_cards` 칸도 그때 생긴다. 추출 모델 미세조정은 승인 기록이 100~200장 모이면 지금 모델과 비교한다. 2026-10-01 사용자가 정했다
+- Unity Catalog 표 단위 계보는 2026-10-03 작업 007로 `fetches`에서 골드까지 이었다. 2026-10-03 운영 `cherry_refresh`를 한 번 돌려 성공했고 운영 `card_lists`에 새 칸이 생겼다. 추출 모델 미세조정은 승인 기록이 100~200장 모이면 지금 모델과 비교한다. 2026-10-01 사용자가 정했다
 - 서버리스가 예전 wheel을 되살려 패키지 설치에서 실패하면 Run now로 다시 돌린다. 운영 작업을 손으로 돌릴 때는 화면에서 한다. 사람 계정으로는 `bundle run -t prod`를 쓸 수 없다. 이 PC의 Git Bash에서 `databricks api`를 쓸 때는 `MSYS_NO_PATHCONV=1`을 켠다
 
 ## 끝난 것
@@ -50,7 +50,7 @@ Databricks 운영. 작업 003은 2026-10-02 끝났다. 아래는 다음 일을 �
 - 결제 알림 읽기를 출시 뒤 Android 부가 기능으로 정했다. 설계 문서 9절, 하위 프로젝트 6, 시나리오 S12와 E38부터 E46. MVP 작업에서는 만들지 않는다
 - Databricks를 고른 이유와 설정 방침: `docs/databricks.md`. 설정은 사용자가 직접 한다
 - 작업 003 Databricks 카드 상품 수집 파이프라인: 2026-10-02 끝났다. `pipeline/`, `backend/cherry_core/pipeline/`, 워크플로 `collect`, `deploy`, `export`. 성공 기준은 통과 다섯, 일부 둘, 미룸 하나다. 결과는 `docs/work/003-databricks-pipeline/plan.md` 끝의 "성공 기준 확인", 과정은 `docs/history/` 31~36, 43, 46, 50, 51
-- 작업 007 Databricks 운영 대시보드와 Spark 계산: 2026-10-03 끝났다. 대시보드 "체리컨슘 운영"과 원문에서 골드까지의 표 단위 계보다. 글 뽑기는 pandas UDF, 목록과 추출과 승인은 쓸 때만 원래 표와 맞붙인다. 성공 기준은 통과 열셋, 남음 하나다. 남은 것은 운영 배포 뒤 첫 `cherry_refresh`다. 결과는 `docs/work/007-dashboard-spark/plan.md` 끝, 과정은 `docs/history/57-dashboard-spark.md`
+- 작업 007 Databricks 운영 대시보드와 Spark 계산: 2026-10-03 끝났다. 대시보드 "체리컨슘 운영"과 원문에서 골드까지의 표 단위 계보다. 글 뽑기는 pandas UDF, 목록과 추출과 승인은 쓸 때만 원래 표와 맞붙인다. 성공 기준 열넷이 모두 통과했다. 결과는 `docs/work/007-dashboard-spark/plan.md` 끝, 과정은 `docs/history/57-dashboard-spark.md`
 
 ## 사용자 확인이 필요한 것
 
