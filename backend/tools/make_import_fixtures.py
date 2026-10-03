@@ -1,7 +1,7 @@
 """엑셀 가져오기 시험 파일을 만든다. Dart 시험이 Python과 같은 파일을 읽게 한다. 작업 006 계획 단계 1의 3
 
 돌리기: uv run --project backend python backend/tools/make_import_fixtures.py
-xlsx는 만들 때마다 안의 시각이 달라 다시 만든 파일과 바이트로 비교하지 않는다. 내용은 backend/tests/api/test_import_parse.py와 같다.
+xlsx는 만들 때마다 안의 시각이 달라 다시 만든 파일과 바이트로 비교하지 않는다. 내용은 app/test/store/import_parse_test.dart가 읽는다.
 """
 
 from __future__ import annotations
