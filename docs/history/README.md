@@ -101,3 +101,4 @@
 | [56](56-on-device-step6-backup.md) | 2026-10-03 | 작업 006 단계 6 기록 내보내기와 가져오기, 자동 백업 끄기 |
 | [57](57-dashboard-spark.md) | 2026-10-03 | 운영 대시보드와 Spark 계산으로 계보 잇기 |
 | [58](58-on-device-step7-cleanup.md) | 2026-10-03 | 작업 006 단계 7 서버, Python 엔진, 로그인 지우기와 문서 맞추기 |
+| [59](59-camera-recognition-dropped.md) | 2026-10-03 | 카메라 카드 인식을 시작했다가 빼기 |
