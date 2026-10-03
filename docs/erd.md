@@ -1,271 +1,129 @@
 # 체리컨슘 ERD
 
-Postgres 기준. 설계 문서 6.3절의 Pydantic 모델을 테이블로 옮기고, 3계층 구조에 필요한 사용자·인증·추천 기록 테이블을 더했다.
+폰 안 SQLite 기준. 2026-10-02 작업 006에서 서버의 Postgres 표 23개를 폰 안 표 10개로 바꿨다. 표 정의는 `app/lib/store/db.dart`의 번호 붙은 SQL 목록이다. 작업 006 설계 4절
 
-두 영역으로 나뉜다.
-- 카탈로그 영역: 저장소의 카탈로그 파일이 원본이다. 서버가 켜질 때 파일 내용으로 맞추고 앱은 읽기만 한다. `cards`부터 `reference_values`까지. 작업 005 설계 4절
-- 사용자 영역: 앱이 쓴다. `users`부터 `export_runs`까지. 테이블 23개.
+- 사용자가 한 명이라 모든 표에 `user_id`가 없다. 계정, 로그인 수단, 세션 표는 없다
+- 카드사, 카드, 개정, 업종, 가맹점, 별칭, 결제수단 표는 없다. 메모리의 카탈로그가 대신한다. 결제는 카탈로그의 key를 글자로 가리킨다
+- 추천 요청과 추천 결과 표는 없다. 결제에 "추천에서 기록함" 표시 하나만 둔다
+- 시각은 UTC 밀리초 정수, 날짜는 `YYYY-MM-DD` 글자, 참과 거짓은 0과 1이다. 받아 둔 카탈로그 표 말고는 모두 strict라 칸의 형이 틀린 값을 DB가 막는다
 
 ```mermaid
 erDiagram
-    issuers {
-        text code PK "shinhan, samsung, ibk ..."
-        text name
-    }
-    categories {
-        text code PK "cafe, convenience, tax ..."
-        text name_ko
-        text kakao_group_code "CE7 등. 없으면 null"
-        text parent_code FK "자식 업종이면 부모"
-    }
-    cards {
-        text id PK "issuer-slug"
-        text issuer_code FK
-        text name
-        text[] search_names
-        text kind "credit | check"
-        text[] product_codes "카드사 내부 상품 코드"
-        text status "on_sale | discontinued | closed"
-        date status_since
-        jsonb annual_fees
-        jsonb sources "원문, 본문 지문, 심의필"
-        date checked_at
-    }
-    card_revisions {
-        bigint id PK
-        text card_id FK
-        date effective_from "card_id, rules_sha256과 함께 고유. 고친 개정은 새 행"
-        bool effective_from_estimated
-        jsonb rules "합친 뒤의 개정 전체"
-        text rules_sha256
-        int schema_version
-        timestamptz published_at
-    }
-    payment_methods {
-        text key PK
-        text name
-        text[] statement_names
-    }
-    point_programs {
-        text key PK
-        text name
-        numeric won_per_point
-    }
-    reference_values {
-        text key PK
-        numeric value
-        text unit
-        date as_of
-        text source
-    }
-    merchants {
-        text key PK "starbucks, gs25 ..."
-        text name
-        text category_code FK
-        text billing "기본 청구 방식"
-    }
-    merchant_aliases {
-        text alias PK "공백·대소문자 정규화한 값"
-        text merchant_key FK
-    }
-
-    users {
-        uuid id PK
-        text email "카카오 이메일 동의를 안 하면 null"
-        timestamptz created_at
-        timestamptz deleted_at "탈퇴 시각. 30일 뒤 물리 삭제"
-    }
-    auth_identities {
-        bigint id PK
-        uuid user_id FK
-        text provider "kakao | google | dev. dev는 개발용 로그인"
-        text provider_uid UK "provider와 함께 고유"
-        timestamptz created_at
-    }
-    sessions {
-        text token_sha256 PK "토큰 원문은 두지 않는다"
-        uuid user_id FK
-        timestamptz created_at
-        timestamptz expires_at
+    catalog_cache {
+        integer id PK "늘 1. 한 줄뿐"
+        text body "받아 둔 카탈로그 JSON"
+        text etag "다음에 받을 때 바뀌었는지 묻는 값"
+        text bundled "받을 때 앱에 담긴 파일의 지문"
     }
     user_cards {
-        uuid id PK
-        uuid user_id FK
-        text card_id FK
+        text id PK "시각 순서 uuid"
+        text card_id "카탈로그의 카드 id"
         text nickname
-        int assumed_prev_month_spend "등록한 달의 전월 실적 추정"
-        date started_on "카드를 쓰기 시작한 날"
-        text last_payment_method FK
-        timestamptz added_at
-        timestamptz removed_at
+        integer assumed_prev_month_spend "지난달 실적 추정값"
+        text started_on "YYYY-MM-DD"
+        text last_payment_method "다음 결제의 기본 결제수단"
+        integer added_at "UTC 밀리초"
+        integer removed_at "해지한 시각"
     }
     transactions {
-        uuid id PK
-        uuid user_id FK
-        uuid user_card_id FK
-        int amount
-        text merchant_name "사용자가 적은 이름"
-        text merchant_key FK "별칭표에 걸리면"
-        text category_code FK
-        timestamptz paid_at
-        int installment_months "일시불 1"
-        bool interest_free_installment
-        int cancelled_amount "기본 0"
-        timestamptz cancelled_at
-        text channel "online | offline"
-        text region "domestic | overseas"
-        text payment_method FK
-        text billing
-        bigint card_revision_id FK "계산에 쓴 개정"
-        text approval_no "카드사 승인번호. 중복 판정"
-        boolean time_known "엑셀에 날짜만 있으면 거짓. E57"
-        bigint import_batch_id FK "엑셀 가져오기 배치"
-        text source "manual | excel | notification"
-        uuid recommendation_request_id FK "추천에서 바로 기록했으면"
-        uuid client_id "앱이 결제마다 만든 번호. E24"
-        timestamptz created_at
-        timestamptz updated_at
-        timestamptz deleted_at
-    }
-    recommendation_requests {
-        uuid id PK
-        uuid user_id FK
-        text merchant_name
-        text merchant_key FK
-        text category_code FK
-        int amount "없으면 null"
-        text channel
-        text region
+        text id PK "시각 순서 uuid"
+        text user_card_id FK
+        integer amount "원. 0보다 크다"
+        text merchant_name "사용자가 적은 가게 이름"
+        text merchant_key "카탈로그의 가맹점"
+        text category_code "카탈로그의 업종"
+        integer paid_at "UTC 밀리초"
+        integer installment_months
+        integer interest_free_installment "0이나 1"
+        integer cancelled_amount "결제액 이하"
+        integer cancelled_at
+        text channel "online, offline"
+        text region "domestic, overseas"
         text payment_method
-        timestamptz requested_at
-    }
-    recommendation_results {
-        uuid request_id PK,FK
-        int rank PK "1부터"
-        uuid user_card_id FK
-        int expected_benefit
-        jsonb applied "받는 혜택 key와 금액"
-        jsonb conditional "입력이 더 있으면 받는 혜택"
-        text[] warnings
-    }
-    import_batches {
-        bigint id PK
-        uuid user_id FK
-        text source "카드사 코드 또는 toss, banksalad. 매핑 표가 생기기 전에는 비어 있다"
-        int row_count "앱이 보낸 행 수"
-        int imported_count
-        int duplicate_count
-        int cancel_count
-        timestamptz created_at
-        timestamptz undone_at
-    }
-    import_cancels {
-        bigint id PK
-        bigint import_batch_id FK
-        uuid transaction_id FK
-        int amount "취소 한 줄의 금액"
-        timestamptz cancelled_at
-    }
-    import_mappings {
-        uuid user_id PK,FK
-        text signature PK "머리 줄 모양의 해시"
-        jsonb mapping "칸마다 열 번호"
-        timestamptz updated_at
-    }
-    card_requests {
-        bigint id PK
-        uuid user_id FK
-        text issuer_text "사용자가 적은 카드사"
-        text card_name_text "사용자가 적은 카드 이름"
-        timestamptz created_at
-    }
-    export_runs {
-        bigint id PK
-        date target_date UK "내보낸 날짜"
-        text status "running | done | failed"
-        text file_prefix "오브젝트 스토리지 경로"
-        int transaction_rows
-        int request_rows
-        timestamptz started_at
-        timestamptz finished_at
-    }
-    user_card_options {
-        bigint id PK
-        uuid user_card_id FK
-        text option_key
-        text choice_key
-        date effective_from "처음 답은 0001-01-01"
-        timestamptz answered_at
-    }
-    user_facts {
-        uuid user_id PK,FK
-        text key PK
-        date effective_from PK "처음 답은 0001-01-01"
-        text value "JSON. 참과 거짓, 달, 선택지"
-        timestamptz answered_at
-    }
-    user_card_facts {
-        uuid user_card_id PK,FK
-        text key PK
-        date effective_from PK "처음 답은 0001-01-01"
-        text value "JSON. 참과 거짓, 달, 선택지"
-        timestamptz answered_at
+        text billing "청구 방식"
+        text revision_from "계산에 쓴 개정의 시행일"
+        text revision_sha "그 개정 규칙의 지문"
+        text approval_no
+        integer import_batch_id FK
+        text source "manual, excel, notification"
+        integer from_recommendation "추천에서 기록함"
+        integer time_known "엑셀에 날짜만 있으면 0. E57"
+        integer created_at
+        integer updated_at
+        integer deleted_at "지운 시각. 행은 남긴다"
     }
     transaction_benefits {
-        uuid transaction_id PK,FK
-        text benefit_key PK
-        int amount "보상 단위. 원이나 포인트"
-        int value "원 가치. 포인트는 원으로 바꾼 값"
-        int base_amount "혜택 계산에 넣은 결제액"
+        text transaction_id PK
+        text benefit_key PK "카탈로그의 혜택 key"
+        integer amount "혜택을 받은 금액"
+        integer value "받은 혜택. 원"
+        integer base_amount
+    }
+    user_card_options {
+        integer id PK
+        text user_card_id FK
+        text option_key
+        text choice_key
+        text effective_from "이날부터 쓰는 답"
+        integer answered_at
+    }
+    user_card_facts {
+        text user_card_id PK
+        text key PK
+        text effective_from PK
+        text value "JSON"
+        integer answered_at
+    }
+    user_facts {
+        text key PK "생일 달, 현역병처럼 모든 카드에 쓰는 사실"
+        text effective_from PK
+        text value "JSON"
+        integer answered_at
+    }
+    import_batches {
+        integer id PK
+        text source
+        integer row_count
+        integer imported_count
+        integer duplicate_count
+        integer cancel_count
+        integer created_at
+        integer undone_at "되돌린 시각. E34"
+    }
+    import_cancels {
+        integer id PK
+        integer import_batch_id FK
+        text transaction_id FK
+        integer amount
+        integer cancelled_at
+    }
+    import_mappings {
+        text signature PK "머리 줄의 sha256"
+        text mapping "열 번호 JSON"
+        integer updated_at
     }
 
-    issuers ||--o{ cards : "발행"
-    cards ||--|{ card_revisions : "개정"
-    categories o|--o{ categories : "부모 업종"
-    categories ||--o{ merchants : "업종"
-    merchants ||--o{ merchant_aliases : "별칭"
-
-    users ||--|{ auth_identities : "로그인 수단"
-    users ||--o{ sessions : "로그인 토큰"
-    users ||--o{ user_cards : "보유"
-    cards ||--o{ user_cards : ""
-    users ||--o{ transactions : ""
     user_cards ||--o{ transactions : "결제"
-    categories ||--o{ transactions : ""
-    merchants o|--o{ transactions : ""
-    card_revisions ||--o{ transactions : "계산에 쓴 개정"
-    payment_methods o|--o{ transactions : "결제수단"
+    user_cards ||--o{ user_card_options : "옵션 답"
+    user_cards ||--o{ user_card_facts : "카드 사실 답"
     transactions ||--o{ transaction_benefits : "받은 혜택"
-    user_cards ||--o{ user_card_options : "옵션 선택"
-    users ||--o{ user_facts : "사람 사실"
-    user_cards ||--o{ user_card_facts : "카드 사실"
-    users ||--o{ recommendation_requests : ""
-    recommendation_requests ||--|{ recommendation_results : "순위"
-    user_cards ||--o{ recommendation_results : ""
-    recommendation_requests o|--o{ transactions : "추천 따라 기록"
-    users ||--o{ card_requests : "카드 추가 요청"
-    users ||--o{ import_batches : "엑셀 가져오기"
-    users ||--o{ import_mappings : "짝지은 열"
+    import_batches o|--o{ transactions : "가져온 결제"
     import_batches ||--o{ import_cancels : "붙인 취소"
     transactions ||--o{ import_cancels : "가져온 취소"
-    import_batches o|--o{ transactions : "가져온 결제"
 ```
 
 ## 설계 메모
 
-- 카탈로그는 카드마다 개정 행을 쌓는다. 서버가 카드사 기본값과 패치를 합친 개정 전체를 `card_revisions.rules`에 넣는다. 옛 개정은 지우지 않는다. 같은 날의 개정이 고쳐지면 새 행을 더해 결제가 가리키는 행이 그때 계산에 쓴 규칙으로 남는다. 지난달 실적은 지난달 규칙으로 계산하기 때문이다.
-- 결제는 계산에 쓴 개정을 `card_revision_id`로, 받은 혜택을 `transaction_benefits`의 혜택 key로 가리킨다. 혜택 key는 갱신해도 바꾸지 않는다. 한도 사용량은 기간 안의 `transaction_benefits`를 모아 계산한다. 저장한 혜택은 다시 계산하지 않는다. 예외는 달이 끝난 순위 카드, 결제한 달 기준 취소로 구간이 바뀐 달, 엑셀이나 손으로 앞선 결제가 들어온 달, 지난달 결제로 구간이 바뀐 달, 결제를 고치거나 지우거나 취소해 구간이 바뀐 다음 달, 카드 사실이나 옵션을 답한 카드다. E48, E5, E51, E52, E53, E54, E56
-- `user_cards`는 같은 사용자가 같은 카드를 두 번 보유할 수 없게 `(user_id, card_id)`에 `removed_at IS NULL` 조건의 부분 유니크 인덱스를 둔다.
-- 실적 계산은 `transactions`를 `(user_card_id, paid_at)`으로 읽는다. 이 두 컬럼의 복합 인덱스가 핵심 인덱스다.
-- `transaction_benefits`는 `(transaction_id)`로 읽고 결제의 `(user_card_id, paid_at)` 인덱스와 함께 쓴다.
-- 추천을 따랐는지는 `transactions.recommendation_request_id`로 연결한다. 추천 화면에서 "이 카드로 결제 기록"을 누르면 채워진다. 별도 선택 테이블은 두지 않는다.
-- 로그인은 카카오와 Google만 받는다. `(provider, provider_uid)`를 유니크로 건다. 1차는 사용자 한 명에 로그인 수단 하나지만, 나중에 수단을 여럿 붙일 수 있게 테이블은 나눠 둔다. `users.email`은 연락용이라 유니크로 걸지 않는다. 카카오와 Google이 같은 이메일을 줘도 1차는 별개 사용자다.
-- 탈퇴는 `users.deleted_at`을 찍고 30일 뒤 사용자 영역 행을 물리 삭제한다. 그 사이 로그인은 막는다.
-- 로그인하면 서버가 무작위 토큰을 앱에 주고 `sessions`에는 그 SHA-256만 둔다. 요청마다 세션과 `users.deleted_at`을 봐서 탈퇴하면 바로 막는다. 토큰은 1년 뒤 끝나고 로그아웃하면 행을 지운다. 작업 005 설계 3절
-- `transactions.source`는 결제가 어디서 들어왔는지다. 결제 알림으로 들어온 결제는 승인번호가 없어 중복 판정을 같은 카드, 같은 금액, 시각 10분 이내로 한다. 알림 초안과 카드번호 끝 4자리 짝은 폰 안에만 두고 서버 테이블에 넣지 않는다. 설계 문서 9절
-- 내보내기는 `export_runs`로 하루 한 번 기록하고, 실패하면 다음 날 재실행이 전날 분까지 다시 내보낸다.
-- 엑셀 가져오기 중복 판정은 `approval_no`가 있으면 `(user_card_id, approval_no)` 유니크로, 없으면 `(user_card_id, paid_at, amount, merchant_name)` 일치로 본다. 승인번호 유니크는 부분 인덱스(`approval_no IS NOT NULL`)로 건다.
-- 앱이 서버에 닿지 못해 모았다가 다시 보낸 결제가 두 건이 되지 않게 `transactions`의 `(user_id, client_id)`에 `client_id IS NOT NULL` 조건의 부분 유니크 인덱스를 둔다. 마이그레이션 007, 작업 005 설계 5i
-- 모든 표에 행 단위 보안을 켠다. 정책은 두지 않는다. 서버는 표 주인 역할로 붙어 영향이 없고, Supabase의 Data API가 켜져도 행이 보이지 않는다. 새 표도 그 마이그레이션에서 켠다. 마이그레이션 006, 작업 005 설계 5h
-- 만료된 세션은 탈퇴한 사용자를 지울 때 함께 지운다
-- 카드 플레이트 임베딩 벡터는 DB에 넣지 않는다. 파이프라인이 오브젝트 스토리지에 파일로 발행하고 앱이 내려받는다.
+- 카드와 가맹점은 카탈로그에서 지우지 않는 것이 규칙이다. 그래도 받은 카탈로그에 보유 카드, 해지한 카드, 저장한 결제의 카드나 가맹점, 업종, 결제수단이 없으면 그 파일을 쓰지 않고 가진 것을 쓴다. 작업 006 설계 2절, 4절
+- 결제는 계산에 쓴 개정을 `revision_from`과 `revision_sha`로, 받은 혜택을 `transaction_benefits`의 혜택 key로 가리킨다. 혜택 key는 갱신해도 바꾸지 않는다. 한도 사용량은 기간 안의 `transaction_benefits`를 모아 계산한다. 저장한 혜택은 다시 계산하지 않는다. E18. 예외는 달이 끝난 순위 카드, 결제한 달 기준 취소로 구간이 바뀐 달, 엑셀이나 손으로 앞선 결제가 들어온 달, 지난달 결제로 구간이 바뀐 달, 결제를 고치거나 지우거나 취소해 구간이 바뀐 다음 달, 카드 사실이나 옵션을 답한 카드다. E48, E5, E51, E52, E53, E54, E56
+- `user_cards`는 같은 카드를 두 번 보유할 수 없게 `card_id`에 `removed_at IS NULL` 조건의 부분 유니크 인덱스를 둔다. E21
+- 실적 계산은 `transactions`를 `(user_card_id, paid_at)`으로 읽는다. 이 두 칸의 복합 인덱스가 핵심 인덱스다
+- 결제 id는 시각 순서 uuid라 같은 시각 결제를 id 순서로 세우면 먼저 넣은 결제가 하루 1회 한도를 쓴다. 새 id는 저장된 가장 큰 id보다 늘 크다
+- 금액은 0보다 큰 정수이고 취소액은 결제액 이하다. 취소액이 있으면 취소 시각도 있다. 화면이 실수해도 DB가 막는다
+- `transactions.source`는 결제가 어디서 들어왔는지다. 결제 알림으로 들어온 결제는 승인번호가 없어 같은 카드, 같은 금액, 시각 10분 이내로 겹침을 본다. 알림 초안과 카드번호 끝 4자리 짝은 이 DB에도 넣지 않는다. 설계 문서 9절
+- 엑셀 가져오기는 같은 카드의 같은 승인번호를 한 번만 받는다. `(user_card_id, approval_no)`에 `approval_no IS NOT NULL AND deleted_at IS NULL` 조건의 부분 유니크 인덱스를 둔다. E31
+- 엑셀 가져오기가 붙인 취소는 `import_cancels`에 한 줄씩 둔다. 결제의 `cancelled_amount`는 이 줄들과 앱에서 적은 취소의 합이다. 묶음을 되돌리면 그 묶음의 취소만 뺀다. E32, E34
+- `import_mappings`는 사용자가 짝지은 열이다. 머리 줄의 sha256마다 하나이고 열 이름 대신 열 번호만 남긴다. 기록 내보내기에 담지 않는다. E30
+- 설정의 기록 내보내기는 `catalog_cache`와 `import_mappings`를 뺀 표 여덟을 JSON 한 파일로 쓴다. 가져오기는 한 트랜잭션에서 표를 비우고 파일의 행을 넣는다. 작업 006 설계 6절
+- 표 정의는 칸과 표를 더하기만 하고 새 칸에는 기본값을 둔다. `PRAGMA user_version`에 돌린 번호를 적고, 이미 낸 번호의 SQL은 고치지 않고 새 번호로 더한다
+- 카드 플레이트 임베딩 벡터는 DB에 넣지 않는다. 파이프라인이 파일로 발행하고 앱이 내려받는다
