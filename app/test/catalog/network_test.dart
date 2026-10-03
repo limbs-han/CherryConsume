@@ -19,9 +19,6 @@ final calls = RegExp(
   r'InternetAddress|NetworkImage|NetworkAssetBundle|FadeInImage)\b|Image\.network',
 );
 
-/// 로그인. 계획 단계 7에서 지우면 여기서도 뺀다
-const untilStep7 = {'lib/social.dart'};
-
 /// 앱이 쓰는 패키지. 새 패키지가 밖으로 나가지 않는지 확인하고 여기에 더한다. 예를 들어 google_fonts는 실행 중에
 /// 글꼴을 받는다. 2026-10-02 위험 검토
 const allowed = {
@@ -35,10 +32,6 @@ const allowed = {
   'crypto',
   'html',
   'xml',
-  // 계획 단계 7에서 지운다
-  'flutter_secure_storage',
-  'google_sign_in',
-  'kakao_flutter_sdk_user',
 };
 
 /// import와 export 문 하나. 조건부 import는 문 안의 주소가 여럿이다
@@ -61,7 +54,7 @@ void main() {
         found.add(f.path.replaceAll(r'\', '/'));
       }
     }
-    expect(found, {'lib/catalog/download.dart', ...untilStep7});
+    expect(found, {'lib/catalog/download.dart'});
   });
 
   test('앱 의존성은 확인한 패키지뿐이다', () {

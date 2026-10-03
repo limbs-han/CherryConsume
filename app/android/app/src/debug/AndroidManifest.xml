@@ -4,6 +4,4 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- PC의 개발 서버는 HTTP라 디버그 빌드에서만 평문 통신을 연다. 작업 005 설계 6절 -->
-    <application android:usesCleartextTraffic="true"/>
 </manifest>
