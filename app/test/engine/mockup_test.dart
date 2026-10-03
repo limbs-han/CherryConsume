@@ -1,6 +1,6 @@
 // 화면 시안의 숫자를 시안 카드로 재현한다. Python `backend/tests/engine/test_mockup.py`를 옮겼다. 엔진 설계 6.3
 //
-// 시안 카드는 `backend/tests/engine/mockup/`의 지어낸 카드이고, Python이 `test/fixtures/mockup_catalog.json`으로 만든다.
+// 시안 카드는 `app/test/engine/mockup/`의 지어낸 카드이고, Python이 `test/fixtures/mockup_catalog.json`으로 만든다.
 // 시안 Mr.Life는 9월 1일에 등록하며 지난달 41만원으로 적었다. 9월 결제는 카페 3건, 편의점 1건, 기타 2건으로
 // 이번 달 182,000원이다. 시안 IBK는 편의점 3건과 기타 1건으로 265,000원, 시안 ZERO는 쿠팡, 자동차세, 기타다
 import 'dart:convert';

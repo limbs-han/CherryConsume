@@ -113,6 +113,7 @@ void dropColumn(Json j, String name, String column) {
 
 void main() {
   test('내보내고 빈 DB에 가져오면 홈과 달별 기록이 같다', () {
+    // S10 기기 변경. 의도 성공 기준 6
     final s = sample();
     final file = exportAll(s);
     final (s: t, clock: _) = fresh();

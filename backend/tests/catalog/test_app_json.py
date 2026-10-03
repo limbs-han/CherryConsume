@@ -14,7 +14,7 @@ from .conftest import benefit, rev
 REPO = Path(__file__).resolve().parents[3]
 PAIRS = [
     (REPO / "catalog", REPO / "app" / "assets" / "catalog.json"),
-    (REPO / "backend" / "tests" / "engine" / "mockup", REPO / "app" / "test" / "fixtures" / "mockup_catalog.json"),
+    (REPO / "app" / "test" / "engine" / "mockup", REPO / "app" / "test" / "fixtures" / "mockup_catalog.json"),
 ]
 
 

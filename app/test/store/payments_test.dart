@@ -499,7 +499,7 @@ void main() {
   });
 
   test('test_unchanged_payments_are_not_rewritten', () {
-    // 9/15 10시 결제를 넣으면 9월을 다시 계산하지만 9/14 결제는 값이 그대로라 다시 쓰지 않는다. E25의 updated_at을 지킨다
+    // 9/15 10시 결제를 넣으면 9월을 다시 계산하지만 9/14 결제는 값이 그대로라 다시 쓰지 않는다. 고친 시각 updated_at이 그대로다
     final (:s, :clock) = fresh();
     final [card] = setup(s);
     pay(s, card, 4500, '스타벅스 역삼점', at: '2026-09-14T12:00:00+09:00');

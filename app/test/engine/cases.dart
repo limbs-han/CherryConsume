@@ -1,4 +1,21 @@
-// 손계산 표 읽기. Python `backend/tests/engine/cases.py`를 옮겼다. 표 형식은 그 파일 머리에 있다. 엔진 설계 6.1
+// 손계산 표 읽기. Python `backend/tests/engine/cases.py`를 옮겼다. 엔진 설계 6.1. 표는 test/engine/cases/<카드 id>.yaml이다
+//
+// card: shinhan-mrlife
+// holder: {facts: {}, options: []}          # 모든 경우에 쓰는 보유 카드 값. 없어도 된다
+// cases:
+//   - name: 주말 이마트 5만원, 30만 구간
+//     prev_month_spend: 350000             # 지난달 인정 실적
+//     holder: {}                            # 이 경우에만 덮어쓰는 값. 없어도 된다
+//     payments:
+//       - {at: 2026-09-05T11:00, amount: 50000, merchant: emart, channel: offline}
+//     expect:
+//       - {payment: 0, benefits: {weekend-mart: 3000}, counted: 50000, warnings: [check_conditions]}
+//     calc: 50,000 × 10% = 5,000. 주말 공유 한도 30만 구간 3,000원이라 3,000
+//
+// - at은 한국 시간이다. 결제의 나머지 칸은 엔진의 Payment와 같다
+// - benefits는 그 결제가 받는 혜택 전부다. 값은 보상 단위라 포인트면 포인트 수다. 받는 혜택이 없으면 {}
+// - counted는 그 결제가 실적에 넣는 금액의 합이다. warnings는 반드시 있어야 하는 경고 코드다. 둘 다 없어도 된다
+// - difference는 엔진과 다른 까닭이다. 실제 명세서 대조에서만 쓴다. 적어 두면 그 결제는 대조하지 않는다. 설계 6.6
 //
 // 표를 읽는 규칙도 같다. 시간대 없는 시각은 한국 시간, 결제 id는 `경우-결제` 세 자리씩, 카드 파일의 holder를 경우의
 // holder가 칸 단위로 덮는다. prev_month_spend가 있으면 첫 결제 달에 등록하고 그 값을 추정값으로 적은 것으로 본다
@@ -12,8 +29,8 @@ import 'package:yaml/yaml.dart';
 
 import 'helpers.dart';
 
-/// 작업 006 단계 7에서 `app/test/engine/`으로 옮긴다
-const casesDir = '../backend/tests/engine/cases';
+/// 작업 006 단계 7에서 `backend/tests/engine/`에서 옮겼다
+const casesDir = 'test/engine/cases';
 
 class Case {
   Case(
