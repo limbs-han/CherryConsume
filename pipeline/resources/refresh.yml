@@ -33,6 +33,8 @@ resources:
         - task_key: documents
           depends_on:
             - task_key: ingest
+          # 다시 돌면 새 PDF를 다시 해석해 요금이 두 번 나와 자동 재시도를 끈다. 작업 007 7단계의 위험 검토
+          disable_auto_optimization: true
           spark_python_task:
             python_file: ../src/documents.py
             parameters: ["--bronze", "${resources.schemas.bronze.name}", "--silver", "${resources.schemas.silver.name}"]
@@ -41,6 +43,8 @@ resources:
         - task_key: changes
           depends_on:
             - task_key: documents
+          # 다시 돌면 목록 이름 뽑기 모델을 또 부를 수 있어 자동 재시도를 끈다. 실패하면 알림을 받고 다음 실행이 메운다
+          disable_auto_optimization: true
           spark_python_task:
             python_file: ../src/changes.py
             parameters:
