@@ -114,8 +114,11 @@ def main(argv: list[str] | None = None) -> None:
             .where(col("draft_id") == args.draft_id)
             .collect()
         )
-        if not found_draft:
-            raise SystemExit("초안을 찾지 못했다")
+        # 아래에서 골드에 쓸 행을 이 초안 행과 맞붙인다. 행이 없거나 여럿이면 쓰는 행 수가 바뀌므로 여기서 멈춘다
+        if len(found_draft) != 1:
+            raise SystemExit(
+                f"초안을 찾지 못했거나 같은 id의 초안이 {len(found_draft)}개다"
+            )
         draft = found_draft[0]
         open_now = (
             spark.table(queue_t)
@@ -308,6 +311,29 @@ def main(argv: list[str] | None = None) -> None:
             f"바꾸지 않은 카드 {len(strange)}장의 개정이 바뀐다. 첫 번째: {strange[0]}. 규칙을 만드는 코드가 바뀌었는지 본다"
         )
 
+    def from_draft(rows, expected: int):
+        # 검수 앱 승인은 골드에 쓸 행을 그 초안의 drafts 행 하나와 맞붙인다. 계보에 drafts에서 catalog_files와
+        # card_revisions로 가는 선이 남는다. 작업 007 설계 2절
+        # 개정 표는 원본에 없는 행을 지워서, 맞붙인 행이 줄면 개정이 지워진다. 검수 기록을 쓰기 전에 행 수를 센다
+        if draft is None:
+            return rows
+        joined = rows.crossJoin(
+            spark.table(f"cherry.{args.silver}.drafts")
+            .where(col("draft_id") == args.draft_id)
+            .select("draft_id")
+        )
+        if joined.count() != expected:
+            raise SystemExit("초안 행과 맞붙인 골드 행 수가 다르다. 쓰기 전에 멈춘다")
+        return joined
+
+    from_draft(
+        spark.createDataFrame(list(changed.items()), "path STRING, yaml STRING"),
+        len(changed),
+    ).createOrReplaceTempView("approved")
+    from_draft(
+        spark.createDataFrame(rows, REVISIONS), len(rows)
+    ).createOrReplaceTempView("revisions")
+
     spark.createDataFrame(
         [
             (
@@ -337,9 +363,6 @@ def main(argv: list[str] | None = None) -> None:
     )
     print(f"1/5 검수 기록 {review_id}")
 
-    spark.createDataFrame(
-        list(changed.items()), "path STRING, yaml STRING"
-    ).createOrReplaceTempView("approved")
     spark.sql(
         f"""MERGE INTO {files_t} t USING approved a ON t.path = a.path
         WHEN MATCHED AND (t.yaml <> a.yaml OR t.review_id <> :rid) THEN
@@ -349,7 +372,6 @@ def main(argv: list[str] | None = None) -> None:
     )
     print("2/5 gold.catalog_files")
 
-    spark.createDataFrame(rows, REVISIONS).createOrReplaceTempView("revisions")
     same = " AND ".join(f"t.{k} <=> s.{k}" for k in KEY)
     # 여섯 칸이 같은 행은 건드리지 않아 검수 번호와 시각이 그대로 남는다. 없어진 행은 지운다
     spark.sql(
