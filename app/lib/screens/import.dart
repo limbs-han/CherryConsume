@@ -16,13 +16,14 @@ const _maxBytes = 2000000;
 typedef PickFile = Future<({String name, Uint8List? bytes})?> Function();
 
 Future<({String name, Uint8List? bytes})?> pickWithSystem() async {
-  final files = await FilePicker.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['xlsx', 'xls', 'csv'],
-  );
-  if (files.isEmpty) return null;
-  final f = files.first;
+  // 고르기 안에서 복사가 실패해도 사본 조각을 지우게 고르기부터 감싼다. 작업 006 단계 6 위험 검토 5번
   try {
+    final files = await FilePicker.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx', 'xls', 'csv'],
+    );
+    if (files.isEmpty) return null;
+    final f = files.first;
     final size = await f.length();
     if (size != null && size > _maxBytes) return (name: f.name, bytes: null);
     // 크기를 모르면 읽은 뒤에 본다
