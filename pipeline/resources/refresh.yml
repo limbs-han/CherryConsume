@@ -39,7 +39,8 @@ resources:
             python_file: ../src/documents.py
             parameters: ["--bronze", "${resources.schemas.bronze.name}", "--silver", "${resources.schemas.silver.name}"]
           environment_key: default
-          timeout_seconds: 1800
+          # 1일 수집은 처음 보는 PDF가 수백 개라 오래 걸린다. 묶음마다 써서 끊겨도 해석한 것은 남는다. 작업 008 6단계
+          timeout_seconds: 3600
         - task_key: index
           depends_on:
             - task_key: documents
