@@ -32,6 +32,10 @@ const allowed = {
   'crypto',
   'html',
   'xml',
+  // 설정의 개인정보처리방침 줄이 주소를 폰 브라우저로 넘긴다. 앱은 받지 않는다. 앱 안 웹 화면은 열지 않게
+  // LaunchMode.externalApplication만 쓴다. 2026-10-05 Android 소스에서 앱 안 웹 화면 말고는 네트워크 호출이
+  // 없는 것을 봤다. 작업 012 설계 1.4
+  'url_launcher',
 };
 
 /// import와 export 문 하나. 조건부 import는 문 안의 주소가 여럿이다
@@ -55,6 +59,25 @@ void main() {
       }
     }
     expect(found, {'lib/catalog/download.dart'});
+  });
+
+  test('url_launcher는 바깥 브라우저로만 연다', () {
+    // 모드 없이 launchUrl을 부르면 Android가 https를 앱 안 웹 화면으로 연다. 작업 012 위험 검토
+    final users = <String>{};
+    for (final f in Directory('lib').listSync(recursive: true)) {
+      if (f is! File || !f.path.endsWith('.dart')) continue;
+      final text = f.readAsStringSync();
+      if (!urisIn(text).any((u) => u.startsWith('package:url_launcher/'))) {
+        continue;
+      }
+      users.add(f.path.replaceAll(r'\', '/'));
+      expect(
+        'launchUrl('.allMatches(text).length,
+        'LaunchMode.externalApplication'.allMatches(text).length,
+        reason: f.path,
+      );
+    }
+    expect(users, {'lib/screens/settings.dart'});
   });
 
   test('앱 의존성은 확인한 패키지뿐이다', () {

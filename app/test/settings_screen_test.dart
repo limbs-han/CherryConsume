@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:cherry_consume/main.dart';
-import 'package:cherry_consume/screens/settings.dart' show appVersion;
+import 'package:cherry_consume/screens/settings.dart';
 import 'package:cherry_consume/screens/shell.dart';
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:cherry_consume/theme.dart';
@@ -26,6 +26,8 @@ Future<void> open(WidgetTester tester) async {
 }
 
 void main() {
+  privacyTests();
+
   test('앱 판은 pubspec.yaml의 version과 같다', () {
     final line = File(
       'pubspec.yaml',
@@ -81,5 +83,52 @@ void main() {
     await tester.scrollUntilVisible(info, 100);
     expect(info, findsOneWidget);
     expect(find.text('앱 정보'), findsOneWidget);
+  });
+}
+
+void privacyTests() {
+  testWidgets('앱 묶음의 개인정보처리방침 줄을 누르면 방침 주소를 브라우저로 연다', (tester) async {
+    // Play 정책은 방침을 Play Console 칸과 앱 안 두 곳에 두라고 한다. 작업 012 설계 1.4
+    final (:api, s: _) = app();
+    final opened = <Uri>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SettingsScreen(
+          api: api,
+          open: (url) async {
+            opened.add(url);
+            return true;
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final row = find.text('개인정보처리방침');
+    await tester.ensureVisible(row);
+    await tester.pumpAndSettle();
+    await tester.tap(row);
+    await tester.pumpAndSettle();
+    expect(opened, [
+      Uri.parse('https://limbs-han.github.io/CherryConsume/privacy/'),
+    ]);
+  });
+
+  testWidgets('브라우저를 열지 못하면 주소를 알린다', (tester) async {
+    final (:api, s: _) = app();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SettingsScreen(api: api, open: (_) async => false),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final row = find.text('개인정보처리방침');
+    await tester.ensureVisible(row);
+    await tester.pumpAndSettle();
+    await tester.tap(row);
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('limbs-han.github.io/CherryConsume/privacy'),
+      findsOneWidget,
+    );
   });
 }

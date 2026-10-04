@@ -8,6 +8,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../api.dart';
 import '../clock.dart' as clock;
@@ -19,6 +20,22 @@ import 'import.dart' show PickFile;
 
 /// 앱 판. pubspec.yaml의 version과 같아야 한다. 시험이 맞춰 본다. 작업 011 설계 2절 S2
 const appVersion = '0.1.0';
+
+/// 개인정보처리방침. Play 정책은 Play Console 칸과 앱 안 두 곳에 두라고 한다. 작업 012 설계 1.4
+final privacyUrl = Uri.parse(
+  'https://limbs-han.github.io/CherryConsume/privacy/',
+);
+
+/// 주소를 폰 브라우저로 연다. 앱이 직접 받지 않는다. 열지 못하면 거짓이다. 시험에서는 바꿔 끼운다
+typedef OpenUrl = Future<bool> Function(Uri url);
+
+Future<bool> openInBrowser(Uri url) async {
+  try {
+    return await launchUrl(url, mode: LaunchMode.externalApplication);
+  } catch (_) {
+    return false;
+  }
+}
 
 /// 내보낸 파일을 사용자가 고른 곳에 쓴다. 취소하면 거짓이다. 시험에서는 바꿔 끼운다
 typedef SaveFile = Future<bool> Function(String name, Uint8List bytes);
@@ -57,10 +74,12 @@ class SettingsScreen extends StatefulWidget {
     required this.api,
     this.save = saveWithSystem,
     this.pick = pickRecords,
+    this.open = openInBrowser,
   });
   final Api api;
   final SaveFile save;
   final PickFile pick;
+  final OpenUrl open;
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -131,6 +150,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (saved && mounted) _say('기록을 내보냈어요.');
     } catch (_) {
       if (mounted) _say('기록을 내보내지 못했어요.');
+    }
+  }
+
+  Future<void> _privacy() async {
+    if (!await widget.open(privacyUrl) && mounted) {
+      _say('브라우저를 열지 못했어요. ${privacyUrl.host}${privacyUrl.path}에서 볼 수 있어요.');
     }
   }
 
@@ -220,6 +245,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: '앱 정보',
               trailing: RowValue('$appVersion · 카탈로그 ${day.month}/${day.day}'),
             ),
+            TapRow(title: '개인정보처리방침', onTap: _privacy),
           ]),
         ],
       ),
