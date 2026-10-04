@@ -113,3 +113,5 @@
 | [68](68-ui-polish-wrap-up.md) | 2026-10-04 | 작업 011 끝 정리와 상태 모음 차이 고치기 |
 | [69](69-catalog-image-benefit-step8.md) | 2026-10-05 | 작업 008 8단계 이미지 혜택 페이지 사진 해석 |
 | [70](70-catalog-docling-step9.md) | 2026-10-05 | 작업 008 9단계 상품설명서 PDF를 Docling으로 해석 |
+| [71](71-ios-after-android.md) | 2026-10-04 | iOS 앱스토어 출시는 Android 출시 다음으로 |
+| [72](72-ui-polish-phone-check.md) | 2026-10-05 | 작업 011 실제 폰 확인에서 짚은 것과 업종별 묶기, 작업 011 끝 |
