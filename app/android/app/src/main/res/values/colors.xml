@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 홈 화면 아이콘 바탕. 2026-10-05 사용자가 크림색을 골랐다. 작업 012 설계 3.2 -->
+    <color name="ic_launcher_background">#FFF6EC</color>
+</resources>
