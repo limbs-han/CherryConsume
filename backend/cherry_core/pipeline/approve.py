@@ -17,8 +17,10 @@ from pathlib import Path
 
 import yaml
 
+from cherry_core.catalog.app_json import app_catalog, number_errors, rule_errors
 from cherry_core.catalog.canonical import canonical_text
 from cherry_core.catalog.load import Catalog, load_catalog
+from cherry_core.pipeline.disclosure import _code_key, _name_key
 from cherry_core.pipeline.export import commit_message, secret_lines
 from cherry_core.pipeline.seed import load_checked, revision_rows
 
@@ -74,9 +76,14 @@ def apply_changes(
         if found := secret_lines(text):
             raise ValueError(f"커밋 훅이 비밀값으로 볼 줄이 있다: {path} {found[0]}")
     files = {**gold, **changed}
-    gone = lost(_load(gold, checked=False), _load(files, checked=True))  # 검사 오류가 있으면 ValueError
+    after = _load(files, checked=True)  # 검사 오류가 있으면 ValueError
+    gone = lost(_load(gold, checked=False), after)
     if gone:
         raise ValueError(f"골드에 있던 것이 사라진다 {len(gone)}개. 첫 번째: {gone[0]}")
+    # export의 catalog json 단계와 같은 검사다. 승인만 지나고 export에서 막히면 뒤 폴더가 모두 걸리고
+    # 골드에서 카드를 뺄 수 없어 저장소를 손으로 맞춰야 한다. 2026-10-05 작업 008 11단계 위험 검토
+    if errors := rule_errors(after) or number_errors(app_catalog(after)):
+        raise ValueError(f"앱 카탈로그를 만들 수 없다 {len(errors)}개. 첫 번째: {errors[0]}")
     return files, changed
 
 
@@ -147,13 +154,16 @@ def commit_json(subject: str, review_id: str, base: str, result: str) -> str:
     return json.dumps({"subject": subject, "review_id": review_id, "base": base, "result": result}, ensure_ascii=False)
 
 
-def draft_subject(text: str, old: str | None = None) -> str:
+def draft_subject(text: str, old: str | None = None, new: bool = False) -> str:
     """검수 앱이 승인한 카드 파일의 커밋 제목. 작업 003 과제 20. old는 승인 전 골드의 같은 파일이다.
 
     판매 중이던 카드가 멈췄으면 발급 중단으로 적는다. 아니면 바뀐 개정 가운데 마지막 것의 시행일을 쓴다.
     바뀐 개정이 없으면 마지막 개정의 시행일이다. 2026-10-02 위험 검토.
     """
     card = yaml.safe_load(text)
+    if new:
+        # 골드에 없던 새 카드 초안이다. 작업 008 11단계
+        return f"feat: {card['name']} 새 카드 추가"
     before = yaml.safe_load(old) if old else {}
     if card.get("status") != "on_sale" and before.get("status", "on_sale") == "on_sale":
         return f"feat: {card['name']} 발급 중단 반영"
@@ -161,6 +171,46 @@ def draft_subject(text: str, old: str | None = None) -> str:
     # 순번이 아니라 들어 있는지로 견준다. 과거 개정을 가운데 끼우면 뒤 순번이 밀리기 때문이다. 다시 검토
     changed = [r for r in card["revisions"] if r not in olds]
     return f"feat: {card['name']} {(changed or card['revisions'])[-1]['effective_from']} 개정 반영"
+
+
+def new_card_path(upload: dict[str, str], gold: dict[str, str], issuer: str, already: Iterable[str] = ()) -> str:
+    """새 카드 초안 승인에서 올린 카드 파일의 경로. 작업 008 설계 3절.
+
+    올린 파일은 그 카드사 폴더의 카드 파일 하나이고 골드에 없는 경로여야 한다. 사람이 id를 바꾸면 파일 이름도 바뀐다.
+    already는 끊긴 이 승인이 골드에 이미 넣은 파일이다. 이어 할 때는 골드에 있어도 받는다.
+    id와 파일 이름, 카드사 폴더가 맞는지는 apply_changes의 카탈로그 검사가 본다.
+    """
+    if len(upload) != 1:
+        raise ValueError(f"새 카드 승인은 카드 파일 하나만 올린다. 올린 파일 {len(upload)}개")
+    (path,) = upload
+    if not re.fullmatch(rf"cards/{re.escape(issuer)}/[a-z0-9-]+\.yaml", path):
+        raise ValueError(f"새 카드 파일은 cards/{issuer}/ 아래에 둔다: {path}")
+    if path in gold and path not in set(already):
+        raise ValueError(f"골드에 이미 있는 카드다: {path}. 새 카드 초안은 새 경로로만 승인한다")
+    return path
+
+
+def new_card_conflicts(text: str, gold: dict[str, str], issuer: str, path: str) -> list[str]:
+    """새 카드와 같은 상품으로 보이는 그 카드사의 골드 카드. 상품 코드나 정리한 이름이 겹친다. 작업 008 11단계.
+
+    색인이 이름이 조금 다른 카탈로그 카드와 짝을 못 지었거나, 같은 색인 행의 초안이 둘이면 같은 상품이 다른 id로 두 번 들어간다.
+    골드에 들어간 카드는 승인으로 지울 수 없어 넣기 전에 막는다. path는 이 카드의 경로라 끊긴 승인을 이어 할 때 뺀다.
+    """
+    card = yaml.safe_load(text)
+    codes = {_code_key(c) for c in card.get("product_codes") or []}
+    names = {_name_key(n) for n in [card.get("name") or "", *(card.get("search_names") or [])]} - {""}
+    out = []
+    for other, other_text in sorted(gold.items()):
+        if other == path or not other.startswith(f"cards/{issuer}/"):
+            continue
+        g = yaml.safe_load(other_text)
+        same_codes = codes & {_code_key(c) for c in g.get("product_codes") or []}
+        same_names = names & {_name_key(n) for n in [g.get("name") or "", *(g.get("search_names") or [])]}
+        if same_codes:
+            out.append(f"{other}: 상품 코드 {', '.join(sorted(same_codes))}가 같다")
+        elif same_names:
+            out.append(f"{other}: 이름이 같다")
+    return out
 
 
 def draft_plan(decision: str, records: list[dict]) -> tuple[str, str | None]:

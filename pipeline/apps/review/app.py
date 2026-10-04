@@ -9,6 +9,7 @@ databricks-sql-connector만 쓴다. 켜져 있는 동안 요금이 나와 검수
 import difflib
 import io
 import os
+import re
 import time
 from datetime import UTC, datetime
 
@@ -98,21 +99,33 @@ if not item["draft_id"]:
 draft = query(
     f"SELECT * FROM cherry.{SILVER}.drafts WHERE draft_id = :id", id=item["draft_id"]
 )[0]
-gold = query(
-    # LIKE의 밑줄은 한 글자 와일드카드라 파일 이름은 정확히 맞춘다
-    f"SELECT path, yaml FROM cherry.{GOLD}.catalog_files "
-    "WHERE path LIKE 'cards/%' AND substring_index(path, '/', -1) = :name",
-    name=f"{draft['card_id']}.yaml",
-)
-if len(gold) != 1:
-    st.error(f"골드에서 카드 파일 {draft['card_id']}을 하나로 찾지 못했다")
-    st.stop()
-path, now = gold[0]["path"], gold[0]["yaml"]
+new_card = draft["mode"] == "new_card"
+if new_card:
+    # 카탈로그에 없는 카드의 새 초안이라 골드에 파일이 없다. 승인할 때 카드 파일의 id로 경로를 정한다. 작업 008 11단계
+    path, now = None, ""
+else:
+    gold = query(
+        # LIKE의 밑줄은 한 글자 와일드카드라 파일 이름은 정확히 맞춘다
+        f"SELECT path, yaml FROM cherry.{GOLD}.catalog_files "
+        "WHERE path LIKE 'cards/%' AND substring_index(path, '/', -1) = :name",
+        name=f"{draft['card_id']}.yaml",
+    )
+    if len(gold) != 1:
+        st.error(f"골드에서 카드 파일 {draft['card_id']}을 하나로 찾지 못했다")
+        st.stop()
+    path, now = gold[0]["path"], gold[0]["yaml"]
 
 st.subheader(f"{draft['card_id']} {draft['status']}")
 st.caption(
     f"초안 {draft['draft_id']}, 모델 {draft['model']}, 프롬프트 판 {draft['prompt_version']}"
 )
+if new_card:
+    st.info(
+        f"새 카드 초안이다. 승인하면 cards/{draft['issuer']}/<id>.yaml로 들어간다. "
+        "id를 바꾸면 그 이름으로 들어가고 색인도 따라 바뀐다. 확인 필요 항목을 원문과 맞춰 보고 연회비와 짧은 이름을 채운다"
+    )
+    if not draft["draft_yaml"]:
+        st.warning("초안이 없다. 카드 파일을 직접 쓰거나 반려한다")
 if draft["reason"]:
     st.warning(draft["reason"])
 if draft.get("retry_reason"):
@@ -156,6 +169,15 @@ note = st.text_input("근거와 까닭")
 
 left, right = st.columns(2)
 if left.button("승인", type="primary", disabled=not reviewer):
+    if new_card:
+        # 앱은 cherry_core와 YAML 읽기를 깔지 않아 저장 형식 카드 파일의 맨 위 id 줄로 경로를 정한다
+        found = re.search(
+            r"^id: ([a-z0-9-]+)$", edited.replace("\r\n", "\n"), re.MULTILINE
+        )
+        if not found:
+            st.error("카드 파일에서 id 줄을 찾지 못했다")
+            st.stop()
+        path = f"cards/{draft['issuer']}/{found.group(1)}.yaml"
     name = f"app-{datetime.now(UTC):%Y%m%dT%H%M%S}-{draft['draft_id'][:8]}"
     w.files.upload(
         f"/Volumes/cherry/{GOLD}/incoming/{name}/catalog/{path}",

@@ -3,6 +3,7 @@
 사람이 바뀐 파일을 incoming 볼륨의 <이름>/catalog/ 아래에 올리고 이 작업을 돌린다. 손 승인이다.
 검수 앱도 고친 초안을 같은 곳에 올리고 draft_id와 함께 이 작업을 돌린다. 앱은 표를 읽기만 하고 쓰기는 이 작업만 한다.
 초안 승인은 PC 해시 대신 초안을 만들 때의 골드 카드 파일 해시로 맞추고, 올린 파일이 그 카드 파일 하나여야 한다.
+새 카드 초안은 골드에 없는 그 카드사 폴더의 새 카드 파일 하나를 받는다. 사람이 id를 바꿨으면 색인의 card_id도 바꾼다. 작업 008 설계 3절.
 decision reject는 검수 기록에 반려를 적고 대기 건을 닫는다. 골드는 그대로다. 작업 003 과제 20
 값은 cherry_core.pipeline.approve가 만든다. 검사를 통과해야 쓴다.
 쓰기 전에 골드 카탈로그 해시를 PC 값과 맞춘다. 옛 판을 고친 파일로 앞선 승인을 덮지 않으려는 것이다.
@@ -25,6 +26,8 @@ from cherry_core.pipeline.approve import (
     commit_json,
     draft_plan,
     draft_subject,
+    new_card_conflicts,
+    new_card_path,
     new_review_id,
     resume_or_start,
     revision_rows_after,
@@ -54,6 +57,48 @@ KEY = (
     "source",
     "rules",
 )
+
+
+def check_new_card(spark, silver, draft, card_path, text, gold) -> None:
+    """새 카드 초안 승인을 새로 시작하기 전에 같은 상품이 골드에 두 번 들어가지 않는지 본다. 작업 008 11단계.
+
+    골드에 들어간 카드는 승인으로 지울 수 없다. 같은 색인 행의 초안이 둘이거나, 색인이 카탈로그 카드와 짝을 못 지었으면
+    같은 상품이 다른 id로 들어간다. 2026-10-05 위험 검토.
+    """
+    issuer, new_id = draft.issuer, Path(card_path).stem
+    if f"cards/{issuer}/{draft.card_id}.yaml" in gold:
+        raise SystemExit(f"이 초안의 카드 {draft.card_id}는 이미 골드에 있다. 반려한다")
+    index_t = f"cherry.{silver}.card_index"
+    if spark.catalog.tableExists(index_t):
+        index = spark.table(index_t).where(col("issuer") == issuer)
+        mine = index.where(col("card_id") == draft.card_id).count()
+        if mine != 1:
+            raise SystemExit(
+                f"색인에 이 초안의 card_id {draft.card_id}인 행이 {mine}개다. 이미 다른 id로 승인됐을 수 있다. 반려한다"
+            )
+        if new_id != draft.card_id and index.where(col("card_id") == new_id).count():
+            raise SystemExit(f"id {new_id}는 색인의 다른 카드가 쓴다. 다른 id로 고친다")
+    approved = (
+        spark.table(f"cherry.{silver}.reviews")
+        .where("decision = 'approved'")
+        .join(
+            spark.table(f"cherry.{silver}.drafts").where(
+                (col("mode") == "new_card")
+                & (col("card_id") == draft.card_id)
+                & (col("draft_id") != draft.draft_id)
+            ),
+            "draft_id",
+        )
+        .count()
+    )
+    if approved:
+        raise SystemExit(f"같은 카드 {draft.card_id}의 다른 새 카드 초안이 이미 승인됐다. 반려한다")
+    if conflicts := new_card_conflicts(text, gold, issuer, card_path):
+        raise SystemExit(f"골드에 같은 상품으로 보이는 카드가 있다. {conflicts[0]}. 반려하거나 그 카드를 고친다")
+    # 새 카드 초안의 기준 해시는 카드사 파일이다. 카드사 기본값이 바뀌면 카드가 조용히 새 기본값을 따른다
+    issuer_file = gold.get(f"issuers/{issuer}.yaml", "")
+    if draft.base_sha256 and draft.base_sha256 != hashlib.sha256(issuer_file.encode("utf-8")).hexdigest():
+        raise SystemExit("초안을 만든 뒤 카드사 파일이 바뀌었다. 반려하고 새 카드 초안을 다시 만든다")
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -237,7 +282,15 @@ def main(argv: list[str] | None = None) -> None:
         if p.is_file()
     }
     subject_in, expect, card_path = args.subject, args.expect_files, None
-    if draft is not None:
+    new_card = draft is not None and draft.mode == "new_card"
+    if new_card:
+        try:
+            card_path = new_card_path(
+                upload, gold, draft.issuer, mine["paths"] if mine else ()
+            )
+        except ValueError as e:
+            raise SystemExit(str(e)) from None
+    elif draft is not None:
         card_path = next(
             (
                 p
@@ -248,6 +301,7 @@ def main(argv: list[str] | None = None) -> None:
         )
         if card_path is None or card_path not in upload:
             raise SystemExit("올린 폴더에 초안의 카드 파일이 없다")
+    if draft is not None:
         # 앱에서 고친 글은 저장 형식이 아닐 수 있다. 앱 사용자는 format 명령을 돌릴 수 없어 여기서 맞춘다
         try:
             loaded = yaml.safe_load(upload[card_path])
@@ -259,11 +313,17 @@ def main(argv: list[str] | None = None) -> None:
         # 이어 할 때는 골드가 이미 바뀌어 처음 제목을 그대로 쓴다. 새 승인의 제목은 검사를 통과한 뒤 만든다
         subject_in = subject_in or (mine["subject"] if mine else "")
         if mine is None:
-            now_sha = hashlib.sha256(gold[card_path].encode("utf-8")).hexdigest()
-            if now_sha != draft.base_sha256:
-                raise SystemExit(
-                    "초안을 만든 뒤 골드의 카드 파일이 바뀌었다. 반려하고, 초안의 변경은 지금 골드 판에 손 승인으로 넣는다"
+            # 새 카드는 골드에 기준 파일이 없어 새 경로인지만 본다. new_card_path
+            if new_card:
+                check_new_card(
+                    spark, args.silver, draft, card_path, upload[card_path], gold
                 )
+            else:
+                now_sha = hashlib.sha256(gold[card_path].encode("utf-8")).hexdigest()
+                if now_sha != draft.base_sha256:
+                    raise SystemExit(
+                        "초안을 만든 뒤 골드의 카드 파일이 바뀌었다. 반려하고, 초안의 변경은 지금 골드 판에 손 승인으로 넣는다"
+                    )
             # 카드 파일 해시를 맞췄으니 PC 해시 대신 지금 골드를 기준으로 삼는다
             expect = digest(list(gold.items()))
     resumed = resume_or_start(mine, unfinished, digest(list(gold.items())), expect)
@@ -273,7 +333,9 @@ def main(argv: list[str] | None = None) -> None:
         )  # 검사에 걸리면 ValueError로 멈춘다
         review_id = new_review_id(datetime.now(UTC), label)
         if card_path is not None and not subject_in:
-            subject_in = draft_subject(upload[card_path], gold.get(card_path))
+            subject_in = draft_subject(
+                upload[card_path], gold.get(card_path), new=new_card
+            )
         base, result, subject = (
             digest(list(gold.items())),
             digest(list(files.items())),
@@ -388,6 +450,26 @@ def main(argv: list[str] | None = None) -> None:
     )
     renewed = sum(r[6] == review_id for r in rows)
     print(f"3/5 gold.card_revisions, 새 검수 번호를 받은 개정 {renewed}개")
+    if new_card and Path(card_path).stem != draft.card_id:
+        # 사람이 id를 바꿨다. 색인도 확정 id를 따른다. 끝난 시각을 적기 전에 해야 끊겨도 다시 누를 때 한다.
+        # 다시 해도 결과가 같다. 색인 단계는 있던 행의 card_id를 지켜 다음 실행에도 남는다. 2026-10-05 위험 검토
+        index_t = f"cherry.{args.silver}.card_index"
+        if spark.catalog.tableExists(index_t):
+            new_id = Path(card_path).stem
+            spark.sql(
+                f"UPDATE {index_t} SET card_id = :new WHERE issuer = :issuer AND card_id = :old",
+                args={"new": new_id, "issuer": draft.issuer, "old": draft.card_id},
+            )
+            moved = (
+                spark.table(index_t)
+                .where((col("issuer") == draft.issuer) & (col("card_id") == new_id))
+                .count()
+            )
+            if moved != 1:
+                raise SystemExit(
+                    f"색인에 card_id {new_id}인 행이 {moved}개다. 하나여야 한다. 색인을 사람이 맞춘 뒤 승인을 다시 누른다"
+                )
+            print(f"색인의 card_id를 {draft.card_id}에서 {new_id}로 바꿨다")
 
     export = Path(f"/Volumes/cherry/{args.gold}/export")
     folder_out = export / "pending" / review_id

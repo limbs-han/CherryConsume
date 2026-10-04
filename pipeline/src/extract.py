@@ -607,7 +607,10 @@ def new_cards(spark, args, s, files, cat, codes, now, to_queue) -> None:
                     out.reason or error,
                     out.draft_yaml,
                     out.problems,
-                    None,
+                    # 새 카드 초안의 기준 해시는 카드사 파일이다. 승인할 때 바뀌었으면 멈춘다. 작업 008 11단계
+                    hashlib.sha256(
+                        files.get(f"issuers/{r['issuer']}.yaml", "").encode("utf-8")
+                    ).hexdigest(),
                     retried.get(cid),
                 )
             )

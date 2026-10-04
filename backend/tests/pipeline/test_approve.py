@@ -267,3 +267,99 @@ def test_stale_exports_are_pending_folders_older_than_a_day_and_a_half():
     now = datetime(2026, 10, 3, 21, 0, tzinfo=UTC)
     names = ["r-20261002T080459Z-ranked-cancel", "r-20261003T083000Z-draft", "bad-name"]
     assert stale_exports(names, now) == ["r-20261002T080459Z-ranked-cancel", "bad-name"]
+
+
+def new_card_file(card_id: str = "nh-newcard-test") -> dict[str, str]:
+    card = yaml.safe_load(GOLD["cards/nh/nh-heroes-check.yaml"])
+    card.update(id=card_id, name="농협 새 카드 시험", search_names=[], product_codes=["NEWTEST"])
+    card.pop("short_name", None)
+    return {f"cards/nh/{card_id}.yaml": canonical_text(card)}
+
+
+def test_new_card_is_approved_at_a_new_path():
+    from cherry_core.pipeline.approve import new_card_path
+
+    upload = new_card_file()
+    assert new_card_path(upload, GOLD, "nh") == "cards/nh/nh-newcard-test.yaml"
+    files, changed = apply_changes(GOLD, upload)
+    assert list(changed) == ["cards/nh/nh-newcard-test.yaml"] and set(GOLD) < set(files)
+    # 새 카드는 이번 검수 번호를 받고 다른 카드 개정은 그대로다
+    assert renewed(upload) == {"nh-newcard-test"}
+
+
+@pytest.mark.parametrize(
+    ("upload", "reason"),
+    [
+        (lambda: new_card_file() | {"cards/nh/nh-other.yaml": "x"}, "하나만"),
+        (lambda: {"cards/kb/kb-newcard-test.yaml": "x"}, "cards/nh/"),
+        (lambda: {"cards/nh/nh-heroes-check.yaml": GOLD["cards/nh/nh-heroes-check.yaml"]}, "이미 있는 카드"),
+        (lambda: {"issuers/nh.yaml": GOLD["issuers/nh.yaml"]}, "cards/nh/"),
+    ],
+)
+def test_new_card_upload_must_be_one_new_file_of_the_issuer(upload, reason):
+    from cherry_core.pipeline.approve import new_card_path
+
+    with pytest.raises(ValueError, match=reason):
+        new_card_path(upload(), GOLD, "nh")
+
+
+def test_resumed_new_card_approval_accepts_the_path_it_already_put_in_gold():
+    from cherry_core.pipeline.approve import new_card_path
+
+    upload = new_card_file()
+    gold = GOLD | upload
+    assert (
+        new_card_path(upload, gold, "nh", already={"cards/nh/nh-newcard-test.yaml"}) == "cards/nh/nh-newcard-test.yaml"
+    )
+
+
+def test_new_card_subject_says_it_is_new():
+    from cherry_core.pipeline.approve import draft_subject
+
+    (text,) = new_card_file().values()
+    assert draft_subject(text, new=True) == "feat: 농협 새 카드 시험 새 카드 추가"
+    assert SUBJECT.fullmatch(draft_subject(text, new=True))
+
+
+def test_new_card_that_matches_a_gold_card_of_the_issuer_is_a_conflict():
+    from cherry_core.pipeline.approve import new_card_conflicts
+
+    ((path, text),) = new_card_file().items()
+    assert new_card_conflicts(text, GOLD, "nh", path) == []
+    # 같은 상품이 다른 id로 두 번 들어가면 승인으로는 지울 수 없다. 2026-10-05 위험 검토
+    heroes = yaml.safe_load(GOLD["cards/nh/nh-heroes-check.yaml"])
+    same_code = {**yaml.safe_load(text), "product_codes": list(heroes["product_codes"])}
+    same_name = {**yaml.safe_load(text), "name": heroes["name"].replace(" ", "")}
+    for card in (same_code, same_name):
+        found = new_card_conflicts(canonical_text(card), GOLD, "nh", path)
+        assert found and found[0].startswith("cards/nh/nh-heroes-check.yaml")
+
+
+@pytest.mark.parametrize(
+    ("change", "reason"),
+    [
+        (lambda c: c.update(id="nh-other-id"), "파일 이름"),
+    ],
+)
+def test_new_card_with_wrong_id_or_numbers_the_app_cannot_hold_is_refused(change, reason):
+    ((path, text),) = new_card_file().items()
+    card = yaml.safe_load(text)
+    change(card)
+    # 카드 검사와 export의 catalog json 숫자 검사를 승인에서도 한다. 승인만 지나고 export에서 막히면 저장소를 손으로 맞춰야 한다
+    with pytest.raises(ValueError, match=reason):
+        apply_changes(GOLD, {path: canonical_text(card)})
+
+
+def test_new_card_id_must_start_with_its_issuer():
+    ((_, text),) = new_card_file().items()
+    card = {**yaml.safe_load(text), "id": "kb-newcard-test"}
+    with pytest.raises(ValueError, match="카드사 폴더"):
+        apply_changes(GOLD, {"cards/nh/kb-newcard-test.yaml": canonical_text(card)})
+
+
+def test_new_card_with_numbers_the_app_cannot_hold_is_refused():
+    ((path, text),) = new_card_file().items()
+    card = yaml.safe_load(text)
+    card["revisions"][0]["benefits"][0]["reward"]["rate"] = 0.33333
+    with pytest.raises(ValueError, match="소수"):
+        apply_changes(GOLD, {path: canonical_text(card)})
