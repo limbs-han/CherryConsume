@@ -97,7 +97,9 @@ def app_catalog(cat: Catalog) -> dict:
                     "rules": app_rules(rules),
                 }
             )
-        cards.append({**dump(card.card, exclude={"revisions"}), "revisions": revisions})
+        # 짧은 이름은 적은 카드에만 담는다. 비운 칸까지 담으면 모든 폰이 받는 파일이 바뀐다. 작업 011 설계 2.4
+        unset = {"short_name"} if card.card.short_name is None else set()
+        cards.append({**dump(card.card, exclude={"revisions", *unset}), "revisions": revisions})
     days: set[date] = set(holidays.country_holidays("KR", years=list(HOLIDAY_YEARS)))
     return {
         "schema": SCHEMA,
@@ -107,7 +109,14 @@ def app_catalog(cat: Catalog) -> dict:
         "payment_methods": [dump(m) for m in cat.payment_methods.values()],
         "point_programs": [dump(m) for m in cat.point_programs.values()],
         "reference": [dump(m) for m in cat.reference.values()],
-        "issuers": [{"id": i.issuer.id, "name": i.issuer.name} for _, i in sorted(cat.issuers.items())],
+        "issuers": [
+            {
+                "id": i.issuer.id,
+                "name": i.issuer.name,
+                **({"short_name": i.issuer.short_name} if i.issuer.short_name else {}),
+            }
+            for _, i in sorted(cat.issuers.items())
+        ],
         "cards": cards,
     }
 

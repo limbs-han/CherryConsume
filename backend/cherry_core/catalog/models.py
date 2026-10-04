@@ -400,6 +400,8 @@ class CardFile(Base):
     id: Annotated[str, Field(pattern=r"^[a-z0-9]+-[a-z0-9-]+$")]
     issuer: Key
     name: str
+    # 칩과 줄처럼 좁은 곳에 쓰는 이름. 비우면 name을 쓴다. 작업 011 설계 2.4
+    short_name: Annotated[str, Field(min_length=1)] | None = None
     search_names: list[str] = []
     kind: Literal["credit", "check"]
     product_codes: list[str] = []
@@ -452,6 +454,8 @@ class IssuerFile(Base):
     schema_version: Literal[2]
     id: Key
     name: str
+    # "신한", "IBK"처럼 칩에 쓰는 이름. 비우면 name을 쓴다. 작업 011 설계 2.4
+    short_name: Annotated[str, Field(min_length=1)] | None = None
     collect: Collect | None = None
     defaults: list[IssuerDefaults] = []
     open_questions: list[OpenQuestion] = []

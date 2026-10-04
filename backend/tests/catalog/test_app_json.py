@@ -122,6 +122,24 @@ def test_json_refuses_numbers_the_app_cannot_hold(make_catalog, tmp_path, capsys
     assert number_errors({"a": [10**12]}) == ["a[0]: 앱이 정확히 계산하지 못하는 정수 1000000000000"]
 
 
+def test_short_name_only_when_written(make_catalog, tmp_path):
+    # 작업 011 설계 2.4. 짧은 이름은 적은 카드와 카드사에만 담는다. 비운 칸까지 담으면 모든 폰이 받는 파일이 괜히 바뀐다
+    def short(f):
+        f["issuers/shinhan.yaml"]["short_name"] = "신한"
+        f["cards/shinhan/shinhan-test.yaml"]["short_name"] = "신한 테스트"
+
+    out = tmp_path / "catalog.json"
+    assert main(["json", "--root", str(make_catalog(short)), "--out", str(out)]) == 0
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["issuers"] == [{"id": "shinhan", "name": "신한카드", "short_name": "신한"}]
+    assert data["cards"][0]["short_name"] == "신한 테스트"
+
+    assert main(["json", "--root", str(make_catalog()), "--out", str(out)]) == 0
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["issuers"] == [{"id": "shinhan", "name": "신한카드"}]
+    assert "short_name" not in data["cards"][0]
+
+
 def test_billing_cycle_spend_is_written_like_the_engine_took_it(make_catalog, tmp_path):
     # 결제일 기준 실적은 검사가 오류로 막지만 엔진은 E6대로 받아 실적을 계산하지 않았다. 같은 기준을 쓴다
     def billing(f):

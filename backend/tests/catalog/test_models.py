@@ -6,9 +6,11 @@ from pydantic import ValidationError
 from cherry_core.catalog.models import (
     Adjust,
     Benefit,
+    CardFile,
     Collect,
     Condition,
     Fact,
+    IssuerFile,
     Limit,
     Option,
     Reward,
@@ -137,6 +139,20 @@ def test_collect_disclosure_url_is_optional_https():
     assert ok.disclosure_url == "https://a.example/disclosure"
     with pytest.raises(ValidationError, match="disclosure_url"):
         Collect.model_validate({**base, "disclosure_url": "http://a.example/disclosure"})
+
+
+def test_short_name_is_optional_and_not_empty():
+    # 작업 011 설계 2.4. 칩과 줄처럼 좁은 곳에 쓰는 이름이다. 비우면 name을 쓴다. 빈 글자면 칩이 빈다
+    from .conftest import CARD
+
+    issuer = {"schema_version": 2, "id": "shinhan", "name": "신한카드"}
+    assert IssuerFile.model_validate(issuer).short_name is None
+    assert IssuerFile.model_validate({**issuer, "short_name": "신한"}).short_name == "신한"
+    assert CardFile.model_validate(CARD).short_name is None
+    assert CardFile.model_validate({**CARD, "short_name": "신한 테스트"}).short_name == "신한 테스트"
+    for bad in [{**issuer, "short_name": ""}, {**CARD, "short_name": ""}]:
+        with pytest.raises(ValidationError, match="short_name"):
+            (IssuerFile if bad.get("issuer") is None else CardFile).model_validate(bad)
 
 
 def test_unknown_field_is_rejected():

@@ -67,6 +67,12 @@ def test_collect_keys_in_reading_order():
     ]
 
 
+def test_short_name_follows_name():
+    # 작업 011 설계 2.4. 짧은 이름은 이름 바로 뒤에 온다
+    text = canonical_text({"short_name": "신한", "name": "신한카드", "id": "shinhan"})
+    assert re.findall(r"(\w+): ", text) == ["id", "name", "short_name"]
+
+
 def test_tier_table_keys_sorted_and_strings_kept():
     data = yaml.safe_load(
         canonical_text({"amount": {500000: 2, 300000: 1}, "from": "21:00", "notes": "첫 줄\n둘째 줄"})

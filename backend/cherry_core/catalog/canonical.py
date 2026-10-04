@@ -19,6 +19,7 @@ KEY_ORDER = [
     "code",
     "issuer",
     "name",
+    "short_name",
     "title",
     "search_names",
     "kind",
