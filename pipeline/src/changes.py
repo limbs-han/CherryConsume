@@ -4,7 +4,8 @@
 처음 받은 원문은 정답 예시와 짝이라 바뀐 것으로 보지 않는다. 지문은 조회수를 가리고, 공지와 목록은 숫자를 가린다.
 카드사 목록은 지난 목록과 비교해 바뀐 줄에서만 ai_query로 카드 이름을 뽑는다. 목록 전체를 다시 뽑으면 긴 목록은 뽑을 때마다
 이름이 달라 가짜 새 카드와 사라진 카드가 쌓였다. 뽑은 이름과 새 카드, 사라진 카드는 silver.card_lists에 쓴다.
-새 카드와 사라진 카드 가운데 아직 검수 대기에 없는 것은 그 표에서 골라 silver.queue에 쓴다. 중간에 끊겨도 다음 실행이 메운다.
+사라진 카드 가운데 아직 검수 대기에 없는 것은 그 표에서 골라 silver.queue에 쓴다. 중간에 끊겨도 다음 실행이 메운다.
+새 카드는 이름만 card_lists에 적고 검수 대기에 올리지 않는다. 색인이 새 카드를 알아채고 추출의 new_card 모드가 초안과 함께 올린다. 작업 008 설계 3절.
 처음 받은 목록은 비교할 것이 없어 모델을 부르지 않는다.
 찍는 것은 개수뿐이다.
 """
@@ -232,9 +233,8 @@ def main(argv: list[str] | None = None) -> None:
         .select(
             "issuer",
             "path",
-            F.explode(
-                F.concat(pick("new_cards", "new_card"), pick("gone_cards", "gone_card"))
-            ).alias("q"),
+            # 새 카드는 추출의 new_card 모드가 초안과 함께 올린다. 이름만 올리면 같은 카드가 두 번 오른다. 작업 008 10단계
+            F.explode(pick("gone_cards", "gone_card")).alias("q"),
         )
         .select(
             "q.kind",

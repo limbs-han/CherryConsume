@@ -374,7 +374,11 @@ def test_page_count_missing_stops_the_issuer():
             b'<strong class="f_count">11</strong>',
             ["cards-p1", "cards-p2", "cards-credit-p1", "cards-credit-p2", "cards-check-p1", "cards-check-p2"],
         ),
-        ("nh", b'{"totalPage": "2"}', ["cards-p1", "cards-p2", "cards-check-p1", "cards-check-p2"]),
+        (
+            "nh",
+            b'{"totalPage": "2"}',
+            ["cards-p1", "cards-p2", "cards-credit-p1", "cards-credit-p2", "cards-check-p1", "cards-check-p2"],
+        ),
         (
             "shinhan",
             b'{"payload": {"totalPage": 1}}',
@@ -662,3 +666,151 @@ def test_only_list_and_enrich_responses_may_be_empty():
     assert must_have_rows("samsung", "check")
     assert not must_have_rows("lotte", "cards-credit-A102-p1")
     assert not must_have_rows("hana", "categories")
+
+
+def test_nh_asks_credit_and_check_lists():
+    # 2026-10-05 체크 목록만 받아 신용 카드 137장의 종류가 비었다. 화면의 분류는 신용 IPCC0105와 체크 IPCC0106이다
+    body = json.dumps({"totalPage": "1", "CARDLIST": []}).encode()
+    got = asked("nh", lambda r: body)
+    assert [(r.source_id, r.form["cardGubun"]) for r in got] == [
+        ("cards-p1", ""),
+        ("cards-credit-p1", "IPCC0105"),
+        ("cards-check-p1", "IPCC0106"),
+    ]
+
+
+def test_kind_comes_from_official_name_when_lists_have_none():
+    merged, _ = merge_rows(
+        [
+            IndexRow("nh", "제주교통복지카드(신용)", code="1"),
+            IndexRow("nh", "서울교육사랑카드(개인체크)", code="2"),
+            IndexRow("nh", "LIKIT all CHECK", code="3"),
+            IndexRow("nh", "다둥이 카드(신용/체크)", code="4"),
+            IndexRow("nh", "the Origins카드", code="5"),
+            # 공식 목록의 종류가 이름보다 앞선다
+            IndexRow("nh", "NH FIT 신용할인형", code="6", kind="check"),
+        ]
+    )
+    assert [r.kind for r in merged] == ["credit", "check", "check", None, None, "check"]
+
+
+def test_corporate_cards_are_not_collected():
+    today = date(2026, 10, 5)
+    for name in (
+        "롯데 비즈니스 법인카드",
+        "LOCA Biz",
+        "CEO카드(기업)",
+        "Business Sky 기업카드",
+        "LOCA Corporate Zeus",
+        "IBK컴퍼니카드(기관)",
+    ):
+        assert not collectable(IndexRow("lotte", name), today), name
+    # 이름에 개인이 있으면 개인 카드다. 낱말 가운데 든 biz는 걸지 않는다
+    for name in ("한국사회적기업진흥원 지원금 체크카드(개인)", "LOCA 365", "Bizzy 카드"):
+        assert collectable(IndexRow("lotte", name), today), name
+
+
+WOORI_PAGE = "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd="
+
+
+def _woori_list(*cards: tuple[str, str]) -> bytes:
+    rows = [{"code": code, "codeName": name, "issuAt": "Y"} for code, name in cards]
+    return json.dumps(
+        {"mainDataList": {"totCnt": str(len(rows)), "cct11PrdntcAgrmMainVo": rows}}, ensure_ascii=False
+    ).encode()
+
+
+def _woori_detail(code: str, name: str, cfcd: str) -> bytes:
+    return json.dumps(
+        {"resultVo": {"crd01DtlVo": {"cdPrdCd": code, "cdPrdNm": name, "cdPrdCfcd": cfcd}}}, ensure_ascii=False
+    ).encode()
+
+
+def test_woori_reads_kind_from_card_detail_for_untyped_cards():
+    listing = _woori_list(("1", "ALL 우리카드"), ("2", "CJ ONE 우리체크"), ("3", "카드의정석 Biz Platinum"))
+    detail = _woori_detail("1", "ALL 우리카드", "1")
+    got = asked("woori", lambda r: listing if r.source_id == "disclosure" else detail)
+    # 이름으로 종류를 아는 카드와 법인 카드는 상세를 열지 않는다
+    assert [(r.source_id, r.url, r.capture) for r in got[1:]] == [
+        ("detail-1", WOORI_PAGE + "1", "searchCrdDtl.pwkjson")
+    ]
+    merged, _ = merge_rows(read("woori", "disclosure", listing) + read("woori", "detail-1", detail))
+    assert [(r.code, r.kind) for r in merged] == [("1", "credit"), ("2", "check"), ("3", None)]
+    # cdPrdCfcd는 1이 신용, 2가 체크다. 그 밖의 값은 비운다
+    assert [read("woori", "detail-9", _woori_detail("9", "x", c))[0].kind for c in ("2", "7")] == ["check", None]
+
+
+def test_woori_detail_failures_skip_the_card_and_three_in_a_row_stop_details():
+    listing = _woori_list(*((str(n), f"카드{n} 우리카드") for n in range(1, 8)))
+    ok = {"detail-2"}
+
+    def answer(r):
+        if r.source_id == "disclosure":
+            return listing
+        if r.source_id in ok:
+            return _woori_detail("2", "카드2 우리카드", "1")
+        raise TimeoutError("detail")
+
+    # 상세는 종류를 채우는 것뿐이라 실패해도 공시 묶음은 쓴다. 실패한 카드는 건너뛰고, 세 번 잇달아 실패하면
+    # 사이트에 부담을 주지 않게 남은 상세는 열지 않는다. 2026-10-05 117장째에서 한 장의 응답이 오지 않았다
+    got = [r.source_id for r in asked("woori", answer)]
+    assert got == ["disclosure", "detail-1", "detail-2", "detail-3", "detail-4", "detail-5"]
+
+
+def test_woori_detail_without_card_data_is_no_row():
+    # 2026-10-05 상세 117장 가운데 2장은 카드 정보 없이 비어 있었다. 읽기가 멈추면 우리 색인 전체가 빠진다
+    empty = json.dumps({"resultVo": {"fixedLengthVo": False, "totalPageCount": 1}}).encode()
+    assert read("woori", "detail-220136", empty) == []
+
+
+@pytest.mark.parametrize(
+    "body", [b"<html>error</html>", b'{"resultVo": []}', b'{"resultVo": {"crd01DtlVo": {"cdPrdCd": null}}}']
+)
+def test_broken_woori_detail_is_no_row(body):
+    # 상세 하나를 못 읽어 우리 색인 전체가 멈추면 안 된다. 2026-10-05 위험 검토
+    assert read("woori", "detail-1", body) == []
+
+
+def test_woori_detail_block_answer_fails_the_issuer():
+    import urllib.error
+
+    listing = _woori_list(("1", "A 우리카드"), ("2", "B 우리카드"))
+
+    def answer(r):
+        if r.source_id == "disclosure":
+            return listing
+        raise urllib.error.HTTPError(r.url, 429, "", {}, None)
+
+    # 거절 답은 차단 신호라 그 카드사를 실패로 센다. 수집기는 이어서 같은 사이트의 상품 페이지를 열지 않는다
+    with pytest.raises(urllib.error.HTTPError):
+        asked("woori", answer)
+
+
+def test_woori_details_stop_after_their_time_budget(monkeypatch):
+    from cherry_core.pipeline import disclosure
+
+    clock = iter([0.0, 10.0, 4000.0, 4000.0])
+    monkeypatch.setattr(disclosure.time, "monotonic", lambda: next(clock))
+    listing = _woori_list(("1", "A 우리카드"), ("2", "B 우리카드"), ("3", "C 우리카드"))
+    got = asked("woori", lambda r: listing if r.source_id == "disclosure" else _woori_detail("1", "A", "1"))
+    # 상세는 60분까지만 연다. 원문 받기 240분 제한에 걸리면 공시 묶음까지 버려진다
+    assert [r.source_id for r in got] == ["disclosure", "detail-1"]
+
+
+def test_woori_name_with_both_kinds_is_not_check():
+    listing = _woori_list(("1", "한화생명 Family카드(신용/체크)"))
+    assert [r.kind for r in read("woori", "disclosure", listing)] == [None]
+
+
+@pytest.mark.parametrize(
+    ("name", "personal"),
+    [
+        ("W_SCHOOL체크_안산국제비즈니스고등학교", True),
+        ("카드의정석 Welfare+ 한영회계법인", True),
+        ("공공기관 임직원 ESG 나눔카드", True),
+        ("LOCA Biz카드", False),
+        ("Biz 카드", False),
+    ],
+)
+def test_corporate_words_spare_school_and_employee_cards(name, personal):
+    assert collectable(IndexRow("woori", name), date(2026, 10, 5)) is personal

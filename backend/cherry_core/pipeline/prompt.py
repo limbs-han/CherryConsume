@@ -51,8 +51,18 @@ INSTRUCTIONS = """\
 """
 
 
-def answer_schema() -> dict:
-    """답의 JSON 스키마. 프롬프트에 글로 넣는다. 카탈로그 모델이 바뀌면 답 형식도 따라 바뀐다."""
+# 새 카드 초안에서 색인에 카드 종류가 없을 때 더하는 지시. 작업 008 설계 3절
+KIND_ASK = (
+    "- 이 카드는 신용카드인지 체크카드인지 모른다. 원문을 보고 kind에 credit이나 check를 적고, "
+    "kind_evidence에 그렇게 본 원문 문장을 원문 그대로 적는다. 원문에서 확인하지 못하면 둘 다 null이다."
+)
+
+
+def answer_schema(kind: bool = False) -> dict:
+    """답의 JSON 스키마. 프롬프트에 글로 넣는다. 카탈로그 모델이 바뀌면 답 형식도 따라 바뀐다.
+
+    kind는 새 카드 초안에서 색인에 카드 종류가 없을 때 켠다. 카드 종류와 그 근거 문장을 함께 묻는다.
+    """
     rules = Rules.model_json_schema(by_alias=True)
     defs = {**rules.pop("$defs", {}), "OpenQuestion": OpenQuestion.model_json_schema()}
     schema = {
@@ -66,6 +76,10 @@ def answer_schema() -> dict:
         "required": ["rules", "effective_from", "source", "open_questions"],
         "$defs": defs,
     }
+    if kind:
+        schema["properties"]["kind"] = {"anyOf": [{"enum": ["credit", "check"]}, {"type": "null"}]}
+        schema["properties"]["kind_evidence"] = {"anyOf": [{"type": "string"}, {"type": "null"}]}
+        schema["required"] += ["kind", "kind_evidence"]
     return schema
 
 
@@ -149,14 +163,17 @@ def build_prompt(
     codes: dict[str, list[str]],
     example: tuple[str, dict] | None = None,
     titles: bool = True,
+    defaults: dict | None = None,
+    ask_kind: bool = False,
 ) -> str:
     """card는 카드 파일, current는 지금 합친 규칙, docs는 (원문 id, 글) 목록, example은 example_for의 값이다.
 
     titles는 정답 예시 추출에서 끈다. 그때 지금 혜택은 정답 카드의 혜택이고, 제목에 비율과 대상이 들어 있어 베끼면 점수가 부푼다.
+    defaults와 ask_kind는 새 카드 초안이 쓴다. 지금 카드가 없어 카드사 기본값을 보여 주고, 색인에 종류가 없으면 종류를 묻는다.
     """
     benefits = [{"key": b["key"], "title": b["title"]} for b in current.get("benefits", [])]
     parts = [
-        INSTRUCTIONS,
+        INSTRUCTIONS + (KIND_ASK + "\n" if ask_kind else ""),
         f"카드: {card['name']} ({card['id']})",
         "지금 혜택: " + json.dumps(benefits, ensure_ascii=False)
         if titles
@@ -166,9 +183,14 @@ def build_prompt(
         "지금 한도 key: " + (", ".join(x["key"] for x in current.get("limits", [])) or "없음"),
         *(f"{name}: {', '.join(keys)}" for name, keys in codes.items()),
         "답 형식. 아래 JSON 스키마를 따르는 JSON 객체 하나로만 답한다.\n"
-        + json.dumps(answer_schema(), ensure_ascii=False, separators=(",", ":")),
+        + json.dumps(answer_schema(ask_kind), ensure_ascii=False, separators=(",", ":")),
         "칸 안내. 모델 이름: 칸(값 모양). 이 이름만 쓴다.\n" + field_guide(),
     ]
+    if defaults:
+        parts.append(
+            "카드사 기본값. 원문에 없는 실적 규칙, 신규 회원, 혜택 제외는 이 값을 따르므로 적지 않는다. "
+            "원문이 이 값과 다르면 원문대로 적는다.\n" + json.dumps(defaults, ensure_ascii=False, default=str)
+        )
     if example:
         name, rules = example
         parts.append(

@@ -3,6 +3,7 @@
 changes 모드는 silver.changes에서 아직 추출하지 않은 변경이 있는 카드만, 원문 id마다 가장 최근 문서로 추출한다.
 초안과 사람이 정할 것은 silver.queue에 올린다. cherry_refresh가 변경 감지 뒤에 부른다.
 golden 모드는 silver.golden의 카드를 첫 수집 원문으로 추출한다. 모델을 고르는 채점용이라 검수 대기에 올리지 않는다.
+new_card 모드는 색인 card_index에서 카탈로그에 없는 카드의 새 초안을 만들고 검수 대기에 kind new_card로 올린다. 작업 008 설계 3절.
 카탈로그는 골드에서 읽는다. 답은 cherry_core.pipeline.extract가 초안과 검사 결과로 바꾼다.
 규칙 형식 검사에 걸린 카드는 이전 답과 오류를 붙여 한 번 더 묻는다. 판 7.
 모델 호출이 실패한 카드는 끝난 것으로 치지 않고, 다 쓴 뒤 실행을 실패로 끝내 알린다. 다음 실행이 다시 추출한다.
@@ -16,7 +17,9 @@ import re
 import tempfile
 import uuid
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from cherry_core.catalog.load import load_catalog
 from cherry_core.catalog.resolve import resolve_card
@@ -27,6 +30,13 @@ from cherry_core.pipeline.extract import (
     process_answer,
     retry_errors,
     unqueued,
+)
+from cherry_core.pipeline.new_card import (
+    SOURCE_IDS,
+    card_head,
+    drafted_cards,
+    pick_new_cards,
+    process_new_card,
 )
 from cherry_core.pipeline.prompt import (
     RESPONSE_FORMAT,
@@ -65,6 +75,58 @@ def subject(reason: str | None, name: str, problems: list[str] | None) -> str:
     return reason or f"{name} 초안, 검사에 걸린 곳 {len(problems or [])}개"
 
 
+def model_query(model: str, max_tokens: int) -> str:
+    return (
+        f"ai_query('{model}', prompt, responseFormat => '{RESPONSE_FORMAT}', failOnError => false, "
+        f"modelParameters => named_struct('temperature', 0.0, 'max_tokens', {max_tokens})) AS out"
+    )
+
+
+def ask(
+    spark: SparkSession, query: str, rows: list[tuple[str, str]]
+) -> dict[str, tuple[str | None, str | None]]:
+    """카드마다 (답, 호출 오류)."""
+    out = {}
+    for a in (
+        spark.createDataFrame(rows, "card_id STRING, prompt STRING")
+        .selectExpr("card_id", query)
+        .collect()
+    ):
+        # 답 칸의 이름이 문서와 달라 이름에 기대지 않는다. errorMessage가 아닌 칸이 답이다. 2026-10-01 개발용 시험
+        result = a.out.asDict()
+        error = result.pop("errorMessage", None)
+        out[a.card_id] = (next(iter(result.values()), None), error)
+    return out
+
+
+def ask_again(spark, query, first, answers, outcomes, judge, defaults_for):
+    """규칙 형식에만 걸린 카드는 이전 답과 칸마다의 오류를 붙여 한 번 더 묻는다. 설계 1절 4단계 판 7.
+
+    answers와 outcomes를 고쳐 쓴다. (다시 물은 카드와 프롬프트, 카드마다 retry_reason)을 돌려준다.
+    처음 답의 까닭은 retry_reason에 남긴다. 다시 묻기 호출이 실패하면 처음 답으로 사람이 정하고 실패를 retry_reason에 적는다.
+    """
+    retry = []
+    for cid, o in outcomes.items():
+        errors = retry_errors(o, answers[cid][0], defaults_for(cid))
+        if errors:
+            retry.append((cid, retry_prompt(first[cid], answers[cid][0], errors)))
+    retried: dict[str, str] = {}
+    try:
+        again = ask(spark, query, retry) if retry else {}
+    except Exception as e:  # noqa: BLE001 첫 답은 이미 요금을 냈다. 다시 묻기가 통째로 실패해도 첫 답을 남긴다
+        print(f"다시 묻기가 실패해 첫 답을 쓴다: {type(e).__name__}: {str(e)[:300]}")
+        again = {}
+        retried = {cid: f"다시 묻기 실패: {type(e).__name__}" for cid, _ in retry}
+    for cid, (response, error) in again.items():
+        if error or response is None:
+            retried[cid] = f"다시 묻기 실패: {error}"[:500]
+            continue
+        retried[cid] = outcomes[cid].reason
+        answers[cid] = (response, error)
+        outcomes[cid] = judge(cid, response, error)
+    return retry, retried
+
+
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--silver", required=True)
@@ -72,7 +134,25 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument(
         "--model", default="", help="ai_query에 넘길 모델 이름. 비면 추출하지 않는다"
     )
-    ap.add_argument("--mode", choices=["changes", "golden"], default="changes")
+    ap.add_argument(
+        "--mode", choices=["changes", "golden", "new_card"], default="changes"
+    )
+    ap.add_argument(
+        "--bronze",
+        default="",
+        help="new_card 모드에서 색인 카드 원문의 주소를 찾을 bronze 스키마",
+    )
+    ap.add_argument(
+        "--issuer",
+        default="",
+        help="new_card 모드에서 이 카드사만. 쉼표로 잇는다. 비면 모두다",
+    )
+    ap.add_argument(
+        "--limit",
+        type=int,
+        default=10,
+        help="new_card 모드에서 이번에 만들 초안 수. 0은 모두다. 카드당 몇 센트다",
+    )
     ap.add_argument(
         "--split",
         choices=["tune", "test", "all"],
@@ -125,6 +205,10 @@ def main(argv: list[str] | None = None) -> None:
             .write.mode("append")
             .saveAsTable(f"{s}.queue")
         )
+
+    if args.mode == "new_card":
+        new_cards(spark, args, s, files, cat, codes, now, to_queue)
+        return
 
     docs = (
         spark.table(f"{s}.documents")
@@ -245,24 +329,7 @@ def main(argv: list[str] | None = None) -> None:
         )
         return
 
-    query = (
-        f"ai_query('{args.model}', prompt, responseFormat => '{RESPONSE_FORMAT}', failOnError => false, "
-        f"modelParameters => named_struct('temperature', 0.0, 'max_tokens', {args.max_tokens})) AS out"
-    )
-
-    def ask(rows: list[tuple[str, str]]) -> dict[str, tuple[str | None, str | None]]:
-        """카드마다 (답, 호출 오류)."""
-        out = {}
-        for a in (
-            spark.createDataFrame(rows, "card_id STRING, prompt STRING")
-            .selectExpr("card_id", query)
-            .collect()
-        ):
-            # 답 칸의 이름이 문서와 달라 이름에 기대지 않는다. errorMessage가 아닌 칸이 답이다. 2026-10-01 개발용 시험
-            result = a.out.asDict()
-            error = result.pop("errorMessage", None)
-            out[a.card_id] = (next(iter(result.values()), None), error)
-        return out
+    query = model_query(args.model, args.max_tokens)
 
     def judge(cid: str, response: str | None, error: str | None):
         lc, issuer, _, day, _ = meta[cid]
@@ -270,36 +337,17 @@ def main(argv: list[str] | None = None) -> None:
             files, lc.file, lc.raw, issuer, response, error, day, args.mode == "changes"
         )
 
-    answers = ask(prompts)
+    answers = ask(spark, query, prompts)
     outcomes = {cid: judge(cid, *v) for cid, v in answers.items()}
-    # 규칙 형식에만 걸린 카드는 이전 답과 칸마다의 오류를 붙여 한 번 더 묻는다. 설계 1절 4단계 판 7
-    # 처음 답의 까닭은 retry_reason에 남긴다. 다시 묻기 호출이 실패하면 처음 답으로 사람이 정하고 실패를 retry_reason에 적는다
-    first = dict(prompts)
 
     # 정답 예시 모드는 채점처럼 카드사 기본값으로 채워 보고 남는 오류만 묻는다. 바뀐 원문 모드는 지금 값으로 이미 채웠다
     def defaults_for(cid: str) -> dict | None:
         _, issuer, _, day, _ = meta[cid]
         return issuer_defaults(issuer, day) if args.mode == "golden" else None
 
-    retry = []
-    for cid, o in outcomes.items():
-        errors = retry_errors(o, answers[cid][0], defaults_for(cid))
-        if errors:
-            retry.append((cid, retry_prompt(first[cid], answers[cid][0], errors)))
-    retried: dict[str, str] = {}
-    try:
-        again = ask(retry) if retry else {}
-    except Exception as e:  # noqa: BLE001 첫 답은 이미 요금을 냈다. 다시 묻기가 통째로 실패해도 첫 답을 남긴다
-        print(f"다시 묻기가 실패해 첫 답을 쓴다: {type(e).__name__}: {str(e)[:300]}")
-        again = {}
-        retried = {cid: f"다시 묻기 실패: {type(e).__name__}" for cid, _ in retry}
-    for cid, (response, error) in again.items():
-        if error or response is None:
-            retried[cid] = f"다시 묻기 실패: {error}"[:500]
-            continue
-        retried[cid] = outcomes[cid].reason
-        answers[cid] = (response, error)
-        outcomes[cid] = judge(cid, response, error)
+    retry, retried = ask_again(
+        spark, query, dict(prompts), answers, outcomes, judge, defaults_for
+    )
 
     drafts, queue, counts = [], [], defaultdict(int)
     for cid, (response, error) in answers.items():
@@ -386,6 +434,224 @@ def main(argv: list[str] | None = None) -> None:
     if counts["model_error"]:
         raise SystemExit(
             f"모델 호출이 실패한 카드 {counts['model_error']}장. 다음 실행에서 다시 추출한다"
+        )
+
+
+# 새 카드 초안은 이만큼씩 묻고 그때마다 쓴다. 시간 제한이나 비용 차단에 걸려도 요금을 낸 답은 남는다. 2026-10-05 위험 검토
+NEW_CARD_GROUP = 20
+# 새 카드 프롬프트 판. 1: 카드사 기본값과 종류 묻기를 더했다. 바뀐 원문과 정답 예시 프롬프트 판 VERSION과 따로 센다
+NEW_CARD_VERSION = "new1"
+
+
+def new_cards(spark, args, s, files, cat, codes, now, to_queue) -> None:
+    """색인에서 카탈로그에 없는 카드의 새 초안을 만든다. 작업 008 설계 3절.
+
+    색인 카드 원문은 card_id가 비어 있어 받은 주소로 찾는다. 주소마다 가장 최근 문서를 쓴다.
+    머리는 색인에서, 규칙은 모델이 쓴다. 초안이 생긴 카드는 다음 실행에서 다시 고르지 않는다. 모델 호출이 실패한 카드는 고른다.
+    """
+    if not args.bronze:
+        raise SystemExit("new_card 모드는 --bronze가 있어야 원문 주소를 찾는다")
+    if args.limit < 0:
+        raise SystemExit("--limit은 0 이상이다. 0은 모두다")
+    today = datetime.now(ZoneInfo("Asia/Seoul")).date()
+    mine = spark.table(f"{s}.drafts").where("mode = 'new_card'")
+    # 앞 실행이 초안을 쓰고 검수 대기를 쓰기 전에 끊겼으면 여기서 메운다
+    queued = {
+        r.draft_id
+        for r in spark.table(f"{s}.queue")
+        .where("draft_id IS NOT NULL")
+        .select("draft_id")
+        .collect()
+    }
+    past = {
+        r.draft_id: r for r in mine.where(F.col("status").isin(list(QUEUED))).collect()
+    }
+    refill = [
+        (
+            "new_card",
+            past[d].issuer,
+            past[d].card_id,
+            subject(past[d].reason, past[d].card_id, past[d].problems),
+            past[d].doc_paths[0],
+            "open",
+            d,
+        )
+        for d in unqueued([(d, r.status) for d, r in past.items()], queued)
+    ]
+    if refill:
+        to_queue(refill)
+    rows = [
+        r.asDict()
+        for r in spark.table(f"{s}.card_index")
+        .select(
+            "issuer",
+            "card_id",
+            "name",
+            "kind",
+            "code",
+            "status",
+            "discontinued_on",
+            "page_url",
+            "pdf_urls",
+            "recommended",
+        )
+        .collect()
+    ]
+    drafted = drafted_cards(
+        [tuple(r) for r in mine.select("card_id", "status", "reason").collect()],
+        {r["card_id"] for r in rows if r["kind"]},
+    )
+    latest = Window.partitionBy("url").orderBy(
+        F.col("fetched_at").desc(), F.col("path").desc()
+    )
+    docs = {
+        r.url: r.asDict()
+        for r in spark.table(f"{s}.documents")
+        # 우리 카드 상세 응답은 상품 페이지와 주소가 같다. 원문 종류로 걸러 상세 응답을 원문으로 쓰지 않는다. 위험 검토
+        .where("card_id IS NULL AND kind IN ('product_page', 'manual_pdf')")
+        .join(
+            spark.table(f"cherry.{args.bronze}.fetches")
+            .select("path", "url")
+            .dropDuplicates(["path"]),
+            "path",
+        )
+        .withColumn("day", F.to_date("fetched_at"))
+        .withColumn("n", F.row_number().over(latest))
+        .where("n = 1")
+        .select("url", "path", "day")
+        .collect()
+    }
+    issuers = {i.strip() for i in args.issuer.split(",") if i.strip()} or None
+    picked = pick_new_cards(
+        rows, set(cat.cards), drafted, docs, today, issuers, args.limit or None
+    )
+    texts = {
+        r.path: r.text
+        for r in spark.table(f"{s}.documents")
+        .where(
+            F.col("path").isin([d["path"] for _, found in picked for _, _, d in found])
+        )
+        .select("path", "text")
+        .collect()
+    }
+    example = example_for(cat, "")
+    version = f"{VERSION}+{NEW_CARD_VERSION}" + (f"+{example[2]}" if example else "")
+    prompts, meta = [], {}
+    for r, found in picked:
+        sources = [(kind, url, d["day"], texts[d["path"]]) for kind, url, d in found]
+        fetched = max(day for _, _, day, _ in sources)
+        issuer = cat.issuers[r["issuer"]].raw if r["issuer"] in cat.issuers else None
+        prompt = build_prompt(
+            {"id": r["card_id"], "name": r["name"]},
+            {},
+            [(SOURCE_IDS[kind], text) for kind, _, _, text in sources],
+            codes,
+            example[:2] if example else None,
+            titles=False,
+            defaults=issuer_defaults(issuer, fetched) or None,
+            ask_kind=not r["kind"],
+        )
+        prompts.append((r["card_id"], prompt))
+        meta[r["card_id"]] = (
+            r,
+            card_head(r, sources, fetched),
+            issuer,
+            fetched,
+            [text for *_, text in sources],
+            [d["path"] for _, _, d in found],
+        )
+    if not prompts:
+        print(f"새 초안을 만들 카드 0장, 검수 대기에 다시 올린 초안 {len(refill)}건")
+        return
+
+    query = model_query(args.model, args.max_tokens)
+
+    def judge(cid: str, response: str | None, error: str | None):
+        _, head, issuer, fetched, card_texts, _ = meta[cid]
+        return process_new_card(
+            files, head, issuer, response, error, fetched, card_texts
+        )
+
+    def defaults_for(cid: str) -> dict:
+        _, _, issuer, fetched, _, _ = meta[cid]
+        return issuer_defaults(issuer, fetched)
+
+    counts, queued, retried_cards = defaultdict(int), 0, 0
+    for n in range(0, len(prompts), NEW_CARD_GROUP):
+        group = prompts[n : n + NEW_CARD_GROUP]
+        answers = ask(spark, query, group)
+        outcomes = {cid: judge(cid, *v) for cid, v in answers.items()}
+        retry, retried = ask_again(
+            spark, query, dict(group), answers, outcomes, judge, defaults_for
+        )
+        retried_cards += len(retry)
+        drafts, queue = [], []
+        for cid, (response, error) in answers.items():
+            r, _, _, _, _, paths = meta[cid]
+            out = outcomes[cid]
+            draft_id = str(uuid.uuid4())
+            counts[out.status] += 1
+            counts["problems"] += bool(out.problems)
+            drafts.append(
+                (
+                    draft_id,
+                    cid,
+                    r["issuer"],
+                    "new_card",
+                    args.model,
+                    version,
+                    [],
+                    paths,
+                    response,
+                    out.status,
+                    out.reason or error,
+                    out.draft_yaml,
+                    out.problems,
+                    None,
+                    retried.get(cid),
+                )
+            )
+            if out.status in QUEUED:
+                queue.append(
+                    (
+                        "new_card",
+                        r["issuer"],
+                        cid,
+                        subject(out.reason, f"{r['name']} 새 카드", out.problems),
+                        paths[0],
+                        "open",
+                        draft_id,
+                    )
+                )
+        # 카드사 칸은 색인 표에서 가져와 쓴다. 계보에 card_index에서 drafts로 가는 선이 남는다. 작업 007 설계 2절
+        # 그사이 색인 단계가 card_id를 바꿔도 요금을 낸 초안이 빠지지 않게 바깥 맞붙이기로 쓰고 빈 칸은 고른 행의 값을 쓴다
+        cards = (
+            spark.table(f"{s}.card_index")
+            .where(F.col("card_id").isin(list(answers)))
+            .select("card_id", F.col("issuer").alias("index_issuer"))
+            .dropDuplicates(["card_id"])
+        )
+        (
+            spark.createDataFrame(drafts, DRAFTS.replace(", created_at TIMESTAMP", ""))
+            .join(cards, "card_id", "left")
+            .withColumn("issuer", F.coalesce("index_issuer", "issuer"))
+            .drop("index_issuer")
+            .withColumn("created_at", now)
+            .write.mode("append")
+            .saveAsTable(f"{s}.drafts")
+        )
+        if queue:
+            to_queue(queue)
+        queued += len(queue)
+        print(f"묶음 {n // NEW_CARD_GROUP + 1} 새 카드 {len(answers)}장을 썼다")
+    print(
+        f"새 카드 {len(prompts)}장, 초안 {counts['draft']}, 사람이 정할 것 {counts['needs_human']}, "
+        f"검사에 걸린 초안 {counts['problems']}, 모델 호출 실패 {counts['model_error']}, 검수 대기 {queued}건, "
+        f"다시 올린 초안 {len(refill)}건, 형식 오류로 다시 물은 카드 {retried_cards}장"
+    )
+    if counts["model_error"]:
+        raise SystemExit(
+            f"모델 호출이 실패한 카드 {counts['model_error']}장. 다음 실행에서 다시 추출한다. 두 번 실패한 카드는 건너뛴다"
         )
 
 

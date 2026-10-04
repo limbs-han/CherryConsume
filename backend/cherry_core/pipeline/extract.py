@@ -50,10 +50,15 @@ def process_answer(
             return Outcome("no_change")
         return Outcome("draft", draft_yaml=canonical_text(draft), problems=check_draft(files, path, draft))
     except ValidationError as e:
-        where = ", ".join(".".join(map(str, x["loc"])) for x in e.errors()[:3])
-        return Outcome("needs_human", f"규칙 형식 오류 {e.error_count()}곳: {where}", errors=_errors(e))
+        return invalid(e)
     except Exception as e:  # noqa: BLE001 모델의 답은 어떤 모양이든 올 수 있다. 무엇이든 사람이 본다
         return Outcome("needs_human", f"답을 초안으로 바꾸지 못했다: {type(e).__name__}: {e}"[:500])
+
+
+def invalid(e: ValidationError) -> Outcome:
+    """규칙 형식 오류. 칸마다의 오류를 붙여 한 번 더 묻는다. 새 카드 초안도 쓴다."""
+    where = ", ".join(".".join(map(str, x["loc"])) for x in e.errors()[:3])
+    return Outcome("needs_human", f"규칙 형식 오류 {e.error_count()}곳: {where}", errors=_errors(e))
 
 
 def _errors(e: ValidationError) -> list[str]:

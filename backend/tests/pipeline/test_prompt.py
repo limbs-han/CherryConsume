@@ -166,3 +166,25 @@ def test_golden_prompt_shows_benefit_keys_without_titles(make_catalog):
     assert "지금 혜택 key: cafe-10" in prompt.splitlines()
     assert "카페 10% 할인" not in prompt
     assert "카페 10% 할인" in build_prompt(card, current, [], codes)  # 바뀐 원문 추출은 제목도 준다
+
+
+def test_new_card_prompt_gives_issuer_defaults_and_asks_kind_only_when_unknown(make_catalog):
+    codes = catalog_codes(load_catalog(make_catalog()))
+    card = {"id": "shinhan-t0002", "name": "신한카드 새 카드"}
+    defaults = {"spend": {"basis": "prev_calendar_month", "exclude_categories": ["tax"]}}
+    prompt = build_prompt(card, {}, [("page", "카페 할인")], codes, titles=False, defaults=defaults, ask_kind=True)
+    assert "지금 혜택 key: 없음" in prompt and "지금 한도 key: 없음" in prompt
+    assert "카드사 기본값." in prompt and '"exclude_categories": ["tax"]' in prompt
+    assert "kind_evidence" in prompt
+    assert json.dumps(answer_schema(kind=True), ensure_ascii=False, separators=(",", ":")) in prompt
+    schema = answer_schema(kind=True)
+    assert {"kind", "kind_evidence"} <= set(schema["required"]) and "kind" not in answer_schema()["properties"]
+    # 색인에 종류가 있으면 묻지 않는다
+    assert "kind_evidence" not in build_prompt(card, {}, [("page", "카페 할인")], codes, defaults=defaults)
+
+
+def test_issuer_without_defaults_gets_no_defaults_part(make_catalog):
+    # 농협, IBK, 카카오뱅크는 카드사 기본값이 없다. "따르므로 적지 않는다"를 붙이면 모델이 실적 규칙을 빼 형식 오류가 난다
+    codes = catalog_codes(load_catalog(make_catalog()))
+    card = {"id": "nh-x", "name": "농협 새 카드"}
+    assert "카드사 기본값." not in build_prompt(card, {}, [("page", "할인")], codes, titles=False, defaults={})

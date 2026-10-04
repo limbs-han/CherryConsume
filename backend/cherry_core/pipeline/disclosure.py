@@ -14,6 +14,7 @@ import hashlib
 import html
 import json
 import re
+import time
 from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from datetime import date, timedelta
@@ -495,13 +496,31 @@ def _woori(content: bytes) -> list[IndexRow]:
                 "woori",
                 name,
                 code=c["code"],
-                kind="check" if "체크" in name or "CHECK" in name.upper() else None,
+                kind=kind_from_name(name),
                 status="discontinued" if stopped else "on_sale",
                 discontinued_on=_date(c.get("issuDt")) if stopped else None,
                 page_url=f"https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd={c['code']}",
             )
         )
     return out
+
+
+def _woori_detail(content: bytes) -> list[IndexRow]:
+    # 카드 상세의 cdPrdCfcd는 1이 신용, 2가 체크다. 카드 안내의 신용 탭 카드는 모두 1, 체크 탭 카드는 모두 2였다
+    # 2026-10-05 상세 117장 가운데 2장은 카드 정보 없이 비어 있었다. 그 카드는 종류가 빈다
+    # 상세 하나를 못 읽어 우리 색인 전체가 멈추지 않게 모양이 다르면 행을 내지 않는다. 위험 검토
+    try:
+        card = _json(content)["resultVo"]["crd01DtlVo"]
+    except (ValueError, KeyError, TypeError):
+        return []
+    if (
+        not isinstance(card, dict)
+        or not isinstance(card.get("cdPrdCd"), str)
+        or not isinstance(card.get("cdPrdNm"), str)
+    ):
+        return []
+    kind = {"1": "credit", "2": "check"}.get(card.get("cdPrdCfcd"))
+    return [IndexRow("woori", _clean(card["cdPrdNm"]), code=card["cdPrdCd"], kind=kind, enrich_only=True)]
 
 
 def _hana_json(content: bytes):
@@ -570,6 +589,7 @@ READERS: dict[tuple[str, str], Callable[[bytes], list[IndexRow]]] = {
     ("samsung", "check"): _samsung_check,
     ("samsung", "terms"): _samsung_terms,
     ("woori", "disclosure"): _woori,
+    ("woori", "detail"): _woori_detail,
     ("hana", "categories"): lambda content: [],
     ("hana", "cards"): _hana_cards,
     ("carddamoa", "recommend"): _carddamoa,
@@ -583,6 +603,7 @@ MAY_BE_EMPTY = {
     ("hyundai", "cards"),
     ("lotte", "cards"),
     ("samsung", "terms"),
+    ("woori", "detail"),
 }
 
 
@@ -621,10 +642,34 @@ class Request:
 Fetch = Callable[[Request], bytes]
 # 단종된 지 이만큼 지난 카드는 색인에만 두고 원문을 받지 않는다. 설계 1절
 COLLECT_YEARS = 3
+WOORI_DETAIL_SECONDS = 3600
+
+
+# 법인과 기업 카드의 이름. 개인이 쓰는 앱이라 새 카드 초안과 수집 대상에서 뺀다. 색인에는 남는다. 2026-10-05 사용자가 정했다
+# biz는 영어 낱말일 때만 건다. Bizzy는 남기고 Biz카드는 건다
+_CORPORATE = re.compile(r"법인|기업|기관|비즈니스|business|corporate|(?<![a-z])biz(?![a-z])", re.IGNORECASE)
+# 법인 낱말이 들어도 개인이 쓰는 카드. 학생 카드, 임직원 복지 카드. 2026-10-05 위험 검토에서 우리 목록에 있었다
+_PERSONAL = re.compile(r"개인|임직원|복지|welfare|학교|학생", re.IGNORECASE)
+
+
+def corporate(name: str) -> bool:
+    """이름으로 본 법인과 기업 카드. 한국사회적기업진흥원 지원금 체크카드(개인), 회계법인 임직원 복지 카드는 개인 카드다."""
+    return bool(_CORPORATE.search(name)) and not _PERSONAL.search(name)
+
+
+def kind_from_name(name: str) -> str | None:
+    """공식 이름에 신용과 체크 가운데 하나만 있으면 그 종류. 둘 다 있거나 없으면 None이다.
+
+    공식 목록에 종류가 없을 때만 쓴다. 농협의 지자체 카드처럼 이름 끝에 (신용), (체크)를 붙인 카드가 많다. 작업 008 설계 3절.
+    """
+    credit, check = "신용" in name, "체크" in name or "CHECK" in name.upper()
+    return "credit" if credit and not check else "check" if check and not credit else None
 
 
 def collectable(row: IndexRow, today: date) -> bool:
-    """판매 중이거나 단종된 지 3년이 안 된 카드. 단종일을 모르는 단종 카드는 받는다."""
+    """판매 중이거나 단종된 지 3년이 안 된 개인 카드. 단종일을 모르는 단종 카드는 받는다."""
+    if corporate(row.name):
+        return False
     if row.status == "on_sale" or row.discontinued_on is None:
         return True
     return row.discontinued_on > today - timedelta(days=round(365.25 * COLLECT_YEARS))
@@ -682,8 +727,9 @@ def _ibk_plan(fetch: Fetch, today: date) -> None:
 
 def _nh_plan(fetch: Fetch, today: date) -> None:
     url = "https://card.nonghyup.com/servlet/IpCc1210I.jct"
-    # 전체 목록에는 신용과 체크 구분이 없어 체크 목록을 따로 받아 카드 코드로 합친다
-    for gubun, suffix in (("", ""), ("IPCC0106", "-check")):
+    # 전체 목록에는 신용과 체크 구분이 없어 화면의 두 분류 신용과 체크 목록을 따로 받아 카드 코드로 합친다
+    # 2026-10-05 체크 목록만 받아 신용 카드의 종류가 비었다. 두 목록 어디에도 없는 카드는 이름으로 정한다
+    for gubun, suffix in (("", ""), ("IPCC0105", "-credit"), ("IPCC0106", "-check")):
         _paged(
             fetch,
             lambda n, gubun=gubun, suffix=suffix: Request(
@@ -805,6 +851,29 @@ def _woori_plan(fetch: Fetch, today: date) -> None:
     data = _json(body)["mainDataList"]
     if len(data["cct11PrdntcAgrmMainVo"]) < int(data["totCnt"]):
         raise ValueError(f"우리 공시 {data['totCnt']}건 가운데 {len(data['cct11PrdntcAgrmMainVo'])}건만 왔다")
+    # 공시 목록에는 신용과 체크 구분이 없다. 종류를 모르는 수집 대상 카드마다 카드 상세 화면이 부르는 응답을 받는다
+    # 상세는 종류를 채우는 것뿐이라 하나가 실패하면 남은 상세를 열지 않고 공시 묶음은 그대로 쓴다. 작업 008 설계 3절
+    # 상세는 60분까지만 연다. 원문 받기 240분 제한에 걸리면 공시 묶음까지 버려진다. 2026-10-05 371장에 26분 걸렸다
+    started, failed = time.monotonic(), 0
+    for row in _woori(body):
+        if row.kind or not collectable(row, today):
+            continue
+        if time.monotonic() - started > WOORI_DETAIL_SECONDS:
+            print("우리 상세가 60분을 넘어 그만 연다. 남은 카드는 종류가 빈다")
+            break
+        try:
+            fetch(Request(f"detail-{row.code}", row.page_url, capture="searchCrdDtl.pwkjson"))
+            failed = 0
+        except Exception as e:
+            # 거절 답은 차단 신호라 그 카드사를 실패로 센다. 수집기가 같은 사이트의 상품 페이지를 이어서 열지 않는다
+            if getattr(e, "code", None) in (403, 429):
+                raise
+            failed += 1
+            print(f"우리 상세 실패 {row.code}: {type(e).__name__}. 그 카드는 종류가 빈다")
+            # 세 번 잇달아 실패하면 사이트에 부담을 주지 않게 남은 상세는 열지 않는다. 수집기의 끊김 규칙과 같다
+            if failed >= 3:
+                print("우리 상세를 그만 연다. 남은 카드는 종류가 빈다")
+                break
 
 
 def _hana_plan(fetch: Fetch, today: date) -> None:
@@ -913,6 +982,7 @@ def merge_rows(rows: list[IndexRow]) -> tuple[list[IndexRow], list[IndexRow]]:
         for n in extra:
             out[i] = _join(out[i], out[n])
         out = [o for n, o in enumerate(out) if n not in extra]
+    out = [r if r.kind else replace(r, kind=kind_from_name(r.name)) for r in out]
     return [r for r in out if not r.enrich_only], [r for r in out if r.enrich_only]
 
 

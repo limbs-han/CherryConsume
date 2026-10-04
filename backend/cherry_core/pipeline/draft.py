@@ -206,20 +206,7 @@ def make_draft(
         path = f"revisions[{len(revisions) - 1}].effective_from"
         questions.append({"path": path, "question": "원문에서 시행일을 찾지 못해 수집한 날로 두었다"})
     here = f"revisions[{len(revisions) - 1}]"
-    asks = [{"path": here, "question": note} for note in notes]
-    for q in extracted.get("open_questions", []):
-        q = q if isinstance(q, dict) else {"question": str(q)}
-        if not q.get("question"):
-            continue
-        # 모델이 준 주소가 새 개정 안에 있으면 쓴다. 지은 주소면 질문 글 앞에 붙이고 주소는 새 개정으로 둔다
-        given = str(q.get("path") or "").removeprefix("rules.")
-        if given and path_exists(out, f"{here}.{given}"):
-            asked = {"path": f"{here}.{given}", "question": q["question"]}
-        else:
-            asked = {"path": here, "question": f"{given}: {q['question']}" if given else q["question"]}
-        if q.get("assumed") is not None:
-            asked["assumed"] = q["assumed"]
-        asks.append(asked)
+    asks = [{"path": here, "question": note} for note in notes] + model_questions(out, here, extracted)
     questions += [a for a in asks if a not in questions]
     if questions:
         out["open_questions"] = questions
@@ -227,6 +214,25 @@ def make_draft(
         if s["id"] == extracted["source"]:
             s["fetched_at"] = fetched
     out["checked_at"] = fetched
+    return out
+
+
+def model_questions(card: dict, here: str, extracted: dict) -> list[dict]:
+    """모델이 준 확인 필요 항목. here는 새 개정의 주소다. 새 카드 초안도 쓴다."""
+    out = []
+    for q in extracted.get("open_questions", []):
+        q = q if isinstance(q, dict) else {"question": str(q)}
+        if not q.get("question"):
+            continue
+        # 모델이 준 주소가 새 개정 안에 있으면 쓴다. 지은 주소면 질문 글 앞에 붙이고 주소는 새 개정으로 둔다
+        given = str(q.get("path") or "").removeprefix("rules.")
+        if given and path_exists(card, f"{here}.{given}"):
+            asked = {"path": f"{here}.{given}", "question": q["question"]}
+        else:
+            asked = {"path": here, "question": f"{given}: {q['question']}" if given else q["question"]}
+        if q.get("assumed") is not None:
+            asked["assumed"] = q["assumed"]
+        out.append(asked)
     return out
 
 

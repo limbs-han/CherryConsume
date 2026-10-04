@@ -2,6 +2,7 @@
 # 정답 예시로 모델을 시험할 때 mode golden으로 돌린다. 바뀐 원문의 추출은 cherry_refresh가 extract_model 변수로 한다
 # 비용 차단 태그를 붙인다. 예약과 트리거가 없어 차단 작업은 설정을 바꾸지 않고, 한도를 넘으면 돌고 있는 실행만 취소한다
 # mode changes는 cherry_refresh가 돌지 않을 때만 쓴다. 두 작업은 서로를 기다리지 않아 같은 변경을 두 번 추출할 수 있다
+# mode new_card는 색인에서 카탈로그에 없는 카드의 새 초안을 만든다. issuer로 카드사를 고르고 limit장까지 만든다. 작업 008 설계 3절
 variables:
   extract_model:
     description: cherry_refresh가 바뀐 원문을 추출할 모델. 비면 추출하지 않는다. 운영은 과제 19에서 고른 모델을 databricks.yml 운영 대상에 넣었다
@@ -25,6 +26,10 @@ resources:
           default: tune
         - name: max_tokens
           default: "25000"
+        - name: issuer
+          default: ""
+        - name: limit
+          default: "10"
       tasks:
         - task_key: extract
           # 서버리스가 실패한 단계를 저절로 다시 돌리면 모델 요금이 두 번 나온다
@@ -44,6 +49,12 @@ resources:
               - "{{job.parameters.split}}"
               - "--max-tokens"
               - "{{job.parameters.max_tokens}}"
+              - "--bronze"
+              - "${resources.schemas.bronze.name}"
+              - "--issuer"
+              - "{{job.parameters.issuer}}"
+              - "--limit"
+              - "{{job.parameters.limit}}"
           environment_key: default
           timeout_seconds: 3600
       environments:
