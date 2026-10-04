@@ -1,4 +1,4 @@
-# 63 작업 008 5단계 색인 카드 원문 받기
+# 64 작업 008 5단계 색인 카드 원문 받기
 
 - 날짜: 2026-10-04
 - 결과물: [작업 008 계획](../work/008-catalog-all-cards/plan.md), [수집기](../../backend/cherry_core/pipeline/collect.py)
