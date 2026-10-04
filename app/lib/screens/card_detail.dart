@@ -24,6 +24,7 @@ class CardDetailScreen extends StatefulWidget {
 
 class _CardDetailScreenState extends State<CardDetailScreen> {
   late Future<CardDetail> _detail = widget.api.cardDetail(widget.id);
+  bool _lockedOpen = false;
 
   /// 카드 사실, 옵션, 쓰기 시작한 날을 답하고 다시 불러온다. 처음 답은 모든 결제에, 바꾼 답은 바뀌는 날부터다. E56
   Future<void> _answer(Map<String, Object?> body) async {
@@ -128,19 +129,73 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
   List<Widget> _body(CardDetail d) {
     final s = d.spend;
     final tier = s.tier ?? 0;
-    // 함께 쓰는 한도마다 회색 상자 하나를 두고 그 한도를 쓰는 혜택을 안에 묶는다. 둘 이상을 쓰는 혜택은 처음 것에 둔다.
-    // 작업 011 설계 2절 D3, D5
-    final boxes = [
-      for (final l in d.limits)
-        if (l.isShared) l,
-    ];
-    final keys = {for (final l in boxes) l.key};
-    String? boxOf(Limit l) =>
-        l.isShared ? null : l.shared.where(keys.contains).firstOrNull;
+    // 함께 쓰는 한도 상자. 같은 혜택들이 쓰는 한도는 한 상자에 두고 제목을 한 번만 쓴다. 놀이공원 할인의 월 1회와 연
+    // 2회다. 다른 상자 혜택의 일부만 쓰는 한도는 그 상자 안의 흰 상자다. KB Easy all의 해외·면세점 한도가 통합 한도
+    // 안에 든다. 혜택은 자기가 쓰는 상자 가운데 가장 작은 상자에 둔다. 2026-10-05 실제 폰에서 한 상자가 비거나 같은
+    // 제목이 겹쳐 보여 고쳤다. 작업 011 설계 2절 D3, D5, F7, F8
+    final groups = <String, List<Limit>>{};
+    final members = <String, Set<String>>{};
+    for (final l in d.limits) {
+      if (!l.isShared) continue;
+      final users = {
+        for (final b in d.limits)
+          if (!b.isShared && b.shared.contains(l.key)) b.key,
+      };
+      final id = (users.toList()..sort()).join('|');
+      (groups[id] ??= []).add(l);
+      members[id] = users;
+    }
+    String? smallest(Iterable<String> ids) => ids.isEmpty
+        ? null
+        : ids.reduce(
+            (a, b) => members[a]!.length <= members[b]!.length ? a : b,
+          );
+    final parent = {
+      for (final g in groups.keys)
+        g: smallest([
+          for (final h in groups.keys)
+            if (members[h]!.length > members[g]!.length &&
+                members[h]!.containsAll(members[g]!))
+              h,
+        ]),
+    };
+    String? boxOf(Limit l) => l.isShared
+        ? null
+        : smallest([
+            for (final g in groups.keys)
+              if (members[g]!.contains(l.key)) g,
+          ]);
     final each = [
       for (final l in d.limits)
         if (!l.isShared && boxOf(l) == null) l,
     ];
+    Widget sharedBox(String g, int depth) => Container(
+      margin: EdgeInsets.only(top: depth > 0 ? 4 : 0, bottom: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: depth > 0 ? 12 : 16,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: depth.isEven ? C.grey : Colors.white,
+        borderRadius: BorderRadius.circular(depth > 0 ? 12 : 16),
+      ),
+      child: Column(
+        children: [
+          for (final (i, l) in groups[g]!.indexed) _LimitRow(l, title: i == 0),
+          for (final l in d.limits)
+            if (boxOf(l) == g) _LimitRow(l),
+          for (final h in groups.keys)
+            if (parent[h] == g) sharedBox(h, depth + 1),
+        ],
+      ),
+    );
+    // 못 받는 혜택을 필요한 구간마다 묶는다. 낮은 구간부터다
+    final lockedByTier =
+        <int, List<({String title, int requiredTier, int remaining})>>{};
+    for (final l in d.locked) {
+      (lockedByTier[l.requiredTier] ??= []).add(l);
+    }
+    final lockedTiers = lockedByTier.keys.toList()..sort();
     return [
       Box(
         child: Column(
@@ -212,7 +267,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
           ],
         ),
       ),
-      if (d.limits.isNotEmpty || d.locked.isNotEmpty) ...[
+      if (d.limits.isNotEmpty) ...[
         const SizedBox(height: 12),
         Box(
           child: Column(
@@ -227,73 +282,111 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              for (final box in boxes)
-                Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                  decoration: const BoxDecoration(
-                    color: C.grey,
-                    borderRadius: r16,
-                  ),
-                  child: Column(
-                    children: [
-                      _LimitRow(box),
-                      for (final l in d.limits)
-                        if (boxOf(l) == box.key) _LimitRow(l),
-                    ],
-                  ),
-                ),
+              for (final g in groups.keys)
+                if (parent[g] == null) sharedBox(g, 0),
               for (final l in each) _LimitRow(l),
-              if (d.locked.isNotEmpty) ...[
-                const SizedBox(height: 12),
-                const Text(
-                  '구간이 모자라 아직 못 받는 혜택',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: C.sub,
-                  ),
-                ),
-                for (final l in d.locked)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+            ],
+          ),
+        ),
+      ],
+      // 구간이 모자라 아직 못 받는 혜택은 이번 달 혜택과 따로 접어 둔다. 섞여 있으면 정보가 너무 많다. 금액은 그 구간까지
+      // 남은 실적이다. 2026-10-05 사용자가 실제 폰에서 정했다. E37, 작업 011 설계 2절 F3, F4
+      if (d.locked.isNotEmpty) ...[
+        const SizedBox(height: 12),
+        Box(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Semantics(
+                button: true,
+                expanded: _lockedOpen,
+                child: Pressable(
+                  onTap: () => setState(() => _lockedOpen = !_lockedOpen),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                l.title,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                  color: C.text,
-                                ),
-                              ),
-                              Text(
-                                '${man(l.requiredTier)} 구간부터 · 다음 달부터 받아요',
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: C.faint,
-                                ),
-                              ),
-                            ],
+                        const Expanded(
+                          child: Text(
+                            '구간이 모자라 아직 못 받는 혜택',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: C.text,
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 12),
                         Text(
-                          '${man(l.remaining)} 더',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                            color: C.amber,
-                          ),
+                          '${d.locked.length}개',
+                          style: const TextStyle(fontSize: 15, color: C.sub),
+                        ),
+                        Icon(
+                          _lockedOpen ? Icons.expand_less : Icons.expand_more,
+                          color: C.faint,
                         ),
                       ],
                     ),
                   ),
-              ],
+                ),
+              ),
+              // 같은 구간의 혜택은 남은 금액이 같아 구간마다 머리줄에 한 번만 쓰고 아래에 이름만 둔다. 줄마다 "29.6만 더"가
+              // 되풀이되어 어색했다. 2026-10-05 사용자가 골랐다. 작업 011 설계 2절 F4
+              if (_lockedOpen)
+                for (final tier in lockedTiers) ...[
+                  Text.rich(
+                    lockedByTier[tier]!.first.remaining > 0
+                        ? TextSpan(
+                            children: [
+                              TextSpan(text: '${man(tier)} 구간까지 '),
+                              TextSpan(
+                                text: _left(
+                                  lockedByTier[tier]!.first.remaining,
+                                ),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: C.amber,
+                                ),
+                              ),
+                              const TextSpan(text: ' 남았어요'),
+                            ],
+                          )
+                        : TextSpan(text: '${man(tier)} 구간 실적을 채웠어요'),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: C.text,
+                    ),
+                  ),
+                  const Text(
+                    '다음 달부터 받아요',
+                    style: TextStyle(fontSize: 13, color: C.faint),
+                  ),
+                  const SizedBox(height: 6),
+                  for (final l in lockedByTier[tier]!)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '·  ',
+                            style: TextStyle(fontSize: 14, color: C.faint),
+                          ),
+                          Expanded(
+                            child: Text(
+                              l.title,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: C.text,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 16),
+                ],
             ],
           ),
         ),
@@ -472,7 +565,23 @@ class _Pair extends StatelessWidget {
   );
 }
 
+/// 남은 금액. 1만 원부터는 "29.6만 원", 아래는 "5,000원"이다
+String _left(int n) => n >= 10000 ? '${man(n)} 원' : won(n);
+
+/// 막대가 찬 몫. 눈금을 같은 간격으로 두고 눈금 사이에서는 금액 비율대로 찬다. 구간 0은 막대 시작이다. 작업 011 설계 2절 F2
+double tierFill(List<int> tiers, int counted) {
+  var low = 0;
+  for (final (i, t) in tiers.indexed) {
+    if (counted < t) return (i + (counted - low) / (t - low)) / tiers.length;
+    low = t;
+  }
+  return 1;
+}
+
 /// 구간 눈금이 있는 실적 막대. 끝은 가장 높은 구간이다. 0.6초 동안 차오른다. 설계 2절 D1
+///
+/// 눈금은 금액 비율이 아니라 같은 간격이다. 비율대로 두면 IBK 나라사랑의 20만과 25만처럼 가까운 구간의 글자가 겹쳤고,
+/// 겹친 글자를 아랫줄로 내린 것도 이상했다. 2026-10-05 사용자가 골랐다. 작업 011 설계 2절 F2
 class TierBar extends StatelessWidget {
   const TierBar({super.key, required this.tiers, required this.counted});
   final List<int> tiers;
@@ -480,16 +589,30 @@ class TierBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final top = tiers.last;
+    final n = tiers.length;
+    final style = DefaultTextStyle.of(
+      context,
+    ).style.merge(const TextStyle(fontSize: 12, color: C.sub));
+    // 끝 구간 글자도 눈금 가운데에 두려고 막대를 그 글자 폭의 절반만큼 줄인다. 끝에 오른쪽을 맞추면 끝 글자가 안으로
+    // 당겨져 앞 글자와 붙었다
+    final half =
+        (TextPainter(
+          text: TextSpan(text: man(tiers.last), style: style),
+          textDirection: TextDirection.ltr,
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout()).width /
+        2;
     return LayoutBuilder(
       builder: (context, box) {
-        final w = box.maxWidth;
+        final w = box.maxWidth - half;
+        final slot = w / n;
         return SizedBox(
           height: 36,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
               Container(
+                width: w,
                 height: 8,
                 decoration: BoxDecoration(
                   color: C.bg,
@@ -497,7 +620,7 @@ class TierBar extends StatelessWidget {
                 ),
               ),
               TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: (counted / top).clamp(0, 1)),
+                tween: Tween(begin: 0, end: tierFill(tiers, counted)),
                 duration: MediaQuery.disableAnimationsOf(context)
                     ? Duration.zero
                     : const Duration(milliseconds: 600),
@@ -511,23 +634,20 @@ class TierBar extends StatelessWidget {
                   ),
                 ),
               ),
-              for (final t in tiers) ...[
-                if (t < top)
+              for (final (i, t) in tiers.indexed) ...[
+                if (i < n - 1)
                   Positioned(
-                    left: w * t / top - 1,
+                    left: slot * (i + 1) - 1,
                     top: -2,
                     child: Container(width: 2, height: 12, color: C.line),
                   ),
+                // 글자는 제 크기로 눈금 가운데에 둔다
                 Positioned(
-                  // 끝 구간 글자는 막대 끝에 오른쪽을 맞춘다
-                  left: t < top ? w * t / top - 24 : null,
-                  right: t < top ? null : 0,
+                  left: slot * (i + 1),
                   top: 16,
-                  width: t < top ? 48 : null,
-                  child: Text(
-                    man(t),
-                    textAlign: t < top ? TextAlign.center : TextAlign.end,
-                    style: const TextStyle(fontSize: 12, color: C.sub),
+                  child: FractionalTranslation(
+                    translation: const Offset(-0.5, 0),
+                    child: Text(man(t), style: style),
                   ),
                 ),
               ],
@@ -542,8 +662,11 @@ class TierBar extends StatelessWidget {
 /// 혜택 한 줄. 남은 양 / 한도. 금액, 횟수, 결제액 한도 가운데 남은 비율이 가장 작은 것을 보인다. 먼저 끝나는 쪽이다.
 /// 다 써도 0 아래로 내려가지 않는다. 이번 달이 아닌 한도는 기간을 앞에 붙인다
 class _LimitRow extends StatelessWidget {
-  const _LimitRow(this.l);
+  const _LimitRow(this.l, {this.title = true});
   final Limit l;
+
+  /// 한 상자에 함께 쓰는 한도 줄이 여럿이면 첫 줄만 이름을 쓴다
+  final bool title;
 
   // 이름 아래에 조건 한 줄을 둔다. 기간 한도가 없는 혜택은 오른쪽 값이 없다. 작업 011 설계 2절 D5
   @override
@@ -554,7 +677,7 @@ class _LimitRow extends StatelessWidget {
       children: [
         _Pair(
           Text(
-            l.title,
+            title ? l.title : '',
             style: TextStyle(
               fontSize: 15,
               fontWeight: l.isShared ? FontWeight.w800 : FontWeight.w700,
