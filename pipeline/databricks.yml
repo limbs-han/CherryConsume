@@ -36,12 +36,17 @@ targets:
     variables:
       # 2026-10-02 과제 19 3단계에서 사용자가 골랐다. 설계 4절 3번
       extract_model: system.ai.gpt-oss-120b
+      # 작업 010. 운영 이력 표는 전체 다시 쌓기를 막는다
+      history_reset_allowed: "false"
     resources:
       jobs:
         cherry_cost_guard:
           schedule:
             pause_status: UNPAUSED
         cherry_refresh:
+          trigger:
+            pause_status: UNPAUSED
+        cherry_history_refresh:
           trigger:
             pause_status: UNPAUSED
       apps:

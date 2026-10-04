@@ -32,6 +32,7 @@ from cherry_core.pipeline.approve import (
     unexpected_renewals,
 )
 from cherry_core.pipeline.export import REVIEW_ID
+from cherry_core.pipeline.history import change_feed_sql
 from cherry_core.pipeline.seed import digest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
@@ -372,6 +373,11 @@ def main(argv: list[str] | None = None) -> None:
     )
     print("2/5 gold.catalog_files")
 
+    # 개정 이력 파이프라인이 이 표의 변경 데이터 피드를 읽는다. 쓰기 전에 모자란 설정만 켠다. 서비스 주체라 운영 표도 된다
+    # 작업 010 설계 1절
+    current = {r.key: r.value for r in spark.sql(f"SHOW TBLPROPERTIES {revisions_t}").collect()}
+    if alter := change_feed_sql(revisions_t, current):
+        spark.sql(alter)
     same = " AND ".join(f"t.{k} <=> s.{k}" for k in KEY)
     # 여섯 칸이 같은 행은 건드리지 않아 검수 번호와 시각이 그대로 남는다. 없어진 행은 지운다
     spark.sql(

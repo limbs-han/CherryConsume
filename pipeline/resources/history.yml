@@ -1,0 +1,47 @@
+# 카드 개정 변경 이력. 작업 010 설계 1절과 2절. 코드는 src/history.py
+# 골드 card_revisions가 바뀌면 표 바뀜 트리거가 작업을 켜고, 작업은 파이프라인을 한 번 돌린다
+# pause_status를 여기 적으면 개발용에서도 트리거가 켜진다. 운영용에서만 databricks.yml이 켠다
+variables:
+  history_reset_allowed:
+    description: 이력 표의 전체 다시 쌓기를 허락하는지. 운영은 false다. 이력은 되살릴 곳이 없다
+    default: "true"
+
+resources:
+  pipelines:
+    cherry_history:
+      name: cherry_history
+      catalog: cherry
+      # 이력 표는 실버에 둔다. 운영 대시보드가 실버 스키마의 표를 스키마 없이 읽는다. 원천은 골드다
+      schema: ${resources.schemas.silver.name}
+      serverless: true
+      libraries:
+        - file:
+            path: ../src/history.py
+      configuration:
+        cherry.gold: ${resources.schemas.gold.name}
+        cherry.history_reset_allowed: ${var.history_reset_allowed}
+
+  jobs:
+    cherry_history_refresh:
+      name: cherry_history_refresh
+      tags:
+        cherry_guard: ${bundle.target}
+      trigger:
+        # 승인이 몇 분 사이에 여럿이면 마지막 바뀜 뒤 1분 기다렸다가 한 번 돈다
+        table_update:
+          table_names:
+            - cherry.${resources.schemas.gold.name}.card_revisions
+          condition: ANY_UPDATED
+          wait_after_last_change_seconds: 60
+          min_time_between_triggers_seconds: 3600
+      max_concurrent_runs: 1
+      # 도는 중에 다음 승인이 오면 건너뛰지 않고 줄을 세운다
+      queue:
+        enabled: true
+      email_notifications:
+        on_failure: ["${var.alert_email}"]
+      tasks:
+        - task_key: history
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.cherry_history.id}
+          timeout_seconds: 1800

@@ -10,6 +10,7 @@ gold.catalog_files를 마지막에 쓴다. 앞에서 실패하면 다시 돌릴 
 import argparse
 from pathlib import Path
 
+from cherry_core.pipeline.history import change_feed_sql
 from cherry_core.pipeline.seed import (
     INITIAL,
     digest,
@@ -105,6 +106,11 @@ def main(argv: list[str] | None = None) -> None:
             .write.mode("append")
             .saveAsTable(files_t)
         )
+    # 개정 이력 파이프라인이 변경 데이터 피드를 읽는다. 덮어쓰기가 표 설정을 지울 수 있어 쓰고 난 뒤에 켠다
+    # 모자란 설정만 쓴다. 같은 값을 다시 써도 표에 새 판이 생겨 이력 작업이 한 번 더 돈다. 작업 010 설계 1절
+    current = {r.key: r.value for r in spark.sql(f"SHOW TBLPROPERTIES {revisions_t}").collect()}
+    if alter := change_feed_sql(revisions_t, current):
+        spark.sql(alter)
     (
         spark.createDataFrame(
             golden_rows(cat, first_paths(spark, documents_t)), without_last(GOLDEN)
