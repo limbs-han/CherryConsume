@@ -76,10 +76,11 @@ void main() {
     await tester.tap(again);
     await tester.pumpAndSettle();
 
-    expect(find.text('새 결제 1건 · 4,300원'), findsOneWidget);
-    expect(find.text('이미 있는 결제 1건은 넣지 않아요'), findsOneWidget);
+    // 새 결제와 겹친 결제는 숫자 타일과 합계로 보인다. 작업 011 설계 2절 I3
+    expect(find.text('합계 4,300원'), findsOneWidget);
+    expect(find.text('중복 제외'), findsOneWidget);
     expect(find.text('취소 1건을 원 결제에 붙여요'), findsOneWidget);
-    final save = find.widgetWithText(FilledButton, '저장');
+    final save = find.widgetWithText(FilledButton, '1건 저장');
     await tester.scrollUntilVisible(save, 200);
     await tester.tap(save);
     await tester.pumpAndSettle();

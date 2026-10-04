@@ -59,6 +59,28 @@ void main() {
     atBottom(tester, find.widgetWithText(FilledButton, '다시 읽기'));
   });
 
+  testWidgets('미리보기는 숫자 타일, 카드와 달과 합계, 날짜가 든 줄, N건 저장이다', (tester) async {
+    // 작업 011 설계 2절 I3. 열 이름이 사전에 있어 짝짓기 없이 미리보기가 된다. GS25 4,300원 한 건이다
+    await open(
+      tester,
+      pick: () async => (
+        name: '내역.csv',
+        bytes: Uint8List.fromList(
+          utf8.encode('이용일자,이용시간,가맹점명,이용금액\n2026.09.10,21:30,GS25 강남점,4300\n'),
+        ),
+      ),
+    );
+    await tester.tap(find.text('파일 고르기'));
+    await tester.pumpAndSettle();
+    for (final label in ['읽은 행', '저장 예정', '중복 제외', '업종 미정']) {
+      expect(find.text(label), findsOneWidget, reason: label);
+    }
+    expect(find.text('신한카드 Mr.Life · 2026년 9월'), findsOneWidget);
+    expect(find.text('합계 4,300원'), findsOneWidget);
+    expect(find.text('9/10'), findsOneWidget);
+    atBottom(tester, find.widgetWithText(FilledButton, '1건 저장'));
+  });
+
   testWidgets('2MB 넘는 파일을 고르면 앞 파일을 지워 그 파일로 저장하지 않는다', (tester) async {
     var n = 0;
     await open(

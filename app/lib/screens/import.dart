@@ -236,7 +236,8 @@ class _ImportScreenState extends State<ImportScreen> {
       final ready = s['new'] > 0 || s['cancels'] > 0;
       return FilledButton(
         onPressed: ready && !_busy ? () => _save(p) : null,
-        child: const Text('저장'),
+        // 시안대로 넣을 건수를 버튼에 쓴다. 취소만 붙이는 파일은 건수 없이 저장이다. 작업 011 설계 2절 I3
+        child: Text(s['new'] > 0 ? '${s['new']}건 저장' : '저장'),
       );
     }
     return FilledButton(
@@ -462,10 +463,10 @@ class _ImportScreenState extends State<ImportScreen> {
     ];
   }
 
+  /// 미리보기. 시안대로 숫자 타일, 카드와 달과 합계, 날짜가 든 줄이다. 업종을 여기서 정하는 칩은 새 기능이라 두지 않는다.
+  /// 작업 011 설계 2절 I3
   List<Widget> _previewView(ImportPreview p, Map<String, dynamic> s) {
-    final lines = [
-      '새 결제 ${s['new']}건 · ${won(s['amount'] as int)}',
-      if (s['duplicates'] > 0) '이미 있는 결제 ${s['duplicates']}건은 넣지 않아요',
+    final notes = [
       if (s['cancels'] > 0) '취소 ${s['cancels']}건을 원 결제에 붙여요',
       if (s['orphans'] > 0) '원 결제가 없거나 담지 못하는 취소 ${s['orphans']}건은 넣지 않아요',
       if (s['skipped'] > 0) '보유 카드가 아닌 행 ${s['skipped']}건은 넣지 않아요',
@@ -478,38 +479,201 @@ class _ImportScreenState extends State<ImportScreen> {
         '시각이 없는 결제 ${s['untimed']}건은 시간대 할인을 확인 필요로 둬요',
       '결제수단은 실물카드로 넣어요. 간편결제 이름이 찍힌 ${s['easy_pay'] ?? 0}건은 그 결제수단이에요',
     ];
+    // 결제 시각 글자의 앞 7자리가 한국 시간 연월이다
+    final months = {
+      for (final r in p.rows)
+        if (r['paid_at'] case final String at) at.substring(0, 7),
+    }.toList()..sort();
+    String month(String ym) =>
+        '${ym.substring(0, 4)}년 ${int.parse(ym.substring(5))}월';
+    final period = months.isEmpty
+        ? null
+        : months.length == 1
+        ? month(months.first)
+        : '${month(months.first)} ~ ${month(months.last)}';
+    final card = _card == null
+        ? '여러 카드'
+        : widget.cards.firstWhere((c) => c.id == _card).name;
+    final shown = p.rows.take(100).toList();
     return [
       const SizedBox(height: 16),
-      Box(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      Row(
+        children: [
+          _Tile('읽은 행', s['rows'] as int),
+          const SizedBox(width: 8),
+          _Tile('저장 예정', s['new'] as int, fg: C.green, bg: C.greenSoft),
+          const SizedBox(width: 8),
+          _Tile('중복 제외', s['duplicates'] as int),
+          const SizedBox(width: 8),
+          _Tile('업종 미정', s['uncategorized'] as int, fg: C.blue, bg: C.blueSoft),
+        ],
+      ),
+      const SizedBox(height: 12),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Row(
           children: [
-            for (final l in lines)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text(l, style: const TextStyle(color: C.text)),
+            Expanded(
+              child: Text(
+                [card, ?period].join(' · '),
+                style: const TextStyle(fontSize: 14, color: C.sub),
               ),
+            ),
+            Text(
+              '합계 ${won(s['amount'] as int)}',
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: C.text,
+              ),
+            ),
           ],
         ),
       ),
-      TextButton(
-        onPressed: _busy ? null : () => setState(() => _remap = true),
-        child: const Text('열 다시 짝짓기'),
-      ),
-      for (final r in p.rows.take(100))
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          dense: true,
-          title: Text('${r['merchant_name']} · ${won(r['amount'] as int)}'),
-          subtitle: Text(
-            [
-              if (r['card_name'] != null) r['card_name'],
-              _status[r['status']] ?? '',
-              if (r['reason'] != null) r['reason'],
-            ].join(' · '),
-          ),
+      const SizedBox(height: 8),
+      for (final n in notes)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+          child: Text(n, style: const TextStyle(fontSize: 13, color: C.sub)),
         ),
+      Align(
+        alignment: Alignment.centerLeft,
+        child: TextButton(
+          onPressed: _busy ? null : () => setState(() => _remap = true),
+          child: const Text('열 다시 짝짓기'),
+        ),
+      ),
+      Box(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            for (final (i, r) in shown.indexed) ...[
+              if (i > 0) const Divider(height: 1, color: C.line),
+              _PreviewRow(r, showCard: _card == null),
+            ],
+          ],
+        ),
+      ),
+      const Padding(
+        padding: EdgeInsets.fromLTRB(4, 12, 4, 0),
+        child: Text(
+          '저장하면 그 달 혜택과 다음 달 구간을 다시 계산해요. 가져온 묶음에서 통째로 되돌릴 수 있어요.',
+          style: TextStyle(fontSize: 12, color: C.sub),
+        ),
+      ),
     ];
+  }
+}
+
+/// 미리보기 숫자 타일 하나
+class _Tile extends StatelessWidget {
+  const _Tile(
+    this.label,
+    this.value, {
+    this.fg = C.text,
+    this.bg = Colors.white,
+  });
+  final String label;
+  final int value;
+  final Color fg, bg;
+
+  @override
+  Widget build(BuildContext context) => Expanded(
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      decoration: BoxDecoration(color: bg, borderRadius: r16),
+      child: Column(
+        children: [
+          Text(
+            '$value',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: fg,
+            ),
+          ),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: C.sub,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// 미리보기 한 줄. 날짜, 가맹점, 업종과 상태, 금액이다. 취소는 금액 앞에 빼기를 붙인다
+class _PreviewRow extends StatelessWidget {
+  const _PreviewRow(this.r, {required this.showCard});
+  final Map<String, dynamic> r;
+  final bool showCard;
+
+  @override
+  Widget build(BuildContext context) {
+    final at = r['paid_at'] as String?;
+    final cancel = r['status'] == 'cancel';
+    final sub = [
+      r['category_name'] ?? '업종 미정',
+      if (showCard && r['card_name'] != null) r['card_name'],
+      if (r['status'] != 'new' && !cancel) _status[r['status']] ?? '',
+      if (r['reason'] != null) r['reason'],
+    ].join(' · ');
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 44,
+            child: Text(
+              at == null
+                  ? ''
+                  : '${int.parse(at.substring(5, 7))}/${int.parse(at.substring(8, 10))}',
+              style: const TextStyle(fontSize: 13, color: C.sub),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${r['merchant_name'] ?? ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: C.text,
+                  ),
+                ),
+                Text(sub, style: const TextStyle(fontSize: 12, color: C.sub)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${cancel ? '-' : ''}${comma(r['amount'] as int? ?? 0)}',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: C.text,
+                ),
+              ),
+              if (cancel)
+                const Text('취소', style: TextStyle(fontSize: 12, color: C.sub)),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
