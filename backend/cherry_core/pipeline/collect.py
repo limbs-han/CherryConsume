@@ -39,6 +39,7 @@ from cherry_core.pipeline.disclosure import (
     read,
     row_key,
 )
+from cherry_core.pipeline.text import image_heavy
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3] / "catalog"
 AGENT = "cherryconsume-collector"
@@ -251,11 +252,24 @@ def index_targets(
     return out
 
 
-def save(out: Path, manifest: TextIO, t: Target, body: bytes, content_type: str, now: datetime) -> str:
-    """원문을 날짜별 폴더에 쓰고 목록 파일에 한 줄 더한다. 브론즈는 이 목록 파일을 읽는다."""
+def save(
+    out: Path,
+    manifest: TextIO,
+    t: Target,
+    body: bytes,
+    content_type: str,
+    now: datetime,
+    screenshot: bytes | None = None,
+) -> str:
+    """원문을 날짜별 폴더에 쓰고 목록 파일에 한 줄 더한다. 브론즈는 이 목록 파일을 읽는다.
+
+    스크린샷은 원문과 같은 이름의 .png로 둔다. 목록 파일에는 칸을 더하지 않고 글 뽑기가 같은 이름을 찾는다. 작업 008 8단계.
+    """
     rel = raw_path(t, now.date(), body, content_type)
     (out / rel).parent.mkdir(parents=True, exist_ok=True)
     (out / rel).write_bytes(body)
+    if screenshot is not None:
+        (out / rel).with_suffix(".png").write_bytes(screenshot)
     line = {**asdict(t), "path": rel, "fetched_at": now.isoformat(), "content_type": content_type}
     line["sha256"] = hashlib.sha256(body).hexdigest()
     manifest.write(json.dumps(line, ensure_ascii=False) + "\n")
@@ -299,9 +313,9 @@ class Fetcher:
                 print(f"건너뜀 {t.issuer} {t.card_id or '-'} {t.source_id}")
                 return
             if t.browser:
-                body, ctype = self._browser(t)
+                body, ctype, shot = self._browser(t)
             else:
-                body, ctype = _get(t.url)
+                (body, ctype), shot = _get(t.url), None
         except Exception as e:  # noqa: BLE001 한 곳이 실패해도 나머지는 받는다
             self.failed += 1
             code = f" {e.code}" if isinstance(e, urllib.error.HTTPError) else ""
@@ -321,10 +335,11 @@ class Fetcher:
         finally:
             time.sleep(DELAY_SECONDS)
         self.drops[t.issuer] = 0
-        save(self.out_dir, self.manifest, t, body, ctype, self.now)
+        save(self.out_dir, self.manifest, t, body, ctype, self.now, shot)
         self.saved += 1
 
-    def _browser(self, t: Target) -> tuple[bytes, str]:
+    def _browser(self, t: Target) -> tuple[bytes, str, bytes | None]:
+        from playwright.sync_api import Error as PlaywrightError
         from playwright.sync_api import TimeoutError as PlaywrightTimeout
 
         if self.page is None:
@@ -341,8 +356,37 @@ class Fetcher:
             self.page.wait_for_load_state("networkidle", timeout=15_000)
         except PlaywrightTimeout:
             pass  # 동영상을 넣은 페이지는 요청이 끊이지 않아 조용해지지 않는다. 현대카드 상품 목록
+        html, shot = self.page.content(), None
+        # 혜택을 이미지로 넣은 상품 페이지는 화면을 찍어 글 뽑기가 해석하게 한다. 작업 008 설계 4절
+        if t.kind == "product_page" and image_heavy(html):
+            try:
+                self._scroll(PlaywrightTimeout)
+                # 저장하는 HTML로 기준을 다시 잰다. 스크롤로 글이 나타나 기준을 벗어나면 HTML 글을 쓰게 찍지 않는다
+                html = self.page.content()
+                if image_heavy(html):
+                    shot = self.page.screenshot(full_page=True)
+            except PlaywrightError as e:
+                # 찍기가 실패해도 받은 HTML은 남긴다. 끊김으로 세지 않는다
+                print(f"찍기 실패 {t.issuer} {t.card_id or '-'} {t.source_id}: {type(e).__name__}")
         # 브라우저가 돌려준 글은 UTF-8이다. meta의 charset은 원래 페이지 것이라 머리에 적어 이긴다
-        return self.page.content().encode("utf-8"), "text/html; charset=utf-8"
+        return html.encode("utf-8"), "text/html; charset=utf-8", shot
+
+    def _scroll(self, timeout: type[Exception]) -> None:
+        """페이지 끝까지 천천히 내렸다 올린다. 스크롤해야 나타나는 내용을 띄워야 전체 화면을 찍어도 비지 않는다.
+
+        2026-10-04 현대와 카카오뱅크 상품 페이지는 내리지 않고 찍으면 가운데가 비었다.
+        ponytail: 한 번에 800픽셀씩 60번까지다. 더 긴 페이지는 아래가 빌 수 있다.
+        """
+        height = self.page.evaluate("document.body.scrollHeight")
+        for y in range(0, min(height, 800 * 60), 800):
+            self.page.evaluate(f"window.scrollTo(0, {y})")
+            self.page.wait_for_timeout(300)
+        try:
+            self.page.wait_for_load_state("networkidle", timeout=15_000)
+        except timeout:
+            pass  # 스크롤로 불러온 이미지를 기다린다. 조용해지지 않는 페이지는 그대로 찍는다
+        self.page.evaluate("window.scrollTo(0, 0)")
+        self.page.wait_for_timeout(500)
 
 
 def main(argv: list[str] | None = None) -> int:

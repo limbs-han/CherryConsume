@@ -6,6 +6,9 @@ ai_parse_document 요금은 새 PDF에만 나온다. PDF는 ai_parse_document �
 처음 보는 내용을 묶음으로 나눠 묶음마다 한 번씩 쓴다. 쓰기 전에 같은 DataFrame을 세거나 모으면 ai_parse_document를 또 부르므로,
 개수는 쓴 뒤 표를 다시 읽어 센다. 시간 제한으로 끊겨도 쓴 묶음은 남아 다음 실행이 남은 것만 해석한다. 작업 008 6단계.
 작업 007 설계 2절. 찍는 것은 개수뿐이고 원문 내용은 찍지 않는다.
+HTML 원문 옆에 같은 이름의 .png가 있으면 수집기가 혜택을 이미지로 넣은 페이지로 보고 찍은 화면이다. 그 사진을
+ai_parse_document로 해석한 글을 쓰고 method는 screenshot이다. HTML 원문마다 본문 이미지 수를 image_count에 적는다. 작업 008 8단계.
+같은 원문의 가장 최근 사진 문서와 페이지 글이 같으면 사진을 다시 해석하지 않고 그 글을 쓴다.
 """
 
 import argparse
@@ -13,13 +16,18 @@ import time
 from pathlib import Path
 
 import pandas as pd
-from cherry_core.pipeline.text import fingerprint, method_and_text
-from pyspark.sql import SparkSession
+from cherry_core.pipeline.text import (
+    body_stats,
+    fingerprint,
+    method_and_text,
+    same_page_text,
+)
+from pyspark.sql import SparkSession, Window
 from pyspark.sql import functions as F
 
 COLUMNS = (
     "path STRING, issuer STRING, card_id STRING, source_id STRING, kind STRING, fetched_at TIMESTAMP, "
-    "sha256 STRING, method STRING, text STRING, fingerprint STRING, parsed_at TIMESTAMP"
+    "sha256 STRING, method STRING, text STRING, fingerprint STRING, parsed_at TIMESTAMP, image_count INT"
 )
 
 
@@ -30,6 +38,20 @@ def texts(
     return pd.DataFrame(
         [method_and_text(b, t, p) for b, t, p in zip(content, content_type, parsed)],
         columns=["method", "text"],
+    )
+
+
+@F.pandas_udf("int")
+def image_counts(content: pd.Series, content_type: pd.Series) -> pd.Series:
+    # HTML 원문만 센다. PDF와 JSON은 비운다
+    return pd.Series(
+        [
+            None
+            if b.startswith(b"%PDF-") or "json" in (t or "")
+            else body_stats(b.decode("utf-8", "replace"))[0]
+            for b, t in zip(content, content_type)
+        ],
+        dtype="Int64",
     )
 
 
@@ -57,13 +79,15 @@ def main(argv: list[str] | None = None) -> None:
     )
     raw = f"/Volumes/cherry/{args.bronze}/raw"
     spark.sql(f"CREATE TABLE IF NOT EXISTS {documents} ({COLUMNS})")
+    if "image_count" not in spark.table(documents).columns:
+        spark.sql(f"ALTER TABLE {documents} ADD COLUMNS (image_count INT)")
 
     new = (
         spark.table(fetches)
         .join(spark.table(documents).select("path"), "path", "left_anti")
         .dropDuplicates(["path"])
     )
-    rows = new.select("path", "sha256").collect()
+    rows = new.select("path", "sha256", "issuer", "card_id", "source_id").collect()
     # 목록 파일만 먼저 올라오면 원문이 아직 없다. 빠진 것은 다음 실행에서 다시 본다
     missing = [r.path for r in rows if not Path(f"{raw}/{r.path}").exists()]
     if missing:
@@ -74,9 +98,59 @@ def main(argv: list[str] | None = None) -> None:
     seen = (
         spark.table(documents)
         .where(F.col("sha256").isin(sorted({r.sha256 for r in rows})))
-        .select("sha256", "method", "text")
-        .dropDuplicates(["sha256"])
+        .select("sha256", "method", "text", "image_count")
     )
+    # 찍은 화면이 있는 HTML은 같은 원문의 가장 최근 사진 문서와 페이지 글이 같으면 그 글을 다시 쓴다. 사진 해석은
+    # 할 때마다 글이 조금씩 달라, 다시 해석하면 바뀌지 않은 페이지가 바뀐 원문으로 잡혀 추출 요금이 난다
+    shot_paths = {
+        r.path
+        for r in rows
+        if r.path.endswith(".html")
+        and Path(f"{raw}/{r.path[: -len('.html')]}.png").exists()
+    }
+    again = {}  # 이번 HTML 경로에서 글을 다시 쓸 앞 사진 문서의 경로로
+    if shot_paths:
+        last = {
+            (d.issuer, d.card_id, d.source_id): d.path
+            for d in spark.table(documents)
+            .where("method = 'screenshot'")
+            .withColumn(
+                "rank",
+                F.row_number().over(
+                    Window.partitionBy("issuer", "card_id", "source_id").orderBy(
+                        F.col("fetched_at").desc()
+                    )
+                ),
+            )
+            .where("rank = 1")
+            .select("issuer", "card_id", "source_id", "path")
+            .collect()
+        }
+        for r in rows:
+            prev = last.get((r.issuer, r.card_id, r.source_id))
+            if (
+                r.path in shot_paths
+                and prev
+                and Path(f"{raw}/{prev}").exists()
+                and same_page_text(
+                    Path(f"{raw}/{prev}").read_bytes(),
+                    Path(f"{raw}/{r.path}").read_bytes(),
+                )
+            ):
+                again[r.path] = prev
+    if again:
+        seen = seen.unionByName(
+            spark.createDataFrame(list(again.items()), "path STRING, prev STRING")
+            .join(new.select("path", "sha256"), "path")
+            .join(
+                spark.table(documents).select(
+                    F.col("path").alias("prev"), "method", "text", "image_count"
+                ),
+                "prev",
+            )
+            .select("sha256", "method", "text", "image_count")
+        )
+    seen = seen.dropDuplicates(["sha256"])
     known = {r.sha256 for r in seen.select("sha256").collect()}
     first = {}  # 이번에 처음 보는 내용마다 대표 경로 하나
     for r in sorted(rows, key=lambda r: r.path):
@@ -110,13 +184,37 @@ def main(argv: list[str] | None = None) -> None:
                 "parsed",
                 F.expr("to_json(ai_parse_document(content, map('version', '2.0')))"),
             )
-            others = body.where(~is_pdf).withColumn(
-                "parsed", F.lit(None).cast("string")
-            )
+            others = body.where(~is_pdf)
+            # 수집기가 찍은 화면은 HTML과 같은 이름의 .png다. 있으면 그 사진을 해석한 글을 쓴다
+            shots = [
+                first[sha][: -len(".html")] + ".png"
+                for sha in group
+                if first[sha] in shot_paths
+            ]
+            if shots:
+                parsed_shots = (
+                    spark.read.format("binaryFile")
+                    .load([f"{raw}/{p}" for p in shots])
+                    .select(
+                        F.regexp_replace(
+                            F.substring_index("path", f"{raw}/", -1), r"\.png$", ".html"
+                        ).alias("path"),
+                        F.expr(
+                            "to_json(ai_parse_document(content, map('version', '2.0')))"
+                        ).alias("parsed"),
+                    )
+                )
+                others = others.join(parsed_shots, "path", "left")
+            else:
+                others = others.withColumn("parsed", F.lit(None).cast("string"))
             by_sha = (
                 parsed.unionByName(others)
-                .select("sha256", texts("content", "content_type", "parsed").alias("t"))
-                .select("sha256", "t.method", "t.text")
+                .select(
+                    "sha256",
+                    texts("content", "content_type", "parsed").alias("t"),
+                    image_counts("content", "content_type").alias("image_count"),
+                )
+                .select("sha256", "t.method", "t.text", "image_count")
                 .unionByName(seen)
             )
         (
@@ -144,18 +242,21 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(
             f"새 원문 {len(rows)}개 가운데 {written}개만 썼다. 경로 맞추기를 본다"
         )
-    pdfs = (
-        spark.table(documents)
-        .where(
-            F.col("path").isin(list(first.values()))
-            & (F.col("method") == "ai_parse_document")
-        )
-        .count()
+    parsed_counts = (
+        {
+            r.method: r["count"]
+            for r in spark.table(documents)
+            .where(F.col("path").isin(list(first.values())))
+            .groupBy("method")
+            .count()
+            .collect()
+        }
         if first
-        else 0
+        else {}
     )
     print(
-        f"새 원문 {len(rows)}개, 처음 보는 내용 {len(first)}개, 그중 PDF {pdfs}개, 아직 없는 원문 {len(missing)}개"
+        f"새 원문 {len(rows)}개, 처음 보는 내용 {len(first)}개, 그중 PDF {parsed_counts.get('ai_parse_document', 0)}개, "
+        f"사진 해석 {parsed_counts.get('screenshot', 0)}개, 앞 사진 글 다시 쓰기 {len(again)}개, 아직 없는 원문 {len(missing)}개"
     )
 
 

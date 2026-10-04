@@ -507,3 +507,100 @@ def test_disclosure_run_also_fetches_index_cards(make_catalog, tmp_path, monkeyp
     # 옵션을 주지 않으면 색인 카드는 받지 않는다
     assert main(["--root", str(root), "--out", str(tmp_path / "raw2"), "--disclosure"]) == 0
     assert [x["source_id"] for x in _manifest(tmp_path / "raw2")] == ["disclosure-credit-p1"]
+
+
+def test_screenshot_is_saved_next_to_the_page_with_png_suffix(make_catalog, tmp_path, monkeypatch, capsys):
+    import cherry_core.pipeline.collect as collect_module
+
+    def fake_browser(self, t):
+        return b"<p>page</p>", "text/html; charset=utf-8", b"\x89PNG fake"
+
+    monkeypatch.setattr(collect_module.Fetcher, "_browser", fake_browser)
+    _offline(monkeypatch, lambda url: (b"User-agent: *\nAllow: /\n", "text/plain"))
+    out = tmp_path / "raw"
+    assert main(["--root", str(make_catalog(collect("browser"))), "--out", str(out)]) == 0
+    lines = _manifest(out)
+    page = next(x for x in lines if x["source_id"] == "page")
+    assert page["path"].endswith(".html")
+    assert (out / page["path"][: -len(".html")]).with_suffix(".png").read_bytes() == b"\x89PNG fake"
+    # 목록 파일에는 칸을 더하지 않는다. 글 뽑기가 같은 이름의 png를 찾는다
+    assert "screenshot" not in page
+
+
+class _PlaywrightError(Exception):
+    pass
+
+
+class _PlaywrightTimeout(_PlaywrightError):
+    pass
+
+
+@pytest.fixture(autouse=False)
+def fake_playwright(monkeypatch):
+    """테스트 환경에는 Playwright가 없다. 수집기가 가져다 쓰는 오류 두 가지만 흉내 낸다."""
+    import sys
+    from types import ModuleType
+
+    api = ModuleType("playwright.sync_api")
+    api.Error, api.TimeoutError = _PlaywrightError, _PlaywrightTimeout
+    monkeypatch.setitem(sys.modules, "playwright", ModuleType("playwright"))
+    monkeypatch.setitem(sys.modules, "playwright.sync_api", api)
+
+
+class _Page:
+    """스크롤 전과 뒤에 다른 HTML을 돌려주는 가짜 브라우저 쪽."""
+
+    def __init__(self, before: str, after: str, fail: bool = False) -> None:
+        self.htmls, self.fail, self.shots = [before, after], fail, 0
+
+    def goto(self, url, **kw):
+        return None
+
+    def wait_for_load_state(self, *a, **kw):
+        pass
+
+    def content(self):
+        return self.htmls.pop(0) if len(self.htmls) > 1 else self.htmls[0]
+
+    def evaluate(self, js):
+        if self.fail:
+            raise _PlaywrightError("scroll failed")
+        return 1600
+
+    def wait_for_timeout(self, ms):
+        pass
+
+    def screenshot(self, **kw):
+        self.shots += 1
+        return b"png"
+
+
+def _shoot(page):
+    from types import SimpleNamespace
+
+    from cherry_core.pipeline.collect import Fetcher
+
+    f = Fetcher(None, None, None, [], {}, None)
+    f.page = page
+    return f._browser(SimpleNamespace(kind="product_page", url="https://x.test/card", issuer="kb", card_id="kb-a", source_id="page"))
+
+
+HEAVY = '<img src="/a.png"><img src="/b.png"><img src="/c.png"><p>혜택</p>'
+
+
+def test_screenshot_only_when_page_is_still_image_heavy_after_scrolling(fake_playwright):
+    page = _Page(HEAVY, HEAVY + "<p>" + "가" * 2500 + "</p>")
+    body, _, shot = _shoot(page)
+    # 스크롤로 글이 나타나 기준에서 벗어나면 찍지 않고, 저장하는 HTML은 스크롤 뒤 것이다
+    assert shot is None and page.shots == 0
+    assert "가" * 2500 in body.decode()
+
+    page = _Page(HEAVY, HEAVY + "<p>더</p>")
+    body, _, shot = _shoot(page)
+    assert shot == b"png" and "더" in body.decode()
+
+
+def test_scroll_failure_keeps_the_html_without_screenshot(fake_playwright, capsys):
+    body, _, shot = _shoot(_Page(HEAVY, HEAVY, fail=True))
+    assert shot is None and body.decode() == HEAVY
+    assert "찍기 실패" in capsys.readouterr().out

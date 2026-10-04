@@ -1,5 +1,7 @@
 """원문에서 글 뽑기, 지문, 바뀐 줄. 설계 1절 2단계와 3단계."""
 
+import json
+
 import pytest
 
 from cherry_core.pipeline.text import changed_lines, document_text, fingerprint, html_text, lines, method_and_text
@@ -117,3 +119,83 @@ def test_notice_and_list_compare_without_numbers():
 def test_product_page_numbers_still_count():
     assert fingerprint("카페 10% 할인", "product_page") != fingerprint("카페 5% 할인", "product_page")
     assert changed_lines("카페 10% 할인", "카페 5% 할인", "product_page") == (["카페 10% 할인"], ["카페 5% 할인"])
+
+
+BENEFIT_IMAGES = (
+    '<html><body><div id="header"><ul><li>카드</li><li>혜택</li><li>금융</li></ul>' + "메뉴" * 3000 + "</div>"
+    '<div class="content"><h2>더 모아 카드</h2><img src="/b1.png"><img src="/b2.png"><img src="/b3.png"></div>'
+    "<footer>" + "바닥글" * 1000 + '<img src="/mark.png"></footer></body></html>'
+)
+
+
+def test_body_stats_leave_out_header_menu_and_footer():
+    from cherry_core.pipeline.text import body_stats
+
+    # 메뉴와 바닥글은 세지 않는다. 본문 이미지 셋과 카드 이름 글자만 남는다
+    assert body_stats(BENEFIT_IMAGES) == (3, len("더모아카드"))
+
+
+def test_image_heavy_needs_three_images_and_short_body():
+    from cherry_core.pipeline.text import image_heavy
+
+    assert image_heavy(BENEFIT_IMAGES)
+    assert not image_heavy(BENEFIT_IMAGES.replace('<img src="/b3.png">', ""))
+    assert not image_heavy(BENEFIT_IMAGES.replace("<h2>더 모아 카드</h2>", "<p>" + "가" * 2000 + "</p>"))
+
+
+def test_html_with_screenshot_parse_uses_screenshot_text():
+    parsed = {
+        "document": {"elements": [{"type": "table", "content": "<table><tr><td>커피</td><td>10%</td></tr></table>"}]}
+    }
+    assert method_and_text(BENEFIT_IMAGES.encode(), "text/html", json.dumps(parsed)) == ("screenshot", "커피 | 10%")
+
+
+def test_body_stats_match_chrome_names_by_word_not_by_part():
+    from cherry_core.pipeline.text import body_stats
+
+    body = "<p>" + "가" * 2500 + "</p>"
+    # card-header나 unavailable처럼 낱말 일부만 같은 이름은 본문이다
+    assert body_stats(f'<div class="card-header">{body}</div>') == (0, 2500)
+    assert body_stats(f'<div class="unavailable-notice">{body}</div>') == (0, 2500)
+    # header_wrap, gnbArea, footer2처럼 낱말 뒤에 붙임표, 밑줄, 대문자, 숫자가 오면 본문 밖이다
+    for name in ("header_wrap", "gnbArea", "footer2", "nav"):
+        assert body_stats(f'<div id="{name}">{body}</div><p>본문</p>') == (0, 2)
+
+
+def test_body_stats_skip_images_in_noscript_and_template():
+    from cherry_core.pipeline.text import body_stats
+
+    pixels = '<noscript><img src="/px.gif"></noscript>' * 3 + '<template><img src="/t.png"></template>'
+    assert body_stats(f"<p>카드</p>{pixels}") == (0, 2)
+
+
+def test_image_heavy_boundary_is_below_two_thousand_chars():
+    from cherry_core.pipeline.text import image_heavy
+
+    images = '<img src="/a.png">' * 3
+    assert image_heavy(f"<p>{'가' * 1999}</p>{images}")
+    assert not image_heavy(f"<p>{'가' * 2000}</p>{images}")
+
+
+def test_bad_or_empty_screenshot_parse_falls_back_to_html_text():
+    for parsed in ('{"document": null}', '{"document": {}}', '{"document": {"elements": []}}', "not json"):
+        assert method_and_text("<p>카페</p><p>할인</p>".encode(), "text/html", parsed) == ("html", "카페\n할인")
+
+
+def test_same_page_text_ignores_markup_and_view_counts_but_not_text():
+    from cherry_core.pipeline.text import same_page_text
+
+    old = '<html><script>var t=1</script><p class="a">카페 10% 할인</p><p>조회 120</p></html>'.encode()
+    # 브라우저가 준 HTML은 받을 때마다 속성과 스크립트가 달라도 페이지 글이 같으면 같은 페이지다
+    assert same_page_text(old, '<html><script>var t=2</script><p class="b">카페 10% 할인</p><p>조회 121</p></html>'.encode())
+    assert not same_page_text(old, "<html><p>카페 20% 할인</p><p>조회 120</p></html>".encode())
+
+
+def test_page_wrappers_and_tags_without_end_tag_are_never_chrome():
+    from cherry_core.pipeline.text import body_stats
+
+    body = "<p>" + "가" * 2500 + "</p>"
+    # 페이지 전체를 감싸는 태그가 걸리면 본문이 통째로 빠진다
+    assert body_stats(f'<body class="header-fixed">{body}</body>') == (0, 2500)
+    # 끝 태그를 생략한 li가 걸리면 닫히지 않아 나머지 본문이 모두 빠진다
+    assert body_stats(f'<ul><li class="nav-item">메뉴<li>a</ul><div>{body}</div>') == (0, 2503)

@@ -102,6 +102,82 @@ def html_text(html: str) -> str:
     return "\n".join(s.removeprefix("| ") for s in lines("".join(parser.parts)))
 
 
+# 본문이 아닌 영역. id나 class의 이름 하나가 이 낱말로 시작하고 바로 끝나거나 붙임표, 밑줄, 숫자, 대문자가 이어지면
+# 그 안은 세지 않는다. header_wrap, gnbArea는 걸리고 card-header, unavailable처럼 낱말이 이름 가운데 든 것은 본문이다
+_CHROME = re.compile(r"(?:^|\s)(?i:header|footer|gnb|lnb|nav|skip|quick|sitemap|familysite)(?=$|[\s\-_0-9A-Z])")
+# 이름이 걸려도 영역으로 보지 않는 태그. 빈 태그와 끝 태그를 생략할 수 있는 태그는 끝 태그가 오지 않아 나머지 본문을 모두 건너뛰고,
+# 페이지 전체를 감싸는 태그는 본문을 통째로 뺀다
+_NOT_REGION = {
+    *("img", "br", "hr", "input", "meta", "link", "source", "area", "wbr", "html", "body", "main"),
+    *("li", "p", "dt", "dd", "tr", "td", "th", "option", "thead", "tbody", "tfoot"),
+}
+# 이미지 혜택 페이지의 기준. 본문 이미지가 이만큼 이상이고 본문 글자가 이만큼 미만이다. 작업 008 설계 4절
+HEAVY_IMAGES, HEAVY_CHARS = 3, 2000
+
+
+class _Body(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.outside: str | None = None  # 지금 건너뛰는 본문 밖 영역의 태그
+        self.depth = 0
+        self.skip = 0
+        self.images = 0
+        self.chars = 0
+
+    def handle_starttag(self, tag: str, attrs: list) -> None:
+        if self.outside:
+            self.depth += tag == self.outside
+            return
+        a = dict(attrs)
+        names = f"{a.get('id') or ''} {a.get('class') or ''}"
+        if tag in ("header", "footer", "nav") or (tag not in _NOT_REGION and _CHROME.search(names)):
+            self.outside, self.depth = tag, 1
+        elif tag in _SKIP:
+            self.skip += 1
+        elif tag == "img" and not self.skip:
+            self.images += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.outside:
+            if tag == self.outside:
+                self.depth -= 1
+                if self.depth == 0:
+                    self.outside = None
+            return
+        if tag in _SKIP:
+            self.skip = max(0, self.skip - 1)
+
+    def handle_data(self, data: str) -> None:
+        if not self.outside and not self.skip:
+            self.chars += len(_SPACE.sub("", data))
+
+
+def body_stats(html: str) -> tuple[int, int]:
+    """(본문 이미지 수, 공백을 뺀 본문 글자 수). 머리말, 바닥글, 메뉴 영역은 세지 않는다. 작업 008 8단계.
+
+    페이지 전체로 재면 메뉴와 바닥글만으로 수천 자라 이미지 혜택 페이지가 하나도 걸리지 않았다.
+    """
+    parser = _Body()
+    parser.feed(html)
+    parser.close()
+    return parser.images, parser.chars
+
+
+def image_heavy(html: str) -> bool:
+    """혜택을 이미지로 넣은 페이지로 보이는지. 그런 페이지는 수집기가 화면을 찍고 글 뽑기가 그 사진을 해석한다."""
+    images, chars = body_stats(html)
+    return images >= HEAVY_IMAGES and chars < HEAVY_CHARS
+
+
+def same_page_text(old: bytes, new: bytes) -> bool:
+    """찍은 화면이 있는 두 HTML의 페이지 글이 같은지. 같으면 앞 사진의 해석 글을 다시 쓴다. 작업 008 설계 4절.
+
+    사진 해석은 같은 화면도 할 때마다 글이 조금씩 달라 바뀌지 않은 페이지가 바뀐 원문으로 잡힌다.
+    브라우저가 준 HTML은 받을 때마다 바이트가 달라 sha로는 막지 못한다. 글이 같고 이미지만 바뀌면 놓친다.
+    """
+    return fingerprint(document_text(old, "text/html")) == fingerprint(document_text(new, "text/html"))
+
+
 def parsed_text(parsed: dict) -> str:
     """ai_parse_document 결과의 글. 표는 HTML로 오므로 html_text로 행을 살린다."""
     parts = []
@@ -142,8 +218,18 @@ def document_text(content: bytes, content_type: str, parsed: dict | None = None)
 def method_and_text(content: bytes, content_type: str, parsed: str | None) -> tuple[str, str]:
     """(글을 뽑은 방법, 글). parsed는 ai_parse_document 결과의 JSON 글이다. 방법은 나중에 방법별로 글 품질을 보려고 남긴다.
 
-    Spark 작업이 파일마다 부른다. 작업 007 설계 2절.
+    Spark 작업이 파일마다 부른다. 작업 007 설계 2절. PDF가 아닌데 parsed가 있으면 그 원문의 스크린샷을 해석한 것이라
+    스크린샷의 글을 쓴다. 혜택을 이미지로 넣은 페이지다. 작업 008 설계 4절.
     """
+    if parsed and not content.startswith(b"%PDF-"):
+        try:
+            shot = parsed_text(json.loads(parsed))
+        except (ValueError, TypeError, KeyError, AttributeError):
+            shot = ""
+        if shot:
+            return "screenshot", shot
+        # 해석이 실패했거나 글이 비면 HTML 글을 쓴다. 빈 글을 쓰면 바뀐 원문으로 잡혀 카드가 비워진다
+        parsed = None
     if content.startswith(b"%PDF-"):
         how = "ai_parse_document"
     elif "json" in content_type:
