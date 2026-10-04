@@ -47,7 +47,8 @@ void main() {
             'device_database',
             'device_sharedpref',
           ])
-            (d, './'),
+            // 도메인 전체는 `.`이다. 출시 빌드의 lint는 database와 sharedpref 칸의 `/`를 하위 폴더로 보고 막는다. 2026-10-04 단계 8
+            (d, '.'),
         },
         reason: section,
       );
