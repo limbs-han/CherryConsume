@@ -5,10 +5,13 @@ library;
 
 import 'package:sqlite3/sqlite3.dart';
 
-import '../../api.dart' show ApiError;
+import '../../api.dart' show ApiError, billings;
 import '../../catalog/models.dart';
 import '../../engine/cond.dart';
+import '../../engine/context.dart' show atTier;
 import '../../engine/models.dart';
+import '../../engine/spend.dart' show newCardTier;
+import '../../format.dart';
 import '../answers.dart';
 import '../db.dart';
 import '../payments.dart';
@@ -130,14 +133,98 @@ Json home(Store s) {
   return (month.subtract(kstOffset), nxt.subtract(kstOffset));
 }
 
-String sharedTitle(Rules rules, String key) {
-  if (key == 'integrated') return '통합 한도';
-  final users = [
-    for (final b in rules.benefits)
-      for (final lim in b.limits)
-        if (lim.shared == key) b.title,
+/// 함께 쓰는 한도의 이름. 그 한도를 쓰는 혜택은 카드 상세에서 이 한도 상자 안에 묶여 보여 이름에 적지 않는다. 작업 011 설계 2절 D5
+String sharedTitle(String key) => key == 'integrated' ? '통합 한도' : '함께 쓰는 한도';
+
+/// 조건 한 줄의 금액. 만 원 단위면 "5만 원", 아니면 "5,000원"이다. 홈의 "11.8만"처럼 올리지 않는다
+String _money(int n) =>
+    n >= 10000 && n % 10000 == 0 ? '${comma(n ~/ 10000)}만 원' : won(n);
+
+const _periodWords = {'txn': '건당', 'day': '하루'};
+const _dayWords = {
+  'mon': '월',
+  'tue': '화',
+  'wed': '수',
+  'thu': '목',
+  'fri': '금',
+  'sat': '토',
+  'sun': '일',
+};
+
+String _days(Days d) {
+  final set = {...?d.days};
+  final days = switch (set) {
+    _ when set.isEmpty => '',
+    _ when set.length == 5 && !set.contains('sat') && !set.contains('sun') =>
+      '평일',
+    _ when set.length == 2 && set.containsAll(['sat', 'sun']) => '주말',
+    _ => [
+      for (final k in _dayWords.keys)
+        if (set.contains(k)) _dayWords[k],
+    ].join('·'),
+  };
+  return switch (d.holidays) {
+    'include' => '$days·공휴일',
+    'exclude' => '$days, 공휴일 제외',
+    'only' => days.isEmpty ? '공휴일' : '$days 중 공휴일',
+    _ => days,
+  };
+}
+
+/// 결제가 맞아야 하는 조건. 옵션, 답한 사실, 순위 영역, 카드를 쓴 달은 받는 혜택이면 이미 맞아 쓰지 않는다. 갈래 가운데
+/// 하나라도 그런 것뿐이면 그 묶음은 쓰지 않는다
+List<String> _conditionWords(Condition c, Map<String, String> methods) {
+  final bills = {for (final (k, n) in billings) k: n};
+  String names(List<String> keys, Map<String, String> m) =>
+      keys.map((k) => m[k] ?? k).join('·');
+  final a = c.amount;
+  final any = c.anyOf == null
+      ? null
+      : [for (final alt in c.anyOf!) _conditionWords(alt, methods).join(' · ')];
+  final not = c.paymentNot;
+  return [
+    if (a != null)
+      [
+        if (a.min != null) '${_money(a.min!)} 이상',
+        if (a.below != null) '${_money(a.below!)} 미만',
+      ].join(' '),
+    if (c.day != null) _days(c.day!),
+    if (c.time != null) '${c.time!.start}~${c.time!.end}',
+    if (c.months != null) '${c.months!.join('·')}월',
+    if (c.region != null) c.region == 'overseas' ? '해외' : '국내',
+    if (c.channel != null) c.channel == 'online' ? '온라인' : '오프라인',
+    if (c.interestFree == true) '무이자 할부',
+    if (c.interestFree == false) '무이자 할부 제외',
+    if (c.lumpSum == true) '일시불',
+    if (c.payment != null) '${names(c.payment!, methods)} 결제',
+    if (not != null)
+      not.length <= 2
+          ? '${names(not, methods)} 제외'
+          : '${methods[not.first] ?? not.first} 등 결제수단 ${not.length}개 제외',
+    if (c.billing != null) names(c.billing!, bills),
+    if (c.billingNot != null) '${names(c.billingNot!, bills)} 제외',
+    if (c.monthTotal != null) '그달 대상 이용 ${_money(c.monthTotal!.min)} 이상',
+    if (any != null && !any.contains('')) any.join(' 또는 '),
+  ].where((w) => w.isNotEmpty).toList();
+}
+
+/// 혜택 하나의 조건 한 줄. 1회와 하루 한도를 먼저, 결제 조건을 뒤에 쓴다. 없으면 null이다. 작업 011 설계 2절 D5
+///
+/// 한도는 그 혜택의 구간 값이다. 엔진 한도 현황은 1회 한도를 기간이 없다고 빼서 카탈로그에서 읽는다. 생일 달처럼 조건에
+/// 따라 바뀌는 한도 조정은 넣지 않는다
+String? conditionLine(Benefit b, int tier, Map<String, String> methods) {
+  final words = [
+    for (final lim in b.limits)
+      if (lim.shared == null)
+        if (_periodWords[lim.per] case final per?) ...[
+          if (atTier(lim.amount, tier) case final int a) '$per 최대 ${_money(a)}',
+          if (atTier(lim.base, tier) case final int x)
+            '$per 결제액 ${_money(x)}까지',
+          if (atTier(lim.count, tier) case final int n) '$per $n회',
+        ],
+    for (final c in b.when) ..._conditionWords(c, methods),
   ];
-  return users.isNotEmpty ? '함께 쓰는 한도 · ${users.join(', ')}' : '함께 쓰는 한도';
+  return words.isEmpty ? null : words.join(' · ');
 }
 
 Map<String, Object?> _held(Store s, String uid) {
@@ -161,7 +248,7 @@ Json cardDetail(Store s, String uid) {
   final status = engine.spendStatus(card, payments, month);
   // 엔진 limitStatus처럼 오늘의 개정을 본다
   final found = engine.ctx.rulesOn(row['card_id'] as String, day);
-  final limits = <Json>[], locked = <Json>[];
+  final limits = <Json>[], locked = <Json>[], plain = <Json>[];
   var available = <String>{};
   final sentences = <Object?>[
     for (final w in status.warnings)
@@ -169,7 +256,6 @@ Json cardDetail(Store s, String uid) {
   ];
   if (found != null) {
     final rules = found.rules;
-    final titles = {for (final b in rules.benefits) b.key: b.title};
     final got = benefitsAt(rules, card, month, status, day);
     available = {for (final b in got) b.key};
     // 받는 혜택에 달린 문장 조건도 보인다. 실적 현황의 경고에는 카드 전체 문장만 있다
@@ -180,32 +266,61 @@ Json cardDetail(Store s, String uid) {
         for (final lim in b.limits)
           if (lim.shared != null) lim.shared,
     };
-    // 1회와 하루 한도는 남은 양이 아니라 조건이라 보이지 않는다. 지금 구간과 옵션에서 못 받는 혜택의 한도도 뺀다
-    for (final use in engine.limitStatus(card, payments, now)) {
-      if (use.per == 'txn' ||
-          use.per == 'day' ||
-          (use.capAmount == null &&
-              use.capCount == null &&
-              use.capBase == null)) {
-        continue;
+    // 받는 혜택마다 한 줄이다. 기간 한도가 있으면 남은 양을 보이고, 1회와 하루 한도는 남은 양이 아니라 조건이라 결제
+    // 조건과 함께 조건 한 줄에 쓴다. 함께 쓰는 한도를 쓰는 혜택은 화면이 그 한도 상자 안에 묶는다. 작업 011 설계 2절 D5
+    final uses = engine.limitStatus(card, payments, now);
+    final baseTier = prevMonthTier(rules, status);
+    final methods = {
+      for (final m in s.catalog.paymentMethods.values) m.key: m.name,
+    };
+    bool capped(LimitUse u) =>
+        u.capAmount != null || u.capCount != null || u.capBase != null;
+    Json usage(LimitUse u) => {
+      'per': u.per,
+      'used_amount': u.usedAmount,
+      'cap_amount': u.capAmount,
+      'used_count': u.usedCount,
+      'cap_count': u.capCount,
+      // 할인받는 결제액의 한도. 신한 Mr.Life 주말 주유처럼 이것만 있는 한도가 있다. 위험 검토 15번
+      'used_base': u.usedBase,
+      'cap_base': u.capBase,
+    };
+    for (final b in got) {
+      final mine = [
+        for (final u in uses)
+          if (u.benefit == b.key) u,
+      ];
+      final period = [
+        for (final u in mine)
+          if (u.per != 'txn' && u.per != 'day' && capped(u)) u,
+      ];
+      final row = {
+        'title': b.title,
+        'key': b.key,
+        'shared': [for (final lim in b.limits) ?lim.shared],
+        'condition': conditionLine(
+          b,
+          newCardTier(card, month, rules, b.key, baseTier).$1,
+          methods,
+        ),
+      };
+      // 기간 한도가 없는 혜택은 남은 양이 없어 limits와 따로 담는다. limits는 남은 양이 있는 줄만이다
+      if (period.isEmpty) plain.add(row);
+      for (final (i, u) in period.indexed) {
+        limits.add({...row, ...usage(u), if (i > 0) 'condition': null});
       }
-      final shown = use.benefit != null
-          ? available.contains(use.benefit)
-          : sharing.contains(use.key);
-      if (!shown) continue;
-      limits.add({
-        'title': use.benefit != null
-            ? (titles[use.benefit] ?? use.benefit)
-            : sharedTitle(rules, use.key),
-        'per': use.per,
-        'used_amount': use.usedAmount,
-        'cap_amount': use.capAmount,
-        'used_count': use.usedCount,
-        'cap_count': use.capCount,
-        // 할인받는 결제액의 한도. 신한 Mr.Life 주말 주유처럼 이것만 있는 한도가 있다. 위험 검토 15번
-        'used_base': use.usedBase,
-        'cap_base': use.capBase,
-      });
+    }
+    for (final u in uses) {
+      if (u.benefit == null && sharing.contains(u.key) && capped(u)) {
+        limits.add({
+          'title': sharedTitle(u.key),
+          'key': u.key,
+          ...usage(u),
+          'shared': const <String>[],
+          'condition': null,
+          'is_shared': true,
+        });
+      }
     }
     final base = prevMonthTier(rules, status);
     final picked = optionPicked(rules, card, day);
@@ -241,6 +356,7 @@ Json cardDetail(Store s, String uid) {
     'tiers': tiersShown(found),
     'spend': status.toJson(),
     'limits': limits,
+    'plain': plain,
     'locked': locked,
     // 조건을 문장으로만 담은 혜택과 공식 문구로 확인하지 못한 값
     'check_sentences': sentences,

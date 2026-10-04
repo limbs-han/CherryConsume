@@ -16,6 +16,16 @@ import 'store/routes/recommend.dart' as recommend_routes;
 import 'store/routes/records.dart' as records_routes;
 import 'store/store.dart';
 
+/// 사용자가 아는 청구 방식. 카드 혜택 스물두 개가 자동납부나 후불교통 조건을 단다. 결제 화면과 카드 상세의 조건 한 줄이 쓴다
+const billings = [
+  ('normal', '일반 결제'),
+  ('autopay', '자동납부'),
+  ('postpaid_transit', '후불교통'),
+  ('subscription', '정기결제'),
+  ('app_prepay', '앱 선결제'),
+  ('in_app', '앱 안 결제'),
+];
+
 class ApiError implements Exception {
   ApiError(this.status, this.body);
   final int status;
@@ -320,13 +330,33 @@ class CardDetail {
         for (final l in j['limits'])
           (
             title: l['title'] as String,
-            per: l['per'] as String,
+            key: l['key'] as String,
+            per: l['per'] as String?,
             usedAmount: l['used_amount'] as int,
             capAmount: l['cap_amount'] as int?,
             usedCount: l['used_count'] as int,
             capCount: l['cap_count'] as int?,
             usedBase: l['used_base'] as int,
             capBase: l['cap_base'] as int?,
+            shared: List<String>.from(l['shared']),
+            condition: l['condition'] as String?,
+            isShared: l['is_shared'] == true,
+          ),
+        // 기간 한도가 없는 혜택. 남은 양 없이 이름과 조건 한 줄만 보인다. 작업 011 설계 2절 D5
+        for (final l in j['plain'])
+          (
+            title: l['title'] as String,
+            key: l['key'] as String,
+            per: null,
+            usedAmount: 0,
+            capAmount: null,
+            usedCount: 0,
+            capCount: null,
+            usedBase: 0,
+            capBase: null,
+            shared: List<String>.from(l['shared']),
+            condition: l['condition'] as String?,
+            isShared: false,
           ),
       ],
       locked = [
@@ -350,13 +380,17 @@ class CardDetail {
   final List<
     ({
       String title,
-      String per,
+      String key,
+      String? per,
       int usedAmount,
       int? capAmount,
       int usedCount,
       int? capCount,
       int usedBase,
       int? capBase,
+      List<String> shared,
+      String? condition,
+      bool isShared,
     })
   >
   limits;

@@ -14,16 +14,6 @@ import '../ui.dart';
 
 String two(int n) => n.toString().padLeft(2, '0');
 
-/// 사용자가 아는 청구 방식. 카드 혜택 스물두 개가 자동납부나 후불교통 조건을 단다
-const billings = [
-  ('normal', '일반 결제'),
-  ('autopay', '자동납부'),
-  ('postpaid_transit', '후불교통'),
-  ('subscription', '정기결제'),
-  ('app_prepay', '앱 선결제'),
-  ('in_app', '앱 안 결제'),
-];
-
 /// 홈, 추천, 기록 탭의 결제 기록 버튼. 지금 가진 카드가 없으면 보이지 않는다. 작업 011 설계 2절 G6
 /// 저장하면 onSaved로 그 탭을 다시 불러오고, 다른 결제를 다시 계산했으면 알린다
 class PayButton extends StatefulWidget {

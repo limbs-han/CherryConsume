@@ -128,16 +128,18 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
   List<Widget> _body(CardDetail d) {
     final s = d.spend;
     final tier = s.tier ?? 0;
-    // 통합 한도처럼 여러 혜택이 함께 쓰는 한도는 회색 상자에 먼저 둔다. 작업 011 설계 2절 D3
-    bool shared(Limit l) =>
-        l.title.startsWith('통합 한도') || l.title.startsWith('함께 쓰는 한도');
-    final group = [
+    // 함께 쓰는 한도마다 회색 상자 하나를 두고 그 한도를 쓰는 혜택을 안에 묶는다. 둘 이상을 쓰는 혜택은 처음 것에 둔다.
+    // 작업 011 설계 2절 D3, D5
+    final boxes = [
       for (final l in d.limits)
-        if (shared(l)) l,
+        if (l.isShared) l,
     ];
+    final keys = {for (final l in boxes) l.key};
+    String? boxOf(Limit l) =>
+        l.isShared ? null : l.shared.where(keys.contains).firstOrNull;
     final each = [
       for (final l in d.limits)
-        if (!shared(l)) l,
+        if (!l.isShared && boxOf(l) == null) l,
     ];
     return [
       Box(
@@ -225,15 +227,20 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              if (group.isNotEmpty)
+              for (final box in boxes)
                 Container(
+                  margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                   decoration: const BoxDecoration(
                     color: C.grey,
                     borderRadius: r16,
                   ),
                   child: Column(
-                    children: [for (final l in group) _LimitRow(l)],
+                    children: [
+                      _LimitRow(box),
+                      for (final l in d.limits)
+                        if (boxOf(l) == box.key) _LimitRow(l),
+                    ],
                   ),
                 ),
               for (final l in each) _LimitRow(l),
@@ -420,25 +427,40 @@ class _Row extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 4),
-    child: Row(
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 15, color: C.sub),
-          ),
+    child: _Pair(
+      Text(label, style: const TextStyle(fontSize: 15, color: C.sub)),
+      Text(
+        value,
+        textAlign: TextAlign.end,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w800,
+          color: color,
         ),
+      ),
+    ),
+  );
+}
+
+/// 이름은 왼쪽, 값은 오른쪽 끝에 제 폭대로 둔다. 값이 폭의 70%를 넘으면 그 안에서 줄을 바꾼다. 이름과 값이 폭을 반씩
+/// 나누면 값이 가운데서 시작하고 짧은 이름도 줄을 바꾼다. 2026-10-04 에뮬레이터에서 찾았다. 작업 011 설계 2절 D2, D3
+class _Pair extends StatelessWidget {
+  const _Pair(this.label, this.value, {this.share = 0.7});
+  final Widget label, value;
+
+  /// 값 칸이 차지할 수 있는 폭의 몫. 혜택 줄은 "결제액 300,000 / 300,000 남음"처럼 값이 길어 이름이 세 줄로 꺾이지
+  /// 않게 절반이다. 2026-10-04 에뮬레이터에서 찾았다
+  final double share;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, box) => Row(
+      children: [
+        Expanded(child: label),
         const SizedBox(width: 12),
-        Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w800,
-              color: color,
-            ),
-          ),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: box.maxWidth * share),
+          child: value,
         ),
       ],
     ),
@@ -518,25 +540,24 @@ class _LimitRow extends StatelessWidget {
   const _LimitRow(this.l);
   final Limit l;
 
+  // 이름 아래에 조건 한 줄을 둔다. 기간 한도가 없는 혜택은 오른쪽 값이 없다. 작업 011 설계 2절 D5
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Row(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Text(
+        _Pair(
+          Text(
             l.title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 15,
-              fontWeight: FontWeight.w700,
+              fontWeight: l.isShared ? FontWeight.w800 : FontWeight.w700,
               color: C.text,
             ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Flexible(
-          child: Text(
-            _remain(l),
+          Text(
+            _remain(l) ?? '',
             textAlign: TextAlign.end,
             style: const TextStyle(
               fontSize: 14,
@@ -544,7 +565,13 @@ class _LimitRow extends StatelessWidget {
               color: C.sub,
             ),
           ),
+          share: l.isShared ? 0.7 : 0.5,
         ),
+        if (l.condition case final c?)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(c, style: const TextStyle(fontSize: 13, color: C.sub)),
+          ),
       ],
     ),
   );
@@ -578,17 +605,21 @@ const _periods = {
 
 typedef Limit = ({
   String title,
-  String per,
+  String key,
+  String? per,
   int usedAmount,
   int? capAmount,
   int usedCount,
   int? capCount,
   int usedBase,
   int? capBase,
+  List<String> shared,
+  String? condition,
+  bool isShared,
 });
 
 /// 남은 양 / 한도. 시안처럼 금액은 단위를 빼고, 횟수는 "회", 결제액 한도는 "결제액"을 붙인다. 작업 011 설계 2절 D3
-String _remain(Limit l) {
+String? _remain(Limit l) {
   final per = l.per == 'month' ? '' : '${_periods[l.per] ?? ''} ';
   final options = [
     if (l.capAmount != null) (l.capAmount!, l.usedAmount, '', ''),
@@ -597,6 +628,7 @@ String _remain(Limit l) {
   ];
   double share((int, int, String, String) o) =>
       o.$1 == 0 ? 0 : max(0, o.$1 - o.$2) / o.$1;
+  if (options.isEmpty) return null;
   final o = options.reduce((a, b) => share(b) < share(a) ? b : a);
   return '$per${o.$3}${comma(max(0, o.$1 - o.$2))} / ${comma(o.$1)}${o.$4} 남음';
 }
