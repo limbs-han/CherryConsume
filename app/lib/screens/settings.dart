@@ -170,17 +170,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  /// 답 고르기. 시안대로 줄을 누르면 바닥 시트에서 고른다. 작업 011 설계 2절 S1
-  Future<void> _pickFact(FactQuestion q) async {
-    final v = await pickSheet<Object>(
-      context,
-      title: q.ask,
-      options: factChoices(q),
-      selected: q.answer,
-    );
-    if (v != null) await _answer(q, v);
-  }
-
   @override
   Widget build(BuildContext context) {
     final day = widget.api.catalogDay();
@@ -204,23 +193,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               AsyncSnapshot(:final data?) => _Rows([
                 for (final q in data)
-                  _Line(
-                    title: _firstSentence(q.ask).$1,
-                    sub: [
-                      ?_firstSentence(q.ask).$2,
-                      '쓰는 카드 · ${q.cards.join(', ')}',
-                    ].join('\n'),
-                    trailing: q.answer == null
-                        ? const Pill('답하기')
-                        : _Value(
-                            factChoices(q)
-                                .firstWhere(
-                                  (c) => c.$1 == q.answer,
-                                  orElse: () => (q.answer!, '${q.answer}'),
-                                )
-                                .$2,
-                          ),
-                    onTap: () => _pickFact(q),
+                  FactRow(
+                    q: q,
+                    note: '쓰는 카드 · ${q.cards.join(', ')}',
+                    onAnswer: (v) => _answer(q, v),
                   ),
               ]),
               _ => const Padding(
@@ -231,30 +207,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const _Group('기록 옮기기'),
           _Rows([
-            _Line(
+            TapRow(
               title: '기록 내보내기',
               sub: '폰을 바꿀 때 기록을 파일 하나로 옮겨요',
               onTap: _export,
             ),
-            _Line(title: '기록 가져오기', sub: '내보낸 파일의 기록으로 바꿔요', onTap: _import),
+            TapRow(title: '기록 가져오기', sub: '내보낸 파일의 기록으로 바꿔요', onTap: _import),
           ]),
           const _Group('앱'),
           _Rows([
-            _Line(
+            TapRow(
               title: '앱 정보',
-              trailing: _Value('$appVersion · 카탈로그 ${day.month}/${day.day}'),
+              trailing: RowValue('$appVersion · 카탈로그 ${day.month}/${day.day}'),
             ),
           ]),
         ],
       ),
     );
   }
-}
-
-/// 긴 질문은 첫 문장을 제목, 나머지를 설명으로 나눈다. 한 문장이면 나머지가 없다. 작업 011 설계 2절 S4
-(String, String?) _firstSentence(String text) {
-  final m = RegExp(r'^(.+?[?.])\s+(.+)$', dotAll: true).firstMatch(text);
-  return m == null ? (text, null) : (m[1]!, m[2]);
 }
 
 class _Group extends StatelessWidget {
@@ -292,63 +262,4 @@ class _Rows extends StatelessWidget {
       ],
     ),
   );
-}
-
-class _Value extends StatelessWidget {
-  const _Value(this.text);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) =>
-      Text(text, style: const TextStyle(fontSize: 15, color: C.sub));
-}
-
-/// 이름, 설명, 오른쪽 값, 화살표 한 줄. 누를 곳이 없으면 화살표를 두지 않는다
-class _Line extends StatelessWidget {
-  const _Line({required this.title, this.sub, this.trailing, this.onTap});
-  final String title;
-  final String? sub;
-  final Widget? trailing;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final line = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: C.text,
-                  ),
-                ),
-                if (sub != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      sub!,
-                      style: const TextStyle(fontSize: 13, color: C.sub),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          if (trailing != null) ...[const SizedBox(width: 12), trailing!],
-          if (onTap != null) const Icon(Icons.chevron_right, color: C.faint),
-        ],
-      ),
-    );
-    if (onTap == null) return line;
-    return Semantics(
-      button: true,
-      child: Pressable(onTap: onTap, child: line),
-    );
-  }
 }

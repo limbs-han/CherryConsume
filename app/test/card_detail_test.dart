@@ -4,6 +4,7 @@ import 'package:cherry_consume/main.dart';
 import 'package:cherry_consume/screens/card_detail.dart';
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:cherry_consume/theme.dart';
+import 'package:cherry_consume/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,7 +21,7 @@ Future<void> openMrLife(WidgetTester tester) async {
   pay(s, card, 4300, 'GS25');
   await tester.pumpWidget(CherryApp(api: api));
   await tester.pumpAndSettle();
-  await tester.tap(find.text('신한카드 Mr.Life'));
+  await tester.tap(find.text('신한 Mr.Life'));
   await tester.pumpAndSettle();
 }
 
@@ -33,6 +34,39 @@ void expectRow(WidgetTester tester, String label, String value) {
 }
 
 void main() {
+  testWidgets('카드별 답은 줄마다 답하기 배지와 화살표, 누르면 바닥 시트에서 고른다', (tester) async {
+    // 작업 011 설계 2절 T3. IBK 나라사랑은 지난달 결제계좌로 급여를 받았는지 묻는다. 칩을 펼치지 않는다
+    final (:api, :s) = app();
+    addCard(s, 'ibk-narasarang');
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('IBK 나라사랑'));
+    await tester.pumpAndSettle();
+    final title = find.textContaining('급여를 받았나요');
+    await tester.scrollUntilVisible(
+      title,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    final row = find.ancestor(of: title, matching: find.byType(Row)).first;
+    expect(
+      find.descendant(of: row, matching: find.widgetWithText(Pill, '답하기')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: row, matching: find.byIcon(Icons.chevron_right)),
+      findsOneWidget,
+    );
+    expect(find.byType(ChoicePill), findsNothing);
+    await tester.ensureVisible(title);
+    await tester.pumpAndSettle();
+    await tester.tap(title);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('예').last);
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: row, matching: find.text('예')), findsOneWidget);
+  });
+
   testWidgets('폰 폭에서 값은 오른쪽 끝에 붙고, 짧은 값 옆의 이름은 한 줄이다', (tester) async {
     // 2026-10-04 에뮬레이터에서 이름과 값이 폭을 반씩 나눠 값이 가운데서 시작하고 "기준"이 줄을 바꿨다. 412 폭 폰
     tester.view.devicePixelRatio = 2.625;

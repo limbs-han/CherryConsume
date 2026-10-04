@@ -465,3 +465,77 @@ class _Dashes extends CustomPainter {
   @override
   bool shouldRepaint(_Dashes old) => old.color != color || old.radius != radius;
 }
+
+/// 줄 오른쪽의 값. 길면 줄여서 이름 칸을 남긴다
+class RowValue extends StatelessWidget {
+  const RowValue(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => ConstrainedBox(
+    constraints: const BoxConstraints(maxWidth: 160),
+    child: Text(
+      text,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.end,
+      style: const TextStyle(fontSize: 15, color: C.sub),
+    ),
+  );
+}
+
+/// 이름, 설명, 오른쪽 값, 화살표 한 줄. 누를 곳이 없으면 화살표를 두지 않는다. 설정과 카드 상세가 쓴다. 작업 011 설계 2절 S1, T3
+class TapRow extends StatelessWidget {
+  const TapRow({
+    super.key,
+    required this.title,
+    this.sub,
+    this.trailing,
+    this.onTap,
+  });
+  final String title;
+  final String? sub;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final line = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: C.text,
+                  ),
+                ),
+                if (sub != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      sub!,
+                      style: const TextStyle(fontSize: 13, color: C.sub),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (trailing != null) ...[const SizedBox(width: 12), trailing!],
+          if (onTap != null) const Icon(Icons.chevron_right, color: C.faint),
+        ],
+      ),
+    );
+    if (onTap == null) return line;
+    return Semantics(
+      button: true,
+      child: Pressable(onTap: onTap, child: line),
+    );
+  }
+}

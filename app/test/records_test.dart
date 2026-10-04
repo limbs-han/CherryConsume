@@ -33,22 +33,20 @@ Future<void> openMenu(WidgetTester tester, String merchant, String item) async {
   await tester.pumpAndSettle();
 }
 
-/// 질문 글로 그 사실 칸을 찾아 그 안의 답을 누른다
+/// 질문의 첫 문장으로 그 사실 줄을 찾아 누르고 바닥 시트에서 답을 고른다. 작업 011 설계 2절 T3
 Future<void> answer(WidgetTester tester, String question, String label) async {
-  final box = find.ancestor(
-    of: find.text(question),
-    matching: find.byType(FactAnswer),
-  );
-  final chip = find.descendant(of: box, matching: find.text(label));
-  // 긴 목록은 아래 칸을 아직 그리지 않아 세로 목록을 굴려 그리게 한 뒤 화면 안으로 끌어온다
+  final row = find.text(firstSentence(question).$1);
+  // 긴 목록은 아래 줄을 아직 그리지 않아 세로 목록을 굴려 그리게 한 뒤 화면 안으로 끌어온다
   await tester.scrollUntilVisible(
-    chip,
+    row,
     100,
     scrollable: find.byType(Scrollable).first,
   );
-  await tester.ensureVisible(chip);
+  await tester.ensureVisible(row);
   await tester.pumpAndSettle();
-  await tester.tap(chip);
+  await tester.tap(row);
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(label).last);
   await tester.pumpAndSettle();
 }
 
@@ -248,7 +246,7 @@ void main() {
     await tester.pumpWidget(CherryApp(api: api));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('삼성카드 taptap O'));
+    await tester.tap(find.text('삼성 taptap O'));
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('카드 정보'), 300);
     await tester.pumpAndSettle();
@@ -265,7 +263,7 @@ void main() {
     await tester.pageBack();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('IBK나라사랑카드'));
+    await tester.tap(find.text('IBK 나라사랑'));
     await tester.pumpAndSettle();
     await answer(tester, ask('ibk-narasarang', 'salary_transfer'), '예');
     expect(find.text('결제 1건의 혜택을 다시 계산했어요.'), findsOneWidget);
@@ -276,7 +274,7 @@ void main() {
     await tester.pageBack();
     await tester.pumpAndSettle();
     await openTab(tester, '설정');
-    expect(find.textContaining('쓰는 카드 · IBK나라사랑카드'), findsOneWidget);
+    expect(find.textContaining('쓰는 카드 · IBK 나라사랑'), findsOneWidget);
     // 설정은 줄을 눌러 바닥 시트에서 고른다. 작업 011 설계 2절 S1
     // 설정 줄은 질문의 첫 문장이 제목이다. 작업 011 설계 2절 S4
     await tester.tap(
@@ -298,7 +296,7 @@ void main() {
     pay(s, card, 4300, 'GS25');
     await tester.pumpWidget(CherryApp(api: api));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('신한카드 Mr.Life'));
+    await tester.tap(find.text('신한 Mr.Life'));
     await tester.pumpAndSettle();
 
     // 편의점 월 5회와 다른 혜택의 월 5회가 같은 4회로 보인다. 작업 011에서 남은 양 / 한도로 바꿨다. 설계 2절 D2, D3

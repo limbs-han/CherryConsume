@@ -371,20 +371,25 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                 ),
               ),
             ),
-            for (final q in d.facts)
-              FactAnswer(
+            // 설정처럼 줄마다 답하기 배지와 화살표이고 누르면 바닥 시트에서 고른다. 작업 011 설계 2절 T3
+            for (final q in d.facts) ...[
+              const Divider(height: 1, color: C.line),
+              FactRow(
                 q: q,
                 onAnswer: (v) => _answer({
                   'facts': {q.key: v},
                 }),
               ),
-            for (final q in d.options)
-              OptionAnswer(
+            ],
+            for (final q in d.options) ...[
+              const Divider(height: 1, color: C.line),
+              OptionRow(
                 q: q,
                 onAnswer: (c) => _answer({
                   'options': {q.key: c},
                 }),
               ),
+            ],
           ],
         ),
       ),
