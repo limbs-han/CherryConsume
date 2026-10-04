@@ -116,3 +116,4 @@
 | [71](71-ios-after-android.md) | 2026-10-04 | iOS 앱스토어 출시는 Android 출시 다음으로 |
 | [72](72-ui-polish-phone-check.md) | 2026-10-05 | 작업 011 실제 폰 확인에서 짚은 것과 업종별 묶기, 작업 011 끝 |
 | [73](73-readme-polish.md) | 2026-10-05 | README 꾸미기 |
+| [74](74-catalog-new-card-step10.md) | 2026-10-05 | 작업 008 10단계 카탈로그에 없는 카드의 새 카드 초안 |
