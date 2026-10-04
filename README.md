@@ -60,9 +60,12 @@
 
 ## 기술 스택
 
-- **앱**: Flutter. Android 먼저. 폰 안 SQLite에 기록하고 Dart 계산 엔진으로 실적과 추천을 계산합니다
-- **서버**: 없습니다. 앱이 인터넷으로 하는 일은 공개 저장소의 카탈로그 파일 받기 하나입니다
-- **데이터 파이프라인**: Python, Databricks. 카드사 상품 정보를 모아 사람이 검수한 뒤 카탈로그로 냅니다
+| 분야 | 기술 | 하는 일 |
+|---|---|---|
+| 앱 | ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white) ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white) | Android 먼저. 폰 안 SQLite에 기록하고 Dart 계산 엔진으로 실적과 추천을 계산합니다 |
+| 데이터 파이프라인 | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=flat-square&logo=pydantic&logoColor=white) ![Databricks](https://img.shields.io/badge/Databricks-FF3621?style=flat-square&logo=databricks&logoColor=white) ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=flat-square&logo=apachespark&logoColor=white) | 카드사 상품 정보를 모아 LLM으로 혜택을 뽑고, 사람이 검수한 뒤 카탈로그로 냅니다 |
+| 자동화 | ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white) ![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=flat-square&logo=githubpages&logoColor=white) | 시험, 파이프라인 배포, 카탈로그 내보내기, 개인정보처리방침 쪽 |
+| 서버 | 없음 | 앱이 인터넷으로 하는 일은 공개 저장소의 카탈로그 파일 받기 하나입니다 |
 
 ## 구조
 
