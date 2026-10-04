@@ -244,7 +244,7 @@ WHERE (__START_AT.at >= current_date() - INTERVAL 30 DAYS AND __START_AT.version
 
 - 승인은 규칙이 바뀐 개정을 같은 판 안에서 지우고 새로 넣는다. 이력에서는 옛 행이 그 판의 차례 0에 닫히고 새 행이 차례 1에 열린다. 시행일을 바로잡으면 옛 시행일 행이 닫히고 새 시행일 행이 열려 다른 개정처럼 보인다. 같은 `review_id`로 묶어 본다.
 - 개발용에서 처음부터 다시 쌓으려면 `pipeline` 폴더에서 `databricks bundle run cherry_history --full-refresh-all`. 그때까지의 이력은 사라지고 지금 개정만 첫 적재로 다시 들어간다. 운영 이력 표는 `pipelines.reset.allowed=false`로 이 명령을 막아 두었다. 원천이 지우고 다시 넣는 표라 이력이 지워지면 되살릴 곳이 없다.
-- 설정: 골드 `card_revisions`의 변경 데이터 피드와 변경 파일, 로그 보존 60일은 승인 작업과 골드 첫 적재 작업이 쓰기 전에 켠다. 사람 계정은 운영 골드 설정을 못 바꾼다. 피드가 켜지기 전에 이력 작업을 손으로 돌리지 않는다. 스트림이 피드 없는 판을 기억해 계속 실패할 수 있다.
+- 설정: 골드 `card_revisions`의 변경 데이터 피드와 변경 파일, 로그 보존 60일은 승인 작업과 골드 첫 적재 작업이 쓰기 전에 켠다. 사람 계정은 운영 골드 설정을 못 바꾼다. 피드가 켜지기 전에 이력 작업을 손으로 돌리지 않는다. 스트림이 피드 없는 판을 기억해 계속 실패할 수 있다. 트리거는 데이터 변경만 보고 설정 변경은 보지 않는다. 그래서 피드를 처음 켠 뒤에는 이력 작업을 손으로 한 번 돌린다. 운영은 2026-10-04 그렇게 켰다.
 - 운영 이력 작업이 끊겼을 때: 실패 메일이 오면 먼저 작업 실행 화면의 오류를 본다. "change data was not recorded"나 파일을 못 찾는다는 오류면 밀린 변경이 지워진 것이다. 이때 순서는 이렇다. 첫째, **SQL Editor**에서 지금 이력을 `CREATE TABLE cherry.silver.card_revision_history_until_<날짜> AS SELECT * FROM cherry.silver.card_revision_history`로 따로 남긴다. 둘째, 번들 변수 `history_reset_allowed`를 운영도 true로 바꿔 푸시하고 전체 다시 쌓기를 한 번 돌린 뒤 false로 되돌린다. 셋째, 옛 이력은 남긴 표에서 본다. 남긴 표 만들기와 운영 실행은 Claude가 사용자에게 묻고 한다.
 
 ### PC에서 받는 카드사
