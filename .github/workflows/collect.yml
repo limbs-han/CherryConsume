@@ -1,18 +1,18 @@
-# 카드사 원문 수집. 작업 003 설계 4절 2번. 매달 1일과 15일 UTC 18시 17분, 한국 시각으로 다음 날 새벽 3시 17분에 돈다
-# 1일에는 모든 카드사를, 15일에는 14일 주기 카드사만 받는다. 받은 원문은 운영 볼륨 cherry.bronze.raw에 올린다
+# 카드사 원문 수집. 작업 003 설계 4절 2번, 작업 008 설계 2절
+# 2026-10-04부터 사용자 집 PC의 Windows 자체 호스팅 러너에서 돈다. 신한처럼 GitHub 서버의 접속을 막는 카드사도 집 주소로는 받힌다
+# 예약은 없다. 매달 1일과 15일 사용자가 Actions 화면에서 손으로 돌린다. PC가 켜져 있을 때 돌리려는 것이다. 2026-10-04 사용자가 정했다
+# 1일에는 주기 30을 골라 모든 카드사의 카드 원문, 상품공시실, 카탈로그 밖 카드의 상품 페이지와 최신 PDF를 받는다
+# 15일에는 주기 14를 골라 14일 주기 카드사의 카드 원문만 받는다. 받은 원문은 운영 볼륨 cherry.bronze.raw에 올린다
+# 카드사마다 작업 하나로 나눠 한 카드사가 실패해도 나머지는 올라간다. 러너가 하나라 차례로 돈다
+# 카드사가 수집 중단을 요청하면 아래 matrix에서 빼고 카드사 파일을 blocked로 둔다. 2026-10-04 사용자가 정했다
 # 공개 저장소라 실행 기록은 누구나 본다. 수집기는 원문 내용을 찍지 않고 카드사 id, 개수, 실패 id만 찍는다
-# 예약 실행은 GitHub이 몰릴 때 늦어질 수 있어 정각을 피하고, 날짜 대신 어느 예약이 불렀는지로 주기를 고른다
-# 공개 저장소의 예약 실행은 저장소에 60일 동안 활동이 없으면 GitHub이 끈다
 name: collect
 
 on:
-  schedule:
-    - cron: "17 18 1 * *"
-    - cron: "17 18 15 * *"
   workflow_dispatch:
     inputs:
       interval:
-        description: 받을 카드사의 갱신 주기. 30이면 모든 카드사, 14면 14일 주기 카드사만
+        description: 1일에는 30, 15일에는 14. 30이면 모든 카드사와 상품공시실, 14면 14일 주기 카드사만
         type: choice
         options: ["30", "14"]
         default: "30"
@@ -28,10 +28,24 @@ defaults:
   run:
     shell: bash
 
+env:
+  # Git Bash가 dbfs:/ 같은 인자를 Windows 경로로 바꾸지 않게 한다
+  MSYS_NO_PATHCONV: "1"
+  PYTHONIOENCODING: utf-8
+
 jobs:
   collect:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    name: collect ${{ matrix.issuer }}
+    # 집 PC 러너만 받는다. 이름표 cherry-home은 러너를 등록할 때 붙인다. docs/databricks.md "집 PC 러너"
+    runs-on: [self-hosted, Windows, cherry-home]
+    # 1일에는 카드 1,000장 안팎의 상품 페이지와 PDF를 2초씩 쉬며 받는다. 브라우저 카드사는 페이지마다 15초까지 기다려
+    # KB는 두 시간 가까이 걸릴 수 있다
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        issuer: [hana, hyundai, ibk, kakaobank, kb, lotte, nh, samsung, shinhan, woori, carddamoa]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -42,26 +56,31 @@ jobs:
       - uses: databricks/setup-cli@6a2e75f1f954d87503702c408deea63216c0799d # v1.18.0
 
       - name: 브라우저 설치
-        run: uv run --project backend --with playwright==1.63.0 python -m playwright install --with-deps chromium
+        run: uv run --project backend --with playwright==1.63.0 python -m playwright install chromium
 
       - name: 원문 받기
         id: collect
-        # 수집이 길어져도 받은 파일은 올릴 수 있게 작업 전체 30분보다 짧게 끊는다
-        timeout-minutes: 20
+        # 수집이 길어져도 받은 파일은 올릴 수 있게 작업 전체보다 짧게 끊는다
+        timeout-minutes: 240
         env:
-          INTERVAL_INPUT: ${{ inputs.interval }}
-          SCHEDULE: ${{ github.event.schedule }}
+          INTERVAL: ${{ inputs.interval }}
+          ISSUER: ${{ matrix.issuer }}
         run: |
-          if [ -n "$INTERVAL_INPUT" ]; then interval="$INTERVAL_INPUT"
-          elif [ "$SCHEDULE" = "17 18 1 * *" ]; then interval=30
-          else interval=14; fi
-          echo "주기 ${interval}일"
+          echo "카드사 ${ISSUER}, 주기 ${INTERVAL}일"
+          # robots.txt를 묻지 않는 곳. 삼성, IBK, 카카오뱅크, 롯데는 사용자가 정했고 카드다모아는 robots.txt가 없다
+          ignore=()
+          case "$ISSUER" in samsung|ibk|kakaobank|lotte|carddamoa) ignore=(--ignore-robots "$ISSUER") ;; esac
+          collect() {
+            uv run --project backend --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out raw --issuer "$ISSUER" "${ignore[@]}" "$@"
+          }
           status=0
-          # GitHub 서버의 접속을 막는 카드사는 빼고 사용자가 PC에서 받는다. 설계 4절 2번, docs/databricks.md "PC에서 받는 카드사"
-          # 신한은 2026-10-01 모든 주소가 RemoteDisconnected였고 같은 날 PC에서는 모두 받았다
-          # 여기에 카드사를 더하면 docs/databricks.md의 PC 명령에도 --issuer를 하나 더 붙인다. 아니면 어디서도 받지 않는다
-          uv run --project backend --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out raw --interval "$interval" \
-            --exclude shinhan || status=$?
+          # 카드다모아는 카드 원문이 없다. 수집 방법이 blocked인 카드사는 받을 카드 원문이 없어 바로 끝난다
+          [ "$ISSUER" = carddamoa ] || collect --interval "$INTERVAL" || status=$?
+          if [ "$INTERVAL" = 30 ]; then
+            # 목록 파일 이름이 초 단위라 앞 실행과 같은 초에 끝나면 겹친다
+            sleep 1
+            collect --disclosure --index-cards 0 || status=$?
+          fi
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
       - name: 받은 원문 올리기
@@ -86,13 +105,15 @@ jobs:
           # 파일 하나를 올리는 cp는 없는 폴더를 만들지 않는다. 첫 수집에서 manifests/가 없어 실패했다
           databricks fs mkdir "$dest/manifests"
           for f in raw/manifests/*.jsonl; do
-            # 받은 것이 없는 목록 파일은 올리지 않는다. 올리면 할 일 없는 적재 작업이 돈다. 신한을 뺀 15일 실행이 그렇다
+            # 받은 것이 없는 목록 파일은 올리지 않는다. 올리면 할 일 없는 적재 작업이 돈다. blocked 카드사의 카드 원문 실행이 그렇다
             [ -s "$f" ] || continue
-            databricks fs cp "$f" "$dest/manifests/$(basename "$f")" --overwrite > /dev/null
-            # 폴더째 한 단계 더 들어가 올라가지 않았는지 이번 목록 파일과 그 첫 원문의 자리로 확인한다
-            databricks fs ls "$dest/manifests" | grep -qF "$(basename "$f")"
-            p=$(head -1 "$f" | jq -r .path)
+            # 폴더째 한 단계 더 들어가 올라가지 않았는지 첫 원문의 자리로 목록 파일을 올리기 전에 확인한다
+            # 목록 파일이 먼저 들어가면 없는 원문을 가리켜 글 뽑기가 그 원문을 계속 미룬다. 2026-10-02 PC 올리기에서 겪었다
+            # 비밀값이 든 단계라 외부 패키지를 부르는 uv 대신 sed로 경로를 읽는다
+            p=$(head -1 "$f" | sed -E 's/.*"path": "([^"]*)".*/\1/')
             [ -z "$p" ] || databricks fs ls "$dest/$(dirname "$p")" | grep -qF "$(basename "$p")"
+            databricks fs cp "$f" "$dest/manifests/$(basename "$f")" --overwrite > /dev/null
+            databricks fs ls "$dest/manifests" | grep -qF "$(basename "$f")"
           done
           echo "올린 파일 $(find raw -type f | wc -l)개"
 
