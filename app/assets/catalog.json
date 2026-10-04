@@ -2327,43 +2327,53 @@
  "issuers": [
   {
    "id": "hana",
-   "name": "하나카드"
+   "name": "하나카드",
+   "short_name": "하나"
   },
   {
    "id": "hyundai",
-   "name": "현대카드"
+   "name": "현대카드",
+   "short_name": "현대"
   },
   {
    "id": "ibk",
-   "name": "IBK기업은행"
+   "name": "IBK기업은행",
+   "short_name": "IBK"
   },
   {
    "id": "kakaobank",
-   "name": "카카오뱅크"
+   "name": "카카오뱅크",
+   "short_name": "카카오"
   },
   {
    "id": "kb",
-   "name": "KB국민카드"
+   "name": "KB국민카드",
+   "short_name": "KB"
   },
   {
    "id": "lotte",
-   "name": "롯데카드"
+   "name": "롯데카드",
+   "short_name": "롯데"
   },
   {
    "id": "nh",
-   "name": "NH농협카드"
+   "name": "NH농협카드",
+   "short_name": "농협"
   },
   {
    "id": "samsung",
-   "name": "삼성카드"
+   "name": "삼성카드",
+   "short_name": "삼성"
   },
   {
    "id": "shinhan",
-   "name": "신한카드"
+   "name": "신한카드",
+   "short_name": "신한"
   },
   {
    "id": "woori",
-   "name": "우리카드"
+   "name": "우리카드",
+   "short_name": "우리"
   }
  ],
  "cards": [
@@ -2372,6 +2382,7 @@
    "id": "hana-travelog-check",
    "issuer": "hana",
    "name": "하나카드 트래블로그 체크카드",
+   "short_name": "하나 트래블로그 체크",
    "search_names": [
     "트래블로그 체크카드"
    ],
@@ -2591,6 +2602,7 @@
    "id": "hana-wonder2-daily",
    "issuer": "hana",
    "name": "하나카드 원더카드 2.0 DAILY",
+   "short_name": "하나 원더 DAILY",
    "search_names": [
     "원더카드 2.0 DAILY",
     "원더카드 DAILY"
@@ -3729,6 +3741,7 @@
    "id": "hyundai-m",
    "issuer": "hyundai",
    "name": "현대카드M",
+   "short_name": "현대 M",
    "search_names": [
     "현대M",
     "현대카드 M"
@@ -4108,6 +4121,7 @@
    "id": "hyundai-the-green-ed4",
    "issuer": "hyundai",
    "name": "현대카드 the Green Edition4",
+   "short_name": "현대 the Green",
    "search_names": [
     "the Green Edition4",
     "더 그린 에디션4"
@@ -4633,6 +4647,7 @@
    "id": "hyundai-zero-edition3-discount",
    "issuer": "hyundai",
    "name": "현대카드ZERO Edition3(할인형)",
+   "short_name": "현대 ZERO",
    "search_names": [
     "제로 에디션3 할인형",
     "현대카드ZERO Edition3 할인형"
@@ -4806,6 +4821,7 @@
    "id": "ibk-narasarang",
    "issuer": "ibk",
    "name": "IBK나라사랑카드",
+   "short_name": "IBK 나라사랑",
    "search_names": [
     "나라사랑카드"
    ],
@@ -13333,6 +13349,7 @@
    "id": "kakaobank-friends-check",
    "issuer": "kakaobank",
    "name": "카카오뱅크 프렌즈 체크카드",
+   "short_name": "카카오 프렌즈 체크",
    "search_names": [
     "K-패스 프렌즈 체크카드",
     "프렌즈 체크카드"
@@ -14902,6 +14919,7 @@
    "id": "kb-easy-all-titanium",
    "issuer": "kb",
    "name": "KB국민 Easy all 티타늄카드",
+   "short_name": "KB Easy all",
    "search_names": [
     "Easy all 티타늄카드"
    ],
@@ -17987,6 +18005,7 @@
    "id": "kb-my-wesh",
    "issuer": "kb",
    "name": "KB국민 My WE:SH 카드",
+   "short_name": "KB My WE:SH",
    "search_names": [
     "My WE:SH 카드",
     "마이 위시 카드"
@@ -19126,6 +19145,7 @@
    "id": "kb-toktok",
    "issuer": "kb",
    "name": "KB국민 청춘대로 톡톡카드",
+   "short_name": "KB 톡톡",
    "search_names": [
     "청춘대로 톡톡카드"
    ],
@@ -19676,6 +19696,7 @@
    "id": "lotte-loca-classic",
    "issuer": "lotte",
    "name": "롯데카드 LOCA CLASSIC",
+   "short_name": "롯데 LOCA CLASSIC",
    "search_names": [
     "LOCA CLASSIC 카드"
    ],
@@ -19903,6 +19924,7 @@
    "id": "lotte-loca365",
    "issuer": "lotte",
    "name": "롯데카드 LOCA 365",
+   "short_name": "롯데 LOCA 365",
    "search_names": [
     "LOCA 365 카드"
    ],
@@ -20984,6 +21006,7 @@
    "id": "nh-heroes-check",
    "issuer": "nh",
    "name": "NH농협카드 히어로즈 체크카드",
+   "short_name": "농협 히어로즈 체크",
    "search_names": [
     "히어로즈 체크카드",
     "히어로즈카드"
@@ -21739,6 +21762,7 @@
    "id": "samsung-id-on",
    "issuer": "samsung",
    "name": "삼성 iD ON 카드",
+   "short_name": "삼성 iD ON",
    "search_names": [
     "iD ON",
     "아이디 온"
@@ -24357,6 +24381,7 @@
    "id": "samsung-taptap-o",
    "issuer": "samsung",
    "name": "삼성카드 taptap O",
+   "short_name": "삼성 taptap O",
    "search_names": [
     "taptap O",
     "탭탭오"
@@ -25907,6 +25932,7 @@
    "id": "shinhan-cheoeum",
    "issuer": "shinhan",
    "name": "신한카드 처음",
+   "short_name": "신한 처음",
    "search_names": [],
    "kind": "credit",
    "product_codes": [
@@ -27375,6 +27401,7 @@
    "id": "shinhan-mrlife",
    "issuer": "shinhan",
    "name": "신한카드 Mr.Life",
+   "short_name": "신한 Mr.Life",
    "search_names": [
     "미스터라이프"
    ],
@@ -28537,6 +28564,7 @@
    "id": "shinhan-pointplan",
    "issuer": "shinhan",
    "name": "신한카드 Point Plan",
+   "short_name": "신한 Point Plan",
    "search_names": [
     "포인트플랜"
    ],
@@ -30056,6 +30084,7 @@
    "id": "woori-every-point",
    "issuer": "woori",
    "name": "우리카드 카드의정석2 EVERY POINT",
+   "short_name": "우리 EVERY POINT",
    "search_names": [
     "카드의정석 EVERY POINT",
     "카드의정석2 EVERY POINT"
@@ -30412,6 +30441,7 @@
    "id": "woori-k-life-check",
    "issuer": "woori",
    "name": "우리카드 카드의정석 K-LIFE CHECK",
+   "short_name": "우리 K-LIFE 체크",
    "search_names": [
     "카드의정석 K-LIFE CHECK"
    ],

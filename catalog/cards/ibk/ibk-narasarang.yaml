@@ -2,6 +2,7 @@ schema_version: 2
 id: ibk-narasarang
 issuer: ibk
 name: IBK나라사랑카드
+short_name: IBK 나라사랑
 search_names: [나라사랑카드]
 kind: check
 product_codes: [12-11-296-0001]

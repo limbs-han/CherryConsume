@@ -2,6 +2,7 @@ schema_version: 2
 id: kakaobank-friends-check
 issuer: kakaobank
 name: 카카오뱅크 프렌즈 체크카드
+short_name: 카카오 프렌즈 체크
 search_names: [K-패스 프렌즈 체크카드, 프렌즈 체크카드]
 kind: check
 product_codes:

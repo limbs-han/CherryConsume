@@ -2,6 +2,7 @@ schema_version: 2
 id: kb-my-wesh
 issuer: kb
 name: KB국민 My WE:SH 카드
+short_name: KB My WE:SH
 search_names: ['My WE:SH 카드', 마이 위시 카드]
 kind: credit
 product_codes:

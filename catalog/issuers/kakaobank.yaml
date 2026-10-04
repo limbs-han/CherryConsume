@@ -1,5 +1,6 @@
 schema_version: 2
 id: kakaobank
 name: 카카오뱅크
+short_name: 카카오
 collect: {list_url: 'https://www.kakaobank.com/Help/Documents/ProductDeclaration/Products', method: browser, interval_days: 30, notice_url: 'https://www.kakaobank.com/Corp/News/Notices', disclosure_url: 'https://www.kakaobank.com/api/v1/docs/app/productGroupList'}
 notes: '상품공시 목록과 공지사항은 자바스크립트로 그림. 목록은 내부 JSON /api/v1/docs/app/productGroupList, 공지는 /api/v1/boards/NOTICE/posts, 상품/약관 변경공시는 /api/v1/boards/PROD_HISTORY/posts에서 받을 수 있음. 행사 혜택 페이지 kakaobankcontent.com은 브라우저로만 읽힘. 행사가 해마다 2월 1일에 바뀌니 1월 중순에 다시 봄. 2026-09-30 수집 시험: www.kakaobank.com의 robots.txt가 이름 붙은 검색 봇 말고는 모두 막아 상품 목록, 공지, 상품 페이지는 받지 않는다. 위 내부 JSON 주소도 같은 사이트라 막힌다. 상품설명서 og.kakaobank.io와 행사 페이지 kakaobankcontent.com은 받고 3천~4천 자가 나온다. 상품 페이지는 사람이 받아 --add로 더한다. 2026-10-03 작업 008 색인: 공시 그룹 목록에서 chnl_prgr_cd 03이 카드 5그룹이고, 그룹별 docs/app/<번호>?hmpg_yn=Y 에 상품설명서 PDF, HTML, TXT 파일 id와 적용일이 있다. 파일은 og.kakaobank.io/view/<id>. 수집 방법 전환은 작업 008 7단계에서.'

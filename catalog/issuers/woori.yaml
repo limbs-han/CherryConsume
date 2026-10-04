@@ -1,6 +1,7 @@
 schema_version: 2
 id: woori
 name: 우리카드
+short_name: 우리
 collect: {list_url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd02/H1CRD202S00.do?ctgrCd=S000017&hiPrdCtgrCd=M110018', method: browser, interval_days: 30, notice_url: 'https://pc.wooricard.com/dcpc/yh1/cct/cct11/prdagrmchgadv/H1CCT211S18.do', disclosure_url: 'https://pc.wooricard.com/dcpc/yh1/cct/cct11/prdntc/H1CCT211S09.do'}
 defaults:
   - effective_from: 2024-02-26

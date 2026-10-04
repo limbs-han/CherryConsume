@@ -2,6 +2,7 @@ schema_version: 2
 id: hana-travelog-check
 issuer: hana
 name: 하나카드 트래블로그 체크카드
+short_name: 하나 트래블로그 체크
 search_names: [트래블로그 체크카드]
 kind: check
 product_codes:

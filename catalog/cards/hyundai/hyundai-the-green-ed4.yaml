@@ -2,6 +2,7 @@ schema_version: 2
 id: hyundai-the-green-ed4
 issuer: hyundai
 name: 현대카드 the Green Edition4
+short_name: 현대 the Green
 search_names: [the Green Edition4, 더 그린 에디션4]
 kind: credit
 product_codes: [TGE4]

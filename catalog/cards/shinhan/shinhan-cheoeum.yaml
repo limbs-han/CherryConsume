@@ -2,6 +2,7 @@ schema_version: 2
 id: shinhan-cheoeum
 issuer: shinhan
 name: 신한카드 처음
+short_name: 신한 처음
 kind: credit
 product_codes:
   - '202404150001'

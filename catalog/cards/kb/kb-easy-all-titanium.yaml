@@ -2,6 +2,7 @@ schema_version: 2
 id: kb-easy-all-titanium
 issuer: kb
 name: KB국민 Easy all 티타늄카드
+short_name: KB Easy all
 search_names: [Easy all 티타늄카드]
 kind: credit
 product_codes:

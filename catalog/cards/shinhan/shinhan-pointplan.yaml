@@ -2,6 +2,7 @@ schema_version: 2
 id: shinhan-pointplan
 issuer: shinhan
 name: 신한카드 Point Plan
+short_name: 신한 Point Plan
 search_names: [포인트플랜]
 kind: credit
 product_codes:

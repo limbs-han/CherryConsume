@@ -2,6 +2,7 @@ schema_version: 2
 id: samsung-taptap-o
 issuer: samsung
 name: 삼성카드 taptap O
+short_name: 삼성 taptap O
 search_names: [taptap O, 탭탭오]
 kind: credit
 product_codes: [AAP1483]

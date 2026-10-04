@@ -1,6 +1,7 @@
 schema_version: 2
 id: kb
 name: KB국민카드
+short_name: KB
 collect: {list_url: 'https://card.kbcard.com/SVC/DVIEW/HSHMCXCRSZZC0002', method: browser, interval_days: 30, notice_url: 'https://card.kbcard.com/CMN/DVIEW/HSEMCXCRSCTC0001', disclosure_url: 'https://card.kbcard.com/SVC/DVIEW/HSHMCXCRSZZC0002'}
 defaults:
   - effective_from: 2017-01-26

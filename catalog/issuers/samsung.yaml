@@ -1,6 +1,7 @@
 schema_version: 2
 id: samsung
 name: 삼성카드
+short_name: 삼성
 collect: {list_url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPDCCardCardinfoRecommendPC001', method: blocked, interval_days: 30, notice_url: 'https://www.samsungcard.com/personal/notice/news/UHPPCC0247M0.jsp', disclosure_url: 'https://www.samsungcard.com/company/IR/announce/product-conditions/UHPPCI0261M0.jsp'}
 defaults:
   - effective_from: 2021-03-25

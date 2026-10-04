@@ -1,6 +1,7 @@
 schema_version: 2
 id: lotte
 name: 롯데카드
+short_name: 롯데
 collect: {list_url: 'https://www.lottecard.co.kr/app/LPCDADA_V100.lc', method: blocked, interval_days: 30, notice_url: 'https://www.lottecard.co.kr/app/LPEVNCA_V100.lc', disclosure_url: 'https://www.lottecard.co.kr/app/LPSCHAA_V100.lc'}
 defaults:
   - effective_from: 2020-07-10

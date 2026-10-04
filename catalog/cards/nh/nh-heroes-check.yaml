@@ -2,6 +2,7 @@ schema_version: 2
 id: nh-heroes-check
 issuer: nh
 name: NH농협카드 히어로즈 체크카드
+short_name: 농협 히어로즈 체크
 search_names: [히어로즈 체크카드, 히어로즈카드]
 kind: check
 product_codes:

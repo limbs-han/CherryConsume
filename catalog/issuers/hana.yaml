@@ -1,6 +1,7 @@
 schema_version: 2
 id: hana
 name: 하나카드
+short_name: 하나
 collect: {list_url: 'https://www.hanacard.co.kr/OPI31000000D.web?schID=pcd&mID=OPI31000005P&CT_ID=241704030444153', method: browser, interval_days: 30, notice_url: 'https://www.hanacard.co.kr/OPP35150000D.web?schID=ncd&mID=OPP35150000D'}
 defaults:
   - effective_from: 2022-07-18

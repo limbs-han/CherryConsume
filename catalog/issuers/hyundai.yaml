@@ -1,6 +1,7 @@
 schema_version: 2
 id: hyundai
 name: 현대카드
+short_name: 현대
 collect: {list_url: 'https://www.hyundaicard.com/cpc/ma/CPCMA0101_01.hc', method: browser, interval_days: 30, notice_url: 'https://www.hyundaicard.com/cpu/ug/CPUUG3001_01.hc', disclosure_url: 'https://www.hyundaicard.com/cpu/ug/CPUUG2001_08.hc'}
 defaults:
   - effective_from: 2022-11-01

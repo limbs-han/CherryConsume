@@ -2,6 +2,7 @@ schema_version: 2
 id: woori-every-point
 issuer: woori
 name: 우리카드 카드의정석2 EVERY POINT
+short_name: 우리 EVERY POINT
 search_names: [카드의정석 EVERY POINT, 카드의정석2 EVERY POINT]
 kind: credit
 product_codes:

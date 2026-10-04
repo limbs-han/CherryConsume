@@ -1,5 +1,6 @@
 schema_version: 2
 id: nh
 name: NH농협카드
+short_name: 농협
 collect: {list_url: 'https://card.nonghyup.com/servlet/IpCc1210I.act', method: api, interval_days: 30, notice_url: 'https://card.nonghyup.com/servlet/IpCi9010I.act?pageNum=1&pageSize=50'}
 notes: '카드 상세는 서버가 그린 HTML이라 바로 읽히지만 브라우저로 열면 몇 초 뒤 보안프로그램 설치 화면으로 넘어감. 카드 목록은 자바스크립트로 불러옴. 새소식 목록은 IpCi9010I.act?pageNum=N&pageSize=50, 상세는 IpCi9011R.act?bbrd_sqno=<번호>를 GET으로 열면 읽힘. 2026-09-29 확인. 상품 코드는 카드 상세 주소의 CD_WRS_SQNO. 2026-09-30 수집 시험: 브라우저로 열면 네 주소 모두 보안프로그램 설치 화면만 받아 method를 api로 바꿨다. 바로 받으면 카드 상세 1.1만 자가 나온다. 새소식은 pageNum과 pageSize를 붙여야 글 목록이 나와 notice_url에 붙였다. 카드 목록은 자바스크립트로 불러와 메뉴 글만 나온다. 2026-10-03 작업 008 색인: 공시실에 카드 목록을 못 찾아 색인은 IpCc1210I.jct 목록 API로 만든다. POST pageNum, cardGubun 빈 값 전체 IPCC0105 신용 IPCC0106 체크, 한 쪽 20장 168장. sel_yn 0이 발급종료. 상품설명서 PDF와 단종일은 없고 출시일은 상세 본문 글에서.'

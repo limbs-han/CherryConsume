@@ -2,6 +2,7 @@ schema_version: 2
 id: kb-toktok
 issuer: kb
 name: KB국민 청춘대로 톡톡카드
+short_name: KB 톡톡
 search_names: [청춘대로 톡톡카드]
 kind: credit
 product_codes:

@@ -2,6 +2,7 @@ schema_version: 2
 id: lotte-loca365
 issuer: lotte
 name: 롯데카드 LOCA 365
+short_name: 롯데 LOCA 365
 search_names: [LOCA 365 카드]
 kind: credit
 product_codes: [P14028-A14028]

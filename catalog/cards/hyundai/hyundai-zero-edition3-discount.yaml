@@ -2,6 +2,7 @@ schema_version: 2
 id: hyundai-zero-edition3-discount
 issuer: hyundai
 name: 현대카드ZERO Edition3(할인형)
+short_name: 현대 ZERO
 search_names: [제로 에디션3 할인형, 현대카드ZERO Edition3 할인형]
 kind: credit
 product_codes: [ZROE3]

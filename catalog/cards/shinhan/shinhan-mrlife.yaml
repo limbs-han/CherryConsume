@@ -2,6 +2,7 @@ schema_version: 2
 id: shinhan-mrlife
 issuer: shinhan
 name: 신한카드 Mr.Life
+short_name: 신한 Mr.Life
 search_names: [미스터라이프]
 kind: credit
 product_codes:

@@ -2,6 +2,7 @@ schema_version: 2
 id: hyundai-m
 issuer: hyundai
 name: 현대카드M
+short_name: 현대 M
 search_names: [현대M, 현대카드 M]
 kind: credit
 product_codes: [ME4]

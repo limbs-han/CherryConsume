@@ -2,6 +2,7 @@ schema_version: 2
 id: lotte-loca-classic
 issuer: lotte
 name: 롯데카드 LOCA CLASSIC
+short_name: 롯데 LOCA CLASSIC
 search_names: [LOCA CLASSIC 카드]
 kind: credit
 product_codes: [P13379-A13379]
