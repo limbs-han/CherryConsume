@@ -105,3 +105,4 @@
 | [60](60-on-device-step8-real-phone.md) | 2026-10-04 | 작업 006 단계 8 실제 폰 |
 | [61](61-catalog-change-history.md) | 2026-10-04 | 작업 010 카탈로그 변경 이력 적재 |
 | [62](62-catalog-index-step4.md) | 2026-10-04 | 작업 008 4단계 상품공시실 색인 |
+| [63](63-handoff-for-other-pc-and-ai.md) | 2026-10-04 | 작업 011 단계 1~3 올리기와 다른 PC, 다른 AI 이어 받기 안내 |
