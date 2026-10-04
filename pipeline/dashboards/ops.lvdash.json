@@ -96,6 +96,34 @@
         "FROM changes WHERE card_id IS NOT NULL\n",
         "ORDER BY day DESC"
       ]
+    },
+    {
+      "name": "history_events",
+      "displayName": "최근 30일 바뀐 개정",
+      "queryLines": [
+        "-- 이력 표에서 개정이 열리고 닫힌 일. 작업 010 설계 3절\n",
+        "-- 같은 판에서 같은 카드와 시행일이 닫히고 열리면 바뀐 개정이다. 이력 표의 첫 판은 첫 적재다\n",
+        "WITH first AS (SELECT min(__START_AT.version) AS v FROM card_revision_history),\n",
+        "opened AS (\n",
+        "  SELECT card_id, effective_from, __START_AT.version AS v, __START_AT.at AS at, review_id\n",
+        "  FROM card_revision_history\n",
+        "),\n",
+        "closed AS (\n",
+        "  SELECT card_id, effective_from, __END_AT.version AS v, __END_AT.at AS at\n",
+        "  FROM card_revision_history WHERE __END_AT IS NOT NULL\n",
+        ")\n",
+        "SELECT coalesce(o.at, c.at) AS at, to_date(coalesce(o.at, c.at)) AS day,\n",
+        "  coalesce(o.card_id, c.card_id) AS card_id, coalesce(o.effective_from, c.effective_from) AS effective_from,\n",
+        "  CASE WHEN o.v = (SELECT v FROM first) THEN '첫 적재'\n",
+        "       WHEN o.card_id IS NOT NULL AND c.card_id IS NOT NULL THEN '바뀐 개정'\n",
+        "       WHEN o.card_id IS NOT NULL THEN '새 개정'\n",
+        "       ELSE '없어진 개정' END AS change,\n",
+        "  o.review_id\n",
+        "FROM opened o FULL OUTER JOIN closed c\n",
+        "  ON o.card_id = c.card_id AND o.effective_from = c.effective_from AND o.v = c.v\n",
+        "WHERE coalesce(o.at, c.at) >= current_date() - INTERVAL 30 DAYS\n",
+        "ORDER BY at DESC\n"
+      ]
     }
   ],
   "pages": [
@@ -703,6 +731,162 @@
             "y": 29,
             "width": 6,
             "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "h_history",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 카탈로그 변경\n",
+                "골드 카드 개정이 바뀐 일이다. 이력 표 `card_revision_history`에서 센다. 작업 010\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 34,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "t_history",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "history_events",
+                  "fields": [
+                    {
+                      "name": "at",
+                      "expression": "`at`"
+                    },
+                    {
+                      "name": "card_id",
+                      "expression": "`card_id`"
+                    },
+                    {
+                      "name": "effective_from",
+                      "expression": "`effective_from`"
+                    },
+                    {
+                      "name": "change",
+                      "expression": "`change`"
+                    },
+                    {
+                      "name": "review_id",
+                      "expression": "`review_id`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "at",
+                    "displayName": "시각"
+                  },
+                  {
+                    "fieldName": "card_id",
+                    "displayName": "카드"
+                  },
+                  {
+                    "fieldName": "effective_from",
+                    "displayName": "시행일"
+                  },
+                  {
+                    "fieldName": "change",
+                    "displayName": "무엇이 됐나"
+                  },
+                  {
+                    "fieldName": "review_id",
+                    "displayName": "검수 번호"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "최근 30일 바뀐 개정"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 35,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "b_history",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "history_events",
+                  "fields": [
+                    {
+                      "name": "day",
+                      "expression": "`day`"
+                    },
+                    {
+                      "name": "change",
+                      "expression": "`change`"
+                    },
+                    {
+                      "name": "count(card_id)",
+                      "expression": "COUNT(`card_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "day",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "날짜"
+                },
+                "y": {
+                  "fieldName": "count(card_id)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "개정 수"
+                },
+                "color": {
+                  "fieldName": "change",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "무엇이 됐나"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "날짜별 바뀐 개정 수"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 35,
+            "width": 2,
+            "height": 6
           }
         }
       ],
