@@ -256,12 +256,41 @@ WHERE (__START_AT.at >= current_date() - INTERVAL 30 DAYS AND __START_AT.version
 - 단종일이 `discontinued_estimated`가 참이면 공시실에 단종일이 없어 처음 사라진 날을 적은 것이다.
 - 안전장치에 걸렸을 때: `index` 단계가 "지난번 판매 중 N장 가운데 M장이 판매 중에서 빠진다"로 실패하면 먼저 그 카드사 공시 원문이 점검 화면인지, 화면이 바뀌어 읽기가 깨졌는지 본다. 그렇다면 읽기 함수를 고친다. 카드사가 실제로 카드를 많이 단종한 것이 맞으면, Claude가 사용자에게 묻고 빠진 열쇠의 행을 SQL로 `status = 'discontinued'`, `discontinued_estimated = true`로 바꾼 뒤 `cherry_refresh`를 다시 돌린다. 그러면 지난번 판매 중 수가 줄어 안전장치를 지난다. 드문 일이다.
 
-### PC에서 받는 카드사
+### 집 PC 러너
 
-GitHub 서버의 접속을 막는 카드사는 `collect` 워크플로가 `--exclude`로 빼고, 사용자가 이 PC에서 받아 운영 볼륨에 올린다. 설계 4절 2번. 2026-10-01 첫 수집에서 정했다. 지금은 신한이다. 뺀 카드사 목록은 `.github/workflows/collect.yml`의 `--exclude`가 기준이다. 거기에 카드사를 더하면 아래 받기 명령에도 `--issuer`를 하나 더 붙인다. 빠뜨리면 그 카드사는 어디서도 받지 않는다.
-- 잊지 않게: 뺀 카드사는 받기를 잊어도 실패 메일이 오지 않는다. 휴대폰 달력에 매달 2일과 16일 반복 알림을 둔다.
+GitHub 자체 호스팅 러너는 GitHub Actions 작업을 GitHub 서버 대신 사용자 집 PC가 받아 돌리는 프로그램이다. 2026-10-04 작업 008 6단계부터 `collect` 워크플로가 이 러너에서만 돈다. 신한처럼 GitHub 서버의 접속을 막는 카드사도 집 주소로는 받힌다. 러너 등록과 GitHub 설정은 계정에 걸린 일이라 사용자가 한다. 집 PC는 Windows다.
+
+러너가 하는 일은 그 PC의 Windows 계정 권한으로 돈다. 공개 저장소라 누구나 풀 리퀘스트로 워크플로를 바꿀 수 있고, 그 풀 리퀘스트를 실행하도록 승인하면 바뀐 코드가 이 PC에서 돈다. 그러면 그 계정의 파일과 로그인 정보에 닿는다. 그래서 아래 두 가지를 지킨다.
+- 외부인의 풀 리퀘스트에는 실행 승인 버튼을 누르지 않는다. 누를 일이 생기면 먼저 `.github/workflows` 아래 바뀐 것이 없는지 Claude에게 보여 준다.
+- 할 수 있으면 러너는 개인 파일이 없는 별도 Windows 표준 계정에서 돌린다. 그 계정에는 Databricks CLI 로그인과 저장소의 `app/test/local` 같은 개인 파일을 두지 않는다.
+
+처음 한 번:
+1. Git for Windows를 설치한다. 워크플로가 그 안의 bash로 돈다. PowerShell에서 `git --version`이 버전을 찍고 `Test-Path "C:\Program Files\Git\bin\bash.exe"`가 `True`면 된다.
+2. PowerShell을 열고 먼저 `cd C:\`를 친다. GitHub의 받기 명령은 지금 있는 폴더 아래에 `actions-runner` 폴더를 만들기 때문이다.
+3. GitHub 저장소 화면에서 **Settings** → **Actions** → **Runners** → **New self-hosted runner**를 누르고 **Windows**, **x64**를 고른다. 화면의 **Download** 칸 명령을 같은 PowerShell에서 차례로 돌린다. `C:\actions-runner` 폴더가 생긴다.
+4. 같은 화면의 **Configure** 칸 첫 명령 `./config.cmd --url … --token …`을 돌린다. 물음에는 이렇게 답한다. 러너 그룹, 이름, 작업 폴더는 Enter로 기본값을 쓴다. 이름표를 묻는 `Enter any additional labels`에는 `cherry-home`을 친다. `Would you like to run the runner as service?`에는 `N`을 친다. 수집하는 날에만 켜 두려는 것이다. 마지막에 `Settings Saved.`가 보이면 된다.
+5. **Settings** → **Actions** → **General**의 외부 기여자 풀 리퀘스트 실행 승인 칸에서 모든 외부 기여자에게 승인을 받는 항목을 고르고 **Save**를 누른다.
+6. 성공하면 보이는 것: `cd C:\actions-runner; ./run.cmd`를 치면 `Listening for Jobs`가 찍히고, **Settings** → **Actions** → **Runners**에 러너가 `Idle`로 보인다. 확인했으면 Ctrl+C로 끈다.
+7. 휴대폰 달력에 매달 1일과 15일 반복 알림을 둔다. 예약을 없애 잊어도 실패 메일이 오지 않는다.
+
+매달 1일과 15일:
+1. PC 절전을 잠시 끈다. Windows **설정** → **시스템** → **전원** → **화면 및 절전**에서 절전 모드로 전환을 **안 함**으로 바꾼다. 1일 실행은 두세 시간이라 그 사이 절전에 들면 러너가 끊기고 남은 카드사가 멈춘다. 끝나면 원래대로 돌린다.
+2. PowerShell에서 `cd C:\actions-runner; ./run.cmd`로 러너를 켠다. 창을 닫으면 러너도 꺼진다.
+3. GitHub **Actions** → **collect** → **Run workflow**를 누르고, 1일에는 `30`, 15일에는 `14`를 골라 **Run workflow**를 누른다. 2026-10-04 사용자가 예약 대신 손으로 돌리기로 정했다.
+4. 카드사 열한 곳의 작업이 차례로 돈다. 15일은 카드 원문만이라 몇 분이고, 1일은 상품공시실과 카탈로그 밖 카드 1,000장 안팎의 상품 페이지와 PDF까지 받아 두세 시간 걸린다.
+5. 끝나면 PowerShell 창에서 Ctrl+C로 러너를 끄고 절전 설정을 되돌린다.
+
+성공과 실패를 가르는 법:
+- 1일에는 받을 주소가 2,000개 안팎이라 상품 페이지 몇 개가 404로 실패하는 일이 흔하다. 그러면 그 카드사 작업이 빨갛게 끝나도 받은 것은 모두 올라간다.
+- 빨간 작업을 열어 "원문 받기" 단계의 마지막 줄 `저장 N, robots.txt로 건너뜀 N, 실패 N, 뺌 N`을 본다. 실패가 몇 개뿐이면 넘어간다. 실패가 수십 개거나 `멈춤`이 찍혔거나 "받은 원문 올리기" 단계가 빨가면 그 단계의 마지막 몇 줄을 Claude에게 붙여 준다. 원문 내용은 찍히지 않는다.
+- 그 뒤 운영 `cherry_refresh`가 저절로 돌아 색인과 글을 만든다. Claude가 결과를 본다. 글 뽑기 단계가 한 시간 제한에 걸리면 색인과 추출이 그 실행에서 건너뛰어지므로, Claude가 사용자에게 묻고 `cherry_refresh`를 다시 돌린다. 이미 해석한 PDF는 다시 해석하지 않는다.
+- 첫 1일 실행은 처음 보는 PDF 수백 개를 `ai_parse_document`로 해석해 요금이 나온다. 체험이 끝나는 10월 13일 전에 돌리면 체험 크레딧 안이다. 그 뒤라면 한 달 30달러 비용 차단에 걸려 남은 달 동안 `cherry_refresh`가 멈출 수 있다.
+- 카드사가 수집 중단을 요청하면 워크플로 `matrix`의 카드사 목록에서 빼고 카드사 파일을 `blocked`로 둔다. 2026-10-04 사용자가 정했다.
+
+### 러너를 쓸 수 없을 때 PC에서 받기
+
+집 PC 러너를 쓸 수 없는 날에는 사용자가 PC에서 받아 운영 볼륨에 올린다. 2026-10-01부터 10월 4일까지 GitHub 서버를 막는 신한을 이렇게 받았다. 아래는 신한 예다. 다른 카드사는 `--issuer`를 바꾼다. 삼성, IBK, 카카오뱅크, 롯데, 카드다모아는 `--ignore-robots <카드사 id>`를 함께 붙인다. 1일에는 같은 명령에 `--disclosure --index-cards 0`을 붙여 한 번 더 돌린다. 카드다모아는 이 두 번째 명령만 돌린다.
 - 처음 한 번: 운영 스키마는 서비스 주체가 만들어 사람 계정에는 권한이 없다. 2026-10-01 첫 올리기가 `User does not have USE SCHEMA privilege on SCHEMA 'cherry.bronze'`로 멈췄다. **SQL Editor**에서 ``GRANT USE SCHEMA ON SCHEMA cherry.bronze TO `cherry-admins`;``와 ``GRANT READ VOLUME, WRITE VOLUME ON VOLUME cherry.bronze.raw TO `cherry-admins`;``를 돌린다. 원문 볼륨 하나만 연다.
-- 언제: `collect`가 도는 매달 2일과 16일. 신한은 14일마다 받는 카드사라 두 번 다 받는다.
 - 어디서: PowerShell에서 저장소 맨 위 폴더 `cherryConsume`. 받은 원문은 저장소 밖 임시 폴더에 두어 커밋에 섞이지 않게 한다.
 - 받기: 아래 두 줄을 차례로 돌린다. 첫 줄은 이번에 쓸 폴더 이름을 정한다. 둘째 줄은 신한 원문을 받는다. 1분쯤 걸리고 마지막 줄이 `저장 10, robots.txt로 건너뜀 0, 실패 0, 뺌 0`처럼 실패 0이면 성공이다. 개수는 카드가 늘면 달라진다.
 
