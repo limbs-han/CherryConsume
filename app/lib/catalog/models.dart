@@ -440,6 +440,7 @@ class CatalogCard {
     : id = j['id'],
       issuer = j['issuer'],
       name = j['name'],
+      shortName = j['short_name'],
       searchNames = _strs(j['search_names']),
       kind = j['kind'],
       productCodes = _strs(j['product_codes']),
@@ -450,6 +451,9 @@ class CatalogCard {
       openQuestions = _list(j['open_questions'], OpenQuestion.fromJson),
       revisions = _list(j['revisions'], Revision.fromJson);
   final String id, issuer, name, kind, status;
+
+  /// 칩과 줄처럼 좁은 곳에 쓰는 이름. 없으면 [name]을 쓴다. 작업 011 설계 2.4
+  final String? shortName;
   final List<String> searchNames, productCodes;
   final DateTime? statusSince;
   final List<AnnualFee> annualFees;
@@ -524,8 +528,14 @@ class ReferenceValue {
 }
 
 class Issuer {
-  Issuer.fromJson(Json j) : id = j['id'], name = j['name'];
+  Issuer.fromJson(Json j)
+    : id = j['id'],
+      name = j['name'],
+      shortName = j['short_name'];
   final String id, name;
+
+  /// "신한"처럼 칩에 쓰는 이름. 없으면 [name]을 쓴다. 작업 011 설계 2.4
+  final String? shortName;
 }
 
 /// 앱이 담거나 받은 카탈로그 한 벌

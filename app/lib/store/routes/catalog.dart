@@ -96,7 +96,8 @@ List<Json> issuers(Store s) {
   };
   return [
     for (final i in s.catalog.issuers.values)
-      if (selling.contains(i.id)) {'code': i.id, 'name': i.name},
+      // 카드 추가의 카드사 칩은 짧은 이름이다. 작업 011 설계 2절 A2
+      if (selling.contains(i.id)) {'code': i.id, 'name': i.shortName ?? i.name},
   ]..sort((a, b) => (a['name'] as String).compareTo(b['name']));
 }
 

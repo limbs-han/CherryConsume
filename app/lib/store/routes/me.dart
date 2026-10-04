@@ -68,7 +68,9 @@ Json addCard(
 Map<String, Object?> named(Store s, Row r) {
   final row = rowMap(r);
   final card = s.catalog.cards[row['card_id']]!;
-  row['name'] = card.name;
+  // 홈, 결제, 기록, 추천, 설정의 칩과 줄은 짧은 이름을 쓴다. 카드 상세 제목은 전체 이름이다. 작업 011 설계 2.4
+  row['name'] = card.shortName ?? card.name;
+  row['full_name'] = card.name;
   row['issuer'] = card.issuer;
   row['issuer_name'] = s.catalog.issuers[card.issuer]!.name;
   row['checked_at'] = card.checkedAt;
@@ -232,7 +234,8 @@ Json cardDetail(Store s, String uid) {
   return {
     'id': uid,
     'card_id': row['card_id'],
-    'name': row['name'],
+    // 카드 상세 제목은 전체 이름이다. 작업 011 설계 2.4
+    'name': row['full_name'],
     'issuer_name': row['issuer_name'],
     'questions': questions(found?.rules, row, day),
     'tiers': tiersShown(found),
