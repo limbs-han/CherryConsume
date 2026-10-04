@@ -8,6 +8,7 @@ import 'package:cherry_consume/api.dart';
 import 'package:cherry_consume/catalog/models.dart';
 import 'package:cherry_consume/clock.dart' as clock;
 import 'package:cherry_consume/main.dart';
+import 'package:cherry_consume/screens/import.dart';
 import 'package:cherry_consume/screens/shell.dart';
 import 'package:cherry_consume/store/db.dart';
 import 'package:cherry_consume/store/store.dart';
@@ -99,7 +100,8 @@ void main() {
 
   testWidgets('화면마다 찍는다', (tester) async {
     // 빈 앱을 먼저 띄웠다가 바꿔 끼우면 홈의 결제 기록 버튼이 찍히지 않아 빈 홈은 맨 끝에 찍는다. 작업 011 단계 2 Z6
-    await tester.pumpWidget(CherryApp(api: await seeded()));
+    final api = await seeded();
+    await tester.pumpWidget(CherryApp(api: api));
     await shot(tester, '1-home');
 
     await tapIn(tester, find.text('카드 추가'));
@@ -115,6 +117,8 @@ void main() {
 
     await tapIn(tester, find.textContaining('Mr.Life').first);
     await shot(tester, '6-card-detail');
+    await reveal(tester, find.text('이 카드 결제 보기'));
+    await shot(tester, '6b-card-detail-bottom');
     await tester.pageBack();
     await tester.pumpAndSettle();
 
@@ -130,7 +134,16 @@ void main() {
     await shot(tester, '4-payment-bottom');
     await tester.tap(find.text('바꾸기'));
     await shot(tester, '4b-details');
-    await tester.ensureVisible(find.widgetWithText(FilledButton, '확인'));
+    // 시트의 목록은 뒤 화면 목록보다 나중에 그려진다
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('pick-결제수단')),
+      200,
+      scrollable: find
+          .byWidgetPredicate(
+            (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+          )
+          .last,
+    );
     await shot(tester, '4b-details-bottom');
     await tester.tap(find.widgetWithText(FilledButton, '확인'));
     await tester.pumpAndSettle();
@@ -148,6 +161,38 @@ void main() {
     await shot(tester, '7-history');
     await tester.tap(find.text('가져오기'));
     await shot(tester, '8-import');
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // 파일 고르기 창은 시험이 누를 수 없어 같은 화면을 합성 CSV로 다시 연다. 열 이름은 사전에 있는 이름이라 짝짓기 없이
+    // 미리보기가 된다. 실제 명세서는 쓰지 않는다. 작업 011 설계 2절 I2
+    const csv =
+        '이용일자,이용시간,가맹점명,이용금액\n'
+        '2026.09.03,12:10,스타벅스 강남점,6100\n'
+        '2026.09.05,19:40,주식회사 케이지이니시스,18000\n'
+        '2026.09.08,08:30,서울시 자동차세,128000\n'
+        '2026.09.12,13:00,이마트 성수점,52000\n'
+        '2026.09.13,10:00,이마트 성수점,-52000\n';
+    final cards = (await api.records()).cards;
+    tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(
+          MaterialPageRoute<int>(
+            builder: (_) => ImportScreen(
+              api: api,
+              cards: cards,
+              pick: () async =>
+                  (name: '신한카드_이용내역_202609.csv', bytes: utf8.encode(csv)),
+            ),
+          ),
+        );
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('Mr.Life'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('파일 고르기'));
+    await shot(tester, '8b-import-preview');
+    await reveal(tester, find.text('열 다시 짝짓기'));
+    await shot(tester, '8c-import-preview-bottom');
     await tester.pageBack();
     await tester.pumpAndSettle();
 
