@@ -104,3 +104,4 @@
 | [59](59-camera-recognition-dropped.md) | 2026-10-03 | 카메라 카드 인식을 시작했다가 빼기 |
 | [60](60-on-device-step8-real-phone.md) | 2026-10-04 | 작업 006 단계 8 실제 폰 |
 | [61](61-catalog-change-history.md) | 2026-10-04 | 작업 010 카탈로그 변경 이력 적재 |
+| [62](62-catalog-index-step4.md) | 2026-10-04 | 작업 008 4단계 상품공시실 색인 |
