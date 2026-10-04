@@ -33,7 +33,72 @@ void expectRow(WidgetTester tester, String label, String value) {
   expect(v.left, greaterThan(l.right), reason: label);
 }
 
+/// 큰 화면에 카드 상세를 띄운다. 긴 목록을 한 번에 그리려고 높이를 크게 잡는다
+Future<void> openTall(WidgetTester tester, String id, String name) async {
+  tester.view.devicePixelRatio = 2.625;
+  tester.view.physicalSize = const Size(1080, 20000);
+  addTearDown(tester.view.reset);
+  final (:api, :s) = app();
+  addCard(s, id, assumedPrevMonthSpend: 1000000);
+  await tester.pumpWidget(CherryApp(api: api));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(name));
+  await tester.pumpAndSettle();
+}
+
 void main() {
+  testWidgets('이번 달 혜택은 업종 순서로 늘어놓고 업종이 바뀌는 곳에 머리줄을 단다', (tester) async {
+    // 2026-10-05 사용자가 비슷한 업종끼리 묶자고 했다. IBK 나라사랑의 함께 쓰는 한도가 없는 혜택 가운데 GS25 주요품목,
+    // 이마트24 주요품목, 군마트 3만원 미만은 편의점이다. 군마트는 화면에서만 편의점이다. 작업 011 설계 2.5, F9
+    await openTall(tester, 'ibk-narasarang', 'IBK 나라사랑');
+    // 편의점 머리줄은 통합 한도 상자 안에도 있다. 상자 밖 목록은 상자들 뒤라 마지막 것이다
+    final head = tester.getRect(find.byKey(const Key('group-편의점')).last);
+    final items = [
+      'GS25 주요품목 10% 현장할인',
+      '이마트24 주요품목 10% 현장할인',
+      '군마트(PX) 3만원 미만 15% 할인',
+    ].map((t) => tester.getRect(find.text(t))).toList();
+    final next =
+        [
+              for (final e
+                  in find
+                      .byWidgetPredicate(
+                        (w) =>
+                            w.key is ValueKey<String> &&
+                            (w.key! as ValueKey<String>).value.startsWith(
+                              'group-',
+                            ),
+                      )
+                      .evaluate())
+                tester.getRect(find.byWidget(e.widget)).top,
+            ]
+            .where((top) => top > head.top)
+            .fold(double.infinity, (a, b) => a < b ? a : b);
+    for (final r in items) {
+      expect(r.top, greaterThan(head.top));
+      expect(r.bottom, lessThan(next));
+    }
+    // 군마트 함께 쓰는 한도 상자는 모두 편의점이라 머리줄이 없다. NOL 상자도 모두 여행이다
+    expect(find.byKey(const Key('group-여행')), findsNothing);
+  });
+
+  testWidgets('함께 쓰는 한도 상자 안도 업종으로 나눈다', (tester) async {
+    // 신한 Mr.Life 통합 한도를 쓰는 혜택은 편의점, 병원 · 약국, 세탁, 온라인 쇼핑, 택시, 카페 · 음식점이다
+    await openTall(tester, 'shinhan-mrlife', '신한 Mr.Life');
+    final grey = find.byWidgetPredicate(
+      (w) =>
+          w is Container && (w.decoration as BoxDecoration?)?.color == C.grey,
+    );
+    final box = find.ancestor(of: find.text('통합 한도'), matching: grey);
+    expect(
+      find.descendant(
+        of: box,
+        matching: find.byKey(const Key('group-카페 · 음식점')),
+      ),
+      findsOneWidget,
+    );
+  });
+
   test('실적 막대는 구간 눈금을 같은 간격으로 두고 눈금 사이에서 금액 비율대로 찬다', () {
     // 2026-10-05 사용자가 겹치는 글자를 아랫줄로 내린 것도 이상하다고 해 같은 간격을 골랐다. 작업 011 설계 2절 F2
     const tiers = [80000, 200000, 250000, 500000, 1000000];

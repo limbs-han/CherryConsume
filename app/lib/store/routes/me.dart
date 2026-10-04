@@ -208,6 +208,34 @@ List<String> _conditionWords(Condition c, Map<String, String> methods) {
   ].where((w) => w.isNotEmpty).toList();
 }
 
+/// 카드 상세에서 혜택을 묶는 업종 이름과 순서. 대상 업종과 대상 가맹점의 업종을 큰 분류로 올린다. 다른 업종이 함께
+/// 있으면 기타를 빼고, 여럿이면 카탈로그 업종 순서로 이어 붙인다. 전가맹점은 모든 가맹점이고 맨 앞이다. 순서는 묶음의
+/// 첫 업종이 카탈로그에서 몇 번째인지다. 계산에는 쓰지 않는다. 작업 011 설계 2.5
+({String name, int order}) benefitGroup(Benefit b, Catalog cat) {
+  if (b.target.all) return (name: '모든 가맹점', order: -1);
+  String top(String code) => code.split('.').first;
+  final codes = {
+    for (final c in b.target.categories) top(c),
+    for (final m in b.target.merchants)
+      // 군마트는 화면에서 묶을 때만 편의점이다. 카탈로그의 가맹점 업종을 바꾸면 편의점 혜택이 군마트 결제에 붙어
+      // 계산이 달라진다. 2026-10-05 사용자가 정했다
+      if (m == 'px')
+        'convenience'
+      else if (cat.merchants[m] case final x?)
+        top(x.category),
+  };
+  if (codes.length > 1) codes.remove('other');
+  if (codes.isEmpty) codes.add('other');
+  final order = [for (final c in cat.categoryTree) c.code];
+  int at(String c) => order.contains(c) ? order.indexOf(c) : order.length;
+  final sorted = codes.toList()..sort((a, b) => at(a).compareTo(at(b)));
+  final names = {for (final c in cat.categoryTree) c.code: c.name};
+  return (
+    name: [for (final c in sorted) names[c] ?? c].join(' · '),
+    order: at(sorted.first),
+  );
+}
+
 /// 혜택 하나의 조건 한 줄. 1회와 하루 한도를 먼저, 결제 조건을 뒤에 쓴다. 없으면 null이다. 작업 011 설계 2절 D5
 ///
 /// 한도는 그 혜택의 구간 값이다. 엔진 한도 현황은 1회 한도를 기간이 없다고 빼서 카탈로그에서 읽는다. 생일 달처럼 조건에
@@ -294,9 +322,13 @@ Json cardDetail(Store s, String uid) {
         for (final u in mine)
           if (u.per != 'txn' && u.per != 'day' && capped(u)) u,
       ];
+      final group = benefitGroup(b, s.catalog);
       final row = {
         'title': b.title,
         'key': b.key,
+        // 화면이 업종별로 묶는다. 작업 011 설계 2.5
+        'group': group.name,
+        'group_order': group.order,
         'shared': [for (final lim in b.limits) ?lim.shared],
         'condition': conditionLine(
           b,

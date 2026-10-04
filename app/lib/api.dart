@@ -345,6 +345,8 @@ class CardDetail {
             shared: List<String>.from(l['shared']),
             condition: l['condition'] as String?,
             isShared: l['is_shared'] == true,
+            group: l['group'] as String?,
+            groupOrder: (l['group_order'] as int?) ?? 0,
           ),
         // 기간 한도가 없는 혜택. 남은 양 없이 이름과 조건 한 줄만 보인다. 작업 011 설계 2절 D5
         for (final l in j['plain'])
@@ -361,6 +363,8 @@ class CardDetail {
             shared: List<String>.from(l['shared']),
             condition: l['condition'] as String?,
             isShared: false,
+            group: l['group'] as String?,
+            groupOrder: (l['group_order'] as int?) ?? 0,
           ),
       ],
       locked = [
@@ -395,6 +399,8 @@ class CardDetail {
       List<String> shared,
       String? condition,
       bool isShared,
+      String? group,
+      int groupOrder,
     })
   >
   limits;

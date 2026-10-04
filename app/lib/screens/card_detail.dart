@@ -169,6 +169,31 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
       for (final l in d.limits)
         if (!l.isShared && boxOf(l) == null) l,
     ];
+    // 업종 순서로 늘어놓고 업종이 바뀌는 곳에 작은 머리줄을 단다. 한 목록의 업종이 하나면 달지 않는다. 같은 업종
+    // 안에서는 원래 순서를 지킨다. 2026-10-05 사용자가 비슷한 업종끼리 묶자고 했다. 작업 011 설계 2.5, F9
+    List<Widget> grouped(List<Limit> rows) {
+      final sorted = [...rows.indexed]
+        ..sort((a, b) {
+          final o = a.$2.groupOrder.compareTo(b.$2.groupOrder);
+          if (o != 0) return o;
+          final n = (a.$2.group ?? '').compareTo(b.$2.group ?? '');
+          return n != 0 ? n : a.$1.compareTo(b.$1);
+        });
+      final heads = {for (final (_, l) in sorted) l.group}.length > 1;
+      final out = <Widget>[];
+      String? last, lastKey;
+      for (final (i, (_, l)) in sorted.indexed) {
+        if (heads && (i == 0 || l.group != last)) {
+          out.add(_GroupHead(l.group ?? ''));
+        }
+        // 기간 한도가 둘인 혜택은 줄이 둘이다. 이름은 첫 줄에만 쓴다. 군마트 월 1만 원과 월 3회, CGV 월 1회와 연 6회다
+        out.add(_LimitRow(l, title: l.key != lastKey));
+        last = l.group;
+        lastKey = l.key;
+      }
+      return out;
+    }
+
     Widget sharedBox(String g, int depth) => Container(
       margin: EdgeInsets.only(top: depth > 0 ? 4 : 0, bottom: 8),
       padding: EdgeInsets.symmetric(
@@ -182,8 +207,10 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
       child: Column(
         children: [
           for (final (i, l) in groups[g]!.indexed) _LimitRow(l, title: i == 0),
-          for (final l in d.limits)
-            if (boxOf(l) == g) _LimitRow(l),
+          ...grouped([
+            for (final l in d.limits)
+              if (boxOf(l) == g) l,
+          ]),
           for (final h in groups.keys)
             if (parent[h] == g) sharedBox(h, depth + 1),
         ],
@@ -284,7 +311,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
               const SizedBox(height: 12),
               for (final g in groups.keys)
                 if (parent[g] == null) sharedBox(g, 0),
-              for (final l in each) _LimitRow(l),
+              ...grouped(each),
             ],
           ),
         ),
@@ -661,6 +688,26 @@ class TierBar extends StatelessWidget {
 
 /// 혜택 한 줄. 남은 양 / 한도. 금액, 횟수, 결제액 한도 가운데 남은 비율이 가장 작은 것을 보인다. 먼저 끝나는 쪽이다.
 /// 다 써도 0 아래로 내려가지 않는다. 이번 달이 아닌 한도는 기간을 앞에 붙인다
+/// 업종 묶음의 작은 머리줄
+class _GroupHead extends StatelessWidget {
+  const _GroupHead(this.name);
+  final String name;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    key: Key('group-$name'),
+    padding: const EdgeInsets.only(top: 12, bottom: 2),
+    child: Text(
+      name,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        color: C.sub,
+      ),
+    ),
+  );
+}
+
 class _LimitRow extends StatelessWidget {
   const _LimitRow(this.l, {this.title = true});
   final Limit l;
@@ -744,6 +791,10 @@ typedef Limit = ({
   List<String> shared,
   String? condition,
   bool isShared,
+
+  /// 묶는 업종 이름과 순서. 함께 쓰는 한도 줄은 없다. 작업 011 설계 2.5
+  String? group,
+  int groupOrder,
 });
 
 /// 남은 양 / 한도. 시안처럼 금액은 단위를 빼고, 횟수는 "회", 결제액 한도는 "결제액"을 붙인다. 작업 011 설계 2절 D3
