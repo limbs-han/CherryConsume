@@ -112,3 +112,4 @@
 | [67](67-catalog-blocked-issuers-step7.md) | 2026-10-04 | 작업 008 7단계 삼성, IBK, 롯데 카드 원문 자동 수집 |
 | [68](68-ui-polish-wrap-up.md) | 2026-10-04 | 작업 011 끝 정리와 상태 모음 차이 고치기 |
 | [69](69-catalog-image-benefit-step8.md) | 2026-10-05 | 작업 008 8단계 이미지 혜택 페이지 사진 해석 |
+| [70](70-catalog-docling-step9.md) | 2026-10-05 | 작업 008 9단계 상품설명서 PDF를 Docling으로 해석 |
