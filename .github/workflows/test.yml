@@ -9,6 +9,7 @@ on:
       - "backend/**"
       - "catalog/**"
       - "app/**"
+      - "docs/store/**"
       - ".github/workflows/test.yml"
   workflow_dispatch:
 

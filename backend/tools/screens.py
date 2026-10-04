@@ -4,6 +4,7 @@
 - 앱: uv run --project backend python backend/tools/screens.py app <기기 일련번호> <이름표>
   에뮬레이터나 폰에서 app/integration_test/screens_test.dart를 돌리고, 시험이 "SHOT 이름"을 출력할 때마다 adb로
   시스템 막대까지 화면 전체를 찍어 app/build/screens/<이름표>/<이름>.png에 둔다
+  에뮬레이터는 `emulator -avd wj_local -timezone Asia/Seoul`로 켠다. UTC면 결제 시각이 9시간 앞당겨 찍힌다. 작업 012
 - 시안: uv run --project backend --with playwright python backend/tools/screens.py mockup
   design/체리컨슘-화면-시안.html의 화면마다 설치된 Chrome으로 찍어 app/build/screens/mockup/<화면 id>.png에 둔다
 app/build/는 저장소에 올라가지 않는다
