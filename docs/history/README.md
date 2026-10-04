@@ -109,3 +109,4 @@
 | [64](64-catalog-index-step5.md) | 2026-10-04 | 작업 008 5단계 색인 카드 원문 받기 |
 | [65](65-short-name-and-reshoot.md) | 2026-10-04 | 작업 011 단계 4 짧은 이름과 단계 5 다시 찍기 |
 | [66](66-catalog-runner-step6.md) | 2026-10-04 | 작업 008 6단계 집 PC 러너와 수집 워크플로 |
+| [67](67-catalog-blocked-issuers-step7.md) | 2026-10-04 | 작업 008 7단계 삼성, IBK, 롯데 카드 원문 자동 수집 |
