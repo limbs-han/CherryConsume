@@ -60,6 +60,8 @@ Future<Api> seeded() async {
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  // README와 스토어 사진에 디버그 띠가 찍히지 않게 끈다
+  WidgetsApp.debugAllowBannerOverride = false;
 
   Future<void> shot(WidgetTester tester, String name) async {
     await tester.pumpAndSettle();
