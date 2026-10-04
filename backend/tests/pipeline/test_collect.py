@@ -234,3 +234,192 @@ def test_timeout_is_not_retried(monkeypatch):
         with pytest.raises((TimeoutError, urllib.error.URLError)):
             collect_module._get("https://x.com/a")
         assert len(calls) == 1
+
+
+def _fake_plan(monkeypatch, plan):
+    import cherry_core.pipeline.collect as collect_module
+
+    monkeypatch.setattr(collect_module, "PLANS", {"kb": plan})
+
+
+def _two_pages(fetch, today):
+    from cherry_core.pipeline.disclosure import Request
+
+    fetch(Request("disclosure-credit-p1", "https://card.kbcard.com/d", form={"pageCount": "1"}))
+    fetch(Request("disclosure-credit-p2", "https://card.kbcard.com/d", form={"pageCount": "2"}))
+
+
+def _manifest(out):
+    (path,) = (out / "manifests").iterdir()
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+
+
+def test_disclosure_saves_every_response_of_the_issuer(make_catalog, tmp_path, monkeypatch, capsys):
+    _fake_plan(monkeypatch, _two_pages)
+    forms = []
+
+    def get(url, form=None, json_body=None):
+        if url.endswith("/robots.txt"):
+            return b"User-agent: *\nAllow: /\n", "text/plain"
+        forms.append(form)
+        return f"<p>{form['pageCount']}</p>".encode(), "text/html"
+
+    _offline(monkeypatch, get)
+    out = tmp_path / "raw"
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(out), "--disclosure"]) == 0
+    assert forms == [{"pageCount": "1"}, {"pageCount": "2"}]
+    lines = _manifest(out)
+    assert [(x["issuer"], x["card_id"], x["source_id"], x["kind"]) for x in lines] == [
+        ("kb", None, "disclosure-credit-p1", "disclosure"),
+        ("kb", None, "disclosure-credit-p2", "disclosure"),
+    ]
+    assert len({x["fetched_at"] for x in lines}) == 1  # 색인 단계가 한 번에 받은 묶음으로 읽는다
+    assert "저장 2, robots.txt로 건너뜀 0, 실패 0" in capsys.readouterr().out
+
+
+def test_disclosure_failing_midway_saves_nothing(make_catalog, tmp_path, monkeypatch, capsys):
+    import urllib.error
+
+    _fake_plan(monkeypatch, _two_pages)
+
+    def get(url, form=None, json_body=None):
+        if url.endswith("/robots.txt"):
+            return b"", "text/plain"
+        if form["pageCount"] == "2":
+            raise urllib.error.HTTPError(url, 429, "", {}, None)
+        return b"<p>1</p>", "text/html"
+
+    _offline(monkeypatch, get)
+    out = tmp_path / "raw"
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(out), "--disclosure"]) == 1
+    assert _manifest(out) == []
+    assert "실패 kb 공시: HTTPError 429" in capsys.readouterr().out
+
+
+def test_disclosure_blocked_by_robots_is_skipped(make_catalog, tmp_path, monkeypatch, capsys):
+    _fake_plan(monkeypatch, _two_pages)
+    _offline(monkeypatch, lambda url, form=None, json_body=None: (b"User-agent: *\nDisallow: /\n", "text/plain"))
+    out = tmp_path / "raw"
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(out), "--disclosure"]) == 0
+    assert _manifest(out) == []
+    assert "건너뜀 kb 공시" in capsys.readouterr().out
+
+
+def test_ignore_robots_does_not_ask_robots(make_catalog, tmp_path, monkeypatch, capsys):
+    import cherry_core.pipeline.collect as collect_module
+
+    _fake_plan(monkeypatch, _two_pages)
+    monkeypatch.setattr(collect_module, "ROBOTS_IGNORED", ("kb", "shinhan"))
+
+    def get(url, form=None, json_body=None):
+        assert not url.endswith("/robots.txt"), "robots.txt를 물었다"
+        return b"<p>x</p>", "text/html"
+
+    _offline(monkeypatch, get)
+    root, out = make_catalog(collect("api")), tmp_path / "raw"
+    assert main(["--root", str(root), "--out", str(out), "--disclosure", "--ignore-robots", "kb"]) == 0
+    assert len(_manifest(out)) == 2
+    # 공시가 아닌 원문에도 같다
+    assert main(["--root", str(root), "--out", str(tmp_path / "raw2"), "--ignore-robots", "shinhan"]) == 0
+    assert "저장 3, robots.txt로 건너뜀 0, 실패 0" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("code", [403, 429])
+def test_refusal_stops_the_issuer_for_this_run(make_catalog, tmp_path, monkeypatch, capsys, code):
+    import urllib.error
+
+    asked = []
+
+    def get(url):
+        if url.endswith("/robots.txt"):
+            return b"", "text/plain"
+        asked.append(url)
+        raise urllib.error.HTTPError(url, code, "", {}, None)
+
+    _offline(monkeypatch, get)
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(tmp_path / "raw")]) == 1
+    assert asked == ["https://www.shinhancard.com/list"]
+    out = capsys.readouterr().out
+    assert "멈춤 shinhan - notice" in out
+    assert "저장 0, robots.txt로 건너뜀 0, 실패 3" in out
+
+
+def test_three_dropped_connections_in_a_row_stop_the_issuer(make_catalog, tmp_path, monkeypatch, capsys):
+    import urllib.error
+
+    def edit(files):
+        collect("api")(files)
+        files["cards/shinhan/shinhan-test.yaml"]["sources"] += [
+            {
+                "id": f"extra{n}",
+                "kind": "product_page",
+                "url": f"https://www.shinhancard.com/x{n}",
+                "fetched_at": date(2026, 9, 28),
+            }
+            for n in range(2)
+        ]
+
+    asked = []
+
+    def get(url):
+        if url.endswith("/robots.txt"):
+            return b"", "text/plain"
+        asked.append(url)
+        raise urllib.error.URLError("reset")
+
+    _offline(monkeypatch, get)
+    assert main(["--root", str(make_catalog(edit)), "--out", str(tmp_path / "raw")]) == 1
+    assert len(asked) == 3
+    assert "멈춤 shinhan shinhan-test extra1" in capsys.readouterr().out
+
+
+def test_capture_request_opens_one_browser_and_saves_as_browser(make_catalog, tmp_path, monkeypatch):
+    import cherry_core.pipeline.collect as collect_module
+    from cherry_core.pipeline.disclosure import Request
+
+    def plan(fetch, today):
+        fetch(Request("disclosure", "https://pc.wooricard.com/d", capture="list.json", script="go()"))
+        fetch(Request("more", "https://pc.wooricard.com/e", capture="list.json"))
+
+    monkeypatch.setattr(collect_module, "PLANS", {"woori": plan})
+    opened = []
+    monkeypatch.setattr(collect_module, "_open_browser", lambda stack: opened.append(1) or "page")
+    monkeypatch.setattr(
+        collect_module, "_captured", lambda page, req: (f"{page}:{req.source_id}".encode(), "application/json")
+    )
+    _offline(monkeypatch, lambda url, form=None, json_body=None: (b"", "text/plain"))
+    out = tmp_path / "raw"
+    assert main(["--root", str(make_catalog(collect("api"))), "--out", str(out), "--disclosure"]) == 0
+    assert opened == [1]
+    lines = _manifest(out)
+    assert [(x["source_id"], x["browser"]) for x in lines] == [("disclosure", True), ("more", True)]
+    assert (out / lines[0]["path"]).read_bytes() == b"page:disclosure"
+
+
+def test_ignore_robots_takes_only_the_agreed_names(make_catalog, tmp_path):
+    with pytest.raises(SystemExit):
+        main(["--root", str(make_catalog(collect("api"))), "--out", str(tmp_path / "raw"), "--ignore-robots", "kb"])
+
+
+def test_remembered_robots_failure_is_not_counted_as_three_drops(make_catalog, tmp_path, monkeypatch, capsys):
+    # robots.txt 한 번의 끊김을 주소마다 끊김으로 세면 세 주소 만에 카드사 전체가 멈춘다
+    import cherry_core.pipeline.collect as collect_module
+
+    def edit(files):
+        collect("api")(files)
+        files["cards/shinhan/shinhan-test.yaml"]["sources"] += [
+            {
+                "id": f"extra{n}",
+                "kind": "product_page",
+                "url": f"https://www.shinhancard.com/x{n}",
+                "fetched_at": date(2026, 9, 28),
+            }
+            for n in range(2)
+        ]
+
+    monkeypatch.setattr(collect_module, "_robots", lambda url: (_ for _ in ()).throw(TimeoutError()))
+    _offline(monkeypatch, lambda url: pytest.fail("robots.txt를 모르는 호스트에서 받았다"))
+    assert main(["--root", str(make_catalog(edit)), "--out", str(tmp_path / "raw")]) == 1
+    out = capsys.readouterr().out
+    assert "멈춤" not in out
+    assert "실패 5" in out
