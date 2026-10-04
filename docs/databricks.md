@@ -247,6 +247,15 @@ WHERE (__START_AT.at >= current_date() - INTERVAL 30 DAYS AND __START_AT.version
 - 설정: 골드 `card_revisions`의 변경 데이터 피드와 변경 파일, 로그 보존 60일은 승인 작업과 골드 첫 적재 작업이 쓰기 전에 켠다. 사람 계정은 운영 골드 설정을 못 바꾼다. 피드가 켜지기 전에 이력 작업을 손으로 돌리지 않는다. 스트림이 피드 없는 판을 기억해 계속 실패할 수 있다. 트리거는 데이터 변경만 보고 설정 변경은 보지 않는다. 그래서 피드를 처음 켠 뒤에는 이력 작업을 손으로 한 번 돌린다. 운영은 2026-10-04 그렇게 켰다.
 - 운영 이력 작업이 끊겼을 때: 실패 메일이 오면 먼저 작업 실행 화면의 오류를 본다. "change data was not recorded"나 파일을 못 찾는다는 오류면 밀린 변경이 지워진 것이다. 이때 순서는 이렇다. 첫째, **SQL Editor**에서 지금 이력을 `CREATE TABLE cherry.silver.card_revision_history_until_<날짜> AS SELECT * FROM cherry.silver.card_revision_history`로 따로 남긴다. 둘째, 번들 변수 `history_reset_allowed`를 운영도 true로 바꿔 푸시하고 전체 다시 쌓기를 한 번 돌린 뒤 false로 되돌린다. 셋째, 옛 이력은 남긴 표에서 본다. 남긴 표 만들기와 운영 실행은 Claude가 사용자에게 묻고 한다.
 
+### 지금 파는 카드 색인 보기
+
+카드사 상품공시실과 카드 목록에서 지금 파는 카드와 단종 카드를 모은 표가 실버 `card_index`다. 작업 008. `cherry_refresh`의 `index` 단계가 새 공시 묶음이 올 때마다 MERGE한다. 공시는 수집기 `--disclosure`가 받는다.
+
+- 카드사별 수: `SELECT issuer, count_if(status = 'on_sale') AS on_sale, count(*) AS rows FROM cherry.silver.card_index GROUP BY issuer ORDER BY issuer`
+- 카탈로그에 없는 판매 중 카드: `SELECT i.issuer, i.name, i.card_id FROM cherry.silver.card_index i LEFT JOIN cherry.gold.catalog_files f ON f.path = concat('cards/', i.issuer, '/', i.card_id, '.yaml') WHERE i.status = 'on_sale' AND f.path IS NULL ORDER BY i.recommended DESC, i.issuer`
+- 단종일이 `discontinued_estimated`가 참이면 공시실에 단종일이 없어 처음 사라진 날을 적은 것이다.
+- 안전장치에 걸렸을 때: `index` 단계가 "지난번 판매 중 N장 가운데 M장이 판매 중에서 빠진다"로 실패하면 먼저 그 카드사 공시 원문이 점검 화면인지, 화면이 바뀌어 읽기가 깨졌는지 본다. 그렇다면 읽기 함수를 고친다. 카드사가 실제로 카드를 많이 단종한 것이 맞으면, Claude가 사용자에게 묻고 빠진 열쇠의 행을 SQL로 `status = 'discontinued'`, `discontinued_estimated = true`로 바꾼 뒤 `cherry_refresh`를 다시 돌린다. 그러면 지난번 판매 중 수가 줄어 안전장치를 지난다. 드문 일이다.
+
 ### PC에서 받는 카드사
 
 GitHub 서버의 접속을 막는 카드사는 `collect` 워크플로가 `--exclude`로 빼고, 사용자가 이 PC에서 받아 운영 볼륨에 올린다. 설계 4절 2번. 2026-10-01 첫 수집에서 정했다. 지금은 신한이다. 뺀 카드사 목록은 `.github/workflows/collect.yml`의 `--exclude`가 기준이다. 거기에 카드사를 더하면 아래 받기 명령에도 `--issuer`를 하나 더 붙인다. 빠뜨리면 그 카드사는 어디서도 받지 않는다.
