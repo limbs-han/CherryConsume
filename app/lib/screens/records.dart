@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
+import '../ui.dart';
 import 'import.dart';
 import 'payment.dart';
 
@@ -92,7 +93,14 @@ class _RecordsScreenState extends State<RecordsScreen> {
     builder: (context, snap) {
       final r = snap.data;
       return Scaffold(
+        // 작업 011 설계 2절 G6
+        floatingActionButton: PayButton(
+          key: ObjectKey(_records),
+          api: widget.api,
+          onSaved: _reload,
+        ),
         appBar: AppBar(
+          titleSpacing: rootTitleSpacing(context),
           title: const Text('기록'),
           actions: [
             IconButton(
@@ -100,9 +108,32 @@ class _RecordsScreenState extends State<RecordsScreen> {
               onPressed: r == null ? null : _batches,
               icon: const Icon(Icons.history),
             ),
-            TextButton(
-              onPressed: r == null ? null : () => _import(r),
-              child: const Text('가져오기'),
+            // 시안대로 오른쪽 위 테두리 버튼이다. 작업 011 설계 2절 Hi1
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: OutlinedButton(
+                onPressed: r == null ? null : () => _import(r),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: C.text,
+                  backgroundColor: Colors.white,
+                  side: const BorderSide(color: C.line),
+                  shape: const RoundedRectangleBorder(borderRadius: r16),
+                  minimumSize: const Size(0, 44),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.upload, size: 20),
+                    SizedBox(width: 6),
+                    Text('가져오기'),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -138,43 +169,45 @@ class _RecordsScreenState extends State<RecordsScreen> {
                     onPressed: () => _shift(r, 1),
                     icon: const Icon(Icons.chevron_right),
                   ),
-                ],
-              ),
-              Text(
-                '${r.count}건 · ${_total(r.amount)}',
-                style: const TextStyle(color: C.sub),
-              ),
-              Row(
-                children: [
-                  Text(
-                    '혜택 ${won(r.benefitTotal)}',
-                    style: const TextStyle(
-                      color: C.green,
-                      fontWeight: FontWeight.w700,
+                  // 달 요약은 시안대로 같은 줄 오른쪽이다. 작업 011 설계 2절 Hi1
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${r.count}건 · ${_total(r.amount)}',
+                          style: const TextStyle(fontSize: 13, color: C.sub),
+                        ),
+                        Wrap(
+                          alignment: WrapAlignment.end,
+                          children: [
+                            Text('혜택 ${won(r.benefitTotal)}', style: _benefit),
+                            const Text(' · 추정', style: _benefit),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 6),
-                  const Pill('추정', fg: C.sub, bg: C.grey),
                 ],
               ),
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
+              // 한 줄로 가로로 민다. 목록이 이미 좌우 20 안이다. 작업 011 설계 2절 Z4, G2
+              PillRow(
+                inset: 0,
                 children: [
-                  ChoiceChip(
-                    label: const Text('모든 카드'),
+                  ChoicePill(
+                    '모든 카드',
                     selected: _card == null,
-                    onSelected: (_) {
+                    onTap: () {
                       _card = null;
                       _reload();
                     },
                   ),
                   for (final c in r.cards)
-                    ChoiceChip(
-                      label: Text(c.name),
+                    ChoicePill(
+                      c.name,
                       selected: _card == c.id,
-                      onSelected: (_) {
+                      onTap: () {
                         _card = c.id;
                         _reload();
                       },
@@ -203,15 +236,29 @@ class _RecordsScreenState extends State<RecordsScreen> {
                     ),
                   ),
                 ),
-                Material(
-                  color: Colors.white,
-                  borderRadius: r20,
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: [
-                      for (final row in rows)
-                        _Row(row: row, onTap: () => _open(r, row)),
-                    ],
+                DecoratedBox(
+                  decoration: const BoxDecoration(
+                    borderRadius: r20,
+                    boxShadow: shadow,
+                  ),
+                  child: Material(
+                    color: Colors.white,
+                    borderRadius: r20,
+                    clipBehavior: Clip.antiAlias,
+                    child: Column(
+                      children: [
+                        for (final (i, row) in rows.indexed) ...[
+                          if (i > 0)
+                            const Divider(
+                              height: 1,
+                              indent: 20,
+                              endIndent: 20,
+                              color: C.line,
+                            ),
+                          _Row(row: row, onTap: () => _open(r, row)),
+                        ],
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -222,6 +269,12 @@ class _RecordsScreenState extends State<RecordsScreen> {
     },
   );
 }
+
+const _benefit = TextStyle(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: C.green,
+);
 
 /// 74.2만 원처럼 쓴다. 1만 원 아래는 원으로 쓴다
 String _total(int n) {
@@ -249,52 +302,71 @@ class _Row extends StatelessWidget {
     final kind = row.rewards.contains('points') ? '적립' : '할인';
     final net = row.amount - row.cancelledAmount;
     final cancelled = row.cancelledAmount > 0;
-    return ListTile(
-      minTileHeight: 64,
+    // 시안대로 금액은 크고 굵게, 실적 제외 배지는 업종 줄 앞에 둔다. 작업 011 설계 2절 Hi2
+    return InkWell(
       onTap: onTap,
-      title: Row(
-        children: [
-          Expanded(
-            child: Text(
-              row.merchantName ?? row.categoryName ?? '결제',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                color: C.text,
-              ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    row.merchantName ?? row.categoryName ?? '결제',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      color: C.text,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  won(net).replaceAll('원', ''),
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                    color: C.text,
+                  ),
+                ),
+              ],
             ),
-          ),
-          if (!row.counted) const Pill('실적 제외', fg: C.sub, bg: C.grey),
-          if (cancelled) ...[
-            const SizedBox(width: 4),
-            const Pill('취소', fg: C.sub, bg: C.grey),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                if (!row.counted) ...[
+                  const Pill('실적 제외', fg: C.sub, bg: C.grey),
+                  const SizedBox(width: 6),
+                ],
+                if (cancelled) ...[
+                  const Pill('취소', fg: C.sub, bg: C.grey),
+                  const SizedBox(width: 6),
+                ],
+                Expanded(
+                  child: Text(
+                    '${row.categoryName ?? '업종 미정'} · ${row.cardName} · '
+                    '${row.timeKnown ? '${two(row.paidAt.hour)}:${two(row.paidAt.minute)}' : '시각 모름'}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 13, color: C.sub),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  row.value > 0 ? '${won(row.value)} $kind' : '혜택 없음',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: row.value > 0 ? FontWeight.w700 : null,
+                    color: row.value > 0 ? C.green : C.faint,
+                  ),
+                ),
+              ],
+            ),
           ],
-        ],
-      ),
-      subtitle: Text(
-        '${row.categoryName ?? '업종 미정'} · ${row.cardName} · '
-        '${row.timeKnown ? '${two(row.paidAt.hour)}:${two(row.paidAt.minute)}' : '시각 모름'}',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(color: C.sub),
-      ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            won(net).replaceAll('원', ''),
-            style: const TextStyle(fontWeight: FontWeight.w700, color: C.text),
-          ),
-          Text(
-            row.value > 0 ? '${won(row.value)} $kind' : '혜택 없음',
-            style: TextStyle(
-              fontSize: 13,
-              color: row.value > 0 ? C.green : C.faint,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

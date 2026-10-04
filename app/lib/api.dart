@@ -29,11 +29,15 @@ class CardHit {
   CardHit(Map<String, dynamic> j)
     : id = j['id'],
       name = j['name'],
+      issuer = j['issuer'],
       issuerName = j['issuer_name'],
       kind = j['kind'],
       annualFee = j['annual_fee'],
       tiers = List<int>.from(j['tiers']);
   final String id, name, issuerName, kind;
+
+  /// 카드사 코드. 카드사 색 칸에 쓴다. 작업 011 설계 2절 A1
+  final String? issuer;
   final int? annualFee;
   final List<int> tiers;
 }
@@ -67,10 +71,14 @@ class HomeCard {
   HomeCard(Map<String, dynamic> j)
     : id = j['id'],
       name = j['name'],
+      issuer = j['issuer'],
       tiers = List<int>.from(j['tiers']),
       headline = j['headline'],
       spend = Spend(j['spend']);
   final String id, name;
+
+  /// 카드사 코드. 카드사 색 칸에 쓴다. 작업 011 설계 2절 H4
+  final String? issuer;
   final List<int> tiers;
   final String? headline;
   final Spend spend;
@@ -543,6 +551,11 @@ class Api {
   /// 카드 사실, 옵션, 쓰기 시작한 날을 답하고 혜택이 바뀐 결제 수를 돌려준다. E56
   Future<int> answerCard(String id, Map<String, Object?> body) async =>
       answers.cardAnswers(store, id, body)['repriced'] as int;
+
+  /// 카탈로그 날짜. 카드마다 공식 문구와 대조한 날 가운데 가장 늦은 날이다. 작업 011 설계 2절 S2
+  DateTime catalogDay() => store.catalog.cards.values
+      .map((c) => c.checkedAt)
+      .reduce((a, b) => a.isAfter(b) ? a : b);
 
   /// 설정의 혜택 계산에 쓰는 답. 가진 카드들의 사람 사실이다
   Future<List<FactQuestion>> userFacts() async => [

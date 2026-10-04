@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
+import '../ui.dart';
 
 const _maxBytes = 2000000;
 
@@ -48,6 +49,8 @@ const _fields = [
   ('card', '카드 이름'),
   ('region', '해외 여부'),
 ];
+
+const _guideText = TextStyle(fontSize: 15, color: C.text, height: 1.5);
 
 const _status = {
   'new': '새 결제',
@@ -91,7 +94,12 @@ class _ImportScreenState extends State<ImportScreen> {
     final f = await widget.pick();
     if (f == null || !mounted) return;
     if (f.bytes == null) {
-      setState(() => _error = '파일이 2MB보다 커요. 기간을 나눠 올려 주세요.');
+      // 앞 파일을 지운다. 남기면 아래 저장 버튼이 켜진 채로 앞 파일을 저장한다. 작업 011 위험 검토 5번
+      setState(() {
+        _file = null;
+        _preview = null;
+        _error = '파일이 2MB보다 커요. 기간을 나눠 올려 주세요.';
+      });
       return;
     }
     _file = (name: f.name, bytes: f.bytes!);
@@ -168,43 +176,183 @@ class _ImportScreenState extends State<ImportScreen> {
     if (!_remap) _read();
   }
 
+  /// 엑셀 받는 곳 안내. 작업 011 설계 2절 I1
+  void _guide() => showModalBottomSheet<void>(
+    context: context,
+    useSafeArea: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) => const SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(24, 24, 24, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '엑셀은 어디서 받나요',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            ),
+            SizedBox(height: 12),
+            Text(
+              '카드사 PC 웹사이트의 이용 내역 조회에서 기간을 정해 엑셀로 내려받아요. 받은 파일을 폰으로 옮긴 뒤 여기서 골라요.',
+              style: _guideText,
+            ),
+            SizedBox(height: 8),
+            Text(
+              '열 이름을 알아보지 못하면 어느 열이 결제일, 가맹점명, 금액인지 짝지어 달라고 물어요.',
+              style: _guideText,
+            ),
+            SizedBox(height: 8),
+            Text(
+              '파일은 2MB까지 올릴 수 있어요. 읽은 뒤 바로 지우고 폰 밖으로 보내지 않아요.',
+              style: _guideText,
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
+  /// 아래에 고정한 단계 버튼. 파일 고르기, 다시 읽기, 저장 차례다. 작업 011 설계 1절 원칙 1
+  Widget _action(ImportPreview? p) {
+    if (p != null && _remap) {
+      final m = _mapped(p);
+      return FilledButton(
+        onPressed: m.ok && !_busy
+            ? () {
+                _columns = m.columns;
+                _read();
+              }
+            : null,
+        child: const Text('다시 읽기'),
+      );
+    }
+    final s = p?.summary;
+    if (p != null && s != null) {
+      final ready = s['new'] > 0 || s['cancels'] > 0;
+      return FilledButton(
+        onPressed: ready && !_busy ? () => _save(p) : null,
+        child: const Text('저장'),
+      );
+    }
+    return FilledButton(
+      onPressed: _busy ? null : _pick,
+      child: const Text('파일 고르기'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = _preview;
+    final read = p != null && !_remap;
     return Scaffold(
       appBar: AppBar(title: const Text('이용 내역 가져오기')),
-      body: ListView(
+      body: WithAction(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        action: _action(p),
         children: [
           const Text(
             '카드사 웹에서 받은 이용 내역 파일을 올려요. 파일은 읽은 뒤 바로 지워요.',
             style: TextStyle(color: C.sub),
           ),
-          const SizedBox(height: 16),
-          const Text('어느 카드의 내역인가요', style: TextStyle(color: C.text)),
-          const SizedBox(height: 6),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              onPressed: _guide,
+              style: TextButton.styleFrom(
+                foregroundColor: C.blue,
+                padding: EdgeInsets.zero,
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.info_outline, size: 18),
+                  SizedBox(width: 6),
+                  Text('엑셀은 어디서 받나요'),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            '어느 카드의 내역인가요',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: C.sub,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // 시안대로 알약이다. 작업 011 설계 2절 G2
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
               for (final c in widget.cards)
-                ChoiceChip(
-                  label: Text(c.name),
+                ChoicePill(
+                  c.name,
                   selected: _card == c.id,
-                  onSelected: _busy ? null : (_) => _chooseCard(c.id),
+                  onTap: () {
+                    if (!_busy) _chooseCard(c.id);
+                  },
                 ),
-              ChoiceChip(
-                label: const Text('파일에 카드 이름이 있어요'),
+              ChoicePill(
+                '파일에 카드 이름이 있어요',
                 selected: _card == null,
-                onSelected: _busy ? null : (_) => _chooseCard(null),
+                onTap: () {
+                  if (!_busy) _chooseCard(null);
+                },
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          OutlinedButton(
-            onPressed: _busy ? null : _pick,
-            child: Text(_file == null ? '파일 고르기' : '${_file!.name} · 다른 파일'),
-          ),
+          if (_file != null) ...[
+            const SizedBox(height: 16),
+            // 고른 파일. 시안대로 이름과 다른 파일 고르기다. 설계 2절 I1
+            Box(
+              padding: const EdgeInsets.fromLTRB(20, 8, 8, 8),
+              child: Row(
+                children: [
+                  Icon(
+                    read ? Icons.check : Icons.description_outlined,
+                    size: 20,
+                    color: read ? C.green : C.sub,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      _file!.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: C.text,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: _busy ? null : _pick,
+                    style: TextButton.styleFrom(
+                      foregroundColor: C.blue,
+                      textStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    child: const Text('다른 파일'),
+                  ),
+                ],
+              ),
+            ),
+          ],
           if (_busy)
             const Padding(
               padding: EdgeInsets.all(16),
@@ -216,18 +364,18 @@ class _ImportScreenState extends State<ImportScreen> {
               child: Text(_error!, style: const TextStyle(color: C.amber)),
             ),
           if (p != null && _remap) ..._mappingView(p),
-          if (p != null && !_remap && p.summary != null)
-            ..._previewView(p, p.summary!),
+          if (read && p.summary != null) ..._previewView(p, p.summary!),
         ],
       ),
     );
   }
 
-  /// 열 짝짓기. 열 이름을 못 찾았을 때와 사용자가 다시 짝지을 때다. E30
-  List<Widget> _mappingView(ImportPreview p) {
+  /// 짝지은 열. 머리 줄을 바꾸거나 열이 밀려도 없는 열을 고른 채로 두지 않는다
+  ({List<String> headers, Map<String, int> columns, bool ok}) _mapped(
+    ImportPreview p,
+  ) {
     final row = _headerRow ?? p.headerRow;
     final headers = row < p.topRows.length ? p.topRows[row] : p.headers;
-    // 머리 줄을 바꾸거나 열이 밀려도 없는 열을 고른 채로 두지 않는다
     final columns = {
       for (final e in (_columns ?? p.mapping ?? const <String, int>{}).entries)
         if (e.value < headers.length && headers[e.value].isNotEmpty)
@@ -237,6 +385,13 @@ class _ImportScreenState extends State<ImportScreen> {
     final ok =
         ['date', 'merchant', 'amount'].every(columns.containsKey) &&
         used.toSet().length == used.length;
+    return (headers: headers, columns: columns, ok: ok);
+  }
+
+  /// 열 짝짓기. 열 이름을 못 찾았을 때와 사용자가 다시 짝지을 때다. E30
+  List<Widget> _mappingView(ImportPreview p) {
+    final row = _headerRow ?? p.headerRow;
+    final (:headers, :columns, ok: _) = _mapped(p);
     return [
       const SizedBox(height: 16),
       const Text(
@@ -304,15 +459,6 @@ class _ImportScreenState extends State<ImportScreen> {
             ),
           ],
         ),
-      FilledButton(
-        onPressed: ok && !_busy
-            ? () {
-                _columns = columns;
-                _read();
-              }
-            : null,
-        child: const Text('다시 읽기'),
-      ),
     ];
   }
 
@@ -332,7 +478,6 @@ class _ImportScreenState extends State<ImportScreen> {
         '시각이 없는 결제 ${s['untimed']}건은 시간대 할인을 확인 필요로 둬요',
       '결제수단은 실물카드로 넣어요. 간편결제 이름이 찍힌 ${s['easy_pay'] ?? 0}건은 그 결제수단이에요',
     ];
-    final ready = s['new'] > 0 || s['cancels'] > 0;
     return [
       const SizedBox(height: 16),
       Box(
@@ -364,11 +509,6 @@ class _ImportScreenState extends State<ImportScreen> {
             ].join(' · '),
           ),
         ),
-      const SizedBox(height: 12),
-      FilledButton(
-        onPressed: ready && !_busy ? () => _save(p) : null,
-        child: const Text('저장'),
-      ),
     ];
   }
 }

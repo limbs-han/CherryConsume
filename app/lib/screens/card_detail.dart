@@ -9,6 +9,7 @@ import '../api.dart';
 import '../clock.dart' as clock;
 import '../format.dart';
 import '../theme.dart';
+import '../ui.dart';
 import 'answer.dart';
 import 'records.dart';
 
@@ -100,6 +101,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
           actions: [
             if (d != null)
               PopupMenuButton<String>(
+                icon: const Icon(Icons.more_horiz),
                 onSelected: (_) => _remove(d),
                 itemBuilder: (_) => const [
                   PopupMenuItem(value: 'remove', child: Text('카드 해지')),
@@ -126,129 +128,165 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
   List<Widget> _body(CardDetail d) {
     final s = d.spend;
     final tier = s.tier ?? 0;
+    // 통합 한도처럼 여러 혜택이 함께 쓰는 한도는 회색 상자에 먼저 둔다. 작업 011 설계 2절 D3
+    bool shared(Limit l) =>
+        l.title.startsWith('통합 한도') || l.title.startsWith('함께 쓰는 한도');
+    final group = [
+      for (final l in d.limits)
+        if (shared(l)) l,
+    ];
+    final each = [
+      for (final l in d.limits)
+        if (!shared(l)) l,
+    ];
     return [
       Box(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('이번 달 실적', style: TextStyle(fontSize: 13, color: C.sub)),
-            Text(
-              won(s.counted),
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: C.text,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                const Expanded(
+                  child: Text(
+                    '이번 달 실적',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: C.sub,
+                    ),
+                  ),
+                ),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: comma(s.counted),
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: '원',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  style: const TextStyle(color: C.text),
+                ),
+              ],
             ),
             if (d.tiers.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 6,
-                children: [
-                  for (final t in d.tiers)
-                    Pill(
-                      man(t),
-                      fg: t == tier ? Colors.white : C.sub,
-                      bg: t == tier ? C.blue : C.grey,
-                    ),
-                ],
-              ),
               const SizedBox(height: 12),
-              Text(
+              TierBar(tiers: d.tiers, counted: s.counted),
+              const Divider(height: 28, color: C.line),
+              _Row(
+                '지금 적용 중',
                 tier > 0
-                    ? '지금 적용 중 · ${man(tier)} 구간${d.prevMonthCounted == null ? '' : ' · 전월 ${man(d.prevMonthCounted!)} 기준'}'
-                    : '지금은 혜택 구간 전이에요',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: C.text,
-                ),
+                    ? '${man(tier)} 구간${d.prevMonthCounted == null ? '' : ' · 전월 ${man(d.prevMonthCounted!)} 기준'}'
+                    : '구간 전',
               ),
               if ((s.toKeep ?? 0) > 0)
-                Text(
-                  '다음 달 ${man(tier)} 구간 유지 · ${man(s.toKeep!)} 더',
-                  style: const TextStyle(color: C.sub),
+                _Row(
+                  '다음 달 ${man(tier)} 구간 유지',
+                  '${man(s.toKeep!)} 더',
+                  color: C.blue,
                 ),
               if (s.nextTier != null && s.toNext != null)
-                Text(
-                  '다음 달 ${man(s.nextTier!)} 구간으로 · ${man(s.toNext!)} 더',
-                  style: const TextStyle(color: C.sub),
-                ),
-            ] else
+                _Row('다음 달 ${man(s.nextTier!)} 구간으로', '${man(s.toNext!)} 더'),
+            ] else ...[
+              const SizedBox(height: 8),
               const Text(
                 '실적과 상관없이 혜택을 받는 카드예요',
                 style: TextStyle(color: C.sub),
               ),
+            ],
           ],
         ),
       ),
-      if (d.limits.isNotEmpty) ...[
-        const _Heading('남은 한도'),
+      if (d.limits.isNotEmpty || d.locked.isNotEmpty) ...[
+        const SizedBox(height: 12),
         Box(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (final l in d.limits)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l.title,
-                          style: const TextStyle(color: C.text),
-                        ),
-                      ),
-                      Text(
-                        _left(l),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: C.green,
-                        ),
-                      ),
-                    ],
+              const Text(
+                '이번 달 혜택',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: C.text,
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (group.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  decoration: const BoxDecoration(
+                    color: C.grey,
+                    borderRadius: r16,
+                  ),
+                  child: Column(
+                    children: [for (final l in group) _LimitRow(l)],
                   ),
                 ),
-            ],
-          ),
-        ),
-      ],
-      if (d.locked.isNotEmpty) ...[
-        const _Heading('구간이 모자라 아직 못 받는 혜택'),
-        Box(
-          child: Column(
-            children: [
-              for (final l in d.locked)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l.title,
-                              style: const TextStyle(color: C.text),
-                            ),
-                            Text(
-                              '${man(l.requiredTier)} 구간부터 · 다음 달부터 받아요',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: C.faint,
+              for (final l in each) _LimitRow(l),
+              if (d.locked.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                const Text(
+                  '구간이 모자라 아직 못 받는 혜택',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: C.sub,
+                  ),
+                ),
+                for (final l in d.locked)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l.title,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: C.text,
+                                ),
                               ),
-                            ),
-                          ],
+                              Text(
+                                '${man(l.requiredTier)} 구간부터 · 다음 달부터 받아요',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: C.faint,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${man(l.remaining)} 더',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: C.amber,
+                        const SizedBox(width: 12),
+                        Text(
+                          '${man(l.remaining)} 더',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: C.amber,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+              ],
             ],
           ),
         ),
@@ -277,28 +315,54 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
           ),
         ),
       ],
-      // 카드 사실과 옵션은 여기서 묻는다. 없는 카드는 쓰기 시작한 날만 있다. 작업 004 설계 3.1
+      // 카드 사실과 옵션은 여기서 묻는다. 없는 카드는 쓰기 시작한 달만 있다. 작업 004 설계 3.1
       const _Heading('카드 정보'),
       Box(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    d.startedOn == null
-                        ? '쓰기 시작한 날을 몰라요'
-                        : '쓰기 시작한 날 · ${d.startedOn}',
-                    style: const TextStyle(color: C.text),
+            Semantics(
+              button: true,
+              child: Pressable(
+                key: const Key('started-on'),
+                onTap: () => _pickStart(d),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '쓰기 시작한 달',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: C.text,
+                              ),
+                            ),
+                            Text(
+                              '새 카드 특례 기간을 계산해요',
+                              style: TextStyle(fontSize: 13, color: C.sub),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        _month(d.startedOn),
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: C.text,
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right, color: C.faint),
+                    ],
                   ),
                 ),
-                TextButton(
-                  key: const Key('started-on'),
-                  onPressed: () => _pickStart(d),
-                  child: const Text('바꾸기'),
-                ),
-              ],
+              ),
             ),
             for (final q in d.facts)
               FactAnswer(
@@ -324,8 +388,11 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
           style: const TextStyle(color: C.sub),
         ),
       const SizedBox(height: 12),
-      OutlinedButton(
-        style: OutlinedButton.styleFrom(backgroundColor: Colors.white),
+      FilledButton(
+        style: FilledButton.styleFrom(
+          backgroundColor: C.blueSoft,
+          foregroundColor: C.blue,
+        ),
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => RecordsScreen(api: widget.api, card: d.id),
@@ -335,6 +402,152 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
       ),
     ];
   }
+}
+
+/// "2025-03-01"에서 "2025년 3월". 모르면 "몰라요"
+String _month(String? day) {
+  if (day == null) return '몰라요';
+  final d = DateTime.parse(day);
+  return '${d.year}년 ${d.month}월';
+}
+
+/// 왼쪽 이름과 오른쪽 굵은 값. 설계 2절 D2
+class _Row extends StatelessWidget {
+  const _Row(this.label, this.value, {this.color = C.text});
+  final String label, value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 15, color: C.sub),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w800,
+              color: color,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+/// 구간 눈금이 있는 실적 막대. 끝은 가장 높은 구간이다. 0.6초 동안 차오른다. 설계 2절 D1
+class TierBar extends StatelessWidget {
+  const TierBar({super.key, required this.tiers, required this.counted});
+  final List<int> tiers;
+  final int counted;
+
+  @override
+  Widget build(BuildContext context) {
+    final top = tiers.last;
+    return LayoutBuilder(
+      builder: (context, box) {
+        final w = box.maxWidth;
+        return SizedBox(
+          height: 36,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 8,
+                decoration: BoxDecoration(
+                  color: C.bg,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: (counted / top).clamp(0, 1)),
+                duration: MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : const Duration(milliseconds: 600),
+                curve: Curves.easeOutCubic,
+                builder: (_, v, _) => Container(
+                  width: w * v,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: C.blue,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ),
+              for (final t in tiers) ...[
+                if (t < top)
+                  Positioned(
+                    left: w * t / top - 1,
+                    top: -2,
+                    child: Container(width: 2, height: 12, color: C.line),
+                  ),
+                Positioned(
+                  // 끝 구간 글자는 막대 끝에 오른쪽을 맞춘다
+                  left: t < top ? w * t / top - 24 : null,
+                  right: t < top ? null : 0,
+                  top: 16,
+                  width: t < top ? 48 : null,
+                  child: Text(
+                    man(t),
+                    textAlign: t < top ? TextAlign.center : TextAlign.end,
+                    style: const TextStyle(fontSize: 12, color: C.sub),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// 혜택 한 줄. 남은 양 / 한도. 금액, 횟수, 결제액 한도 가운데 남은 비율이 가장 작은 것을 보인다. 먼저 끝나는 쪽이다.
+/// 다 써도 0 아래로 내려가지 않는다. 이번 달이 아닌 한도는 기간을 앞에 붙인다
+class _LimitRow extends StatelessWidget {
+  const _LimitRow(this.l);
+  final Limit l;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            l.title,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: C.text,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(
+            _remain(l),
+            textAlign: TextAlign.end,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: C.sub,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _Heading extends StatelessWidget {
@@ -363,29 +576,27 @@ const _periods = {
   'lifetime': '전체 기간',
 };
 
-/// 한도 한 줄의 남은 양. 금액, 횟수, 결제액 한도 가운데 남은 비율이 가장 작은 것을 보인다. 먼저 끝나는 쪽이다.
-/// 다 써도 0 아래로 내려가지 않는다
-String _left(
-  ({
-    String title,
-    String per,
-    int usedAmount,
-    int? capAmount,
-    int usedCount,
-    int? capCount,
-    int usedBase,
-    int? capBase,
-  })
-  l,
-) {
-  final per = _periods[l.per] ?? '';
+typedef Limit = ({
+  String title,
+  String per,
+  int usedAmount,
+  int? capAmount,
+  int usedCount,
+  int? capCount,
+  int usedBase,
+  int? capBase,
+});
+
+/// 남은 양 / 한도. 시안처럼 금액은 단위를 빼고, 횟수는 "회", 결제액 한도는 "결제액"을 붙인다. 작업 011 설계 2절 D3
+String _remain(Limit l) {
+  final per = l.per == 'month' ? '' : '${_periods[l.per] ?? ''} ';
   final options = [
-    if (l.capAmount != null) (l.capAmount!, l.usedAmount, (int n) => won(n)),
-    if (l.capCount != null) (l.capCount!, l.usedCount, (int n) => '$n회'),
-    if (l.capBase != null) (l.capBase!, l.usedBase, (int n) => '결제액 ${won(n)}'),
+    if (l.capAmount != null) (l.capAmount!, l.usedAmount, '', ''),
+    if (l.capCount != null) (l.capCount!, l.usedCount, '', '회'),
+    if (l.capBase != null) (l.capBase!, l.usedBase, '결제액 ', ''),
   ];
-  double share((int, int, String Function(int)) o) =>
+  double share((int, int, String, String) o) =>
       o.$1 == 0 ? 0 : max(0, o.$1 - o.$2) / o.$1;
   final o = options.reduce((a, b) => share(b) < share(a) ? b : a);
-  return '$per ${o.$3(max(0, o.$1 - o.$2))} 남음';
+  return '$per${o.$3}${comma(max(0, o.$1 - o.$2))} / ${comma(o.$1)}${o.$4} 남음';
 }

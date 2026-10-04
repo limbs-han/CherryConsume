@@ -5,6 +5,7 @@ import 'package:cherry_consume/format.dart' show won;
 import 'package:cherry_consume/main.dart';
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:cherry_consume/store/routes/recommend.dart' show recommend;
+import 'package:cherry_consume/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -34,20 +35,22 @@ void main() {
     await openTab(tester);
     expect(find.text('어디서 결제하세요?'), findsOneWidget);
     expect(find.text('GS25 테헤란점'), findsOneWidget);
-    final cafe = find.widgetWithText(ListTile, '카페');
-    expect(
-      find.descendant(
-        of: cafe,
-        matching: find.text('신한카드 Mr.Life · 야간 식음료 10% 할인'),
-      ),
-      findsOneWidget,
-    );
+    // 업종 줄은 카드 이름과 혜택 이름을 두 줄로 쓴다. 작업 011 설계 2절 R1
+    final cafe = find.widgetWithText(Pressable, '카페');
+    for (final text in ['신한카드 Mr.Life', '야간 식음료 10% 할인']) {
+      expect(
+        find.descendant(of: cafe, matching: find.text(text)),
+        findsOneWidget,
+      );
+    }
 
     await tester.tap(cafe);
     await tester.pumpAndSettle();
     expect(find.text('1,000원 할인'), findsOneWidget);
     expect(find.text('80원 할인'), findsOneWidget);
     expect(find.text('네이버페이로 내면 1,000원 더 받아요'), findsOneWidget);
+    // 결제수단을 바꾸면 더 받는 팁은 지갑 아이콘을 붙인다. 작업 011 설계 2절 R5
+    expect(find.byIcon(Icons.account_balance_wallet_outlined), findsWidgets);
 
     await tester.tap(find.text('이 카드로 결제 기록').first);
     await tester.pumpAndSettle();

@@ -5,12 +5,12 @@ library;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../api.dart';
 import '../clock.dart' as clock;
 import '../format.dart';
 import '../theme.dart';
+import '../ui.dart';
 
 String two(int n) => n.toString().padLeft(2, '0');
 
@@ -23,6 +23,54 @@ const billings = [
   ('app_prepay', '앱 선결제'),
   ('in_app', '앱 안 결제'),
 ];
+
+/// 홈, 추천, 기록 탭의 결제 기록 버튼. 지금 가진 카드가 없으면 보이지 않는다. 작업 011 설계 2절 G6
+/// 저장하면 onSaved로 그 탭을 다시 불러오고, 다른 결제를 다시 계산했으면 알린다
+class PayButton extends StatefulWidget {
+  const PayButton({super.key, required this.api, required this.onSaved});
+  final Api api;
+  final VoidCallback onSaved;
+
+  @override
+  State<PayButton> createState() => _PayButtonState();
+}
+
+class _PayButtonState extends State<PayButton> {
+  late final Future<Home> _home = widget.api.home();
+
+  Future<void> _pay(List<HomeCard> cards) async {
+    final repriced = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+        builder: (_) => PaymentScreen(
+          api: widget.api,
+          cards: [for (final c in cards) (id: c.id, name: c.name)],
+        ),
+      ),
+    );
+    if (repriced == null || !mounted) return;
+    widget.onSaved();
+    if (repriced > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('다른 결제 $repriced건의 혜택도 다시 계산했어요.')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder(
+    future: _home,
+    builder: (context, snap) {
+      final cards = snap.data?.cards ?? const <HomeCard>[];
+      if (cards.isEmpty) return const SizedBox.shrink();
+      return FloatingActionButton.extended(
+        heroTag: null,
+        onPressed: () => _pay(cards),
+        icon: const Icon(Icons.add),
+        label: const Text('결제 기록'),
+      );
+    },
+  );
+}
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({
@@ -47,6 +95,11 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   late final _input = widget.initial ?? PaymentInput();
+
+  /// 고치기와 추천에서 연 결제는 처음 금액을 쉼표로 채운다
+  late final _amountText = TextEditingController(
+    text: _input.amount == null ? '' : comma(_input.amount!),
+  );
   late final Future<List<Category>> _categories = widget.api.categories();
   late final Future<Map<String, String>> _methods = widget.api.paymentMethods();
   Draft? _draft;
@@ -64,6 +117,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void dispose() {
     _wait?.cancel();
+    _amountText.dispose();
     super.dispose();
   }
 
@@ -188,15 +242,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   '지금까지 ${won(e.cancelledAmount)} 취소 · ${before.month}월 ${before.day}일',
                   style: const TextStyle(color: C.sub),
                 ),
-              TextField(
+              // 취소 금액도 쉼표를 넣는 금액 칸이다. 작업 011 설계 1절 원칙 6
+              AmountField(
                 key: const Key('cancel-amount'),
                 controller: text,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(
-                  suffixText: '원',
-                  hintText: '0',
-                ),
+                maxDigits: 9,
               ),
               const SizedBox(height: 12),
               Row(
@@ -232,7 +282,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             FilledButton(
               onPressed: () {
-                final n = int.tryParse(text.text);
+                final n = amountOf(text.text);
                 Navigator.pop(context, n == null || n <= 0 ? null : (n, day));
               },
               child: const Text('기록'),
@@ -320,6 +370,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -352,36 +403,50 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
         ],
       ),
-      body: ListView(
+      // 저장은 아래에 고정해 키보드와 아래 막대에 가리지 않는다. 작업 011 설계 1절 원칙 1, 2절 Z2
+      body: WithAction(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        action: FilledButton(
+          onPressed: _busy || (_input.amount ?? 0) <= 0 || _cardId == null
+              ? null
+              : _save,
+          child: const Text('저장'),
+        ),
         children: [
           const _Label('얼마 썼나요'),
-          TextFormField(
+          // 시안대로 44 크기에 쉼표를 넣고, 열면 바로 금액을 친다. 작업 011 설계 1절 원칙 6, 2절 P1
+          AmountField(
             key: const Key('amount'),
-            initialValue: _input.amount?.toString(),
+            controller: _amountText,
+            size: 44,
             autofocus: true,
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(9),
-            ],
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w800,
-              color: C.text,
-            ),
-            decoration: const InputDecoration(suffixText: '원', hintText: '0'),
+            maxDigits: 9,
             onChanged: (v) {
-              _input.amount = int.tryParse(v);
+              _input.amount = v;
               _changed();
             },
           ),
           const SizedBox(height: 20),
           const _Label('어디서요'),
+          // 가게를 찾는 칸이라 시안대로 돋보기가 있는 흰 상자다. 설계 2절 P2
           TextFormField(
             key: const Key('merchant'),
             initialValue: _input.merchantName,
-            decoration: const InputDecoration(hintText: '가게 이름'),
+            style: const TextStyle(fontSize: 16, color: C.text),
+            decoration: const InputDecoration(
+              hintText: '가게 이름',
+              prefixIcon: Icon(Icons.search, color: C.sub),
+              filled: true,
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: r16,
+                borderSide: BorderSide(color: C.line),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: r16,
+                borderSide: BorderSide(color: C.blue, width: 1.5),
+              ),
+            ),
             onChanged: (v) {
               _input
                 ..merchantName = v.trim()
@@ -398,10 +463,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
             runSpacing: 8,
             children: [
               for (final c in widget.cards)
-                ChoiceChip(
-                  label: Text(c.name),
+                ChoicePill(
+                  c.name,
                   selected: _cardId == c.id,
-                  onSelected: (_) {
+                  onTap: () {
                     setState(() => _input.userCardId = c.id);
                     _refresh();
                   },
@@ -410,9 +475,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           if (_input.userCardId == null && top != null && top.value > 0) ...[
             const SizedBox(height: 8),
-            Text(
-              '이 가게에선 ${top.name}가 가장 이득이라 골라 뒀어요',
-              style: const TextStyle(fontSize: 13, color: C.sub),
+            // 시안대로 체크와 파란 굵은 글자다. 설계 2절 P4
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.check, size: 18, color: C.blue),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    '이 가게에선 ${top.name}가 가장 이득이라 골라 뒀어요',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: C.blue,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
           const SizedBox(height: 20),
@@ -474,13 +553,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
           ],
-          const SizedBox(height: 24),
-          FilledButton(
-            onPressed: _busy || (_input.amount ?? 0) <= 0 || _cardId == null
-                ? null
-                : _save,
-            child: const Text('저장'),
-          ),
         ],
       ),
     );
@@ -606,121 +678,181 @@ class _DetailsSheetState extends State<_DetailsSheet> {
         .where((c) => c.code == parent)
         .expand((c) => c.children)
         .toList();
+    // 확인은 시트 아래에 고정한다. 시트는 상태 표시줄 아래에서 멈춘다. 작업 011 설계 2절 Z1
+    // 시트는 Scaffold 밖이라 키보드가 열려 있으면 그만큼 직접 올린다
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        24,
-        20,
-        16 +
-            MediaQuery.of(context).viewInsets.bottom +
-            MediaQuery.of(context).viewPadding.bottom,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _Label('업종'),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final c in widget.categories)
-                  ChoiceChip(
-                    label: Text(c.name),
-                    selected: parent == c.code,
-                    onSelected: (_) => setState(() => i.category = c.code),
-                  ),
-              ],
-            ),
-            if (children.isNotEmpty) ...[
-              const SizedBox(height: 8),
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: WithAction(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+        action: FilledButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('확인'),
+        ),
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _Label('업종'),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  for (final ch in children)
-                    ChoiceChip(
-                      label: Text(ch.name),
-                      selected: i.category == ch.code,
-                      onSelected: (_) => setState(() => i.category = ch.code),
+                  for (final c in widget.categories)
+                    ChoicePill(
+                      c.name,
+                      selected: parent == c.code,
+                      onTap: () => setState(() => i.category = c.code),
                     ),
                 ],
               ),
-            ],
-            const SizedBox(height: 16),
-            const _Label('결제 시각'),
-            OutlinedButton(
-              onPressed: _pickTime,
-              child: Text(() {
-                final at = i.paidAt ?? clock.now();
-                return '${at.month}월 ${at.day}일 ${two(at.hour)}:${two(at.minute)}';
-              }()),
-            ),
-            const SizedBox(height: 16),
-            const _Label('어디서 결제했나요'),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'offline', label: Text('오프라인')),
-                ButtonSegment(value: 'online', label: Text('온라인')),
+              if (children.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final ch in children)
+                      ChoicePill(
+                        ch.name,
+                        selected: i.category == ch.code,
+                        onTap: () => setState(() => i.category = ch.code),
+                      ),
+                  ],
+                ),
               ],
-              selected: {i.channel ?? 'offline'},
-              onSelectionChanged: (v) => setState(() => i.channel = v.first),
-            ),
-            const SizedBox(height: 16),
-            const _Label('할부'),
-            DropdownButton<int>(
-              value: i.installmentMonths,
-              items: [
-                for (final m in [1, 2, 3, 4, 5, 6, 10, 12])
-                  DropdownMenuItem(
-                    value: m,
-                    child: Text(m == 1 ? '일시불' : '$m개월'),
-                  ),
-              ],
-              onChanged: (v) => setState(() => i.installmentMonths = v ?? 1),
-            ),
-            // 무이자할부는 혜택이나 실적에서 빼는 카드가 많다. 일시불이면 묻지 않는다
-            if (i.installmentMonths > 1)
+              const SizedBox(height: 16),
+              const _Label('결제 시각'),
+              OutlinedButton(
+                onPressed: _pickTime,
+                child: Text(() {
+                  final at = i.paidAt ?? clock.now();
+                  return '${at.month}월 ${at.day}일 ${two(at.hour)}:${two(at.minute)}';
+                }()),
+              ),
+              const SizedBox(height: 16),
+              const _Label('어디서 결제했나요'),
+              SegmentedButton<String>(
+                segments: const [
+                  ButtonSegment(value: 'offline', label: Text('오프라인')),
+                  ButtonSegment(value: 'online', label: Text('온라인')),
+                ],
+                selected: {i.channel ?? 'offline'},
+                onSelectionChanged: (v) => setState(() => i.channel = v.first),
+              ),
+              const SizedBox(height: 16),
+              _PickRow(
+                label: '할부',
+                // 엑셀로 가져온 24개월처럼 고르는 줄에 없는 개월도 그대로 보인다. 위험 검토 1번
+                options: [
+                  for (final m in {
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    10,
+                    12,
+                    i.installmentMonths,
+                  }.toList()..sort())
+                    (m, m == 1 ? '일시불' : '$m개월'),
+                ],
+                value: i.installmentMonths,
+                onPick: (v) => setState(() => i.installmentMonths = v),
+              ),
+              // 무이자할부는 혜택이나 실적에서 빼는 카드가 많다. 일시불이면 묻지 않는다
+              if (i.installmentMonths > 1)
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('무이자할부'),
+                  value: i.interestFree,
+                  onChanged: (v) => setState(() => i.interestFree = v),
+                ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('무이자할부'),
-                value: i.interestFree,
-                onChanged: (v) => setState(() => i.interestFree = v),
+                title: const Text('해외 결제'),
+                value: i.overseas,
+                onChanged: (v) => setState(() => i.overseas = v),
               ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('해외 결제'),
-              value: i.overseas,
-              onChanged: (v) => setState(() => i.overseas = v),
-            ),
-            const SizedBox(height: 16),
-            const _Label('청구 방식'),
-            DropdownButton<String>(
-              value: i.billing ?? 'normal',
-              isExpanded: true,
-              items: [
-                for (final (key, name) in billings)
-                  DropdownMenuItem(value: key, child: Text(name)),
-              ],
-              onChanged: (v) => setState(() => i.billing = v),
-            ),
-            const SizedBox(height: 16),
-            const _Label('결제수단'),
-            DropdownButton<String>(
-              value: i.paymentMethod ?? 'physical_card',
-              isExpanded: true,
-              items: [
-                for (final e in widget.methods.entries)
-                  DropdownMenuItem(value: e.key, child: Text(e.value)),
-              ],
-              onChanged: (v) => setState(() => i.paymentMethod = v),
-            ),
-            const SizedBox(height: 24),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('확인'),
-            ),
-          ],
+              const SizedBox(height: 16),
+              _PickRow(
+                label: '청구 방식',
+                options: billings,
+                value: i.billing ?? 'normal',
+                onPick: (v) => setState(() => i.billing = v),
+              ),
+              _PickRow(
+                label: '결제수단',
+                options: [
+                  for (final e in widget.methods.entries) (e.key, e.value),
+                ],
+                value: i.paymentMethod ?? 'physical_card',
+                onPick: (v) => setState(() => i.paymentMethod = v),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 이름, 고른 값, 화살표 한 줄. 누르면 바닥 시트에서 고른다. 드롭다운 대신이다. 작업 011 설계 1절 원칙 5, 2절 P5
+class _PickRow<T> extends StatelessWidget {
+  const _PickRow({
+    required this.label,
+    required this.options,
+    required this.value,
+    required this.onPick,
+  });
+  final String label;
+  final List<(T, String)> options;
+  final T value;
+  final ValueChanged<T> onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final shown = options
+        .firstWhere((o) => o.$1 == value, orElse: () => options.first)
+        .$2;
+    return Semantics(
+      button: true,
+      child: Pressable(
+        key: Key('pick-$label'),
+        onTap: () async {
+          final v = await pickSheet<T>(
+            context,
+            title: label,
+            options: options,
+            selected: value,
+          );
+          if (v != null) onPick(v);
+        },
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 56),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: C.line)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(fontSize: 15, color: C.sub),
+                ),
+              ),
+              Text(
+                shown,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: C.text,
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: C.faint),
+            ],
+          ),
         ),
       ),
     );

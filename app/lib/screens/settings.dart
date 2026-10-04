@@ -12,8 +12,13 @@ import 'package:flutter/material.dart';
 import '../api.dart';
 import '../clock.dart' as clock;
 import '../store/backup.dart' show maxBytes;
+import '../theme.dart';
+import '../ui.dart';
 import 'answer.dart';
 import 'import.dart' show PickFile;
+
+/// 앱 판. pubspec.yaml의 version과 같아야 한다. 시험이 맞춰 본다. 작업 011 설계 2절 S2
+const appVersion = '0.1.0';
 
 /// 내보낸 파일을 사용자가 고른 곳에 쓴다. 취소하면 거짓이다. 시험에서는 바꿔 끼운다
 typedef SaveFile = Future<bool> Function(String name, Uint8List bytes);
@@ -165,59 +170,176 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  /// 답 고르기. 시안대로 줄을 누르면 바닥 시트에서 고른다. 작업 011 설계 2절 S1
+  Future<void> _pickFact(FactQuestion q) async {
+    final v = await pickSheet<Object>(
+      context,
+      title: q.ask,
+      options: factChoices(q),
+      selected: q.answer,
+    );
+    if (v != null) await _answer(q, v);
+  }
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('설정')),
-    body: ListView(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-      children: [
-        const Text(
-          '혜택 계산에 쓰는 답',
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-        FutureBuilder(
-          future: _facts,
-          builder: (context, snap) => switch (snap) {
-            AsyncSnapshot(hasError: true) => const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text('답을 불러오지 못했어요.'),
-            ),
-            AsyncSnapshot(:final data?) when data.isEmpty => const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text('지금 가진 카드에는 물을 것이 없어요.'),
-            ),
-            AsyncSnapshot(:final data?) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+  Widget build(BuildContext context) {
+    final day = widget.api.catalogDay();
+    // 시안대로 묶음마다 흰 카드에 줄, 오른쪽 값, 화살표다. 작업 011 설계 2절 S1, S2
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: rootTitleSpacing(context),
+        title: const Text('설정'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        children: [
+          const _Group('혜택 계산에 쓰는 답'),
+          FutureBuilder(
+            future: _facts,
+            builder: (context, snap) => switch (snap) {
+              AsyncSnapshot(hasError: true) => const Text('답을 불러오지 못했어요.'),
+              AsyncSnapshot(:final data?) when data.isEmpty => const Text(
+                '지금 가진 카드에는 물을 것이 없어요.',
+                style: TextStyle(color: C.sub),
+              ),
+              AsyncSnapshot(:final data?) => _Rows([
                 for (final q in data)
-                  FactAnswer(
-                    q: q,
-                    note: '쓰는 카드 · ${q.cards.join(', ')}',
-                    onAnswer: (v) => _answer(q, v),
+                  _Line(
+                    title: q.ask,
+                    sub: '쓰는 카드 · ${q.cards.join(', ')}',
+                    trailing: q.answer == null
+                        ? const Pill('답하기')
+                        : _Value(
+                            factChoices(q)
+                                .firstWhere(
+                                  (c) => c.$1 == q.answer,
+                                  orElse: () => (q.answer!, '${q.answer}'),
+                                )
+                                .$2,
+                          ),
+                    onTap: () => _pickFact(q),
                   ),
-              ],
+              ]),
+              _ => const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            },
+          ),
+          const _Group('기록 옮기기'),
+          _Rows([
+            _Line(
+              title: '기록 내보내기',
+              sub: '폰을 바꿀 때 기록을 파일 하나로 옮겨요',
+              onTap: _export,
             ),
-            _ => const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
+            _Line(title: '기록 가져오기', sub: '내보낸 파일의 기록으로 바꿔요', onTap: _import),
+          ]),
+          const _Group('앱'),
+          _Rows([
+            _Line(
+              title: '앱 정보',
+              trailing: _Value('$appVersion · 카탈로그 ${day.month}/${day.day}'),
             ),
-          },
-        ),
-        const SizedBox(height: 24),
-        const Text('기록 옮기기', style: TextStyle(fontWeight: FontWeight.w700)),
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: const Text('기록 내보내기'),
-          subtitle: const Text('폰을 바꿀 때 기록을 파일 하나로 옮겨요'),
-          onTap: _export,
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: const Text('기록 가져오기'),
-          subtitle: const Text('내보낸 파일의 기록으로 바꿔요'),
-          onTap: _import,
-        ),
+          ]),
+        ],
+      ),
+    );
+  }
+}
+
+class _Group extends StatelessWidget {
+  const _Group(this.title);
+  final String title;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
+    child: Text(
+      title,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        color: C.sub,
+      ),
+    ),
+  );
+}
+
+/// 흰 카드 하나에 줄을 구분선으로 잇는다
+class _Rows extends StatelessWidget {
+  const _Rows(this.lines);
+  final List<Widget> lines;
+
+  @override
+  Widget build(BuildContext context) => Box(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: Column(
+      children: [
+        for (final (i, l) in lines.indexed) ...[
+          if (i > 0) const Divider(height: 1, color: C.line),
+          l,
+        ],
       ],
     ),
   );
+}
+
+class _Value extends StatelessWidget {
+  const _Value(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) =>
+      Text(text, style: const TextStyle(fontSize: 15, color: C.sub));
+}
+
+/// 이름, 설명, 오른쪽 값, 화살표 한 줄. 누를 곳이 없으면 화살표를 두지 않는다
+class _Line extends StatelessWidget {
+  const _Line({required this.title, this.sub, this.trailing, this.onTap});
+  final String title;
+  final String? sub;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final line = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: C.text,
+                  ),
+                ),
+                if (sub != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      sub!,
+                      style: const TextStyle(fontSize: 13, color: C.sub),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (trailing != null) ...[const SizedBox(width: 12), trailing!],
+          if (onTap != null) const Icon(Icons.chevron_right, color: C.faint),
+        ],
+      ),
+    );
+    if (onTap == null) return line;
+    return Semantics(
+      button: true,
+      child: Pressable(onTap: onTap, child: line),
+    );
+  }
 }

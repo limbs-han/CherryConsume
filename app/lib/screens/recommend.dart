@@ -2,11 +2,11 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../api.dart';
 import '../format.dart';
 import '../theme.dart';
+import '../ui.dart';
 import 'add_card.dart';
 import 'card_detail.dart';
 import 'payment.dart';
@@ -63,7 +63,16 @@ class _RecommendScreenState extends State<RecommendScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('어디서 결제하세요?')),
+    // 작업 011 설계 2절 G6
+    floatingActionButton: PayButton(
+      key: ObjectKey(_data),
+      api: widget.api,
+      onSaved: _reload,
+    ),
+    appBar: AppBar(
+      titleSpacing: rootTitleSpacing(context),
+      title: const Text('어디서 결제하세요?'),
+    ),
     body: FutureBuilder(
       future: _data,
       builder: (context, snap) {
@@ -89,12 +98,16 @@ class _RecommendScreenState extends State<RecommendScreen> {
               textInputAction: TextInputAction.search,
               decoration: const InputDecoration(
                 hintText: '가게 이름이나 업종',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: Icon(Icons.search, color: C.sub),
                 filled: true,
                 fillColor: Colors.white,
-                border: OutlineInputBorder(
+                enabledBorder: OutlineInputBorder(
                   borderRadius: r16,
-                  borderSide: BorderSide.none,
+                  borderSide: BorderSide(color: C.line),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: r16,
+                  borderSide: BorderSide(color: C.blue, width: 1.5),
                 ),
               ),
               onSubmitted: (v) {
@@ -109,56 +122,91 @@ class _RecommendScreenState extends State<RecommendScreen> {
                 runSpacing: 8,
                 children: [
                   for (final name in recent)
-                    ActionChip(
-                      label: Text(name),
-                      onPressed: () => _open(merchantName: name),
+                    ChoicePill(
+                      name,
+                      selected: false,
+                      onTap: () => _open(merchantName: name),
                     ),
                 ],
               ),
             ],
             const SizedBox(height: 20),
-            const _Heading('업종별 지금 1순위'),
-            const Text(
-              '1만 원 결제 기준 혜택. 가게마다 다른 할인은 가게를 고르면 보여요.',
-              style: TextStyle(fontSize: 13, color: C.faint),
+            // 시안대로 업종을 왼쪽 칸에 두고 카드 이름과 혜택, 금액, 화살표를 한 줄에 쓴다. 작업 011 설계 2절 R1
+            const Row(
+              children: [
+                Expanded(child: _Heading('업종별 지금 1순위')),
+                _Heading('1만 원 결제 기준 혜택'),
+              ],
             ),
-            const SizedBox(height: 8),
-            // 누른 자리 물결이 보이게 흰 바탕을 Material로 칠한다
-            Material(
-              color: Colors.white,
-              borderRadius: r20,
-              clipBehavior: Clip.antiAlias,
+            Box(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  for (final t in top)
-                    ListTile(
-                      minTileHeight: 64,
-                      title: Text(
-                        t.categoryName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: C.text,
+                  for (final (i, t) in top.indexed) ...[
+                    if (i > 0) const Divider(height: 1, color: C.line),
+                    Semantics(
+                      button: true,
+                      child: Pressable(
+                        onTap: () =>
+                            _open(category: t.category, title: t.categoryName),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 72,
+                                child: Text(
+                                  t.categoryName,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: C.text,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      t.row.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: C.text,
+                                      ),
+                                    ),
+                                    if (t.row.value > 0 && t.row.title != null)
+                                      Text(
+                                        t.row.title!,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: C.sub,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                won(t.row.value),
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w800,
+                                  color: C.green,
+                                ),
+                              ),
+                              const Icon(Icons.chevron_right, color: C.faint),
+                            ],
+                          ),
                         ),
                       ),
-                      subtitle: Text(
-                        t.row.value > 0
-                            ? '${t.row.name} · ${t.row.title}'
-                            : t.row.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: C.sub),
-                      ),
-                      trailing: Text(
-                        won(t.row.value),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: C.green,
-                        ),
-                      ),
-                      onTap: () =>
-                          _open(category: t.category, title: t.categoryName),
                     ),
+                  ],
                 ],
               ),
             ),
@@ -279,7 +327,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
   Future<void> _pay(RecResult r, RecRow row) async {
     // 금액칸이 순위를 계산한 금액과 다르면 먼저 다시 추천한다. 1만 원 순위로 15만 원 결제를 열지 않게 한다
-    final typed = int.tryParse(_amountText.text);
+    final typed = amountOf(_amountText.text);
     if (typed != _amount) {
       _amount = typed;
       _refresh();
@@ -311,160 +359,220 @@ class _ResultScreenState extends State<ResultScreen> {
     future: _result,
     builder: (context, snap) {
       final r = snap.data;
+      // 누른 가게 이름을 그대로 쓴다. 지점 이름이 대표 이름으로 바뀌지 않는다. 작업 011 설계 2절 R2
       final title =
-          r?.merchantDisplay ??
           widget.merchantName ??
+          r?.merchantDisplay ??
           widget.title ??
           r?.categoryName ??
           '추천';
-      return Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
-          children: [
-            if (r?.categoryName != null)
-              Text(r!.categoryName!, style: const TextStyle(color: C.sub)),
-            const SizedBox(height: 12),
-            TextField(
-              key: const Key('amount'),
-              controller: _amountText,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(9),
-              ],
-              decoration: const InputDecoration(
-                labelText: '결제 금액',
-                hintText: '1만 원 기준',
-                suffixText: '원',
+      // 다시 계산하는 동안에는 누를 수 없다. 이전 순위의 추천 요청으로 결제를 열지 않게 한다
+      final payable =
+          r != null &&
+          r.ranking.isNotEmpty &&
+          snap.connectionState == ConnectionState.done;
+      final children = <Widget>[
+        // 시안대로 한 줄 상자다. 금액을 비우면 1만 원 기준으로 계산한다. 작업 011 설계 2절 R3
+        Container(
+          constraints: const BoxConstraints(minHeight: 56),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: r16,
+            border: Border.all(color: C.line),
+          ),
+          child: Row(
+            children: [
+              const Text(
+                '결제 금액',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: C.sub,
+                ),
               ),
-              // 금액을 다 적고 확인을 누를 때만 다시 추천한다. 칠 때마다 다시 계산하면 순위가 계속 흔들린다
-              textInputAction: TextInputAction.done,
-              onSubmitted: (v) {
-                _amount = int.tryParse(v);
-                _refresh();
-              },
-            ),
-            const SizedBox(height: 16),
-            if (snap.hasError)
-              const Text('추천을 불러오지 못했어요.', style: TextStyle(color: C.sub)),
-            if (r == null && !snap.hasError)
-              const Center(child: CircularProgressIndicator()),
-            // E16. 가게를 못 찾으면 업종을 골라 추천한다
-            if (r != null && r.category == null && widget.merchantName != null)
-              FutureBuilder(
-                future: _categories,
-                builder: (context, cats) => Box(
-                  color: C.blueSoft,
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  key: const Key('amount'),
+                  controller: _amountText,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [ThousandsFormatter(9)],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: C.text,
+                  ),
+                  decoration: const InputDecoration(
+                    hintText: '금액을 넣으면 더 정확해요',
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                  // 금액을 다 적고 확인을 누를 때만 다시 추천한다. 칠 때마다 다시 계산하면 순위가 계속 흔들린다
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (v) {
+                    _amount = amountOf(v);
+                    _refresh();
+                  },
+                ),
+              ),
+              if (_amount == null) const Pill('1만 원 기준'),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        if (snap.hasError)
+          const Text('추천을 불러오지 못했어요.', style: TextStyle(color: C.sub)),
+        if (r == null && !snap.hasError)
+          const Center(child: CircularProgressIndicator()),
+        // E16. 가게를 못 찾으면 업종을 골라 추천한다
+        if (r != null && r.category == null && widget.merchantName != null)
+          FutureBuilder(
+            future: _categories,
+            builder: (context, cats) => Box(
+              color: C.blueSoft,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '“${widget.merchantName}”을 찾지 못했어요',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: C.text,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    '업종을 고르면 그 업종으로 추천해요. 가게 이름은 적은 그대로 저장해요.',
+                    style: TextStyle(fontSize: 13, color: C.sub),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
-                      Text(
-                        '“${widget.merchantName}”을 찾지 못했어요',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: C.text,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        '업종을 고르면 그 업종으로 추천해요. 가게 이름은 적은 그대로 저장해요.',
-                        style: TextStyle(fontSize: 13, color: C.sub),
-                      ),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          // 자식 업종이 있으면 자식으로 고른다. 부모 업종으로는 자식 업종 혜택이 빠진다. E47
-                          for (final c in cats.data ?? <Category>[])
-                            for (final (code, name)
-                                in c.children.isEmpty
-                                    ? [(c.code, c.name)]
-                                    : [
-                                        for (final ch in c.children)
-                                          (ch.code, ch.name),
-                                      ])
-                              ActionChip(
-                                label: Text(name),
-                                onPressed: () {
-                                  _category = code;
-                                  _refresh();
-                                },
-                              ),
-                        ],
-                      ),
+                      // 자식 업종이 있으면 자식으로 고른다. 부모 업종으로는 자식 업종 혜택이 빠진다. E47
+                      for (final c in cats.data ?? <Category>[])
+                        for (final (code, name)
+                            in c.children.isEmpty
+                                ? [(c.code, c.name)]
+                                : [
+                                    for (final ch in c.children)
+                                      (ch.code, ch.name),
+                                  ])
+                          ActionChip(
+                            label: Text(name),
+                            onPressed: () {
+                              _category = code;
+                              _refresh();
+                            },
+                          ),
                     ],
                   ),
-                ),
+                ],
               ),
-            // 담을 수 없는 질문은 계산하지 않고 까닭을 알린다
-            if (r?.unsupported == 'billing')
-              const Box(
-                color: C.grey,
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  '이 업종은 후불교통이나 자동납부에 따라 받는 혜택이 달라 추천을 계산하지 않아요. 결제 기록의 바꾸기에서 청구 방식을 골라 적어 주세요.',
-                  style: TextStyle(color: C.sub, height: 1.5),
-                ),
-              ),
-            if (r != null && r.ranking.isNotEmpty)
-              Text(
-                '${r.amount == null ? '1만 원' : won(r.amount!)} 결제 기준',
-                style: const TextStyle(fontSize: 13, color: C.faint),
-              ),
-            if (r != null)
-              for (final (i, row) in r.ranking.indexed) ...[
-                const SizedBox(height: 8),
-                _RankRow(
-                  rank: i + 1,
-                  row: row,
-                  onAsk: (scope) => _answerAt(row, scope),
-                  // 다시 계산하는 동안에는 누를 수 없다. 이전 순위의 추천 요청으로 결제를 열지 않게 한다
-                  onPay: i == 0 && snap.connectionState == ConnectionState.done
-                      ? () => _pay(r, row)
-                      : null,
-                ),
-              ],
-            const SizedBox(height: 16),
-            const Text(
-              '혜택 금액은 카탈로그로 계산한 추정치예요. 실제 청구와 다를 수 있어요.',
-              style: TextStyle(fontSize: 13, color: C.faint),
+            ),
+          ),
+        // 담을 수 없는 질문은 계산하지 않고 까닭을 알린다
+        if (r?.unsupported == 'billing')
+          const Box(
+            color: C.grey,
+            padding: EdgeInsets.all(16),
+            child: Text(
+              '이 업종은 후불교통이나 자동납부에 따라 받는 혜택이 달라 추천을 계산하지 않아요. 결제 기록의 바꾸기에서 청구 방식을 골라 적어 주세요.',
+              style: TextStyle(color: C.sub, height: 1.5),
+            ),
+          ),
+        if (r != null && r.ranking.isNotEmpty)
+          Text(
+            '${r.amount == null ? '1만 원' : won(r.amount!)} 결제 기준',
+            style: const TextStyle(fontSize: 13, color: C.faint),
+          ),
+        if (r != null)
+          for (final (i, row) in r.ranking.indexed) ...[
+            const SizedBox(height: 8),
+            _RankRow(
+              rank: i + 1,
+              row: row,
+              onAsk: (scope) => _answerAt(row, scope),
             ),
           ],
+        const SizedBox(height: 16),
+        const Text(
+          '혜택 금액은 카탈로그로 계산한 추정치예요. 실제 청구와 다를 수 있어요.',
+          style: TextStyle(fontSize: 13, color: C.faint),
         ),
+      ];
+      const padding = EdgeInsets.fromLTRB(20, 4, 20, 32);
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          actions: [
+            if (r?.categoryName != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Pill(r!.categoryName!, fg: C.sub, bg: C.grey),
+              ),
+          ],
+        ),
+        // 1순위로 결제 기록은 아래에 고정해 키보드와 아래 막대에 가리지 않는다. 작업 011 설계 1절 원칙 1, 2절 R4, Z3
+        body: r != null && r.ranking.isNotEmpty
+            ? WithAction(
+                padding: padding,
+                action: FilledButton(
+                  onPressed: payable ? () => _pay(r, r.ranking.first) : null,
+                  child: const Text('이 카드로 결제 기록'),
+                ),
+                children: children,
+              )
+            : SafeArea(
+                top: false,
+                child: ListView(padding: padding, children: children),
+              ),
       );
     },
   );
 }
 
 class _RankRow extends StatelessWidget {
-  const _RankRow({
-    required this.rank,
-    required this.row,
-    this.onPay,
-    this.onAsk,
-  });
+  const _RankRow({required this.rank, required this.row, this.onAsk});
   final int rank;
   final RecRow row;
-  final VoidCallback? onPay;
   final ValueChanged<String?>? onAsk;
 
+  // 1순위는 코발트 테두리로 두드러지게 하고 번호는 검은 원이다. 작업 011 설계 2절 R4
   @override
-  Widget build(BuildContext context) => Box(
+  Widget build(BuildContext context) => Container(
+    key: Key('rank-$rank'),
     padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: r20,
+      border: rank == 1 ? Border.all(color: C.blue, width: 2) : null,
+      boxShadow: shadow,
+    ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Text(
-              '$rank',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: C.blue,
+            Container(
+              width: 28,
+              height: 28,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                color: C.text,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                '$rank',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -492,10 +600,11 @@ class _RankRow extends StatelessWidget {
               ),
           ],
         ),
-        if (row.title != null && row.value > 0) ...[
+        // 2, 3순위도 혜택 이름을 보인다. 작업 011 설계 2절 R5
+        if (row.title != null) ...[
           const SizedBox(height: 4),
           Padding(
-            padding: const EdgeInsets.only(left: 24),
+            padding: const EdgeInsets.only(left: 40),
             child: Text(
               row.title!,
               style: const TextStyle(fontSize: 13, color: C.sub),
@@ -515,15 +624,31 @@ class _RankRow extends StatelessWidget {
           ),
         for (final m in row.payWith)
           Padding(
-            padding: const EdgeInsets.only(left: 24, top: 4),
-            child: Text(
-              '${m.name}로 내면 ${won(m.extra)} 더 받아요',
-              style: const TextStyle(fontSize: 13, color: C.amber),
+            padding: const EdgeInsets.only(left: 40, top: 6),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.account_balance_wallet_outlined,
+                  size: 16,
+                  color: C.amber,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    '${m.name}로 내면 ${won(m.extra)} 더 받아요',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: C.amber,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         for (final a in row.asks)
           Padding(
-            padding: const EdgeInsets.only(left: 24, top: 4),
+            padding: const EdgeInsets.only(left: 40, top: 4),
             child: InkWell(
               onTap: onAsk == null ? null : () => onAsk!(a.scope),
               child: Text(
@@ -532,10 +657,6 @@ class _RankRow extends StatelessWidget {
               ),
             ),
           ),
-        if (onPay != null) ...[
-          const SizedBox(height: 12),
-          FilledButton(onPressed: onPay, child: const Text('이 카드로 결제 기록')),
-        ],
       ],
     ),
   );

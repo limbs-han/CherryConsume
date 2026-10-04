@@ -4,12 +4,12 @@ library;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../api.dart';
 import '../clock.dart' as clock;
 import '../format.dart';
 import '../theme.dart';
+import '../ui.dart';
 
 String cardLine(CardHit c) {
   final kind = c.kind == 'credit' ? '신용' : '체크';
@@ -50,6 +50,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     final added = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -62,109 +63,110 @@ class _AddCardScreenState extends State<AddCardScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('카드 추가')),
-    body: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
-          child: TextField(
-            decoration: const InputDecoration(
-              hintText: '카드 이름 검색. 예: Mr.Life, 나라사랑',
-              prefixIcon: Icon(Icons.search),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: r16,
-                borderSide: BorderSide.none,
+    // 목록 마지막 줄이 아래 막대 위까지 올라온다. 작업 011 설계 2절 Z3
+    body: SafeArea(
+      top: false,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+            child: TextField(
+              decoration: const InputDecoration(
+                hintText: '카드 이름 검색. 예: Mr.Life, 나라사랑',
+                prefixIcon: Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: r16,
+                  borderSide: BorderSide.none,
+                ),
               ),
+              onChanged: (v) {
+                _q = v;
+                _wait?.cancel();
+                _wait = Timer(const Duration(milliseconds: 250), _search);
+              },
             ),
-            onChanged: (v) {
-              _q = v;
-              _wait?.cancel();
-              _wait = Timer(const Duration(milliseconds: 250), _search);
-            },
           ),
-        ),
-        SizedBox(
-          height: 48,
-          child: FutureBuilder(
-            future: _issuers,
-            builder: (context, snap) => ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                for (final (code, name) in [
-                  (null, '전체'),
-                  for (final i in snap.data ?? []) (i.code, i.name),
-                ])
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(name),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: FutureBuilder(
+              future: _issuers,
+              // 좌우 20 안에서만 밀려 뒤로 가기 손짓과 겹치지 않는다. 작업 011 설계 2절 Z4, G2
+              builder: (context, snap) => PillRow(
+                children: [
+                  for (final (code, name) in [
+                    (null, '전체'),
+                    for (final i in snap.data ?? []) (i.code, i.name),
+                  ])
+                    ChoicePill(
+                      name,
                       selected: _issuer == code,
-                      onSelected: (_) {
+                      onTap: () {
                         _issuer = code;
                         _search();
                       },
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: FutureBuilder(
-            future: _cards,
-            builder: (context, snap) {
-              if (snap.hasError) {
-                return const Center(child: Text('카드 목록을 불러오지 못했어요.'));
-              }
-              if (!snap.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (snap.data!.isEmpty) {
-                return const Center(
-                  child: Text('찾는 카드가 없어요.', style: TextStyle(color: C.sub)),
-                );
-              }
-              return ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                children: [
-                  for (final c in snap.data!)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Material(
-                        color: Colors.white,
-                        borderRadius: r16,
-                        child: ListTile(
-                          minTileHeight: 64,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: r16,
-                          ),
-                          title: Text(
-                            c.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: C.text,
+          Expanded(
+            child: FutureBuilder(
+              future: _cards,
+              builder: (context, snap) {
+                if (snap.hasError) {
+                  return const Center(child: Text('카드 목록을 불러오지 못했어요.'));
+                }
+                if (!snap.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snap.data!.isEmpty) {
+                  return const Center(
+                    child: Text('찾는 카드가 없어요.', style: TextStyle(color: C.sub)),
+                  );
+                }
+                return ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                  children: [
+                    for (final c in snap.data!)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Material(
+                          color: Colors.white,
+                          borderRadius: r16,
+                          child: ListTile(
+                            minTileHeight: 64,
+                            leading: IssuerSwatch(c.issuer),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: r16,
                             ),
+                            title: Text(
+                              c.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: C.text,
+                              ),
+                            ),
+                            subtitle: Text(
+                              cardLine(c),
+                              style: const TextStyle(color: C.sub),
+                            ),
+                            trailing: const Icon(
+                              Icons.chevron_right,
+                              color: C.faint,
+                            ),
+                            onTap: () => _pick(c),
                           ),
-                          subtitle: Text(
-                            cardLine(c),
-                            style: const TextStyle(color: C.sub),
-                          ),
-                          trailing: const Icon(
-                            Icons.chevron_right,
-                            color: C.faint,
-                          ),
-                          onTap: () => _pick(c),
                         ),
                       ),
-                    ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
@@ -189,6 +191,7 @@ class RegisterSheet extends StatefulWidget {
 class _RegisterSheetState extends State<RegisterSheet> {
   late Future<Preview> _preview = widget.api.preview(widget.card.id);
   int? _prev;
+  final _prevText = TextEditingController();
   bool _isNew = false;
   int _monthsAgo = 0;
   bool _busy = false;
@@ -213,6 +216,7 @@ class _RegisterSheetState extends State<RegisterSheet> {
   @override
   void dispose() {
     _wait?.cancel();
+    _prevText.dispose();
     super.dispose();
   }
 
@@ -240,112 +244,125 @@ class _RegisterSheetState extends State<RegisterSheet> {
     }
   }
 
+  Widget _pills<T>(List<(T, String)> options, T selected, ValueChanged<T> on) =>
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final (v, label) in options)
+            ChoicePill(label, selected: v == selected, onTap: () => on(v)),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) => Padding(
-    // 키보드와 아래 시스템 막대에 등록 버튼이 가리지 않게 한다
-    padding: EdgeInsets.fromLTRB(
-      20,
-      24,
-      20,
-      16 +
-          MediaQuery.of(context).viewInsets.bottom +
-          MediaQuery.of(context).viewPadding.bottom,
-    ),
-    child: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '${widget.card.name} 등록',
-            style: const TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w800,
-              color: C.text,
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            '지난달 이 카드로 쓴 금액',
-            style: TextStyle(fontWeight: FontWeight.w700, color: C.text),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            '대략 적으면 이번 달 혜택 구간을 바로 계산해요. 모르면 비워 두세요.',
-            style: TextStyle(fontSize: 13, color: C.sub),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            key: const Key('prev'),
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(9),
+    // 시트는 Scaffold 밖이라 키보드가 열리면 그만큼 직접 올린다. 등록은 아래에 고정한다. 작업 011 설계 1절 원칙 1
+    padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 8, 0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '${widget.card.name} 등록',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: C.text,
+                  ),
+                ),
+              ),
+              IconButton(
+                tooltip: '닫기',
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.close, color: C.sub),
+              ),
             ],
-            decoration: const InputDecoration(
-              suffixText: '원',
-              hintText: '예: 410000',
-            ),
-            onChanged: (v) {
-              _prev = int.tryParse(v);
-              _wait?.cancel();
-              _wait = Timer(const Duration(milliseconds: 300), _refresh);
-            },
           ),
-          const SizedBox(height: 12),
-          FutureBuilder(
-            future: _preview,
-            builder: (context, snap) => Box(
-              color: C.blueSoft,
-              padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                width: double.infinity,
-                child: _PreviewText(snap.data),
+        ),
+        Flexible(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '지난달 이 카드로 쓴 금액',
+                  style: TextStyle(fontWeight: FontWeight.w700, color: C.text),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  '대략 적으면 이번 달 혜택 구간을 바로 계산해요. 모르면 비워 두세요.',
+                  style: TextStyle(fontSize: 13, color: C.sub),
+                ),
+                const SizedBox(height: 8),
+                AmountField(
+                  key: const Key('prev'),
+                  controller: _prevText,
+                  hint: '예: 410,000',
+                  maxDigits: 9,
+                  onChanged: (v) {
+                    _prev = v;
+                    _wait?.cancel();
+                    _wait = Timer(const Duration(milliseconds: 300), _refresh);
+                  },
+                ),
+                const SizedBox(height: 12),
+                FutureBuilder(
+                  future: _preview,
+                  builder: (context, snap) => Box(
+                    color: C.blueSoft,
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: _PreviewText(snap.data),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  '최근 두 달 안에 새로 받은 카드인가요?',
+                  style: TextStyle(fontWeight: FontWeight.w700, color: C.text),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  '새 카드는 실적이 모자라도 혜택을 주는 기간이 있어요. 예를 고르면 받은 달을 물어요.',
+                  style: TextStyle(fontSize: 13, color: C.sub),
+                ),
+                const SizedBox(height: 8),
+                _pills([(false, '아니요'), (true, '예')], _isNew, (v) {
+                  _isNew = v;
+                  _refresh();
+                }),
+                if (_isNew) ...[
+                  const SizedBox(height: 8),
+                  _pills([(0, '이번 달'), (1, '지난달')], _monthsAgo, (v) {
+                    _monthsAgo = v;
+                    _refresh();
+                  }),
+                ],
+              ],
+            ),
+          ),
+        ),
+        SafeArea(
+          top: false,
+          minimum: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+          child: SizedBox(
+            height: 56,
+            child: Pressable(
+              child: FilledButton(
+                onPressed: _busy ? null : _register,
+                child: const Text('등록'),
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          const Text(
-            '최근 두 달 안에 새로 받은 카드인가요?',
-            style: TextStyle(fontWeight: FontWeight.w700, color: C.text),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            '새 카드는 실적이 모자라도 혜택을 주는 기간이 있어요. 예를 고르면 받은 달을 물어요.',
-            style: TextStyle(fontSize: 13, color: C.sub),
-          ),
-          const SizedBox(height: 8),
-          SegmentedButton<bool>(
-            segments: const [
-              ButtonSegment(value: false, label: Text('아니요')),
-              ButtonSegment(value: true, label: Text('예')),
-            ],
-            selected: {_isNew},
-            onSelectionChanged: (v) {
-              _isNew = v.first;
-              _refresh();
-            },
-          ),
-          if (_isNew) ...[
-            const SizedBox(height: 8),
-            SegmentedButton<int>(
-              segments: const [
-                ButtonSegment(value: 0, label: Text('이번 달')),
-                ButtonSegment(value: 1, label: Text('지난달')),
-              ],
-              selected: {_monthsAgo},
-              onSelectionChanged: (v) {
-                _monthsAgo = v.first;
-                _refresh();
-              },
-            ),
-          ],
-          const SizedBox(height: 24),
-          FilledButton(
-            onPressed: _busy ? null : _register,
-            child: const Text('등록'),
-          ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }
@@ -370,20 +387,34 @@ class _PreviewText extends StatelessWidget {
     };
     final b = p.benefits;
     final more = b.length > 2 ? ' 외 ${b.length - 2}개' : '';
-    return Column(
+    // 시안처럼 체크 아이콘 옆에 구간을, 그 아래에 받는 혜택을 쓴다. 작업 011 설계 2절 A3
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          head,
-          style: const TextStyle(fontWeight: FontWeight.w700, color: C.blue),
-        ),
-        if (b.isNotEmpty) ...[
-          const SizedBox(height: 4),
-          Text(
-            '${b.take(2).join(', ')}$more',
-            style: const TextStyle(fontSize: 13, color: C.sub),
+        const Icon(Icons.check, size: 20, color: C.blue),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                head,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: C.blue,
+                ),
+              ),
+              if (b.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  '${b.take(2).join(', ')}$more',
+                  style: const TextStyle(fontSize: 13, color: C.sub),
+                ),
+              ],
+            ],
           ),
-        ],
+        ),
       ],
     );
   }

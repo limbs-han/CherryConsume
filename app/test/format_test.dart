@@ -65,11 +65,14 @@ void main() {
     // 이번 달 18.2만을 써서 30만 구간까지 11.8만 남았다. 시안 보드 1
     final l = look(card(counted: 182000, toKeep: 118000, toNext: 318000));
     expect((l.ring, l.sub, l.badge), ('60%', '11.8만 더 쓰면 유지', '30만 구간'));
+    // 시안은 남은 금액만 코발트로 강조한다. 작업 011 설계 2절 H4
+    expect((l.lead, l.tone), ('11.8만', Tone.blue));
   });
 
   test('홈 카드 한 줄. 다음 달 확정', () {
     final l = look(card(counted: 300000, toKeep: 0, toNext: 200000));
     expect((l.ring, l.sub, l.badge), ('완료', '다음 달 혜택 확정', '30만 구간'));
+    expect((l.lead, l.tone), (null, Tone.green));
   });
 
   test('홈 카드 한 줄. 아직 혜택 구간 전이면 기회 색', () {
@@ -86,6 +89,7 @@ void main() {
       (l.ring, l.sub, l.badge, l.chance),
       ('0%', '30만 더 쓰면 다음 달 30만 구간', '구간 전', true),
     );
+    expect((l.lead, l.tone), ('30만', Tone.amber));
   });
 
   test('홈 카드 한 줄. 실적 무관', () {
@@ -100,6 +104,7 @@ void main() {
       ),
     );
     expect((l.ring, l.sub, l.badge), ('상시', '국내외 가맹점 0.8% 할인', '실적 무관'));
+    expect((l.lead, l.tone), (null, Tone.gray));
   });
 
   test('홈 카드 한 줄. 실적 계산 미지원', () {

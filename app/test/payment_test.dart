@@ -26,10 +26,12 @@ Future<void> openPayment(
   await tester.pumpAndSettle();
 }
 
-Future<void> choose<T>(WidgetTester tester, int index, String item) async {
-  final box = find.byType(DropdownButton<T>).at(index);
-  await tester.ensureVisible(box);
-  await tester.tap(box);
+/// 세부 시트에서 그 이름의 줄을 눌러 바닥 시트에서 고른다. 작업 011 설계 2절 P5
+Future<void> choose(WidgetTester tester, String label, String item) async {
+  final row = find.byKey(Key('pick-$label'));
+  await tester.ensureVisible(row);
+  await tester.pumpAndSettle();
+  await tester.tap(row);
   await tester.pumpAndSettle();
   await tester.tap(find.text(item).last);
   await tester.pumpAndSettle();
@@ -168,19 +170,22 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('온라인'));
     await tester.pumpAndSettle();
-    await choose<int>(tester, 0, '3개월');
+    await choose(tester, '할부', '3개월');
     final free = find.widgetWithText(SwitchListTile, '무이자할부');
     await tester.ensureVisible(free);
+    await tester.pumpAndSettle();
     await tester.tap(free);
     await tester.pumpAndSettle();
     final overseas = find.widgetWithText(SwitchListTile, '해외 결제');
     await tester.ensureVisible(overseas);
+    await tester.pumpAndSettle();
     await tester.tap(overseas);
     await tester.pumpAndSettle();
-    await choose<String>(tester, 0, '정기결제');
-    await choose<String>(tester, 1, '네이버페이');
+    await choose(tester, '청구 방식', '정기결제');
+    await choose(tester, '결제수단', '네이버페이');
     final done = find.widgetWithText(FilledButton, '확인');
     await tester.ensureVisible(done);
+    await tester.pumpAndSettle();
     await tester.tap(done);
     await tester.pumpAndSettle();
     expect(find.text('온라인 · 3개월 무이자 · 네이버페이 · 해외 · 정기결제'), findsOneWidget);

@@ -5,8 +5,16 @@ import 'package:flutter/material.dart';
 
 import '../api.dart';
 import '../theme.dart';
+import '../ui.dart';
 
-/// 사실 하나. bool은 예와 아니오, month는 1~12월, choice는 선택지다
+/// 사실 하나의 고를 것. bool은 예와 아니오, month는 1~12월, choice는 선택지다
+List<(Object, String)> factChoices(FactQuestion q) => switch (q.type) {
+  'bool' => [(true, '예'), (false, '아니오')],
+  'month' => [for (var m = 1; m <= 12; m++) (m, '$m월')],
+  _ => [for (final c in q.choices ?? const <String>[]) (c, c)],
+};
+
+/// 사실 하나
 class FactAnswer extends StatelessWidget {
   const FactAnswer({
     super.key,
@@ -20,20 +28,15 @@ class FactAnswer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final choices = switch (q.type) {
-      'bool' => <(Object, String)>[(true, '예'), (false, '아니오')],
-      'month' => [for (var m = 1; m <= 12; m++) (m, '$m월')],
-      _ => [for (final c in q.choices ?? const <String>[]) (c, c)],
-    };
     return _Ask(
       title: q.ask,
       note: note,
       chips: [
-        for (final (value, label) in choices)
-          ChoiceChip(
-            label: Text(label),
+        for (final (value, label) in factChoices(q))
+          ChoicePill(
+            label,
             selected: q.answer == value,
-            onSelected: (_) => onAnswer(value),
+            onTap: () => onAnswer(value),
           ),
       ],
     );
@@ -57,12 +60,10 @@ class OptionAnswer extends StatelessWidget {
           : '${from.month}월 ${from.day}일부터 ${titles[q.pendingValue]}',
       chips: [
         for (final c in q.choices)
-          ChoiceChip(
-            label: Text(
-              q.unsupported.contains(c.key) ? '${c.title} · 계산 안 함' : c.title,
-            ),
+          ChoicePill(
+            q.unsupported.contains(c.key) ? '${c.title} · 계산 안 함' : c.title,
             selected: q.answer == c.key,
-            onSelected: (_) => onAnswer(c.key),
+            onTap: () => onAnswer(c.key),
           ),
       ],
     );

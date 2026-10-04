@@ -8,6 +8,7 @@ import 'package:cherry_consume/store/routes/answers.dart' show cardAnswers;
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:cherry_consume/store/routes/records.dart' show cancel;
 import 'package:cherry_consume/store/store.dart';
+import 'package:cherry_consume/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -178,12 +179,14 @@ void main() {
     await openMenu(tester, '이마트', '취소 기록');
 
     // 처음 값이 전액이면 누르기만 해도 전액 취소가 된다. 비워 둔다. 위험 검토 16번
-    final field = tester.widget<TextField>(
+    final field = tester.widget<AmountField>(
       find.byKey(const Key('cancel-amount')),
     );
-    expect(field.controller!.text, '');
+    expect(field.controller.text, '');
     expect(find.textContaining('취소한 날'), findsOneWidget);
     await tester.enterText(find.byKey(const Key('cancel-amount')), '2000');
+    // 취소 금액도 쉼표를 넣는 금액 칸이다. 작업 011 설계 1절 원칙 6
+    expect(find.text('2,000'), findsOneWidget);
     await tester.tap(find.widgetWithText(FilledButton, '기록'));
     await tester.pumpAndSettle();
     expect(find.text('다른 달에 더 취소된 금액은 아직 담지 못해요.'), findsOneWidget);
@@ -249,7 +252,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('카드 정보'), 300);
     await tester.pumpAndSettle();
-    expect(find.text('쓰기 시작한 날을 몰라요'), findsOneWidget);
+    expect(find.text('쓰기 시작한 달'), findsOneWidget);
     final c =
         (realJson['cards'] as List).firstWhere(
               (c) => c['id'] == 'samsung-taptap-o',
@@ -274,7 +277,11 @@ void main() {
     await tester.pumpAndSettle();
     await openTab(tester, '설정');
     expect(find.text('쓰는 카드 · IBK나라사랑카드'), findsOneWidget);
-    await answer(tester, ask('ibk-narasarang', 'soldier'), '예');
+    // 설정은 줄을 눌러 바닥 시트에서 고른다. 작업 011 설계 2절 S1
+    await tester.tap(find.text(ask('ibk-narasarang', 'soldier')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('예').last);
+    await tester.pumpAndSettle();
     expect(find.text('답을 적었어요.'), findsOneWidget);
     expect(find.text('답을 적지 못했어요.'), findsNothing);
     expect(s.db.select('select key from user_facts').single['key'], 'soldier');
@@ -291,11 +298,11 @@ void main() {
     await tester.tap(find.text('신한카드 Mr.Life'));
     await tester.pumpAndSettle();
 
-    // 편의점 월 5회와 다른 혜택의 월 5회가 같은 4회로 보인다
-    expect(find.text('이번 달 4회 남음'), findsWidgets);
-    expect(find.text('이번 달 9,570원 남음'), findsOneWidget);
-    expect(find.text('이번 달 결제액 300,000원 남음'), findsOneWidget);
-    expect(find.text('지금 적용 중 · 30만 구간 · 전월 41만 기준'), findsOneWidget);
+    // 편의점 월 5회와 다른 혜택의 월 5회가 같은 4회로 보인다. 작업 011에서 남은 양 / 한도로 바꿨다. 설계 2절 D2, D3
+    expect(find.text('4 / 5회 남음'), findsWidgets);
+    expect(find.text('9,570 / 10,000 남음'), findsOneWidget);
+    expect(find.text('결제액 300,000 / 300,000 남음'), findsOneWidget);
+    expect(find.text('30만 구간 · 전월 41만 기준'), findsOneWidget);
     final assumed = find.text('카드사 공식 문구로 확인하지 못한 값 5개는 추정으로 계산해요.');
     await tester.scrollUntilVisible(
       assumed,

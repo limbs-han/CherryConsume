@@ -69,6 +69,7 @@ Map<String, Object?> named(Store s, Row r) {
   final row = rowMap(r);
   final card = s.catalog.cards[row['card_id']]!;
   row['name'] = card.name;
+  row['issuer'] = card.issuer;
   row['issuer_name'] = s.catalog.issuers[card.issuer]!.name;
   row['checked_at'] = card.checkedAt;
   return row;
@@ -108,6 +109,7 @@ Json home(Store s) {
       'id': r['id'],
       'card_id': r['card_id'],
       'name': r['name'],
+      'issuer': r['issuer'],
       'issuer_name': r['issuer_name'],
       // 비면 실적 무관 카드다
       'tiers': tiersShown(found),
