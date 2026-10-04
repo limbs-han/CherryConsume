@@ -423,3 +423,87 @@ def test_remembered_robots_failure_is_not_counted_as_three_drops(make_catalog, t
     out = capsys.readouterr().out
     assert "멈춤" not in out
     assert "실패 5" in out
+
+
+FIXTURES = __import__("pathlib").Path(__file__).parent / "fixtures" / "disclosure"
+
+
+def _got(issuer, source_id, name):
+    body = (FIXTURES / name).read_bytes()
+    return [(Target(issuer, None, source_id, "disclosure", "https://x", False), body, "text/html")]
+
+
+def test_index_targets_take_page_and_latest_pdf_of_cards_outside_catalog():
+    from cherry_core.pipeline.collect import index_targets
+
+    got = index_targets("kb", _got("kb", "disclosure-credit-p1", "kb_disclosure.html"), [], date(2026, 10, 4), 0, False)
+    # Fnsave는 2009년에 단종돼 받지 않는다. 알파원은 상품 페이지와 PDF를 받는다
+    assert got == [
+        Target(
+            "kb",
+            None,
+            "ix-04587-page",
+            "product_page",
+            "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04587",
+            False,
+        ),
+        Target(
+            "kb",
+            None,
+            "ix-04587-pdf",
+            "manual_pdf",
+            "https://img2.kbcard.com/obj/card/download/04587__prdctOpmn_20210923.pdf",
+            False,
+        ),
+    ]
+
+
+def test_index_targets_skip_catalog_cards_and_stop_at_the_limit():
+    from cherry_core.pipeline.collect import index_targets
+    from cherry_core.pipeline.disclosure import KnownCard
+
+    known = [KnownCard("kb-alpha", "kb", ("KB국민 알파원카드",), ())]
+    kb = _got("kb", "disclosure-credit-p1", "kb_disclosure.html")
+    assert index_targets("kb", kb, known, date(2026, 10, 4), 0, False) == []
+    hana = _got("hana", "cards-check-241704050328506", "hana_cards.json")
+    got = index_targets("hana", hana, [], date(2026, 10, 4), 1, True)
+    # 하나는 수집 방법이 브라우저라 상품 페이지를 브라우저로 연다. 표본 두 장 가운데 한 장만 받는다
+    assert [(t.source_id, t.browser) for t in got] == [("ix-94316-page", True)]
+
+
+def test_disclosure_run_also_fetches_index_cards(make_catalog, tmp_path, monkeypatch, capsys):
+    from cherry_core.pipeline.disclosure import Request
+
+    kb = (FIXTURES / "kb_disclosure.html").read_bytes()
+
+    def plan(fetch, today):
+        fetch(Request("disclosure-credit-p1", "https://card.kbcard.com/d"))
+
+    _fake_plan(monkeypatch, plan)
+    asked = []
+
+    def get(url, form=None, json_body=None):
+        if url.endswith("/robots.txt"):
+            return b"User-agent: *\nAllow: /\n", "text/plain"
+        asked.append(url)
+        return (
+            (kb, "text/html")
+            if url.endswith("/d")
+            else (b"%PDF-1.4 x" if url.endswith(".pdf") else b"<p>card</p>", "text/html")
+        )
+
+    _offline(monkeypatch, get)
+    out = tmp_path / "raw"
+    root = make_catalog(collect("api"))
+    assert main(["--root", str(root), "--out", str(out), "--disclosure", "--index-cards", "5"]) == 0
+    lines = _manifest(out)
+    assert [(x["source_id"], x["kind"], x["card_id"]) for x in lines] == [
+        ("disclosure-credit-p1", "disclosure", None),
+        ("ix-04587-page", "product_page", None),
+        ("ix-04587-pdf", "manual_pdf", None),
+    ]
+    # 색인 카드는 묶음과 다른 받은 시각이 아니라 같은 실행의 시각으로 저장된다. 색인 단계는 kind로 공시만 고른다
+    assert "색인 카드 kb 2개" in capsys.readouterr().out
+    # 옵션을 주지 않으면 색인 카드는 받지 않는다
+    assert main(["--root", str(root), "--out", str(tmp_path / "raw2"), "--disclosure"]) == 0
+    assert [x["source_id"] for x in _manifest(tmp_path / "raw2")] == ["disclosure-credit-p1"]

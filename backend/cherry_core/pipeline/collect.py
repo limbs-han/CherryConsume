@@ -4,6 +4,7 @@
 실행 기록은 공개 저장소에서 누구나 보므로 원문 내용은 찍지 않고 개수와 id만 찍는다.
 브라우저가 필요한 카드사는 Playwright로 연다. 실행할 때 `uv run --with playwright`로 더한다.
 `--disclosure`는 카드사 상품공시실만 받는다. 작업 008 설계 1절. 받는 순서는 `cherry_core.pipeline.disclosure.PLANS`다.
+`--index-cards`를 함께 주면 받은 공시로 색인 행을 다시 만들어 카탈로그 밖 카드의 상품 페이지와 최신 PDF도 받는다.
 카드사가 403이나 429로 거절하거나 연결이 세 번 잇달아 끊기면 그 카드사의 남은 주소는 이번 실행에서 받지 않는다. 설계 2절.
 """
 
@@ -27,7 +28,17 @@ from typing import TextIO
 from urllib.parse import urlsplit
 
 from cherry_core.catalog.load import load_catalog
-from cherry_core.pipeline.disclosure import PLANS, Request
+from cherry_core.pipeline.card_index import key_id
+from cherry_core.pipeline.disclosure import (
+    PLANS,
+    KnownCard,
+    Request,
+    card_ids,
+    collectable,
+    merge_rows,
+    read,
+    row_key,
+)
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3] / "catalog"
 AGENT = "cherryconsume-collector"
@@ -41,6 +52,8 @@ DROPS = 3  # 한 카드사에서 연결이 이만큼 잇달아 끊기면 멈춘�
 # 워크플로에 다른 이름을 잘못 넣지 않게 이 목록 밖은 받지 않는다
 ROBOTS_IGNORED = ("samsung", "ibk", "kakaobank", "lotte", "carddamoa")
 KST = timezone(timedelta(hours=9))
+# 색인 카드를 고르는 곳. 카드다모아는 카드사가 아니라 추천 표시다
+READ_ISSUERS = set(PLANS) - {"carddamoa"}
 
 
 @dataclass(frozen=True)
@@ -212,6 +225,32 @@ def fetch_disclosure(issuer: str, today: date, allow: Callable[[str], bool]) -> 
     return got
 
 
+def index_targets(
+    issuer: str, got: list[tuple[Target, bytes, str]], known: list[KnownCard], today: date, limit: int, browser: bool
+) -> list[Target]:
+    """받은 공시 응답으로 색인 행을 다시 만들어, 카탈로그 밖 카드의 상품 페이지와 최신 PDF 주소를 고른다. 작업 008 5단계.
+
+    수집기는 Databricks 색인 표를 읽지 않는다. 같은 읽기 함수와 저장소 catalog/로 같은 판단을 한다.
+    card_id는 비운다. 카탈로그 id가 아직 없고 색인의 card_id는 Databricks가 정한다. limit은 카드 수이고 0이면 모두다.
+    """
+    merged, _ = merge_rows([r for t, body, _ in got for r in read(issuer, t.source_id, body)])
+    out: list[Target] = []
+    cards = 0
+    for r, (_, in_catalog) in zip(merged, card_ids(merged, known)):
+        if in_catalog or not collectable(r, today) or not (r.page_url or r.pdf_urls):
+            continue
+        tag = "ix-" + key_id(issuer, row_key(r)).split("-", 1)[1]
+        if r.page_url:
+            out.append(Target(issuer, None, f"{tag}-page", "product_page", r.page_url, browser))
+        if r.pdf_urls:
+            # PDF 목록은 최신이 앞이다. 옛 판 PDF는 새 카드 초안에 쓰지 않는다
+            out.append(Target(issuer, None, f"{tag}-pdf", "manual_pdf", r.pdf_urls[0], False))
+        cards += 1
+        if cards == limit:
+            break
+    return out
+
+
 def save(out: Path, manifest: TextIO, t: Target, body: bytes, content_type: str, now: datetime) -> str:
     """원문을 날짜별 폴더에 쓰고 목록 파일에 한 줄 더한다. 브론즈는 이 목록 파일을 읽는다."""
     rel = raw_path(t, now.date(), body, content_type)
@@ -228,6 +267,82 @@ def _manual(root: Path, card_id: str, source_id: str) -> Target:
     card = load_catalog(root).cards[card_id].card
     source = {s.id: s for s in card.sources}[source_id]
     return Target(card.issuer, card.id, source.id, source.kind, source.url, False)
+
+
+class Fetcher:
+    """원문 주소를 차례로 받아 저장한다. robots.txt 확인, 브라우저, 403과 429와 세 번 끊김에 멈추기를 여기서 한다."""
+
+    def __init__(
+        self,
+        out_dir: Path,
+        manifest: TextIO,
+        now: datetime,
+        ignore: list[str],
+        robots: dict[str, str | None | Exception],
+        stack: ExitStack,
+    ) -> None:
+        self.out_dir, self.manifest, self.now, self.ignore, self.stack = out_dir, manifest, now, ignore, stack
+        self.robots = robots  # 호스트마다 robots.txt. 공시 받기와 함께 쓴다
+        self.blocked: set[str] = set()
+        self.drops: dict[str, int] = {}
+        self.page = None
+        self.saved = self.skipped = self.failed = 0
+
+    def fetch(self, t: Target) -> None:
+        if t.issuer in self.blocked:
+            self.failed += 1
+            print(f"멈춤 {t.issuer} {t.card_id or '-'} {t.source_id}")
+            return
+        try:
+            if t.issuer not in self.ignore and not _robots_allow(t.url, self.robots):
+                self.skipped += 1
+                print(f"건너뜀 {t.issuer} {t.card_id or '-'} {t.source_id}")
+                return
+            if t.browser:
+                body, ctype = self._browser(t)
+            else:
+                body, ctype = _get(t.url)
+        except Exception as e:  # noqa: BLE001 한 곳이 실패해도 나머지는 받는다
+            self.failed += 1
+            code = f" {e.code}" if isinstance(e, urllib.error.HTTPError) else ""
+            print(f"실패 {t.issuer} {t.card_id or '-'} {t.source_id}: {type(e).__name__}{code}")
+            # 브라우저로 연 주소가 끊기면 Playwright 오류로 온다. 이것도 끊김으로 센다
+            network = isinstance(e, (urllib.error.URLError, TimeoutError, ConnectionError)) or type(
+                e
+            ).__module__.startswith("playwright")
+            if e is not self.robots.get(urlsplit(t.url).netloc):
+                # 기억해 둔 robots.txt 실패는 새 연결이 아니라 끊김 수를 늘리지도 되돌리지도 않는다
+                self.drops[t.issuer] = self.drops.get(t.issuer, 0) + 1 if network and not code else 0
+            if (isinstance(e, urllib.error.HTTPError) and e.code in BLOCK_CODES) or self.drops.get(
+                t.issuer, 0
+            ) >= DROPS:
+                self.blocked.add(t.issuer)
+            return
+        finally:
+            time.sleep(DELAY_SECONDS)
+        self.drops[t.issuer] = 0
+        save(self.out_dir, self.manifest, t, body, ctype, self.now)
+        self.saved += 1
+
+    def _browser(self, t: Target) -> tuple[bytes, str]:
+        from playwright.sync_api import TimeoutError as PlaywrightTimeout
+
+        if self.page is None:
+            from playwright.sync_api import sync_playwright
+
+            browser = self.stack.enter_context(sync_playwright()).chromium.launch()
+            self.stack.callback(browser.close)
+            self.page = browser.new_page(user_agent=USER_AGENT)
+        resp = self.page.goto(t.url, wait_until="load", timeout=60_000)
+        # 거절 화면을 원문으로 저장하면 바뀐 원문으로 잡혀 추출 요금이 난다. 다른 받기와 같이 오류로 센다
+        if resp is not None and resp.status >= 400:
+            raise urllib.error.HTTPError(t.url, resp.status, "", {}, None)
+        try:
+            self.page.wait_for_load_state("networkidle", timeout=15_000)
+        except PlaywrightTimeout:
+            pass  # 동영상을 넣은 페이지는 요청이 끊이지 않아 조용해지지 않는다. 현대카드 상품 목록
+        # 브라우저가 돌려준 글은 UTF-8이다. meta의 charset은 원래 페이지 것이라 머리에 적어 이긴다
+        return self.page.content().encode("utf-8"), "text/html; charset=utf-8"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -247,6 +362,11 @@ def main(argv: list[str] | None = None) -> int:
         help="이 카드사는 robots.txt를 묻지 않는다. 사용자가 정한 삼성, IBK, 카카오뱅크, 롯데와 robots.txt가 없는 카드다모아만 된다",
     )
     ap.add_argument("--disclosure", action="store_true", help="카드사 상품공시실만 받는다. 작업 008")
+    ap.add_argument(
+        "--index-cards",
+        type=int,
+        help="--disclosure와 함께 카드사마다 카탈로그 밖 카드를 이만큼 받는다. 0은 모두다. 주지 않으면 받지 않는다",
+    )
     ap.add_argument("--add", type=Path, help="사람이 받아 온 파일을 더한다. --card와 --source를 함께 쓴다")
     ap.add_argument("--card")
     ap.add_argument("--source")
@@ -267,7 +387,18 @@ def main(argv: list[str] | None = None) -> int:
     robots: dict[str, str | None | Exception] = {}
     saved = skipped = failed = excluded = 0
     if args.disclosure:
-        with manifest.open("w", encoding="utf-8") as out:
+        today = now.astimezone(KST).date()  # 3년 기준은 한국 날짜로 센다. 새벽 수집이면 UTC 날짜가 하루 앞이다
+        pending: list[Target] = []
+        if args.index_cards is not None:
+            cat = load_catalog(args.root)
+            known = [
+                KnownCard(c.card.id, c.card.issuer, (c.card.name, *c.card.search_names), tuple(c.card.product_codes))
+                for c in cat.cards.values()
+            ]
+            browsers = {
+                i for i, li in cat.issuers.items() if li.issuer.collect and li.issuer.collect.method == "browser"
+            }
+        with ExitStack() as stack, manifest.open("w", encoding="utf-8") as out:
             for issuer in sorted(PLANS):
                 if args.issuer and issuer not in args.issuer:
                     continue
@@ -277,10 +408,7 @@ def main(argv: list[str] | None = None) -> int:
                 ignore = issuer in args.ignore_robots
                 try:
                     got = fetch_disclosure(
-                        # 3년 기준은 한국 날짜로 센다. 새벽 수집이면 UTC 날짜가 하루 앞이다
-                        issuer,
-                        now.astimezone(KST).date(),
-                        lambda url, ignore=ignore: ignore or _robots_allow(url, robots),
+                        issuer, today, lambda url, ignore=ignore: ignore or _robots_allow(url, robots)
                     )
                 except Disallowed:
                     skipped += 1
@@ -297,66 +425,27 @@ def main(argv: list[str] | None = None) -> int:
                 out.flush()
                 print(f"공시 {issuer} 응답 {len(got)}개")
                 saved += len(got)
+                if args.index_cards is not None and issuer in READ_ISSUERS:
+                    found = index_targets(issuer, got, known, today, args.index_cards, issuer in browsers)
+                    print(f"색인 카드 {issuer} {len(found)}개")
+                    pending += found
+            fetcher = Fetcher(args.out, out, now, args.ignore_robots, robots, stack)
+            for t in pending:
+                fetcher.fetch(t)
+        saved += fetcher.saved
+        skipped += fetcher.skipped
+        failed += fetcher.failed
         print(f"저장 {saved}, robots.txt로 건너뜀 {skipped}, 실패 {failed}, 뺌 {excluded}")
         return 1 if failed else 0
 
-    blocked: set[str] = set()
-    drops: dict[str, int] = {}
     with ExitStack() as stack, manifest.open("w", encoding="utf-8") as out:
-        page = None
+        fetcher = Fetcher(args.out, out, now, args.ignore_robots, robots, stack)
         for t in targets(args.root, args.interval, set(args.issuer or []) or None):
             if t.issuer in args.exclude:
                 excluded += 1
                 continue
-            if t.issuer in blocked:
-                failed += 1
-                print(f"멈춤 {t.issuer} {t.card_id or '-'} {t.source_id}")
-                continue
-            try:
-                if t.issuer not in args.ignore_robots and not _robots_allow(t.url, robots):
-                    skipped += 1
-                    print(f"건너뜀 {t.issuer} {t.card_id or '-'} {t.source_id}")
-                    continue
-                if t.browser:
-                    if page is None:
-                        from playwright.sync_api import TimeoutError as PlaywrightTimeout
-                        from playwright.sync_api import sync_playwright
-
-                        browser = stack.enter_context(sync_playwright()).chromium.launch()
-                        stack.callback(browser.close)
-                        page = browser.new_page(user_agent=USER_AGENT)
-                    resp = page.goto(t.url, wait_until="load", timeout=60_000)
-                    # 거절 화면을 원문으로 저장하면 바뀐 원문으로 잡혀 추출 요금이 난다. 다른 받기와 같이 오류로 센다
-                    if resp is not None and resp.status >= 400:
-                        raise urllib.error.HTTPError(t.url, resp.status, "", {}, None)
-                    try:
-                        page.wait_for_load_state("networkidle", timeout=15_000)
-                    except PlaywrightTimeout:
-                        pass  # 동영상을 넣은 페이지는 요청이 끊이지 않아 조용해지지 않는다. 현대카드 상품 목록
-                    # 브라우저가 돌려준 글은 UTF-8이다. meta의 charset은 원래 페이지 것이라 머리에 적어 이긴다
-                    body, ctype = page.content().encode("utf-8"), "text/html; charset=utf-8"
-                else:
-                    body, ctype = _get(t.url)
-            except Exception as e:  # noqa: BLE001 한 곳이 실패해도 나머지는 받는다
-                failed += 1
-                code = f" {e.code}" if isinstance(e, urllib.error.HTTPError) else ""
-                print(f"실패 {t.issuer} {t.card_id or '-'} {t.source_id}: {type(e).__name__}{code}")
-                # robots.txt 실패를 기억해 다시 던진 것은 새로 연결한 것이 아니라 끊김으로 세지 않는다
-                # 브라우저로 연 주소가 끊기면 Playwright 오류로 온다. 이것도 끊김으로 센다
-                network = isinstance(e, (urllib.error.URLError, TimeoutError, ConnectionError)) or type(
-                    e
-                ).__module__.startswith("playwright")
-                if e is not robots.get(urlsplit(t.url).netloc):
-                    # 기억해 둔 robots.txt 실패는 새 연결이 아니라 끊김 수를 늘리지도 되돌리지도 않는다
-                    drops[t.issuer] = drops.get(t.issuer, 0) + 1 if network and not code else 0
-                if (isinstance(e, urllib.error.HTTPError) and e.code in BLOCK_CODES) or drops.get(t.issuer, 0) >= DROPS:
-                    blocked.add(t.issuer)
-                continue
-            finally:
-                time.sleep(DELAY_SECONDS)
-            drops[t.issuer] = 0
-            save(args.out, out, t, body, ctype, now)
-            saved += 1
+            fetcher.fetch(t)
+    saved, skipped, failed = fetcher.saved, fetcher.skipped, fetcher.failed
     print(f"저장 {saved}, robots.txt로 건너뜀 {skipped}, 실패 {failed}, 뺌 {excluded}")
     return 1 if failed else 0
 
