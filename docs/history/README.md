@@ -118,3 +118,4 @@
 | [73](73-readme-polish.md) | 2026-10-05 | README 꾸미기 |
 | [74](74-catalog-new-card-step10.md) | 2026-10-05 | 작업 008 10단계 카탈로그에 없는 카드의 새 카드 초안 |
 | [75](75-catalog-new-card-approve-step11.md) | 2026-10-05 | 작업 008 11단계 새 카드 초안을 골드의 새 경로로 승인하기 |
+| [74](74-android-release-step1.md) | 2026-10-05 | 작업 012 Android 출시 준비 의도, 설계, 계획과 단계 1 |
