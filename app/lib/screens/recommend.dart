@@ -302,6 +302,27 @@ class _ResultScreenState extends State<ResultScreen> {
     amount: _amount,
   );
 
+  /// 가게를 못 찾았을 때 업종 고르기. 자식 업종이 있으면 자식으로 고른다. 부모 업종으로는 자식 업종 혜택이 빠진다. E47,
+  /// 작업 011 설계 2절 T4
+  Future<void> _pickCategory() async {
+    final cats = await _categories;
+    if (!mounted) return;
+    final code = await pickSheet<String>(
+      context,
+      title: '업종 고르기',
+      options: [
+        for (final c in cats)
+          ...c.children.isEmpty
+              ? [(c.code, c.name)]
+              : [for (final ch in c.children) (ch.code, ch.name)],
+      ],
+      selected: _category,
+    );
+    if (code == null) return;
+    _category = code;
+    _refresh();
+  }
+
   void _refresh() => setState(() {
     _result = _ask();
   });
@@ -426,56 +447,44 @@ class _ResultScreenState extends State<ResultScreen> {
           const Text('추천을 불러오지 못했어요.', style: TextStyle(color: C.sub)),
         if (r == null && !snap.hasError)
           const Center(child: CircularProgressIndicator()),
-        // E16. 가게를 못 찾으면 업종을 골라 추천한다
+        // E16. 가게를 못 찾으면 업종을 골라 추천한다. 업종이 수십 개라 바닥 시트에서 고른다. 작업 011 설계 2절 T4
         if (r != null && r.category == null && widget.merchantName != null)
-          FutureBuilder(
-            future: _categories,
-            builder: (context, cats) => Box(
-              color: C.blueSoft,
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '“${widget.merchantName}”을 찾지 못했어요',
-                    style: const TextStyle(
+          Box(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '“${widget.merchantName}”을 찾지 못했어요',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: C.text,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  '업종을 고르면 그 업종으로 추천해요. 가게 이름은 적은 그대로 저장해요.',
+                  style: TextStyle(fontSize: 13, color: C.sub),
+                ),
+                const SizedBox(height: 12),
+                OutlinedButton(
+                  onPressed: _pickCategory,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: C.blue,
+                    side: const BorderSide(color: C.blue, width: 1.5),
+                    shape: const StadiumBorder(),
+                    minimumSize: const Size(0, 44),
+                    textStyle: const TextStyle(
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: C.text,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    '업종을 고르면 그 업종으로 추천해요. 가게 이름은 적은 그대로 저장해요.',
-                    style: TextStyle(fontSize: 13, color: C.sub),
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      // 자식 업종이 있으면 자식으로 고른다. 부모 업종으로는 자식 업종 혜택이 빠진다. E47
-                      for (final c in cats.data ?? <Category>[])
-                        for (final (code, name)
-                            in c.children.isEmpty
-                                ? [(c.code, c.name)]
-                                : [
-                                    for (final ch in c.children)
-                                      (ch.code, ch.name),
-                                  ])
-                          ActionChip(
-                            label: Text(name),
-                            onPressed: () {
-                              _category = code;
-                              _refresh();
-                            },
-                          ),
-                    ],
-                  ),
-                ],
-              ),
+                  child: const Text('업종 고르기'),
+                ),
+              ],
             ),
           ),
-        // 담을 수 없는 질문은 계산하지 않고 까닭을 알린다
         if (r?.unsupported == 'billing')
           const Box(
             color: C.grey,
@@ -621,6 +630,22 @@ class _RankRow extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 24, top: 4),
             child: Pill('달 끝에 확정', fg: C.sub, bg: C.grey),
+          ),
+        // 문장으로만 남은 조건이 있으면 배지와 그 문장을 붙인다. E12, 작업 011 설계 2절 T5
+        if (row.checks.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 40, top: 6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Pill('조건 확인', fg: C.amber, bg: C.amberSoft),
+                const SizedBox(height: 4),
+                Text(
+                  row.checks.join(' '),
+                  style: const TextStyle(fontSize: 13, color: C.sub),
+                ),
+              ],
+            ),
           ),
         for (final m in row.payWith)
           Padding(

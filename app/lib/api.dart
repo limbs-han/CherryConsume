@@ -161,7 +161,8 @@ class RecRow {
       ],
       exhausted = j['exhausted'],
       limited = j['limited'],
-      provisional = j['provisional'];
+      provisional = j['provisional'],
+      checks = List<String>.from(j['checks'] ?? const []);
   final String userCardId, name;
   final int value;
   final String? title;
@@ -171,6 +172,9 @@ class RecRow {
   /// 사실이나 옵션을 답하면 더 받는 금액. 사람 사실은 설정, 나머지는 카드 상세에서 답한다. 작업 005 설계 5e
   final List<({String kind, String? scope, String question, int extra})> asks;
   final bool exhausted, limited, provisional;
+
+  /// 결제 입력으로 가리지 못해 문장으로 남은 조건. E12
+  final List<String> checks;
 
   /// 할인, 적립, 캐시백. 함께 받으면 모두 보인다. 포인트는 원으로 바꾼 값이다. E13
   String get kind => {

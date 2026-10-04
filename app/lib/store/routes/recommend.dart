@@ -166,6 +166,12 @@ List<Json> rowsOf(
       'limited': limited,
       // 달 끝 순위로 정해지는 혜택. E48
       'provisional': codes.contains('ranked_provisional'),
+      // 결제 입력으로 가리지 못해 문장으로 남은 조건. 조건이 없는 것처럼 계산하고 확인 필요를 붙인다. E12, 작업 011 설계 2절 T5
+      'checks': [
+        for (final w in r.warnings)
+          if (w.code == 'check_conditions')
+            ...(w.data['sentences'] as List).cast<String>(),
+      ],
     });
   }
   return out;
