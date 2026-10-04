@@ -270,12 +270,12 @@ GitHub 자체 호스팅 러너는 GitHub Actions 작업을 GitHub 서버 대신 
 3. GitHub 저장소 화면에서 **Settings** → **Actions** → **Runners** → **New self-hosted runner**를 누르고 **Windows**, **x64**를 고른다. 화면의 **Download** 칸 명령을 같은 PowerShell에서 차례로 돌린다. `C:\actions-runner` 폴더가 생긴다.
 4. 같은 화면의 **Configure** 칸 첫 명령 `./config.cmd --url … --token …`을 돌린다. 물음에는 이렇게 답한다. 러너 그룹, 이름, 작업 폴더는 Enter로 기본값을 쓴다. 이름표를 묻는 `Enter any additional labels`에는 `cherry-home`을 친다. `Would you like to run the runner as service?`에는 `N`을 친다. 수집하는 날에만 켜 두려는 것이다. 마지막에 `Settings Saved.`가 보이면 된다.
 5. **Settings** → **Actions** → **General**의 외부 기여자 풀 리퀘스트 실행 승인 칸에서 모든 외부 기여자에게 승인을 받는 항목을 고르고 **Save**를 누른다.
-6. 성공하면 보이는 것: `cd C:\actions-runner; ./run.cmd`를 치면 `Listening for Jobs`가 찍히고, **Settings** → **Actions** → **Runners**에 러너가 `Idle`로 보인다. 확인했으면 Ctrl+C로 끈다.
+6. 성공하면 보이는 것: Git Bash에서 `cd /c/actions-runner && ./run.cmd`를 치면 `Listening for Jobs`가 찍히고, **Settings** → **Actions** → **Runners**에 러너가 `Idle`로 보인다. 확인했으면 Ctrl+C로 끈다.
 7. 휴대폰 달력에 매달 1일과 15일 반복 알림을 둔다. 예약을 없애 잊어도 실패 메일이 오지 않는다.
 
 매달 1일과 15일:
 1. PC 절전을 잠시 끈다. Windows **설정** → **시스템** → **전원** → **화면 및 절전**에서 절전 모드로 전환을 **안 함**으로 바꾼다. 1일 실행은 두세 시간이라 그 사이 절전에 들면 러너가 끊기고 남은 카드사가 멈춘다. 끝나면 원래대로 돌린다.
-2. PowerShell에서 `cd C:\actions-runner; ./run.cmd`로 러너를 켠다. 창을 닫으면 러너도 꺼진다.
+2. Git Bash에서 `cd /c/actions-runner && ./run.cmd`로 러너를 켠다. 창을 닫으면 러너도 꺼진다. 2026-10-05 사용자가 러너는 Git Bash에서 켜기로 정했다. 러너가 Git Bash의 PATH를 물려받아 워크플로의 `bash`가 처음부터 Git Bash로 잡힌다. 러너 등록 1~5번은 GitHub 화면의 PowerShell 명령이라 PowerShell에서 한다.
 3. GitHub **Actions** → **collect** → **Run workflow**를 누르고, 1일에는 `30`, 15일에는 `14`를 골라 **Run workflow**를 누른다. 2026-10-04 사용자가 예약 대신 손으로 돌리기로 정했다.
 4. 카드사 열한 곳의 작업이 차례로 돈다. 15일은 카드 원문만이라 몇 분이고, 1일은 상품공시실과 카탈로그 밖 카드 1,000장 안팎의 상품 페이지와 PDF까지 받아 두세 시간 걸린다.
 5. 끝나면 PowerShell 창에서 Ctrl+C로 러너를 끄고 절전 설정을 되돌린다.

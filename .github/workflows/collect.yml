@@ -50,9 +50,10 @@ jobs:
       # Git for Windows는 PATH에 cmd 폴더만 넣어 bash가 Windows의 WSL bash.exe로 잡힌다. 리눅스가 깔리지 않은 PC에서는
       # bash 단계가 모두 바로 실패한다. 2026-10-05 첫 실행에서 모든 카드사가 setup-cli와 올리기 단계에서 멈췄다
       # 뒤 단계와 setup-cli 안의 bash 단계가 Git Bash를 쓰게 그 폴더를 PATH 앞에 둔다
+      # cmd로 쓴다. Windows PC는 PowerShell 스크립트 실행이 기본으로 막혀 있어 두 번째 실행에서 powershell 단계가 실패했다
       - name: Git Bash를 bash로
-        shell: powershell
-        run: Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Git\bin"
+        shell: cmd
+        run: echo C:\Program Files\Git\bin>>"%GITHUB_PATH%"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
