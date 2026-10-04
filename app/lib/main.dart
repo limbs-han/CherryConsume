@@ -84,6 +84,16 @@ class CherryApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
     title: '체리컨슘',
     theme: theme(),
+    // Android 15부터 앱이 아래 막대 뒤까지 그린다. 3버튼 막대 뒤에는 Android가 반투명 바탕을 깔아 글자가 비치지
+    // 않게 한다. 제스처 막대는 그대로 투명하다. 작업 011 설계 2절 Z3
+    builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarContrastEnforced: true,
+      ),
+      child: child!,
+    ),
     home: Shell(api: api),
   );
 }

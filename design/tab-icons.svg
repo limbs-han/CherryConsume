@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="48" viewBox="0 0 96 48">
+  <!-- 체리컨슘 하단 탭 그림. 위 줄은 고른 탭, 아래 줄은 안 고른 탭. 앱의 lib/screens/shell.dart와 같은 좌표다. 작업 011 설계 3절 -->
+  <g transform="translate(0 0)" fill="#3457B2" stroke="#3457B2" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M4 11.2 12 4.5l8 6.7V19a1.5 1.5 0 0 1-1.5 1.5h-3.7v-5.2H9.2v5.2H5.5A1.5 1.5 0 0 1 4 19z"/>
+  </g>
+  <g transform="translate(24 0)" fill="#3457B2" stroke="#3457B2" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="3" y="7" width="14" height="11" rx="2"/>
+    <path d="M3 10.6h14" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+    <polygon points="18.3,3.2 19.35,5.35 21.7,5.7 20,7.35 20.4,9.7 18.3,8.6 16.2,9.7 16.6,7.35 14.9,5.7 17.25,5.35"/>
+  </g>
+  <g transform="translate(48 0)" fill="#3457B2" stroke="#3457B2" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M6.5 3.5h11a1 1 0 0 1 1 1v16l-2.1-1.4-2.1 1.4-2.3-1.4-2.3 1.4-2.1-1.4-2.1 1.4v-16a1 1 0 0 1 1-1z"/>
+    <path d="M9 8.5h6M9 12h6M9 15.5h3.5" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(72 0)" fill="#3457B2" stroke="#3457B2" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <polygon points="18.60,12.00 20.34,13.66 19.85,15.25 17.49,15.67 16.67,16.67 16.72,19.07 15.25,19.85 13.29,18.47 12.00,18.60 10.34,20.34 8.75,19.85 8.33,17.49 7.33,16.67 4.93,16.72 4.15,15.25 5.53,13.29 5.40,12.00 3.66,10.34 4.15,8.75 6.51,8.33 7.33,7.33 7.28,4.93 8.75,4.15 10.71,5.53 12.00,5.40 13.66,3.66 15.25,4.15 15.67,6.51 16.67,7.33 19.07,7.28 19.85,8.75 18.47,10.71"/>
+    <circle cx="12" cy="12" r="2.6" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="0"/>
+  </g>
+  <g transform="translate(0 24)" fill="none" stroke="#6B7684" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M4 11.2 12 4.5l8 6.7V19a1.5 1.5 0 0 1-1.5 1.5h-3.7v-5.2H9.2v5.2H5.5A1.5 1.5 0 0 1 4 19z"/>
+  </g>
+  <g transform="translate(24 24)" fill="none" stroke="#6B7684" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="3" y="7" width="14" height="11" rx="2"/>
+    <path d="M3 10.6h14" fill="none" stroke="#6B7684" stroke-width="1.6"/>
+    <polygon points="18.3,3.2 19.35,5.35 21.7,5.7 20,7.35 20.4,9.7 18.3,8.6 16.2,9.7 16.6,7.35 14.9,5.7 17.25,5.35"/>
+  </g>
+  <g transform="translate(48 24)" fill="none" stroke="#6B7684" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M6.5 3.5h11a1 1 0 0 1 1 1v16l-2.1-1.4-2.1 1.4-2.3-1.4-2.3 1.4-2.1-1.4-2.1 1.4v-16a1 1 0 0 1 1-1z"/>
+    <path d="M9 8.5h6M9 12h6M9 15.5h3.5" fill="none" stroke="#6B7684" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(72 24)" fill="none" stroke="#6B7684" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+    <polygon points="18.60,12.00 20.34,13.66 19.85,15.25 17.49,15.67 16.67,16.67 16.72,19.07 15.25,19.85 13.29,18.47 12.00,18.60 10.34,20.34 8.75,19.85 8.33,17.49 7.33,16.67 4.93,16.72 4.15,15.25 5.53,13.29 5.40,12.00 3.66,10.34 4.15,8.75 6.51,8.33 7.33,7.33 7.28,4.93 8.75,4.15 10.71,5.53 12.00,5.40 13.66,3.66 15.25,4.15 15.67,6.51 16.67,7.33 19.07,7.28 19.85,8.75 18.47,10.71"/>
+    <circle cx="12" cy="12" r="2.6" fill="none" stroke="#6B7684" stroke-width="1.6"/>
+  </g>
+</svg>
