@@ -205,8 +205,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               AsyncSnapshot(:final data?) => _Rows([
                 for (final q in data)
                   _Line(
-                    title: q.ask,
-                    sub: '쓰는 카드 · ${q.cards.join(', ')}',
+                    title: _firstSentence(q.ask).$1,
+                    sub: [
+                      ?_firstSentence(q.ask).$2,
+                      '쓰는 카드 · ${q.cards.join(', ')}',
+                    ].join('\n'),
                     trailing: q.answer == null
                         ? const Pill('답하기')
                         : _Value(
@@ -246,6 +249,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+}
+
+/// 긴 질문은 첫 문장을 제목, 나머지를 설명으로 나눈다. 한 문장이면 나머지가 없다. 작업 011 설계 2절 S4
+(String, String?) _firstSentence(String text) {
+  final m = RegExp(r'^(.+?[?.])\s+(.+)$', dotAll: true).firstMatch(text);
+  return m == null ? (text, null) : (m[1]!, m[2]);
 }
 
 class _Group extends StatelessWidget {

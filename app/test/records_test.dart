@@ -276,9 +276,12 @@ void main() {
     await tester.pageBack();
     await tester.pumpAndSettle();
     await openTab(tester, '설정');
-    expect(find.text('쓰는 카드 · IBK나라사랑카드'), findsOneWidget);
+    expect(find.textContaining('쓰는 카드 · IBK나라사랑카드'), findsOneWidget);
     // 설정은 줄을 눌러 바닥 시트에서 고른다. 작업 011 설계 2절 S1
-    await tester.tap(find.text(ask('ibk-narasarang', 'soldier')));
+    // 설정 줄은 질문의 첫 문장이 제목이다. 작업 011 설계 2절 S4
+    await tester.tap(
+      find.text('${ask('ibk-narasarang', 'soldier').split('?').first}?'),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('예').last);
     await tester.pumpAndSettle();

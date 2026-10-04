@@ -52,6 +52,15 @@ void main() {
       find.descendant(of: row, matching: find.widgetWithText(Pill, '답하기')),
       findsOneWidget,
     );
+    // 긴 질문은 첫 문장을 제목으로, 나머지를 설명으로 둔다. 작업 011 설계 2절 S4
+    expect(find.text(soldier), findsOneWidget);
+    expect(
+      find.descendant(
+        of: row,
+        matching: find.textContaining('IBK장병내일준비적금이 있거나'),
+      ),
+      findsOneWidget,
+    );
 
     await tester.tap(find.textContaining(soldier));
     await tester.pumpAndSettle();
