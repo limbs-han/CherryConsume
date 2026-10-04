@@ -24,6 +24,25 @@ Finder tab(String label) =>
     find.descendant(of: find.byType(Tabs), matching: find.text(label));
 
 void main() {
+  testWidgets('카드 상세에서 돌아오는 동안 결제 기록 버튼이 사라졌다 다시 나타나지 않는다', (tester) async {
+    // 2026-10-05 실제 폰에서 찾았다. 홈이 다시 읽을 때 버튼을 새로 만들어 한 순간 사라졌다가 커지며 나타났다.
+    // 작업 011 설계 2절 F1
+    final (:api, :s) = app();
+    addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000);
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    final before = tester.state(find.byType(PayButton));
+    await tester.tap(find.text('신한 Mr.Life'));
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    for (var i = 0; i < 40; i++) {
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(find.byType(FloatingActionButton), findsOneWidget, reason: '$i');
+    }
+    await tester.pumpAndSettle();
+    expect(identical(tester.state(find.byType(PayButton)), before), isTrue);
+  });
+
   testWidgets('빈 홈. 혜택 띠는 연한 점선 상자에 회색 0원, 안내 카드에 카드 아이콘 원', (tester) async {
     final (:api, s: _) = app();
     await tester.pumpWidget(CherryApp(api: api));

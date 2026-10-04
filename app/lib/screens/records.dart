@@ -95,7 +95,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
       return Scaffold(
         // 작업 011 설계 2절 G6
         floatingActionButton: PayButton(
-          key: ObjectKey(_records),
+          refresh: _records,
           api: widget.api,
           onSaved: _reload,
         ),

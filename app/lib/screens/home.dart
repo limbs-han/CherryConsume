@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return Scaffold(
         // 홈을 다시 불러오면 버튼도 카드 목록을 다시 본다
         floatingActionButton: PayButton(
-          key: ObjectKey(_home),
+          refresh: _home,
           api: widget.api,
           onSaved: _reload,
         ),

@@ -17,16 +17,32 @@ String two(int n) => n.toString().padLeft(2, '0');
 /// 홈, 추천, 기록 탭의 결제 기록 버튼. 지금 가진 카드가 없으면 보이지 않는다. 작업 011 설계 2절 G6
 /// 저장하면 onSaved로 그 탭을 다시 불러오고, 다른 결제를 다시 계산했으면 알린다
 class PayButton extends StatefulWidget {
-  const PayButton({super.key, required this.api, required this.onSaved});
+  const PayButton({
+    super.key,
+    required this.api,
+    required this.onSaved,
+    this.refresh,
+  });
   final Api api;
   final VoidCallback onSaved;
+
+  /// 그 탭이 다시 읽을 때마다 바뀌는 값. 바뀌면 카드 목록만 다시 읽는다. 버튼을 새로 만들면 한 순간 사라졌다가 커지며
+  /// 나타나 2026-10-05 실제 폰에서 이상해 보였다. 작업 011 설계 2절 F1
+  final Object? refresh;
 
   @override
   State<PayButton> createState() => _PayButtonState();
 }
 
 class _PayButtonState extends State<PayButton> {
-  late final Future<Home> _home = widget.api.home();
+  late Future<Home> _home = widget.api.home();
+
+  @override
+  void didUpdateWidget(PayButton old) {
+    super.didUpdateWidget(old);
+    // 다시 읽는 동안에는 앞 목록으로 버튼을 그대로 둔다. FutureBuilder가 앞 값을 들고 있는다
+    if (widget.refresh != old.refresh) _home = widget.api.home();
+  }
 
   Future<void> _pay(List<HomeCard> cards) async {
     final repriced = await Navigator.of(context).push<int>(
