@@ -9,6 +9,8 @@ ai_parse_document 요금은 새 PDF에만 나온다. PDF는 ai_parse_document �
 HTML 원문 옆에 같은 이름의 .png가 있으면 수집기가 혜택을 이미지로 넣은 페이지로 보고 찍은 화면이다. 그 사진을
 ai_parse_document로 해석한 글을 쓰고 method는 screenshot이다. HTML 원문마다 본문 이미지 수를 image_count에 적는다. 작업 008 8단계.
 같은 원문의 가장 최근 사진 문서와 페이지 글이 같으면 사진을 다시 해석하지 않고 그 글을 쓴다.
+PDF 옆에 같은 이름의 .md가 있으면 집 PC 수집기가 Docling으로 해석한 글이라 그것을 쓰고 method는 docling이다.
+ai_parse_document는 .md가 없는 PDF에만 부른다. 작업 008 9단계.
 """
 
 import argparse
@@ -33,10 +35,13 @@ COLUMNS = (
 
 @F.pandas_udf("method STRING, text STRING")
 def texts(
-    content: pd.Series, content_type: pd.Series, parsed: pd.Series
+    content: pd.Series, content_type: pd.Series, parsed: pd.Series, markdown: pd.Series
 ) -> pd.DataFrame:
     return pd.DataFrame(
-        [method_and_text(b, t, p) for b, t, p in zip(content, content_type, parsed)],
+        [
+            method_and_text(b, t, p, m)
+            for b, t, p, m in zip(content, content_type, parsed, markdown)
+        ],
         columns=["method", "text"],
     )
 
@@ -157,6 +162,14 @@ def main(argv: list[str] | None = None) -> None:
         if r.sha256 not in known:
             first.setdefault(r.sha256, r.path)
 
+    # 집 PC 수집기가 Docling으로 해석해 둔 PDF는 같은 이름의 .md다. 그 PDF에는 ai_parse_document를 부르지 않는다
+    # 크기가 0인 .md는 없는 것으로 본다. 빈 글을 쓰면 카드가 비워진다
+    md_paths = set()
+    for path in first.values():
+        md = Path(f"{raw}/{path[: -len('.pdf')]}.md")
+        if path.endswith(".pdf") and md.exists() and md.stat().st_size > 0:
+            md_paths.add(path)
+
     # 첫 수집처럼 PDF가 수백 개 오면 시간 제한 안에 끝나지 않을 수 있어 묶음마다 쓴다. 이미 아는 내용의 경로는 첫 묶음에 쓴다
     new_shas = list(first)
     groups = [
@@ -180,11 +193,35 @@ def main(argv: list[str] | None = None) -> None:
                 .join(new.select("path", "sha256", "content_type"), "path")
             )
             is_pdf = F.expr("substr(content, 1, 5) = X'255044462D'")  # %PDF-
-            parsed = body.where(is_pdf).withColumn(
+            pdfs = body.where(is_pdf)
+            no_text = F.lit(None).cast("string")
+            mds = [
+                first[sha][: -len(".pdf")] + ".md"
+                for sha in group
+                if first[sha] in md_paths
+            ]
+            markdown = None
+            if mds:
+                markdown = (
+                    spark.read.format("binaryFile")
+                    .load([f"{raw}/{p}" for p in mds])
+                    .select(
+                        F.regexp_replace(
+                            F.substring_index("path", f"{raw}/", -1), r"\.md$", ".pdf"
+                        ).alias("path"),
+                        F.col("content").cast("string").alias("markdown"),
+                    )
+                )
+                pdfs = pdfs.join(markdown, "path", "left_anti")
+            parsed = pdfs.withColumn(
                 "parsed",
                 F.expr("to_json(ai_parse_document(content, map('version', '2.0')))"),
-            )
-            others = body.where(~is_pdf)
+            ).withColumn("markdown", no_text)
+            if markdown is not None:
+                parsed = parsed.unionByName(
+                    body.join(markdown, "path").withColumn("parsed", no_text)
+                )
+            others = body.where(~is_pdf).withColumn("markdown", no_text)
             # 수집기가 찍은 화면은 HTML과 같은 이름의 .png다. 있으면 그 사진을 해석한 글을 쓴다
             shots = [
                 first[sha][: -len(".html")] + ".png"
@@ -211,7 +248,7 @@ def main(argv: list[str] | None = None) -> None:
                 parsed.unionByName(others)
                 .select(
                     "sha256",
-                    texts("content", "content_type", "parsed").alias("t"),
+                    texts("content", "content_type", "parsed", "markdown").alias("t"),
                     image_counts("content", "content_type").alias("image_count"),
                 )
                 .select("sha256", "t.method", "t.text", "image_count")
@@ -256,8 +293,14 @@ def main(argv: list[str] | None = None) -> None:
     )
     print(
         f"새 원문 {len(rows)}개, 처음 보는 내용 {len(first)}개, 그중 PDF {parsed_counts.get('ai_parse_document', 0)}개, "
+        f"Docling PDF {parsed_counts.get('docling', 0)}개, "
         f"사진 해석 {parsed_counts.get('screenshot', 0)}개, 앞 사진 글 다시 쓰기 {len(again)}개, 아직 없는 원문 {len(missing)}개"
     )
+    # .md와 PDF의 경로가 어긋나면 행은 남지만 ai_parse_document로 해석돼 요금이 난다. 쓴 뒤라도 알려 경로를 고친다
+    if parsed_counts.get("docling", 0) != len(md_paths):
+        raise SystemExit(
+            f".md가 있는 PDF {len(md_paths)}개 가운데 {parsed_counts.get('docling', 0)}개만 Docling 글로 썼다. 경로 맞추기를 본다"
+        )
 
 
 if __name__ == "__main__":

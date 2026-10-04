@@ -55,8 +55,13 @@ jobs:
           version: "0.12.5"
       - uses: databricks/setup-cli@6a2e75f1f954d87503702c408deea63216c0799d # v1.18.0
 
+      # uv run은 환경을 잠금 파일에 맞추므로 모든 줄에 --group docling을 붙인다. 빼면 그 줄이 Docling을 지운다
       - name: 브라우저 설치
-        run: uv run --project backend --with playwright==1.63.0 python -m playwright install chromium
+        run: uv run --project backend --group docling --with playwright==1.63.0 python -m playwright install chromium
+
+      - name: Docling 준비
+        # 설치나 모델 받기가 실패하면 받기 전에 멈춘다. 그대로 받으면 PDF가 모두 운영의 유료 해석으로 넘어간다. 작업 008 9단계
+        run: uv run --project backend --group docling --with playwright==1.63.0 python -c "from cherry_core.pipeline.collect import docling_converter; docling_converter(); print('Docling 준비 끝')"
 
       - name: 원문 받기
         id: collect
@@ -70,8 +75,9 @@ jobs:
           # robots.txt를 묻지 않는 곳. 삼성, IBK, 카카오뱅크, 롯데는 사용자가 정했고 카드다모아는 robots.txt가 없다
           ignore=()
           case "$ISSUER" in samsung|ibk|kakaobank|lotte|carddamoa) ignore=(--ignore-robots "$ISSUER") ;; esac
+          # PDF는 Docling으로 해석해 옆에 .md로 둔다. 모델은 앞 단계에서 받아 사용자 폴더에 남는다. 작업 008 9단계
           collect() {
-            uv run --project backend --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out raw --issuer "$ISSUER" "${ignore[@]}" "$@"
+            uv run --project backend --group docling --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out raw --docling --issuer "$ISSUER" "${ignore[@]}" "$@"
           }
           status=0
           # 카드다모아는 카드 원문이 없다. 수집 방법이 blocked인 카드사는 받을 카드 원문이 없어 바로 끝난다

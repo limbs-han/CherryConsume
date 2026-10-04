@@ -582,7 +582,9 @@ def _shoot(page):
 
     f = Fetcher(None, None, None, [], {}, None)
     f.page = page
-    return f._browser(SimpleNamespace(kind="product_page", url="https://x.test/card", issuer="kb", card_id="kb-a", source_id="page"))
+    return f._browser(
+        SimpleNamespace(kind="product_page", url="https://x.test/card", issuer="kb", card_id="kb-a", source_id="page")
+    )
 
 
 HEAVY = '<img src="/a.png"><img src="/b.png"><img src="/c.png"><p>혜택</p>'
@@ -604,3 +606,124 @@ def test_scroll_failure_keeps_the_html_without_screenshot(fake_playwright, capsy
     body, _, shot = _shoot(_Page(HEAVY, HEAVY, fail=True))
     assert shot is None and body.decode() == HEAVY
     assert "찍기 실패" in capsys.readouterr().out
+
+
+class _Doc:
+    """Docling 문서 흉내. 쪽마다 마크다운을 준다."""
+
+    def __init__(self, pages, status="success"):
+        self.page_mds, self.status = pages, status
+
+    def export_to_markdown(self, page_no=None):
+        return "\n".join(self.page_mds) if page_no is None else self.page_mds[page_no - 1]
+
+    def num_pages(self):
+        return len(self.page_mds)
+
+
+class _Converter:
+    def __init__(self, result):
+        self.result, self.seen = result, []
+
+    def convert(self, path):
+        self.seen.append(path)
+        if isinstance(self.result, Exception):
+            raise self.result
+        from types import SimpleNamespace
+
+        return SimpleNamespace(document=self.result, status=self.result.status)
+
+
+class _Manifest:
+    """목록 파일 흉내. 줄마다 내보내는지 센다."""
+
+    def __init__(self):
+        self.lines, self.flushed = [], 0
+
+    def write(self, line):
+        self.lines.append(line)
+
+    def flush(self):
+        self.flushed = len(self.lines)
+
+
+def _pdf_fetcher(tmp_path, monkeypatch, docling, result):
+    from datetime import UTC, datetime
+
+    from cherry_core.pipeline.collect import Fetcher
+
+    _offline(monkeypatch, lambda url: (b"%PDF-1.7 x" if url.endswith(".pdf") else b"<p>card</p>", "text/html"))
+    f = Fetcher(tmp_path, _Manifest(), datetime(2026, 10, 5, tzinfo=UTC), ["shinhan"], {}, None, docling=docling)
+    conv = _Converter(result)
+    monkeypatch.setattr(f, "_converter", lambda: conv)
+    return f, conv
+
+
+def _target(source_id, url):
+    from cherry_core.pipeline.collect import Target
+
+    return Target("shinhan", "shinhan-a", source_id, "manual_pdf", url, False)
+
+
+PAGE = "가" * 300
+
+
+def test_docling_markdown_is_saved_next_to_the_pdf(tmp_path, monkeypatch):
+    f, conv = _pdf_fetcher(tmp_path, monkeypatch, True, _Doc([PAGE, PAGE]))
+    f.fetch(_target("guide", "https://x.test/guide.pdf"))
+    f.fetch(_target("page", "https://x.test/page.html"))
+    (pdf,) = tmp_path.rglob("*.pdf")
+    assert pdf.with_suffix(".md").read_text(encoding="utf-8") == f"{PAGE}\n{PAGE}"
+    # HTML은 Docling에 보내지 않는다. 임시 파일은 남지 않는다
+    assert conv.seen == [pdf] and not list(tmp_path.rglob("page-*.md")) and not list(tmp_path.rglob("*.tmp"))
+    # Docling이 프로세스를 죽여도 받은 원문이 목록에서 빠지지 않게 줄마다 내보낸다
+    assert f.manifest.flushed == len(f.manifest.lines) == 2
+
+
+def test_without_docling_option_pdf_has_no_markdown(tmp_path, monkeypatch):
+    f, conv = _pdf_fetcher(tmp_path, monkeypatch, False, _Doc([PAGE, PAGE]))
+    f.fetch(_target("guide", "https://x.test/guide.pdf"))
+    assert conv.seen == [] and not list(tmp_path.rglob("*.md"))
+
+
+@pytest.mark.parametrize(
+    ("result", "said"),
+    [
+        (_Doc(["<!-- image -->"] * 3), "글자층 없음"),
+        (_Doc(["\ufffd" + PAGE, PAGE]), "글자 깨짐"),
+        (_Doc([PAGE, PAGE], status="partial_success"), "일부 쪽 실패"),
+        (RuntimeError("bad pdf"), "Docling 실패"),
+    ],
+)
+def test_unreliable_or_failed_pdf_keeps_pdf_without_markdown(tmp_path, monkeypatch, capsys, result, said):
+    f, _ = _pdf_fetcher(tmp_path, monkeypatch, True, result)
+    f.fetch(_target("guide", "https://x.test/guide.pdf"))
+    # 마크다운만 빠지고 PDF는 저장된다. 글 뽑기가 ai_parse_document로 읽는다. 끊김으로 세지 않는다
+    assert len(list(tmp_path.rglob("*.pdf"))) == 1 and not list(tmp_path.rglob("*.md"))
+    assert said in capsys.readouterr().out and f.saved == 1 and f.drops["shinhan"] == 0
+
+
+def test_converter_that_cannot_be_built_stops_the_run_after_saving_the_pdf(tmp_path, monkeypatch):
+    f, _ = _pdf_fetcher(tmp_path, monkeypatch, True, _Doc([PAGE]))
+
+    def broken():
+        raise OSError("model download failed")
+
+    monkeypatch.setattr(f, "_converter", broken)
+    # 그대로 받으면 PDF가 모두 유료 해석으로 넘어간다. 받은 PDF는 목록에 남기고 실행을 멈춘다
+    with pytest.raises(OSError):
+        f.fetch(_target("guide", "https://x.test/guide.pdf"))
+    assert len(list(tmp_path.rglob("*.pdf"))) == 1 and f.manifest.flushed == 1
+
+
+def test_markdown_write_failure_keeps_the_pdf(tmp_path, monkeypatch, capsys):
+    from datetime import date
+
+    from cherry_core.pipeline.collect import raw_path
+
+    f, _ = _pdf_fetcher(tmp_path, monkeypatch, True, _Doc([PAGE]))
+    t = _target("guide", "https://x.test/guide.pdf")
+    # .md 자리에 폴더가 있으면 바꿔 넣기가 실패한다
+    (tmp_path / raw_path(t, date(2026, 10, 5), b"%PDF-1.7 x", "text/html")).with_suffix(".md").mkdir(parents=True)
+    f.fetch(t)
+    assert f.saved == 1 and "쓰기 실패" in capsys.readouterr().out and not list(tmp_path.rglob("*.tmp"))

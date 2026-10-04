@@ -39,7 +39,7 @@ from cherry_core.pipeline.disclosure import (
     read,
     row_key,
 )
-from cherry_core.pipeline.text import image_heavy
+from cherry_core.pipeline.text import docling_problem, image_heavy
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3] / "catalog"
 AGENT = "cherryconsume-collector"
@@ -283,6 +283,31 @@ def _manual(root: Path, card_id: str, source_id: str) -> Target:
     return Target(card.issuer, card.id, source.id, source.kind, source.url, False)
 
 
+# Docling의 배치 모델은 HuggingFace의 최신 판 대신 이 커밋으로 고정한다. 판이 바뀌면 같은 PDF의 글이 바뀌어
+# 바뀐 원문으로 잡히므로 올릴 때는 일부러 올린다. 표 모델은 Docling이 판을 고정한다. 작업 008 설계 4절
+LAYOUT_REVISION = "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8"
+DOCLING_TIMEOUT = 300  # PDF 하나에 쓰는 초. 넘기면 일부 쪽으로 끝나 ai_parse_document로 넘어간다
+
+
+def docling_converter():
+    """Docling 변환기를 만들고 모델을 불러온다. 몇 분 걸려 수집기는 첫 PDF에서 한 번 만든다.
+
+    워크플로의 Docling 준비 단계가 받기 전에 먼저 불러 설치와 모델 받기 실패를 거른다.
+    OCR은 끄고 표 구조는 정확 모드로 복원한다. 9단계 비교와 같은 설정이다.
+    """
+    from docling.datamodel.base_models import InputFormat
+    from docling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
+    from docling.document_converter import DocumentConverter, PdfFormatOption
+
+    opts = PdfPipelineOptions(do_ocr=False, do_table_structure=True, document_timeout=DOCLING_TIMEOUT)
+    opts.table_structure_options.mode = TableFormerMode.ACCURATE
+    spec = opts.layout_options.model_spec
+    opts.layout_options.model_spec = spec.model_copy(update={"revision": LAYOUT_REVISION})
+    converter = DocumentConverter(format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=opts)})
+    converter.initialize_pipeline(InputFormat.PDF)
+    return converter
+
+
 class Fetcher:
     """원문 주소를 차례로 받아 저장한다. robots.txt 확인, 브라우저, 403과 429와 세 번 끊김에 멈추기를 여기서 한다."""
 
@@ -294,8 +319,10 @@ class Fetcher:
         ignore: list[str],
         robots: dict[str, str | None | Exception],
         stack: ExitStack,
+        docling: bool = False,
     ) -> None:
         self.out_dir, self.manifest, self.now, self.ignore, self.stack = out_dir, manifest, now, ignore, stack
+        self.docling, self.converter = docling, None
         self.robots = robots  # 호스트마다 robots.txt. 공시 받기와 함께 쓴다
         self.blocked: set[str] = set()
         self.drops: dict[str, int] = {}
@@ -335,8 +362,47 @@ class Fetcher:
         finally:
             time.sleep(DELAY_SECONDS)
         self.drops[t.issuer] = 0
-        save(self.out_dir, self.manifest, t, body, ctype, self.now, shot)
+        rel = save(self.out_dir, self.manifest, t, body, ctype, self.now, shot)
+        # Docling이 프로세스를 죽여도 받은 원문이 목록에서 빠지지 않게 줄마다 내보낸다
+        self.manifest.flush()
         self.saved += 1
+        # PDF는 Docling으로 해석한 글을 같은 이름의 .md로 둔다. 없으면 글 뽑기가 ai_parse_document로 읽는다. 작업 008 9단계
+        if self.docling and body.startswith(b"%PDF-"):
+            md = self._docling(self.out_dir / rel)
+            if md is not None:
+                path = (self.out_dir / rel).with_suffix(".md")
+                tmp = path.with_suffix(".md.tmp")
+                try:
+                    # 반쯤 쓴 .md가 남지 않게 임시 이름으로 쓴 뒤 바꾼다
+                    tmp.write_text(md, encoding="utf-8")
+                    tmp.replace(path)
+                except OSError as e:
+                    tmp.unlink(missing_ok=True)
+                    print(f".md 쓰기 실패 {path.name}: {type(e).__name__}")
+
+    def _docling(self, path: Path) -> str | None:
+        # 변환기를 못 만들면 그대로 실패로 끝낸다. 계속 받으면 PDF가 모두 운영의 유료 해석으로 넘어간다
+        converter = self._converter()
+        try:
+            result = converter.convert(path)
+            doc = result.document
+            problem = None if result.status == "success" else "일부 쪽 실패"
+            problem = problem or docling_problem(
+                [doc.export_to_markdown(page_no=n) for n in range(1, doc.num_pages() + 1)]
+            )
+            md = doc.export_to_markdown()
+        except Exception as e:  # noqa: BLE001 해석이 실패해도 PDF는 남는다. 끊김으로 세지 않는다
+            print(f"Docling 실패 {path.name}: {type(e).__name__}")
+            return None
+        if problem:
+            print(f"{problem} {path.name}")
+            return None
+        return md
+
+    def _converter(self):
+        if self.converter is None:
+            self.converter = docling_converter()
+        return self.converter
 
     def _browser(self, t: Target) -> tuple[bytes, str, bytes | None]:
         from playwright.sync_api import Error as PlaywrightError
@@ -411,6 +477,11 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         help="--disclosure와 함께 카드사마다 카탈로그 밖 카드를 이만큼 받는다. 0은 모두다. 주지 않으면 받지 않는다",
     )
+    ap.add_argument(
+        "--docling",
+        action="store_true",
+        help="받은 PDF를 Docling으로 해석해 같은 이름의 .md로 둔다. 집 PC 워크플로가 쓴다",
+    )
     ap.add_argument("--add", type=Path, help="사람이 받아 온 파일을 더한다. --card와 --source를 함께 쓴다")
     ap.add_argument("--card")
     ap.add_argument("--source")
@@ -473,7 +544,7 @@ def main(argv: list[str] | None = None) -> int:
                     found = index_targets(issuer, got, known, today, args.index_cards, issuer in browsers)
                     print(f"색인 카드 {issuer} {len(found)}개")
                     pending += found
-            fetcher = Fetcher(args.out, out, now, args.ignore_robots, robots, stack)
+            fetcher = Fetcher(args.out, out, now, args.ignore_robots, robots, stack, args.docling)
             for t in pending:
                 fetcher.fetch(t)
         saved += fetcher.saved
@@ -483,7 +554,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1 if failed else 0
 
     with ExitStack() as stack, manifest.open("w", encoding="utf-8") as out:
-        fetcher = Fetcher(args.out, out, now, args.ignore_robots, robots, stack)
+        fetcher = Fetcher(args.out, out, now, args.ignore_robots, robots, stack, args.docling)
         for t in targets(args.root, args.interval, set(args.issuer or []) or None):
             if t.issuer in args.exclude:
                 excluded += 1

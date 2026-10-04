@@ -187,7 +187,9 @@ def test_same_page_text_ignores_markup_and_view_counts_but_not_text():
 
     old = '<html><script>var t=1</script><p class="a">카페 10% 할인</p><p>조회 120</p></html>'.encode()
     # 브라우저가 준 HTML은 받을 때마다 속성과 스크립트가 달라도 페이지 글이 같으면 같은 페이지다
-    assert same_page_text(old, '<html><script>var t=2</script><p class="b">카페 10% 할인</p><p>조회 121</p></html>'.encode())
+    assert same_page_text(
+        old, '<html><script>var t=2</script><p class="b">카페 10% 할인</p><p>조회 121</p></html>'.encode()
+    )
     assert not same_page_text(old, "<html><p>카페 20% 할인</p><p>조회 120</p></html>".encode())
 
 
@@ -199,3 +201,56 @@ def test_page_wrappers_and_tags_without_end_tag_are_never_chrome():
     assert body_stats(f'<body class="header-fixed">{body}</body>') == (0, 2500)
     # 끝 태그를 생략한 li가 걸리면 닫히지 않아 나머지 본문이 모두 빠진다
     assert body_stats(f'<ul><li class="nav-item">메뉴<li>a</ul><div>{body}</div>') == (0, 2503)
+
+
+DOCLING_MD = """## 연회비
+
+| 구분   | 금액            |
+|------|---------------|
+| 국내전용 | 1만원(기본 7천원) |
+|      | 해외겸용          |
+
+<!-- image -->
+
+- 연회비는 카드 발급 시 선청구됩니다.
+"""
+
+
+def test_markdown_text_joins_table_cells_and_drops_markup():
+    from cherry_core.pipeline.text import markdown_text
+
+    assert markdown_text(DOCLING_MD) == (
+        "연회비\n구분 | 금액\n국내전용 | 1만원(기본 7천원)\n| 해외겸용\n- 연회비는 카드 발급 시 선청구됩니다."
+    )
+
+
+def test_docling_problem_rejects_broken_empty_or_missing_pages():
+    from cherry_core.pipeline.text import docling_problem
+
+    page = "가" * 300
+    assert docling_problem([page, page]) is None
+    # 2026-10-05 롯데 상품설명서는 글자층의 글자 정보가 빠져 "쿠팡이츠"가 "�팡이�"로 나왔다
+    assert docling_problem([page, "\ufffd팡이\ufffd " + page]) == "글자 깨짐"
+    # 글자층이 없는 PDF는 OCR을 끈 Docling이 그림 자리만 낸다. 쪽당 평균 200자 아래다
+    assert docling_problem(["<!-- image -->"] * 5) == "글자층 없음"
+    assert docling_problem(["가" * 200]) is None
+    assert docling_problem(["가" * 199]) == "글자층 없음"
+    # 표지일 수 있는 첫 두 쪽은 비어도 되고, 그 밖의 빈 쪽은 그림으로 된 혜택일 수 있다
+    long = "가" * 400
+    assert docling_problem(["<!-- image -->", "", long, long, long]) is None
+    assert docling_problem([page, page, "가" * 49 + "\n<!-- image -->", page, page]) == "빈 쪽"
+    assert docling_problem([page, page, "가" * 50, page, page]) is None
+
+
+def test_markdown_text_undoes_docling_escapes_and_keeps_dash_rows():
+    from cherry_core.pipeline.text import markdown_text
+
+    md = "## &lt;유의사항&gt;\n\nA&amp;B card\\_name\n\n| 구분 | 할인 |\n|------|:----:|\n| - | - |\n|  |  |\n"
+    assert markdown_text(md) == "<유의사항>\nA&B card_name\n구분 | 할인\n- | -"
+
+
+def test_pdf_with_docling_markdown_uses_it_without_ai_parse_document():
+    assert method_and_text(b"%PDF-1.7 ...", "application/pdf", None, DOCLING_MD)[0] == "docling"
+    # 마크다운이 없으면 지금처럼 ai_parse_document 결과를 쓴다
+    parsed = json.dumps({"document": {"elements": [{"type": "text", "content": "할인"}]}})
+    assert method_and_text(b"%PDF-1.7 ...", "application/pdf", parsed, None) == ("ai_parse_document", "할인")

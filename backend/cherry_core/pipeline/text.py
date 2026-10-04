@@ -6,6 +6,7 @@ import codecs
 import hashlib
 import json
 import re
+from html import unescape
 from html.parser import HTMLParser
 
 _SPACE = re.compile(r"\s+")
@@ -178,6 +179,50 @@ def same_page_text(old: bytes, new: bytes) -> bool:
     return fingerprint(document_text(old, "text/html")) == fingerprint(document_text(new, "text/html"))
 
 
+# Docling 마크다운의 표 구분 줄. 칸마다 붙임표가 셋 이상이다. 칸이 모두 "-"인 행은 "해당 없음"이라 남긴다
+_MD_RULE = re.compile(r"\|(?:\s*:?-{3,}:?\s*\|)+")
+# Docling의 글을 믿지 않고 ai_parse_document에 맡기는 기준. 작업 008 설계 4절
+MIN_CHARS_PER_PAGE = 200  # 공백을 뺀 글이 쪽당 평균 이보다 적으면 글자층이 없는 PDF다
+MIN_PAGE_CHARS = 50  # 표지일 수 있는 첫 두 쪽 밖에서 이보다 적은 쪽은 그림으로 된 쪽이다
+COVER_PAGES = 2
+
+
+def markdown_text(md: str) -> str:
+    """Docling이 PDF에서 만든 마크다운의 글. 표 행은 html_text처럼 칸을 ' | '로 잇고 구분 줄, 그림 자리, 제목 표시는 뺀다.
+
+    Docling이 바꿔 쓴 &gt; 같은 문자 참조와 \\_는 되돌린다.
+    """
+    out = []
+    for line in md.splitlines():
+        s = unescape(line.strip()).replace("\\_", "_")
+        if s == "<!-- image -->" or _MD_RULE.fullmatch(s):
+            continue
+        if s.startswith("|"):
+            cells = [c.strip() for c in s.strip("|").split("|")]
+            if not any(cells):
+                continue
+            s = " | ".join(cells)
+        out.append(s.lstrip("#"))
+    return "\n".join(lines("\n".join(out)))
+
+
+def docling_problem(pages: list[str]) -> str | None:
+    """Docling이 쪽마다 낸 마크다운을 믿을 수 없는 까닭. 믿을 수 있으면 None이고, 까닭이 있으면 ai_parse_document에 맡긴다.
+
+    글자층에 글자 정보가 빠진 PDF는 깨진 글자 U+FFFD가 나온다. 2026-10-05 롯데 상품설명서 두 장이 그랬다.
+    OCR을 꺼서 그림으로 된 쪽은 글이 빈다. 표지 밖에 그런 쪽이 있으면 그 쪽의 혜택이 빠진다.
+    """
+    texts = [markdown_text(p) for p in pages]
+    if any("\ufffd" in t for t in texts):
+        return "글자 깨짐"
+    chars = [len(_SPACE.sub("", t)) for t in texts]
+    if sum(chars) < MIN_CHARS_PER_PAGE * max(len(pages), 1):
+        return "글자층 없음"
+    if any(c < MIN_PAGE_CHARS for c in chars[COVER_PAGES:]):
+        return "빈 쪽"
+    return None
+
+
 def parsed_text(parsed: dict) -> str:
     """ai_parse_document 결과의 글. 표는 HTML로 오므로 html_text로 행을 살린다."""
     parts = []
@@ -215,12 +260,17 @@ def document_text(content: bytes, content_type: str, parsed: dict | None = None)
     return html_text(text)
 
 
-def method_and_text(content: bytes, content_type: str, parsed: str | None) -> tuple[str, str]:
+def method_and_text(
+    content: bytes, content_type: str, parsed: str | None, markdown: str | None = None
+) -> tuple[str, str]:
     """(글을 뽑은 방법, 글). parsed는 ai_parse_document 결과의 JSON 글이다. 방법은 나중에 방법별로 글 품질을 보려고 남긴다.
 
     Spark 작업이 파일마다 부른다. 작업 007 설계 2절. PDF가 아닌데 parsed가 있으면 그 원문의 스크린샷을 해석한 것이라
     스크린샷의 글을 쓴다. 혜택을 이미지로 넣은 페이지다. 작업 008 설계 4절.
     """
+    # 집 PC 수집기가 Docling으로 해석해 둔 PDF는 그 글을 쓴다. 작업 008 9단계
+    if markdown and content.startswith(b"%PDF-"):
+        return "docling", markdown_text(markdown)
     if parsed and not content.startswith(b"%PDF-"):
         try:
             shot = parsed_text(json.loads(parsed))
