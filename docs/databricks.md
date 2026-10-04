@@ -206,6 +206,46 @@ GitHub 저장소 비밀값은 Actions가 실행될 때만 꺼내 쓰는 값이�
 - 보는 것: 화면 왼쪽 **Dashboards**의 "체리컨슘 운영". 수집 상태, 검수 대기, 쓴 금액을 한 화면에 보인다. 작업 007. 정의는 `pipeline/dashboards/ops.lvdash.json`이다.
 - 비용: 열 때만 SQL 웨어하우스가 켜지고 5분 쓰지 않으면 멈춘다. 예약 새로고침은 없다. 웨어하우스는 켜질 때마다 돈이 나와, 쓴 금액에서 가장 큰 몫이 SQL이다. 2026-10-01과 10-02에 하루 7~13달러였다.
 - 화면을 고치면: 개발용 화면에서 고친 뒤 `databricks bundle generate dashboard`로 정의 파일을 다시 받는다.
+- 2026-10-04 작업 010으로 "카탈로그 변경" 묶음을 더했다. 최근 30일 바뀐 개정 목록과 날짜별 바뀐 개정 수다.
+
+### 카탈로그 변경 이력 보기
+
+골드 `card_revisions`가 바뀔 때마다 작업 `cherry_history_refresh`가 Lakeflow 파이프라인 `cherry_history`를 돌려 실버 `card_revision_history`에 쌓는다. 작업 010. 행이 바뀌면 옛 행을 지우지 않고 끝난 시각을 적어 닫는다. `__START_AT.at`부터 `__END_AT.at` 전까지가 그 행이 맞았던 때이고, 지금 맞는 행은 `__END_AT`이 비어 있다. 첫 판의 행은 이력을 켠 날의 첫 적재다.
+
+- 어느 날 이 카드의 규칙이 무엇이었나:
+
+```sql
+SELECT effective_from, rules, review_id
+FROM cherry.silver.card_revision_history
+WHERE card_id = 'kb-toktok'
+  AND __START_AT.at <= TIMESTAMP'2026-10-10 00:00:00'
+  AND (__END_AT IS NULL OR __END_AT.at > TIMESTAMP'2026-10-10 00:00:00')
+ORDER BY effective_from
+```
+
+- 이 카드의 개정이 언제 어떻게 바뀌어 왔나:
+
+```sql
+SELECT effective_from, __START_AT.at AS opened, __END_AT.at AS closed, review_id
+FROM cherry.silver.card_revision_history
+WHERE card_id = 'kb-toktok'
+ORDER BY effective_from, __START_AT
+```
+
+- 최근 한 달 바뀐 카드. 이력을 켠 날의 첫 적재는 뺀다:
+
+```sql
+WITH first AS (SELECT min(__START_AT.version) AS v FROM cherry.silver.card_revision_history)
+SELECT DISTINCT card_id
+FROM cherry.silver.card_revision_history, first
+WHERE (__START_AT.at >= current_date() - INTERVAL 30 DAYS AND __START_AT.version > first.v)
+   OR __END_AT.at >= current_date() - INTERVAL 30 DAYS
+```
+
+- 승인은 규칙이 바뀐 개정을 같은 판 안에서 지우고 새로 넣는다. 이력에서는 옛 행이 그 판의 차례 0에 닫히고 새 행이 차례 1에 열린다. 시행일을 바로잡으면 옛 시행일 행이 닫히고 새 시행일 행이 열려 다른 개정처럼 보인다. 같은 `review_id`로 묶어 본다.
+- 개발용에서 처음부터 다시 쌓으려면 `pipeline` 폴더에서 `databricks bundle run cherry_history --full-refresh-all`. 그때까지의 이력은 사라지고 지금 개정만 첫 적재로 다시 들어간다. 운영 이력 표는 `pipelines.reset.allowed=false`로 이 명령을 막아 두었다. 원천이 지우고 다시 넣는 표라 이력이 지워지면 되살릴 곳이 없다.
+- 설정: 골드 `card_revisions`의 변경 데이터 피드와 변경 파일, 로그 보존 60일은 승인 작업과 골드 첫 적재 작업이 쓰기 전에 켠다. 사람 계정은 운영 골드 설정을 못 바꾼다. 피드가 켜지기 전에 이력 작업을 손으로 돌리지 않는다. 스트림이 피드 없는 판을 기억해 계속 실패할 수 있다.
+- 운영 이력 작업이 끊겼을 때: 실패 메일이 오면 먼저 작업 실행 화면의 오류를 본다. "change data was not recorded"나 파일을 못 찾는다는 오류면 밀린 변경이 지워진 것이다. 이때 순서는 이렇다. 첫째, **SQL Editor**에서 지금 이력을 `CREATE TABLE cherry.silver.card_revision_history_until_<날짜> AS SELECT * FROM cherry.silver.card_revision_history`로 따로 남긴다. 둘째, 번들 변수 `history_reset_allowed`를 운영도 true로 바꿔 푸시하고 전체 다시 쌓기를 한 번 돌린 뒤 false로 되돌린다. 셋째, 옛 이력은 남긴 표에서 본다. 남긴 표 만들기와 운영 실행은 Claude가 사용자에게 묻고 한다.
 
 ### PC에서 받는 카드사
 
@@ -258,7 +298,7 @@ Get-ChildItem "$raw\manifests\*.jsonl" | ForEach-Object { databricks fs cp $_.Fu
 - 성공하면 보이는 것: 출력 세 줄. `골드 카탈로그 파일 35개 해시 …`, `골드 카드 개정 22개 해시 …`, `정답 예시 20장, 채점 전용 5장, 첫 수집 원문이 있는 카드 15장`. 앞의 두 해시가 넣은 해시와 같으면 골드와 저장소가 같다. 원문이 있는 카드는 GitHub이 받는 12장과 PC에서 받는 신한 3장이다. 삼성, 롯데, IBK는 사람이 원문을 더할 때까지 없다. 개수는 카드가 늘면 달라진다.
 - 정답 예시 다시 만들기: 삼성처럼 사람이 원문을 `--add`로 더한 뒤 같은 해시로 다시 돌린다. 골드는 그대로이고 정답 예시만 바뀐다. 그래서 `catalog-seed`는 지우지 않고 첫 카탈로그 그대로 둔다.
 - 운영 표를 SQL로 보려면: 운영 스키마는 서비스 주체가 만들어 사람 계정은 읽지 못한다. **SQL Editor**에서 ``GRANT USE SCHEMA, SELECT ON SCHEMA cherry.gold TO `cherry-admins`;``와 ``GRANT USE SCHEMA, SELECT ON SCHEMA cherry.silver TO `cherry-admins`;``를 한 번 돌린다. 읽기만 연다.
-- 개발용에서 처음부터 다시 시험하려면: 골드 표 두 개를 SQL `DROP TABLE`로 지운 뒤 돌린다. 운영에서는 하지 않는다.
+- 개발용에서 처음부터 다시 시험하려면: 골드 표 두 개를 SQL `DROP TABLE`로 지운 뒤 돌린다. 운영에서는 하지 않는다. 지우고 다시 만든 개정 표는 다른 표라 이력 스트림이 끊긴다. 개발용 이력도 `databricks bundle run cherry_history --full-refresh-all`로 다시 쌓는다.
 
 ### 손으로 승인하기
 
