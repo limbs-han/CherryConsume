@@ -60,7 +60,8 @@ void main() {
     final (:s, clock: _) = fresh();
     final chips = issuers(s);
     expect(chips, hasLength(10));
-    expect(chips, contains(equals({'code': 'shinhan', 'name': '신한카드'})));
+    // 카드사 칩은 짧은 이름이다. 작업 011 설계 2.4
+    expect(chips, contains(equals({'code': 'shinhan', 'name': '신한'})));
   });
 
   test('test_preview_with_last_month', () {
@@ -130,7 +131,8 @@ void main() {
     final [card as Json] = h['cards'] as List;
     expect(
       (card['card_id'], card['name'], card['issuer_name']),
-      ('shinhan-mrlife', '신한카드 Mr.Life', '신한카드'),
+      // 홈의 카드 이름은 짧은 이름이다. 작업 011 설계 2.4
+      ('shinhan-mrlife', '신한 Mr.Life', '신한카드'),
     );
     expect(card['tiers'], [300000, 500000, 1000000]);
     // 이번 달 실적 0원. 30만 구간을 지키려면 30만, 다음 50만 구간까지 50만

@@ -63,7 +63,7 @@ void main() {
     final under = find.ancestor(of: pill, matching: find.byType(Row)).first;
     final line = find.descendant(
       of: under,
-      matching: find.textContaining('신한카드 Mr.Life'),
+      matching: find.textContaining('신한 Mr.Life'),
     );
     expect(line, findsOneWidget);
     expect(tester.getRect(pill).right, lessThan(tester.getRect(line).left));

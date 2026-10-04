@@ -15,15 +15,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'engine/helpers.dart' show realJson;
 import 'store/helpers.dart' show start;
 
-/// 신한카드와 신한 Mr.Life에만 짧은 이름을 적은 카탈로그. 다른 카드는 칸이 없어 전체 이름을 쓴다
-({Api api, Store s}) shortApp() {
+/// 커밋된 카탈로그에서 현대 ZERO의 짧은 이름만 비운 것. 2026-10-04 봇 커밋 90ff4b3부터 카드 20장과 카드사 열 곳에
+/// 짧은 이름이 있어, 칸이 빈 카드가 전체 이름으로 돌아가는지 보려고 하나를 비운다
+Json withoutZeroShortName() {
   final j = jsonDecode(jsonEncode(realJson)) as Json;
-  for (final i in j['issuers'] as List) {
-    if (i['id'] == 'shinhan') i['short_name'] = '신한';
-  }
   for (final c in j['cards'] as List) {
-    if (c['id'] == 'shinhan-mrlife') c['short_name'] = '신한 Mr.Life';
+    if (c['id'] == 'hyundai-zero-edition3-discount') c.remove('short_name');
   }
+  return j;
+}
+
+({Api api, Store s}) shortApp() {
+  final j = withoutZeroShortName();
   clock.now = () => start;
   addTearDown(() => clock.now = DateTime.now);
   final s = Store(openDb(), Catalog.fromJson(j), clock: () => clock.now());
@@ -32,9 +35,11 @@ import 'store/helpers.dart' show start;
 
 void main() {
   test('짧은 이름 칸이 없으면 이름을 쓴다', () {
-    final c = Catalog.fromJson(realJson);
-    expect(c.cards['shinhan-mrlife']!.shortName, isNull);
-    expect(c.issuers['shinhan']!.shortName, isNull);
+    final real = Catalog.fromJson(realJson);
+    expect(real.cards['shinhan-mrlife']!.shortName, '신한 Mr.Life');
+    expect(real.issuers['shinhan']!.shortName, '신한');
+    final c = Catalog.fromJson(withoutZeroShortName());
+    expect(c.cards['hyundai-zero-edition3-discount']!.shortName, isNull);
   });
 
   testWidgets('홈과 결제 기록의 카드 알약은 짧은 이름, 카드 상세 제목은 전체 이름이다', (tester) async {

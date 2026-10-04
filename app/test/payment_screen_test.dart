@@ -45,7 +45,7 @@ void main() {
     final pills = tester.widgetList<ChoicePill>(find.byType(ChoicePill));
     expect(
       {for (final p in pills) p.label: p.selected},
-      {'신한카드 Mr.Life': true, '현대카드ZERO Edition3(할인형)': false},
+      {'신한 Mr.Life': true, '현대 ZERO': false},
     );
     final why = find.textContaining('가장 이득이라 골라 뒀어요');
     expect(tester.widget<Text>(why).style!.color, C.blue);

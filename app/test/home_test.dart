@@ -42,7 +42,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // 카드 두 장이 각자 흰 카드다. 실적 채우기 제목은 카드 밖이다
-    for (final name in ['신한카드 Mr.Life', '현대카드ZERO Edition3(할인형)']) {
+    for (final name in ['신한 Mr.Life', '현대 ZERO']) {
       expect(
         find.ancestor(of: find.text(name), matching: find.byType(Box)),
         findsOneWidget,

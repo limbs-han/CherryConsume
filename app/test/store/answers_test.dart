@@ -172,7 +172,8 @@ void main() {
       (soldier['key'], soldier['type'], soldier['answer']),
       ('soldier', 'bool', null),
     );
-    expect(soldier['cards'], ['IBK나라사랑카드']);
+    // 쓰는 카드는 짧은 이름이다. 작업 011 설계 2.4
+    expect(soldier['cards'], ['IBK 나라사랑']);
     expect(
       putUserFacts(s, {
         'facts': {'soldier': true},

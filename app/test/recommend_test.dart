@@ -37,7 +37,7 @@ void main() {
     expect(find.text('GS25 테헤란점'), findsOneWidget);
     // 업종 줄은 카드 이름과 혜택 이름을 두 줄로 쓴다. 작업 011 설계 2절 R1
     final cafe = find.widgetWithText(Pressable, '카페');
-    for (final text in ['신한카드 Mr.Life', '야간 식음료 10% 할인']) {
+    for (final text in ['신한 Mr.Life', '야간 식음료 10% 할인']) {
       expect(
         find.descendant(of: cafe, matching: find.text(text)),
         findsOneWidget,
