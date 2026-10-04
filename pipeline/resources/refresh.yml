@@ -1,5 +1,5 @@
 # 새 목록 파일이 오면 도는 작업. 작업 003 과제 15, 16, 18
-# 순서: 원문 적재, 글 뽑기, 변경 감지, 추출, 비용 차단. cherry_guard 태그가 있어 비용 차단 작업이 한도를 넘기면 멈춘다
+# 순서: 원문 적재, 글 뽑기, 변경 감지, 추출, 비용 차단. 공시 색인은 글 뽑기 뒤에 변경 감지와 나란히 돈다. cherry_guard 태그가 있어 비용 차단 작업이 한도를 넘기면 멈춘다
 # 실행 시간 제한은 설계 4절 8번의 시작값이다. 과제 15와 18에서 잰 시간의 두 배로 고친다
 variables:
   list_model:
@@ -40,6 +40,23 @@ resources:
             parameters: ["--bronze", "${resources.schemas.bronze.name}", "--silver", "${resources.schemas.silver.name}"]
           environment_key: default
           timeout_seconds: 1800
+        - task_key: index
+          depends_on:
+            - task_key: documents
+          # 작업 008 계획 4.6. 카드사 화면이 바뀌어 읽기가 깨져도 바뀐 원문 추출은 돌게 변경 감지와 나란히 둔다
+          # 읽기가 깨진 실패는 다시 돌아도 같아 자동 재시도를 끈다
+          disable_auto_optimization: true
+          spark_python_task:
+            python_file: ../src/index.py
+            parameters:
+              - "--bronze"
+              - "${resources.schemas.bronze.name}"
+              - "--silver"
+              - "${resources.schemas.silver.name}"
+              - "--gold"
+              - "${resources.schemas.gold.name}"
+          environment_key: default
+          timeout_seconds: 900
         - task_key: changes
           depends_on:
             - task_key: documents
@@ -80,6 +97,7 @@ resources:
         - task_key: guard
           depends_on:
             - task_key: extract
+            - task_key: index
           # 앞 단계가 실패해도 비용 차단 확인은 건너뛰지 않는다
           # 늘 마지막 단계로 둔다. 자기 실행은 취소하지 않아서, 이 단계와 함께 도는 단계가 있으면 한도를 넘어도 끝까지 돈다
           run_if: ALL_DONE

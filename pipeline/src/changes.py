@@ -96,6 +96,8 @@ def main(argv: list[str] | None = None) -> None:
 
     latest_two = (
         spark.table(f"{s}.documents")
+        # 공시 원문은 색인 단계가 읽는다. 쪽마다 바뀐 줄을 쌓을 까닭이 없다. 작업 008
+        .where(~F.col("kind").eqNullSafe("disclosure"))
         .withColumn(
             "rank",
             F.row_number().over(
