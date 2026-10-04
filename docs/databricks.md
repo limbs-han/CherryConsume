@@ -265,7 +265,7 @@ GitHub 자체 호스팅 러너는 GitHub Actions 작업을 GitHub 서버 대신 
 - 할 수 있으면 러너는 개인 파일이 없는 별도 Windows 표준 계정에서 돌린다. 그 계정에는 Databricks CLI 로그인과 저장소의 `app/test/local` 같은 개인 파일을 두지 않는다.
 
 처음 한 번:
-1. Git for Windows를 설치한다. 워크플로가 그 안의 bash로 돈다. PowerShell에서 `git --version`이 버전을 찍고 `Test-Path "C:\Program Files\Git\bin\bash.exe"`가 `True`면 된다.
+1. Git for Windows를 설치한다. 워크플로가 그 안의 bash로 돈다. Git for Windows는 PATH에 bash 폴더를 넣지 않아 `bash`가 Windows의 WSL `bash.exe`로 잡힐 수 있다. 워크플로 첫 단계가 Git Bash 폴더를 PATH 앞에 두므로 PC 설정은 바꾸지 않는다. 2026-10-05 첫 실행에서 이것으로 모든 카드사가 멈췄다. PowerShell에서 `git --version`이 버전을 찍고 `Test-Path "C:\Program Files\Git\bin\bash.exe"`가 `True`면 된다.
 2. PowerShell을 열고 먼저 `cd C:\`를 친다. GitHub의 받기 명령은 지금 있는 폴더 아래에 `actions-runner` 폴더를 만들기 때문이다.
 3. GitHub 저장소 화면에서 **Settings** → **Actions** → **Runners** → **New self-hosted runner**를 누르고 **Windows**, **x64**를 고른다. 화면의 **Download** 칸 명령을 같은 PowerShell에서 차례로 돌린다. `C:\actions-runner` 폴더가 생긴다.
 4. 같은 화면의 **Configure** 칸 첫 명령 `./config.cmd --url … --token …`을 돌린다. 물음에는 이렇게 답한다. 러너 그룹, 이름, 작업 폴더는 Enter로 기본값을 쓴다. 이름표를 묻는 `Enter any additional labels`에는 `cherry-home`을 친다. `Would you like to run the runner as service?`에는 `N`을 친다. 수집하는 날에만 켜 두려는 것이다. 마지막에 `Settings Saved.`가 보이면 된다.
