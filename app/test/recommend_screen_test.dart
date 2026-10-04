@@ -28,6 +28,35 @@ Future<void> openTab(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets('업종 칸은 가장 긴 업종 이름에 맞추고 카드 이름과 띄운다. 줄 사이도 넉넉하다', (tester) async {
+    // 2026-10-05 실제 폰에서 "일반음식점"처럼 다섯 글자 업종이 카드 이름에 붙고 업종 줄 사이가 좁았다. 작업 011 설계 2절 F5, F6
+    tester.view.devicePixelRatio = 2.625;
+    tester.view.physicalSize = const Size(1080, 2400);
+    addTearDown(tester.view.reset);
+    await openTab(tester);
+    final cat = find.text('일반음식점');
+    await tester.scrollUntilVisible(
+      cat,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    final row = find.ancestor(of: cat, matching: find.byType(Row)).first;
+    final name = find.descendant(of: row, matching: find.byType(Text)).at(1);
+    expect(
+      tester.getSize(cat).height,
+      tester.getSize(find.text('카페')).height,
+      reason: '한 줄',
+    );
+    expect(
+      tester.getRect(name).left - tester.getRect(cat).right,
+      greaterThanOrEqualTo(12),
+    );
+    final pad = tester.widget<Padding>(
+      find.ancestor(of: row, matching: find.byType(Padding)).first,
+    );
+    expect(pad.padding.vertical, greaterThanOrEqualTo(36));
+  });
+
   testWidgets('가게를 못 찾으면 업종 고르기를 눌러 바닥 시트에서 고른다', (tester) async {
     // 작업 011 설계 2절 T4, 시나리오 E16. 업종 칩을 모두 펼치지 않는다
     await openTab(tester);

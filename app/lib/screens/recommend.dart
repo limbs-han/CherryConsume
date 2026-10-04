@@ -65,7 +65,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
   Widget build(BuildContext context) => Scaffold(
     // 작업 011 설계 2절 G6
     floatingActionButton: PayButton(
-      key: ObjectKey(_data),
+      refresh: _data,
       api: widget.api,
       onSaved: _reload,
     ),
@@ -90,6 +90,25 @@ class _RecommendScreenState extends State<RecommendScreen> {
         final (top, recent) = snap.data!;
         // E17. 카드가 없으면 추천할 것이 없다
         if (top.isEmpty) return _NoCards(onAdd: _addCard);
+        // 업종 칸은 가장 긴 업종 이름의 폭이고 화면 폭의 35%를 넘지 않는다. 고정 폭이면 "일반음식점"처럼 다섯 글자 업종이
+        // 카드 이름에 붙었다. 2026-10-05 실제 폰에서 찾았다. 작업 011 설계 2절 F5
+        final catStyle = DefaultTextStyle.of(context).style.merge(
+          const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: C.text,
+          ),
+        );
+        final scaler = MediaQuery.textScalerOf(context);
+        final catWidth = [
+          for (final t in top)
+            (TextPainter(
+              text: TextSpan(text: t.categoryName, style: catStyle),
+              textDirection: TextDirection.ltr,
+              textScaler: scaler,
+            )..layout()).width,
+        ].fold(0.0, (a, b) => a > b ? a : b).ceilToDouble();
+        final catMax = MediaQuery.sizeOf(context).width * 0.35;
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
           children: [
@@ -149,21 +168,16 @@ class _RecommendScreenState extends State<RecommendScreen> {
                       child: Pressable(
                         onTap: () =>
                             _open(category: t.category, title: t.categoryName),
+                        // 업종 줄 사이를 넉넉히 둔다. 작업 011 설계 2절 F6
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           child: Row(
                             children: [
                               SizedBox(
-                                width: 72,
-                                child: Text(
-                                  t.categoryName,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                    color: C.text,
-                                  ),
-                                ),
+                                width: catWidth < catMax ? catWidth : catMax,
+                                child: Text(t.categoryName, style: catStyle),
                               ),
+                              const SizedBox(width: 16),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
