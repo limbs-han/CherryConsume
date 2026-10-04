@@ -190,10 +190,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
           spacing: 8,
           runSpacing: 8,
           children: [
+            // 칩은 알약이다. 작업 011 설계 2절 T2
             for (final c in saved.askChildren)
-              ActionChip(
-                label: Text(c.name),
-                onPressed: () => Navigator.pop(context, c.code),
+              ChoicePill(
+                c.name,
+                selected: false,
+                onTap: () => Navigator.pop(context, c.code),
               ),
           ],
         ),

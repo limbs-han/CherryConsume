@@ -4,6 +4,7 @@ import 'package:cherry_consume/main.dart';
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:cherry_consume/store/routes/records.dart' show delete;
 import 'package:cherry_consume/store/store.dart';
+import 'package:cherry_consume/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -46,7 +47,7 @@ void main() {
     expect(find.text('30만 더 쓰면 유지'), findsOneWidget);
 
     await openPayment(tester, 4300, 'GS25 테헤란점');
-    expect(find.text('이 가게에선 신한카드 Mr.Life가 가장 이득이라 골라 뒀어요'), findsOneWidget);
+    expect(find.text('이 가게에선 신한 Mr.Life가 가장 이득이라 골라 뒀어요'), findsOneWidget);
     expect(find.text('430원'), findsOneWidget);
     expect(find.text('편의점 10% 할인'), findsOneWidget);
     // 화면은 폰 시간대로 보인다. 한국 폰이면 21:00이고 UTC로 도는 CI에서는 12:00이다
@@ -105,7 +106,7 @@ void main() {
     await tester.pumpWidget(CherryApp(api: api));
     await tester.pumpAndSettle();
     await openPayment(tester, 4300, 'GS25');
-    expect(find.text('이 가게에선 신한카드 Mr.Life가 가장 이득이라 골라 뒀어요'), findsOneWidget);
+    expect(find.text('이 가게에선 신한 Mr.Life가 가장 이득이라 골라 뒀어요'), findsOneWidget);
     pay(s, card, 4300, 'GS25', at: '2026-09-15T20:00:00+09:00');
     await tester.tap(find.widgetWithText(FilledButton, '저장'));
     await tester.pumpAndSettle();
@@ -125,6 +126,8 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, '저장'));
     await tester.pumpAndSettle();
     expect(find.text('KT 요금은 통신요금 가운데 어느 쪽인가요'), findsOneWidget);
+    // 고를 것은 알약이다. 작업 011 설계 2절 T2
+    expect(find.widgetWithText(ChoicePill, '이동통신'), findsOneWidget);
     await tester.tap(find.text('이동통신'));
     await tester.pumpAndSettle();
     expect(find.text('KT 요금은 통신요금 가운데 어느 쪽인가요'), findsNothing);
