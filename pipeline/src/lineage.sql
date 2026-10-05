@@ -7,7 +7,8 @@
 --   손 승인: 첫 적재와 같은 원문에 사람이 올린 incoming 폴더 이름 silver.reviews.source를 더해 보인다
 -- 원문 경로는 bronze.fetches와 silver.documents가 같은 값을 쓴다. 볼륨 cherry.bronze.raw 안의 경로다
 -- 끝은 silver.documents다. 사람 계정에는 bronze 표를 읽는 권한을 주지 않았다. 2026-10-02. 원문 주소는 카드 파일 sources에 있다
--- 삼성, 롯데, IBK 다섯 장은 자동 수집 원문이 없어 원문 칸이 빈 줄 하나로 나온다. 계보가 검수 기록에서 끝난다
+-- 삼성, 롯데, IBK 다섯 장의 첫 적재 개정은 그때 자동 수집 원문이 없어 원문 칸이 빈 줄 하나로 나온다. 계보가 검수 기록에서 끝난다
+-- 2026-10-05부터 집 PC 러너가 이 다섯 장의 원문도 받아 다음 개정부터는 원문이 붙는다
 WITH rev AS (
   SELECT card_id, effective_from, source, review_id
   FROM cherry.gold.card_revisions

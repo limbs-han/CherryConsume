@@ -71,7 +71,6 @@
       "name": "collect_cards",
       "displayName": "카드별 마지막 수집",
       "queryLines": [
-        "-- 자동 수집이 없는 삼성, 롯데, IBK 다섯 장은 나오지 않는다\n",
         "SELECT issuer, card_id, max(fetched_at) AS last_fetched,\n",
         "  datediff(current_date(), to_date(max(fetched_at))) AS days_ago\n",
         "FROM documents WHERE card_id IS NOT NULL\n",
