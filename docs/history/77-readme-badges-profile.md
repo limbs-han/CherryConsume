@@ -1,9 +1,10 @@
-# 75 README 기술 스택 배지와 프로필 README 꾸미기
+# 77 README 기술 스택 배지와 프로필 README 꾸미기
 
 - 날짜: 2026-10-05
 - 결과물: [README 기술 스택](../../README.md), [프로필 README](https://github.com/limbs-han/limbs-han)
 - 커밋: `6eacf4f` docs: README 기술 스택을 배지 표로 바꾸기
 - 커밋: `limbs-han/limbs-han` 저장소 `337b854` docs: 프로필 README를 요약표와 프로젝트 카드로 다시 꾸미기
+- 커밋: `limbs-han/limbs-han` 저장소 `7738adb` docs: 빵긋에 Jira, namu-reco에 Spark, Airflow, Docker 배지 더하기
 
 ## 요청
 
@@ -24,6 +25,13 @@ README 기술 스택 절을 분야, 기술 배지, 하는 일 세 칸 표로 바
 - 선택: 올리기 → 둘 다 커밋하고 푸시
 
 스킬의 데이터 처리 줄에 Databricks, 프로그래밍 줄에 Flutter와 Dart를 더해 올렸다.
+
+### 수정 요청 1
+> 그리고 limbs-han/readme 를 수정해준건 이쁘고 좋은데
+> 빵긋의 뱃지엔 Jira 를 넣어줬으면 좋겠고
+> namu-reco의 뱃지엔 spark 와 airflow, Docker를 넣어줘
+
+반영: 빵긋 배지에 Jira, namu-reco 배지에 Spark, Airflow, Docker를 더해 올렸다.
 
 ## 최종 결과
 

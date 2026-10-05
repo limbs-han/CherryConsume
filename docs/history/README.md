@@ -118,6 +118,8 @@
 | [73](73-readme-polish.md) | 2026-10-05 | README 꾸미기 |
 | [74](74-catalog-new-card-step10.md) | 2026-10-05 | 작업 008 10단계 카탈로그에 없는 카드의 새 카드 초안 |
 | [75](75-catalog-new-card-approve-step11.md) | 2026-10-05 | 작업 008 11단계 새 카드 초안을 골드의 새 경로로 승인하기 |
-| [74](74-android-release-step1.md) | 2026-10-05 | 작업 012 Android 출시 준비 의도, 설계, 계획과 단계 1 |
-| [75](75-readme-badges-profile.md) | 2026-10-05 | README 기술 스택 배지와 프로필 README 꾸미기 |
+| [76](76-android-release-step1.md) | 2026-10-05 | 작업 012 Android 출시 준비 의도, 설계, 계획과 단계 1 |
+| [77](77-readme-badges-profile.md) | 2026-10-05 | README 기술 스택 배지와 프로필 README 꾸미기 |
+| [78](78-code-explainer.md) | 2026-10-05 | 체리컨슘 코드 해설서 |
 | [79](79-catalog-new-card-score-step12.md) | 2026-10-05 | 작업 008 12단계 정답 예시를 새 카드 프롬프트로 채점하기 |
+| [80](80-code-doc-alignment.md) | 2026-10-05 | 작업 013 코드와 문서 맞추기 |

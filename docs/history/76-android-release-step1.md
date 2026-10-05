@@ -1,4 +1,4 @@
-# 74 작업 012 Android 출시 준비 의도, 설계, 계획과 단계 1
+# 76 작업 012 Android 출시 준비 의도, 설계, 계획과 단계 1
 
 - 날짜: 2026-10-05
 - 결과물: [작업 012 의도](../work/012-android-release/intent.md), [설계](../work/012-android-release/design.md), [계획](../work/012-android-release/plan.md), [개인정보처리방침](../privacy/index.html), [스토어 등록 정보](../store/listing.md), [스토어 검사](../../backend/tests/test_store_listing.py), [그림 스크립트](../../backend/tools/store_art.py), [설정 화면](../../app/lib/screens/settings.dart)
