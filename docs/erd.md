@@ -111,6 +111,11 @@ erDiagram
         text key PK "last_export, bundled_catalog"
         text value "UTC 밀리초, 옮긴 담긴 목록의 지문"
     }
+    merchant_categories {
+        text name_key PK "간편결제 이름을 뗀 가게 이름 열쇠"
+        text category_code "사용자가 고른 업종"
+        integer updated_at
+    }
 
     user_cards ||--o{ transactions : "결제"
     user_cards ||--o{ user_card_options : "옵션 답"
@@ -136,5 +141,6 @@ erDiagram
 - `import_mappings`는 사용자가 짝지은 열이다. 머리 줄의 sha256마다 하나이고 열 이름 대신 열 번호만 남긴다. 기록 내보내기에 담지 않는다. E30
 - `app_state`는 기록이 아닌 앱 상태다. 마지막으로 기록을 내보낸 시각 `last_export`와 표로 옮긴 담긴 목록 파일의 지문 `bundled_catalog`다. 설정의 기록 내보내기 줄이 `last_export`로 "마지막으로 내보낸 날"을 보인다. 작업 012 설계 4절
 - `catalog_card_files`는 카드 규칙 파일을 지문마다 한 줄로 둔다. 앱에 담긴 파일은 앱 판이 바뀐 뒤 처음 켤 때 옮기고, 받은 파일은 지문을 확인해 넣는다. 켤 때 담긴 목록과 받아 둔 목록이 가리키지 않는 줄을 지운다. 앱 판이 바뀐 뒤부터 `catalog_cache.body`는 한 벌 카탈로그가 아니라 목록 파일이다. 작업 014 설계 2절
-- 설정의 기록 내보내기는 `catalog_cache`, `catalog_card_files`, `import_mappings`, `app_state`를 뺀 표 여덟을 JSON 한 파일로 쓴다. 가져오기는 한 트랜잭션에서 표를 비우고 파일의 행을 넣는다. 작업 006 설계 6절
+- `merchant_categories`는 사용자가 고른 가게 이름별 업종이다. 열쇠는 간편결제 이름과 영문 괄호, 회사 표시, 띄어쓰기를 뺀 가게 이름이고 원래 이름은 두지 않는다. 결제의 업종을 정할 때 가맹점 업종보다 먼저 쓴다. 기록 내보내기에 담는다. 작업 016 설계 3절, E62
+- 설정의 기록 내보내기는 `catalog_cache`, `catalog_card_files`, `import_mappings`, `app_state`를 뺀 표 아홉을 JSON 한 파일로 쓴다. 표마다 표나 칸이 마지막으로 바뀐 표 정의 번호를 두어, 그보다 옛 번호 파일에는 그 표가 없어도 받는다. 가져오기는 한 트랜잭션에서 표를 비우고 파일의 행을 넣는다. 작업 006 설계 6절
 - 표 정의는 칸과 표를 더하기만 하고 새 칸에는 기본값을 둔다. `PRAGMA user_version`에 돌린 번호를 적고, 이미 낸 번호의 SQL은 고치지 않고 새 번호로 더한다
