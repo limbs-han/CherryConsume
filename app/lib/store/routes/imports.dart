@@ -446,10 +446,11 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     throw ApiError(413, '파일이 2MB보다 커요. 기간을 나눠 올려 주세요');
   }
   final List<List<Object?>> table;
+  final String source;
   int? start;
   Map<String, int>? cols;
   try {
-    table = readTable(data);
+    (rows: table, :source) = readSource(data);
     if (mapping != null && mapping is! Map) throw Unreadable('열 짝이 맞지 않아요');
     if (mapping != null) {
       (start, cols) = findHeader(
@@ -479,7 +480,7 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
       } on Unreadable {
         (start, cols) = (null, null);
       } on FormatException {
-        // 가져온 기록의 짝이 깨졌으면 자동으로 찾는다
+        // 기억한 짝이 깨졌으면 자동으로 찾는다
         (start, cols) = (null, null);
       }
       break;
@@ -496,6 +497,7 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
           : [for (final c in table[top]) pyStr(c).trim()],
       'mapping': null,
       'signature': table.isEmpty ? null : signature(table[top]),
+      'source': source,
       'top_rows': topRows(table),
       'rows': <Json>[],
       'summary': null,
@@ -594,6 +596,7 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     'headers': [for (final c in table[start]) pyStr(c).trim()],
     'mapping': cols,
     'signature': signature(table[start]),
+    'source': source,
     'top_rows': topRows(table),
     'rows': shown,
     'summary': {
@@ -659,9 +662,13 @@ Json save(Store s, Json body) {
       throw ApiError(404, '보유 카드가 아니다');
     }
     final judged = plan(s, cards, rows, now);
+    // 출처는 미리보기가 읽은 파일 모양이다. 모르는 값은 남기지 않는다. 파일 이름이 들어오지 않게 한다. 작업 013 13-10
+    final source = importSources.contains(body['source'])
+        ? body['source'] as String
+        : null;
     s.db.execute(
-      'insert into import_batches (row_count, imported_count, duplicate_count, cancel_count, created_at) values (?, 0, 0, 0, ?)',
-      [rows.length, ms(now)],
+      'insert into import_batches (source, row_count, imported_count, duplicate_count, cancel_count, created_at) values (?, ?, 0, 0, 0, ?)',
+      [source, rows.length, ms(now)],
     );
     final batch = s.db.lastInsertRowId;
     final sorted = ids.toList()..sort();
@@ -938,7 +945,7 @@ Json undo(Store s, int bid) => write(s, () {
         final left = q.cancelledAmount - mine[q.id]!;
         final amount = left < 0 ? 0 : left;
         final other = others[q.id];
-        // 남은 취소가 다른 묶음의 것뿐이면 그 가운데 가장 늦은 시각이다. 앱에서 적은 취소가 남으면 지금 시각을 둔다
+        // 남은 취소가 다른 묶음의 것뿐이면 그 가운데 가장 늦은 시각이다. 앱에서 적은 취소가 남으면 결제에 적혀 있던 시각을 둔다
         final at = amount == 0
             ? null
             : other != null && amount <= other.$2

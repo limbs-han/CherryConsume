@@ -112,11 +112,20 @@ String _comma(int n) =>
 
 bool _filled(List<Object?> r) => r.any((c) => pyStr(c).trim().isNotEmpty);
 
+/// 엑셀 묶음의 출처로 남기는 값. 읽은 파일 모양이다. 작업 013 13-10
+const importSources = {'xlsx', 'html', 'csv'};
+
 /// 파일을 행 목록으로. 칸은 글자나 숫자, 날짜다
-List<List<Object?>> readTable(Uint8List data) {
+List<List<Object?>> readTable(Uint8List data) => readSource(data).rows;
+
+/// 파일을 행 목록과 읽은 모양으로. 모양은 `xlsx`, `html`, `csv`다. 이름의 확장자가 아니라 내용으로 가린다. 묶음의 출처로
+/// 남긴다. 설계 문서 8절, 작업 013 13-10
+({List<List<Object?>> rows, String source}) readSource(Uint8List data) {
   List<List<Object?>> rows;
+  String source;
   if (_starts(data, const [0x50, 0x4b])) {
     rows = _xlsx(data);
+    source = 'xlsx';
   } else if (_starts(data, const [0xd0, 0xcf, 0x11, 0xe0])) {
     throw Unreadable('옛 엑셀 형식이라 읽지 못했어요. 엑셀에서 xlsx나 csv로 저장해 올려 주세요');
   } else {
@@ -130,11 +139,13 @@ List<List<Object?>> readTable(Uint8List data) {
         throw Unreadable(_tooMany);
       }
       rows = _html(text);
+      source = 'html';
     } else {
       if ('\n'.allMatches(text).length > (maxRows + 20) * 4) {
         throw Unreadable(_tooMany);
       }
       rows = _csv(text);
+      source = 'csv';
     }
   }
   // 60열에서 자른 뒤 빈 줄을 거른다. 61번째 열 뒤에만 값이 있는 줄은 빈 줄이다. 서버와 같은 순서다
@@ -145,7 +156,7 @@ List<List<Object?>> readTable(Uint8List data) {
         c,
   ];
   if (rows.length > maxRows + 20) throw Unreadable(_tooMany);
-  return rows;
+  return (rows: rows, source: source);
 }
 
 final _cell = RegExp(r'<t[dh][\s>/]');

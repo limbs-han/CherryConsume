@@ -458,6 +458,7 @@ class ImportPreview {
           ? null
           : Map<String, int>.from(j['mapping'] as Map),
       signature = j['signature'],
+      source = j['source'],
       topRows = [
         for (final r in j['top_rows'] ?? const []) List<String>.from(r as List),
       ],
@@ -468,6 +469,9 @@ class ImportPreview {
   final List<String> headers;
   final Map<String, int>? mapping;
   final String? signature;
+
+  /// 읽은 파일 모양. xlsx, html, csv. 묶음 출처로 남긴다. 작업 013 13-10
+  final String? source;
 
   /// 머리 줄을 고를 위 10줄. 앱이 올린 파일의 줄이다
   final List<List<String>> topRows;
@@ -660,8 +664,10 @@ class Api {
     List<Map<String, dynamic>> rows, {
     String? signature,
     Map<String, int>? columns,
+    String? source,
   }) async => import_routes.save(store, {
     'rows': rows,
+    'source': source,
     'mapping': columns == null
         ? null
         : {'signature': signature, 'columns': columns},

@@ -13,6 +13,7 @@ import 'package:sqlite3/sqlite3.dart';
 import '../api.dart' show ApiError;
 import 'answers.dart';
 import 'db.dart';
+import 'imports.dart' show importSources;
 import 'payments.dart';
 import 'routes/catalog.dart' show maxSpend;
 import 'store.dart';
@@ -127,6 +128,13 @@ Map<String, int> importAll(Store s, Uint8List data) {
       for (final r in list)
         {for (final (i, c) in columns.indexed) c as String: (r as List)[i]},
     ];
+  }
+  // 엑셀 묶음의 출처는 읽은 파일 모양 셋이거나 비어 있다. 파일 이름 같은 글자가 든 파일은 받지 않는다. 받으면 다음
+  // 내보내기에도 실려 나간다. 작업 013 13-10, 위험 검토 낮음 2
+  if (rows['import_batches']!.any(
+    (r) => r['source'] != null && !importSources.contains(r['source']),
+  )) {
+    throw notOurs;
   }
   // 지금 카탈로그에 없는 카드, 가맹점, 업종, 결제수단이 든 파일은 받지 않는다. 받으면 기록과 계산이 깨진다. 설계 4절
   bool inCatalog(String t, String col, bool Function(String) has) =>
