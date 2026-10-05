@@ -217,4 +217,81 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('업종을 고치면 같은 가게 결제도 바꿀지 묻고, 바꾸기를 고르면 함께 바꾼다', (tester) async {
+    // 작업 016 설계 5절. 2026-10-05 사용자가 물어보고 바꾸기로 정했다
+    final (:api, :s) = app();
+    final card = addCard(s, 'shinhan-mrlife')['id'] as String;
+    pay(s, card, 4300, '동네 가게', at: '2026-09-10T12:00:00+09:00');
+    pay(s, card, 4300, '동네가게', at: '2026-09-11T12:00:00+09:00');
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('기록'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('동네 가게'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('바꾸기'));
+    await tester.pumpAndSettle();
+    final pill = find.widgetWithText(
+      ChoicePill,
+      s.categoryNames['convenience']!,
+    );
+    await tester.ensureVisible(pill);
+    await tester.pumpAndSettle();
+    await tester.tap(pill);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('확인'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '저장'));
+    await tester.pumpAndSettle();
+    expect(find.text('같은 가게 결제 1건도 바꿀까요?'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, '바꾸기'));
+    await tester.pumpAndSettle();
+    expect(
+      {
+        for (final r in s.db.select('select category_code from transactions'))
+          r['category_code'],
+      },
+      {'convenience'},
+    );
+  });
+  testWidgets('같은 가게 결제를 묻는 창에서 그대로 두기를 고르면 그 결제는 바뀌지 않는다', (tester) async {
+    // 작업 016 설계 5절. 2026-10-05 사용자가 물어보고 바꾸기로 정했다
+    final (:api, :s) = app();
+    final card = addCard(s, 'shinhan-mrlife')['id'] as String;
+    pay(s, card, 4300, '동네 가게', at: '2026-09-10T12:00:00+09:00');
+    pay(s, card, 4300, '동네가게', at: '2026-09-11T12:00:00+09:00');
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('기록'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('동네 가게'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('바꾸기'));
+    await tester.pumpAndSettle();
+    final pill = find.widgetWithText(
+      ChoicePill,
+      s.categoryNames['convenience']!,
+    );
+    await tester.ensureVisible(pill);
+    await tester.pumpAndSettle();
+    await tester.tap(pill);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('확인'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '저장'));
+    await tester.pumpAndSettle();
+    expect(find.text('같은 가게 결제 1건도 바꿀까요?'), findsOneWidget);
+    await tester.tap(find.text('그대로 두기'));
+    await tester.pumpAndSettle();
+    expect(
+      [
+        for (final r in s.db.select(
+          'select category_code from transactions order by paid_at',
+        ))
+          r['category_code'],
+      ],
+      ['convenience', null],
+    );
+  });
 }

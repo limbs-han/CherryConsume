@@ -20,7 +20,14 @@ import '../payments.dart';
 import '../store.dart';
 import 'catalog.dart' show maxSpend;
 import 'me.dart' show engineCard;
-import 'payments.dart' show PaymentBody, filled, myCards, paymentOf;
+import 'payments.dart'
+    show
+        PaymentBody,
+        autoCategory,
+        filled,
+        myCards,
+        paymentOf,
+        rememberedCategory;
 import 'records.dart' show lockCards, revisionFor, store;
 
 const maxBytes = 2000000;
@@ -669,9 +676,9 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
       s.aliases,
       methodOf(catalog, x['merchant_name'] as String).$2,
     );
-    x['category_name'] = key == null
-        ? null
-        : s.categoryNames[catalog.merchants[key]!.category];
+    // 기억한 가게 이름의 업종이 먼저다. 저장할 때 filled가 같은 순서로 정한다. 작업 016 설계 4절
+    final code = autoCategory(s, x['merchant_name'] as String, key);
+    x['category_name'] = code == null ? null : s.categoryNames[code];
     x['card_name'] = cards[x['user_card_id']]!['name'];
   }
   final fresh = [
@@ -800,6 +807,9 @@ Json save(Store s, Json body) {
       // 가게는 간편결제 이름을 뺀 나머지로 찾는다. 기록에는 파일의 가맹점명을 그대로 둔다
       final fields = PaymentBody({
         'merchant_name': shop,
+        // 기억한 업종은 결제에 남는 파일의 가맹점명으로 찾는다. 미리보기와 기록 고치기도 그 이름이다. 작업 016 단계 1
+        // 검토 단계 2 중간
+        'category': rememberedCategory(s, r.merchantName),
         'paid_at': kstIso(r.paidAt),
         'installment_months': r.installmentMonths,
         'interest_free': r.interestFree && r.installmentMonths > 1,

@@ -109,6 +109,9 @@ void main() {
     final path = dbPath();
     final old = openDb(path, migrations.sublist(0, 3));
     final s = Store(old, realCatalog, clock: () => start);
+    // 결제 넣기는 새 판 코드라 표 정의 5번의 가게 업종 표를 읽는다. 옛 판 DB에는 없어 넣는 동안만 두고 지운다. 새 판은
+    // DB를 열 때 표 정의를 먼저 돌려 이 경우가 없다. 작업 016
+    old.execute(migrations[4]);
     final card = addCard(
       s,
       'shinhan-mrlife',
@@ -116,6 +119,7 @@ void main() {
     )['id'];
     pay(s, card, 12000, 'GS25 테헤란점', at: '2026-09-10T12:00:00+09:00');
     final before = jsonEncode(home(s));
+    old.execute('drop table merchant_categories');
     old.execute(
       'insert into catalog_cache (id, body, etag, bundled) '
       "values (1, ?, 'old-etag', 'old-mark')",

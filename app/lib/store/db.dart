@@ -155,6 +155,14 @@ const migrations = <String>[
     body text not null,
     primary key (card_id, sha256)
   ) strict''',
+  // 5. 사용자가 고른 가게 이름별 업종. 같은 이름의 다음 결제에 카탈로그 가맹점의 업종보다 먼저 쓴다. 기록이라 기록
+  // 내보내기 파일에 든다. 작업 016 설계 3절
+  '''
+  create table merchant_categories (
+    name_key text primary key,
+    category_code text not null,
+    updated_at integer not null
+  ) strict''',
 ];
 
 /// 날짜 칸의 모양. YYYY-MM-DD 글자라 글자 순서가 날짜 순서와 같다

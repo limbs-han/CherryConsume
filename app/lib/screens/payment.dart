@@ -176,13 +176,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ? await widget.api.savePayment(_input)
           : await widget.api.editPayment(editing.id, _input);
       var repriced = saved.repriced;
+      var last = saved;
       final code = await _askCategory(saved);
       if (code != null) {
         // 자식 업종을 답하면 그 결제만 다시 계산한다. E47, E50. 결제는 이미 저장됐으니 고치기가 실패해도 화면을 닫는다.
         // 남겨 두면 다시 눌러 같은 결제가 두 건이 된다
         _input.category = code;
         try {
-          repriced += (await widget.api.editPayment(saved.id, _input)).repriced;
+          last = await widget.api.editPayment(saved.id, _input);
+          repriced += last.repriced;
         } catch (_) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -191,6 +193,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           }
         }
       }
+      repriced += await _askSameName(last);
       if (mounted) Navigator.of(context).pop(repriced);
     } catch (_) {
       if (!mounted) return;
@@ -199,6 +202,43 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ).showSnackBar(const SnackBar(content: Text('저장하지 못했어요.')));
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// 고른 업종과 업종이 다른 같은 가게 결제가 있으면 함께 바꿀지 묻는다. 바꾸면 혜택이 바뀐 결제 수다. 결제는 이미
+  /// 저장됐으니 실패해도 화면을 닫는다. 2026-10-05 사용자가 물어보고 바꾸기로 정했다. 작업 016 설계 5절
+  Future<int> _askSameName(Saved saved) async {
+    final code = saved.sameCategory;
+    if (saved.sameCount == 0 || code == null || !mounted) return 0;
+    final yes = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('같은 가게 결제 ${saved.sameCount}건도 바꿀까요?'),
+        content: Text(
+          '바꿀 업종: ${saved.sameCategoryName ?? code}. 그 결제들이 든 달부터 혜택을 다시 계산해요.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('그대로 두기'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('바꾸기'),
+          ),
+        ],
+      ),
+    );
+    if (yes != true) return 0;
+    try {
+      return await widget.api.recategorize(_input.merchantName, code);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('같은 가게 결제는 바꾸지 못했어요. 기록에서 고쳐 주세요.')),
+        );
+      }
+      return 0;
     }
   }
 
@@ -377,6 +417,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final categories = await _categories;
     final methods = await _methods;
     if (!mounted) return;
+    final auto = _input.category == null ? d.category : null;
     _input
       ..category ??= d.category
       ..channel ??= d.channel
@@ -397,6 +438,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
         methods: methods,
       ),
     );
+    // 시트를 열기만 하고 업종을 그대로 두면 고른 것으로 보내지 않는다. 가게 기억과 같은 가게 묻기는 사용자가 고른 업종만
+    // 본다. 작업 016 단계 2~4 검토 낮음 7
+    if (auto != null && _input.category == auto) _input.category = null;
     _refresh();
   }
 

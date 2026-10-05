@@ -20,6 +20,7 @@ const tables = {
   'app_state',
   // 카드 규칙 파일. 작업 014 설계 2절
   'catalog_card_files',
+  'merchant_categories',
 };
 
 Set<String> tablesIn(Database db) => {

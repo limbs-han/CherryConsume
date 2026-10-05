@@ -73,31 +73,86 @@ const draftId = '~draft';
 /// 별칭 비교 값. 카탈로그 검사의 별칭 겹침 검사와 같다. 서버 `catalog_sync.py`의 alias_key
 String aliasKey(String alias) => alias.replaceAll(' ', '').toLowerCase();
 
-Map<String, String> aliasIndex(Catalog catalog) => {
-  for (final m in catalog.merchants.values)
-    for (final a in m.aliases) aliasKey(a): m.key,
-};
+/// 맞추거나 열쇠를 만들기 전에 뺄 괄호. 영문만 든 괄호와 회사 표시다. "씨유(CU)", "(주)". 다른 괄호 안은 가게 이름일
+/// 수 있어 남긴다. "네이버페이(스타벅스)", "이마트(트레이더스)월계점". 작업 016 단계 1 검토 낮음 6
+final _noise = RegExp(r'\([A-Za-z0-9 &.\-]*\)|\((주|유|사|재)\)|㈜');
+
+/// 같은 가게를 알아보는 열쇠. 영문 괄호와 회사 표시를 빼고, 괄호 글자와 띄어쓰기를 빼고, 영문은 소문자다. "씨유(CU)
+/// 가게점"과 "씨유가게점"은 같은 가게고, "네이버페이(꽃집)"과 "네이버페이(치킨집)"은 다른 가게다. 작업 016 설계 1절
+String nameKey(String name) => name
+    .replaceAll(_noise, '')
+    .replaceAll(RegExp(r'[\s()\[\]]'), '')
+    .toLowerCase();
+
+/// 붙여 쓴 지점 이름을 맞출 업종. 지점이 많고 이름 뒤에 다른 낱말이 붙는 일이 적다. 2026-10-05 사용자가 골랐다
+const _branchy = {'convenience', 'cafe'};
+
+/// 흔한 낱말과 같은 별칭. 붙여 쓴 이름으로는 맞추지 않는다. "커피빈스강남점"은 동네 카페다. 작업 016 단계 1 검토 중간 4
+/// ponytail: 카탈로그를 사람이 보고 넣는다. 가맹점이 늘면 카탈로그 칸으로 옮긴다
+const _common = {'커피빈'};
+
+/// 가게 이름 찾기 표. names는 별칭에서 가맹점으로, glued는 붙여 쓴 지점 이름을 맞출 편의점과 카페의 별칭과 공식
+/// 이름이다. 편의점과 카페는 공식 이름도 별칭처럼 맞춘다. CU의 별칭에 "CU"가 없다. 다른 업종의 공식 이름은 "KT",
+/// "FLO"처럼 흔한 낱말과 겹쳐 "KT 대리점"이 통신요금 혜택에 맞아 넣지 않는다. 작업 016 설계 2절, 단계 1 검토 높음 1
+typedef MerchantIndex = ({
+  Map<String, String> names,
+  Map<String, String> glued,
+});
+
+MerchantIndex aliasIndex(Catalog catalog) {
+  final ms = catalog.merchants.values;
+  bool branchy(Merchant m) => _branchy.contains(m.category.split('.').first);
+  return (
+    // 공식 이름은 다른 가맹점의 별칭과 겹치면 별칭을 쓴다. 뒤에 넣은 별칭이 앞의 이름을 덮는다
+    names: {
+      for (final m in ms)
+        if (branchy(m)) aliasKey(m.name): m.key,
+      for (final m in ms)
+        for (final a in m.aliases) aliasKey(a): m.key,
+    },
+    glued: {
+      for (final m in ms)
+        if (branchy(m))
+          for (final a in [m.name, ...m.aliases])
+            if (!_common.contains(a)) aliasKey(a): m.key,
+    },
+  );
+}
+
+/// 붙여 쓴 지점 이름의 나머지. 한글 세 글자 이상이고 "점"으로 끝난다
+final _branch = RegExp(r'^[가-힣]{2,}점$');
 
 /// 가게 이름의 가맹점. E15
 ///
 /// 앞에서부터 띄어 쓴 낱말 몇 개를 이은 것이 별칭과 같으면 맞는 것으로 보고 가장 긴 별칭을 고른다.
 /// "스타벅스 역삼점", "GS25 테헤란점", "LOTTE MART 잠실점"은 맞는다. "롯데하이마트 강남점", "멜론빵 전문점",
 /// "이마트트레이더스 월계점"처럼 별칭 뒤에 글자가 붙은 낱말은 맞지 않는다. 2026-10-01 위험 검토 두 번
-/// 붙여 쓴 "스타벅스역삼점"도 맞지 않아 사용자가 업종을 고른다. 엉뚱한 가맹점의 혜택으로 저장되는 것보다 낫다. E16
-String? matchMerchant(Map<String, String> index, String? name) {
+/// 붙여 쓴 "롯데마트잠실점"도 맞지 않아 사용자가 업종을 고른다. 엉뚱한 가맹점의 혜택으로 저장되는 것보다 낫다. E16
+///
+/// 영문 괄호와 회사 표시는 띄어쓰기로 보고 맞춘다. "씨유(CU) 가게점"은 "씨유 가게점"이다. 편의점과 카페는 첫 낱말에
+/// 지점 이름을 붙여 쓴 "세븐일레븐가게점", "스타벅스역삼점"도 맞는다. 나머지는 한글 세 글자 이상이고 "점"으로
+/// 끝나야 한다. "CUBE점", "CU-BE점", "스타벅스점"은 맞지 않는다. 2026-10-05 사용자가 편의점과 카페만 골랐다. 작업 016
+/// 설계 2절, 단계 1 검토 중간 3, 낮음 5
+String? matchMerchant(MerchantIndex index, String? name) {
   final words = (name ?? '')
+      .replaceAll(_noise, ' ')
       .split(RegExp(r'\s+'))
       .where((w) => w.isNotEmpty)
       .toList();
   final prefixes = {
     for (var k = 1; k <= words.length; k++) aliasKey(words.take(k).join()),
   };
-  final hits = [
-    for (final a in prefixes)
-      if (index.containsKey(a)) a,
-  ];
-  if (hits.isEmpty) return null;
-  return index[hits.reduce((a, b) => b.length > a.length ? b : a)];
+  String? longest(Iterable<String> keys) =>
+      keys.isEmpty ? null : keys.reduce((a, b) => b.length > a.length ? b : a);
+  final hit = longest(prefixes.where(index.names.containsKey));
+  if (hit != null) return index.names[hit];
+  if (words.isEmpty) return null;
+  final first = aliasKey(words.first);
+  final glued = longest([
+    for (final a in index.glued.keys)
+      if (first.startsWith(a) && _branch.hasMatch(first.substring(a.length))) a,
+  ]);
+  return glued == null ? null : index.glued[glued];
 }
 
 DateTime _month(Payment p) => monthOf(localDay(p.paidAt));

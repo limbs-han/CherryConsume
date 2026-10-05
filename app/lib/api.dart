@@ -502,11 +502,18 @@ class Saved {
       askChildren = [
         for (final c in j['ask_category']?['children'] ?? const [])
           (code: c['code'] as String, name: c['name'] as String),
-      ];
+      ],
+      sameCount = j['same_name']?['count'] ?? 0,
+      sameCategory = j['same_name']?['category'],
+      sameCategoryName = j['same_name']?['category_name'];
   final String id;
   final int repriced;
   final String? askParent;
   final List<({String code, String name})> askChildren;
+
+  /// 고른 업종과 업종이 다른 같은 가게 결제 수와 고른 업종. 함께 바꿀지 묻는다. 작업 016 설계 5절
+  final int sameCount;
+  final String? sameCategory, sameCategoryName;
 }
 
 /// 폰 안 저장소를 부르는 앱의 입구. 화면은 서버를 부르던 때와 같은 메서드를 부른다. 작업 006 설계 4절
@@ -609,6 +616,14 @@ class Api {
   /// 고치고 혜택이 바뀐 다른 결제 수와 자식 업종 질문을 돌려준다. E54, E47
   Future<Saved> editPayment(String id, PaymentInput input) async =>
       Saved(records_routes.edit(store, id, input.toJson()));
+
+  /// 같은 가게 이름의 결제 업종을 한꺼번에 바꾸고 혜택이 바뀐 결제 수를 돌려준다. 작업 016 설계 5절
+  Future<int> recategorize(String merchantName, String category) async =>
+      records_routes.recategorize(store, {
+            'merchant_name': merchantName,
+            'category': category,
+          })['repriced']
+          as int;
 
   /// 카드 사실, 옵션, 쓰기 시작한 날을 답하고 혜택이 바뀐 결제 수를 돌려준다. E56
   Future<int> answerCard(String id, Map<String, Object?> body) async =>

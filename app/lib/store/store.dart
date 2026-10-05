@@ -27,7 +27,7 @@ class Store {
   DateTime today() => localDay(clock());
 
   /// 가게 이름 별칭에서 가맹점으로. 서버 `main.py`의 app.state.aliases
-  late final Map<String, String> aliases = aliasIndex(catalog);
+  late final MerchantIndex aliases = aliasIndex(catalog);
 
   /// 업종 code에서 이름으로. 자식 업종은 부모 code를 붙인 code다
   late final Map<String, String> categoryNames = {

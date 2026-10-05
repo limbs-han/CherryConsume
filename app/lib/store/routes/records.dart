@@ -324,6 +324,14 @@ Json edit(Store s, String tid, Json raw) {
       }
       rethrow;
     }
+    // 업종을 고쳤으면 가게 이름으로 기억한다. 다른 칸만 고쳤으면 그대로 둔다. 가게 이름도 바꿨으면 새 이름의 자동
+    // 업종과 견준다. 작업 016 설계 3절, 단계 2~4 검토 낮음 6
+    final before =
+        shopKey(s, old['merchant_name'] as String?) ==
+            shopKey(s, body.merchantName)
+        ? old['category_code'] as String?
+        : autoCategory(s, body.merchantName, f.merchant);
+    rememberCategory(s, body.merchantName, body.category, before);
     var repriced = 0;
     for (final MapEntry(key: cid, value: res) in results.entries) {
       final before = {for (final q in loaded[cid]!) q.id: q};
@@ -342,7 +350,71 @@ Json edit(Store s, String tid, Json raw) {
       'value': result.value,
       'repriced': repriced,
       'ask_category': askCategory(s, result),
+      'same_name': sameNameAsk(
+        s,
+        body.merchantName,
+        body.category,
+        before,
+        tid,
+      ),
     };
+  });
+}
+
+/// 같은 가게 이름의 결제 업종을 한꺼번에 바꾼다. 업종을 고친 뒤 사용자가 함께 바꾸기를 고르면 부른다. 카드마다 바꾼
+/// 결제가 든 가장 이른 달부터 다시 계산한다. 업종이 실적 제외와 혜택 대상을 정해 그 뒤 달이 모두 바뀔 수 있다.
+/// 채널은 그대로 둔다. 작업 016 설계 5절
+Json recategorize(Store s, Json raw) {
+  final name = raw['merchant_name'], code = raw['category'];
+  if (name is! String ||
+      shopKey(s, name).isEmpty ||
+      code is! String ||
+      !s.catalog.categories.contains(code)) {
+    throw ApiError(422, '가게 이름이나 업종이 틀렸다');
+  }
+  return write(s, () {
+    final found = sameName(s, name, code);
+    final byCard = <String, List<Map<String, Object?>>>{};
+    for (final r in found) {
+      byCard.putIfAbsent(r['user_card_id'] as String, () => []).add(r);
+    }
+    if (byCard.isEmpty) return {'changed': 0, 'repriced': 0};
+    final engine = s.engine, now = s.clock();
+    final rows = lockCards(s, byCard.keys.toSet());
+    final loaded = loadPayments(s, byCard.keys.toList());
+    // 업종을 바꾼 결제는 고치기처럼 지금 개정으로 계산하고 개정 칸을 맞춘다. 작업 016 단계 2~4 검토 낮음 9
+    for (final r in found) {
+      final (from, sha) = revisionFor(
+        s,
+        rows[r['user_card_id']]!['card_id'] as String,
+        fromMs(r['paid_at'] as int),
+      );
+      s.db.execute(
+        'update transactions set category_code = ?, revision_from = ?, revision_sha = ?, updated_at = ? '
+        'where id = ?',
+        [code, from, sha, ms(now), r['id']],
+      );
+    }
+    var repriced = 0;
+    for (final MapEntry(key: uid, value: list) in byCard.entries) {
+      final ids = {for (final r in list) r['id']};
+      final payments = [
+        for (final q in loaded[uid]!)
+          ids.contains(q.id) ? q.copyWith(category: code) : q,
+      ];
+      final start = list
+          .map((r) => monthOf(localDay(fromMs(r['paid_at'] as int))))
+          .reduce((a, b) => a.isBefore(b) ? a : b);
+      repriced += store(
+        s,
+        rows[uid]!['card_id'] as String,
+        repricedFrom(engine, engineCard(rows[uid]!), payments, start, now),
+        {for (final q in loaded[uid]!) q.id: q},
+        ids.cast<String>(),
+        now,
+      );
+    }
+    return {'changed': found.length, 'repriced': repriced};
   });
 }
 

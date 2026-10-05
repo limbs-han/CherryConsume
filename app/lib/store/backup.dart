@@ -26,10 +26,21 @@ const maxBytes = 20000000;
 /// 사용자 표가 처음 생긴 표 정의 번호. 이보다 낮은 파일에는 기록이 없다
 const firstSchema = 2;
 
-/// 기록 표가 마지막으로 바뀐 표 정의 번호. 이 번호 이상의 파일은 기록 표와 칸이 지금과 같아 빠지면 깨진 파일이다. 표 정의
-/// 3번은 기록이 아닌 앱 상태 표만, 4번은 카드 규칙 파일 표만 더했다. 기록 표를 바꾸는 번호를 더하면 이 값도 올린다.
-/// 작업 012 위험 검토 중간 1, 작업 014 단계 3
-const recordSchema = 2;
+/// 기록 표마다 표나 칸이 마지막으로 바뀐 표 정의 번호. 이 번호 이상의 파일은 그 표와 칸이 지금과 같아 빠지면 깨진
+/// 파일이다. 더 낮은 파일에는 그 표나 칸이 없을 수 있다. 표 정의 3번은 기록이 아닌 앱 상태 표만, 4번은 카드 규칙 파일
+/// 표만 더했다. 5번은 가게 이름별 업종 표를 더했다. 기록 표나 칸을 바꾸면 그 표의 번호를 올린다. 작업 012 위험 검토
+/// 중간 1, 작업 014 단계 3, 작업 016 설계 6절
+const changedAt = {
+  'user_cards': 2,
+  'import_batches': 2,
+  'transactions': 2,
+  'transaction_benefits': 2,
+  'import_cancels': 2,
+  'user_card_options': 2,
+  'user_card_facts': 2,
+  'user_facts': 2,
+  'merchant_categories': 5,
+};
 
 /// 담는 표. 외래 키를 지키는 넣는 순서다. 받아 둔 카탈로그와 엑셀 열 짝은 담지 않는다. 열 짝 지문은 머리 줄의
 /// sha256뿐이라 파일을 가진 사람이 머리 줄 글자를 대입해 되찾을 수 있다. 2026-10-03 사용자가 정했다
@@ -42,6 +53,9 @@ const tables = [
   'user_card_options',
   'user_card_facts',
   'user_facts',
+  // 사용자가 고른 가게 이름별 업종. 2026-10-05 사용자가 담기로 했다. 결제의 가게 이름이 이미 들어 새로 드러나는 것은
+  // 없다. 작업 016 설계 6절
+  'merchant_categories',
 ];
 
 /// 보유 카드나 결제나 답이 하나라도 있는가. 있으면 가져오기 전에 바꿀지 묻는다
@@ -121,10 +135,10 @@ Map<String, int> importAll(Store s, Uint8List data) {
   if (schema > migrations.length) throw newer;
   // 표 정의는 칸과 표를 더하기만 한다. 옛 번호 파일은 표나 칸이 빠질 수 있고 표 정의의 기본값이 된다. 같은 번호
   // 파일에서 빠졌으면 깨진 파일이다. 혜택 줄이 빠지면 0원으로 굳고 지운 시각 칸이 빠지면 지운 결제가 살아난다
-  final exact = schema >= recordSchema;
+  bool exact(String t) => schema >= changedAt[t]!;
   final given = json['tables'] as Map;
   if (given.keys.any((k) => !tables.contains(k)) ||
-      (exact && !tables.every(given.containsKey))) {
+      tables.any((t) => exact(t) && !given.containsKey(t))) {
     throw notOurs;
   }
   final rows = <String, List<Map<String, Object?>>>{};
@@ -140,7 +154,7 @@ Map<String, int> importAll(Store s, Uint8List data) {
         list is! List ||
         columns.any((c) => c is! String || !known.contains(c)) ||
         columns.toSet().length != columns.length ||
-        (exact && columns.length != known.length) ||
+        (exact(t) && columns.length != known.length) ||
         list.any((r) => r is! List || r.length != columns.length)) {
       throw notOurs;
     }
@@ -170,6 +184,11 @@ Map<String, int> importAll(Store s, Uint8List data) {
       ) ||
       !inCatalog('transactions', 'merchant_key', cat.merchants.containsKey) ||
       !inCatalog('transactions', 'category_code', cat.categories.contains) ||
+      !inCatalog(
+        'merchant_categories',
+        'category_code',
+        cat.categories.contains,
+      ) ||
       !inCatalog(
         'transactions',
         'payment_method',

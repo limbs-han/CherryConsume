@@ -7,6 +7,7 @@
 import 'dart:convert';
 
 import 'package:cherry_consume/catalog/models.dart';
+import 'package:cherry_consume/store/payments.dart' show nameKey;
 import 'package:cherry_consume/store/routes/answers.dart';
 import 'package:cherry_consume/store/routes/catalog.dart';
 import 'package:cherry_consume/store/routes/me.dart';
@@ -348,7 +349,24 @@ void main() {
       'STEPS 댄스',
       'desktop shop',
       'Arnold',
-      '스타벅스역삼점',
+      // 붙여 쓴 지점 이름은 편의점과 카페만 맞춘다. 별칭 끝과 나머지 처음이 둘 다 영문이면 맞지 않는다. 작업 016
+      '멜론빵전문점',
+      '이마트가게점',
+      'CUBE점',
+      '세븐일레븐가게',
+      // 작업 016 단계 1 검토. 공식 이름이 흔한 낱말과 겹치는 KT, FLO, 기호가 낀 이름, 두 낱말에 걸친 이름, 흔한 말과
+      // 같은 별칭, 나머지가 너무 짧은 이름, 닫히지 않은 괄호, 가게 이름이 든 괄호
+      'KT 대리점',
+      'FLO 플라워',
+      'CU-BE점',
+      'CU_BE점',
+      '커피 빈스 강남점',
+      '커피빈스강남점',
+      'CU점',
+      '스타벅스점',
+      '아티제과점',
+      '씨유(CU 가게점',
+      '이마트(트레이더스)월계점',
     ];
     for (final name in wrong) {
       expect(
@@ -368,6 +386,22 @@ void main() {
       '이마트트레이더스 월계점': 'traders',
       '쿠팡 플레이': 'coupang_play',
       '쿠팡플레이': 'coupang_play',
+      // 작업 016 설계 2절. 괄호를 빼고, 공식 이름도 맞추고, 편의점과 카페는 붙여 쓴 지점 이름도 맞춘다. 2026-10-01에는
+      // 스타벅스역삼점이 맞지 않게 정했으나 2026-10-05 사용자가 편의점과 카페를 맞추기로 했다
+      '씨유(CU) 가게점': 'cu',
+      '씨유(CU)가게점': 'cu',
+      'CU 가게점': 'cu',
+      'CU가게점': 'cu',
+      '지에스(GS)25 가게점': 'gs25',
+      'GS25가게점': 'gs25',
+      '세븐일레븐가게점': 'seven_eleven',
+      '스타벅스역삼점': 'starbucks',
+      '투썸플레이스가게점': 'twosome',
+      '(주)우아한형제들': 'baemin',
+      // 간편결제 이름은 떼고 나머지로 찾는다. 가져오기와 같다. 작업 016 단계 2~4 검토 중간 2
+      '네이버페이(스타벅스)': 'starbucks',
+      '네이버페이(CGV)': 'cgv',
+      '네이버페이 스타벅스 역삼점': 'starbucks',
     };
     for (final MapEntry(key: name, value: key) in right.entries) {
       expect(draft(s, {'merchant_name': name})['merchant'], key, reason: name);
@@ -792,5 +826,35 @@ void main() {
       860,
     );
     expect(benefitTotal(other), 1290);
+  });
+
+  test('같은 가게는 띄어쓰기, 괄호 안, 영문 대소문자가 달라도 같은 열쇠다', () {
+    // 작업 016 설계 1절
+    expect(
+      {nameKey('씨유(CU) 가게점'), nameKey('씨유 가게점'), nameKey('씨유가게점')},
+      {'씨유가게점'},
+    );
+    expect(nameKey('(주)Cafe [2층] Mellow'), 'cafe2층mellow');
+    expect(nameKey('씨유 가게점'), isNot(nameKey('씨유 다른점')));
+    // 영문 괄호와 회사 표시만 뺀다. 다른 괄호 안은 가게 이름이라 남긴다. 작업 016 단계 1 검토
+    expect(nameKey('네이버페이(꽃집)'), isNot(nameKey('네이버페이(치킨집)')));
+    expect(nameKey('스타벅스(역삼점)'), isNot(nameKey('스타벅스(강남점)')));
+  });
+
+  test('별칭과 공식 이름 하나는 가맹점 하나에만 걸린다', () {
+    // 작업 016 단계 1 검토 낮음 8. 겹치면 카탈로그 순서에 따라 다른 가맹점에 맞는다
+    final (:s, clock: _) = fresh();
+    final owners = <String, Set<String>>{};
+    for (final m in s.catalog.merchants.values) {
+      for (final a in {m.name, ...m.aliases}) {
+        owners
+            .putIfAbsent(a.replaceAll(' ', '').toLowerCase(), () => {})
+            .add(m.key);
+      }
+    }
+    expect({
+      for (final MapEntry(:key, :value) in owners.entries)
+        if (value.length > 1) key: value,
+    }, isEmpty);
   });
 }

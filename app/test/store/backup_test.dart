@@ -422,6 +422,8 @@ void main() {
           'answered_at',
         ],
         'user_facts': ['key', 'effective_from', 'value', 'answered_at'],
+        // 작업 016 설계 6절. 가게 이름 열쇠와 고른 업종이다
+        'merchant_categories': ['name_key', 'category_code', 'updated_at'],
       },
     );
   });
@@ -454,5 +456,55 @@ void main() {
             as String;
     final id = pay(t, card, 1000, 'GS25')['id'] as String;
     expect(id.compareTo(ahead), greaterThan(0));
+  });
+
+  test('기억한 가게 업종을 내보내고 가져오며, 표 정의 4번 파일은 그 표 없이도 받는다', () {
+    // 작업 016 설계 6절. 2026-10-05 사용자가 담기로 했다
+    final s = sample();
+    s.db.execute(
+      "insert into merchant_categories (name_key, category_code, updated_at) values ('동네국밥집', 'restaurant', 1)",
+    );
+    final file = exportAll(s);
+    final (s: t, clock: _) = fresh();
+    importAll(t, bytes(file));
+    expect(rowsOf(t, 'merchant_categories'), rowsOf(s, 'merchant_categories'));
+    // 옛 판 파일에는 이 표가 없다
+    final (s: u, clock: _) = fresh();
+    importAll(
+      u,
+      bytes(
+        edited(file, (j) {
+          j['schema'] = 4;
+          (j['tables'] as Map).remove('merchant_categories');
+        }),
+      ),
+    );
+    expect(rowsOf(u, 'merchant_categories'), isEmpty);
+    expect(rowsOf(u, 'transactions'), rowsOf(s, 'transactions'));
+    // 5번 파일에서 빠지면 깨진 파일이다. 카탈로그에 없는 업종도 받지 않는다
+    expect(
+      () => importAll(
+        fresh().s,
+        bytes(
+          edited(
+            file,
+            (j) => (j['tables'] as Map).remove('merchant_categories'),
+          ),
+        ),
+      ),
+      throwsA(isA<ApiError>()),
+    );
+    expect(
+      () => importAll(
+        fresh().s,
+        bytes(
+          edited(
+            file,
+            (j) => put(j, 'merchant_categories', 0, 'category_code', 'nope'),
+          ),
+        ),
+      ),
+      throwsA(isA<ApiError>()),
+    );
   });
 }

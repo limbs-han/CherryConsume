@@ -14,6 +14,7 @@ import '../db.dart';
 import '../payments.dart';
 import '../store.dart';
 import 'catalog.dart';
+import 'imports.dart' show methodOf;
 import 'me.dart';
 
 /// 이 업종은 온라인으로 채운다. 앱스토어처럼 업종이 기타인 온라인 가맹점은 사용자가 바꾼다
@@ -135,9 +136,10 @@ Filled filled(Store s, PaymentBody body) {
   if (paidAt.isAfter(now.add(const Duration(days: 1)))) {
     throw _bad('결제 시각이 지금보다 하루 넘게 뒤다');
   }
-  final merchant = matchMerchant(s.aliases, body.merchantName);
+  final merchant = merchantOf(s, body.merchantName);
   final m = merchant == null ? null : cat.merchants[merchant]!;
-  final category = body.category ?? m?.category;
+  final category =
+      body.category ?? autoCategory(s, body.merchantName, merchant);
   // 청구 방식은 저장할 때 정해 둔다. 카탈로그의 가맹점 청구 방식이 바뀌어도 저장한 결제는 그대로다. E18
   final billing = body.billing ?? m?.billing;
   final channel =
@@ -155,6 +157,109 @@ Filled filled(Store s, PaymentBody body) {
     paidAt: paidAt,
     billing: billing,
   );
+}
+
+/// 가게 이름에서 간편결제 이름을 뗀 가게. 가맹점 찾기와 가게 기억이 모두 이것으로 한다. 가져오기는 원래 이렇게
+/// 찾았는데 직접 넣기와 기록 고치기는 이름 전체로 찾아, 가져올 때 CGV이던 "네이버페이(CGV)" 결제를 고치면 네이버페이가
+/// 됐다. 작업 016 단계 2~4 검토 중간 2
+String shopOf(Store s, String name) => methodOf(s.catalog, name).$2;
+
+/// 가게 이름의 카탈로그 가맹점. E15
+String? merchantOf(Store s, String? name) =>
+    name == null ? null : matchMerchant(s.aliases, shopOf(s, name));
+
+/// 가게 기억의 열쇠. "네이버페이(CGV)"와 "네이버페이(KFC)"는 다른 가게고 "네이버페이 동네국밥집"과 "동네국밥집"은 같은
+/// 가게다. 작업 016 설계 1절, 단계 2~4 검토 중간 1
+String shopKey(Store s, String? name) =>
+    name == null ? '' : nameKey(shopOf(s, name));
+
+/// 부모 업종을 고른 것이 이미 그 자식 업종인 것을 덮지 않는다. "음식점"을 고르면 "일반음식점"인 결제는 그대로다. 덮으면
+/// 자식 업종에만 주는 혜택이 빠진다. E47, 작업 016 단계 2~4 검토 중간 3
+bool _covers(String chosen, String? had) =>
+    had != null && had.startsWith('$chosen.');
+
+/// 사용자가 고르지 않았을 때의 업종. 기억한 가게 이름의 업종이 카탈로그 가맹점의 업종보다 먼저다. 작업 016 설계 4절
+String? autoCategory(Store s, String? name, String? merchant) =>
+    rememberedCategory(s, name) ??
+    (merchant == null ? null : s.catalog.merchants[merchant]!.category);
+
+/// 사용자가 고른 가게 이름의 업종. 지금 카탈로그에 없는 업종은 쓰지 않는다. 작업 016 설계 3절
+String? rememberedCategory(Store s, String? name) {
+  final key = shopKey(s, name);
+  if (key.isEmpty) return null;
+  final found = s.db.select(
+    'select category_code from merchant_categories where name_key = ?',
+    [key],
+  );
+  final code = found.isEmpty ? null : found.first['category_code'] as String;
+  return code != null && s.catalog.categories.contains(code) ? code : null;
+}
+
+/// 사용자가 결제에 고른 업종을 가게 이름으로 기억한다. 고르기 전 업종 before와 같거나 그 부모면 그대로 둔다. 카탈로그
+/// 가맹점의 업종과 같으면 기억을 지워 카탈로그가 바뀌어도 카탈로그를 따른다. 작업 016 설계 3절
+void rememberCategory(Store s, String? name, String? chosen, String? before) {
+  final key = shopKey(s, name);
+  if (key.isEmpty || chosen == null || chosen == before) return;
+  if (_covers(chosen, before)) return;
+  final merchant = merchantOf(s, name);
+  if (merchant != null && s.catalog.merchants[merchant]!.category == chosen) {
+    s.db.execute('delete from merchant_categories where name_key = ?', [key]);
+    return;
+  }
+  s.db.execute(
+    'insert into merchant_categories (name_key, category_code, updated_at) values (?, ?, ?) '
+    'on conflict (name_key) do update set category_code = excluded.category_code, '
+    'updated_at = excluded.updated_at',
+    [key, chosen, ms(s.clock())],
+  );
+}
+
+/// 같은 가게 이름의 다른 결제 가운데 업종이 code와 다른 결제. 지운 결제와 이미 code의 자식 업종인 결제는 뺀다. 작업
+/// 016 설계 5절
+List<Map<String, Object?>> sameName(
+  Store s,
+  String name,
+  String code, [
+  String? except,
+]) {
+  final key = shopKey(s, name);
+  return [
+    for (final r in s.db.select(
+      'select id, user_card_id, merchant_name, category_code, paid_at from transactions '
+      'where deleted_at is null and merchant_name is not null',
+    ))
+      if (r['id'] != except &&
+          r['category_code'] != code &&
+          !_covers(code, r['category_code'] as String?) &&
+          shopKey(s, r['merchant_name'] as String) == key)
+        {for (final c in r.keys) c: r[c]},
+  ];
+}
+
+/// 사용자가 업종을 골라 바꿨을 때 같은 가게 결제 가운데 업종이 다른 것의 건수. 화면이 함께 바꿀지 묻는다. 고르지
+/// 않았거나 그대로거나 같은 이름 결제가 없으면 null이다. 작업 016 설계 5절
+Json? sameNameAsk(
+  Store s,
+  String? name,
+  String? chosen,
+  String? before,
+  String except,
+) {
+  if (name == null ||
+      shopKey(s, name).isEmpty ||
+      chosen == null ||
+      chosen == before ||
+      _covers(chosen, before)) {
+    return null;
+  }
+  final n = sameName(s, name, chosen, except).length;
+  return n == 0
+      ? null
+      : {
+          'count': n,
+          'category': chosen,
+          'category_name': s.categoryNames[chosen],
+        };
 }
 
 /// 해지하지 않은 보유 카드와 그 답
@@ -419,6 +524,9 @@ Json save(Store s, Json raw) {
         ms(now),
       ],
     );
+    // 업종 고르기로 고른 업종이 자동 업종과 다르면 가게 이름으로 기억한다. 작업 016 설계 3절
+    final auto = autoCategory(s, body.merchantName, f.merchant);
+    rememberCategory(s, body.merchantName, body.category, auto);
     // 다시 계산한 결제 가운데 혜택이 바뀐 것만 저장된 혜택과 계산에 쓴 개정을 바꾼다. E52, E53
     final before = {for (final q in history) q.id: q};
     List<AppliedBenefit> byKey(List<AppliedBenefit> bs) =>
@@ -463,6 +571,7 @@ Json save(Store s, Json raw) {
       'repriced': changed.length,
       ...described(s, row['card_id'] as String, p.paidAt, result),
       'ask_category': askCategory(s, result),
+      'same_name': sameNameAsk(s, body.merchantName, body.category, auto, pid),
     };
   });
 }
