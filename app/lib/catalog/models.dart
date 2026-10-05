@@ -6,6 +6,9 @@ library;
 /// 이 앱이 읽는 카탈로그 JSON의 형식 번호. 이보다 큰 파일은 쓰지 않는다
 const catalogSchema = 1;
 
+/// 목록 파일과 카드별 규칙 파일의 형식 번호. 작업 014 설계 1절
+const splitSchema = 2;
+
 /// 날짜는 UTC 자정의 DateTime으로 둔다. 시간대 없이 날짜끼리 비교하고 요일을 센다
 DateTime day(int y, int m, int d) => DateTime.utc(y, m, d);
 
@@ -435,8 +438,46 @@ class OpenQuestion {
   final Object? assumed;
 }
 
+/// 카드 규칙 파일 하나. 개정과 확인 필요 항목이다. 작업 014 설계 1절
+class CardRules {
+  CardRules.fromJson(Json j)
+    : openQuestions = _list(j['open_questions'], OpenQuestion.fromJson),
+      revisions = _list(j['revisions'], Revision.fromJson);
+
+  /// 카드 하나의 규칙 파일. 형식 번호와 카드 id가 맞아야 읽는다
+  factory CardRules.fromFile(Json j, String id) {
+    if (j['schema'] != splitSchema || j['id'] != id) {
+      throw FormatException('$id의 규칙 파일이 아니다');
+    }
+    return CardRules.fromJson(j);
+  }
+  final List<OpenQuestion> openQuestions;
+
+  /// 시행일 오름차순
+  final List<Revision> revisions;
+}
+
+/// 목록 파일에 든 개정 머리. 규칙 파일을 열지 않고 그날의 개정과 실적 구간을 고른다. 작업 014 설계 4절
+class RevisionHead {
+  RevisionHead(this.effectiveFrom, this.effectiveFromEstimated, this.tiers);
+  RevisionHead.fromJson(Json j)
+    : effectiveFrom = parseDay(j['effective_from']),
+      effectiveFromEstimated = j['effective_from_estimated'] ?? false,
+      tiers = [for (final t in j['tiers'] as List) t as int];
+  final DateTime effectiveFrom;
+  final bool effectiveFromEstimated;
+  final List<int> tiers;
+}
+
 class CatalogCard {
-  CatalogCard.fromJson(Json j)
+  /// 한 벌 JSON의 카드 줄. 규칙도 같이 읽는다
+  CatalogCard.fromJson(Json j) : this._(j, CardRules.fromJson(j), null);
+
+  /// 목록 파일의 카드 줄. 규칙은 [revisions]나 [openQuestions]를 처음 부를 때 load로 읽는다. 작업 014 설계 2절
+  CatalogCard.fromIndex(Json j, CardRules Function() load)
+    : this._(j, null, load);
+
+  CatalogCard._(Json j, this._rules, this._load)
     : id = j['id'],
       issuer = j['issuer'],
       name = j['name'],
@@ -448,8 +489,16 @@ class CatalogCard {
       statusSince = _day(j['status_since']),
       annualFees = _list(j['annual_fees'], AnnualFee.fromJson),
       checkedAt = parseDay(j['checked_at']),
-      openQuestions = _list(j['open_questions'], OpenQuestion.fromJson),
-      revisions = _list(j['revisions'], Revision.fromJson);
+      heads = _rules != null
+          ? [
+              for (final r in _rules.revisions)
+                RevisionHead(
+                  r.effectiveFrom,
+                  r.effectiveFromEstimated,
+                  r.rules.tiers,
+                ),
+            ]
+          : _list(j['revisions'], RevisionHead.fromJson);
   final String id, issuer, name, kind, status;
 
   /// 칩과 줄처럼 좁은 곳에 쓰는 이름. 없으면 [name]을 쓴다. 작업 011 설계 2.4
@@ -458,10 +507,36 @@ class CatalogCard {
   final DateTime? statusSince;
   final List<AnnualFee> annualFees;
   final DateTime checkedAt;
-  final List<OpenQuestion> openQuestions;
+
+  /// 시행일 오름차순. [revisions]와 같은 차례다
+  final List<RevisionHead> heads;
+
+  CardRules? _rules;
+  final CardRules Function()? _load;
+  CardRules get _loaded => _rules ??= _checked(_load!());
+
+  /// 목록의 개정 머리와 규칙 파일의 개정이 같은 차례인가. 다른 판끼리 묶이면 머리로 고른 차례가 다른 개정을 가리켜
+  /// 혜택이 조용히 틀린다. 작업 014 단계 2 위험 검토 중간 1
+  CardRules _checked(CardRules rules) {
+    final r = rules.revisions;
+    bool same(int i) {
+      final (a, h) = (r[i], heads[i]);
+      return a.effectiveFrom == h.effectiveFrom &&
+          a.effectiveFromEstimated == h.effectiveFromEstimated &&
+          a.rules.tiers.join(',') == h.tiers.join(',');
+    }
+
+    if (r.length != heads.length ||
+        !Iterable<int>.generate(r.length).every(same)) {
+      throw FormatException('$id의 규칙 파일이 목록과 다른 판이다');
+    }
+    return rules;
+  }
+
+  List<OpenQuestion> get openQuestions => _loaded.openQuestions;
 
   /// 시행일 오름차순
-  final List<Revision> revisions;
+  List<Revision> get revisions => _loaded.revisions;
 }
 
 // 공통 파일
@@ -546,10 +621,30 @@ class Catalog {
     if (schema is! int || schema > catalogSchema) {
       throw FormatException('카탈로그 형식 번호 $schema를 읽지 못한다');
     }
-    return Catalog._(j);
+    return Catalog._(j, CatalogCard.fromJson);
   }
 
-  Catalog._(Json j)
+  /// 목록 파일. 카드 규칙은 쓸 때 load(카드 id, 규칙 파일 지문)로 읽는다. 작업 014 설계 2절
+  factory Catalog.fromIndex(
+    Json j,
+    CardRules Function(String id, String sha256) load,
+  ) {
+    final schema = j['schema'];
+    if (schema is! int || schema != splitSchema) {
+      throw FormatException('목록 파일 형식 번호 $schema를 읽지 못한다');
+    }
+    // 칸이 빠진 목록은 깨진 파일이다. 청구 방식 업종이 비면 추천이 담을 수 없는 업종을 계산해 버린다. 단계 2 위험
+    // 검토 중간 2, 낮음 3
+    if (j['billing_bound'] is! List) {
+      throw const FormatException('목록 파일에 청구 방식 업종이 없다');
+    }
+    return Catalog._(j, (c) {
+      final id = c['id'] as String, sha = c['file_sha256'] as String;
+      return CatalogCard.fromIndex(c, () => load(id, sha));
+    }, billingBound: {..._strs(j['billing_bound'])});
+  }
+
+  Catalog._(Json j, CatalogCard Function(Json) card, {this.billingBound})
     : holidays = {for (final h in _strs(j['holidays'])) parseDay(h)},
       categoryTree = _list(j['categories'], Category.fromJson),
       merchants = {
@@ -568,9 +663,10 @@ class Catalog {
           m.key: m,
       },
       issuers = {for (final i in _list(j['issuers'], Issuer.fromJson)) i.id: i},
-      cards = {
-        for (final c in _list(j['cards'], CatalogCard.fromJson)) c.id: c,
-      };
+      cards = {for (final c in _list(j['cards'], card)) c.id: c};
+
+  /// 목록 파일이 적어 둔 청구 방식 조건의 대상 업종. 한 벌 JSON이면 null이고 추천이 모은다. 작업 014 설계 4절
+  final Set<String>? billingBound;
 
   /// 한국 공휴일. 대체공휴일과 선거일이 들어 있다
   final Set<DateTime> holidays;

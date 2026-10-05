@@ -782,7 +782,7 @@ List<Warn> notes(
   if (sentences.isNotEmpty) {
     out.add(Warn('check_conditions', data: {'sentences': sentences}));
   }
-  final assumed = ctx.assumed[card.cardId] ?? const {};
+  final assumed = ctx.assumedOf(card.cardId);
   final paths = [for (final o in got) ...?assumed[o.benefit.key]];
   if (paths.isNotEmpty) out.add(Warn('assumed_value', data: {'paths': paths}));
   if (!isFinal) {

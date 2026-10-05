@@ -373,7 +373,7 @@ Json cardDetail(Store s, String uid) {
     }
   }
   // 카드 전체 항목과 이번 달 받는 혜택의 항목을 센다. 안내가 "추정으로 계산해요"라 계산에 쓰는 것만 센다. 위험 검토 14번
-  final paths = engine.ctx.assumed[row['card_id']] ?? const {};
+  final paths = engine.ctx.assumedOf(row['card_id'] as String);
   final assumed = <String?>{
     null,
     ...available,

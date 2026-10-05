@@ -84,8 +84,11 @@ bool _inTier(Benefit b, Rules rules, int tier) {
   return lo <= tier && tier <= hi;
 }
 
-List<int> tiersShown(Revision? found) => [
-  for (final t in found?.rules.tiers ?? const <int>[])
+List<int> tiersShown(Revision? found) => shownTiers(found?.rules.tiers);
+
+/// 0원 구간을 뺀 실적 구간
+List<int> shownTiers(List<int>? tiers) => [
+  for (final t in tiers ?? const <int>[])
     if (t > 0) t,
 ];
 
@@ -120,7 +123,8 @@ List<Json> paymentMethods(Store s) => [
 ];
 
 List<Json> cards(Store s, {String q = '', String? issuer}) {
-  // 구간은 미리보기, 홈과 같게 이달 1일의 개정에서 읽는다. 엔진이 이달 구간을 그 개정으로 정한다
+  // 구간은 미리보기, 홈과 같게 이달 1일의 개정에서 읽는다. 엔진이 이달 구간을 그 개정으로 정한다. 규칙 파일을 열지
+  // 않게 목록의 개정 머리에서 읽는다. 작업 014 설계 4절
   final month = monthOf(s.today()), want = _key(q);
   final out = <Json>[];
   for (final c in s.catalog.cards.values) {
@@ -150,7 +154,7 @@ List<Json> cards(Store s, {String q = '', String? issuer}) {
       'issuer_name': issuerName,
       'kind': c.kind,
       'annual_fee': fees.isEmpty ? null : fees.reduce((a, b) => a < b ? a : b),
-      'tiers': tiersShown(s.engine.ctx.rulesOn(c.id, month)),
+      'tiers': shownTiers(s.engine.ctx.headOn(c.id, month)?.tiers),
     });
   }
   return out..sort((a, b) {

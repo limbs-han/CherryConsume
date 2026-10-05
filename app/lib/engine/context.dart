@@ -47,30 +47,45 @@ class Ctx {
     }
     final ref = cat.reference[fuelPriceKey];
     fuelPrice = ref != null ? frac(ref.value) : null;
-    for (final MapEntry(key: cid, value: card) in cat.cards.entries) {
-      final byBenefit = <String?, List<String>>{};
-      for (final q in card.openQuestions) {
-        final m = _benefitInPath.firstMatch(q.path);
-        byBenefit.putIfAbsent(m?.group(1), () => []).add(q.path);
-      }
-      assumed[cid] = byBenefit;
-    }
   }
 
   final Catalog catalog;
   late final Map<String, Frac> pointValue;
   final Map<String, List<String>> children = {};
   late final Frac? fuelPrice;
-  final Map<String, Map<String?, List<String>>> assumed = {};
+  final Map<String, Map<String?, List<String>>> _assumed = {};
+
+  /// 카드의 확인 필요 항목 경로를 혜택 key마다 모은 것. 카드 밖의 항목은 null 키다. 규칙 파일을 처음 쓸 때 만든다.
+  /// 작업 014 설계 2절
+  Map<String?, List<String>> assumedOf(String cardId) =>
+      _assumed[cardId] ??= () {
+        final byBenefit = <String?, List<String>>{};
+        for (final q in catalog.cards[cardId]?.openQuestions ?? const []) {
+          final m = _benefitInPath.firstMatch(q.path);
+          byBenefit.putIfAbsent(m?.group(1), () => []).add(q.path);
+        }
+        return byBenefit;
+      }();
+
+  /// 그날의 개정 차례. 시행일이 그날 이하인 마지막 개정이고, 없으면 첫 개정이 추정 시행일일 때만 그것이다
+  int? _on(String cardId, DateTime day) {
+    final heads = catalog.cards[cardId]?.heads;
+    if (heads == null || heads.isEmpty) return null;
+    final i = heads.lastIndexWhere((h) => !h.effectiveFrom.isAfter(day));
+    if (i >= 0) return i;
+    return heads.first.effectiveFromEstimated ? 0 : null;
+  }
+
+  /// 그날의 개정 머리. 카드 추가 검색이 규칙 파일을 열지 않고 구간을 읽는다. 작업 014 설계 4절
+  RevisionHead? headOn(String cardId, DateTime day) {
+    final i = _on(cardId, day);
+    return i == null ? null : catalog.cards[cardId]!.heads[i];
+  }
 
   /// 그날의 개정. 카탈로그에 없는 카드는 null이라 no_revision으로 건너뛴다. 설계 문서 6.8
   Revision? rulesOn(String cardId, DateTime day) {
-    final card = catalog.cards[cardId];
-    if (card == null) return null;
-    final revisions = card.revisions;
-    final current = revisions.where((r) => !r.effectiveFrom.isAfter(day));
-    if (current.isNotEmpty) return current.last;
-    return revisions.first.effectiveFromEstimated ? revisions.first : null;
+    final i = _on(cardId, day);
+    return i == null ? null : catalog.cards[cardId]!.revisions[i];
   }
 
   String category(Payment p) {

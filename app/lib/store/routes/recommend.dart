@@ -31,8 +31,10 @@ const topCategories = [
   'pharmacy',
 ];
 
-/// 청구 방식 조건이 붙은 혜택의 대상 업종. 가게 없이 업종만 물으면 후불교통인지 자동납부인지 몰라 1순위를 맞게 못 낸다
+/// 청구 방식 조건이 붙은 혜택의 대상 업종. 가게 없이 업종만 물으면 후불교통인지 자동납부인지 몰라 1순위를 맞게 못 낸다.
+/// 목록 파일이 적어 둔 값이 있으면 그것을 쓴다. 모든 카드의 규칙 파일을 열지 않기 위해서다. 작업 014 설계 4절
 Set<String> billingBound(Catalog catalog) {
+  if (catalog.billingBound case final listed?) return listed;
   bool hasBilling(List<Condition> conditions) => conditions.any(
     (c) => c.billing != null || hasBilling(c.anyOf ?? const []),
   );

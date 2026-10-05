@@ -183,7 +183,7 @@ List<Warn> cardNotes(Ctx ctx, UserCard card, Rules rules, DateTime month) {
   if (sentences.isNotEmpty) {
     out.add(Warn('check_conditions', data: {'sentences': sentences}));
   }
-  final paths = ctx.assumed[card.cardId]?[null];
+  final paths = ctx.assumedOf(card.cardId)[null];
   if (paths != null && paths.isNotEmpty) {
     out.add(Warn('assumed_value', data: {'paths': paths}));
   }
