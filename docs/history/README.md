@@ -125,3 +125,4 @@
 | [80](80-code-doc-alignment.md) | 2026-10-05 | 작업 013 코드와 문서 맞추기 |
 | [81](81-catalog-review-order-step13.md) | 2026-10-05 | 작업 008 13단계 검수 대기 순서와 옛 새 카드 초안 닫기 |
 | [82](82-pipeline-doc-fixes-form-guide.md) | 2026-10-05 | 파이프라인 문서 어긋남 고치기와 카드 요청 설문 준비 |
+| [83](83-android-release-while-waiting.md) | 2026-10-05 | Play Console을 기다리는 동안 기록 내보내기 날짜, 시험자 안내, 카드 요청 링크 |
