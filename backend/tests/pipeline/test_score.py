@@ -192,3 +192,40 @@ def test_partial_issuer_default_does_not_break_the_whole_answer():
     result = score_answer(json.dumps(golden), _answer(VALID), defaults)
     assert result["new_card"] == (0, 3)
     assert result["benefits.reward"] == (2, 2) and result["spend"] == (3, 3) and result["tiers"] == (1, 1)
+
+
+def test_new_card_answer_with_its_own_keys_is_matched_by_content():
+    # 새 카드 추출은 key를 모델이 짓는다. key로 맞추면 내용이 같아도 모두 틀려 작업 008 12단계 첫 채점이 2.6%였다
+    import copy
+    import json
+
+    from cherry_core.pipeline.draft import clean_rules, int_keys
+    from cherry_core.pipeline.score import score_answer
+    from tests.pipeline.test_draft import CURRENT
+
+    golden = json.dumps(clean_rules(int_keys(copy.deepcopy(CURRENT))))
+    renamed = copy.deepcopy(CURRENT)
+    renamed["limits"][0]["key"] = "monthly-cap"
+    renamed["benefits"][0]["key"] = "coffee-ten"
+    renamed["benefits"][0]["limits"] = [{"per": "txn", "amount": 1000}, {"shared": "monthly-cap"}]
+    plain = score_answer(golden, _answer(renamed))
+    aligned = score_answer(golden, _answer(renamed), align=True)
+    assert plain["benefits.reward"][0] == 0
+    assert all(ok == total for ok, total in aligned.values())
+
+
+def test_aligning_keys_pairs_each_golden_item_once_by_most_equal_fields():
+    from cherry_core.pipeline.score import align_keys
+
+    expected = {
+        "benefits": [{"key": "a", "reward": {"rate": 10}, "target": {"all": True}}, {"key": "b", "reward": {"rate": 5}}]
+    }
+    actual = {
+        "benefits": [
+            {"key": "x", "reward": {"rate": 5}},
+            {"key": "y", "reward": {"rate": 10}, "target": {"all": True}},
+            {"key": "b", "reward": {"rate": 1}},
+        ]
+    }
+    # 같은 칸이 가장 많은 짝부터 정한다. 짝이 없는 추출은 남고, 정답 key와 겹치면 이름을 바꿔 다른 혜택과 섞이지 않는다
+    assert [b["key"] for b in align_keys(expected, actual)["benefits"]] == ["b", "a", "b~extra"]

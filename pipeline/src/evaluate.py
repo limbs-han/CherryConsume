@@ -30,6 +30,12 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument(
         "--experiment", required=True, help="MLflow 실험 경로. 없으면 만든다"
     )
+    ap.add_argument(
+        "--mode",
+        choices=["golden", "golden_new"],
+        default="golden",
+        help="채점할 추출. golden_new는 새 카드 프롬프트로 뽑은 정답 예시다. 작업 008 12단계",
+    )
     args = ap.parse_args(argv)
     if not args.model:
         raise SystemExit("채점할 모델을 적는다")
@@ -37,7 +43,7 @@ def main(argv: list[str] | None = None) -> None:
     s = f"cherry.{args.silver}"
 
     drafts = spark.table(f"{s}.drafts").where(
-        (F.col("mode") == "golden") & (F.col("model") == args.model)
+        (F.col("mode") == args.mode) & (F.col("model") == args.model)
     )
     version = args.prompt_version
     if not version:
@@ -96,13 +102,16 @@ def main(argv: list[str] | None = None) -> None:
             missing.append(g.card_id)
             continue
         issuer = issuers.get(g.issuer)
+        # 새 카드 프롬프트는 key를 모델이 지어 내용으로 key를 맞춘 뒤 채점한다. 작업 008 12단계
+        align = args.mode == "golden_new"
         result = score_answer(
             g.rules,
             d.answer,
             issuer_defaults(issuer, g.effective_from) if issuer else None,
+            align=align,
         )
         cards.append((g.split, result))
-        raw_cards.append((g.split, score_answer(g.rules, d.answer)))
+        raw_cards.append((g.split, score_answer(g.rules, d.answer, align=align)))
         per_card[g.card_id] = {
             "split": g.split,
             "status": d.status,
@@ -118,9 +127,10 @@ def main(argv: list[str] | None = None) -> None:
     mlflow.set_tracking_uri("databricks")
     # 작업 공간 경로의 /Workspace 앞붙이는 MLflow 실험 이름에 쓰지 않는다
     mlflow.set_experiment(args.experiment.removeprefix("/Workspace"))
-    with mlflow.start_run(run_name=f"{args.model} 판 {base}"):
+    with mlflow.start_run(run_name=f"{args.model} 판 {base} {args.mode}"):
         mlflow.log_params(
             {
+                "mode": args.mode,
                 "model": args.model,
                 "prompt_version": base,
                 "prompt_tags": ", ".join(tags),
@@ -136,7 +146,7 @@ def main(argv: list[str] | None = None) -> None:
         )
         mlflow.log_dict({"cards": per_card, "missing": sorted(missing)}, "cards.json")
     print(
-        f"모델 {args.model}, 프롬프트 판 {base}, 다듬기용 {tune}장 {metrics.get('tune.all', 0):.1%}, "
+        f"{args.mode} 모델 {args.model}, 프롬프트 판 {base}, 다듬기용 {tune}장 {metrics.get('tune.all', 0):.1%}, "
         f"채점 전용 {holdout}장 {metrics.get('holdout.all', 0):.1%}, 추출이 없는 카드 {len(missing)}장, "
         f"다시 물은 카드 {retried}장, 다시 묻기 실패 {retry_failed}장"
     )

@@ -14,6 +14,8 @@ resources:
           default: ""
         - name: prompt_version
           default: ""
+        - name: mode
+          default: golden
       tasks:
         - task_key: evaluate
           spark_python_task:
@@ -29,6 +31,8 @@ resources:
               - "{{job.parameters.prompt_version}}"
               - "--experiment"
               - "${workspace.root_path}/cherry_eval"
+              - "--mode"
+              - "{{job.parameters.mode}}"
           environment_key: default
           timeout_seconds: 900
       environments:

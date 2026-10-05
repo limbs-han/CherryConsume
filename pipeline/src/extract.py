@@ -4,6 +4,8 @@ changes 모드는 silver.changes에서 아직 추출하지 않은 변경이 있�
 초안과 사람이 정할 것은 silver.queue에 올린다. cherry_refresh가 변경 감지 뒤에 부른다.
 golden 모드는 silver.golden의 카드를 첫 수집 원문으로 추출한다. 모델을 고르는 채점용이라 검수 대기에 올리지 않는다.
 new_card 모드는 색인 card_index에서 카탈로그에 없는 카드의 새 초안을 만들고 검수 대기에 kind new_card로 올린다. 작업 008 설계 3절.
+golden_new 모드는 정답 예시 카드를 카탈로그에 없는 카드처럼 새 카드 프롬프트로 추출한다. 지금 혜택 key 대신 카드사 기본값을 준다.
+채점용이라 검수 대기에 올리지 않는다. 작업 008 12단계.
 카탈로그는 골드에서 읽는다. 답은 cherry_core.pipeline.extract가 초안과 검사 결과로 바꾼다.
 규칙 형식 검사에 걸린 카드는 이전 답과 오류를 붙여 한 번 더 묻는다. 판 7.
 모델 호출이 실패한 카드는 끝난 것으로 치지 않고, 다 쓴 뒤 실행을 실패로 끝내 알린다. 다음 실행이 다시 추출한다.
@@ -135,7 +137,9 @@ def main(argv: list[str] | None = None) -> None:
         "--model", default="", help="ai_query에 넘길 모델 이름. 비면 추출하지 않는다"
     )
     ap.add_argument(
-        "--mode", choices=["changes", "golden", "new_card"], default="changes"
+        "--mode",
+        choices=["changes", "golden", "golden_new", "new_card"],
+        default="changes",
     )
     ap.add_argument(
         "--bronze",
@@ -217,7 +221,7 @@ def main(argv: list[str] | None = None) -> None:
     )
     changed: dict[str, list[str]] = {}  # 카드마다 이번에 쓰는 변경 행의 새 경로
     refill: list[tuple] = []
-    if args.mode == "golden":
+    if args.mode in ("golden", "golden_new"):
         golden = spark.table(f"{s}.golden")
         if args.split != "all":
             golden = golden.where(F.col("split") == args.split)
@@ -301,20 +305,33 @@ def main(argv: list[str] | None = None) -> None:
         example = example_for(cat, cid)
         # 예시 카드가 개정되면 프롬프트도 바뀌어 판 번호에 예시 카드와 개정 시행일을 붙인다
         version = f"{VERSION}+{example[2]}" if example else VERSION
-        prompts.append(
-            (
-                cid,
-                build_prompt(
-                    lc.raw,
-                    current,
-                    [(r.source_id, r.text) for r in card_docs],
-                    codes,
-                    example[:2] if example else None,
-                    # 정답 예시는 혜택 제목을 주지 않는다. 제목이 정답을 알려 준다. 설계 1절 4단계 판 11
-                    titles=args.mode == "changes",
-                ),
+        docs_in = [(r.source_id, r.text) for r in card_docs]
+        if args.mode == "golden_new":
+            # 새 카드 초안과 같은 프롬프트다. 지금 카드가 없다고 보고 혜택과 한도 key를 주지 않는다. 작업 008 12단계
+            version = f"{VERSION}+{NEW_CARD_VERSION}" + (
+                f"+{example[2]}" if example else ""
             )
-        )
+            prompt = build_prompt(
+                {"id": cid, "name": lc.card.name},
+                {},
+                docs_in,
+                codes,
+                example[:2] if example else None,
+                titles=False,
+                defaults=issuer_defaults(issuer, max(r.day for r in card_docs))
+                or None,
+            )
+        else:
+            prompt = build_prompt(
+                lc.raw,
+                current,
+                docs_in,
+                codes,
+                example[:2] if example else None,
+                # 정답 예시는 혜택 제목을 주지 않는다. 제목이 정답을 알려 준다. 설계 1절 4단계 판 11
+                titles=args.mode == "changes",
+            )
+        prompts.append((cid, prompt))
         days = [first_seen[p] for p in changed.get(cid, []) if p in first_seen]
         meta[cid] = (
             lc,
@@ -343,7 +360,11 @@ def main(argv: list[str] | None = None) -> None:
     # 정답 예시 모드는 채점처럼 카드사 기본값으로 채워 보고 남는 오류만 묻는다. 바뀐 원문 모드는 지금 값으로 이미 채웠다
     def defaults_for(cid: str) -> dict | None:
         _, issuer, _, day, _ = meta[cid]
-        return issuer_defaults(issuer, day) if args.mode == "golden" else None
+        return (
+            issuer_defaults(issuer, day)
+            if args.mode in ("golden", "golden_new")
+            else None
+        )
 
     retry, retried = ask_again(
         spark, query, dict(prompts), answers, outcomes, judge, defaults_for
@@ -396,7 +417,11 @@ def main(argv: list[str] | None = None) -> None:
         docs.groupBy("card_id")
         .agg(F.first("issuer").alias("issuer"))
         .join(
-            (golden if args.mode == "golden" else spark.table(f"{s}.changes"))
+            (
+                golden
+                if args.mode in ("golden", "golden_new")
+                else spark.table(f"{s}.changes")
+            )
             .select("card_id")
             .distinct(),
             "card_id",
