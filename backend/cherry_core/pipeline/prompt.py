@@ -23,7 +23,10 @@ from cherry_core.pipeline.draft import clean_rules
 # 9: 정답 예시는 카드사 기본값으로 채운 뒤 남는 오류만 알려 주기
 # 10: 순위 영역 취소 달 설명
 # 11: 정답 예시 추출은 지금 혜택의 제목을 주지 않기. 2026-10-02 사용자가 정했다
-VERSION = "11"
+# 12: 혜택 금액 칸은 정확히 하나, 포인트는 program 필수, 채울 수 없는 혜택은 unmodeled로. 2026-10-05 작업 008 12단계 형식 오류
+# 13: 빼기는 혜택 하나씩, 적을 수 있는 혜택은 모두 적기. 판 12는 복잡한 카드의 혜택을 통째로 뺐다. 적립률은 rate, 정액은 fixed
+# 14: 혜택을 빼라는 지시를 없앤다. 판 12와 13에서 모델이 혜택을 하나도 적지 않고 질문만 남긴 답이 다섯 번 나왔다
+VERSION = "14"
 # 형식 예시로 보여 줄 다듬기용 카드. 형식 요소를 고루 가진 짧은 카드다. 앞의 것을 쓰고, 자기 자신을 추출할 때는 다음 것을 쓴다
 # 채점 전용 카드가 없는 카드사에서 골랐다. 같은 카드사 카드는 규칙이 닮아 예시를 베끼면 채점 점수가 부푼다. 2026-10-02 위험 검토
 EXAMPLE_CARDS = ("nh-heroes-check", "lotte-loca365")
@@ -40,7 +43,9 @@ INSTRUCTIONS = """\
 - 시행일은 원문에 적힌 날짜만 effective_from에 YYYY-MM-DD로 쓴다. 없으면 null이다.
 - source는 가장 많이 근거로 삼은 원문의 id다.
 - 원문에 없는 칸은 아예 적지 않는다. null, 빈 목록, 빈 객체, false로 채우지 않는다.
-- 혜택의 target에는 all: true, categories, merchants 가운데 하나 이상을 적는다.
+- 혜택의 target에는 all: true, categories, merchants 가운데 하나 이상을 적는다. 빈 목록을 쓰지 않는다.
+- 혜택의 reward에는 rate, fixed, per_unit, per_liter 가운데 정확히 하나를 적는다. 할인율과 포인트 적립률은 rate에 퍼센트로, 정액 할인과 정액 적립은 fixed에 원이나 포인트로 적는다. reward.type이 points면 program에 포인트 목록의 key를 반드시 적고, points가 아니면 program을 적지 않는다.
+- 대상 가운데 일부만 맞는 key가 없으면 있는 key만 target에 적고 나머지는 그 혜택의 unmodeled에 남긴다.
 - 혜택 limits의 shared는 규칙 맨 위 limits에 key로 정의한 한도만 가리킨다. 정의하지 않은 이름을 쓰지 않는다.
 - reward.type처럼 정해진 값이 있는 칸은 답 형식의 enum 가운데 하나만 쓴다.
 - 규칙 맨 위 limits의 key는 지금 한도 key에 같은 한도가 있으면 그대로 쓴다. 주어지는 것은 이름뿐이고 per, amount, count, base는 원문에서 읽어 적는다.

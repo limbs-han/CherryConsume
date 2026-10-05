@@ -157,6 +157,17 @@ def test_instructions_explain_ranked_cancellation():
     ) in INSTRUCTIONS
 
 
+def test_instructions_name_one_reward_amount_and_never_ask_to_drop_benefits():
+    # 판 12. 2026-10-05 작업 008 12단계 채점에서 형식 오류 대부분이 금액 칸 없음, 포인트 program 없음, 빈 target이었다
+    from cherry_core.pipeline.prompt import INSTRUCTIONS
+
+    assert "reward에는 rate, fixed, per_unit, per_liter 가운데 정확히 하나를 적는다" in INSTRUCTIONS
+    assert "reward.type이 points면 program에 포인트 목록의 key를 반드시 적고" in INSTRUCTIONS
+    assert "할인율과 포인트 적립률은 rate에 퍼센트로" in INSTRUCTIONS
+    # 판 14. 판 12와 13의 "혜택을 benefits에서 뺀다"는 모델이 혜택을 통째로 포기하게 해 없앴다
+    assert "benefits에서 뺀다" not in INSTRUCTIONS and "benefits에 적지 않는다" not in INSTRUCTIONS
+
+
 def test_golden_prompt_shows_benefit_keys_without_titles(make_catalog):
     # 2026-10-02 정답 예시 채점에서 지금 혜택은 정답 카드의 혜택이다. 제목에 비율과 대상이 들어 있어 베끼면 점수가 부푼다
     card = FILES["cards/shinhan/shinhan-test.yaml"]
