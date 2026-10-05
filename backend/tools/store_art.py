@@ -16,9 +16,8 @@ STORE = ROOT / "docs" / "store"
 RES = ROOT / "app" / "android" / "app" / "src" / "main" / "res"
 SHOTS = ROOT / "app" / "build" / "screens" / "store"
 FONTS = ROOT / "app" / "assets" / "fonts"
-CREAM = (255, 246, 236)  # 아이콘 바탕. 2026-10-05 사용자가 골랐다
 BLUE = (52, 87, 178)  # 앱 C.blue
-WHITE = (255, 255, 255)
+WHITE = (255, 255, 255)  # 아이콘 바탕. 2026-10-05 사용자가 크림이 누렇게 보인다고 흰색으로 바꿨다
 # 찍은 화면, 문구 표의 화면 이름, 내보낼 이름
 SCREENS = [
     ("1-home", "홈", "1-home"),
@@ -56,25 +55,26 @@ def rounded(im: Image.Image, radius: int) -> Image.Image:
 
 def store_icon() -> None:
     # 모서리는 Play가 30%로 깎는다. 원본은 꽉 찬 정사각형이다
-    centered(512, 0.78, CREAM + (255,)).save(STORE / "icon-512.png")
+    centered(512, 0.84, WHITE + (255,)).save(STORE / "icon-512.png")
 
 
 def launcher_icons() -> None:
-    # Android 8 이상은 적응형 아이콘이다. 108dp 칸 가운데 지름 66dp 안전 영역에 들게 그림을 41%로 둔다.
+    # Android 8 이상은 적응형 아이콘이다. 108dp 칸 가운데 지름 66dp 안전 영역에 들게 그림을 55%로 둔다. 그림의 불투명한
+    # 점이 가운데서 긴 변의 0.536배 안에 있어 57%까지 안전 영역에 든다. 2026-10-05 사용자가 41%는 작아 보인다고 했다.
     # 바탕색은 values/colors.xml의 ic_launcher_background다. 그 아래 판은 둥근 사각형 PNG를 쓴다
     for name, dp in [("mdpi", 1), ("hdpi", 1.5), ("xhdpi", 2), ("xxhdpi", 3), ("xxxhdpi", 4)]:
         folder = RES / f"mipmap-{name}"
-        centered(round(108 * dp), 0.41, (0, 0, 0, 0)).save(folder / "ic_launcher_foreground.png")
+        centered(round(108 * dp), 0.55, (0, 0, 0, 0)).save(folder / "ic_launcher_foreground.png")
         size, pad = round(48 * dp), round(2 * dp)
         legacy = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         inner = size - 2 * pad
-        legacy.alpha_composite(rounded(centered(inner, 0.78, CREAM + (255,)), round(inner * 0.2)), (pad, pad))
+        legacy.alpha_composite(rounded(centered(inner, 0.84, WHITE + (255,)), round(inner * 0.2)), (pad, pad))
         legacy.save(folder / "ic_launcher.png")
 
 
 def feature_graphic() -> None:
     im = Image.new("RGB", (1024, 500), BLUE)
-    tile = rounded(centered(260, 0.78, CREAM + (255,)), 60)
+    tile = rounded(centered(260, 0.84, WHITE + (255,)), 60)
     im.paste(tile, (110, 120), tile)
     draw = ImageDraw.Draw(im)
     draw.text((420, 250), "체리컨슘", font=font("ExtraBold", 96), fill=WHITE, anchor="ls")
