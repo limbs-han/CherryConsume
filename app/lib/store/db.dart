@@ -146,6 +146,15 @@ const migrations = <String>[
     key text primary key,
     value text not null
   ) strict''',
+  // 4. 카드 규칙 파일. 지문마다 한 줄이다. 앱에 담긴 파일과 받은 파일이 같은 표에 든다. 실행 중에는 이 표에서만 규칙을
+  // 읽는다. 작업 014 설계 2절
+  '''
+  create table catalog_card_files (
+    card_id text not null,
+    sha256 text not null,
+    body text not null,
+    primary key (card_id, sha256)
+  ) strict''',
 ];
 
 /// 날짜 칸의 모양. YYYY-MM-DD 글자라 글자 순서가 날짜 순서와 같다

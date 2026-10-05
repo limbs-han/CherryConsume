@@ -18,6 +18,8 @@ const tables = {
   'import_mappings',
   // 기록이 아닌 앱 상태. 마지막으로 내보낸 날을 둔다. 작업 012 설계 4.2
   'app_state',
+  // 카드 규칙 파일. 작업 014 설계 2절
+  'catalog_card_files',
 };
 
 Set<String> tablesIn(Database db) => {

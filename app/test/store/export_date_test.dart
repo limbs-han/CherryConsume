@@ -98,7 +98,7 @@ void main() {
     );
   });
 
-  test('카드가 든 2번 DB를 3번으로 올려도 기록이 그대로다', () {
+  test('카드가 든 2번 DB를 지금 번호로 올려도 기록이 그대로다', () {
     // 위험 검토 낮음 3
     final dir = Directory.systemTemp.createTempSync('cherry');
     addTearDown(() => dir.deleteSync(recursive: true));
@@ -108,7 +108,7 @@ void main() {
     old.close();
     final db = openDb(path);
     addTearDown(db.close);
-    expect(db.userVersion, 3);
+    expect(db.userVersion, migrations.length);
     expect(db.select('select count(*) as n from user_cards').first['n'], 1);
     expect(db.select('select count(*) as n from app_state').first['n'], 0);
   });

@@ -533,6 +533,9 @@ class CatalogCard {
     return rules;
   }
 
+  /// 규칙을 이미 읽었는가. 켤 때 보유 카드 것만 읽는지 시험이 센다. 작업 014 성공 기준 2
+  bool get rulesRead => _rules != null;
+
   List<OpenQuestion> get openQuestions => _loaded.openQuestions;
 
   /// 시행일 오름차순

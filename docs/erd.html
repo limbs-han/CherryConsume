@@ -12,7 +12,7 @@
 </head>
 <body>
 <h1>체리컨슘 ERD</h1>
-<p>원본은 docs/erd.md 의 Mermaid 정의. 폰 안 SQLite 표 11개입니다. 작업 006</p>
+<p>원본은 docs/erd.md 의 Mermaid 정의. 폰 안 SQLite 표 12개입니다. 작업 006, 작업 014</p>
 <pre class="mermaid">
 erDiagram
     catalog_cache {
@@ -20,6 +20,11 @@ erDiagram
         text body "받아 둔 카탈로그 JSON"
         text etag "다음에 받을 때 바뀌었는지 묻는 값"
         text bundled "받을 때 앱에 담긴 파일의 지문"
+    }
+    catalog_card_files {
+        text card_id PK "카탈로그의 카드 id"
+        text sha256 PK "규칙 파일 글자의 sha256"
+        text body "카드 규칙 파일 JSON"
     }
     user_cards {
         text id PK "시각 순서 uuid"
@@ -109,8 +114,8 @@ erDiagram
         integer updated_at
     }
     app_state {
-        text key PK "last_export"
-        text value "UTC 밀리초"
+        text key PK "last_export, bundled_catalog"
+        text value "UTC 밀리초, 옮긴 담긴 목록의 지문"
     }
 
     user_cards ||--o{ transactions : "결제"

@@ -1,6 +1,6 @@
 # 체리컨슘 ERD
 
-폰 안 SQLite 기준. 2026-10-02 작업 006에서 서버의 Postgres 표 23개를 폰 안 표 10개로 바꿨다. 2026-10-05 작업 012에서 앱 상태 표를 더해 11개다. 표 정의는 `app/lib/store/db.dart`의 번호 붙은 SQL 목록이다. 작업 006 설계 4절
+폰 안 SQLite 기준. 2026-10-02 작업 006에서 서버의 Postgres 표 23개를 폰 안 표 10개로 바꿨다. 2026-10-05 작업 012에서 앱 상태 표를, 작업 014에서 카드 규칙 파일 표를 더해 12개다. 표 정의는 `app/lib/store/db.dart`의 번호 붙은 SQL 목록이다. 작업 006 설계 4절
 
 - 사용자가 한 명이라 모든 표에 `user_id`가 없다. 계정, 로그인 수단, 세션 표는 없다
 - 카드사, 카드, 개정, 업종, 가맹점, 별칭, 결제수단 표는 없다. 메모리의 카탈로그가 대신한다. 결제는 카탈로그의 key를 글자로 가리킨다
@@ -14,6 +14,11 @@ erDiagram
         text body "받아 둔 카탈로그 JSON"
         text etag "다음에 받을 때 바뀌었는지 묻는 값"
         text bundled "받을 때 앱에 담긴 파일의 지문"
+    }
+    catalog_card_files {
+        text card_id PK "카탈로그의 카드 id"
+        text sha256 PK "규칙 파일 글자의 sha256"
+        text body "카드 규칙 파일 JSON"
     }
     user_cards {
         text id PK "시각 순서 uuid"
@@ -103,8 +108,8 @@ erDiagram
         integer updated_at
     }
     app_state {
-        text key PK "last_export"
-        text value "UTC 밀리초"
+        text key PK "last_export, bundled_catalog"
+        text value "UTC 밀리초, 옮긴 담긴 목록의 지문"
     }
 
     user_cards ||--o{ transactions : "결제"
@@ -129,6 +134,7 @@ erDiagram
 - 엑셀 가져오기는 같은 카드의 같은 승인번호를 한 번만 받는다. `(user_card_id, approval_no)`에 `approval_no IS NOT NULL AND deleted_at IS NULL` 조건의 부분 유니크 인덱스를 둔다. E31
 - 엑셀 가져오기가 붙인 취소는 `import_cancels`에 한 줄씩 둔다. 결제의 `cancelled_amount`는 이 줄들과 앱에서 적은 취소의 합이다. 묶음을 되돌리면 그 묶음의 취소만 뺀다. E32, E34
 - `import_mappings`는 사용자가 짝지은 열이다. 머리 줄의 sha256마다 하나이고 열 이름 대신 열 번호만 남긴다. 기록 내보내기에 담지 않는다. E30
-- `app_state`는 기록이 아닌 앱 상태다. 지금은 마지막으로 기록을 내보낸 시각 `last_export` 하나다. 설정의 기록 내보내기 줄이 이것으로 "마지막으로 내보낸 날"을 보인다. 작업 012 설계 4절
-- 설정의 기록 내보내기는 `catalog_cache`, `import_mappings`, `app_state`를 뺀 표 여덟을 JSON 한 파일로 쓴다. 가져오기는 한 트랜잭션에서 표를 비우고 파일의 행을 넣는다. 작업 006 설계 6절
+- `app_state`는 기록이 아닌 앱 상태다. 마지막으로 기록을 내보낸 시각 `last_export`와 표로 옮긴 담긴 목록 파일의 지문 `bundled_catalog`다. 설정의 기록 내보내기 줄이 `last_export`로 "마지막으로 내보낸 날"을 보인다. 작업 012 설계 4절
+- `catalog_card_files`는 카드 규칙 파일을 지문마다 한 줄로 둔다. 앱에 담긴 파일은 앱 판이 바뀐 뒤 처음 켤 때 옮기고, 받은 파일은 지문을 확인해 넣는다. 켤 때 담긴 목록과 받아 둔 목록이 가리키지 않는 줄을 지운다. 앱 판이 바뀐 뒤부터 `catalog_cache.body`는 한 벌 카탈로그가 아니라 목록 파일이다. 작업 014 설계 2절
+- 설정의 기록 내보내기는 `catalog_cache`, `catalog_card_files`, `import_mappings`, `app_state`를 뺀 표 여덟을 JSON 한 파일로 쓴다. 가져오기는 한 트랜잭션에서 표를 비우고 파일의 행을 넣는다. 작업 006 설계 6절
 - 표 정의는 칸과 표를 더하기만 하고 새 칸에는 기본값을 둔다. `PRAGMA user_version`에 돌린 번호를 적고, 이미 낸 번호의 SQL은 고치지 않고 새 번호로 더한다
