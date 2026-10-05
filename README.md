@@ -11,9 +11,8 @@
 ![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-%EB%A8%BC%EC%A0%80-3DDC84?logo=android&logoColor=white)
 
-| 홈 | 카드 상세 | 추천 | 가게별 순위 |
-|:---:|:---:|:---:|:---:|
-| <img src="docs/readme/home.png" width="180" alt="홈 화면"> | <img src="docs/readme/card.png" width="180" alt="카드 상세 화면"> | <img src="docs/readme/recommend.png" width="180" alt="추천 화면"> | <img src="docs/readme/result.png" width="180" alt="가게별 카드 순위 화면"> |
+<img src="docs/store/screens/1-home.png" width="250" alt="홈 화면. 카드마다 남은 실적"> <img src="docs/store/screens/2-card.png" width="250" alt="카드 상세 화면. 구간과 한도"> <img src="docs/store/screens/3-recommend.png" width="250" alt="추천 화면. 업종마다 가장 이득인 카드"><br>
+<img src="docs/store/screens/4-result.png" width="250" alt="가게별 카드 순위 화면"> <img src="docs/store/screens/5-payment.png" width="250" alt="결제 기록 화면. 저장 전에 보는 혜택"> <img src="docs/store/screens/6-history.png" width="250" alt="기록 화면. 달마다 쓴 돈과 받은 혜택">
 
 <sub>화면 사진의 결제 내역은 지어낸 것입니다</sub>
 
