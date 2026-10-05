@@ -38,11 +38,22 @@ const names = {
     '거래일시',
   ],
   'time': ['이용시간', '승인시간', '거래시간', '사용시간', '이용시각', '승인시각', '시간'],
-  'merchant': ['가맹점명', '이용가맹점', '이용하신가맹점', '가맹점', '이용처', '사용처', '거래처'],
+  'merchant': [
+    '가맹점명',
+    '이용가맹점명',
+    '이용가맹점',
+    '이용하신가맹점',
+    '가맹점',
+    '이용처',
+    '사용처',
+    '거래처',
+  ],
   'amount': ['이용금액', '승인금액', '거래금액', '사용금액', '결제금액', '금액'],
   'installment': ['할부개월', '할부기간', '할부개월수', '할부', '이용구분'],
   'cancel': ['취소여부', '승인구분', '취소구분', '상태', '거래구분', '구분'],
   'approval': ['승인번호'],
+  // 취소 줄에서 실제로 취소된 금액. 부분 취소면 승인금액과 다르다. 2026-10-05 실제 IBK 파일. 단계 검토 중간 4
+  'cancel_amount': ['취소금액'],
   'card': ['카드명', '이용카드', '카드이름', '카드'],
   'interest_free': ['무이자여부', '무이자구분', '무이자'],
   'region': ['해외여부', '국내외구분', '국내외', '해외구분', '이용국가'],
@@ -73,6 +84,9 @@ class ImportRow {
   /// 할부인데 무이자인지 모르면 null이다. 유이자로 넣고 미리보기에 알린다. 2026-10-02 사용자가 정했다
   bool? interestFree = false;
   bool overseas = false;
+
+  /// 카드가 준 할인을 카드사가 취소 줄로 적은 것. 결제도 취소도 아니라 넣지 않는다. E59
+  bool discount = false;
   String? error;
 }
 
@@ -127,7 +141,11 @@ List<List<Object?>> readTable(Uint8List data) => readSource(data).rows;
     rows = _xlsx(data);
     source = 'xlsx';
   } else if (_starts(data, const [0xd0, 0xcf, 0x11, 0xe0])) {
-    throw Unreadable('옛 엑셀 형식이라 읽지 못했어요. 엑셀에서 xlsx나 csv로 저장해 올려 주세요');
+    // 기업은행 "거래용" 파일이 이 형식이다. "출력용"은 html 표라 읽는다. 2026-10-05 실제 IBK 파일
+    throw Unreadable(
+      '옛 엑셀 형식이라 읽지 못했어요. 카드사 홈페이지에서 다른 저장 방식으로 받거나 xlsx, csv로 저장해 올려 주세요. '
+      '기업은행은 출력용으로 받으면 읽혀요',
+    );
   } else {
     final text = _text(data);
     final lower = text.toLowerCase();
@@ -774,9 +792,19 @@ int topRow(List<List<Object?>> table) {
         cols.keys.every(names.containsKey) &&
         required.every(cols.containsKey) &&
         cols.values.every((j) => j is int && j >= 0 && j < table[row].length) &&
-        cols.values.toSet().length == cols.length;
+        // 한 열은 한 칸에만 고른다. 결제일 칸에 시각이 함께 든 파일은 시각도 그 열을 고를 수 있다. 2026-10-05 실제
+        // IBK 파일의 승인일시. E30
+        {
+              for (final MapEntry(:key, :value) in cols.entries)
+                if (key != 'time' || value != cols['date']) value,
+            }.length ==
+            cols.keys
+                .where((k) => k != 'time' || cols[k] != cols['date'])
+                .length;
     if (!ok) {
-      throw Unreadable('열 짝이 맞지 않아요. 한 열은 한 칸에만 고르고 결제일, 가맹점명, 금액은 꼭 골라 주세요');
+      throw Unreadable(
+        '열 짝이 맞지 않아요. 결제일과 시각 말고는 한 열을 한 칸에만 고르고 결제일, 가맹점명, 금액은 꼭 골라 주세요',
+      );
     }
     return (
       row,
@@ -934,10 +962,25 @@ List<ImportRow> parseRows(
     } else if (amount == null || amount == 0) {
       row.error = '금액을 읽지 못했어요';
     } else {
-      // 시각 열이 비면 날짜 칸에 든 시각을 쓴다
-      row.at = (mapping.containsKey('time') ? _time(get('time')) : null) ?? at;
+      // 시각 열이 비면 날짜 칸에 든 시각을 쓴다. 시각 열이 결제일 열과 같으면 날짜 칸을 읽은 시각만 쓴다. 날짜만 든
+      // xlsx 칸을 시각으로 다시 읽으면 0시로 읽혀 시각을 안다고 잘못 적는다. 단계 검토 낮음 7
+      final ownTime =
+          mapping.containsKey('time') && mapping['time'] != mapping['date'];
+      row.at = (ownTime ? _time(get('time')) : null) ?? at;
       row.amount = amount.abs();
       row.cancel = amount < 0 || pyStr(get('cancel')).contains('취소');
+      // 취소금액 열이 있으면 취소 줄의 금액은 그 열이다. 부분 취소를 전액 취소로 읽지 않는다
+      final cancelled = _amount(get('cancel_amount'));
+      if (row.cancel && cancelled != null && cancelled != 0) {
+        row.amount = cancelled.abs();
+      } else if (!row.cancel && cancelled != null && cancelled != 0) {
+        // 결제 줄에 취소금액이 찍혔으면 일부 취소된 결제다. 실제 모양을 아직 못 봐 넣지 않고 보인다. 그대로 넣으면
+        // 취소된 만큼 실적이 부풀려진다. 재검토 중간 1
+        row.error = '일부 취소된 결제예요. 기록에서 직접 적어 주세요';
+      }
+      // 취소 표시가 있고 가맹점명이 할인으로 끝나면 카드가 준 할인이다. IBK의 "통신요금할인", "카카오T 자동결제 할인"
+      // 이 그렇다. 원 결제를 찾으면 이름이 겹치는 결제를 취소한 것으로 잘못 볼 수 있다. E59
+      row.discount = row.cancel && merchant.endsWith('할인');
       row.installmentMonths = _installment(get('installment'));
       row.approvalNo = _approval(get('approval'));
       final card = pyStr(get('card')).trim();

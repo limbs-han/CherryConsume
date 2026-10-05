@@ -150,4 +150,49 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('이마트 성수점'), findsNothing);
   });
+
+  testWidgets('결제일과 시각을 같은 열로 짝지어도 다시 읽는다', (tester) async {
+    // E30. 2026-10-05 실제 IBK 파일의 승인일시처럼 한 칸에 날짜와 시각이 있다. 화면 검사가 막아 다시 읽기가 꺼져 있었다
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    final file = (
+      name: '내역.csv',
+      bytes: text('날,곳,값\n2026.09.10 21:30,GS25 강남점,4300\n') as Uint8List?,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ImportScreen(
+          api: api,
+          cards: [(id: card, name: '신한카드 Mr.Life')],
+          pick: () async => file,
+        ),
+      ),
+    );
+    await tester.tap(find.text('파일 고르기'));
+    await tester.pumpAndSettle();
+    for (final (key, header) in [
+      ('date', '날'),
+      ('time', '날'),
+      ('merchant', '곳'),
+      ('amount', '값'),
+    ]) {
+      final pick = find.byKey(Key('map-$key'));
+      await tester.ensureVisible(pick);
+      await tester.pumpAndSettle();
+      await tester.tap(pick);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(header).last);
+      await tester.pumpAndSettle();
+    }
+    final again = find.widgetWithText(FilledButton, '다시 읽기');
+    await tester.scrollUntilVisible(again, 200);
+    await tester.ensureVisible(again);
+    await tester.pumpAndSettle();
+    expect(tester.widget<FilledButton>(again).onPressed, isNotNull);
+    await tester.tap(again);
+    await tester.pumpAndSettle();
+    expect(find.text('합계 4,300원'), findsOneWidget);
+  });
 }

@@ -349,10 +349,15 @@ Json _cancelOf(
       if (_has(ap) && p.approval == ap) p,
   ];
   if (found.isEmpty) {
-    // 승인번호가 같은 결제가 없으면 가맹점과 금액으로 찾는다. 직접 넣은 결제에는 승인번호가 없다
+    // 승인번호가 같은 결제가 없으면 가맹점과 금액으로 찾는다. 직접 넣은 결제에는 승인번호가 없다. 둘 다 승인번호가
+    // 있고 다르면 다른 결제다. IBK는 취소된 결제를 승인 줄 없이 취소 줄로만 적어, 이름이 같은 다른 결제를 취소한
+    // 것으로 잘못 붙일 수 있었다. 잘못 붙으면 보이지 않게 틀리고, 못 붙이면 미리보기에 보인다. 단계 검토 중간 3
     found = [
       for (final (_, p) in earlier)
-        if (_sameMerchant(p, r.merchantName, key) && p.amount >= r.amount) p,
+        if (!(_has(ap) && _has(p.approval)) &&
+            _sameMerchant(p, r.merchantName, key) &&
+            p.amount >= r.amount)
+          p,
     ];
   }
   if (found.isEmpty) return {'status': 'orphan', 'reason': '원 결제를 찾지 못했어요'};
@@ -513,7 +518,26 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   final catalog = s.catalog, now = s.clock();
   final shown = <Json>[];
   final rows = <Line>[];
-  for (final p in parseRows(table, start, cols)) {
+  final parsed = parseRows(table, start, cols);
+  // 카드마다 결제의 승인번호. 파일의 결제 줄과 저장된 기록이다. 할인으로 끝나는 이름의 취소 줄이 진짜 취소인지 본다
+  String? uidOf(ImportRow p) => userCardId ?? cardOf(cards, catalog, p.card);
+  final paid = <String, Set<String>>{};
+  for (final r in s.db.select(
+    'select user_card_id, approval_no from transactions '
+    'where approval_no is not null and deleted_at is null',
+  )) {
+    final k = approvalKey(r['approval_no'] as String);
+    if (_has(k)) {
+      paid.putIfAbsent(r['user_card_id'] as String, () => {}).add(k!);
+    }
+  }
+  for (final p in parsed) {
+    final (u, k) = (uidOf(p), approvalKey(p.approvalNo));
+    if (!p.cancel && u != null && _has(k)) {
+      paid.putIfAbsent(u, () => {}).add(k!);
+    }
+  }
+  for (final p in parsed) {
     final base = <String, Object?>{
       'line': p.line,
       'merchant_name': p.merchant,
@@ -534,6 +558,12 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     }
     if (p.error != null) {
       shown.add({...base, 'status': 'error', 'reason': p.error});
+      continue;
+    }
+    // 이름이 할인으로 끝나도 승인번호가 같은 결제가 파일이나 기록에 있으면 그 결제의 취소다. 단계 검토 중간 2
+    if (p.discount &&
+        !(paid[uidOf(p)]?.contains(approvalKey(p.approvalNo)) ?? false)) {
+      shown.add({...base, 'status': 'discount', 'reason': '카드가 준 할인이라 넣지 않아요'});
       continue;
     }
     // 고른 카드가 있으면 그 카드다. 없으면 카드 이름 열로 나눈다. E33
@@ -606,6 +636,7 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
       'duplicates': count('duplicate'),
       'cancels': count('cancel'),
       'orphans': count('orphan'),
+      'discounts': count('discount'),
       'skipped': count('skipped'),
       'errors': count('error'),
       'uncategorized': fresh.where((x) => x['category_name'] == null).length,

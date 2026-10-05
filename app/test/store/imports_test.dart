@@ -69,6 +69,7 @@ void main() {
       'duplicates': 0,
       'cancels': 1,
       'orphans': 0,
+      'discounts': 0,
       'skipped': 0,
       'errors': 0,
       'uncategorized': 0,

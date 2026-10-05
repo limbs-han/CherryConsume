@@ -45,6 +45,7 @@ const _fields = [
   ('installment', '할부'),
   ('interest_free', '무이자 여부'),
   ('cancel', '취소 여부'),
+  ('cancel_amount', '취소금액'),
   ('approval', '승인번호'),
   ('card', '카드 이름'),
   ('region', '해외 여부'),
@@ -58,6 +59,7 @@ const _status = {
   'cancel': '원 결제에 취소로 붙여요',
   'orphan': '넣지 않아요',
   'skipped': '넣지 않아요',
+  'discount': '카드 할인이라 넣지 않아요',
   'error': '읽지 못했어요',
 };
 
@@ -383,7 +385,11 @@ class _ImportScreenState extends State<ImportScreen> {
         if (e.value < headers.length && headers[e.value].isNotEmpty)
           e.key: e.value,
     };
-    final used = columns.values.toList();
+    // 결제일 칸에 시각이 함께 든 파일은 시각도 그 열을 고를 수 있다. 저장소 findHeader와 같다. E30
+    final used = [
+      for (final MapEntry(:key, :value) in columns.entries)
+        if (key != 'time' || value != columns['date']) value,
+    ];
     final ok =
         ['date', 'merchant', 'amount'].every(columns.containsKey) &&
         used.toSet().length == used.length;
@@ -403,7 +409,7 @@ class _ImportScreenState extends State<ImportScreen> {
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       const Text(
-        '한 열은 한 칸에만 골라요. 결제일, 가맹점명, 금액은 꼭 골라요.',
+        '결제일과 시각 말고는 한 열을 한 칸에만 골라요. 결제일, 가맹점명, 금액은 꼭 골라요.',
         style: TextStyle(fontSize: 13, color: C.sub),
       ),
       // 위에 조회 기간이나 카드 정보 줄이 있으면 열 이름이 있는 줄을 고른다
@@ -480,6 +486,8 @@ class _ImportScreenState extends State<ImportScreen> {
       if (s['cancels'] > 0) '취소 ${s['cancels']}건을 원 결제에 붙여요',
       if (s['orphans'] > 0) '원 결제가 없거나 담지 못하는 취소 ${s['orphans']}건은 넣지 않아요',
       if (s['skipped'] > 0) '보유 카드가 아닌 행 ${s['skipped']}건은 넣지 않아요',
+      if ((s['discounts'] ?? 0) > 0)
+        '카드가 준 할인 ${s['discounts']}건은 결제가 아니라 넣지 않아요. 혜택은 앱이 따로 계산해요',
       if (s['errors'] > 0) '읽지 못한 행 ${s['errors']}건',
       if (s['uncategorized'] > 0)
         '업종을 모르는 결제 ${s['uncategorized']}건은 기록에서 고칠 수 있어요',
@@ -628,12 +636,15 @@ class _PreviewRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final at = r['paid_at'] as String?;
     final cancel = r['status'] == 'cancel';
-    final sub = [
-      r['category_name'] ?? '업종 미정',
-      if (showCard && r['card_name'] != null) r['card_name'],
-      if (r['status'] != 'new' && !cancel) _status[r['status']] ?? '',
-      if (r['reason'] != null) r['reason'],
-    ].join(' · ');
+    // 카드 할인 줄은 결제가 아니라 업종과 사유를 붙이지 않는다
+    final sub = r['status'] == 'discount'
+        ? _status['discount']!
+        : [
+            r['category_name'] ?? '업종 미정',
+            if (showCard && r['card_name'] != null) r['card_name'],
+            if (r['status'] != 'new' && !cancel) _status[r['status']] ?? '',
+            if (r['reason'] != null) r['reason'],
+          ].join(' · ');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
