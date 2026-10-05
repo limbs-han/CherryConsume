@@ -254,6 +254,7 @@ WHERE (__START_AT.at >= current_date() - INTERVAL 30 DAYS AND __START_AT.version
 - 카드사별 수: `SELECT issuer, count_if(status = 'on_sale') AS on_sale, count(*) AS rows FROM cherry.silver.card_index GROUP BY issuer ORDER BY issuer`
 - 카탈로그에 없는 판매 중 카드: `SELECT i.issuer, i.name, i.card_id FROM cherry.silver.card_index i LEFT JOIN cherry.gold.catalog_files f ON f.path = concat('cards/', i.issuer, '/', i.card_id, '.yaml') WHERE i.status = 'on_sale' AND f.path IS NULL ORDER BY i.recommended DESC, i.issuer`
 - 단종일이 `discontinued_estimated`가 참이면 공시실에 단종일이 없어 처음 사라진 날을 적은 것이다.
+- 카드 요청 표시: 설문으로 요청이 온 카드는 `requested`를 켜면 검수 앱에서 추천 카드 다음에 보인다. 운영 표에 쓰는 일이라 Claude가 사용자에게 묻고 `UPDATE cherry.silver.card_index SET requested = true WHERE issuer = '<카드사>' AND card_id = '<id>'`를 돌린다. 색인 작업은 이 칸을 바꾸지 않는다. 작업 008 13단계.
 - 안전장치에 걸렸을 때: `index` 단계가 "지난번 판매 중 N장 가운데 M장이 판매 중에서 빠진다"로 실패하면 먼저 그 카드사 공시 원문이 점검 화면인지, 화면이 바뀌어 읽기가 깨졌는지 본다. 그렇다면 읽기 함수를 고친다. 카드사가 실제로 카드를 많이 단종한 것이 맞으면, Claude가 사용자에게 묻고 빠진 열쇠의 행을 SQL로 `status = 'discontinued'`, `discontinued_estimated = true`로 바꾼 뒤 `cherry_refresh`를 다시 돌린다. 그러면 지난번 판매 중 수가 줄어 안전장치를 지난다. 드문 일이다.
 
 ### 집 PC 러너
@@ -363,13 +364,14 @@ databricks bundle run cherry_approve --params "incoming=<이름>,label=<영문 �
 - 개발용 켜기: `pipeline` 폴더에서 `databricks bundle deploy` 뒤 `databricks bundle run cherry_review`. 끝나면 앱 주소가 찍힌다. 화면 왼쪽 **Compute**의 **Apps** 탭에서도 `cherry-review-dev`를 열 수 있다.
 - 운영 켜기: 운영 앱은 푸시하면 배포 작업이 만들지만 켜지는 않는다. **Compute**의 **Apps** 탭에서 `cherry-review-prod`를 열고 **Start**를 누른다. 앱 코드를 바꾼 뒤에는 **Deploy**를 눌러 번들이 올린 `apps/review` 폴더를 고른다.
 - 끄기: 검수가 끝나면 앱 화면에서 **Stop**을 누른다. 개발용은 `databricks apps stop cherry-review-dev`로도 끈다. 운영 비용 차단은 한도에서 운영 앱을 끄지만, 개발용 앱은 끄지 못하니 꼭 끈다.
+- 목록 순서: 카탈로그 카드의 바뀐 원문 초안, 카드다모아 추천 카드, 요청 카드, 그 밖의 순서이고 같은 묶음 안에서는 오래된 것부터다. 추천과 요청은 앞에 `추천`, `요청`이 붙는다. 같은 카드의 더 새 새 카드 초안이 올라오면 옛 건은 추출이 `superseded`로 닫아 목록에서 빠진다. 바뀐 원문 초안과 승인이 끊긴 초안은 닫지 않는다. 작업 008 13단계. 운영 앱 코드를 이 판으로 Deploy하기 전에 운영 `cherry_refresh`가 한 번 돌아 색인에 `requested` 칸이 있어야 한다. 없으면 목록을 못 읽는다.
 - 승인과 반려: 목록에서 건을 고르면 까닭, 검사 결과, 바뀐 원문 줄, 지금 골드 파일과 초안의 차이가 보인다. 아래 칸에서 카드 파일을 고쳐 승인할 수 있다. 저장 형식은 작업이 맞춘다. 누르면 작업이 끝날 때까지 기다렸다가 출력을 보인다. 성공한 승인은 손 승인처럼 다음 새벽 `export`가 저장소에 커밋한다.
 - 멈추는 경우: 검사 오류, 사라지는 카드와 혜택 key, 초안을 만든 뒤 골드 카드 파일이 바뀐 경우, 운영 내보내기에 36시간 넘게 남은 폴더가 있는 경우다. 마지막 경우는 export가 커밋하지 못한 것이라 "내보내기 폴더가 계속 실패할 때"를 먼저 한다. 초안이 낡았다는 오류가 나면 반려하고, 초안의 변경은 지금 골드 판에 손 승인으로 넣는다. 반려한 변경은 다시 추출되지 않기 때문이다.
 - 중간에 끊기면: 같은 건에서 처음 누른 버튼을 다시 누른다. 승인이 끊겼으면 승인을, 반려가 끊겼으면 반려를 누른다. 작업이 그 초안의 검수 기록을 보고 끊긴 승인을 이어 하거나 대기 건만 닫는다. 승인한 초안은 반려되지 않고 반려한 초안은 승인되지 않는다. 끊긴 앱 승인은 손 승인으로 잇지 않는다.
 - 새 카드 초안: 2026-10-05 작업 008 11단계부터 추출 `new_card` 모드가 만든 새 카드 초안도 이 앱에서 승인한다. 목록에 `new_card`로 보인다. 골드에 파일이 없어 빈 글과의 차이가 보이고, 승인하면 `cards/<카드사>/<id>.yaml`로 들어간다. 카드 파일의 `id:` 줄을 바꾸면 그 이름으로 들어가고 색인도 따라 바뀐다. 확인 필요 항목을 원문과 맞춰 보고 연회비와 짧은 이름을 채운 뒤 승인한다. 초안이 없는 건은 카드 파일을 직접 쓰거나 반려한다. 커밋 제목은 "feat: <이름> 새 카드 추가"다. 새 카드 승인이 멈추는 경우: 올린 파일이 카드 파일 하나가 아니거나 그 카드사 폴더가 아니다, 골드에 이미 있는 경로다, 그 카드사 골드 카드와 상품 코드나 이름이 겹친다, 같은 카드의 다른 새 카드 초안이 이미 승인됐다, 바꾼 id를 색인의 다른 카드가 쓴다, 초안을 만든 뒤 카드사 파일이 바뀌었다, 앱 카탈로그를 만들 수 없는 수가 있다. 앞의 넷은 반려하고, 뒤의 셋은 id나 값을 고치거나 초안을 다시 만든다.
 - 초안 없는 새 카드와 사라진 카드: 앱은 보여 주기만 한다. 새 카드는 카드 조사 에이전트로 조사해 손 승인으로 넣는다. 다 본 건은 `silver.queue`에서 `status`를 `approved`나 `rejected`로 바꿔 닫는다. 행을 지우지 않는다. 바뀐 것 고르기는 검수 대기에 없는 새 카드를 다시 올려 메우므로, 지운 건은 다음 실행에 다시 열린다. 2026-10-03 작업 007.
 - 성공하면 보이는 것: 앱 주소를 열면 "검수 대기" 제목과 열린 건 목록이 보인다. 승인하면 `cherry_approve SUCCESS`, `1/5`부터 `5/5`까지, `검수 대기 건을 닫았다`가 보이고 새로 고치면 그 건이 목록에서 사라진다. 끄면 **Apps** 탭의 상태가 멈춤이다.
-- 권한: 앱 서비스 주체는 표 넷 읽기, `incoming` 볼륨 쓰기, `cherry_approve` 실행만 받는다. 배포가 이 권한을 줄 때 앱 서비스 주체에게 `cherry` 카탈로그 사용 권한도 있어야 하는데, 배포하는 서비스 주체는 그것을 남에게 줄 수 없다. 그래서 처음 한 번, 운영만: **SQL Editor**에서 ``GRANT USE CATALOG ON CATALOG cherry TO `account users`;``를 돌린다. 2026-10-02 사용자가 정했다. 카탈로그로 들어가는 문만 열고, 스키마와 표는 따로 권한이 있어야 읽는다. 성공하면 다시 돌린 `deploy`가 초록 체크로 끝나고 **Apps** 탭에 `cherry-review-prod`가 멈춤 상태로 보인다.
+- 권한: 앱 서비스 주체는 표 다섯 읽기, `incoming` 볼륨 쓰기, `cherry_approve` 실행만 받는다. 배포가 이 권한을 줄 때 앱 서비스 주체에게 `cherry` 카탈로그 사용 권한도 있어야 하는데, 배포하는 서비스 주체는 그것을 남에게 줄 수 없다. 그래서 처음 한 번, 운영만: **SQL Editor**에서 ``GRANT USE CATALOG ON CATALOG cherry TO `account users`;``를 돌린다. 2026-10-02 사용자가 정했다. 카탈로그로 들어가는 문만 열고, 스키마와 표는 따로 권한이 있어야 읽는다. 성공하면 다시 돌린 `deploy`가 초록 체크로 끝나고 **Apps** 탭에 `cherry-review-prod`가 멈춤 상태로 보인다.
 
 ## 출처
 

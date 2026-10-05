@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from cherry_core.pipeline.extract import pending_changes, process_answer, unqueued
+from cherry_core.pipeline.extract import pending_changes, process_answer, superseded, unqueued
 from tests.catalog.conftest import FILES, write_catalog
 from tests.pipeline.test_draft import CARD, CURRENT, FETCHED, ISSUER, PATH
 
@@ -80,6 +80,31 @@ def test_pending_changes_skip_done_ones_but_retry_model_errors():
 def test_drafts_missing_from_the_queue_are_put_back():
     drafts = [("d1", "draft"), ("d2", "needs_human"), ("d3", "no_change"), ("d4", "model_error"), ("d5", "draft")]
     assert unqueued(drafts, {"d5"}) == ["d1", "d2"]
+
+
+def test_older_open_drafts_of_the_same_card_are_superseded():
+    # 작업 008 설계 5절. 승인 전에 같은 카드의 새 초안이 생기면 옛 건을 닫는다. 다시 올린 옛 초안이 새 초안을 닫지 않게 초안 시각으로 본다
+    rows = [
+        (("kb", "kb-toktok"), "d1", "2026-10-01T00:00", "needs_human"),
+        (("kb", "kb-toktok"), "d3", "2026-10-05T00:00", "draft"),
+        (("kb", "kb-toktok"), "d2", "2026-10-03T00:00", "draft"),
+        (("kb", "kb-toktok"), "d2", "2026-10-03T00:00", "draft"),  # 겹쳐 돈 다시 올리기로 같은 초안의 열린 행이 둘이다
+        (("nh", "nh-heroes"), "d4", "2026-10-01T00:00", "draft"),
+        (("nh", "nh-free"), "d6", "2026-10-02T00:00", "draft"),
+        (("nh", "nh-free"), "d5", "2026-10-02T00:00", "draft"),
+        (("hana", "nh-free"), "d7", "2026-10-01T00:00", "draft"),  # 다른 카드사의 같은 id
+    ]
+    assert superseded(rows) == ["d1", "d2", "d5"]
+
+
+def test_needs_human_draft_does_not_close_an_older_usable_draft():
+    # 2026-10-05 위험 검토. 쓸 글이 없는 새 초안이 쓸 수 있는 옛 초안을 닫으면 옛 변경이 검수에서 사라진다
+    rows = [
+        (("nh", "nh-free"), "d1", "2026-10-01T00:00", "draft"),
+        (("nh", "nh-free"), "d2", "2026-10-03T00:00", "needs_human"),
+        (("nh", "nh-free"), "d3", "2026-10-02T00:00", "needs_human"),
+    ]
+    assert superseded(rows) == ["d3"]
 
 
 def test_changes_mode_keeps_current_spend_through_process_answer(files):

@@ -50,6 +50,11 @@ resources:
             securable_full_name: cherry.${resources.schemas.silver.name}.drafts
             securable_type: TABLE
             permission: SELECT
+        - name: card-index
+          uc_securable:
+            securable_full_name: cherry.${resources.schemas.silver.name}.card_index
+            securable_type: TABLE
+            permission: SELECT
         - name: changes
           uc_securable:
             securable_full_name: cherry.${resources.schemas.silver.name}.changes

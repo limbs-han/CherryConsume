@@ -72,9 +72,16 @@ reviewer = st.context.headers.get("X-Forwarded-Email", "")
 if not reviewer:
     st.error("로그인한 사람의 메일을 받지 못했다. 승인과 반려를 할 수 없다")
 
+# 카탈로그 카드의 바뀐 원문 초안, 카드다모아 추천, 카드 요청, 그 밖의 순서로 보이고 같은 묶음 안에서는 오래된 것부터다
+# 바뀐 원문 초안은 앱 사용자의 계산이 틀린 채로 남아 새 카드 초안 수백 건보다 먼저 본다. 작업 008 설계 5절
 items = query(
-    f"SELECT kind, issuer, card_id, subject, source_path, created_at, draft_id FROM cherry.{SILVER}.queue "
-    "WHERE status = 'open' ORDER BY created_at"
+    "SELECT q.kind, q.issuer, q.card_id, q.subject, q.source_path, q.created_at, q.draft_id, "
+    "CASE WHEN q.kind IN ('draft', 'needs_human') THEN 0 WHEN i.recommended THEN 1 WHEN i.requested THEN 2 "
+    "ELSE 3 END AS rank "
+    f"FROM cherry.{SILVER}.queue q LEFT JOIN (SELECT issuer, card_id, bool_or(coalesce(recommended, false)) AS recommended, "
+    f"bool_or(coalesce(requested, false)) AS requested FROM cherry.{SILVER}.card_index "
+    "WHERE card_id IS NOT NULL GROUP BY issuer, card_id) i ON q.issuer = i.issuer AND q.card_id = i.card_id "
+    "WHERE q.status = 'open' ORDER BY rank, q.created_at"
 )
 if not items:
     st.info("열린 검수 대기 건이 없다")
@@ -83,7 +90,7 @@ pick = st.selectbox(
     f"열린 건 {len(items)}개",
     range(len(items)),
     format_func=lambda i: (
-        f"{items[i]['created_at']:%m-%d %H:%M} {items[i]['kind']} "
+        f"{('', '추천 ', '요청 ', '')[items[i]['rank']]}{items[i]['created_at']:%m-%d %H:%M} {items[i]['kind']} "
         f"{items[i]['card_id'] or items[i]['issuer']} {items[i]['subject']}"
     ),
 )

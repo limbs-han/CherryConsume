@@ -5,6 +5,7 @@
 행은 Python에서 만들고 documents 표와 원문 경로로 맞붙여 MERGE한다. 그래야 계보에 documents에서 card_index로 가는 선이 남는다.
 사라진 카드는 지우지 않는다. 판매 중이던 카드가 묶음에 없으면 단종으로 바꾸고 그 묶음의 한국 날짜를 추정 단종일로 둔다.
 카드다모아 묶음은 카드사 묶음 뒤에 따로 다룬다. 판매 중 색인 행 가운데 추천 카드와 짝인 것만 recommended를 켠다. 계획 4.7.
+requested는 사람이 카드 요청 설문 답을 보고 SQL로 켠다. 이 작업은 그 칸을 바꾸지 않는다. 작업 008 설계 5절.
 한 카드사가 실패해도 다른 카드사는 계속하고, 끝에 실패한 카드사를 모아 실패로 끝내 알림을 받는다.
 찍는 것은 개수와 짝을 못 찾은 행의 이름뿐이다. 카드 이름은 공개된 상품 이름이다.
 """
@@ -30,7 +31,7 @@ from pyspark.sql import functions as F
 INDEX = (
     "issuer STRING, key STRING, name STRING, kind STRING, code STRING, card_id STRING, status STRING, "
     "launched_on DATE, discontinued_on DATE, discontinued_estimated BOOLEAN, page_url STRING, pdf_urls ARRAY<STRING>, "
-    "recommended BOOLEAN, first_seen TIMESTAMP, last_seen TIMESTAMP, source_path STRING"
+    "recommended BOOLEAN, first_seen TIMESTAMP, last_seen TIMESTAMP, source_path STRING, requested BOOLEAN"
 )
 ROW = (
     "issuer STRING, key STRING, name STRING, kind STRING, code STRING, card_id STRING, status STRING, "
@@ -140,9 +141,9 @@ def index_issuer(
           launched_on = coalesce(s.launched_on, t.launched_on), page_url = coalesce(s.page_url, t.page_url),
           pdf_urls = s.pdf_urls, last_seen = :seen, source_path = s.source_path
         WHEN NOT MATCHED THEN INSERT (issuer, key, name, kind, code, card_id, status, launched_on, discontinued_on,
-          discontinued_estimated, page_url, pdf_urls, recommended, first_seen, last_seen, source_path)
+          discontinued_estimated, page_url, pdf_urls, recommended, first_seen, last_seen, source_path, requested)
           VALUES (s.issuer, s.key, s.name, s.kind, s.code, s.card_id, s.status, s.launched_on, s.discontinued_on,
-          false, s.page_url, s.pdf_urls, false, :seen, :seen, s.source_path)
+          false, s.page_url, s.pdf_urls, false, :seen, :seen, s.source_path, false)
         WHEN NOT MATCHED BY SOURCE AND t.issuer = :issuer AND t.status = 'on_sale' THEN
           UPDATE SET status = 'discontinued', discontinued_on = {SEEN_DAY}, discontinued_estimated = true""",
         args={"seen": seen, "issuer": issuer},
@@ -215,6 +216,10 @@ def main(argv: list[str] | None = None) -> None:
     )
     raw = f"/Volumes/cherry/{args.bronze}/raw"
     spark.sql(f"CREATE TABLE IF NOT EXISTS {index} ({INDEX})")
+    if "requested" not in spark.table(index).columns:
+        # 작업 008 13단계 전에 만든 표. 요청 표시는 지금까지 없었으니 모두 false다
+        spark.sql(f"ALTER TABLE {index} ADD COLUMNS (requested BOOLEAN)")
+        spark.sql(f"UPDATE {index} SET requested = false WHERE requested IS NULL")
 
     lines = (
         spark.table(fetches)

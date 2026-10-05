@@ -31,6 +31,7 @@ from cherry_core.pipeline.extract import (
     pending_changes,
     process_answer,
     retry_errors,
+    superseded,
     unqueued,
 )
 from cherry_core.pipeline.new_card import (
@@ -209,6 +210,38 @@ def main(argv: list[str] | None = None) -> None:
             .write.mode("append")
             .saveAsTable(f"{s}.queue")
         )
+        # 같은 카드의 더 새 새 카드 초안이 열려 있으면 옛 건을 닫는다. 작업 008 설계 5절
+        # 바뀐 원문 초안은 닫지 않는다. 옛 초안의 바뀐 줄과 추정 시행일이 새 초안에 없어 닫으면 검수에서 사라진다
+        # 검수 기록이 있는 초안은 끊긴 승인이라 닫지 않는다. 닫으면 앱에서 고를 수 없어 다른 승인이 모두 막힌다. 위험 검토
+        opened = (
+            spark.table(f"{s}.queue")
+            .where("status = 'open' AND kind = 'new_card' AND card_id IS NOT NULL")
+            .join(
+                spark.table(f"{s}.drafts").select(
+                    "draft_id", F.col("created_at").alias("drafted_at"), "status"
+                ),
+                "draft_id",
+            )
+        )
+        if spark.catalog.tableExists(f"{s}.reviews"):
+            opened = opened.join(
+                spark.table(f"{s}.reviews").select("draft_id"), "draft_id", "left_anti"
+            )
+        stale = superseded(
+            [
+                ((r.issuer, r.card_id), r.draft_id, r.drafted_at, r.status)
+                for r in opened.collect()
+            ]
+        )
+        if stale:
+            spark.createDataFrame(
+                [(d,) for d in stale], "draft_id STRING"
+            ).createOrReplaceTempView("stale")
+            spark.sql(
+                f"""MERGE INTO {s}.queue t USING stale s ON t.draft_id = s.draft_id AND t.status = 'open'
+                WHEN MATCHED THEN UPDATE SET status = 'superseded'"""
+            )
+            print(f"같은 카드의 새 초안으로 닫은 옛 검수 대기 {len(stale)}건")
 
     if args.mode == "new_card":
         new_cards(spark, args, s, files, cat, codes, now, to_queue)

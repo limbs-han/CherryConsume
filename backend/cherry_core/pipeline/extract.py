@@ -105,3 +105,17 @@ def unqueued(drafts: list[tuple[str, str]], queued: set[str]) -> list[str]:
     다음 실행이 시작할 때 이 목록을 검수 대기에 다시 올린다. 모델 요금은 들지 않는다.
     """
     return [d for d, status in drafts if status in QUEUED and d not in queued]
+
+
+def superseded(rows: list[tuple[object, str, object, str]]) -> list[str]:
+    """열린 검수 대기 가운데 같은 카드의 더 새 초안이 있는 초안. rows는 (카드, 초안 번호, 초안 시각, 결과)다.
+
+    쌓인 초안은 원문이 바뀌면 낡는다. 같은 카드의 새 초안이 생기면 옛 건을 superseded로 닫고 새 초안만 보인다.
+    작업 008 설계 5절. 다시 올린 옛 초안이 새 초안을 닫지 않게 올린 순서가 아니라 초안 시각으로 본다.
+    쓸 글이 없는 needs_human은 그보다 옛 draft를 닫지 않는다. 2026-10-05 위험 검토
+    """
+    out = set()
+    for card, d, at, status in rows:
+        if any(c == card and (a, n) > (at, d) and (s == "draft" or status != "draft") for c, n, a, s in rows):
+            out.add(d)
+    return sorted(out)  # ponytail: 카드마다 열린 건이 몇 개라 이중 반복으로 둔다
