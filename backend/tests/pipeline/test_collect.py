@@ -205,6 +205,17 @@ def test_connection_error_is_retried(monkeypatch):
     assert len(calls) == 3
 
 
+def test_korean_and_space_in_url_are_percent_encoded_once(monkeypatch):
+    # 2026-10-05 롯데 수집에서 상품설명서 PDF 주소 40개가 파일 이름의 한글과 공백으로 UnicodeEncodeError, InvalidURL이었다
+    collect_module, calls = _flaky(monkeypatch, [])
+    collect_module._get("https://x.com/Upload/로카 365_설명서.pdf?a=1&b=가")
+    collect_module._get("https://x.com/Upload/%EB%A1%9C%EC%B9%B4.pdf")
+    assert calls == [
+        "https://x.com/Upload/%EB%A1%9C%EC%B9%B4%20365_%EC%84%A4%EB%AA%85%EC%84%9C.pdf?a=1&b=%EA%B0%80",
+        "https://x.com/Upload/%EB%A1%9C%EC%B9%B4.pdf",
+    ]
+
+
 def test_gives_up_after_three_tries(monkeypatch):
     import urllib.error
 

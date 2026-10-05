@@ -111,6 +111,8 @@ def _get(url: str, form: dict[str, str] | None = None, json_body: dict | None = 
     2026-10-02 GitHub 수집에서 실행마다 다른 카드사 하나가 연결 실패였다. 호스트의 robots.txt가 한 번 끊기면 그 호스트 주소가 모두 실패로 남는다.
     """
     headers = {"User-Agent": USER_AGENT}
+    # 주소에 한글이나 공백이 있으면 요청 줄에 넣지 못한다. 이미 %로 바꾼 것은 그대로 둔다. 2026-10-05 롯데 PDF 40개
+    url = urllib.parse.quote(url, safe=":/?#[]@!$&'()*+,;=%~")
     data = urllib.parse.urlencode(form).encode() if form is not None else None
     if json_body is not None:
         data, headers["Content-Type"] = json.dumps(json_body).encode(), "application/json"
