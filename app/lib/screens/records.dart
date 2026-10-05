@@ -303,69 +303,73 @@ class _Row extends StatelessWidget {
     final net = row.amount - row.cancelledAmount;
     final cancelled = row.cancelledAmount > 0;
     // 시안대로 금액은 크고 굵게, 실적 제외 배지는 업종 줄 앞에 둔다. 작업 011 설계 2절 Hi2
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    row.merchantName ?? row.categoryName ?? '결제',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+    // 누르는 동안 작아진다. 원칙 4의 "기록의 카드 줄"이 이 결제 줄이다. 작업 013 13-19
+    return Semantics(
+      button: true,
+      child: Pressable(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      row.merchantName ?? row.categoryName ?? '결제',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: C.text,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    won(net).replaceAll('원', ''),
                     style: const TextStyle(
                       fontSize: 17,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w800,
                       color: C.text,
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  won(net).replaceAll('원', ''),
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                    color: C.text,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                if (!row.counted) ...[
-                  const Pill('실적 제외', fg: C.sub, bg: C.grey),
-                  const SizedBox(width: 6),
                 ],
-                if (cancelled) ...[
-                  const Pill('취소', fg: C.sub, bg: C.grey),
-                  const SizedBox(width: 6),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  if (!row.counted) ...[
+                    const Pill('실적 제외', fg: C.sub, bg: C.grey),
+                    const SizedBox(width: 6),
+                  ],
+                  if (cancelled) ...[
+                    const Pill('취소', fg: C.sub, bg: C.grey),
+                    const SizedBox(width: 6),
+                  ],
+                  Expanded(
+                    child: Text(
+                      '${row.categoryName ?? '업종 미정'} · ${row.cardName} · '
+                      '${row.timeKnown ? '${two(row.paidAt.hour)}:${two(row.paidAt.minute)}' : '시각 모름'}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13, color: C.sub),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    row.value > 0 ? '${won(row.value)} $kind' : '혜택 없음',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: row.value > 0 ? FontWeight.w700 : null,
+                      color: row.value > 0 ? C.green : C.faint,
+                    ),
+                  ),
                 ],
-                Expanded(
-                  child: Text(
-                    '${row.categoryName ?? '업종 미정'} · ${row.cardName} · '
-                    '${row.timeKnown ? '${two(row.paidAt.hour)}:${two(row.paidAt.minute)}' : '시각 모름'}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, color: C.sub),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  row.value > 0 ? '${won(row.value)} $kind' : '혜택 없음',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: row.value > 0 ? FontWeight.w700 : null,
-                    color: row.value > 0 ? C.green : C.faint,
-                  ),
-                ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

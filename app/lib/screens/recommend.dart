@@ -227,7 +227,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
             const SizedBox(height: 12),
             const Text(
               '이번 달 남은 한도와 적용 구간을 반영한 추정치예요.',
-              style: TextStyle(fontSize: 13, color: C.faint),
+              style: TextStyle(fontSize: 13, color: C.sub),
             ),
           ],
         );
@@ -511,7 +511,7 @@ class _ResultScreenState extends State<ResultScreen> {
         if (r != null && r.ranking.isNotEmpty)
           Text(
             '${r.amount == null ? '1만 원' : won(r.amount!)} 결제 기준',
-            style: const TextStyle(fontSize: 13, color: C.faint),
+            style: const TextStyle(fontSize: 13, color: C.sub),
           ),
         if (r != null)
           for (final (i, row) in r.ranking.indexed) ...[
@@ -525,7 +525,7 @@ class _ResultScreenState extends State<ResultScreen> {
         const SizedBox(height: 16),
         const Text(
           '혜택 금액은 카탈로그로 계산한 추정치예요. 실제 청구와 다를 수 있어요.',
-          style: TextStyle(fontSize: 13, color: C.faint),
+          style: TextStyle(fontSize: 13, color: C.sub),
         ),
       ];
       const padding = EdgeInsets.fromLTRB(20, 4, 20, 32);
@@ -652,7 +652,7 @@ class _RankRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Pill('조건 확인', fg: C.amber, bg: C.amberSoft),
+                const Pill('조건 확인', fg: C.sub, bg: C.grey),
                 const SizedBox(height: 4),
                 Text(
                   row.checks.join(' '),

@@ -5,6 +5,7 @@ library;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../api.dart';
 import '../clock.dart' as clock;
@@ -143,7 +144,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   String? get _cardId => _input.userCardId ?? _draft?.pick;
 
+  void _pickCard(String id) {
+    setState(() => _input.userCardId = id);
+    _refresh();
+  }
+
   Future<void> _save() async {
+    // 저장과 등록은 짧게 떤다. 설계 문서 10절, 작업 013 13-16
+    HapticFeedback.lightImpact();
     setState(() => _busy = true);
     _wait?.cancel();
     try {
@@ -397,6 +405,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final d = _draft;
     final est = d?.estimate;
     final top = d != null && d.ranking.isNotEmpty ? d.ranking.first : null;
+    // 카드가 5장을 넘으면 앞의 두 장과 "다른 카드"만 둔다. 가게를 치면 혜택 순, 치기 전에는 홈 순서다. 5장 이하는 늘 홈
+    // 순서라 치는 동안 칩 자리가 바뀌지 않는다. 바뀌는 사이에 누르면 다른 카드가 골린다. 작업 004 설계 3절, 작업 013 13-17
+    final byId = {for (final c in widget.cards) c.id: c};
+    final seen = <String>{};
+    final ranked = widget.cards.length > 5 && _input.merchantName.isNotEmpty;
+    final ordered = [
+      if (ranked)
+        for (final r
+            in d?.ranking ?? const <({String id, String name, int value})>[])
+          if (byId[r.id] != null && seen.add(r.id)) byId[r.id]!,
+      for (final c in widget.cards)
+        if (seen.add(c.id)) c,
+    ];
+    final shown = ordered.length <= 5 ? ordered : ordered.take(2).toList();
+    final rest = ordered.skip(shown.length).toList();
+    final other = rest.where((c) => c.id == _cardId).firstOrNull;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.editing == null ? '결제 기록' : '결제 고치기'),
@@ -470,13 +494,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final c in widget.cards)
+              for (final c in shown)
                 ChoicePill(
                   c.name,
                   selected: _cardId == c.id,
-                  onTap: () {
-                    setState(() => _input.userCardId = c.id);
-                    _refresh();
+                  onTap: () => _pickCard(c.id),
+                ),
+              if (rest.isNotEmpty)
+                ChoicePill(
+                  other?.name ?? '다른 카드',
+                  selected: other != null,
+                  onTap: () async {
+                    final id = await pickSheet<String>(
+                      context,
+                      title: '다른 카드',
+                      options: [for (final c in rest) (c.id, c.name)],
+                      selected: _cardId,
+                    );
+                    if (id != null) _pickCard(id);
                   },
                 ),
             ],

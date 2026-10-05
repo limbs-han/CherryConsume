@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cherry_consume/screens/import.dart';
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:cherry_consume/ui.dart';
+import 'package:cherry_consume/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -39,6 +40,35 @@ void atBottom(WidgetTester tester, Finder button) {
 }
 
 void main() {
+  testWidgets('열 짝짓기는 바닥 시트에서 고른다', (tester) async {
+    // 고를 것이 넷 이상이면 바닥 시트다. 설계 문서 10절 원칙 5, 작업 013 13-18
+    await open(tester);
+    await tester.tap(find.text('파일 고르기'));
+    await tester.pumpAndSettle();
+    expect(find.text('어느 열이 무엇인지 짝지어 주세요'), findsOneWidget);
+    expect(find.byType(DropdownButton<int?>), findsNothing);
+    await tester.tap(find.byKey(const Key('map-date')));
+    await tester.pumpAndSettle();
+    final sheet = find.byType(BottomSheet);
+    expect(sheet, findsOneWidget);
+    for (final h in ['없음', '날', '곳', '값']) {
+      expect(
+        find.descendant(of: sheet, matching: find.text(h)),
+        findsOneWidget,
+      );
+    }
+    await tester.tap(find.descendant(of: sheet, matching: find.text('날')));
+    await tester.pumpAndSettle();
+    expect(sheet, findsNothing);
+    expect(
+      find.descendant(
+        of: find.byKey(const Key('map-date')),
+        matching: find.text('날'),
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('단계 버튼은 아래 고정, 카드는 알약, 엑셀 받는 곳 안내가 있다', (tester) async {
     await open(tester);
     atBottom(tester, find.widgetWithText(FilledButton, '파일 고르기'));
@@ -98,6 +128,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('다른 파일'));
     await tester.pumpAndSettle();
+    // 파일을 못 읽었다는 알림이라 알림 회색이다. 호박색은 기회에만 쓴다. 작업 004 설계 2.1, 작업 013 13-15
+    expect(
+      tester.widget<Text>(find.textContaining('2MB보다 커요')).style?.color,
+      C.sub,
+    );
     expect(find.text('파일이 2MB보다 커요. 기간을 나눠 올려 주세요.'), findsOneWidget);
     expect(find.text('내역.csv'), findsNothing);
     atBottom(tester, find.widgetWithText(FilledButton, '파일 고르기'));

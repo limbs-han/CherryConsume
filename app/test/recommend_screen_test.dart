@@ -94,10 +94,26 @@ void main() {
       find.descendant(of: first, matching: find.widgetWithText(Pill, '조건 확인')),
       findsOneWidget,
     );
+    // 조건 확인은 알려 주기만 하는 배지라 알림 회색이다. 호박색은 기회에만 쓴다. 작업 004 설계 2.1, 작업 013 13-13
+    final pill = tester.widget<Pill>(
+      find.descendant(of: first, matching: find.widgetWithText(Pill, '조건 확인')),
+    );
+    expect((pill.fg, pill.bg), (C.sub, C.grey));
+    expect(faintOffWhite(tester), isEmpty);
     expect(
       find.descendant(of: first, matching: find.textContaining('아이스크림만')),
       findsOneWidget,
     );
+  });
+
+  testWidgets('추천 첫 화면에는 흰 상자 밖에 흐린 글자가 없다', (tester) async {
+    // 회색 바탕 위 흐린 글자는 대비가 4.19:1이다. 목록이 화면 밖까지 그려지게 높게 띄운다. 작업 004 설계 2.1, 작업 013 13-14
+    tester.view.devicePixelRatio = 2.625;
+    tester.view.physicalSize = const Size(1080, 8000);
+    addTearDown(tester.view.reset);
+    await openTab(tester);
+    expect(find.text('이번 달 남은 한도와 적용 구간을 반영한 추정치예요.'), findsOneWidget);
+    expect(faintOffWhite(tester), isEmpty);
   });
 
   testWidgets('업종별 1순위는 업종이 왼쪽 칸이고 화살표가 있다. 최근 가게는 알약이다', (tester) async {

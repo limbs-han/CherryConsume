@@ -34,6 +34,18 @@ void main() {
     );
   });
 
+  testWidgets('등록을 누르면 짧게 떤다', (tester) async {
+    // 설계 문서 10절, 작업 013 13-16
+    final (:api, s: _) = app();
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await openSheet(tester);
+    final log = haptics(tester);
+    await tester.tap(find.widgetWithText(FilledButton, '등록'));
+    await tester.pumpAndSettle();
+    expect(log, ['HapticFeedbackType.lightImpact']);
+  });
+
   testWidgets('등록 시트. 닫기, 쉼표 금액, 체크 안내, 알약 예와 아니오', (tester) async {
     final (:api, s: _) = app();
     await tester.pumpWidget(CherryApp(api: api));

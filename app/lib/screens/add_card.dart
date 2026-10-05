@@ -4,6 +4,7 @@ library;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../api.dart';
 import '../clock.dart' as clock;
@@ -221,6 +222,8 @@ class _RegisterSheetState extends State<RegisterSheet> {
   }
 
   Future<void> _register() async {
+    // 저장과 등록은 짧게 떤다. 설계 문서 10절, 작업 013 13-16
+    HapticFeedback.lightImpact();
     setState(() => _busy = true);
     try {
       await widget.api.addCard(

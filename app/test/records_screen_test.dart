@@ -51,6 +51,27 @@ void main() {
     );
   });
 
+  testWidgets('결제 줄은 누르는 동안 0.96배로 작아진다', (tester) async {
+    // 누를 수 있는 카드 줄은 누름 반응이 있다. 기록 탭에서는 결제 줄이 그 줄이다. 작업 011 설계 1절 원칙 4, 작업 013 13-19
+    await open(tester);
+    final scale = find.ancestor(
+      of: find.text('스타벅스 역삼점'),
+      matching: find.byType(AnimatedScale),
+    );
+    expect(scale, findsOneWidget);
+    // 화면 읽기는 결제 줄 하나를 누를 수 있는 버튼으로 읽는다. 작업 013 위험 검토 낮음 4
+    expect(
+      tester.getSemantics(find.text('스타벅스 역삼점')),
+      isSemantics(isButton: true, hasTapAction: true),
+    );
+    final g = await tester.startGesture(tester.getCenter(find.text('스타벅스 역삼점')));
+    // 목록 안에서는 끌기인지 누르기인지 가려질 때까지 기다린 뒤 작아진다
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(tester.widget<AnimatedScale>(scale).scale, 0.96);
+    await g.up();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('결제 금액은 크고 굵다. 실적 제외 배지는 업종 줄 앞이다', (tester) async {
     await open(tester);
     final amount = tester.widget<Text>(find.text('12,500'));

@@ -158,6 +158,7 @@ class _ImportScreenState extends State<ImportScreen> {
         rows,
         signature: p.signature,
         columns: _columns,
+        source: p.source,
       );
       if (mounted) Navigator.of(context).pop(done['imported'] as int);
     } catch (_) {
@@ -362,7 +363,7 @@ class _ImportScreenState extends State<ImportScreen> {
           if (_error != null)
             Padding(
               padding: const EdgeInsets.only(top: 12),
-              child: Text(_error!, style: const TextStyle(color: C.amber)),
+              child: Text(_error!, style: const TextStyle(color: C.sub)),
             ),
           if (p != null && _remap) ..._mappingView(p),
           if (read && p.summary != null) ..._previewView(p, p.summary!),
@@ -393,6 +394,8 @@ class _ImportScreenState extends State<ImportScreen> {
   List<Widget> _mappingView(ImportPreview p) {
     final row = _headerRow ?? p.headerRow;
     final (:headers, :columns, ok: _) = _mapped(p);
+    String rowLabel(int i) =>
+        '${i + 1}줄 · ${p.topRows[i].where((c) => c.isNotEmpty).take(3).join(', ')}';
     return [
       const SizedBox(height: 16),
       const Text(
@@ -409,24 +412,25 @@ class _ImportScreenState extends State<ImportScreen> {
           children: [
             const SizedBox(width: 96, child: Text('열 이름 줄')),
             Expanded(
-              child: DropdownButton<int>(
+              child: _PickField(
                 key: const Key('map-row'),
-                isExpanded: true,
-                value: row,
-                items: [
-                  for (final (i, r) in p.topRows.indexed)
-                    DropdownMenuItem(
-                      value: i,
-                      child: Text(
-                        '${i + 1}줄 · ${r.where((c) => c.isNotEmpty).take(3).join(', ')}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                ],
-                onChanged: (v) => setState(() {
-                  _headerRow = v;
-                  _columns = {};
-                }),
+                label: rowLabel(row),
+                onTap: () async {
+                  final v = await pickSheet<int>(
+                    context,
+                    title: '열 이름 줄',
+                    options: [
+                      for (final (i, _) in p.topRows.indexed) (i, rowLabel(i)),
+                    ],
+                    selected: row,
+                  );
+                  if (v != null) {
+                    setState(() {
+                      _headerRow = v;
+                      _columns = {};
+                    });
+                  }
+                },
               ),
             ),
           ],
@@ -436,26 +440,32 @@ class _ImportScreenState extends State<ImportScreen> {
           children: [
             SizedBox(width: 96, child: Text(label)),
             Expanded(
-              child: DropdownButton<int?>(
+              child: _PickField(
                 key: Key('map-$key'),
-                isExpanded: true,
-                value: columns[key],
-                hint: const Text('없음'),
-                items: [
-                  const DropdownMenuItem<int?>(value: null, child: Text('없음')),
-                  for (final (i, h) in headers.indexed)
-                    if (h.isNotEmpty)
-                      DropdownMenuItem<int?>(value: i, child: Text(h)),
-                ],
-                onChanged: (v) => setState(() {
-                  final next = Map.of(columns);
-                  if (v == null) {
-                    next.remove(key);
-                  } else {
-                    next[key] = v;
-                  }
-                  _columns = next;
-                }),
+                label: columns[key] == null ? '없음' : headers[columns[key]!],
+                onTap: () async {
+                  // 시트를 그냥 닫으면 null이라 없음은 -1로 고른다
+                  final v = await pickSheet<int>(
+                    context,
+                    title: label,
+                    options: [
+                      (-1, '없음'),
+                      for (final (i, h) in headers.indexed)
+                        if (h.isNotEmpty) (i, h),
+                    ],
+                    selected: columns[key] ?? -1,
+                  );
+                  if (v == null) return;
+                  setState(() {
+                    final next = Map.of(columns);
+                    if (v < 0) {
+                      next.remove(key);
+                    } else {
+                      next[key] = v;
+                    }
+                    _columns = next;
+                  });
+                },
               ),
             ),
           ],
@@ -772,6 +782,27 @@ class _ImportsScreenState extends State<ImportsScreen> {
           ),
           _ => const Center(child: CircularProgressIndicator()),
         },
+      ),
+    ),
+  );
+}
+
+/// 열 짝짓기 칸. 누르면 바닥 시트에서 고른다. 고를 것이 넷 이상이면 바닥 시트다. 설계 문서 10절 원칙 5, 작업 013 13-18
+class _PickField extends StatelessWidget {
+  const _PickField({super.key, required this.label, required this.onTap});
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          Expanded(child: Text(label, overflow: TextOverflow.ellipsis)),
+          const Icon(Icons.expand_more, color: C.sub),
+        ],
       ),
     ),
   );
