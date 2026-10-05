@@ -10,7 +10,7 @@
 
 | 데이터 | 어디에 두나 | 폰 밖으로 | 근거 |
 |---|---|---|---|
-| 등록한 카드 상품, 카드 별명, 쓰기 시작한 날, 전월실적 직접 입력 | 폰 안 SQLite `user_cards` | 안 나간다 | `app/lib/store/db.dart` |
+| 등록한 카드 상품, 쓰기 시작한 날, 전월실적 직접 입력. 카드 별명 칸도 있지만 앱이 쓰지 않는다. 작업 013 13-9 | 폰 안 SQLite `user_cards` | 안 나간다 | `app/lib/store/db.dart` |
 | 결제 기록. 날짜와 시각, 금액, 가게 이름, 업종, 카드, 결제 수단, 온라인과 해외 여부, 할부, 승인번호, 취소, 받은 혜택 | `transactions`, `transaction_benefits`, `import_cancels`, `import_batches` | 안 나간다 | 같은 파일 |
 | 혜택 조건에 대한 답. 생일 달, 현역병 여부 같은 것 | `user_card_options`, `user_card_facts`, `user_facts` | 안 나간다 | 같은 파일 |
 | 엑셀 열 짝. 머리 줄의 sha256 지문 | `import_mappings` | 안 나간다. 기록 내보내기 파일에도 넣지 않는다 | `app/lib/store/backup.dart` 담는 표 목록 |
