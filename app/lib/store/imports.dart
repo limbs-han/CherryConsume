@@ -791,15 +791,23 @@ int topRow(List<List<Object?>> table) {
         cols is Map &&
         cols.keys.every(names.containsKey) &&
         required.every(cols.containsKey) &&
-        cols.values.every((j) => j is int && j >= 0 && j < table[row].length) &&
+        // -1은 사용자가 "없음"으로 비운 칸이다. 꼭 고를 칸은 비울 수 없다. 기억한 짝을 자동으로 채울 때 건너뛴다. E30
+        cols.values.every(
+          (j) => j is int && j >= -1 && j < table[row].length,
+        ) &&
+        required.every((k) => cols[k] != -1) &&
         // 한 열은 한 칸에만 고른다. 결제일 칸에 시각이 함께 든 파일은 시각도 그 열을 고를 수 있다. 2026-10-05 실제
         // IBK 파일의 승인일시. E30
         {
               for (final MapEntry(:key, :value) in cols.entries)
-                if (key != 'time' || value != cols['date']) value,
+                if (value != -1 && (key != 'time' || value != cols['date']))
+                  value,
             }.length ==
             cols.keys
-                .where((k) => k != 'time' || cols[k] != cols['date'])
+                .where(
+                  (k) =>
+                      cols[k] != -1 && (k != 'time' || cols[k] != cols['date']),
+                )
                 .length;
     if (!ok) {
       throw Unreadable(
@@ -810,7 +818,7 @@ int topRow(List<List<Object?>> table) {
       row,
       {
         for (final MapEntry(:key, :value) in cols.entries)
-          key as String: value as int,
+          if (value != -1) key as String: value as int,
       },
     );
   }

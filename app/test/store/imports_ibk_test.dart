@@ -5,7 +5,7 @@ import 'dart:typed_data';
 
 import 'package:cherry_consume/api.dart' show ApiError;
 import 'package:cherry_consume/catalog/models.dart';
-import 'package:cherry_consume/store/imports.dart' show parseRows;
+import 'package:cherry_consume/store/imports.dart' show parseRows, signature;
 import 'package:cherry_consume/store/routes/imports.dart' as imports;
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:cherry_consume/store/store.dart';
@@ -327,5 +327,104 @@ void main() {
       userCardId: card,
     );
     expect(rowsOf(p).single['status'], 'discount');
+  });
+
+  test('기억한 짝에 없는 칸은 자동으로 찾은 열로 채운다', () {
+    // E30. 첫 가져오기 때 결제일, 가맹점, 금액만 손으로 짝지으면 다음에 취소 여부 없이 읽혀 취소와 카드 할인 줄이 모두
+    // 결제로 들어갔다. 2026-10-05 실제 IBK 파일로 찾았다
+    final (:s, :card) = ibkCard();
+    s.db.execute(
+      'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
+      [
+        signature([for (final h in _head) h]),
+        jsonEncode({'date': 3, 'merchant': 6, 'amount': 7}),
+      ],
+    );
+    final p = imports.preview(
+      s,
+      ibk([
+        line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000010'),
+        line('취소또는할인', '2026-09-06 02:30:00', '쇼핑할인', '1,000', 'F8000004'),
+      ]),
+      userCardId: card,
+    );
+    expect(p['mapping'], containsPair('cancel', 1));
+    expect([for (final r in rowsOf(p)) r['status']], ['new', 'discount']);
+  });
+
+  test('기억한 짝의 칸과 열은 자동으로 찾은 것보다 이긴다', () {
+    final (:s, :card) = ibkCard();
+    // 금액을 승인금액이 아닌 열로 골라 두었다. 자동은 그 칸을 바꾸지 않고, 고른 열을 다른 칸에 쓰지 않는다
+    s.db.execute(
+      'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
+      [
+        signature([for (final h in _head) h]),
+        jsonEncode({'date': 3, 'merchant': 6, 'amount': 17}),
+      ],
+    );
+    final p = imports.preview(
+      s,
+      ibk([line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000011')]),
+      userCardId: card,
+    );
+    final m = p['mapping'] as Map;
+    expect(m['amount'], 17);
+    expect(m.containsKey('cancel_amount'), isFalse);
+    expect(m['cancel'], 1);
+  });
+
+  test('"없음"으로 비운 칸은 기억한 짝을 채울 때 되살리지 않는다', () {
+    // E30. 사용자가 직접 정한 것이 자동으로 찾은 것보다 우선이다. 다시 검토 중간 1
+    final (:s, :card) = ibkCard();
+    s.db.execute(
+      'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
+      [
+        signature([for (final h in _head) h]),
+        jsonEncode({'date': 3, 'merchant': 6, 'amount': 7, 'cancel': -1}),
+      ],
+    );
+    final p = imports.preview(
+      s,
+      ibk([
+        line(
+          '취소또는할인',
+          '2026-09-06 02:30:00',
+          '쇼핑할인',
+          '1,000',
+          'F8000005',
+          cancelled: '0',
+        ),
+      ]),
+      userCardId: card,
+    );
+    // 비운 칸은 -1로 돌려준다. 화면이 다시 짝짓고 저장할 때 그대로 남긴다
+    final m = p['mapping'] as Map;
+    expect(m['cancel'], -1);
+    expect(m['approval'], 14);
+    expect(rowsOf(p).single['status'], 'new');
+    // 화면이 직접 보낸 짝의 비운 칸도 -1로 돌려준다
+    final direct = imports.preview(
+      s,
+      ibk([line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000013')]),
+      userCardId: card,
+      mapping: {
+        'row': 2,
+        'columns': {'date': 3, 'merchant': 6, 'amount': 7, 'cancel': -1},
+      },
+    );
+    expect(direct['mapping'] as Map, containsPair('cancel', -1));
+    // 꼭 고를 칸은 비울 수 없다
+    expect(
+      () => imports.preview(
+        s,
+        ibk([line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000012')]),
+        userCardId: card,
+        mapping: {
+          'row': 2,
+          'columns': {'date': 3, 'merchant': 6, 'amount': -1},
+        },
+      ),
+      throwsA(isA<ApiError>()),
+    );
   });
 }

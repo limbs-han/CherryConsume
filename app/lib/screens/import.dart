@@ -227,7 +227,7 @@ class _ImportScreenState extends State<ImportScreen> {
       return FilledButton(
         onPressed: m.ok && !_busy
             ? () {
-                _columns = m.columns;
+                _columns = {..._cleared(p), ...m.columns};
                 _read();
               }
             : null,
@@ -374,6 +374,12 @@ class _ImportScreenState extends State<ImportScreen> {
     );
   }
 
+  /// 사용자가 "없음"으로 비운 칸. -1로 보내고 저장해야 다음에 기억한 짝을 자동으로 채울 때 되살리지 않는다. E30
+  Map<String, int> _cleared(ImportPreview p) => {
+    for (final e in (_columns ?? p.mapping ?? const <String, int>{}).entries)
+      if (e.value < 0) e.key: e.value,
+  };
+
   /// 짝지은 열. 머리 줄을 바꾸거나 열이 밀려도 없는 열을 고른 채로 두지 않는다
   ({List<String> headers, Map<String, int> columns, bool ok}) _mapped(
     ImportPreview p,
@@ -382,7 +388,9 @@ class _ImportScreenState extends State<ImportScreen> {
     final headers = row < p.topRows.length ? p.topRows[row] : p.headers;
     final columns = {
       for (final e in (_columns ?? p.mapping ?? const <String, int>{}).entries)
-        if (e.value < headers.length && headers[e.value].isNotEmpty)
+        if (e.value >= 0 &&
+            e.value < headers.length &&
+            headers[e.value].isNotEmpty)
           e.key: e.value,
     };
     // 결제일 칸에 시각이 함께 든 파일은 시각도 그 열을 고를 수 있다. 저장소 findHeader와 같다. E30
@@ -430,7 +438,8 @@ class _ImportScreenState extends State<ImportScreen> {
                     ],
                     selected: row,
                   );
-                  if (v != null) {
+                  // 같은 줄을 다시 고르면 고른 짝과 비운 칸을 지우지 않는다
+                  if (v != null && v != row) {
                     setState(() {
                       _headerRow = v;
                       _columns = {};
@@ -463,13 +472,12 @@ class _ImportScreenState extends State<ImportScreen> {
                   );
                   if (v == null) return;
                   setState(() {
-                    final next = Map.of(columns);
-                    if (v < 0) {
-                      next.remove(key);
-                    } else {
-                      next[key] = v;
-                    }
-                    _columns = next;
+                    // "없음"은 -1로 남긴다. 기억한 짝을 다음에 자동으로 채울 때 사용자가 비운 칸을 되살리지 않는다. E30
+                    _columns = {
+                      ..._cleared(p),
+                      ...columns,
+                      key: v < 0 ? -1 : v,
+                    };
                   });
                 },
               ),

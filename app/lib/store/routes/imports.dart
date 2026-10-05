@@ -454,6 +454,8 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   final String source;
   int? start;
   Map<String, int>? cols;
+  // 사용자가 "없음"으로 비운 칸. 화면이 보낸 짝이나 기억한 짝에서 모은다
+  var cleared = const <String>{};
   try {
     (rows: table, :source) = readSource(data);
     if (mapping != null && mapping is! Map) throw Unreadable('열 짝이 맞지 않아요');
@@ -462,6 +464,12 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
         table,
         Map<String, Object?>.from(mapping as Map),
       );
+      // findHeader를 지났으면 columns는 맞는 Map이다
+      cleared = {
+        for (final MapEntry(:key, :value)
+            in (mapping['columns'] as Map).entries)
+          if (value == -1) '$key',
+      };
     }
   } on Unreadable catch (e) {
     throw _bad(e.message);
@@ -474,14 +482,20 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
         r['signature'] as String: r['mapping'] as String,
     };
     // 사용자가 짝지은 열을 자동으로 찾은 열보다 먼저 쓴다. 자동이 틀려 고친 짝이 다음에도 쓰인다. E30
+    var chosen = const <String>{};
     for (final (i, row) in table.take(20).indexed) {
       final found = saved[signature(row)];
       if (found == null) continue;
       try {
-        (start, cols) = findHeader(table, {
-          'row': i,
-          'columns': jsonDecode(found),
-        });
+        final picked = jsonDecode(found);
+        (start, cols) = findHeader(table, {'row': i, 'columns': picked});
+        // findHeader를 지났으면 짝이 맞는 Map이다. "없음"으로 비운 -1 칸까지 사용자가 정한 칸이다. 깨진 짝이면
+        // 자동으로 찾으니 비운 칸을 남기지 않는다
+        chosen = {for (final k in (picked as Map).keys) '$k'};
+        cleared = {
+          for (final MapEntry(:key, :value) in picked.entries)
+            if (value == -1) '$key',
+        };
       } on Unreadable {
         (start, cols) = (null, null);
       } on FormatException {
@@ -489,6 +503,20 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
         (start, cols) = (null, null);
       }
       break;
+    }
+    // 기억한 짝에 없는 칸은 같은 머리 줄에서 자동으로 찾은 열로 채운다. 고른 칸, "없음"으로 비운 칸, 고른 열은 그대로
+    // 둔다. 세 칸만 손으로 짝지은 IBK 파일이 다음에 취소 여부 없이 읽혀 취소와 카드 할인 줄이 모두 결제로 들어갔다.
+    // 2026-10-05 E30
+    if (start != null && cols != null) {
+      final (autoStart, auto) = findHeader(table);
+      if (autoStart == start && auto != null) {
+        final used = cols.values.toSet();
+        cols = {
+          ...cols,
+          for (final MapEntry(:key, :value) in auto.entries)
+            if (!chosen.contains(key) && !used.contains(value)) key: value,
+        };
+      }
     }
     if (start == null) (start, cols) = findHeader(table);
   }
@@ -624,7 +652,8 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     'needs_mapping': false,
     'header_row': start,
     'headers': [for (final c in table[start]) pyStr(c).trim()],
-    'mapping': cols,
+    // 비운 칸도 -1로 돌려준다. 화면이 다시 짝짓고 저장할 때 -1이 빠지면 다음에 채우기가 그 칸을 되살린다. E30
+    'mapping': {...cols, for (final k in cleared) k: -1},
     'signature': signature(table[start]),
     'source': source,
     'top_rows': topRows(table),

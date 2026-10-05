@@ -195,4 +195,85 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('합계 4,300원'), findsOneWidget);
   });
+
+  testWidgets('없음으로 비운 칸을 저장하면 다음 가져오기에도 비운 채다', (tester) async {
+    // E30. 자동이 "상태" 열을 취소 여부로 잡았는데 값이 "취소불가"라 결제가 모두 취소로 빠지는 파일이다. 다시 검토 중간 1
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    final bytes = text(
+      '이용일자,가맹점명,이용금액,상태\n2026.09.10 21:30,GS25 강남점,4300,취소불가\n',
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ImportScreen(
+          api: api,
+          cards: [(id: card, name: '신한카드 Mr.Life')],
+          pick: () async => (name: '내역.csv', bytes: bytes as Uint8List?),
+        ),
+      ),
+    );
+    await tester.tap(find.text('파일 고르기'));
+    await tester.pumpAndSettle();
+    final remap = find.text('열 다시 짝짓기');
+    await tester.scrollUntilVisible(remap, 200);
+    await tester.tap(remap);
+    await tester.pumpAndSettle();
+    final pick = find.byKey(const Key('map-cancel'));
+    await tester.scrollUntilVisible(pick, 200);
+    await tester.pumpAndSettle();
+    await tester.tap(pick);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('없음').last);
+    await tester.pumpAndSettle();
+    final again = find.widgetWithText(FilledButton, '다시 읽기');
+    await tester.scrollUntilVisible(again, 200);
+    await tester.ensureVisible(again);
+    await tester.pumpAndSettle();
+    await tester.tap(again);
+    await tester.pumpAndSettle();
+    final save = find.widgetWithText(FilledButton, '1건 저장');
+    await tester.scrollUntilVisible(save, 200);
+    await tester.tap(save);
+    await tester.pumpAndSettle();
+    final [kept] = s.db.select('select mapping from import_mappings');
+    expect(jsonDecode(kept['mapping'] as String), containsPair('cancel', -1));
+    // 다음 가져오기는 기억한 짝으로 읽고 비운 칸을 채우지 않는다
+    final next = imports.preview(s, bytes, userCardId: card);
+    expect(next['mapping'] as Map, containsPair('cancel', -1));
+    // 기억한 짝으로 연 파일을 바꾸지 않고 다시 짝지어 저장해도 비운 칸이 남는다. 다시 검토 중간 1
+    final later = text(
+      '이용일자,가맹점명,이용금액,상태\n2026.09.11 08:10,CU 역삼점,1500,취소불가\n',
+    );
+    await tester.pumpWidget(
+      // 앞 화면이 저장하며 닫혔으니 앱을 새로 띄운다
+      MaterialApp(
+        key: UniqueKey(),
+        home: ImportScreen(
+          api: api,
+          cards: [(id: card, name: '신한카드 Mr.Life')],
+          pick: () async => (name: '내역.csv', bytes: later as Uint8List?),
+        ),
+      ),
+    );
+    await tester.tap(find.text('파일 고르기'));
+    await tester.pumpAndSettle();
+    final remap2 = find.text('열 다시 짝짓기');
+    await tester.scrollUntilVisible(remap2, 200);
+    await tester.tap(remap2);
+    await tester.pumpAndSettle();
+    final again2 = find.widgetWithText(FilledButton, '다시 읽기');
+    await tester.scrollUntilVisible(again2, 200);
+    await tester.ensureVisible(again2);
+    await tester.pumpAndSettle();
+    await tester.tap(again2);
+    await tester.pumpAndSettle();
+    final save2 = find.widgetWithText(FilledButton, '1건 저장');
+    await tester.scrollUntilVisible(save2, 200);
+    await tester.tap(save2);
+    await tester.pumpAndSettle();
+    final [kept2] = s.db.select('select mapping from import_mappings');
+    expect(jsonDecode(kept2['mapping'] as String), containsPair('cancel', -1));
+  });
 }
