@@ -128,3 +128,4 @@
 | [83](83-android-release-while-waiting.md) | 2026-10-05 | Play Console을 기다리는 동안 기록 내보내기 날짜, 시험자 안내, 카드 요청 링크 |
 | [84](84-home-pc-first-collect.md) | 2026-10-05 | 작업 008 집 PC 러너 첫 수집 고치기 |
 | [85](85-collab-record.md) | 2026-10-05 | 체리컨슘 클로드 협업 기록 |
+| [86](86-prompt-v14-and-collect-check.md) | 2026-10-05 | 추출 프롬프트 판 14와 삼성, 롯데, IBK 수집 확인 |
