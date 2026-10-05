@@ -14,6 +14,7 @@ import '../../catalog/models.dart';
 import '../../engine/cond.dart';
 import '../../engine/models.dart';
 import '../db.dart';
+import '../formats.dart' show Format, detect;
 import '../imports.dart' hide norm, required;
 import '../payments.dart';
 import '../store.dart';
@@ -454,12 +455,18 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   final String source;
   int? start;
   Map<String, int>? cols;
+  // 아는 형식. 작업 015 설계 2절
+  Format? format;
   // 사용자가 "없음"으로 비운 칸. 화면이 보낸 짝이나 기억한 짝에서 모은다
   var cleared = const <String>{};
+  // 아는 형식이면 형식 표로만 읽는다. 기억한 짝, 화면이 보낸 짝, 열 이름 사전을 쓰지 않아 같은 형식의 파일은 앞서
+  // 무엇을 기억했든 결과가 같다. 작업 015 설계 2절
+  (Format, int, Map<String, int>)? known;
   try {
     (rows: table, :source) = readSource(data);
+    known = detect(table);
     if (mapping != null && mapping is! Map) throw Unreadable('열 짝이 맞지 않아요');
-    if (mapping != null) {
+    if (mapping != null && known == null) {
       (start, cols) = findHeader(
         table,
         Map<String, Object?>.from(mapping as Map),
@@ -474,7 +481,10 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   } on Unreadable catch (e) {
     throw _bad(e.message);
   }
-  if (mapping == null) {
+  if (known != null) (format, start, cols) = known;
+  // 모르는 형식에서 열 이름 사전으로 자동으로 찾은 짝. 화면이 이 짝과 다른 칸을 알린다. 작업 015 설계 4절 2
+  final (autoStart, auto) = known == null ? findHeader(table) : (null, null);
+  if (mapping == null && known == null) {
     final saved = {
       for (final r in s.db.select(
         'select signature, mapping from import_mappings',
@@ -508,7 +518,6 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     // 둔다. 세 칸만 손으로 짝지은 IBK 파일이 다음에 취소 여부 없이 읽혀 취소와 카드 할인 줄이 모두 결제로 들어갔다.
     // 2026-10-05 E30
     if (start != null && cols != null) {
-      final (autoStart, auto) = findHeader(table);
       if (autoStart == start && auto != null) {
         final used = cols.values.toSet();
         cols = {
@@ -518,7 +527,7 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
         };
       }
     }
-    if (start == null) (start, cols) = findHeader(table);
+    if (start == null) (start, cols) = (autoStart, auto);
   }
   if (start == null || cols == null) {
     final top = table.isEmpty ? 0 : topRow(table);
@@ -546,7 +555,7 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   final catalog = s.catalog, now = s.clock();
   final shown = <Json>[];
   final rows = <Line>[];
-  final parsed = parseRows(table, start, cols);
+  final parsed = parseRows(table, start, cols, format);
   // 카드마다 결제의 승인번호. 파일의 결제 줄과 저장된 기록이다. 할인으로 끝나는 이름의 취소 줄이 진짜 취소인지 본다
   String? uidOf(ImportRow p) => userCardId ?? cardOf(cards, catalog, p.card);
   final paid = <String, Set<String>>{};
@@ -654,6 +663,11 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     'headers': [for (final c in table[start]) pyStr(c).trim()],
     // 비운 칸도 -1로 돌려준다. 화면이 다시 짝짓고 저장할 때 -1이 빠지면 다음에 채우기가 그 칸을 되살린다. E30
     'mapping': {...cols, for (final k in cleared) k: -1},
+    'format': format?.id,
+    'format_name': format?.name,
+    // 자동으로 찾은 머리 줄과 짝. 기억한 짝이 다른 머리 줄을 골랐어도 화면이 알 수 있게 줄을 함께 준다
+    'auto_header_row': autoStart,
+    'auto_mapping': autoStart == start ? auto : null,
     'signature': signature(table[start]),
     'source': source,
     'top_rows': topRows(table),

@@ -459,6 +459,12 @@ class ImportPreview {
           : Map<String, int>.from(j['mapping'] as Map),
       signature = j['signature'],
       source = j['source'],
+      format = j['format'],
+      formatName = j['format_name'],
+      autoHeaderRow = j['auto_header_row'],
+      autoMapping = j['auto_mapping'] == null
+          ? null
+          : Map<String, int>.from(j['auto_mapping'] as Map),
       topRows = [
         for (final r in j['top_rows'] ?? const []) List<String>.from(r as List),
       ],
@@ -472,6 +478,14 @@ class ImportPreview {
 
   /// 읽은 파일 모양. xlsx, html, csv. 묶음 출처로 남긴다. 작업 013 13-10
   final String? source;
+
+  /// 아는 카드사 파일 형식과 그 이름. 모르는 형식이면 null이다. 작업 015 설계 2절
+  final String? format, formatName;
+
+  /// 모르는 형식에서 열 이름 사전으로 자동으로 찾은 머리 줄과 짝. 짝은 쓴 머리 줄과 같을 때만 있다. 작업 015 설계
+  /// 4절 2
+  final int? autoHeaderRow;
+  final Map<String, int>? autoMapping;
 
   /// 머리 줄을 고를 위 10줄. 앱이 올린 파일의 줄이다
   final List<List<String>> topRows;

@@ -408,6 +408,8 @@ class _ImportScreenState extends State<ImportScreen> {
   List<Widget> _mappingView(ImportPreview p) {
     final row = _headerRow ?? p.headerRow;
     final (:headers, :columns, ok: _) = _mapped(p);
+    // 자동으로 찾은 짝은 저장소가 찾은 머리 줄의 열 번호다. 열 이름 줄을 바꾸면 견주지 않는다
+    final auto = row == p.headerRow ? p.autoMapping : null;
     String rowLabel(int i) =>
         '${i + 1}줄 · ${p.topRows[i].where((c) => c.isNotEmpty).take(3).join(', ')}';
     return [
@@ -450,7 +452,7 @@ class _ImportScreenState extends State<ImportScreen> {
             ),
           ],
         ),
-      for (final (key, label) in _fields)
+      for (final (key, label) in _fields) ...[
         Row(
           children: [
             SizedBox(width: 96, child: Text(label)),
@@ -484,13 +486,32 @@ class _ImportScreenState extends State<ImportScreen> {
             ),
           ],
         ),
+        // 자동으로 찾은 열과 다르게 고르거나 비우면 알린다. 작업 015 설계 4절 2
+        if (auto?[key] case final a?
+            when a < headers.length && columns[key] != a)
+          Padding(
+            padding: const EdgeInsets.only(left: 96, bottom: 4),
+            child: Text(
+              '자동으로 찾은 열: ${headers[a]}. 바꾸면 결과가 달라질 수 있어요. 미리보기 숫자를 확인해 주세요',
+              style: const TextStyle(fontSize: 12, color: C.sub),
+            ),
+          ),
+      ],
     ];
   }
 
   /// 미리보기. 시안대로 숫자 타일, 카드와 달과 합계, 날짜가 든 줄이다. 업종을 여기서 정하는 칩은 새 기능이라 두지 않는다.
   /// 작업 011 설계 2절 I3
   List<Widget> _previewView(ImportPreview p, Map<String, dynamic> s) {
+    final auto = p.autoMapping;
     final notes = [
+      // 기억한 짝이나 고른 짝이 자동으로 찾은 머리 줄이나 짝과 다르면 알린다. 2026-10-05 실제 폰에서 기억한 짝이 취소
+      // 여부를 비워 취소와 할인 줄이 읽지 못한 행이 됐다. 작업 015 설계 4절 2
+      if (p.autoHeaderRow != null &&
+          (p.autoHeaderRow != p.headerRow ||
+              (auto?.entries.any((e) => p.mapping?[e.key] != e.value) ??
+                  false)))
+        '자동으로 찾은 열 짝과 다르게 읽었어요. 열 다시 짝짓기에서 확인해 주세요',
       if (s['cancels'] > 0) '취소 ${s['cancels']}건을 원 결제에 붙여요',
       if (s['orphans'] > 0) '원 결제가 없거나 담지 못하는 취소 ${s['orphans']}건은 넣지 않아요',
       if (s['skipped'] > 0) '보유 카드가 아닌 행 ${s['skipped']}건은 넣지 않아요',
@@ -522,7 +543,16 @@ class _ImportScreenState extends State<ImportScreen> {
         : widget.cards.firstWhere((c) => c.id == _card).name;
     final shown = p.rows.take(100).toList();
     return [
-      const SizedBox(height: 16),
+      // 읽은 형식이나 모르는 형식 안내. 작업 015 설계 4절 3
+      Padding(
+        padding: const EdgeInsets.fromLTRB(4, 16, 4, 8),
+        child: Text(
+          p.formatName == null
+              ? '처음 보는 형식이라 열 짝을 확인해 주세요'
+              : '${p.formatName} 형식으로 읽었어요',
+          style: const TextStyle(fontSize: 13, color: C.sub),
+        ),
+      ),
       Row(
         children: [
           _Tile('읽은 행', s['rows'] as int),
@@ -562,13 +592,15 @@ class _ImportScreenState extends State<ImportScreen> {
           padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
           child: Text(n, style: const TextStyle(fontSize: 13, color: C.sub)),
         ),
-      Align(
-        alignment: Alignment.centerLeft,
-        child: TextButton(
-          onPressed: _busy ? null : () => setState(() => _remap = true),
-          child: const Text('열 다시 짝짓기'),
+      // 아는 형식은 형식 표로만 읽는다. 손으로 고른 열과 형식 규칙이 엇갈리지 않게 한다. 작업 015 설계 2절 2
+      if (p.format == null)
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: _busy ? null : () => setState(() => _remap = true),
+            child: const Text('열 다시 짝짓기'),
+          ),
         ),
-      ),
       Box(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(

@@ -3,8 +3,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cherry_consume/api.dart' show Api;
 import 'package:cherry_consume/main.dart';
 import 'package:cherry_consume/screens/import.dart';
+import 'package:cherry_consume/store/imports.dart' show signature;
 import 'package:cherry_consume/store/routes/imports.dart' as imports;
 import 'package:cherry_consume/store/routes/me.dart' show addCard;
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'app_helpers.dart';
 import 'store/helpers.dart' show pay;
+import 'store/imports_ibk_test.dart' show ibk, line;
 
 Uint8List text(String s) => Uint8List.fromList(utf8.encode(s));
 
@@ -261,6 +264,8 @@ void main() {
     await tester.pumpAndSettle();
     final remap2 = find.text('열 다시 짝짓기');
     await tester.scrollUntilVisible(remap2, 200);
+    await tester.ensureVisible(remap2);
+    await tester.pumpAndSettle();
     await tester.tap(remap2);
     await tester.pumpAndSettle();
     final again2 = find.widgetWithText(FilledButton, '다시 읽기');
@@ -275,5 +280,97 @@ void main() {
     await tester.pumpAndSettle();
     final [kept2] = s.db.select('select mapping from import_mappings');
     expect(jsonDecode(kept2['mapping'] as String), containsPair('cancel', -1));
+  });
+
+  // 작업 015 설계 2절과 4절. 화면이 읽은 형식을 보이고, 모르는 형식에서 자동으로 찾은 짝과 다른 칸을 알린다
+  Future<void> open(
+    WidgetTester tester,
+    Uint8List bytes,
+    String card,
+    Api api,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ImportScreen(
+          api: api,
+          cards: [(id: card, name: '카드')],
+          pick: () async => (name: '내역.xls', bytes: bytes as Uint8List?),
+        ),
+      ),
+    );
+    await tester.tap(find.text('파일 고르기'));
+    await tester.pumpAndSettle();
+  }
+
+  const plain = '이용일자,가맹점명,이용금액,상태\n2026.09.10 21:30,GS25 강남점,4300,\n';
+
+  testWidgets('아는 형식은 형식 이름을 보이고 열 짝짓기 단추가 없다', (tester) async {
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'ibk-narasarang', assumedPrevMonthSpend: 300000)['id']
+            as String;
+    await open(
+      tester,
+      ibk([line('원화', '2026-09-10 12:30:00', '편의점 예시', '4,300', '10000001')]),
+      card,
+      api,
+    );
+    expect(find.text('기업은행 출력용 형식으로 읽었어요'), findsOneWidget);
+    expect(find.text('열 다시 짝짓기'), findsNothing);
+  });
+
+  testWidgets('모르는 형식은 열 짝을 확인해 달라고 한다', (tester) async {
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    await open(tester, text(plain), card, api);
+    expect(find.text('처음 보는 형식이라 열 짝을 확인해 주세요'), findsOneWidget);
+    expect(find.text('열 다시 짝짓기'), findsOneWidget);
+    // 자동으로 찾은 짝으로 읽었으면 다르다는 알림이 없다
+    expect(find.textContaining('자동으로 찾은 열 짝과 다르게'), findsNothing);
+  });
+
+  testWidgets('자동으로 찾은 열을 비우면 칸 아래에 알린다', (tester) async {
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    await open(tester, text(plain), card, api);
+    final remap = find.text('열 다시 짝짓기');
+    await tester.scrollUntilVisible(remap, 200);
+    await tester.ensureVisible(remap);
+    await tester.pumpAndSettle();
+    await tester.tap(remap);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('자동으로 찾은 열:'), findsNothing);
+    final pick = find.byKey(const Key('map-cancel'));
+    await tester.scrollUntilVisible(pick, 200);
+    await tester.pumpAndSettle();
+    await tester.tap(pick);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('없음').last);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('자동으로 찾은 열: 상태.'), findsOneWidget);
+  });
+
+  testWidgets('기억한 짝이 자동으로 찾은 짝과 다르면 미리보기에 알린다', (tester) async {
+    // 2026-10-05 실제 폰에서 기억한 짝이 취소 여부를 비워 취소와 할인 줄이 읽지 못한 행이 됐다
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    s.db.execute(
+      'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
+      [
+        signature(['이용일자', '가맹점명', '이용금액', '상태']),
+        jsonEncode({'date': 0, 'merchant': 1, 'amount': 2, 'cancel': -1}),
+      ],
+    );
+    await open(tester, text(plain), card, api);
+    expect(
+      find.text('자동으로 찾은 열 짝과 다르게 읽었어요. 열 다시 짝짓기에서 확인해 주세요'),
+      findsOneWidget,
+    );
   });
 }

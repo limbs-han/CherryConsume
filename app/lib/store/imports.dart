@@ -15,6 +15,8 @@ import 'package:crypto/crypto.dart';
 import 'package:html/parser.dart' as html;
 import 'package:xml/xml_events.dart';
 
+import 'formats.dart' show Format, headKey;
+
 const maxRows = 3000;
 const maxCols = 60;
 
@@ -945,13 +947,20 @@ int _installment(Object? v) {
   return n < 1 ? 1 : n;
 }
 
-/// 머리 줄 아래 행을 결제 행으로. 날짜도 가맹점도 없는 합계 줄은 건너뛴다
+/// 머리 줄 아래 행을 결제 행으로. 날짜도 가맹점도 없는 합계 줄은 건너뛴다. format은 아는 형식이다. 없으면 열
+/// 이름 사전의 규칙으로 읽는다. 작업 015 설계 1절
 List<ImportRow> parseRows(
   List<List<Object?>> table,
   int start,
-  Map<String, int> mapping,
-) {
+  Map<String, int> mapping, [
+  Format? format,
+]) {
   final out = <ImportRow>[];
+  // 본 값을 적은 열의 번호. 같은 이름이 둘이면 앞 열이다
+  final head = <String, int>{};
+  for (final (j, c) in table[start].indexed) {
+    head.putIfAbsent(headKey(c), () => j);
+  }
   for (final (k, raw) in table.skip(start + 1).indexed) {
     Object? get(String field) {
       final j = mapping[field];
@@ -976,7 +985,12 @@ List<ImportRow> parseRows(
           mapping.containsKey('time') && mapping['time'] != mapping['date'];
       row.at = (ownTime ? _time(get('time')) : null) ?? at;
       row.amount = amount.abs();
-      row.cancel = amount < 0 || pyStr(get('cancel')).contains('취소');
+      // 아는 형식은 그 형식의 취소 값과 금액 부호를 따른다. 뱅크샐러드는 음수가 결제다
+      final mark = pyStr(get('cancel')).trim();
+      row.cancel = format == null
+          ? amount < 0 || mark.contains('취소')
+          : (format.reversed ? amount > 0 : amount < 0) ||
+                format.cancelValues.contains(mark);
       // 취소금액 열이 있으면 취소 줄의 금액은 그 열이다. 부분 취소를 전액 취소로 읽지 않는다
       final cancelled = _amount(get('cancel_amount'));
       if (row.cancel && cancelled != null && cancelled != 0) {
@@ -987,8 +1001,12 @@ List<ImportRow> parseRows(
         row.error = '일부 취소된 결제예요. 기록에서 직접 적어 주세요';
       }
       // 취소 표시가 있고 가맹점명이 할인으로 끝나면 카드가 준 할인이다. IBK의 "통신요금할인", "카카오T 자동결제 할인"
-      // 이 그렇다. 원 결제를 찾으면 이름이 겹치는 결제를 취소한 것으로 잘못 볼 수 있다. E59
-      row.discount = row.cancel && merchant.endsWith('할인');
+      // 이 그렇다. 원 결제를 찾으면 이름이 겹치는 결제를 취소한 것으로 잘못 볼 수 있다. 이 규칙을 가진 형식에만 건다.
+      // 다른 카드사의 진짜 취소를 할인으로 빼지 않게 한다. E59, 작업 015 설계 4절 1
+      row.discount =
+          (format?.discountRows ?? false) &&
+          row.cancel &&
+          merchant.endsWith('할인');
       row.installmentMonths = _installment(get('installment'));
       row.approvalNo = _approval(get('approval'));
       final card = pyStr(get('card')).trim();
@@ -1004,6 +1022,17 @@ List<ImportRow> parseRows(
       // 해외 여부 Y나 국내외 구분 "해외"면 해외다. 열이 없거나 모르면 국내다
       // ponytail: 이용 국가 열의 나라 이름은 읽지 않는다. 실제 파일을 받으면 더한다
       row.overseas = _yes(get('region')) == true;
+      // 실제 파일에서 본 적 없는 값이 든 줄은 넣지 않고 보인다. 해외 결제나 처음 보는 취소 표시를 결제로 넣어 실적을
+      // 부풀리지 않는다. 작업 015 설계 1절
+      final unseen = format?.seen.entries.any((e) {
+        final j = head[e.key];
+        return !e.value.contains(
+          j != null && j < raw.length ? pyStr(raw[j]).trim() : '',
+        );
+      });
+      if (row.error == null && (unseen ?? false)) {
+        row.error = '처음 보는 값이에요. 기록에서 직접 적어 주세요';
+      }
     }
     out.add(row);
   }

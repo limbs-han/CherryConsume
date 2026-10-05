@@ -75,13 +75,18 @@ String _tr(List<String> cells) =>
     '<tr>${[for (final c in cells) '<td>$c</td>'].join()}</tr>';
 
 /// 확장자는 xls지만 속은 html 표인 출력용 파일. 머리 줄 위에 제목과 합계 줄이 있다
-Uint8List ibk(List<List<String>> lines) => Uint8List.fromList(
-  utf8.encode(
-    '<html><head><meta charset="utf-8"></head><body><table>'
-    '${_tr(['기간별 사용내역 조회'])}${_tr(['[ 일시불 합계 ] : 원화 : 0'])}${_tr(_head)}'
-    '${lines.map(_tr).join()}</table></body></html>',
-  ),
-);
+Uint8List ibk(List<List<String>> lines, {List<String> head = _head}) =>
+    Uint8List.fromList(
+      utf8.encode(
+        '<html><head><meta charset="utf-8"></head><body><table>'
+        '${_tr(['기간별 사용내역 조회'])}${_tr(['[ 일시불 합계 ] : 원화 : 0'])}${_tr(head)}'
+        '${lines.map(_tr).join()}</table></body></html>',
+      ),
+    );
+
+/// 승인구분 열 이름만 거래구분으로 바꾼 파일. 기업은행 출력용 형식으로 맞지 않아 열 이름 사전과 기억한 짝으로 읽는다.
+/// 모르는 형식의 기억한 짝 채우기를 본다. E30
+final _plain = [for (final h in _head) h == '승인구분' ? '거래구분' : h];
 
 ({Store s, String card}) ibkCard() {
   final (:s, clock: _) = fresh();
@@ -110,11 +115,12 @@ void main() {
   });
 
   test('결제일과 시각을 같은 승인일시 열로 짝지어도 읽는다', () {
-    // 2026-10-05 사용자가 실제 IBK 파일로 둘 다 승인일시를 골라 막혔다. E30
+    // 2026-10-05 사용자가 실제 IBK 파일로 둘 다 승인일시를 골라 막혔다. E30. 기업은행 출력용은 짝을 보내도 형식 표로
+    // 읽어 모르는 형식 파일로 본다. 작업 015 설계 2절
     final (:s, :card) = ibkCard();
     final file = ibk([
       line('원화', '2026-09-10 12:30:00', '편의점 예시', '4,300', '10000001'),
-    ]);
+    ], head: _plain);
     final p = imports.preview(
       s,
       file,
@@ -336,7 +342,7 @@ void main() {
     s.db.execute(
       'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
       [
-        signature([for (final h in _head) h]),
+        signature([for (final h in _plain) h]),
         jsonEncode({'date': 3, 'merchant': 6, 'amount': 7}),
       ],
     );
@@ -345,11 +351,12 @@ void main() {
       ibk([
         line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000010'),
         line('취소또는할인', '2026-09-06 02:30:00', '쇼핑할인', '1,000', 'F8000004'),
-      ]),
+      ], head: _plain),
       userCardId: card,
     );
     expect(p['mapping'], containsPair('cancel', 1));
-    expect([for (final r in rowsOf(p)) r['status']], ['new', 'discount']);
+    // 모르는 형식이라 할인 줄 규칙을 걸지 않는다. 원 결제가 없는 취소다. 작업 015 설계 4절 1
+    expect([for (final r in rowsOf(p)) r['status']], ['new', 'orphan']);
   });
 
   test('기억한 짝의 칸과 열은 자동으로 찾은 것보다 이긴다', () {
@@ -358,13 +365,15 @@ void main() {
     s.db.execute(
       'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
       [
-        signature([for (final h in _head) h]),
+        signature([for (final h in _plain) h]),
         jsonEncode({'date': 3, 'merchant': 6, 'amount': 17}),
       ],
     );
     final p = imports.preview(
       s,
-      ibk([line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000011')]),
+      ibk([
+        line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000011'),
+      ], head: _plain),
       userCardId: card,
     );
     final m = p['mapping'] as Map;
@@ -379,7 +388,7 @@ void main() {
     s.db.execute(
       'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
       [
-        signature([for (final h in _head) h]),
+        signature([for (final h in _plain) h]),
         jsonEncode({'date': 3, 'merchant': 6, 'amount': 7, 'cancel': -1}),
       ],
     );
@@ -394,7 +403,7 @@ void main() {
           'F8000005',
           cancelled: '0',
         ),
-      ]),
+      ], head: _plain),
       userCardId: card,
     );
     // 비운 칸은 -1로 돌려준다. 화면이 다시 짝짓고 저장할 때 그대로 남긴다
@@ -405,7 +414,9 @@ void main() {
     // 화면이 직접 보낸 짝의 비운 칸도 -1로 돌려준다
     final direct = imports.preview(
       s,
-      ibk([line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000013')]),
+      ibk([
+        line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000013'),
+      ], head: _plain),
       userCardId: card,
       mapping: {
         'row': 2,
@@ -417,7 +428,9 @@ void main() {
     expect(
       () => imports.preview(
         s,
-        ibk([line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000012')]),
+        ibk([
+          line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000012'),
+        ], head: _plain),
         userCardId: card,
         mapping: {
           'row': 2,
@@ -426,5 +439,99 @@ void main() {
       ),
       throwsA(isA<ApiError>()),
     );
+  });
+
+  test('기업은행 출력용은 기억한 짝이 무엇이든 형식 표로 읽는다', () {
+    // 작업 015 성공 기준 1. 2026-10-05 같은 실제 파일이 기억한 짝에 따라 세 가지 결과로 나왔다
+    final lines = [
+      line('원화', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000020'),
+      line('취소또는할인', '2026-09-06 02:30:00', '쇼핑할인', '1,000', 'F8000020'),
+      line('취소또는할인', '2026-09-07 11:00:00', '다른 가게', '3,000', '10000021'),
+    ];
+    List<Object?> statuses(Map<String, int>? saved) {
+      final (:s, :card) = ibkCard();
+      if (saved != null) {
+        s.db.execute(
+          'insert into import_mappings (signature, mapping, updated_at) values (?, ?, 0)',
+          [
+            signature([for (final h in _head) h]),
+            jsonEncode(saved),
+          ],
+        );
+      }
+      final p = imports.preview(s, ibk(lines), userCardId: card);
+      expect(p['format'], 'ibk-print');
+      expect(p['format_name'], '기업은행 출력용');
+      return [for (final r in rowsOf(p)) r['status']];
+    }
+
+    for (final saved in [
+      null,
+      {'date': 3, 'merchant': 6, 'amount': 7},
+      {'date': 3, 'merchant': 6, 'amount': 7, 'cancel': -1},
+    ]) {
+      expect(statuses(saved), ['new', 'discount', 'orphan'], reason: '$saved');
+    }
+  });
+
+  test('모르는 형식의 할인으로 끝나는 취소 줄은 보통 취소로 원 결제를 찾는다', () {
+    // 작업 015 성공 기준 6. E59 할인 줄 규칙은 기업은행 출력용에만 건다
+    final (:s, :card) = ibkCard();
+    final p = imports.preview(
+      s,
+      Uint8List.fromList(
+        utf8.encode(
+          '이용일자,가맹점명,이용금액,취소여부\n'
+          '2026.09.05 10:00,마트할인,5000,\n'
+          '2026.09.06 10:00,마트할인,5000,취소\n',
+        ),
+      ),
+      userCardId: card,
+    );
+    expect(p['format'], isNull);
+    expect([for (final r in rowsOf(p)) r['status']], ['new', 'cancel']);
+  });
+
+  test('기업은행 출력용에서 본 적 없는 값이 든 줄은 넣지 않고 보인다', () {
+    // 작업 015 설계 1절. 해외 결제와 할부는 아직 실제 파일로 보지 못했다
+    final (:s, :card) = ibkCard();
+    final overseas = line(
+      '원화',
+      '2026-09-05 10:00:00',
+      '가게 예시',
+      '5,000',
+      '10000030',
+    )..[2] = '해외체크일시불';
+    final [r] = rowsOf(imports.preview(s, ibk([overseas]), userCardId: card));
+    expect((r['status'], r['reason']), ('error', '처음 보는 값이에요. 기록에서 직접 적어 주세요'));
+  });
+
+  test('기업은행 출력용 승인구분에 처음 보는 값이 든 줄은 결제로 넣지 않는다', () {
+    // 작업 015 단계 검토 낮음 7. 취소를 결제로 넣는 길을 막는다
+    final (:s, :card) = ibkCard();
+    final [r] = rowsOf(
+      imports.preview(
+        s,
+        ibk([line('취소', '2026-09-05 10:00:00', '가게 예시', '5,000', '10000031')]),
+        userCardId: card,
+      ),
+    );
+    expect(r['status'], 'error');
+  });
+
+  test('기업은행 출력용은 화면이 보낸 짝도 쓰지 않고 형식 표로 읽는다', () {
+    // 작업 015 단계 검토 낮음 6
+    final (:s, :card) = ibkCard();
+    final p = imports.preview(
+      s,
+      ibk([line('취소또는할인', '2026-09-06 02:30:00', '쇼핑할인', '1,000', 'F8000040')]),
+      userCardId: card,
+      mapping: {
+        'row': 2,
+        'columns': {'date': 3, 'merchant': 6, 'amount': 7},
+      },
+    );
+    expect(p['format'], 'ibk-print');
+    expect(rowsOf(p).single['status'], 'discount');
   });
 }
