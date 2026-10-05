@@ -246,7 +246,8 @@ Python 엔진을 `app/lib/engine/`으로 같은 파일 나눔과 같은 함수 �
   - `.claude/CLAUDE.md`의 서버 문장과 `README.md`는 고칠 문장을 보여 주고 사용자 확인을 받는다
   - 결과: 2026-10-03 설계 문서의 확정된 결정 표 스택, 구조, 앱 DB, 로그인 줄과 4절 구조, 4.2 앱 DB, 4.3 인증, 6.2 저장소, 6.9 시험, 위험, 8절과 9절의 서버 문장을 고쳤다. ERD는 폰 안 SQLite 표 10개로 다시 썼다. 시나리오 S1, S4, S10, S11, E22, E24~E29, E36, E40~E42를 고쳤다. E22 카드 요청은 만든 적이 없어 받을 곳을 출시 준비에서 정한다
   - 사용자 확인: `.claude/CLAUDE.md`, `.claude/rules/backend.md`를 나눈 `engine.md`, `README.md`를 안대로 고쳤다. E28은 "JSON 내보내기가 대신 (추천)"을 골랐다. 2026-10-03
-- [ ] 6. 사용자가 카카오와 Google 개발자 앱, Supabase 프로젝트를 지운다. Claude는 누를 곳을 안내한다
+- [x] 6. 사용자가 카카오와 Google 개발자 앱, Supabase 프로젝트를 지운다. Claude는 누를 곳을 안내한다
+  - 2026-10-05 사용자가 지웠다. `app/android/local.properties`의 카카오 키 줄도 지웠다. 명세서는 이미 `app/test/local/`에 있다. Docker 볼륨 `cherryconsume_db`는 Docker를 켜야 확인한다
 - [x] 7. 위험 검토, 사용자 확인, 커밋
   - 2026-10-03 b572850, 919cb62, 1508fc8, 7b0a59b, a8f4df4로 커밋했다. 7.6은 사용자가 따로 한다
   - 2026-10-03 검토 결과 높음 0, 중간 4, 낮음 15건. 고친 것
