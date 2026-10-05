@@ -5,7 +5,7 @@
 ## 롯데카드
 
 - 막힘: `robots.txt`는 프로토콜과 상관없이 늘 응답이 없다. curl 28. 다른 주소는 기본 설정(HTTP/2 협상)에서 연결이 끊기고(curl 56), `--http1.1`로 받으면 모두 200이다. 쿠키와 CSRF는 필요 없다. 수집기는 HTTP/1.1로 받는다. 끊기는 까닭이 HTTP/2 협상인지 직전 타임아웃 뒤의 보호장치인지는 추측이다.
-- 전체 목록: `POST /app/LPSCHAA_V100.lc`, 폼 `collection=disclosure&listcount=500&startcount=0&query=`. 응답의 `Content`가 다시 JSON 글이고 `result.collection[0].docs`가 카드다. 총 531건, 500건 가운데 판매 중 282, 발급 종료 218. 신용과 체크가 한 목록에 섞여 있고 구분 칸이 없다.
+- 전체 목록: `POST /app/LPSCHAA_V100.lc`, 폼 `collection=disclosure&listcount=500&startcount=0&query=`. 2026-10-05 수집기는 listcount 2000으로 받는다. 응답의 `Content`가 다시 JSON 글이고 `result.collection[0].docs`가 카드다. 총 531건, 500건 가운데 판매 중 282, 발급 종료 218. 신용과 체크가 한 목록에 섞여 있고 구분 칸이 없다.
 - 칸: 이름 `VT_CD_KND_NM`, PDF `https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/<OCY_FILE_NM>`, 발급 종료 `ISU_E_YN`, 마지막 게시일 `BULT_SDT`. 단종일, 출시일, 카드 코드, 상품 페이지는 없다. `DOCID`로 상품 이력 팝업 `LPCMNPD_AJAX.lc?num=135`를 부를 수 있다. 개정 이력이 있는지는 아직 안 봤다.
 - 판매 중 카드의 코드와 그림: `POST /app/LPCDADA_A100.lc`(신용 일반), `A101`(제휴), `A102`(프리미엄), 체크는 `LPCDAEA` 쪽으로 추측. 한 쪽 9장, `Param.totalRowCnt`가 총 쪽수. 응답 HTML에서 코드 `vtCdKndC`, 상품 페이지 `LPCDADB_V100.lc?vtCdKndC=<코드>`, 그림 `image.lottecard.co.kr/UploadFiles/ecenterPath/cdInfo/ecenterCdInfo<코드>_nm1_v.png`.
 - 공시 목록과 카드 목록은 공통 키가 없어 이름으로 짝짓는다. 표기가 다를 수 있어 사람 확인이 필요하다.
