@@ -16,6 +16,11 @@ on:
         type: choice
         options: ["30", "14"]
         default: "30"
+      issuer:
+        description: 한 카드사만 다시 받을 때 고른다. all이면 모두
+        type: choice
+        options: [all, hana, hyundai, ibk, kakaobank, kb, lotte, nh, samsung, shinhan, woori, carddamoa]
+        default: all
 
 permissions:
   contents: read
@@ -45,7 +50,8 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        issuer: [hana, hyundai, ibk, kakaobank, kb, lotte, nh, samsung, shinhan, woori, carddamoa]
+        # 2026-10-05 우리 올리기가 실패해 한 카드사만 다시 받을 수 있게 했다
+        issuer: ${{ fromJSON(inputs.issuer == 'all' && '["hana","hyundai","ibk","kakaobank","kb","lotte","nh","samsung","shinhan","woori","carddamoa"]' || format('["{0}"]', inputs.issuer)) }}
     steps:
       # Git for Windows는 PATH에 cmd 폴더만 넣어 bash가 Windows의 WSL bash.exe로 잡힌다. 리눅스가 깔리지 않은 PC에서는
       # bash 단계가 모두 바로 실패한다. 2026-10-05 첫 실행에서 모든 카드사가 setup-cli와 올리기 단계에서 멈췄다
@@ -83,8 +89,12 @@ jobs:
           ignore=()
           case "$ISSUER" in samsung|ibk|kakaobank|lotte|carddamoa) ignore=(--ignore-robots "$ISSUER") ;; esac
           # PDF는 Docling으로 해석해 옆에 .md로 둔다. 모델은 앞 단계에서 받아 사용자 폴더에 남는다. 작업 008 9단계
+          # 롯데 상품설명서는 글자층이 깨져 Docling 글을 쓰지 못하고 모두 운영에서 해석한다. 2026-10-05 첫 수집에서
+          # Docling이 롯데 PDF를 읽다 수집기 프로세스가 기록 없이 죽어 색인 카드 627장 가운데 41개만 받았다. 그래서 롯데는 끈다
+          docling=(--docling)
+          [ "$ISSUER" = lotte ] && docling=()
           collect() {
-            uv run --project backend --group docling --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out raw --docling --issuer "$ISSUER" "${ignore[@]}" "$@"
+            uv run --project backend --group docling --with playwright==1.63.0 python -m cherry_core.pipeline.collect --out raw "${docling[@]}" --issuer "$ISSUER" "${ignore[@]}" "$@"
           }
           status=0
           # 카드다모아는 카드 원문이 없다. 수집 방법이 blocked인 카드사는 받을 카드 원문이 없어 바로 끝난다
@@ -124,9 +134,11 @@ jobs:
             # 목록 파일이 먼저 들어가면 없는 원문을 가리켜 글 뽑기가 그 원문을 계속 미룬다. 2026-10-02 PC 올리기에서 겪었다
             # 비밀값이 든 단계라 외부 패키지를 부르는 uv 대신 sed로 경로를 읽는다
             p=$(head -1 "$f" | sed -E 's/.*"path": "([^"]*)".*/\1/')
-            [ -z "$p" ] || databricks fs ls "$dest/$(dirname "$p")" | grep -qF "$(basename "$p")"
+            # ls를 grep -q에 바로 이으면 grep이 찾자마자 파이프를 닫아 ls가 쓰기 오류로 실패한다. 파일이 많은 우리에서
+            # 2026-10-05 "The pipe is being closed"로 멈췄다. 목록을 다 받은 뒤 찾는다
+            if [ -n "$p" ]; then listing=$(databricks fs ls "$dest/$(dirname "$p")"); grep -qF "$(basename "$p")" <<< "$listing"; fi
             databricks fs cp "$f" "$dest/manifests/$(basename "$f")" --overwrite > /dev/null
-            databricks fs ls "$dest/manifests" | grep -qF "$(basename "$f")"
+            listing=$(databricks fs ls "$dest/manifests"); grep -qF "$(basename "$f")" <<< "$listing"
           done
           echo "올린 파일 $(find raw -type f | wc -l)개"
 

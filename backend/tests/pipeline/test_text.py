@@ -238,8 +238,10 @@ def test_docling_problem_rejects_broken_empty_or_missing_pages():
     # 표지일 수 있는 첫 두 쪽은 비어도 되고, 그 밖의 빈 쪽은 그림으로 된 혜택일 수 있다
     long = "가" * 400
     assert docling_problem(["<!-- image -->", "", long, long, long]) is None
-    assert docling_problem([page, page, "가" * 49 + "\n<!-- image -->", page, page]) == "빈 쪽"
-    assert docling_problem([page, page, "가" * 50, page, page]) is None
+    assert docling_problem([page, page, "가" * 19 + "\n<!-- image -->", page, page]) == "빈 쪽"
+    assert docling_problem([page, page, "가" * 20, page, page]) is None
+    # 2026-10-05 첫 수집에서 현대 상품설명서는 뒤표지가 비고 목차와 간지는 글이 서른 자쯤이었다
+    assert docling_problem([page, page, page, page, "<!-- image -->"]) is None
 
 
 def test_markdown_text_undoes_docling_escapes_and_keeps_dash_rows():

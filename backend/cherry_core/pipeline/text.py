@@ -183,7 +183,9 @@ def same_page_text(old: bytes, new: bytes) -> bool:
 _MD_RULE = re.compile(r"\|(?:\s*:?-{3,}:?\s*\|)+")
 # Docling의 글을 믿지 않고 ai_parse_document에 맡기는 기준. 작업 008 설계 4절
 MIN_CHARS_PER_PAGE = 200  # 공백을 뺀 글이 쪽당 평균 이보다 적으면 글자층이 없는 PDF다
-MIN_PAGE_CHARS = 50  # 표지일 수 있는 첫 두 쪽 밖에서 이보다 적은 쪽은 그림으로 된 쪽이다
+# 앞표지일 수 있는 첫 두 쪽과 뒤표지일 수 있는 마지막 쪽 밖에서 이보다 적은 쪽은 그림으로 된 쪽이다
+# 2026-10-05 첫 수집에서 현대 상품설명서는 뒤표지가 비고 목차와 간지가 서른 자쯤이라 50자로는 넷에 하나가 걸렸다
+MIN_PAGE_CHARS = 20
 COVER_PAGES = 2
 
 
@@ -218,7 +220,7 @@ def docling_problem(pages: list[str]) -> str | None:
     chars = [len(_SPACE.sub("", t)) for t in texts]
     if sum(chars) < MIN_CHARS_PER_PAGE * max(len(pages), 1):
         return "글자층 없음"
-    if any(c < MIN_PAGE_CHARS for c in chars[COVER_PAGES:]):
+    if any(c < MIN_PAGE_CHARS for c in chars[COVER_PAGES:-1]):
         return "빈 쪽"
     return None
 
