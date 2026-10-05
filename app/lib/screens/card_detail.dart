@@ -686,8 +686,6 @@ class TierBar extends StatelessWidget {
   }
 }
 
-/// 혜택 한 줄. 남은 양 / 한도. 금액, 횟수, 결제액 한도 가운데 남은 비율이 가장 작은 것을 보인다. 먼저 끝나는 쪽이다.
-/// 다 써도 0 아래로 내려가지 않는다. 이번 달이 아닌 한도는 기간을 앞에 붙인다
 /// 업종 묶음의 작은 머리줄
 class _GroupHead extends StatelessWidget {
   const _GroupHead(this.name);
@@ -708,6 +706,8 @@ class _GroupHead extends StatelessWidget {
   );
 }
 
+/// 혜택 한 줄. 남은 양 / 한도. 금액, 횟수, 결제액 한도 가운데 남은 비율이 가장 작은 것을 보인다. 먼저 끝나는 쪽이다.
+/// 다 써도 0 아래로 내려가지 않는다. 이번 달이 아닌 한도는 기간을 앞에 붙인다
 class _LimitRow extends StatelessWidget {
   const _LimitRow(this.l, {this.title = true});
   final Limit l;
