@@ -124,3 +124,92 @@ def app_catalog(cat: Catalog) -> dict:
 def app_catalog_text(cat: Catalog) -> str:
     """줄을 나눠 쓴다. 바뀐 곳을 diff로 읽고, 커밋 훅이 줄 하나 때문에 파일 전체를 막지 않게 한다"""
     return json.dumps(app_catalog(cat), ensure_ascii=False, indent=1) + "\n"
+
+
+# 목록 파일과 카드별 규칙 파일의 형식 번호. 작업 014 설계 1절
+SPLIT_SCHEMA = 2
+# 목록 파일에 담는 카드 칸. 앱 CatalogCard가 읽는 정보 칸이다. product_codes는 앱이 쓰는 곳이 없다
+INDEX_FIELDS = (
+    "id",
+    "issuer",
+    "name",
+    "short_name",
+    "search_names",
+    "kind",
+    "status",
+    "status_since",
+    "annual_fees",
+    "checked_at",
+)
+
+
+def _line(data) -> str:
+    return json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+
+
+def card_text(card: dict) -> str:
+    """규칙 파일은 한 줄이다"""
+    return _line(card) + "\n"
+
+
+def index_text(index: dict) -> str:
+    """목록 파일은 카드마다 한 줄이다. 승인 하나가 바꾸는 줄이 그 카드 한 줄이 된다"""
+    head = ",\n".join(f"{_line(k)}:{_line(v)}" for k, v in index.items() if k != "cards")
+    cards = ",\n".join(_line(c) for c in index["cards"])
+    return f'{{{head},\n"cards":[\n{cards}\n]}}\n'
+
+
+def _billing_bound(full: dict) -> list[str]:
+    """청구 방식 조건이 붙은 혜택의 대상 업종. 앱 추천 billingBound와 같은 규칙이다"""
+
+    def has(conditions: list) -> bool:
+        return any(c.get("billing") is not None or has(c.get("any_of") or []) for c in conditions)
+
+    return sorted(
+        {
+            code
+            for card in full["cards"]
+            for r in card["revisions"]
+            for b in r["rules"]["benefits"]
+            if has(b["when"])
+            for code in b["target"]["categories"]
+        }
+    )
+
+
+def app_split(cat: Catalog) -> tuple[str, dict[str, str]]:
+    """목록 파일 글자와 카드 id마다 규칙 파일 글자. 규칙 파일에는 앱이 읽지 않는 근거 문장과 메모를 담지 않는다.
+    개정 지문은 app_catalog가 전체 규칙으로 만든 값 그대로다. 작업 014 설계 1절"""
+    full = app_catalog(cat)
+    files: dict[str, str] = {}
+    heads = []
+    for card in full["cards"]:
+        revisions = []
+        for r in card["revisions"]:
+            rules = {
+                **r["rules"],
+                "benefits": [
+                    {k: v for k, v in b.items() if k not in ("evidence", "notes")} for b in r["rules"]["benefits"]
+                ],
+            }
+            revisions.append({**r, "rules": rules})
+        text = card_text(
+            {"schema": SPLIT_SCHEMA, "id": card["id"], "open_questions": card["open_questions"], "revisions": revisions}
+        )
+        files[card["id"]] = text
+        heads.append(
+            {
+                **{k: card[k] for k in INDEX_FIELDS if k in card},
+                "revisions": [
+                    {
+                        "effective_from": r["effective_from"],
+                        "effective_from_estimated": r["effective_from_estimated"],
+                        "tiers": r["rules"]["tiers"],
+                    }
+                    for r in card["revisions"]
+                ],
+                "file_sha256": hashlib.sha256(text.encode()).hexdigest(),
+            }
+        )
+    shared = {k: v for k, v in full.items() if k not in ("schema", "cards")}
+    return index_text({"schema": SPLIT_SCHEMA, **shared, "billing_bound": _billing_bound(full), "cards": heads}), files

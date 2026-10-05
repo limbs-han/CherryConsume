@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from .app_json import app_catalog, app_catalog_text, number_errors, rule_errors
+from .app_json import app_catalog, app_catalog_text, app_split, number_errors, rule_errors
 from .canonical import catalog_files, format_file
 from .check import check_catalog
 from .load import load_catalog
@@ -21,6 +21,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("command", choices=["check", "format", "json"])
     ap.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     ap.add_argument("--out", type=Path, default=DEFAULT_JSON)
+    # 목록 파일과 카드별 규칙 파일을 이 폴더에 쓴다. 작업 014 단계 1. 단계 5에서 기본이 된다
+    ap.add_argument("--split", type=Path)
     args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -41,6 +43,19 @@ def main(argv: list[str] | None = None) -> int:
             for e in errors:
                 print(f"  {e}")
             return 1
+        if args.split:
+            text, files = app_split(cat)
+            cards = args.split / "cards"
+            cards.mkdir(parents=True, exist_ok=True)
+            # 빠진 카드의 규칙 파일은 지운다
+            for p in cards.glob("*.json"):
+                if p.stem not in files:
+                    p.unlink()
+            for cid, body in files.items():
+                (cards / f"{cid}.json").write_text(body, encoding="utf-8", newline="\n")
+            (args.split / "index.json").write_text(text, encoding="utf-8", newline="\n")
+            print(f"카드 {len(files)}장을 {args.split}에 나눠 썼다")
+            return 0
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(app_catalog_text(cat), encoding="utf-8", newline="\n")
         print(f"카드 {len(cat.cards)}장을 {args.out}에 썼다")
