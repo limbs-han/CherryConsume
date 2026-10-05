@@ -25,7 +25,7 @@ MAX_INTEGER = 10**12
 
 
 def rules_sha256(data: dict) -> str:
-    """개정 규칙의 지문. 서버의 card_revisions와 같은 값이다"""
+    """개정 규칙의 지문. 앱 결제의 `revision_sha`로 남는 값이다"""
     text = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(text.encode()).hexdigest()
 
@@ -92,7 +92,7 @@ def app_catalog(cat: Catalog) -> dict:
                     "effective_from": r.effective_from.isoformat(),
                     "effective_from_estimated": r.effective_from_estimated,
                     "source": r.source,
-                    # 서버의 card_revisions와 같은 값이 되게 규칙 전체의 덤프로 만든다
+                    # 규칙 전체의 덤프로 만든다. 앱 결제가 계산에 쓴 개정을 이 값으로 남긴다
                     "sha256": rules_sha256(dump(rules)),
                     "rules": app_rules(rules),
                 }

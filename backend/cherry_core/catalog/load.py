@@ -53,7 +53,7 @@ class LoadedIssuer:
 class Catalog:
     root: Path
     categories: set[str] = field(default_factory=set)
-    # 화면의 업종 칩과 서버의 업종 표가 이름과 부모를 쓴다. 작업 005
+    # 화면의 업종 칩과 앱 JSON의 `categories`가 이름과 부모를 쓴다. 작업 005
     category_tree: list[Category] = field(default_factory=list)
     merchants: dict[str, Merchant] = field(default_factory=dict)
     payment_methods: dict[str, PaymentMethod] = field(default_factory=dict)
