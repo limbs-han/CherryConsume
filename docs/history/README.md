@@ -129,3 +129,4 @@
 | [84](84-home-pc-first-collect.md) | 2026-10-05 | 작업 008 집 PC 러너 첫 수집 고치기 |
 | [85](85-collab-record.md) | 2026-10-05 | 체리컨슘 클로드 협업 기록 |
 | [86](86-prompt-v14-and-collect-check.md) | 2026-10-05 | 추출 프롬프트 판 14와 삼성, 롯데, IBK 수집 확인 |
+| [87](87-spend-defaults-and-review-app.md) | 2026-10-05 | 카드사 실적 규칙 기본값과 운영 검수 앱 첫 배포 |
