@@ -205,7 +205,7 @@ def pick_new_cards(
     """새 초안을 만들 색인 행과 그 원문 (원문 종류, 주소, 문서). docs는 주소마다 가장 최근 문서다.
 
     카탈로그에 있거나 이미 초안이 있는 카드, 법인 카드와 3년 넘게 전에 단종된 카드, 원문이 없는 카드는 뺀다.
-    원문은 상품 페이지와 가장 최근 PDF 하나다. 수집기가 받는 것과 같다. 카드다모아 추천 카드를 먼저 고른다.
+    원문은 상품 페이지와 가장 최근 PDF 하나다. 수집기가 받는 것과 같다. 카드다모아 추천 카드, 설문으로 요청이 온 카드를 먼저 고른다.
     """
     out = []
     for r in rows:
@@ -218,5 +218,5 @@ def pick_new_cards(
         found = [(kind, url, docs[url]) for kind, url in urls if url and url in docs]
         if found:
             out.append((r, found))
-    out.sort(key=lambda x: (not x[0]["recommended"], x[0]["issuer"], x[0]["name"]))
+    out.sort(key=lambda x: (not x[0]["recommended"], not x[0].get("requested"), x[0]["issuer"], x[0]["name"]))
     return out[:limit] if limit else out

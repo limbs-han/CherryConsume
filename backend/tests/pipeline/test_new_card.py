@@ -172,6 +172,19 @@ def test_pick_new_cards_skips_catalog_drafted_corporate_old_and_docless_cards():
     assert pick_new_cards(rows, set(), set(), docs, FETCHED, issuers={"kb"}) == []
 
 
+def test_requested_card_is_picked_after_recommended_and_before_the_rest():
+    # 작업 008 14단계. 설문으로 요청이 온 카드는 그 카드사를 한 장만 돌려도 초안이 생겨야 한다
+    rows = [
+        index_row("shinhan-a", "가 카드"),
+        index_row("shinhan-b", "나 카드", requested=True),
+        index_row("shinhan-c", "다 카드", recommended=True),
+        index_row("shinhan-d", "라 카드", requested=None),  # 칸이 생기기 전 행
+    ]
+    docs = {f"https://x.test/shinhan-{c}": {"path": f"{c}.html"} for c in "abcd"}
+    picked = pick_new_cards(rows, set(), set(), docs, FETCHED)
+    assert [r["card_id"] for r, _ in picked] == ["shinhan-c", "shinhan-b", "shinhan-a", "shinhan-d"]
+
+
 def test_card_sent_to_a_person_for_unknown_kind_is_drafted_again_once_the_index_knows_it():
     from cherry_core.pipeline.new_card import KIND_REASON, drafted_cards
 

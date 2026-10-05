@@ -552,6 +552,7 @@ def new_cards(spark, args, s, files, cat, codes, now, to_queue) -> None:
             "page_url",
             "pdf_urls",
             "recommended",
+            "requested",
         )
         .collect()
     ]
