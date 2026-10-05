@@ -14,18 +14,8 @@ resources:
       # 개발용과 운영이 같은 작업 공간이라 이름이 겹치지 않게 대상 이름을 붙인다
       name: cherry-review-${bundle.target}
       description: 카드 개정 초안 검수
+      # 실행 명령과 환경변수는 apps/review/app.yaml에 둔다. 화면의 Deploy는 번들 config를 읽지 않는다
       source_code_path: ../apps/review
-      config:
-        command: ["streamlit", "run", "app.py"]
-        env:
-          - name: DATABRICKS_WAREHOUSE_ID
-            value_from: sql-warehouse
-          - name: APPROVE_JOB_ID
-            value_from: approve-job
-          - name: CHERRY_SILVER
-            value: ${resources.schemas.silver.name}
-          - name: CHERRY_GOLD
-            value: ${resources.schemas.gold.name}
       resources:
         - name: sql-warehouse
           sql_warehouse:

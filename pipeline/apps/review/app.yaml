@@ -1,0 +1,14 @@
+# 검수 앱 실행 설정. 화면의 Deploy와 번들 실행이 모두 이 파일을 읽는다
+# 2026-10-05 번들 config에만 두었더니 화면의 Deploy가 python app.py로 켜 환경변수가 없어 앱이 죽었다
+# 스키마 이름은 대상마다 달라 고정값을 쓰지 않고 앱 자원인 표의 전체 이름에서 읽는다. 자원은 resources/review.yml
+# 볼륨은 전체 이름이 아니라 /Volumes/... 경로로 들어와 쓰지 않는다
+command: ["streamlit", "run", "app.py"]
+env:
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: APPROVE_JOB_ID
+    valueFrom: approve-job
+  - name: QUEUE_TABLE
+    valueFrom: queue
+  - name: CATALOG_FILES_TABLE
+    valueFrom: catalog-files

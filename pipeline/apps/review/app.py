@@ -18,7 +18,8 @@ from databricks import sql
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.core import Config
 
-SILVER, GOLD = os.environ["CHERRY_SILVER"], os.environ["CHERRY_GOLD"]
+# 앱 자원의 전체 이름 cherry.<스키마>.<이름>에서 스키마를 읽는다. app.yaml
+SILVER, GOLD = os.environ["QUEUE_TABLE"].split(".")[1], os.environ["CATALOG_FILES_TABLE"].split(".")[1]
 JOB_ID = int(os.environ["APPROVE_JOB_ID"])
 DONE = {"TERMINATED", "SKIPPED", "INTERNAL_ERROR"}
 cfg = Config()
