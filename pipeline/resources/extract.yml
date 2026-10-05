@@ -56,7 +56,9 @@ resources:
               - "--limit"
               - "{{job.parameters.limit}}"
           environment_key: default
-          timeout_seconds: 3600
+          # 첫 전체 추출은 새 카드 1,800장쯤에 장당 33초라 1시간에 100장을 못 넘긴다. 20장마다 써 끊겨도 다음 실행이 잇는다
+          # 2026-10-05 운영 시험 30장이 16분이었다. 작업 008 15단계
+          timeout_seconds: 28800
       environments:
         - environment_key: default
           spec:
