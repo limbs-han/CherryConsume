@@ -141,12 +141,20 @@ def test_json_split_writes_the_folder_and_drops_files_of_removed_cards(make_cata
     out = tmp_path / "split"
     (out / "cards").mkdir(parents=True)
     (out / "cards" / "gone.json").write_text("{}\n", encoding="utf-8")
-    default = REPO / "app" / "assets" / "catalog.json"
-    kept = default.read_bytes()
     assert main(["json", "--root", str(make_catalog()), "--split", str(out)]) == 0
     assert sorted(p.name for p in (out / "cards").iterdir()) == ["shinhan-test.json"]
     index = json.loads((out / "index.json").read_text(encoding="utf-8"))
     body = (out / "cards" / "shinhan-test.json").read_bytes()
     assert index["cards"][0]["file_sha256"] == hashlib.sha256(body).hexdigest()
-    # 단계 1에서는 저장소의 한 파일을 건드리지 않는다. 계획 지킬 것
-    assert default.read_bytes() == kept
+
+
+def test_committed_app_files_match_the_catalog(real):
+    # 카탈로그를 고치고 앱 파일을 다시 만들지 않으면 여기서 걸린다. 다시 만드는 명령은 python -m cherry_core.catalog json
+    _, text, _, cards = real
+    app = REPO / "app" / "assets" / "catalog"
+    assert (app / "index.json").read_text(encoding="utf-8") == text
+    assert sorted(p.stem for p in (app / "cards").glob("*.json")) == sorted(cards)
+    for cid, body in cards.items():
+        assert (app / "cards" / f"{cid}.json").read_text(encoding="utf-8") == body, cid
+    # 옛 한 파일은 없다. 작업 014 설계 1절
+    assert not (REPO / "app" / "assets" / "catalog.json").exists()

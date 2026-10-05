@@ -71,9 +71,9 @@ for f in git("diff", "--cached", "--name-only", "--diff-filter=A").splitlines():
             f"{f}: 작업 기록 {m.group(1)}번이 이미 있다. 목록의 마지막 번호 다음을 쓴다"
         )
 
-# 폰이 받는 app/assets/catalog.json이 stage한 catalog/로 다시 만든 것과 같은지 본다. catalog_json.py
+# 폰이 받는 app/assets/catalog/가 stage한 catalog/로 다시 만든 것과 같은지 본다. catalog_json.py
 staged = git("diff", "--cached", "--name-only").splitlines()
-if any(f == "app/assets/catalog.json" or f.startswith("catalog/") for f in staged):
+if any(f.startswith(("app/assets/catalog/", "catalog/")) for f in staged):
     from catalog_json import errors as catalog_json_errors
 
     errors += catalog_json_errors(git("rev-parse", "--show-toplevel").strip())

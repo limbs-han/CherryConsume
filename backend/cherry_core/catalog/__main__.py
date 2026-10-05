@@ -1,4 +1,8 @@
-"""카탈로그 명령. check는 검증, format은 고정 저장 형식으로 다시 쓰기, json은 앱이 담는 파일 만들기."""
+"""카탈로그 명령. check는 검증, format은 고정 저장 형식으로 다시 쓰기, json은 앱이 담는 파일 만들기.
+
+json은 앱이 담는 목록 파일과 카드별 규칙 파일을 `app/assets/catalog/`에 쓴다. `--out`을 주면 시험이 쓰는 한 벌 JSON
+한 파일을 쓴다. 작업 014 설계 5절
+"""
 
 from __future__ import annotations
 
@@ -12,17 +16,17 @@ from .check import check_catalog
 from .load import load_catalog
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3] / "catalog"
-# 앱이 담고 켤 때 이 경로로 새 판을 받는다. 작업 006 설계 2절
-DEFAULT_JSON = Path(__file__).resolve().parents[3] / "app" / "assets" / "catalog.json"
+# 앱이 담고 켤 때 이 경로로 새 판을 받는다. 작업 006 설계 2절, 작업 014 설계 1절
+DEFAULT_SPLIT = Path(__file__).resolve().parents[3] / "app" / "assets" / "catalog"
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="python -m cherry_core.catalog")
     ap.add_argument("command", choices=["check", "format", "json"])
     ap.add_argument("--root", type=Path, default=DEFAULT_ROOT)
-    ap.add_argument("--out", type=Path, default=DEFAULT_JSON)
-    # 목록 파일과 카드별 규칙 파일을 이 폴더에 쓴다. 작업 014 단계 1. 단계 5에서 기본이 된다
-    ap.add_argument("--split", type=Path)
+    # 한 벌 JSON 한 파일. 엔진 시험의 시안 카탈로그가 쓴다
+    ap.add_argument("--out", type=Path)
+    ap.add_argument("--split", type=Path, default=DEFAULT_SPLIT)
     args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -43,7 +47,7 @@ def main(argv: list[str] | None = None) -> int:
             for e in errors:
                 print(f"  {e}")
             return 1
-        if args.split:
+        if args.out is None:
             text, files = app_split(cat)
             cards = args.split / "cards"
             cards.mkdir(parents=True, exist_ok=True)

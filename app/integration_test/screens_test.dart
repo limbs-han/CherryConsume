@@ -5,7 +5,8 @@
 import 'dart:convert';
 
 import 'package:cherry_consume/api.dart';
-import 'package:cherry_consume/catalog/models.dart';
+import 'package:cherry_consume/catalog/cache.dart' show nothing;
+import 'package:cherry_consume/catalog/split.dart';
 import 'package:cherry_consume/clock.dart' as clock;
 import 'package:cherry_consume/main.dart';
 import 'package:cherry_consume/screens/import.dart';
@@ -25,9 +26,17 @@ DateTime kst(int day, int hour, int minute) =>
 
 Future<Api> fresh() async {
   clock.now = () => now;
-  final json = await rootBundle.loadString('assets/catalog.json');
-  final catalog = Catalog.fromJson(jsonDecode(json) as Map<String, dynamic>);
-  return Api(Store(openDb(), catalog, clock: () => clock.now()));
+  // 앱이 켤 때처럼 담긴 규칙 파일을 DB로 옮기고 목록을 고른다. 작업 014 설계 2절
+  final index = await rootBundle.loadString('assets/catalog/index.json');
+  final db = openDb();
+  await copyBundled(
+    db,
+    index,
+    (id) => rootBundle.loadString('assets/catalog/cards/$id.json'),
+  );
+  return Api(
+    Store(db, chooseIndex(db, index, nothing), clock: () => clock.now()),
+  );
 }
 
 /// 시안 홈과 기록의 카드 세 장과 결제

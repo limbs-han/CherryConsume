@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:sqlite3/sqlite3.dart' show Database;
 
 import 'api.dart';
-import 'catalog/cache.dart';
+import 'catalog/cache.dart' show InUse;
 import 'clock.dart' as clock;
 import 'catalog/download.dart';
+import 'catalog/split.dart';
 import 'files.dart';
 import 'screens/shell.dart';
 import 'store/db.dart';
@@ -18,31 +19,43 @@ import 'theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final path = '${await filesDir()}/cherry.db';
-  final bundled = await rootBundle.loadString('assets/catalog.json');
-  // 받기는 화면을 막지 않게 기다리지 않는다. 실패해도 던지지 않고 가진 것을 쓴다
-  final (app, _) = boot(path, bundled);
+  final bundled = await rootBundle.loadString('assets/catalog/index.json');
+  // 받기는 화면을 막지 않게 기다리지 않는다. 실패해도 던지지 않고 가진 것을 쓴다. 담긴 규칙 파일은 DB로 옮긴 뒤 다시
+  // 읽지 않아 자산 읽기가 글자를 메모리에 남기지 않게 한다. 작업 014 단계 3 위험 검토 낮음 10
+  final (app, _) = await boot(
+    path,
+    bundled,
+    read: (id) =>
+        rootBundle.loadString('assets/catalog/cards/$id.json', cache: false),
+  );
   runApp(app);
 }
 
-/// DB를 열고 쓸 카탈로그를 고른 뒤 새 카탈로그 받기를 건다. 받은 카탈로그는 다음에 켤 때부터 쓴다. 시험이 받기를
-/// 기다릴 수 있게 그 Future도 돌려준다. 시험은 가짜 응답을 주는 받기를 넣는다
-(Widget, Future<Refresh>?) boot(
+/// DB를 열고, 앱 판이 바뀌었으면 담긴 규칙 파일을 DB로 옮기고, 쓸 목록을 고른 뒤 새 카탈로그 받기를 건다. 받은
+/// 카탈로그는 다음에 켤 때부터 쓴다. 시험이 받기를 기다릴 수 있게 그 Future도 돌려준다. 시험은 가짜 응답을 주는 받기를
+/// 넣는다. 작업 014 설계 2절
+Future<(Widget, Future<Refresh>?)> boot(
   String path,
   String bundled, {
-  Future<Refresh> Function(Database, String, InUse) refresh = refreshCatalog,
-}) {
+  required Future<String> Function(String cardId) read,
+  Future<Refresh> Function(Database, String, InUse) refresh = refreshIndex,
+}) async {
+  Database? db;
   try {
-    final db = openDb(path);
+    db = openDb(path);
+    await copyBundled(db, bundled, read);
     final used = inUse(db);
     final store = Store(
       db,
-      chooseCatalog(db, bundled, used),
+      chooseIndex(db, bundled, used),
       clock: () => clock.now(),
     );
     return (CherryApp(api: Api(store)), refresh(db, bundled, used));
   } catch (e, st) {
     // 앱보다 새 판이 만든 DB, 깨진 파일, 가득 찬 저장 공간. 이 DB가 기록의 하나뿐인 사본이라 지우라고 하지 않는다
     debugPrint('$e\n$st');
+    // 연 DB를 닫아 다른 앱이나 시험이 파일을 쓸 수 있게 한다. 단계 5 위험 검토 낮음 2
+    db?.close();
     return (const _CannotOpen(), null);
   }
 }

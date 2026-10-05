@@ -3,8 +3,6 @@
 import json
 from pathlib import Path
 
-import pytest
-
 from cherry_core.catalog.__main__ import main
 from cherry_core.catalog.app_json import SCHEMA, app_catalog_text, number_errors, rules_sha256
 from cherry_core.catalog.load import load_catalog
@@ -12,15 +10,13 @@ from cherry_core.catalog.load import load_catalog
 from .conftest import benefit, rev
 
 REPO = Path(__file__).resolve().parents[3]
-PAIRS = [
-    (REPO / "catalog", REPO / "app" / "assets" / "catalog.json"),
-    (REPO / "app" / "test" / "engine" / "mockup", REPO / "app" / "test" / "fixtures" / "mockup_catalog.json"),
-]
+MOCKUP = (REPO / "app" / "test" / "engine" / "mockup", REPO / "app" / "test" / "fixtures" / "mockup_catalog.json")
 
 
-@pytest.mark.parametrize(("root", "out"), PAIRS, ids=["catalog", "mockup"])
-def test_committed_json_matches_the_catalog(root, out):
-    # 카탈로그를 고치고 JSON을 다시 만들지 않으면 여기서 걸린다. 다시 만드는 명령은 python -m cherry_core.catalog json
+def test_committed_mockup_json_matches_the_mockup():
+    # 시안 카드를 고치고 JSON을 다시 만들지 않으면 여기서 걸린다. 다시 만드는 명령은
+    # python -m cherry_core.catalog json --root app/test/engine/mockup --out app/test/fixtures/mockup_catalog.json
+    root, out = MOCKUP
     assert out.read_text(encoding="utf-8") == app_catalog_text(load_catalog(root))
 
 

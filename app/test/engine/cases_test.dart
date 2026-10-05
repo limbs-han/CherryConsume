@@ -1,5 +1,5 @@
 // 손계산 표. Python `backend/tests/engine/test_cases.py`를 옮겼다. 엔진 설계 6.1과 6.2.
-// 표 형식, 모든 혜택이 한 번 이상 나오는지, 엔진과 같은지를 본다. 카탈로그는 커밋된 `assets/catalog.json`이다
+// 표 형식, 모든 혜택이 한 번 이상 나오는지, 엔진과 같은지를 본다. 카탈로그는 커밋된 `assets/catalog/`를 한 벌로 합친 것이다
 import 'dart:convert';
 
 import 'package:cherry_consume/catalog/models.dart';

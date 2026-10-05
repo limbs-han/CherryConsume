@@ -1,5 +1,4 @@
-// 시험이 쓰는 목록 파일과 규칙 파일. 저장소의 앱 파일은 작업 014 단계 5까지 한 파일이라 Python 생성기와 같은 규칙으로
-// 나눈다
+// 시험이 쓰는 목록 파일과 규칙 파일. 한 벌 JSON을 Python 생성기와 같은 규칙으로 나눈다. 작업 014
 import 'dart:convert';
 
 import 'package:cherry_consume/catalog/models.dart';

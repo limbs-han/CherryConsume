@@ -5,11 +5,13 @@ import 'dart:io';
 import 'package:cherry_consume/catalog/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../engine/helpers.dart' show realCatalog, realJson;
+
 Json readJson(String path) => jsonDecode(File(path).readAsStringSync()) as Json;
 
 void main() {
   test('커밋된 카탈로그 전체가 읽힌다', () {
-    final cat = Catalog.fromJson(readJson('assets/catalog.json'));
+    final cat = Catalog.fromJson(realJson);
     expect(cat.cards.length, 20);
     final mrlife = cat.cards['shinhan-mrlife']!;
     expect(mrlife.revisions.first.rules.tiers, [0, 300000, 500000, 1000000]);
@@ -49,7 +51,7 @@ void main() {
   });
 
   test('한도 조정은 적어 둔 칸을 안다', () {
-    final cat = Catalog.fromJson(readJson('assets/catalog.json'));
+    final cat = realCatalog;
     final adjusts = [
       for (final r in cat.cards['ibk-narasarang']!.revisions)
         for (final b in r.rules.benefits)

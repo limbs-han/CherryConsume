@@ -1,5 +1,6 @@
 /// 카탈로그 2판 모델. Python `backend/cherry_core/catalog/models.py`를 옮겼다. 엔진과 화면이 쓰는 칸만 읽는다.
-/// 앱이 담는 `assets/catalog.json`은 Python이 검사를 통과한 카탈로그에서 만든다. 그래서 여기서는 규칙을 다시
+/// 앱이 담는 `assets/catalog/`의 목록 파일과 카드별 규칙 파일은 Python이 검사를 통과한 카탈로그에서 만든다. 시험은
+/// 한 벌 JSON도 읽는다. 그래서 여기서는 규칙을 다시
 /// 검사하지 않는다. 작업 006 설계 2절, 3절
 library;
 

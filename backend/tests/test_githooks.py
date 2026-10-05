@@ -1,5 +1,6 @@
 """git 훅. 임시 저장소를 만들어 훅을 실제로 돌린다. 작업 013 13-21, 13-22, 13-50"""
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -30,7 +31,11 @@ def commit(repo: Path, path: str, text: str = "x") -> str:
 
 def hook(name: str, repo: Path, *args: str) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, str(HOOKS / name), *args], cwd=repo, capture_output=True, text=True, encoding="utf-8",
+        [sys.executable, str(HOOKS / name), *args],
+        cwd=repo,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
         check=False,
     )
 
@@ -47,7 +52,7 @@ def test_pre_push_checks_every_pushed_commit_that_touches_catalog(tmp_path):
     git(r, "update-ref", "refs/remotes/origin/master", base)
     first = commit(r, "catalog/a.yaml", "y")
     commit(r, "docs/note.md")
-    last = commit(r, "app/assets/catalog.json", "{}")
+    last = commit(r, "app/assets/catalog/index.json", "{}")
     assert pushed(str(r), last) == [last, first]
 
 
@@ -80,3 +85,41 @@ def test_pre_commit_blocks_new_history_with_taken_number(tmp_path):
     (r / "docs/history/51-d.md").write_text("x", encoding="utf-8")
     git(r, "add", "docs/history/51-d.md")
     assert hook("pre_commit.py", r).returncode == 0
+
+
+def test_catalog_json_blocks_hand_edits_and_missing_or_extra_app_files(tmp_path):
+    # 작업 014 단계 5 위험 검토 낮음 1. 비교가 망가지면 손으로 고친 규칙 파일이 master로 올라가 폰이 받는다
+    sys.path.insert(0, str(HOOKS))
+    try:
+        from catalog_json import errors
+    finally:
+        sys.path.remove(str(HOOKS))
+    real = HOOKS.parent
+    r = repo(tmp_path)
+    shutil.copy(real / ".gitattributes", r / ".gitattributes")
+    shutil.copytree(real / "catalog", r / "catalog")
+    shutil.copytree(real / "app" / "assets" / "catalog", r / "app" / "assets" / "catalog")
+    git(r, "add", ".")
+    git(r, "commit", "-q", "-m", "chore: 카탈로그")
+    assert errors(str(r), "HEAD") == []
+    assert errors(str(r)) == []
+    card = "app/assets/catalog/cards/shinhan-mrlife.json"
+    path = r / card
+    body = path.read_text(encoding="utf-8")
+    # 손으로 고친 규칙 파일
+    path.write_text(body.replace("할인", "할인!", 1), encoding="utf-8", newline="\n")
+    git(r, "add", card)
+    assert errors(str(r))
+    path.write_text(body, encoding="utf-8", newline="\n")
+    git(r, "add", card)
+    assert errors(str(r)) == []
+    # 빠진 규칙 파일
+    git(r, "rm", "-q", "--cached", card)
+    assert errors(str(r))
+    git(r, "add", card)
+    # 남은 규칙 파일
+    (r / "app/assets/catalog/cards/gone.json").write_text("{}\n", encoding="utf-8", newline="\n")
+    git(r, "add", "app/assets/catalog/cards/gone.json")
+    assert errors(str(r))
+    git(r, "commit", "-q", "-m", "chore: 남은 파일")
+    assert errors(str(r), "HEAD")

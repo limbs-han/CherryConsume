@@ -38,11 +38,16 @@ Future<void> copyBundled(
       if (!have.contains('${c['id']} ${c['file_sha256']}'))
         (id: c['id'] as String, sha: c['file_sha256'] as String),
   ];
-  final bodies = await Future.wait([for (final w in want) read(w.id)]);
+  // 100개씩 읽어 넣는다. 1,500개 본문을 한꺼번에 메모리에 올리지 않는다. 켜기 전이라 다른 쓰기가 끼어들지 않는다.
+  // 단계 5 위험 검토 낮음 6
   db.execute('begin immediate');
   try {
-    for (final (i, w) in want.indexed) {
-      saveCardFile(db, w.id, w.sha, bodies[i]);
+    for (var i = 0; i < want.length; i += 100) {
+      final part = want.skip(i).take(100).toList();
+      final bodies = await Future.wait([for (final w in part) read(w.id)]);
+      for (final (k, w) in part.indexed) {
+        saveCardFile(db, w.id, w.sha, bodies[k]);
+      }
     }
     db.execute(
       "insert into app_state (key, value) values ('bundled_catalog', ?) "

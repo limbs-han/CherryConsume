@@ -1,17 +1,14 @@
-/// 쓸 카탈로그 고르기와 받아 둔 카탈로그 한 줄. 작업 006 설계 2절 "내려받기"
+/// 받아 둔 목록 파일 한 줄, 담긴 파일의 지문, 앱이 정확히 담지 못하는 수 검사. 작업 006 설계 2절, 작업 014 설계 2절
 ///
-/// 받아 둔 것이 있으면 그것을, 없으면 앱에 담긴 것을 쓴다. 받을 때 담긴 파일의 지문을 함께 적고, 켤 때 담긴 파일이
-/// 그때와 다르면 앱이 새 판이라 담긴 것을 먼저 본다. 어느 쪽이든 끝까지 읽히고 보유 카드와 저장한 결제의 카드,
-/// 가맹점, 업종, 결제수단이 다 있어야 쓴다. 규칙 검사는 Python이 JSON을 만들 때 했고 커밋 훅이 맞춰 본다. 설계 3절
+/// 받을 때 담긴 목록의 지문을 함께 적고, 켤 때 담긴 목록이 그때와 다르면 앱이 새 판이라 담긴 것을 먼저 본다. 고르기는
+/// `split.dart`의 `chooseIndex`다. 규칙 검사는 Python이 JSON을 만들 때 했고 커밋 훅이 맞춰 본다. 설계 3절
 library;
 
 import 'dart:convert';
 
 import 'package:sqlite3/sqlite3.dart';
 
-import '../engine/engine.dart';
 import '../engine/frac.dart';
-import 'models.dart';
 
 /// 보유 카드의 카드 id, 저장한 결제의 가맹점, 업종, 결제수단. 카탈로그에 하나라도 없으면 그 카탈로그를 쓰지 않는다.
 /// 설계 4절
@@ -45,26 +42,6 @@ List<String> numberErrors(Object? json, [String path = '']) => switch (json) {
   _ => const [],
 };
 
-/// 쓸 수 있는 카탈로그. 읽히지 않거나 앱이 쓰는 것이 빠졌으면 null이다
-Catalog? _read(String body, InUse inUse) {
-  try {
-    final json = jsonDecode(body);
-    if (numberErrors(json).isNotEmpty) return null;
-    final cat = Catalog.fromJson(json as Json);
-    Engine(cat);
-    final ok =
-        cat.cards.keys.toSet().containsAll(inUse.cards) &&
-        cat.merchants.keys.toSet().containsAll(inUse.merchants) &&
-        cat.categories.containsAll(inUse.categories) &&
-        cat.paymentMethods.keys.toSet().containsAll(inUse.methods);
-    return ok ? cat : null;
-  } catch (_) {
-    return null;
-  }
-}
-
-bool usable(String body, InUse inUse) => _read(body, inUse) != null;
-
 /// 담긴 파일의 지문. 64비트 FNV-1a다. 폰 int는 64비트라 곱이 넘치면 그대로 접힌다
 String bundledMark(String text) {
   var h = 0xcbf29ce484222325;
@@ -88,31 +65,6 @@ String bundledMark(String text) {
   );
 }
 
-/// 켤 때 쓸 카탈로그. 담긴 파일이 받을 때와 같으면 받아 둔 것을, 다르면 담긴 것을 먼저 본다.
-/// 먼저 본 것을 쓸 수 없으면 다른 것을 쓴다. 둘 다 쓸 수 없으면 담긴 것을 쓴다
-Catalog chooseCatalog(Database db, String bundled, InUse inUse) {
-  final cached = cachedCatalog(db);
-  if (cached == null) return Catalog.fromJson(jsonDecode(bundled) as Json);
-  final sameApp = cached.bundled == bundledMark(bundled);
-  Catalog? fromCache() {
-    final cat = _read(cached.body, inUse);
-    // 읽히지 않는 받아 둔 것은 지운다. 모델이 바뀐 새 판에서 생길 수 있다
-    if (cat == null && _read(cached.body, nothing) == null) {
-      db.execute('delete from catalog_cache');
-    }
-    return cat;
-  }
-
-  Catalog? fromApp() {
-    final cat = _read(bundled, inUse);
-    if (cat != null && !sameApp) db.execute('delete from catalog_cache');
-    return cat;
-  }
-
-  return (sameApp ? fromCache() ?? fromApp() : fromApp() ?? fromCache()) ??
-      Catalog.fromJson(jsonDecode(bundled) as Json);
-}
-
 const nothing = (
   cards: <String>{},
   merchants: <String>{},
@@ -120,7 +72,7 @@ const nothing = (
   methods: <String>{},
 );
 
-/// 받은 카탈로그를 둔다. 다음에 앱을 켤 때부터 쓴다
+/// 받은 목록 파일을 둔다. 다음에 앱을 켤 때부터 쓴다
 void saveCatalog(Database db, String body, String? etag, String bundled) =>
     db.execute(
       'insert into catalog_cache (id, body, etag, bundled) values (1, ?, ?, ?) '

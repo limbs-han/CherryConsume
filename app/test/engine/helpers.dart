@@ -9,9 +9,33 @@ import 'package:cherry_consume/catalog/models.dart';
 import 'package:cherry_consume/engine/engine.dart';
 import 'package:cherry_consume/engine/models.dart';
 
-/// 커밋된 카탈로그. 시험마다 다시 읽지 않는다
-final Json realJson =
-    jsonDecode(File('assets/catalog.json').readAsStringSync()) as Json;
+/// 커밋된 목록 파일. 시험마다 다시 읽지 않는다
+final Json realIndex =
+    jsonDecode(File('assets/catalog/index.json').readAsStringSync()) as Json;
+
+/// 커밋된 규칙 파일 글자
+String realCardFile(String id) =>
+    File('assets/catalog/cards/$id.json').readAsStringSync();
+
+/// 목록 파일과 규칙 파일을 한 벌 JSON으로 합친다. 엔진과 저장소 시험은 한 벌 카탈로그로 돈다. 작업 014 단계 5
+Json joinSplit(Json index, String Function(String id) file) => {
+  for (final MapEntry(:key, :value) in index.entries)
+    if (key != 'cards' && key != 'billing_bound') key: value,
+  'schema': catalogSchema,
+  'cards': [
+    for (final c in (index['cards'] as List).cast<Json>())
+      {
+        for (final MapEntry(:key, :value) in c.entries)
+          if (key != 'revisions' && key != 'file_sha256') key: value,
+        for (final MapEntry(:key, :value)
+            in (jsonDecode(file(c['id'] as String)) as Json).entries)
+          if (key != 'schema' && key != 'id') key: value,
+      },
+  ],
+};
+
+/// 커밋된 카탈로그를 한 벌로 합친 것
+final Json realJson = joinSplit(realIndex, realCardFile);
 final Catalog realCatalog = Catalog.fromJson(realJson);
 
 /// 한국 시간 "2026-09-19T14:20"을 UTC 시각으로. Python 시험의 at()이다

@@ -1,6 +1,6 @@
 // 목록 파일과 카드별 규칙 파일로 만든 카탈로그. 작업 014 설계 1절, 2절, 4절, 계획 단계 2
 //
-// 저장소의 앱 파일은 단계 5까지 한 파일이라, 시험이 그 파일을 Python 생성기와 같은 규칙으로 나눠 쓴다
+// 시험은 커밋된 파일을 한 벌로 합친 것을 Python 생성기와 같은 규칙으로 다시 나눠, 고친 목록과 규칙 파일을 만든다
 import 'dart:convert';
 
 import 'package:cherry_consume/catalog/models.dart';
@@ -204,5 +204,27 @@ void main() {
       }, (_, _) => throw StateError('')),
       throwsFormatException,
     );
+  });
+
+  test('커밋된 규칙 파일의 지문이 목록과 모두 같고 규칙이 모두 읽힌다', () {
+    // 단계 3 위험 검토 낮음 6. 담긴 파일 지문이 다르면 그 판은 켜지 않는다
+    final cat = Catalog.fromIndex(realIndex, (id, sha) {
+      expect(
+        sha,
+        sha256.convert(utf8.encode(realCardFile(id))).toString(),
+        reason: id,
+      );
+      return CardRules.fromFile(jsonDecode(realCardFile(id)) as Json, id);
+    });
+    expect(cat.cards, hasLength(20));
+    for (final c in cat.cards.values) {
+      expect(c.revisions, isNotEmpty);
+    }
+  });
+
+  test('Python이 모은 청구 방식 업종이 규칙에서 모은 값과 같다', () {
+    // 단계 2 위험 검토 낮음 6. 목록의 값과 추천이 한 벌 카탈로그에서 모으던 값이 같아야 한다
+    expect({...realIndex['billing_bound'] as List}, billingBound(realCatalog));
+    expect(billingBound(realCatalog), isNotEmpty);
   });
 }
