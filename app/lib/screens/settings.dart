@@ -37,6 +37,11 @@ Future<bool> openInBrowser(Uri url) async {
   }
 }
 
+/// 기록 내보내기 줄 아래 문구. 해가 다르면 해를 붙인다. 작업 012 설계 4.1
+String exportedNote(DateTime? at, DateTime now) => at == null
+    ? '아직 내보낸 적 없어요'
+    : '마지막으로 내보낸 날 ${at.year == now.year ? '' : '${at.year}년 '}${at.month}월 ${at.day}일';
+
 /// 내보낸 파일을 사용자가 고른 곳에 쓴다. 취소하면 거짓이다. 시험에서는 바꿔 끼운다
 typedef SaveFile = Future<bool> Function(String name, Uint8List bytes);
 
@@ -87,6 +92,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late Future<List<FactQuestion>> _facts = widget.api.userFacts();
+  late Future<DateTime?> _exported = widget.api.lastExported();
 
   Future<void> _answer(FactQuestion q, Object value) async {
     try {
@@ -147,7 +153,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
         'cherryconsume-$day.json',
         utf8.encode(text),
       );
-      if (saved && mounted) _say('기록을 내보냈어요.');
+      if (saved) {
+        // 파일은 이미 저장됐다. 날 적기가 실패해도 내보냈다고 알린다. 위험 검토 낮음 4
+        try {
+          await widget.api.markExported();
+        } catch (_) {}
+        if (mounted) {
+          setState(() {
+            _exported = widget.api.lastExported();
+          });
+          _say('기록을 내보냈어요.');
+        }
+      }
     } catch (_) {
       if (mounted) _say('기록을 내보내지 못했어요.');
     }
@@ -232,10 +249,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const _Group('기록 옮기기'),
           _Rows([
-            TapRow(
-              title: '기록 내보내기',
-              sub: '폰을 바꿀 때 기록을 파일 하나로 옮겨요',
-              onTap: _export,
+            // 기록이 폰 안에만 있어 마지막으로 내보낸 날을 보인다. 작업 012 설계 4.1
+            FutureBuilder<DateTime?>(
+              future: _exported,
+              builder: (context, snap) => TapRow(
+                title: '기록 내보내기',
+                // 다시 읽는 동안 앞 날을 그대로 보여 줄 높이가 출렁이지 않는다
+                sub:
+                    snap.connectionState == ConnectionState.done || snap.hasData
+                    ? exportedNote(snap.data, clock.now().toLocal())
+                    : null,
+                onTap: _export,
+              ),
             ),
             TapRow(title: '기록 가져오기', sub: '내보낸 파일의 기록으로 바꿔요', onTap: _import),
           ]),

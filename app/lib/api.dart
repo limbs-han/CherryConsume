@@ -684,6 +684,13 @@ class Api {
   /// 쓰기를 Isolate.run으로 옮긴다. 단계 6 위험 검토 9번
   Future<String> exportRecords() async => backup.exportAll(store);
 
+  /// 마지막으로 기록을 내보낸 시각. 작업 012 설계 4절
+  Future<DateTime?> lastExported() async =>
+      backup.lastExported(store)?.toLocal();
+
+  /// 저장 창에서 파일을 저장했을 때 부른다
+  Future<void> markExported() async => backup.markExported(store);
+
   /// 보유 카드나 결제가 있으면 가져오기 전에 바꿀지 묻는다
   Future<bool> hasRecords() async => backup.hasRecords(store);
 

@@ -1,6 +1,8 @@
 // 설정 화면을 시안대로. 작업 011 설계 2절 S1, S2, 계획 단계 3의 8
 import 'dart:io';
 
+import 'package:cherry_consume/api.dart';
+import 'package:cherry_consume/clock.dart' as clock;
 import 'package:cherry_consume/main.dart';
 import 'package:cherry_consume/screens/settings.dart';
 import 'package:cherry_consume/screens/shell.dart';
@@ -27,6 +29,7 @@ Future<void> open(WidgetTester tester) async {
 
 void main() {
   privacyTests();
+  exportDateTests();
 
   test('앱 판은 pubspec.yaml의 version과 같다', () {
     final line = File(
@@ -83,6 +86,56 @@ void main() {
     await tester.scrollUntilVisible(info, 100);
     expect(info, findsOneWidget);
     expect(find.text('앱 정보'), findsOneWidget);
+  });
+}
+
+void exportDateTests() {
+  Future<void> openWith(
+    WidgetTester tester,
+    Api api, {
+    bool saves = true,
+  }) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SettingsScreen(api: api, save: (_, _) async => saves),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> export(WidgetTester tester) async {
+    await tester.tap(find.text('기록 내보내기'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('내보내기'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('기록 내보내기 줄 아래에 마지막으로 내보낸 날을 보인다', (tester) async {
+    // 기록이 폰 안에만 있어 폰을 잃으면 사라진다. 사용자가 스스로 내보내게 알린다. 작업 012 설계 4.1
+    final (:api, s: _) = app();
+    await openWith(tester, api);
+    expect(find.text('아직 내보낸 적 없어요'), findsOneWidget);
+    await export(tester);
+    expect(find.text('마지막으로 내보낸 날 9월 15일'), findsOneWidget);
+    expect(find.text('아직 내보낸 적 없어요'), findsNothing);
+    expect(find.text('기록을 내보냈어요.'), findsOneWidget);
+  });
+
+  testWidgets('저장 창을 닫으면 내보낸 날을 적지 않는다', (tester) async {
+    final (:api, s: _) = app();
+    await openWith(tester, api, saves: false);
+    await export(tester);
+    expect(find.text('아직 내보낸 적 없어요'), findsOneWidget);
+  });
+
+  testWidgets('해가 다르면 해를 붙인다', (tester) async {
+    final (:api, :s) = app(DateTime.utc(2025, 9, 19, 12));
+    await openWith(tester, api);
+    await export(tester);
+    expect(find.text('마지막으로 내보낸 날 9월 19일'), findsOneWidget);
+    clock.now = () => DateTime.utc(2026, 9, 15, 12);
+    await openWith(tester, Api(s));
+    expect(find.text('마지막으로 내보낸 날 2025년 9월 19일'), findsOneWidget);
   });
 }
 

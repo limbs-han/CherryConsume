@@ -139,6 +139,13 @@ const migrations = <String>[
     mapping text not null,
     updated_at integer not null
   ) strict''',
+  // 3. 앱 상태. 기록이 아니라 기록 내보내기 파일에 넣지 않고 기록을 가져와도 그대로 둔다. 마지막으로 내보낸 날을 둔다.
+  // 작업 012 설계 4.2
+  '''
+  create table app_state (
+    key text primary key,
+    value text not null
+  ) strict''',
 ];
 
 /// 날짜 칸의 모양. YYYY-MM-DD 글자라 글자 순서가 날짜 순서와 같다

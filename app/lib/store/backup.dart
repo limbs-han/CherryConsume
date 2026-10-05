@@ -26,6 +26,10 @@ const maxBytes = 20000000;
 /// 사용자 표가 처음 생긴 표 정의 번호. 이보다 낮은 파일에는 기록이 없다
 const firstSchema = 2;
 
+/// 기록 표가 마지막으로 바뀐 표 정의 번호. 이 번호 이상의 파일은 기록 표와 칸이 지금과 같아 빠지면 깨진 파일이다. 표 정의
+/// 3번은 기록이 아닌 앱 상태 표만 더했다. 기록 표를 바꾸는 번호를 더하면 이 값도 올린다. 작업 012 위험 검토 중간 1
+const recordSchema = 2;
+
 /// 담는 표. 외래 키를 지키는 넣는 순서다. 받아 둔 카탈로그와 엑셀 열 짝은 담지 않는다. 열 짝 지문은 머리 줄의
 /// sha256뿐이라 파일을 가진 사람이 머리 줄 글자를 대입해 되찾을 수 있다. 2026-10-03 사용자가 정했다
 const tables = [
@@ -46,6 +50,21 @@ bool hasRecords(Store s) => s.db
       'union all select 1 from user_facts limit 1',
     )
     .isNotEmpty;
+
+/// 마지막으로 기록을 내보낸 시각. 내보낸 적이 없으면 null이다. 설정이 알린다. 작업 012 설계 4절
+DateTime? lastExported(Store s) {
+  final r = s.db.select(
+    "select value from app_state where key = 'last_export'",
+  );
+  return r.isEmpty ? null : fromMs(int.parse(r.first['value'] as String));
+}
+
+/// 저장 창에서 파일을 저장했을 때만 부른다
+void markExported(Store s) => s.db.execute(
+  "insert into app_state (key, value) values ('last_export', ?) "
+  'on conflict (key) do update set value = excluded.value',
+  ['${s.clock().millisecondsSinceEpoch}'],
+);
 
 /// 기록 파일 글자. 가져오기 상한을 넘으면 어느 폰에서도 가져올 수 없어 413으로 막는다
 /// ponytail: 상한을 넘는 기록은 옮길 길이 없다. 그런 사용자가 생기면 파일을 나누거나 흘려 읽는 가져오기를 만든다
@@ -101,7 +120,7 @@ Map<String, int> importAll(Store s, Uint8List data) {
   if (schema > migrations.length) throw newer;
   // 표 정의는 칸과 표를 더하기만 한다. 옛 번호 파일은 표나 칸이 빠질 수 있고 표 정의의 기본값이 된다. 같은 번호
   // 파일에서 빠졌으면 깨진 파일이다. 혜택 줄이 빠지면 0원으로 굳고 지운 시각 칸이 빠지면 지운 결제가 살아난다
-  final exact = schema == migrations.length;
+  final exact = schema >= recordSchema;
   final given = json['tables'] as Map;
   if (given.keys.any((k) => !tables.contains(k)) ||
       (exact && !tables.every(given.containsKey))) {
