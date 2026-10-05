@@ -27,7 +27,7 @@
 - 계산 규칙, 카탈로그 틀, 골드 표는 바꾸지 않는다.
 - 받은 카탈로그를 실행 중에 바꿔 끼우지 않는다. 지금처럼 다음에 켤 때부터 쓴다.
 - 추천을 가진 카드 밖으로 넓히지 않는다.
-- 내보내기 `backend/cherry_core/catalog/app_json.py`와 `.github/workflows/export.yml`은 이 작업이 형식을 정해 넘기고 Databricks 세션이 바꾼다. 2026-10-05 그 세션이 맡겠다고 했다.
+- 내보내기 워크플로 `.github/workflows/export.yml`과 `pipeline/`의 승인 작업은 이 작업이 형식을 정해 넘기고 Databricks 세션이 바꾼다. 생성기 `app_json.py`와 git 훅은 이 작업이 바꾼다. 처음에는 생성기도 넘기려 했으나 2026-10-05 설계 5절에서 사용자가 이렇게 나눴다.
 
 ## 정한 것
 
