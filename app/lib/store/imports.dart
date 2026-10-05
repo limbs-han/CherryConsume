@@ -947,6 +947,9 @@ int _installment(Object? v) {
   return n < 1 ? 1 : n;
 }
 
+/// 날짜 없이 가맹점명 칸에 건수만 적은 합계 줄. 2026-10-05 실제 신한카드 이용내역의 맨 아래 "총 25건". 작업 015
+final _footer = RegExp(r'^총\s*[\d,]+\s*건$');
+
 /// 머리 줄 아래 행을 결제 행으로. 날짜도 가맹점도 없는 합계 줄은 건너뛴다. format은 아는 형식이다. 없으면 열
 /// 이름 사전의 규칙으로 읽는다. 작업 015 설계 1절
 List<ImportRow> parseRows(
@@ -961,6 +964,9 @@ List<ImportRow> parseRows(
   for (final (j, c) in table[start].indexed) {
     head.putIfAbsent(headKey(c), () => j);
   }
+  // 카드 한 장의 파일인지 보는 열의 값들. 남기지 않는다
+  final holder = format?.oneCard == null ? null : head[format!.oneCard];
+  final holders = <String>{};
   for (final (k, raw) in table.skip(start + 1).indexed) {
     Object? get(String field) {
       final j = mapping[field];
@@ -971,8 +977,14 @@ List<ImportRow> parseRows(
     final merchant = pyStr(
       get('merchant'),
     ).trim().split(RegExp(r'\s+')).join(' ');
-    if (day == null && merchant.isEmpty) continue;
+    if (day == null && (merchant.isEmpty || _footer.hasMatch(merchant))) {
+      continue;
+    }
     final row = ImportRow(start + 2 + k, day: day, merchant: merchant);
+    if (holder != null && holder < raw.length) {
+      final h = pyStr(raw[holder]).trim();
+      if (h.isNotEmpty) holders.add(h);
+    }
     final amount = _amount(get('amount'));
     if (day == null) {
       row.error = '날짜를 읽지 못했어요';
@@ -1031,10 +1043,17 @@ List<ImportRow> parseRows(
         );
       });
       if (row.error == null && (unseen ?? false)) {
-        row.error = '처음 보는 값이에요. 기록에서 직접 적어 주세요';
+        row.error = '처음 보는 값이에요. 카드 결제라면 기록에서 직접 적어 주세요';
       }
     }
     out.add(row);
+  }
+  // 카드 여러 장의 결제가 섞였으면 넣지 않는다. 신한카드 홈페이지는 전체 카드 내역을 한 파일로 줄 수 있다. 작업 015
+  // 단계 검토 중간 2
+  if (holders.length > 1) {
+    for (final r in out) {
+      r.error ??= '카드 여러 장의 결제가 든 파일이에요. 카드사에서 카드마다 따로 받아 주세요';
+    }
   }
   return out;
 }

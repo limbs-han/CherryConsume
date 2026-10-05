@@ -514,12 +514,15 @@ class _ImportScreenState extends State<ImportScreen> {
         '자동으로 찾은 열 짝과 다르게 읽었어요. 열 다시 짝짓기에서 확인해 주세요',
       if (s['cancels'] > 0) '취소 ${s['cancels']}건을 원 결제에 붙여요',
       if (s['orphans'] > 0) '원 결제가 없거나 담지 못하는 취소 ${s['orphans']}건은 넣지 않아요',
-      if (s['skipped'] > 0) '보유 카드가 아닌 행 ${s['skipped']}건은 넣지 않아요',
+      if (s['skipped'] > 0)
+        '${_card == null ? '보유 카드' : '고른 카드'}가 아닌 행 ${s['skipped']}건은 넣지 않아요',
       if ((s['discounts'] ?? 0) > 0)
         '카드가 준 할인 ${s['discounts']}건은 결제가 아니라 넣지 않아요. 혜택은 앱이 따로 계산해요',
       if (s['errors'] > 0) '읽지 못한 행 ${s['errors']}건',
       if (s['uncategorized'] > 0)
         '업종을 모르는 결제 ${s['uncategorized']}건은 기록에서 고칠 수 있어요',
+      if ((s['installment_assumed'] ?? 0) > 0)
+        '신용카드 결제 ${s['installment_assumed']}건은 할부인지 몰라 일시불로 넣어요. 할부 결제는 기록에서 고쳐 주세요',
       if ((s['interest_unknown'] ?? 0) > 0)
         '무이자인지 모르는 할부 ${s['interest_unknown']}건은 유이자로 넣어요. 기록에서 고칠 수 있어요',
       if ((s['untimed'] ?? 0) > 0)

@@ -409,11 +409,21 @@ DateTime _later(DateTime a, DateTime b) => a.isAfter(b) ? a : b;
 String? cardOf(
   Map<String, Map<String, Object?>> cards,
   Catalog catalog,
-  String? name,
-) {
+  String? name, {
+  bool strict = false,
+}) {
   if (name == null) return null;
   String bare(String n) => _norm(n.replaceAll(RegExp(r'\(.*?\)'), ''));
   final wanted = bare(name);
+  if (strict) {
+    // 카드 여러 장이 든 파일은 공식 이름이 같은 카드 한 장만이다. 검색 이름이나 이름 일부로 맞추면 "KB국민 나라사랑카드"
+    // 줄이 IBK 나라사랑카드로 들어간다. 작업 015 단계 검토 중간 1
+    final same = [
+      for (final MapEntry(key: uid, value: r) in cards.entries)
+        if (bare(catalog.cards[r['card_id']]!.name) == wanted) uid,
+    ];
+    return same.length == 1 ? same.first : null;
+  }
   final names = {
     for (final MapEntry(key: uid, value: r) in cards.entries)
       uid: [
@@ -556,8 +566,17 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   final shown = <Json>[];
   final rows = <Line>[];
   final parsed = parseRows(table, start, cols, format);
+  // 줄의 카드. 고른 카드가 있으면 그 카드다. 없으면 카드 이름 열로 나눈다. E33. 카드 이름으로 줄을 나누는 형식은 고른
+  // 카드가 있어도 카드 이름이 그 카드인 줄만 그 카드다. 뱅크샐러드 파일은 카드 여러 장의 결제를 담는다. 작업 015 설계
+  // 2절 4
+  final byName = format?.cardRows ?? false;
+  String? uidOf(ImportRow p) {
+    if (!byName) return userCardId ?? cardOf(cards, catalog, p.card);
+    final named = cardOf(cards, catalog, p.card, strict: true);
+    return userCardId == null || named == userCardId ? named : null;
+  }
+
   // 카드마다 결제의 승인번호. 파일의 결제 줄과 저장된 기록이다. 할인으로 끝나는 이름의 취소 줄이 진짜 취소인지 본다
-  String? uidOf(ImportRow p) => userCardId ?? cardOf(cards, catalog, p.card);
   final paid = <String, Set<String>>{};
   for (final r in s.db.select(
     'select user_card_id, approval_no from transactions '
@@ -603,10 +622,13 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
       shown.add({...base, 'status': 'discount', 'reason': '카드가 준 할인이라 넣지 않아요'});
       continue;
     }
-    // 고른 카드가 있으면 그 카드다. 없으면 카드 이름 열로 나눈다. E33
-    final uid = userCardId ?? cardOf(cards, catalog, p.card);
+    final uid = uidOf(p);
     if (uid == null) {
-      shown.add({...base, 'status': 'skipped', 'reason': '보유 카드가 아니에요'});
+      shown.add({
+        ...base,
+        'status': 'skipped',
+        'reason': userCardId == null ? '보유 카드가 아니에요' : '고른 카드의 줄이 아니에요',
+      });
       continue;
     }
     final Line row;
@@ -681,6 +703,20 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
       'orphans': count('orphan'),
       'discounts': count('discount'),
       'skipped': count('skipped'),
+      // 할부 열이 없는 형식의 신용카드 결제. 할부인지 몰라 일시불로 넣는다. 2026-10-05 사용자가 정했다. 작업 015 설계
+      // 3절
+      'installment_assumed':
+          format != null && !format.columns.containsKey('installment')
+          ? fresh
+                .where(
+                  (x) =>
+                      catalog
+                          .cards[cards[x['user_card_id']]!['card_id']]
+                          ?.kind ==
+                      'credit',
+                )
+                .length
+          : 0,
       'errors': count('error'),
       'uncategorized': fresh.where((x) => x['category_name'] == null).length,
       // 무이자인지 모르는 할부. 유이자로 넣는다. 2026-10-02 사용자가 정했다

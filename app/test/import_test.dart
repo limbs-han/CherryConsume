@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'app_helpers.dart';
 import 'store/helpers.dart' show pay;
+import 'store/import_formats_test.dart' show banksalad, banksaladHead, sheet;
 import 'store/imports_ibk_test.dart' show ibk, line;
 
 Uint8List text(String s) => Uint8List.fromList(utf8.encode(s));
@@ -370,6 +371,34 @@ void main() {
     await open(tester, text(plain), card, api);
     expect(
       find.text('자동으로 찾은 열 짝과 다르게 읽었어요. 열 다시 짝짓기에서 확인해 주세요'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('뱅크샐러드 파일의 신용카드 결제는 일시불로 넣는다고 알린다', (tester) async {
+    // 작업 015 설계 3절
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    await open(
+      tester,
+      sheet([
+        banksaladHead,
+        banksalad(
+          '2026-09-10',
+          '12:30:00',
+          '편의점 예시',
+          -4300,
+          card: '신한카드 Mr.Life',
+        ),
+      ]),
+      card,
+      api,
+    );
+    expect(find.text('뱅크샐러드 가계부 내보내기 형식으로 읽었어요'), findsOneWidget);
+    expect(
+      find.text('신용카드 결제 1건은 할부인지 몰라 일시불로 넣어요. 할부 결제는 기록에서 고쳐 주세요'),
       findsOneWidget,
     );
   });

@@ -503,7 +503,10 @@ void main() {
       '10000030',
     )..[2] = '해외체크일시불';
     final [r] = rowsOf(imports.preview(s, ibk([overseas]), userCardId: card));
-    expect((r['status'], r['reason']), ('error', '처음 보는 값이에요. 기록에서 직접 적어 주세요'));
+    expect(
+      (r['status'], r['reason']),
+      ('error', '처음 보는 값이에요. 카드 결제라면 기록에서 직접 적어 주세요'),
+    );
   });
 
   test('기업은행 출력용 승인구분에 처음 보는 값이 든 줄은 결제로 넣지 않는다', () {
