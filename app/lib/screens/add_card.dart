@@ -10,6 +10,7 @@ import '../api.dart';
 import '../clock.dart' as clock;
 import '../format.dart';
 import '../theme.dart';
+import 'settings.dart' show OpenUrl, openInBrowser;
 import '../ui.dart';
 
 String cardLine(CardHit c) {
@@ -21,9 +22,20 @@ String cardLine(CardHit c) {
   return '$kind · $fee · $spend';
 }
 
+/// 카드 요청 설문 주소. 사용자가 Google 설문을 만들면 적는다. 비어 있으면 요청 줄을 두지 않는다.
+/// 시나리오 E22, 작업 012 설계 6절
+const String? cardRequestUrl = null;
+
 class AddCardScreen extends StatefulWidget {
-  const AddCardScreen({super.key, required this.api});
+  const AddCardScreen({
+    super.key,
+    required this.api,
+    this.requestUrl = cardRequestUrl,
+    this.open = openInBrowser,
+  });
   final Api api;
+  final String? requestUrl;
+  final OpenUrl open;
 
   @override
   State<AddCardScreen> createState() => _AddCardScreenState();
@@ -45,6 +57,17 @@ class _AddCardScreenState extends State<AddCardScreen> {
   void dispose() {
     _wait?.cancel();
     super.dispose();
+  }
+
+  Future<void> _request() async {
+    final url = Uri.parse(widget.requestUrl!);
+    if (!await widget.open(url) && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('브라우저를 열지 못했어요. ${url.host}${url.path}에서 요청할 수 있어요.'),
+        ),
+      );
+    }
   }
 
   Future<void> _pick(CardHit card) async {
@@ -123,8 +146,21 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (snap.data!.isEmpty) {
-                  return const Center(
-                    child: Text('찾는 카드가 없어요.', style: TextStyle(color: C.sub)),
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '찾는 카드가 없어요.',
+                          style: TextStyle(color: C.sub),
+                        ),
+                        if (widget.requestUrl != null)
+                          TextButton(
+                            onPressed: _request,
+                            child: const Text('카드 요청하기'),
+                          ),
+                      ],
+                    ),
                   );
                 }
                 return ListView(
@@ -160,6 +196,21 @@ class _AddCardScreenState extends State<AddCardScreen> {
                             onTap: () => _pick(c),
                           ),
                         ),
+                      ),
+                    // 목록에 없는 카드는 설문으로 알려 받는다. 작업 012 설계 6절
+                    if (widget.requestUrl != null)
+                      Column(
+                        children: [
+                          const SizedBox(height: 8),
+                          const Text(
+                            '찾는 카드가 없나요?',
+                            style: TextStyle(color: C.sub),
+                          ),
+                          TextButton(
+                            onPressed: _request,
+                            child: const Text('카드 요청하기'),
+                          ),
+                        ],
                       ),
                   ],
                 );
