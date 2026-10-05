@@ -666,8 +666,20 @@ def _pdf_fetcher(tmp_path, monkeypatch, docling, result):
     _offline(monkeypatch, lambda url: (b"%PDF-1.7 x" if url.endswith(".pdf") else b"<p>card</p>", "text/html"))
     f = Fetcher(tmp_path, _Manifest(), datetime(2026, 10, 5, tzinfo=UTC), ["shinhan"], {}, None, docling=docling)
     conv = _Converter(result)
-    monkeypatch.setattr(f, "_converter", lambda: conv)
+    monkeypatch.setattr(f, "_worker", lambda: _InProcess(conv))
     return f, conv
+
+
+class _InProcess:
+    """하위 프로세스 없이 같은 판단을 하는 DoclingWorker 흉내."""
+
+    def __init__(self, converter):
+        self.converter = converter
+
+    def convert(self, path):
+        from cherry_core.pipeline.collect import docling_text
+
+        return docling_text(self.converter, path)
 
 
 def _target(source_id, url):
@@ -720,11 +732,57 @@ def test_converter_that_cannot_be_built_stops_the_run_after_saving_the_pdf(tmp_p
     def broken():
         raise OSError("model download failed")
 
-    monkeypatch.setattr(f, "_converter", broken)
+    monkeypatch.setattr(f, "_worker", broken)
     # 그대로 받으면 PDF가 모두 유료 해석으로 넘어간다. 받은 PDF는 목록에 남기고 실행을 멈춘다
     with pytest.raises(OSError):
         f.fetch(_target("guide", "https://x.test/guide.pdf"))
     assert len(list(tmp_path.rglob("*.pdf"))) == 1 and f.manifest.flushed == 1
+
+
+def _dying_converter():
+    """하위 프로세스에서 만드는 변환기 흉내. 이름에 die가 있으면 프로세스를 죽이고, slow가 있으면 멈춘다."""
+    import os
+    import time
+    from types import SimpleNamespace
+
+    class Converter:
+        def convert(self, path):
+            if "die" in path.name:
+                os._exit(3)
+            if "slow" in path.name:
+                time.sleep(60)
+            return SimpleNamespace(document=_Doc([PAGE]), status="success")
+
+    return Converter()
+
+
+def _broken_converter():
+    raise OSError("model download failed")
+
+
+def _exit_at_start():
+    import os
+
+    os._exit(3)
+
+
+def test_docling_worker_skips_the_pdf_that_kills_or_hangs_it_and_starts_again(tmp_path):
+    # 2026-10-05 롯데와 현대 수집에서 Docling이 PDF를 읽다 수집기 프로세스가 기록 없이 죽어 뒤의 원문을 받지 못했다
+    from cherry_core.pipeline.collect import DoclingWorker
+
+    w = DoclingWorker(make=_dying_converter, wait=5)
+    try:
+        assert w.convert(tmp_path / "a-die.pdf") == (None, "Docling 중단 a-die.pdf: 프로세스 죽음")
+        assert w.convert(tmp_path / "b.pdf") == (PAGE, None)
+        assert w.convert(tmp_path / "c-slow.pdf") == (None, "Docling 중단 c-slow.pdf: 시간 초과")
+        assert w.convert(tmp_path / "d.pdf") == (PAGE, None)
+    finally:
+        w.close()
+    with pytest.raises(RuntimeError, match="model download failed"):
+        DoclingWorker(make=_broken_converter).convert(tmp_path / "e.pdf")
+    # 변환기를 만들다 소리 없이 죽어도 기다리지 않고 실패로 끝낸다
+    with pytest.raises(RuntimeError, match="프로세스가 죽었다"):
+        DoclingWorker(make=_exit_at_start).convert(tmp_path / "f.pdf")
 
 
 def test_markdown_write_failure_keeps_the_pdf(tmp_path, monkeypatch, capsys):

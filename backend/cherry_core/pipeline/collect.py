@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import multiprocessing
 import sys
 import time
 import urllib.error
@@ -289,6 +290,7 @@ def _manual(root: Path, card_id: str, source_id: str) -> Target:
 # 바뀐 원문으로 잡히므로 올릴 때는 일부러 올린다. 표 모델은 Docling이 판을 고정한다. 작업 008 설계 4절
 LAYOUT_REVISION = "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8"
 DOCLING_TIMEOUT = 300  # PDF 하나에 쓰는 초. 넘기면 일부 쪽으로 끝나 ai_parse_document로 넘어간다
+DOCLING_WAIT = DOCLING_TIMEOUT * 2  # 하위 프로세스의 답을 기다리는 초. 넘기면 멈춘 것으로 보고 끈다
 
 
 def docling_converter():
@@ -310,6 +312,103 @@ def docling_converter():
     return converter
 
 
+def docling_text(converter, path: Path) -> tuple[str | None, str | None]:
+    """PDF 하나를 Docling으로 읽어 (마크다운, 문제)를 돌려준다. 문제가 있으면 마크다운은 None이고 PDF는 운영에서 해석한다."""
+    try:
+        result = converter.convert(path)
+        doc = result.document
+        problem = None if result.status == "success" else "일부 쪽 실패"
+        problem = problem or docling_problem(
+            [doc.export_to_markdown(page_no=n) for n in range(1, doc.num_pages() + 1)]
+        )
+        md = doc.export_to_markdown()
+    except Exception as e:  # noqa: BLE001 해석이 실패해도 PDF는 남는다. 끊김으로 세지 않는다
+        return None, f"Docling 실패 {path.name}: {type(e).__name__}"
+    if problem:
+        return None, f"{problem} {path.name}"
+    return md, None
+
+
+def _docling_worker(conn, make) -> None:
+    """하위 프로세스 본체. 변환기를 한 번 만들고, 받은 경로를 차례로 읽어 결과를 돌려준다. None을 받으면 끝낸다."""
+    try:
+        converter = make()
+    except Exception as e:  # noqa: BLE001 부모가 실행을 멈출지 정한다
+        conn.send(("error", f"{type(e).__name__}: {e}"))
+        return
+    conn.send(("ready", None))
+    while (path := conn.recv()) is not None:
+        conn.send(docling_text(converter, Path(path)))
+
+
+class DoclingWorker:
+    """Docling을 하위 프로세스 하나에서 돌린다.
+
+    2026-10-05 롯데와 현대 수집에서 Docling이 PDF를 읽다 수집기 프로세스가 기록 없이 죽어 그 뒤의 원문을 받지 못했다.
+    현대는 PDF 275개 가운데 157개만 받았다. 변환기는 모델을 불러오느라 만들기가 느려 PDF마다 새로 띄우지 않고 하나를 계속 쓴다.
+    하위 프로세스가 죽거나 DOCLING_WAIT 넘게 답하지 않으면 그 PDF만 .md 없이 두고 다음 PDF에서 새로 띄운다.
+    변환기를 만들지 못하면 그대로 실패로 끝낸다. 계속 받으면 PDF가 모두 운영의 유료 해석으로 넘어간다.
+    """
+
+    def __init__(self, make: Callable = docling_converter, wait: float = DOCLING_WAIT) -> None:
+        self.make, self.wait = make, wait
+        self.proc = self.conn = None
+
+    def convert(self, path: Path) -> tuple[str | None, str | None]:
+        if self.proc is None:
+            self._start()
+        try:
+            self.conn.send(str(path))
+            if self._ready(self.wait):
+                return self.conn.recv()
+            why = "시간 초과"
+        except (EOFError, OSError):
+            why = "프로세스 죽음"
+        self.close()
+        return None, f"Docling 중단 {path.name}: {why}"
+
+    def _ready(self, seconds: float | None) -> bool:
+        """답이 오면 True, seconds가 지나면 False, 하위 프로세스가 죽으면 EOFError.
+
+        Windows는 하위 프로세스가 죽어도 읽기가 바로 끝나지 않을 수 있어 1초마다 살았는지 함께 본다.
+        2026-10-05 이 PC 시험에서 시작하다 죽은 하위 프로세스를 20분 기다렸다.
+        """
+        deadline = None if seconds is None else time.monotonic() + seconds
+        while not self.conn.poll(1):
+            if not self.proc.is_alive():
+                if self.conn.poll(0):
+                    return True
+                raise EOFError
+            if deadline is not None and time.monotonic() > deadline:
+                return False
+        return True
+
+    def _start(self) -> None:
+        ctx = multiprocessing.get_context("spawn")
+        self.conn, child = ctx.Pipe()
+        proc = ctx.Process(target=_docling_worker, args=(child, self.make), daemon=True)
+        proc.start()
+        self.proc = proc
+        # 부모가 아이 쪽 끝을 닫아야 아이가 죽었을 때 읽기가 EOF로 끝난다
+        child.close()
+        try:
+            self._ready(None)  # 처음에는 모델을 받느라 오래 걸릴 수 있어 시간을 정하지 않고 기다린다
+            kind, message = self.conn.recv()
+        except (EOFError, OSError):
+            kind, message = "error", "변환기를 만들다 프로세스가 죽었다"
+        if kind != "ready":
+            self.close()
+            raise RuntimeError(f"Docling 변환기를 만들지 못했다: {message}")
+
+    def close(self) -> None:
+        if self.proc is not None and self.proc.is_alive():
+            self.proc.terminate()
+            self.proc.join(10)
+        if self.conn is not None:
+            self.conn.close()
+        self.proc = self.conn = None
+
+
 class Fetcher:
     """원문 주소를 차례로 받아 저장한다. robots.txt 확인, 브라우저, 403과 429와 세 번 끊김에 멈추기를 여기서 한다."""
 
@@ -324,7 +423,7 @@ class Fetcher:
         docling: bool = False,
     ) -> None:
         self.out_dir, self.manifest, self.now, self.ignore, self.stack = out_dir, manifest, now, ignore, stack
-        self.docling, self.converter = docling, None
+        self.docling, self.worker = docling, None
         self.robots = robots  # 호스트마다 robots.txt. 공시 받기와 함께 쓴다
         self.blocked: set[str] = set()
         self.drops: dict[str, int] = {}
@@ -383,28 +482,16 @@ class Fetcher:
                     print(f".md 쓰기 실패 {path.name}: {type(e).__name__}")
 
     def _docling(self, path: Path) -> str | None:
-        # 변환기를 못 만들면 그대로 실패로 끝낸다. 계속 받으면 PDF가 모두 운영의 유료 해석으로 넘어간다
-        converter = self._converter()
-        try:
-            result = converter.convert(path)
-            doc = result.document
-            problem = None if result.status == "success" else "일부 쪽 실패"
-            problem = problem or docling_problem(
-                [doc.export_to_markdown(page_no=n) for n in range(1, doc.num_pages() + 1)]
-            )
-            md = doc.export_to_markdown()
-        except Exception as e:  # noqa: BLE001 해석이 실패해도 PDF는 남는다. 끊김으로 세지 않는다
-            print(f"Docling 실패 {path.name}: {type(e).__name__}")
-            return None
+        md, problem = self._worker().convert(path)
         if problem:
-            print(f"{problem} {path.name}")
-            return None
+            print(problem)
         return md
 
-    def _converter(self):
-        if self.converter is None:
-            self.converter = docling_converter()
-        return self.converter
+    def _worker(self) -> DoclingWorker:
+        if self.worker is None:
+            self.worker = DoclingWorker()
+            self.stack.callback(self.worker.close)
+        return self.worker
 
     def _browser(self, t: Target) -> tuple[bytes, str, bytes | None]:
         from playwright.sync_api import Error as PlaywrightError
