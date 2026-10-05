@@ -124,3 +124,4 @@
 | [79](79-catalog-new-card-score-step12.md) | 2026-10-05 | 작업 008 12단계 정답 예시를 새 카드 프롬프트로 채점하기 |
 | [80](80-code-doc-alignment.md) | 2026-10-05 | 작업 013 코드와 문서 맞추기 |
 | [81](81-catalog-review-order-step13.md) | 2026-10-05 | 작업 008 13단계 검수 대기 순서와 옛 새 카드 초안 닫기 |
+| [82](82-pipeline-doc-fixes-form-guide.md) | 2026-10-05 | 파이프라인 문서 어긋남 고치기와 카드 요청 설문 준비 |
