@@ -1,7 +1,8 @@
 # 검수에서 승인된 카탈로그 개정을 저장소에 커밋한다. 작업 003 설계 4절 7번
 # 검수 앱이 승인마다 운영 볼륨 cherry.gold.export의 pending/<폴더>에 catalog/ 아래 파일과 commit.json을 둔다
 # 폴더 하나가 커밋 하나다. 커밋 훅이 형식과 민감 정보를 검사하고, 저장소에 올라간 폴더만 done/으로 옮긴다
-# 쓰기 권한은 푸시하는 작업에만 주고, 그 작업은 GitHub이 만든 액션만 쓴다. 공개 저장소라 실행 기록은 누구나 본다
+# 쓰기 권한은 푸시하는 작업에만 준다. 그 작업의 액션은 모두 커밋 해시로 고정하고, GitHub이 만들지 않은 것은 setup-uv
+# 하나다. uv는 uv.lock에 적힌 판과 해시로만 받는다. 공개 저장소라 실행 기록은 누구나 본다. 작업 013 13-20
 name: export
 
 on:
@@ -142,7 +143,7 @@ jobs:
           git merge -q --ff-only export
           # 폰이 받는 파일이 받은 catalog/로 다시 만든 것과 같은지 본다. 번들을 바꿔 그 파일만 고쳐도 폰에 가지 않게 한다.
           # 만드는 코드는 위에서 바뀌지 않은 것을 본 master의 것이다. 작업 006 단계 3 위험 검토
-          uv run --project backend python -m cherry_core.catalog json --out "$RUNNER_TEMP/catalog.json"
+          uv run --locked --project backend python -m cherry_core.catalog json --out "$RUNNER_TEMP/catalog.json"
           if ! cmp -s "$RUNNER_TEMP/catalog.json" app/assets/catalog.json; then
             echo "::error::app/assets/catalog.json이 catalog/로 다시 만든 것과 달라 올리지 않는다"
             exit 1
