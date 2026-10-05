@@ -25,7 +25,8 @@ import 'store/helpers.dart' show start;
 /// 작업 004 설계 2.1, 작업 013 13-14
 List<String> faintOffWhite(WidgetTester tester) => [
   for (final e in find.byType(Text).evaluate())
-    if ((e.widget as Text).style?.color == C.faint && backgroundOf(e) != Colors.white)
+    if ((e.widget as Text).style?.color == C.faint &&
+        backgroundOf(e) != Colors.white)
       (e.widget as Text).data ?? '',
 ];
 
@@ -57,6 +58,8 @@ List<String> haptics(WidgetTester tester) {
     if (call.method == 'HapticFeedback.vibrate') log.add('${call.arguments}');
     return null;
   });
-  addTearDown(() => messenger.setMockMethodCallHandler(SystemChannels.platform, null));
+  addTearDown(
+    () => messenger.setMockMethodCallHandler(SystemChannels.platform, null),
+  );
   return log;
 }

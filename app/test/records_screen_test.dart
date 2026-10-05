@@ -64,7 +64,9 @@ void main() {
       tester.getSemantics(find.text('스타벅스 역삼점')),
       isSemantics(isButton: true, hasTapAction: true),
     );
-    final g = await tester.startGesture(tester.getCenter(find.text('스타벅스 역삼점')));
+    final g = await tester.startGesture(
+      tester.getCenter(find.text('스타벅스 역삼점')),
+    );
     // 목록 안에서는 끌기인지 누르기인지 가려질 때까지 기다린 뒤 작아진다
     await tester.pump(const Duration(milliseconds: 150));
     expect(tester.widget<AnimatedScale>(scale).scale, 0.96);

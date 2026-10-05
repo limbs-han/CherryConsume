@@ -15,7 +15,11 @@ Future<void> tall(WidgetTester tester) async {
   tester.view.physicalSize = const Size(1080, 8000);
   addTearDown(tester.view.reset);
   final (:api, :s) = app();
-  final card = addCard(s, 'ibk-narasarang', assumedPrevMonthSpend: 300000)['id'];
+  final card = addCard(
+    s,
+    'ibk-narasarang',
+    assumedPrevMonthSpend: 300000,
+  )['id'];
   addCard(s, 'hyundai-zero-edition3-discount');
   pay(s, card, 4300, 'GS25 테헤란점', at: '2026-09-10T12:00:00+09:00');
   await tester.pumpWidget(CherryApp(api: api));
@@ -23,7 +27,9 @@ Future<void> tall(WidgetTester tester) async {
 }
 
 Future<void> tab(WidgetTester tester, String name) async {
-  await tester.tap(find.descendant(of: find.byType(Tabs), matching: find.text(name)));
+  await tester.tap(
+    find.descendant(of: find.byType(Tabs), matching: find.text(name)),
+  );
   await tester.pumpAndSettle();
 }
 
