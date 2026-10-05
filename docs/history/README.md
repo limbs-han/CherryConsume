@@ -127,3 +127,4 @@
 | [82](82-pipeline-doc-fixes-form-guide.md) | 2026-10-05 | 파이프라인 문서 어긋남 고치기와 카드 요청 설문 준비 |
 | [83](83-android-release-while-waiting.md) | 2026-10-05 | Play Console을 기다리는 동안 기록 내보내기 날짜, 시험자 안내, 카드 요청 링크 |
 | [84](84-home-pc-first-collect.md) | 2026-10-05 | 작업 008 집 PC 러너 첫 수집 고치기 |
+| [85](85-collab-record.md) | 2026-10-05 | 체리컨슘 클로드 협업 기록 |
