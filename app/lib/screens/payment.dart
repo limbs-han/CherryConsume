@@ -664,7 +664,8 @@ class _Label extends StatelessWidget {
   );
 }
 
-/// "자동으로 채웠어요" 한 줄. 업종, 시각, 채널, 할부, 결제수단
+/// "가게 이름으로 채웠어요" 두 줄. 가맹점, 업종, 시각, 채널, 할부, 결제수단. 2026-10-06 사용자가 "자동으로 채웠어요"가
+/// 결제 알림 읽기처럼 들린다고 해 바꿨다
 class _Summary extends StatelessWidget {
   const _Summary({
     required this.draft,
@@ -700,7 +701,10 @@ class _Summary extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('자동으로 채웠어요', style: TextStyle(fontSize: 12, color: C.faint)),
+        const Text(
+          '가게 이름으로 채웠어요',
+          style: TextStyle(fontSize: 12, color: C.faint),
+        ),
         const SizedBox(height: 2),
         Text(
           // 찾은 가맹점을 보여 별칭이 다른 가게에 걸렸으면 사용자가 알아보게 한다
