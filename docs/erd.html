@@ -12,7 +12,7 @@
 </head>
 <body>
 <h1>체리컨슘 ERD</h1>
-<p>원본은 docs/erd.md 의 Mermaid 정의. 폰 안 SQLite 표 10개입니다. 작업 006</p>
+<p>원본은 docs/erd.md 의 Mermaid 정의. 폰 안 SQLite 표 11개입니다. 작업 006</p>
 <pre class="mermaid">
 erDiagram
     catalog_cache {
@@ -107,6 +107,10 @@ erDiagram
         text signature PK "머리 줄의 sha256"
         text mapping "열 번호 JSON"
         integer updated_at
+    }
+    app_state {
+        text key PK "last_export"
+        text value "UTC 밀리초"
     }
 
     user_cards ||--o{ transactions : "결제"

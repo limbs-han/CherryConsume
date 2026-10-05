@@ -50,7 +50,7 @@
 | 문서 | 내용 |
 |---|---|
 | [설계 문서](docs/2026-09-19-cherryconsume-design.md) | 확정한 결정과 제약, 전체 구조, 계산 엔진 설계 |
-| [ERD](docs/erd.md) | 폰 안 SQLite 표 10개. [렌더 페이지](docs/erd.html) |
+| [ERD](docs/erd.md) | 폰 안 SQLite 표 11개. [렌더 페이지](docs/erd.html) |
 | [시나리오와 예외](docs/scenarios.md) | 주요 시나리오 12개, 예외 57개, 운영 예외 4개 |
 | [출시 서명과 실제 폰](docs/release-setup.md) | 출시 서명 키 만들기, 실제 폰에 깔기, 기록 지키기 |
 | [Databricks를 고른 이유](docs/databricks.md) | 이 프로젝트에서 하는 일, 다른 레이크하우스와 비교, 비용과 제약, 설정 순서 |
