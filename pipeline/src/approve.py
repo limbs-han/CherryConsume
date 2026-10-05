@@ -226,7 +226,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"반려했다. 검수 번호 {review_id}, 초안 {args.draft_id}")
         return
     if draft is not None and plan == "start" and args.gold == "gold":
-        # 하루 넘게 남은 내보내기 폴더는 export가 커밋하지 못한 것이다. 그 위에 쌓으면 뒤 폴더가 모두 걸린다
+        # 36시간 넘게 남은 내보내기 폴더는 export가 커밋하지 못한 것이다. 그 위에 쌓으면 뒤 폴더가 모두 걸린다
         # export는 운영 골드만 읽어 개발용 pending은 아무도 비우지 않는다. 그래서 운영에서만 본다. 다시 검토
         pending = Path(f"/Volumes/cherry/{args.gold}/export/pending")
         names = (

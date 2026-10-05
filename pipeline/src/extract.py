@@ -327,7 +327,7 @@ def main(argv: list[str] | None = None) -> None:
     for cid, card_docs in sorted(by_card.items()):
         lc = cat.cards.get(cid)
         if lc is None:
-            # 골드 카탈로그에 없는 카드. 새 카드는 목록 비교가 검수 대기에 올린다
+            # 골드 카탈로그에 없는 카드. 새 카드는 new_card 모드가 색인에서 초안을 만든다. 작업 008 10단계
             skipped += 1
             continue
         card_docs.sort(key=lambda r: r.source_id)
