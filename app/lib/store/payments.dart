@@ -92,7 +92,7 @@ const _branchy = {'convenience', 'cafe'};
 const _common = {'커피빈'};
 
 /// 가게 이름 찾기 표. names는 별칭에서 가맹점으로, glued는 붙여 쓴 지점 이름을 맞출 편의점과 카페의 별칭과 공식
-/// 이름이다. 편의점과 카페는 공식 이름도 별칭처럼 맞춘다. CU의 별칭에 "CU"가 없다. 다른 업종의 공식 이름은 "KT",
+/// 이름이다. 편의점과 카페는 공식 이름도 별칭처럼 맞춘다. 다른 업종의 공식 이름은 "KT",
 /// "FLO"처럼 흔한 낱말과 겹쳐 "KT 대리점"이 통신요금 혜택에 맞아 넣지 않는다. 작업 016 설계 2절, 단계 1 검토 높음 1
 typedef MerchantIndex = ({
   Map<String, String> names,
