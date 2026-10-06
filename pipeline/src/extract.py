@@ -262,7 +262,7 @@ def main(argv: list[str] | None = None) -> None:
         paths = [p for r in golden.collect() if r.sources for p in r.sources.values()]
         rows = docs.where(F.col("path").isin(paths)).collect()
     else:
-        mine = spark.table(f"{s}.drafts").where("mode = 'changes'")
+        mine = spark.table(f"{s}.drafts").where("mode = 'changes'").drop("mode")
         # 앞 실행이 초안을 쓰고 검수 대기를 쓰기 전에 끊겼으면 여기서 메운다
         queued = {
             r.draft_id
@@ -513,7 +513,8 @@ def new_cards(spark, args, s, files, cat, codes, now, to_queue) -> None:
     if args.limit < 0:
         raise SystemExit("--limit은 0 이상이다. 0은 모두다")
     today = datetime.now(ZoneInfo("Asia/Seoul")).date()
-    mine = spark.table(f"{s}.drafts").where("mode = 'new_card'")
+    # 거른 mode 칸은 빼고 읽는다. 표가 커져 결과가 여러 묶음으로 오자 묶음마다 이 칸의 빈칸 허용이 달라 collect가 실패했다. 2026-10-06
+    mine = spark.table(f"{s}.drafts").where("mode = 'new_card'").drop("mode")
     # 앞 실행이 초안을 쓰고 검수 대기를 쓰기 전에 끊겼으면 여기서 메운다
     queued = {
         r.draft_id
