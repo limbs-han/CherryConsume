@@ -1,0 +1,186 @@
+schema_version: 2
+id: woori-k-pass-cookie-check
+issuer: woori
+name: 우리카드 우리 K-패스 (COOKIE CHECK)
+short_name: 우리 K-패스 쿠키 체크
+search_names: [K-패스 쿠키 체크, 우리 K-패스 COOKIE CHECK]
+kind: check
+product_codes:
+  - '839035'
+status: discontinued
+status_since: 2024-12-30
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=839035', fetched_at: 2026-10-05, review_no: 2024-C00806}
+  - {id: disclosure, kind: api, url: 'https://pc.wooricard.com/dcpc/yh1/cct/cct11/prdntc/H1CCT211S09.do', fetched_at: 2026-10-05}
+checked_at: 2026-10-06
+revisions:
+  - effective_from: 2024-04-18
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 250000, 500000, 700000]
+    spend:
+      exclude_categories: [gift_card, prepaid_charge]
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 200000
+      tier_by_benefit: {overseas-1: 250000, overseas-2: 250000}
+      from: registration
+    limits:
+      - {key: overseas, per: month, amount: 100000}
+      - key: basic
+        per: month
+        amount: {200000: 8000, 500000: 18000, 700000: 28000}
+      - {key: extra, per: month, amount: 2000}
+    stacks:
+      - {key: extra}
+    benefits:
+      - key: overseas-1
+        title: 해외 가맹점 1% 캐시백
+        source: page
+        evidence: [해외가맹점(해외직구 포함) 이용금액의 1~2% 캐시백, 건당 이용금액 | 캐시백율 | 통합 월 캐시백 한도 | 1만원 이상 30만원 미만 시 | 이용금액의 1% | 월 10만원, '캐시백 조건 : 전월 국내외 가맹점 이용실적 25만원 이상 시 제공', ※ 전월 실적 산정 시 캐시백 받은 국내매출은 실적에서 제외됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 10000, below: 300000}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: overseas}
+        tiers: {from: 250000}
+        unmodeled: [이 혜택의 전월 실적 25만원에는 캐시백 받은 국내 결제가 들어가지 않는다. 국내 혜택의 전월 실적에는 들어간다]
+        notes: Mastercard 발급만. 해외 직구 포함. 우리카드 전산상 해외 가맹점 매출로 분류된 건만, 매출표 접수일 기준 반영. 2% 혜택과 월 10만원 한도를 같이 쓴다. 카드 결제일에 결제계좌로 일괄 입금
+      - key: overseas-2
+        title: 해외 가맹점 30만원 이상 2% 캐시백
+        source: page
+        evidence: [해외가맹점(해외직구 포함) 이용금액의 1~2% 캐시백, 건당 이용금액 | 캐시백율 | 통합 월 캐시백 한도 | 30만원 이상 시 | 이용금액의 2% | 월 10만원, '캐시백 조건 : 전월 국내외 가맹점 이용실적 25만원 이상 시 제공', ※ 전월 실적 산정 시 캐시백 받은 국내매출은 실적에서 제외됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 300000}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: overseas}
+        tiers: {from: 250000}
+        unmodeled: [이 혜택의 전월 실적 25만원에는 캐시백 받은 국내 결제가 들어가지 않는다. 국내 혜택의 전월 실적에는 들어간다]
+        notes: Mastercard 발급만. 해외 직구 포함. 우리카드 전산상 해외 가맹점 매출로 분류된 건만, 매출표 접수일 기준 반영. 1% 혜택과 월 10만원 한도를 같이 쓴다. 카드 결제일에 결제계좌로 일괄 입금
+      - key: transit-3000
+        title: 대중교통 월 5만원 이상 3천원 캐시백
+        source: page
+        evidence: ['버스, 지하철 합산 이용 금액 5만원 이상 시 3천원 캐시백', 통합 월 1회 제공, '※ 대중교통은 후불교통요금(카드이용대금명세서에 ‘교통-버스’, ‘교통-지하철’로 표시되는 매출, 고속버스/공항버스/ 공항철도(직통열차)는 대상 제외)에 한함.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+          - billing: [postpaid_transit]
+          - month_total: {min: 50000}
+        reward: {type: cashback, basis: month_total, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: basic}
+        tiers: {from: 200000}
+        unmodeled: [공항버스와 공항철도 직통열차는 제외된다]
+      - key: online-mall-2000
+        title: 11번가·G마켓·쿠팡 2천원 캐시백
+        source: page
+        evidence: ['11번가, G마켓, 쿠팡', 2천원 캐시백, 건당 2만원 이상 결제 시 2천원 캐시백, 통합 월 3회 제공]
+        target:
+          merchants: [coupang, eleven_st, gmarket]
+        when:
+          - {region: domestic}
+          - amount: {min: 20000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 3}
+          - {shared: basic}
+        tiers: {from: 200000}
+      - key: movie-5000
+        title: CGV·롯데시네마 5천원 캐시백
+        source: page
+        evidence: ['CGV, 롯데시네마', 5천원 캐시백, '건당 15,000원 이상 결제 시 5천원 캐시백(통합 월 1회 제공)', ※ 예매 대행사이트를 통한 예매 시 캐시백 제외]
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - {region: domestic}
+          - amount: {min: 15000}
+        reward: {type: cashback, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: basic}
+        tiers: {from: 200000}
+        unmodeled: [예매 대행 사이트를 거친 예매는 제외된다]
+      - key: daily-1000
+        title: 편의점·올리브영·군마트 1천원 캐시백
+        source: page
+        evidence: ['CU, GS25, 세븐일레븐, 올리브영, 군마트(PX,WA마트)', 1천원 캐시백, 건당 1만원 이상 결제 시 1천원 캐시백(통합 월 2회 제공), ※ 온라인 매장 캐시백 제외, ※ 상품권 및 선불카드 구매/충전 금액은 캐시백 제외, '※ 백화점, 대형할인점, 미군부대 등 일부 입점매장 캐시백 제외']
+        target:
+          exclude_categories: [gift_card, prepaid_charge]
+          merchants: [cu, gs25, olive_young, px, seven_eleven]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, count: 2}
+          - {shared: basic}
+        tiers: {from: 200000}
+        unmodeled: ['백화점, 대형할인점, 미군부대 등 일부 입점매장은 제외된다']
+        notes: 원문의 군마트는 PX와 WA마트
+      - key: language-3000
+        title: YBM NET·해커스 어학원 3천원 캐시백
+        source: page
+        evidence: ['YBM NET(토익 응시료 포함), 해커스 어학원', 3천원 캐시백, 건당 3만원 이상 결제 시 3천원 캐시백(통합 월 2회 제공), '※ YBM 어학시험(토익, 토익스피킹, JPT, 한국어 능력시험 등) 응시료 결제 금액도 캐시백 제공']
+        target:
+          merchants: [hackers_academy, toeic, ybm_net]
+        when:
+          - {region: domestic}
+          - amount: {min: 30000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, count: 2}
+          - {shared: basic}
+        tiers: {from: 200000}
+        unmodeled: ['YBM 어학시험 응시료(토익스피킹, JPT, 한국어 능력시험 등)도 대상이다']
+      - key: starbucks-2000
+        title: 스타벅스 2천원 캐시백
+        source: page
+        evidence: [스타벅스 (사이렌오더 포함), 2천원 캐시백, 건당 1만원 이상 결제 시 2천원 캐시백(통합 월 4회 제공), ※ 사이렌오더를 통한 결제건도 캐시백 제공, ※ 상품권 및 선불카드 구매/충전(앱 결제 포함) 등의 이용금액 캐시백 제외, '※ 백화점, 대형할인점, 미군부대 등 일부 입점매장 캐시백 제외']
+        target:
+          exclude_categories: [gift_card, prepaid_charge]
+          merchants: [starbucks]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 4}
+          - {shared: basic}
+        tiers: {from: 200000}
+        unmodeled: ['백화점, 대형할인점, 미군부대 등 일부 입점매장은 제외된다']
+        notes: 사이렌오더 결제 포함. 스타벅스 카드 충전 제외
+      - key: easypay-1000
+        title: 네이버페이·카카오페이·PAYCO 1천원 추가 캐시백
+        source: page
+        evidence: ['네이버페이, 카카오페이, PAYCO', 1천원 추가 캐시백, 건당 1만원 이상 결제 시 1천원 캐시백(통합 월 2회 제공), ※ 3대 간편결제에 본 카드를 등록하여 사용한 경우에만 제공, '추가 서비스 | 2,000원']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - payment: [kakao_pay, naver_pay, payco]
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, count: 2}
+          - {shared: extra}
+        tiers: {from: 200000}
+        stack: extra
+        notes: 추가 서비스라 기본 서비스 캐시백과 겹쳐 받는다. 한도는 추가 서비스 월 2천원
+    unmodeled: [해외 가맹점 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 국내 가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일을 찾지 못했다. 상품 출시일은 2020-02-21이고 페이지 준법 심의필은 2024-C00806(2024.04.18)이다, assumed: '2024-04-18'}
+  - {path: status, question: 우리카드 공시실 기준 2024-12-30 단종이다. 상품 페이지의 카드신청 버튼은 숨김이고 "본 페이지는 2025년 11월 현재 기준" 문구만 남아 있다, assumed: discontinued}
+  - {path: 'revisions[0].spend.exclude_categories', question: '상품 페이지의 실적 제외는 상품권과 선불카드 구매·충전뿐이다. 국세, 지방세, 공과금, 아파트 관리비, 등록금 같은 다른 우리카드 체크카드의 제외 항목이 이 카드에도 있는지 상품설명서와 약관을 보지 못했다', assumed: 상품권과 선불카드 구매·충전만 제외}
+  - {path: 'revisions[0].benefits[language-3000].target.merchants', question: YBM 한국어 능력시험이 TOPIK을 뜻하는지 알 수 없다. TOPIK은 YBM이 아닌 국립국제교육원이 주관한다, assumed: topik을 대상에 넣지 않음}
+notes: 'K-패스 전용 체크카드. 우리카드 공시실 기준 2024-12-30 단종이고 보유자는 계속 쓴다. 상품 출시일 2020-02-21. 연회비 없음(해외겸용 Mastercard, 국내전용). 만 18세 이상, 가족카드 발급 불가. 해외 서비스는 Mastercard 발급만. K-패스 대중교통 마일리지 환급은 정부 사업이라 카드 혜택으로 옮기지 않는다. 대상 지역 거주자만 신청하고 환급은 K-패스 앱과 고객센터가 맡는다. 실적은 전월 1일~말일 매출승인일 기준 국내외 가맹점 이용금액이고 상품권과 선불카드 구매·충전은 빠진다. 국내 서비스와 라운지 실적에는 캐시백 받은 국내 매출이 들어가고 해외 캐시백 실적에는 들어가지 않는다. 국내 서비스 한도는 전월 20만/50만/70만원 이상에서 기본 서비스 8천/1만8천/2만8천원, 추가 서비스 2천원, 합친 통합 월 한도 1만/2만/3만원. 통합 한도는 두 한도의 합과 같아 따로 두지 않았다. 월 한도와 횟수는 당월 1일~말일, 거래(매입) 순서대로 적용. 캐시백 및 제외 업종·가맹점은 우리카드 전산상 등록 기준이고 국내 캐시백은 매출표 접수일(승인일로부터 2~3영업일)에 결제계좌로 입금. 카드 사용등록일부터 다음 달 말일까지 국내 서비스는 전월 20만원, 해외 캐시백은 25만원으로 간주하고 그보다 많이 쓰면 그 구간을 준다. 결제 건 혜택 아님: 해외이용수수료 면제(해외 가맹점 건당 US$0.5, 해외 ATM 건당 US$3, 국제브랜드 수수료 1%는 부과), 인천공항 라운지 마티나·스카이허브 통합 월 1회 연 2회(전월 국내외 50만원 이상, 카드 수령 달 제외, 국제선 탑승 시), 체크카드 소액신용한도(월 최고 30만원 신용 일시불). 해외 QR결제 가이드는 다른 카드 안내라 옮기지 않았다. 첫 개정 시행일 근거: page. 받은 원문은 2026-10-05 사본이고 실제 페이지는 자바스크립트로 그려 2026-10-06 다시 열었을 때 본문이 오지 않았다. 상품안내장 PDF는 다운로드 팝업이라 주소를 얻지 못했다.'

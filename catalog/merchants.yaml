@@ -351,7 +351,7 @@
 - key: px
   name: 군마트
   category: other
-  aliases: [군마트, PX, 해군마트, 국군복지단]
+  aliases: [군마트, PX, WA마트, 해군마트, 국군복지단]
 - key: riot_games
   name: 라이엇게임즈
   category: other
@@ -481,6 +481,10 @@
   name: NOL
   category: travel.hotel
   aliases: [NOL, 야놀자, 놀유니버스]
+- key: ybm_net
+  name: YBM NET
+  category: education.exam
+  aliases: [YBM NET]
 - key: yes24
   name: 예스24
   category: online_shopping
