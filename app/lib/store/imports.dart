@@ -973,6 +973,10 @@ List<ImportRow> parseRows(
   }
   // 줄마다 어느 카드인지 적힌 열
   final holder = format?.cardCodes == null ? null : head[format!.cardCodes];
+  // 머리 줄 위에 형식의 제목이 없으면 머리 줄이 같은 다른 판이다. 국외 결제나 취소가 든 판일 수 있다
+  final otherEdition =
+      format?.title != null &&
+      !table.take(start).any((r) => r.any((c) => headKey(c) == format!.title));
   for (final (k, raw) in table.skip(start + 1).indexed) {
     Object? get(String field) {
       final j = mapping[field];
@@ -1047,7 +1051,24 @@ List<ImportRow> parseRows(
           j != null && j < raw.length ? pyStr(raw[j]).trim() : '',
         );
       });
-      if (row.error == null && (unseen ?? false)) {
+      // 취소 값을 따로 정하지 않은 형식에서 취소 칸에 처음 보는 값이 들었으면 취소된 결제다. 손으로 결제를 적으라고 하면
+      // 취소된 결제가 들어간다. 작업 017 단계 3 검토 중간 2
+      final cancelColumn = format?.columns['cancel'];
+      final cancelAt = cancelColumn == null ? null : head[cancelColumn];
+      final cancelMarked =
+          format != null &&
+          format.cancelValues.isEmpty &&
+          !(format.seen[cancelColumn]?.contains(
+                cancelAt != null && cancelAt < raw.length
+                    ? pyStr(raw[cancelAt]).trim()
+                    : '',
+              ) ??
+              true);
+      if (row.error == null && otherEdition) {
+        row.error = '${format!.name} 가운데 국내 정상 승인 파일만 읽어요';
+      } else if (row.error == null && cancelMarked) {
+        row.error = '취소된 결제예요. 이미 넣었다면 기록에서 취소를 적어 주세요';
+      } else if (row.error == null && (unseen ?? false)) {
         row.error = '처음 보는 값이에요. 카드 결제라면 기록에서 직접 적어 주세요';
       }
     }
