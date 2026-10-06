@@ -402,4 +402,38 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('미리보기는 넣는 줄만 100줄씩 보이고 넣지 않는 줄은 접어 둔다', (tester) async {
+    // 2026-10-06 사용자가 뱅크샐러드 파일에서 다른 카드라 빠지는 줄이 새 결제처럼 섞여 보이고 최근 한 달만 보인다고 했다
+    final (:api, :s) = app();
+    final card =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    final day = DateTime.utc(2026, 4, 1);
+    final lines = [
+      '이용일자,가맹점명,이용금액',
+      for (var i = 0; i < 130; i++)
+        '${day.add(Duration(days: i)).toIso8601String().substring(0, 10).replaceAll('-', '.')},가게 ${i + 1},1000',
+      '2026.09.01,오류 가게,금액 모름',
+      '2026.09.02,오류 가게,금액 모름',
+    ];
+    await open(tester, text('${lines.join('\n')}\n'), card, api);
+    expect(find.text('가게 100', skipOffstage: false), findsOneWidget);
+    expect(find.text('가게 101', skipOffstage: false), findsNothing);
+    expect(find.text('오류 가게', skipOffstage: false), findsNothing);
+    final more = find.text('30건 더 보기');
+    await tester.scrollUntilVisible(more, 300);
+    await tester.ensureVisible(more);
+    await tester.pumpAndSettle();
+    await tester.tap(more);
+    await tester.pumpAndSettle();
+    expect(find.text('가게 130', skipOffstage: false), findsOneWidget);
+    final rest = find.text('넣지 않는 줄 2건 보기');
+    await tester.scrollUntilVisible(rest, 300);
+    await tester.ensureVisible(rest);
+    await tester.pumpAndSettle();
+    await tester.tap(rest);
+    await tester.pumpAndSettle();
+    expect(find.text('오류 가게', skipOffstage: false), findsNWidgets(2));
+  });
 }

@@ -53,6 +53,9 @@ const _fields = [
 
 const _guideText = TextStyle(fontSize: 15, color: C.text, height: 1.5);
 
+/// 미리보기 목록을 한 번에 그리는 줄 수
+const _page = 100;
+
 const _status = {
   'new': '새 결제',
   'duplicate': '이미 있어 넣지 않아요',
@@ -87,6 +90,9 @@ class _ImportScreenState extends State<ImportScreen> {
   // 사용자가 짝지은 {칸: 열 번호}. 비우면 저장소가 찾는다
   Map<String, int>? _columns;
   bool _remap = false;
+  // 미리보기 목록에 보이는 넣는 줄과 넣지 않는 줄 수, 넣지 않는 줄을 펼쳤는가
+  int _more = _page, _restMore = _page;
+  bool _restOpen = false;
   String? _error;
   bool _busy = false;
   // 늦게 온 응답이 마지막 요청의 미리보기를 덮지 않게 센다
@@ -133,6 +139,8 @@ class _ImportScreenState extends State<ImportScreen> {
         _preview = p;
         _headerRow = p.headerRow;
         _remap = p.needsMapping;
+        _more = _restMore = _page;
+        _restOpen = false;
       });
     } on ApiError catch (e) {
       // 저장소가 준 까닭을 그대로 보인다. 옛 xls, 2MB 넘는 파일, 카드를 고르지 않음 같은 것이다
@@ -544,7 +552,44 @@ class _ImportScreenState extends State<ImportScreen> {
     final card = _card == null
         ? '여러 카드'
         : widget.cards.firstWhere((c) => c.id == _card).name;
-    final shown = p.rows.take(100).toList();
+    // 넣는 줄은 모두 보이고 넣지 않는 줄은 접어 둔다. 길면 100줄씩 더 본다. 2026-10-06 사용자가 뱅크샐러드 파일에서 다른
+    // 카드라 빠지는 줄이 새 결제처럼 섞여 보이고 앞 100줄인 최근 한 달만 보인다고 해 정했다
+    bool saving(Map r) => r['status'] == 'new' || r['status'] == 'cancel';
+    final kept = [
+      for (final r in p.rows)
+        if (saving(r)) r,
+    ];
+    final rest = [
+      for (final r in p.rows)
+        if (!saving(r)) r,
+    ];
+    List<Widget> rows(
+      List<Map<String, dynamic>> list,
+      int limit,
+      VoidCallback more,
+    ) => [
+      if (list.isNotEmpty)
+        Box(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              for (final (i, r) in list.take(limit).indexed) ...[
+                if (i > 0) const Divider(height: 1, color: C.line),
+                _PreviewRow(r, showCard: _card == null),
+              ],
+            ],
+          ),
+        ),
+      if (list.length > limit)
+        Center(
+          child: TextButton(
+            onPressed: more,
+            child: Text(
+              '${list.length - limit < _page ? list.length - limit : _page}건 더 보기',
+            ),
+          ),
+        ),
+    ];
     return [
       // 읽은 형식이나 모르는 형식 안내. 작업 015 설계 4절 3
       Padding(
@@ -604,17 +649,19 @@ class _ImportScreenState extends State<ImportScreen> {
             child: const Text('열 다시 짝짓기'),
           ),
         ),
-      Box(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            for (final (i, r) in shown.indexed) ...[
-              if (i > 0) const Divider(height: 1, color: C.line),
-              _PreviewRow(r, showCard: _card == null),
-            ],
-          ],
+      ...rows(kept, _more, () => setState(() => _more += _page)),
+      if (rest.isNotEmpty)
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: () => setState(() => _restOpen = !_restOpen),
+            child: Text(
+              _restOpen ? '넣지 않는 줄 접기' : '넣지 않는 줄 ${rest.length}건 보기',
+            ),
+          ),
         ),
-      ),
+      if (_restOpen)
+        ...rows(rest, _restMore, () => setState(() => _restMore += _page)),
       const Padding(
         padding: EdgeInsets.fromLTRB(4, 12, 4, 0),
         child: Text(
