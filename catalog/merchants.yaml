@@ -83,7 +83,7 @@
 - key: cu
   name: CU
   category: convenience
-  aliases: [CU편의점, 씨유, BGF리테일]
+  aliases: [CU, CU편의점, 씨유, BGF리테일]
 - key: daiso
   name: 다이소
   category: other
@@ -165,7 +165,7 @@
 - key: hollys
   name: 할리스
   category: cafe
-  aliases: [할리스, HOLLYS]
+  aliases: [할리스, 할리스커피, HOLLYS]
 - key: homeplus
   name: 홈플러스
   category: grocery_mart
