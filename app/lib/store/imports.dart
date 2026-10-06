@@ -84,6 +84,9 @@ class ImportRow {
   String? approvalNo;
   String? card;
 
+  /// 형식 표의 카드 칸 값. 카드번호 일부라 미리보기에서 짝을 고를 때만 쓰고 남기지 않는다. 작업 017 설계 3절
+  String? cardCode;
+
   /// 할부인데 무이자인지 모르면 null이다. 유이자로 넣고 미리보기에 알린다. 2026-10-02 사용자가 정했다
   bool? interestFree = false;
   bool overseas = false;
@@ -968,9 +971,8 @@ List<ImportRow> parseRows(
   for (final (j, c) in table[start].indexed) {
     head.putIfAbsent(headKey(c), () => j);
   }
-  // 카드 한 장의 파일인지 보는 열의 값들. 남기지 않는다
-  final holder = format?.oneCard == null ? null : head[format!.oneCard];
-  final holders = <String>{};
+  // 줄마다 어느 카드인지 적힌 열
+  final holder = format?.cardCodes == null ? null : head[format!.cardCodes];
   for (final (k, raw) in table.skip(start + 1).indexed) {
     Object? get(String field) {
       final j = mapping[field];
@@ -985,9 +987,8 @@ List<ImportRow> parseRows(
       continue;
     }
     final row = ImportRow(start + 2 + k, day: day, merchant: merchant);
-    if (holder != null && holder < raw.length) {
-      final h = pyStr(raw[holder]).trim();
-      if (h.isNotEmpty) holders.add(h);
+    if (holder != null) {
+      row.cardCode = holder < raw.length ? pyStr(raw[holder]).trim() : '';
     }
     final amount = _amount(get('amount'));
     if (day == null) {
@@ -1051,13 +1052,6 @@ List<ImportRow> parseRows(
       }
     }
     out.add(row);
-  }
-  // 카드 여러 장의 결제가 섞였으면 넣지 않는다. 신한카드 홈페이지는 전체 카드 내역을 한 파일로 줄 수 있다. 작업 015
-  // 단계 검토 중간 2
-  if (holders.length > 1) {
-    for (final r in out) {
-      r.error ??= '카드 여러 장의 결제가 든 파일이에요. 카드사에서 카드마다 따로 받아 주세요';
-    }
   }
   return out;
 }

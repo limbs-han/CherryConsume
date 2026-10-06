@@ -14,7 +14,7 @@ import '../../catalog/models.dart';
 import '../../engine/cond.dart';
 import '../../engine/models.dart';
 import '../db.dart';
-import '../formats.dart' show Format, detect;
+import '../formats.dart' show Format, detect, formats;
 import '../imports.dart' hide norm, required;
 import '../payments.dart';
 import '../store.dart';
@@ -463,8 +463,14 @@ String _cut(String s) {
 }
 
 /// 파일을 읽어 미리보기를 준다. 파일은 메모리에서 읽고 바로 버린다. E35. mapping은 사용자가 짝지은
-/// {"row": 줄, "columns": {칸: 열 번호}}다
-Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
+/// {"row": 줄, "columns": {칸: 열 번호}}다. codes는 화면이 고른 {카드 칸 값: 보유 카드}다. 작업 017 설계 3절
+Json preview(
+  Store s,
+  Uint8List data, {
+  String? userCardId,
+  Object? mapping,
+  Map<String, String>? codes,
+}) {
   if (data.length > maxBytes) {
     throw ApiError(413, '파일이 2MB보다 커요. 기간을 나눠 올려 주세요');
   }
@@ -566,7 +572,13 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   if (userCardId != null && !cards.containsKey(userCardId)) {
     throw ApiError(404, '보유 카드가 아니다');
   }
-  if (!cols.containsKey('card') && userCardId == null) {
+  if (codes != null && codes.values.any((u) => !cards.containsKey(u))) {
+    throw ApiError(404, '보유 카드가 아니다');
+  }
+  // 카드 칸 값이 있는 형식은 값마다 카드를 고를 수 있어 위에서 카드를 고르지 않아도 읽는다
+  if (!cols.containsKey('card') &&
+      format?.cardCodes == null &&
+      userCardId == null) {
     throw _bad('어느 카드의 내역인지 골라 주세요');
   }
   final catalog = s.catalog, now = s.clock();
@@ -577,7 +589,44 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
   // 카드가 있어도 카드 이름이 그 카드인 줄만 그 카드다. 뱅크샐러드 파일은 카드 여러 장의 결제를 담는다. 작업 015 설계
   // 2절 4
   final byName = format?.cardRows ?? false;
+  // 카드 칸 값마다의 줄 수와 짝. 화면이 고른 짝이 먼저다. 값이 하나뿐이면 다음은 위에서 고른 카드, 그다음 기억한
+  // 짝이다. 지금 고른 카드가 예전에 기억한 짝보다 우선이다. 빈 칸은 값으로 세지 않는다. 지운 카드의 짝은 쓰지 않는다.
+  // 작업 017 설계 3절, 단계 2 위험 검토 높음 1과 중간 2
+  final counts = <String, int>{};
+  for (final p in parsed) {
+    if (p.cardCode case final c? when c.isNotEmpty) {
+      counts[c] = (counts[c] ?? 0) + 1;
+    }
+  }
+  final pairs = <String, String?>{};
+  if (format?.cardCodes != null) {
+    final saved = {
+      for (final r in s.db.select(
+        'select code, user_card_id from import_card_codes where format = ?',
+        [format!.id],
+      ))
+        r['code'] as String: r['user_card_id'] as String,
+    };
+    for (final c in counts.keys) {
+      final u =
+          codes?[c] ?? (counts.length == 1 ? userCardId : null) ?? saved[c];
+      pairs[c] = u != null && cards.containsKey(u) ? u : null;
+    }
+    // 카드 칸이 모두 빈 파일은 고를 값이 없어 위에서 카드를 골라야 한다. 단계 2 재검토 낮음 2
+    if (counts.isEmpty && userCardId == null) {
+      throw _bad('어느 카드의 내역인지 골라 주세요');
+    }
+  }
   String? uidOf(ImportRow p) {
+    // 카드 칸이 빈 줄은 값이 하나 이하인 파일에서만 그 카드다
+    if (p.cardCode case final c?) {
+      if (c.isNotEmpty) return pairs[c];
+      return switch (counts.length) {
+        0 => userCardId,
+        1 => pairs[counts.keys.single],
+        _ => null,
+      };
+    }
     if (!byName) return userCardId ?? cardOf(cards, catalog, p.card);
     final named = cardOf(cards, catalog, p.card, strict: true);
     return userCardId == null || named == userCardId ? named : null;
@@ -592,6 +641,25 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     final k = approvalKey(r['approval_no'] as String);
     if (_has(k)) {
       paid.putIfAbsent(r['user_card_id'] as String, () => {}).add(k!);
+    }
+  }
+  // 승인번호마다 저장된 결제의 카드, 금액, 결제일. 카드 칸 짝을 바꿔 같은 파일을 다시 넣어도 다른 카드에 이미 있는 결제는
+  // 넣지 않는다. 단계 2 위험 검토 중간 3
+  final stored = <String, List<(String, int, DateTime)>>{};
+  if (format?.cardCodes != null) {
+    for (final r in s.db.select(
+      // 지운 카드의 결제는 보지 않는다. 잘못 짝지은 카드를 지우고 다시 넣을 수 있게 한다. 단계 2 재검토 낮음 4
+      'select t.user_card_id, t.approval_no, t.amount, t.paid_at from transactions t '
+      'join user_cards u on u.id = t.user_card_id '
+      'where t.approval_no is not null and t.deleted_at is null and u.removed_at is null',
+    )) {
+      final k = approvalKey(r['approval_no'] as String);
+      if (!_has(k)) continue;
+      stored.putIfAbsent(k!, () => []).add((
+        r['user_card_id'] as String,
+        r['amount'] as int,
+        localDay(fromMs(r['paid_at'])),
+      ));
     }
   }
   for (final p in parsed) {
@@ -630,6 +698,23 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
       continue;
     }
     final uid = uidOf(p);
+    if (uid == null && p.cardCode != null) {
+      shown.add({...base, 'status': 'unpaired', 'reason': '어느 카드인지 골라 주세요'});
+      continue;
+    }
+    if (uid != null &&
+        !p.cancel &&
+        (stored[approvalKey(p.approvalNo)]?.any(
+              (x) => x.$1 != uid && x.$2 == p.amount && x.$3 == localDay(at!),
+            ) ??
+            false)) {
+      shown.add({
+        ...base,
+        'status': 'duplicate',
+        'reason': '다른 카드에 이미 있는 결제예요',
+      });
+      continue;
+    }
     if (uid == null) {
       shown.add({
         ...base,
@@ -700,6 +785,10 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
     'signature': signature(table[start]),
     'source': source,
     'top_rows': topRows(table),
+    'card_codes': [
+      for (final MapEntry(key: c, value: n) in counts.entries)
+        {'code': c, 'count': n, 'user_card_id': pairs[c]},
+    ],
     'rows': shown,
     'summary': {
       'rows': shown.length,
@@ -710,6 +799,7 @@ Json preview(Store s, Uint8List data, {String? userCardId, Object? mapping}) {
       'orphans': count('orphan'),
       'discounts': count('discount'),
       'skipped': count('skipped'),
+      'unpaired': count('unpaired'),
       // 할부 열이 없는 형식의 신용카드 결제. 할부인지 몰라 일시불로 넣는다. 2026-10-05 사용자가 정했다. 작업 015 설계
       // 3절
       'installment_assumed':
@@ -761,6 +851,28 @@ Json save(Store s, Json body) {
     }
     (sig, columns) = (sg, Map<String, int>.from(cs));
   }
+  // 화면이 고른 카드 칸 값의 짝. 저장할 때 남겨 다음 가져오기에 쓴다. 작업 017 설계 3절
+  final codes = body['card_codes'];
+  String? codeFormat;
+  var pairs = const <String, String>{};
+  if (codes != null) {
+    final f = codes is Map ? codes['format'] : null;
+    final ps = codes is Map ? codes['pairs'] : null;
+    // 빈 값은 짝으로 남기지 않는다. 남기면 카드 칸이 빈 줄이 모두 그 카드로 들어간다. 단계 2 검토 중간 2, 낮음 7
+    if (!formats.any((x) => x.id == f && x.cardCodes != null) ||
+        ps is! Map ||
+        ps.length > 50 ||
+        ps.entries.any(
+          (e) =>
+              e.key is! String ||
+              e.value is! String ||
+              (e.key as String).isEmpty ||
+              (e.key as String).length > 100,
+        )) {
+      throw _bad('card_codes가 틀렸다');
+    }
+    (codeFormat, pairs) = (f as String, Map<String, String>.from(ps));
+  }
   final now = s.clock();
   if (rows.any(
     (r) =>
@@ -772,10 +884,11 @@ Json save(Store s, Json body) {
   return write(s, () {
     final engine = s.engine, catalog = s.catalog;
     final ids = {for (final r in rows) r.userCardId};
-    final cards = lockCards(s, ids);
-    if (ids.any(
-      (i) => !cards.containsKey(i) || cards[i]!['removed_at'] != null,
-    )) {
+    final cards = lockCards(s, {...ids, ...pairs.values});
+    if ({
+      ...ids,
+      ...pairs.values,
+    }.any((i) => !cards.containsKey(i) || cards[i]!['removed_at'] != null)) {
       throw ApiError(404, '보유 카드가 아니다');
     }
     final judged = plan(s, cards, rows, now);
@@ -921,6 +1034,13 @@ Json save(Store s, Json body) {
         'insert into import_mappings (signature, mapping, updated_at) values (?, ?, ?) '
         'on conflict (signature) do update set mapping = excluded.mapping, updated_at = excluded.updated_at',
         [sig, jsonEncode(columns), ms(now)],
+      );
+    }
+    for (final MapEntry(key: code, value: uid) in pairs.entries) {
+      s.db.execute(
+        'insert into import_card_codes (format, code, user_card_id, updated_at) values (?, ?, ?, ?) '
+        'on conflict (format, code) do update set user_card_id = excluded.user_card_id, updated_at = excluded.updated_at',
+        [codeFormat, code, uid, ms(now)],
       );
     }
     return {'id': batch, ...counts, 'repriced': repriced};

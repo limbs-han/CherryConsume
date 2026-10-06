@@ -454,7 +454,15 @@ Json removeCard(Store s, String uid) {
       'update user_cards set removed_at = ? where id = ? and removed_at is null',
       [ms(s.clock()), uid],
     );
-    return s.db.updatedRows;
+    final n = s.db.updatedRows;
+    // 카드번호 일부와 이 카드의 짝은 남길 까닭이 없다. 행을 지우지 않아 외래 키로는 지워지지 않는다. 작업 017 단계 2 검토
+    // 낮음 4
+    if (n > 0) {
+      s.db.execute('delete from import_card_codes where user_card_id = ?', [
+        uid,
+      ]);
+    }
+    return n;
   });
   if (changed == 0) throw ApiError(404, '보유 카드가 아니다');
   return {'id': uid};

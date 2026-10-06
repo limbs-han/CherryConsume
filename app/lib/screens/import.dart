@@ -89,6 +89,8 @@ class _ImportScreenState extends State<ImportScreen> {
   int? _headerRow;
   // 사용자가 짝지은 {칸: 열 번호}. 비우면 저장소가 찾는다
   Map<String, int>? _columns;
+  // 사용자가 고른 {카드 칸 값: 보유 카드}. 작업 017 설계 3절
+  Map<String, String> _codes = {};
   bool _remap = false;
   // 미리보기 목록에 보이는 넣는 줄과 넣지 않는 줄 수, 넣지 않는 줄을 펼쳤는가
   int _more = _page, _restMore = _page;
@@ -113,6 +115,7 @@ class _ImportScreenState extends State<ImportScreen> {
     _file = (name: f.name, bytes: f.bytes!);
     _columns = null;
     _headerRow = null;
+    _codes = {};
     _remap = false;
     await _read();
   }
@@ -133,6 +136,7 @@ class _ImportScreenState extends State<ImportScreen> {
         userCardId: _card,
         headerRow: _headerRow,
         columns: _columns == null ? null : Map.of(_columns!),
+        codes: _codes.isEmpty ? null : Map.of(_codes),
       );
       if (!mounted || seq != _seq) return;
       setState(() {
@@ -169,6 +173,9 @@ class _ImportScreenState extends State<ImportScreen> {
         signature: p.signature,
         columns: _columns,
         source: p.source,
+        // 고른 카드 칸 짝만 남긴다. 위에서 고른 카드로 들어간 값은 남기지 않는다
+        format: p.format,
+        codes: _codes,
       );
       if (mounted) Navigator.of(context).pop(done['imported'] as int);
     } catch (_) {
@@ -182,7 +189,11 @@ class _ImportScreenState extends State<ImportScreen> {
   }
 
   void _chooseCard(String? id) {
-    setState(() => _card = id);
+    // 고르기 줄에서 고른 짝이 새로 고른 카드를 말없이 이기지 않게 비운다. 단계 2 재검토 중간 1
+    setState(() {
+      _card = id;
+      _codes = {};
+    });
     // 짝짓는 중이면 덜 채운 짝으로 다시 읽지 않는다. 다시 읽기를 누를 때 고른 카드로 읽는다
     if (!_remap) _read();
   }
@@ -523,6 +534,8 @@ class _ImportScreenState extends State<ImportScreen> {
         '자동으로 찾은 열 짝과 다르게 읽었어요. 열 다시 짝짓기에서 확인해 주세요',
       if (s['cancels'] > 0) '취소 ${s['cancels']}건을 원 결제에 붙여요',
       if (s['orphans'] > 0) '원 결제가 없거나 담지 못하는 취소 ${s['orphans']}건은 넣지 않아요',
+      if ((s['unpaired'] ?? 0) > 0)
+        '어느 카드인지 고르지 않은 행 ${s['unpaired']}건은 넣지 않아요',
       if (s['skipped'] > 0)
         '${_card == null ? '보유 카드' : '고른 카드'}가 아닌 행 ${s['skipped']}건은 넣지 않아요',
       if ((s['discounts'] ?? 0) > 0)
@@ -550,7 +563,9 @@ class _ImportScreenState extends State<ImportScreen> {
         : months.length == 1
         ? month(months.first)
         : '${month(months.first)} ~ ${month(months.last)}';
-    final card = _card == null
+    // 카드 칸 값이 둘 이상이면 줄마다 다른 카드로 들어간다. 단계 2 위험 검토 높음 1
+    final many = _card == null || p.cardCodes.length > 1;
+    final card = many
         ? '여러 카드'
         : widget.cards.firstWhere((c) => c.id == _card).name;
     // 넣는 줄은 모두 보이고 넣지 않는 줄은 접어 둔다. 길면 100줄씩 더 본다. 2026-10-06 사용자가 뱅크샐러드 파일에서 다른
@@ -576,7 +591,7 @@ class _ImportScreenState extends State<ImportScreen> {
             children: [
               for (final (i, r) in list.take(limit).indexed) ...[
                 if (i > 0) const Divider(height: 1, color: C.line),
-                _PreviewRow(r, showCard: _card == null),
+                _PreviewRow(r, showCard: many),
               ],
             ],
           ),
@@ -602,6 +617,48 @@ class _ImportScreenState extends State<ImportScreen> {
           style: const TextStyle(fontSize: 13, color: C.sub),
         ),
       ),
+      // 카드 칸 값이 둘 이상이거나 짝이 없는 값이 있으면 값마다 보유 카드를 고른다. 작업 017 설계 3절
+      if (p.cardCodes.length > 1 ||
+          p.cardCodes.any((c) => c.userCardId == null)) ...[
+        const Padding(
+          padding: EdgeInsets.fromLTRB(4, 0, 4, 8),
+          child: Text(
+            '파일에 카드가 여럿이에요. 카드 칸 값마다 어느 카드인지 골라 주세요',
+            style: TextStyle(fontSize: 13, color: C.sub),
+          ),
+        ),
+        for (final (i, c) in p.cardCodes.indexed)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                SizedBox(width: 120, child: Text('${c.code} · ${c.count}건')),
+                Expanded(
+                  child: _PickField(
+                    key: Key('code-$i'),
+                    label:
+                        [
+                          for (final k in widget.cards)
+                            if (k.id == c.userCardId) k.name,
+                        ].firstOrNull ??
+                        '카드 고르기',
+                    onTap: () async {
+                      final v = await pickSheet<String>(
+                        context,
+                        title: '${c.code} 카드',
+                        options: [for (final k in widget.cards) (k.id, k.name)],
+                        selected: c.userCardId,
+                      );
+                      if (v == null || !mounted) return;
+                      _codes = {..._codes, c.code: v};
+                      _read();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
       Row(
         children: [
           _Tile('읽은 행', s['rows'] as int),

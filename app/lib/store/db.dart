@@ -163,6 +163,16 @@ const migrations = <String>[
     category_code text not null,
     updated_at integer not null
   ) strict''',
+  // 6. 카드사 파일의 카드 칸 값과 보유 카드의 짝. 값은 카드번호 일부라 폰 안에만 두고 기록 내보내기 파일에 넣지 않는다.
+  // 보유 카드를 지우면 함께 지운다. 작업 017 설계 3절
+  '''
+  create table import_card_codes (
+    format text not null,
+    code text not null,
+    user_card_id text not null references user_cards (id) on delete cascade,
+    updated_at integer not null,
+    primary key (format, code)
+  ) strict''',
 ];
 
 /// 날짜 칸의 모양. YYYY-MM-DD 글자라 글자 순서가 날짜 순서와 같다

@@ -71,6 +71,7 @@ void main() {
       'orphans': 0,
       'discounts': 0,
       'skipped': 0,
+      'unpaired': 0,
       'installment_assumed': 0,
       'errors': 0,
       'uncategorized': 0,

@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'app_helpers.dart';
 import 'store/helpers.dart' show pay;
+import 'store/card_codes_test.dart' show twoCards;
 import 'store/import_formats_test.dart' show banksalad, banksaladHead, sheet;
 import 'store/imports_ibk_test.dart' show ibk, line;
 
@@ -437,5 +438,50 @@ void main() {
     await tester.tap(rest);
     await tester.pumpAndSettle();
     expect(find.text('오류 가게', skipOffstage: false), findsNWidgets(2));
+  });
+
+  testWidgets('카드 칸 값이 둘인 파일은 값마다 카드를 골라 넣고 짝을 기억한다', (tester) async {
+    // 작업 017 설계 3절. 값은 지어냈다
+    final (:api, :s) = app();
+    final mr =
+        addCard(s, 'shinhan-mrlife', assumedPrevMonthSpend: 410000)['id']
+            as String;
+    final ibkCard = addCard(s, 'ibk-narasarang')['id'] as String;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ImportScreen(
+          api: api,
+          cards: [(id: mr, name: '카드 가'), (id: ibkCard, name: '카드 나')],
+          pick: () async => (name: '내역.xls', bytes: twoCards() as Uint8List?),
+        ),
+      ),
+    );
+    await tester.tap(find.text('파일 고르기'));
+    await tester.pumpAndSettle();
+    expect(find.text('본인A* · 2건'), findsOneWidget);
+    expect(find.text('가족B* · 1건'), findsOneWidget);
+    for (final (i, name) in [(0, '카드 나'), (1, '카드 가')]) {
+      final pick = find.byKey(Key('code-$i'));
+      await tester.ensureVisible(pick);
+      await tester.pumpAndSettle();
+      await tester.tap(pick);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(name).last);
+      await tester.pumpAndSettle();
+    }
+    final save = find.widgetWithText(FilledButton, '3건 저장');
+    await tester.ensureVisible(save);
+    await tester.pumpAndSettle();
+    await tester.tap(save);
+    await tester.pumpAndSettle();
+    expect(
+      s.db
+          .select(
+            'select user_card_id, count(*) n from transactions group by user_card_id order by n',
+          )
+          .map((r) => (r['user_card_id'], r['n'])),
+      [(mr, 1), (ibkCard, 2)],
+    );
+    expect(s.db.select('select 1 from import_card_codes'), hasLength(2));
   });
 }

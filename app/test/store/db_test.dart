@@ -21,6 +21,8 @@ const tables = {
   // 카드 규칙 파일. 작업 014 설계 2절
   'catalog_card_files',
   'merchant_categories',
+  // 카드 칸 값과 보유 카드의 짝. 작업 017 설계 3절
+  'import_card_codes',
 };
 
 Set<String> tablesIn(Database db) => {

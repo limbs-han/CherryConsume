@@ -468,6 +468,14 @@ class ImportPreview {
       topRows = [
         for (final r in j['top_rows'] ?? const []) List<String>.from(r as List),
       ],
+      cardCodes = [
+        for (final c in j['card_codes'] ?? const [])
+          (
+            code: c['code'] as String,
+            count: c['count'] as int,
+            userCardId: c['user_card_id'] as String?,
+          ),
+      ],
       rows = [for (final r in j['rows']) r as Map<String, dynamic>],
       summary = j['summary'] as Map<String, dynamic>?;
   final bool needsMapping;
@@ -489,6 +497,10 @@ class ImportPreview {
 
   /// 머리 줄을 고를 위 10줄. 앱이 올린 파일의 줄이다
   final List<List<String>> topRows;
+
+  /// 카드 칸 값마다 줄 수와 짝지은 보유 카드. 짝이 없으면 null이다. 값은 카드번호 일부라 화면에만 보인다. 작업 017
+  /// 설계 3절
+  final List<({String code, int count, String? userCardId})> cardCodes;
   final List<Map<String, dynamic>> rows;
   final Map<String, dynamic>? summary;
 }
@@ -679,12 +691,14 @@ class Api {
     String? userCardId,
     int? headerRow,
     Map<String, int>? columns,
+    Map<String, String>? codes,
   }) async => ImportPreview(
     import_routes.preview(
       store,
       data,
       userCardId: userCardId,
       mapping: columns == null ? null : {'row': headerRow, 'columns': columns},
+      codes: codes,
     ),
   );
 
@@ -694,12 +708,17 @@ class Api {
     String? signature,
     Map<String, int>? columns,
     String? source,
+    String? format,
+    Map<String, String>? codes,
   }) async => import_routes.save(store, {
     'rows': rows,
     'source': source,
     'mapping': columns == null
         ? null
         : {'signature': signature, 'columns': columns},
+    'card_codes': format == null || codes == null || codes.isEmpty
+        ? null
+        : {'format': format, 'pairs': codes},
   });
 
   Future<List<Map<String, dynamic>>> imports() async =>
