@@ -37,6 +37,18 @@ _SPACE = re.compile(r"\s+")
 MIN_EVIDENCE = 10
 
 
+# 이름으로 카드 종류를 추정하는 카드사. 롯데는 공시실에 종류가 없고 신용, 체크 목록이 판매 중 카드의 절반쯤만 담는다.
+# 2026-10-06 목록 130장 모두 이름에 "체크"가 있으면 체크카드, 없으면 신용카드였다. 추정이라 확인 필요 항목을 단다
+NAME_KIND_ISSUERS = {"lotte"}
+
+
+def name_kind(issuer: str, name: str) -> str | None:
+    """이름으로 추정한 카드 종류. 추정하지 않는 카드사면 None이다."""
+    if issuer not in NAME_KIND_ISSUERS:
+        return None
+    return "check" if "체크" in name else "credit"
+
+
 class KindUnknown(ValueError):
     """색인에도 원문에도 카드 종류의 근거가 없다. 다시 물어도 나아지지 않아 사람이 정한다."""
 
@@ -74,7 +86,15 @@ def _kind(head: dict, extracted: dict, texts: list[str]) -> tuple[str, dict | No
         or [k for k, yes in said.items() if yes] != [kind]
         or evidence not in _SPACE.sub(" ", "\n".join(texts))
     ):
-        raise KindUnknown(KIND_REASON)
+        guess = name_kind(head["issuer"], head["name"])
+        if guess is None:
+            raise KindUnknown(KIND_REASON)
+        word = "체크카드" if guess == "check" else "신용카드"
+        return guess, {
+            "path": "kind",
+            "question": f"원문에서 카드 종류를 찾지 못해 이름으로 {word}로 추정했다. 카드사 공식 목록에서 이름에 체크가 든 카드만 "
+            "체크카드였다. 확인한다",
+        }
     return kind, {"path": "kind", "question": f'카드 종류를 원문 문장 "{evidence}"로 정했다. 확인한다'}
 
 

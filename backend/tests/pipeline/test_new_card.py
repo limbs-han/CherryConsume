@@ -279,6 +279,26 @@ def test_short_or_mismatched_kind_evidence_needs_a_person(files, extra):
     assert out.status == "needs_human" and "카드 종류" in out.reason
 
 
+def test_lotte_kind_falls_back_to_the_name_with_a_question():
+    # 2026-10-06 롯데 공식 신용, 체크 목록 130장 모두 이름에 체크가 있는 카드만 체크카드였다. 목록 밖 카드는 이름으로 추정하고 묻는다
+    import pytest
+
+    from cherry_core.pipeline.new_card import KindUnknown, _kind, name_kind
+
+    def head(issuer, name):
+        return {"issuer": issuer, "name": name, "kind": None}
+
+    kind, q = _kind(head("lotte", "디지로카 Monaco"), {}, ["원문"])
+    assert kind == "credit" and "이름으로" in q["question"]
+    assert _kind(head("lotte", "LIKIT all 체크카드"), {}, ["원문"])[0] == "check"
+    # 원문 근거가 있으면 그것이 먼저다
+    said = "이 카드는 체크카드 상품으로 결제계좌에서 바로 빠집니다"
+    assert _kind(head("lotte", "디지로카 Monaco"), {"kind": "check", "kind_evidence": said}, [said])[0] == "check"
+    with pytest.raises(KindUnknown):
+        _kind(head("nh", "NH 카드"), {}, ["원문"])
+    assert name_kind("lotte", "롯데카드") == "credit" and name_kind("nh", "NH 카드") is None
+
+
 def test_cards_whose_model_call_failed_twice_are_left_for_a_person():
     from cherry_core.pipeline.new_card import drafted_cards
 

@@ -38,6 +38,7 @@ from cherry_core.pipeline.new_card import (
     SOURCE_IDS,
     card_head,
     drafted_cards,
+    name_kind,
     pick_new_cards,
     process_new_card,
 )
@@ -558,7 +559,8 @@ def new_cards(spark, args, s, files, cat, codes, now, to_queue) -> None:
     ]
     drafted = drafted_cards(
         [tuple(r) for r in mine.select("card_id", "status", "reason").collect()],
-        {r["card_id"] for r in rows if r["kind"]},
+        # 이름으로 종류를 추정하는 카드사도 종류를 아는 것으로 쳐 종류 때문에 사람에게 넘긴 초안을 다시 고른다. 2026-10-06
+        {r["card_id"] for r in rows if r["kind"] or name_kind(r["issuer"], r["name"])},
     )
     latest = Window.partitionBy("url").orderBy(
         F.col("fetched_at").desc(), F.col("path").desc()
