@@ -14,3 +14,4 @@
 - {key: bc_top_point, name: BC카드 TOP포인트, won_per_point: 1}
 - {key: ibk_point, name: IBK포인트, won_per_point: 1}
 - {key: ok_cashbag, name: OK캐쉬백, won_per_point: 1}
+- {key: baemin_point, name: 배민포인트, won_per_point: 1}
