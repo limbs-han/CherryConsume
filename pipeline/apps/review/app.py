@@ -19,7 +19,10 @@ from databricks.sdk import WorkspaceClient
 from databricks.sdk.core import Config
 
 # 앱 자원의 전체 이름 cherry.<스키마>.<이름>에서 스키마를 읽는다. app.yaml
-SILVER, GOLD = os.environ["QUEUE_TABLE"].split(".")[1], os.environ["CATALOG_FILES_TABLE"].split(".")[1]
+SILVER, GOLD = (
+    os.environ["QUEUE_TABLE"].split(".")[1],
+    os.environ["CATALOG_FILES_TABLE"].split(".")[1],
+)
 JOB_ID = int(os.environ["APPROVE_JOB_ID"])
 DONE = {"TERMINATED", "SKIPPED", "INTERNAL_ERROR"}
 cfg = Config()
@@ -84,11 +87,15 @@ items = query(
     "WHERE card_id IS NOT NULL GROUP BY issuer, card_id) i ON q.issuer = i.issuer AND q.card_id = i.card_id "
     "WHERE q.status = 'open' ORDER BY rank, q.created_at"
 )
+# 첫 전체 추출로 새 카드 초안이 1,800건 쌓여 처음에는 바뀐 원문, 추천, 요청만 보인다. 2026-10-06
+total = len(items)
+if st.radio("보기", ["먼저 볼 것", "전체"], horizontal=True) == "먼저 볼 것":
+    items = [x for x in items if x["rank"] < 3]
 if not items:
     st.info("열린 검수 대기 건이 없다")
     st.stop()
 pick = st.selectbox(
-    f"열린 건 {len(items)}개",
+    f"열린 건 {len(items)}개, 전체 {total}개. 카드 이름을 쳐서 찾을 수 있다",
     range(len(items)),
     format_func=lambda i: (
         f"{('', '추천 ', '요청 ', '')[items[i]['rank']]}{items[i]['created_at']:%m-%d %H:%M} {items[i]['kind']} "
