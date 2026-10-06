@@ -68,6 +68,8 @@ void main() {
       ('merchant', '곳'),
       ('amount', '값'),
     ]) {
+      await tester.ensureVisible(find.byKey(Key('map-$key')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('map-$key')));
       await tester.pumpAndSettle();
       await tester.tap(find.text(header).last);

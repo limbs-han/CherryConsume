@@ -12,6 +12,7 @@ import 'package:cherry_consume/store/store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'helpers.dart';
+import 'xls_build.dart';
 
 const _head = [
   'No',
@@ -202,15 +203,11 @@ void main() {
     expect(statuses, ['orphan', 'new']);
   });
 
-  test('진짜 옛 엑셀 형식이면 출력용으로 받으라고 알린다', () {
-    // 기업은행 "거래용" 파일은 진짜 옛 xls다
+  test('엑셀 95 이전 형식이면 출력용으로 받으라고 알린다', () {
+    // 기업은행 "거래용" 옛 엑셀은 작업 017부터 읽는다. 그 전 형식만 이 문구로 거절한다
     final (:s, :card) = ibkCard();
     expect(
-      () => imports.preview(
-        s,
-        Uint8List.fromList([0xd0, 0xcf, 0x11, 0xe0, ...List.filled(64, 0x30)]),
-        userCardId: card,
-      ),
+      () => imports.preview(s, cfb(biff(), name: 'Book'), userCardId: card),
       throwsA(isA<ApiError>().having((e) => e.body, 'body', contains('출력용'))),
     );
   });

@@ -379,7 +379,8 @@ void main() {
       throwsA(
         allOf(
           status(422),
-          isA<ApiError>().having((e) => e.body, 'body', contains('xlsx')),
+          // 작업 017부터 옛 엑셀을 읽어, 앞머리만 옛 엑셀인 파일은 깨진 파일이다
+          isA<ApiError>().having((e) => e.body, 'body', contains('깨져')),
         ),
       ),
     );

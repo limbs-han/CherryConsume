@@ -427,7 +427,8 @@ class _ImportScreenState extends State<ImportScreen> {
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       const Text(
-        '결제일과 시각 말고는 한 열을 한 칸에만 골라요. 결제일, 가맹점명, 금액은 꼭 골라요.',
+        '결제일과 시각 말고는 한 열을 한 칸에만 골라요. 결제일, 가맹점명, 금액은 꼭 골라요. '
+        '열 이름 줄이 없는 파일은 카드사에서 다른 저장 방식으로 받아 주세요. 기업은행은 출력용으로 받으면 돼요.',
         style: TextStyle(fontSize: 13, color: C.sub),
       ),
       // 위에 조회 기간이나 카드 정보 줄이 있으면 열 이름이 있는 줄을 고른다

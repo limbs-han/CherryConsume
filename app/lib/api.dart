@@ -476,7 +476,7 @@ class ImportPreview {
   final Map<String, int>? mapping;
   final String? signature;
 
-  /// 읽은 파일 모양. xlsx, html, csv. 묶음 출처로 남긴다. 작업 013 13-10
+  /// 읽은 파일 모양. xlsx, xls, html, csv. 묶음 출처로 남긴다. 작업 013 13-10
   final String? source;
 
   /// 아는 카드사 파일 형식과 그 이름. 모르는 형식이면 null이다. 작업 015 설계 2절

@@ -16,6 +16,7 @@ import 'package:html/parser.dart' as html;
 import 'package:xml/xml_events.dart';
 
 import 'formats.dart' show Format, headKey;
+import 'xls.dart' show readXls;
 
 const maxRows = 3000;
 const maxCols = 60;
@@ -129,12 +130,12 @@ String _comma(int n) =>
 bool _filled(List<Object?> r) => r.any((c) => pyStr(c).trim().isNotEmpty);
 
 /// 엑셀 묶음의 출처로 남기는 값. 읽은 파일 모양이다. 작업 013 13-10
-const importSources = {'xlsx', 'html', 'csv'};
+const importSources = {'xlsx', 'xls', 'html', 'csv'};
 
 /// 파일을 행 목록으로. 칸은 글자나 숫자, 날짜다
 List<List<Object?>> readTable(Uint8List data) => readSource(data).rows;
 
-/// 파일을 행 목록과 읽은 모양으로. 모양은 `xlsx`, `html`, `csv`다. 이름의 확장자가 아니라 내용으로 가린다. 묶음의 출처로
+/// 파일을 행 목록과 읽은 모양으로. 모양은 `xlsx`, `xls`, `html`, `csv`다. 이름의 확장자가 아니라 내용으로 가린다. 묶음의 출처로
 /// 남긴다. 설계 문서 8절, 작업 013 13-10
 ({List<List<Object?>> rows, String source}) readSource(Uint8List data) {
   List<List<Object?>> rows;
@@ -143,11 +144,14 @@ List<List<Object?>> readTable(Uint8List data) => readSource(data).rows;
     rows = _xlsx(data);
     source = 'xlsx';
   } else if (_starts(data, const [0xd0, 0xcf, 0x11, 0xe0])) {
-    // 기업은행 "거래용" 파일이 이 형식이다. "출력용"은 html 표라 읽는다. 2026-10-05 실제 IBK 파일
-    throw Unreadable(
-      '옛 엑셀 형식이라 읽지 못했어요. 카드사 홈페이지에서 다른 저장 방식으로 받거나 xlsx, csv로 저장해 올려 주세요. '
-      '기업은행은 출력용으로 받으면 읽혀요',
+    // 우리카드 메일과 기업은행 "거래용" 파일이 이 형식이다. BIFF8만 읽고 그 전 형식은 거절한다. 작업 017 설계 1절
+    rows = readXls(
+      data,
+      tooOld:
+          '옛 엑셀 형식이라 읽지 못했어요. 카드사 홈페이지에서 다른 저장 방식으로 받거나 xlsx, csv로 저장해 올려 주세요. '
+          '기업은행은 출력용으로 받으면 읽혀요',
     );
+    source = 'xls';
   } else {
     final text = _text(data);
     final lower = text.toLowerCase();
@@ -404,7 +408,7 @@ Map<String, Uint8List> _unzip(Uint8List data) {
 
 /// 엑셀이 날짜로 보이는 기본 서식 번호. openpyxl의 BUILTIN_FORMATS 가운데 날짜인 것과, 한국어 엑셀이 날짜에 쓰는
 /// 27~36, 50~58이다. openpyxl은 27~36, 50~58을 모르는 서식으로 보아 날짜를 숫자로 읽는다. 작업 006 설계 5절
-const _dateIds = {
+const dateIds = {
   14,
   15,
   16,
@@ -753,7 +757,7 @@ Set<int> _dateStyles(Uint8List? bytes) {
         case 'xf' when inXfs:
           final id = int.tryParse(_attr(e, 'numFmtId') ?? '') ?? 0;
           final fmt = custom[id];
-          if (fmt != null ? isDateFormat(fmt) : _dateIds.contains(id)) {
+          if (fmt != null ? isDateFormat(fmt) : dateIds.contains(id)) {
             out.add(index);
           }
           index++;
