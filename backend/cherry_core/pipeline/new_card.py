@@ -31,6 +31,7 @@ from cherry_core.pipeline.prompt import parse_answer
 SOURCE_IDS = {"product_page": "page", "manual_pdf": "manual"}
 NOTES = "새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다."
 KIND_REASON = "카드 종류를 색인과 원문에서 확인하지 못했다. 신용인지 체크인지 사람이 정한다"
+FORMAT_REASON = "규칙 형식 오류"  # extract.invalid가 까닭 앞에 붙인다
 _SPACE = re.compile(r"\s+")
 # 카드 종류의 근거 문장. 메뉴의 "신용카드" 한 낱말이 근거로 통과하지 않게 길이를 본다. 2026-10-05 위험 검토
 MIN_EVIDENCE = 10
@@ -184,12 +185,17 @@ def drafted_cards(drafts: list[tuple[str, str, str | None]], typed: set[str]) ->
     모델 호출이 실패한 카드와, 종류를 몰라 사람에게 넘겼는데 그 뒤 색인이 종류를 알게 된 카드는 다시 고른다.
     종류 때문에 넘긴 카드는 초안이 없어 사람이 처음부터 써야 하기 때문이다.
     모델 호출이 두 번 실패한 카드는 다시 고르지 않는다. 늘 실패하는 카드가 앞자리를 차지해 다른 카드가 멈추지 않게 한다.
+    규칙 형식 오류로 넘긴 카드는 한 번만 다시 고른다. 2026-10-06 첫 전체 추출의 형식 오류 대부분이 카탈로그 포인트 목록에
+    없는 포인트라, 목록을 채운 뒤 다시 물으면 초안이 생긴다. 두 번째도 형식 오류면 사람에게 둔다.
     """
     errors = Counter(cid for cid, status, _ in drafts if status == "model_error")
+    formats = Counter(cid for cid, status, reason in drafts if (reason or "").startswith(FORMAT_REASON))
     return {
         cid
         for cid, status, reason in drafts
-        if status != "model_error" and not (reason == KIND_REASON and cid in typed)
+        if status != "model_error"
+        and not (reason == KIND_REASON and cid in typed)
+        and not ((reason or "").startswith(FORMAT_REASON) and formats[cid] == 1)
     } | {cid for cid, n in errors.items() if n >= 2}
 
 

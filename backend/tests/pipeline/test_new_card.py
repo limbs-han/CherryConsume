@@ -195,8 +195,23 @@ def test_card_sent_to_a_person_for_unknown_kind_is_drafted_again_once_the_index_
         ("nh-d", "model_error", "모델 호출 실패: timeout"),
         ("nh-e", "needs_human", "규칙 형식 오류 2곳: benefits"),
     ]
-    # 색인이 nh-a의 종류를 알게 되면 다시 고른다. 모델 호출이 실패한 카드도 다시 고른다
-    assert drafted_cards(drafts, typed={"nh-a", "nh-e"}) == {"nh-b", "nh-c", "nh-e"}
+    # 색인이 nh-a의 종류를 알게 되면 다시 고른다. 모델 호출이 실패한 카드와 형식 오류가 한 번인 카드도 다시 고른다
+    assert drafted_cards(drafts, typed={"nh-a", "nh-e"}) == {"nh-b", "nh-c"}
+
+
+def test_card_with_a_format_error_is_drafted_again_only_once():
+    # 2026-10-06 첫 전체 추출에서 형식 오류 242장 대부분이 카탈로그 포인트 목록에 없는 포인트였다. 목록을 채운 뒤 한 번 더 묻는다
+    from cherry_core.pipeline.new_card import drafted_cards
+
+    fmt = "규칙 형식 오류 1곳: benefits.0.reward"
+    drafts = [
+        ("kb-a", "needs_human", fmt),
+        ("kb-b", "needs_human", fmt),
+        ("kb-b", "needs_human", fmt),
+        ("kb-c", "needs_human", fmt),
+        ("kb-c", "draft", None),
+    ]
+    assert drafted_cards(drafts, typed=set()) == {"kb-b", "kb-c"}
 
 
 def test_spend_the_model_read_differently_from_issuer_defaults_is_asked(files):
