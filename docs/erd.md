@@ -116,10 +116,17 @@ erDiagram
         text category_code "사용자가 고른 업종"
         integer updated_at
     }
+    import_card_codes {
+        text format PK "형식 표의 형식"
+        text code PK "카드 칸 값. 카드번호 일부"
+        text user_card_id FK
+        integer updated_at
+    }
 
     user_cards ||--o{ transactions : "결제"
     user_cards ||--o{ user_card_options : "옵션 답"
     user_cards ||--o{ user_card_facts : "카드 사실 답"
+    user_cards ||--o{ import_card_codes : "카드 칸 짝"
     transactions ||--o{ transaction_benefits : "받은 혜택"
     import_batches o|--o{ transactions : "가져온 결제"
     import_batches ||--o{ import_cancels : "붙인 취소"
@@ -135,12 +142,13 @@ erDiagram
 - 결제 id는 시각 순서 uuid라 같은 시각 결제를 id 순서로 세우면 먼저 넣은 결제가 하루 1회 한도를 쓴다. 새 id는 저장된 가장 큰 id보다 늘 크다
 - 금액은 0보다 큰 정수이고 취소액은 결제액 이하다. 취소액이 있으면 취소 시각도 있다. 화면이 실수해도 DB가 막는다
 - `transactions.source`는 결제가 어디서 들어왔는지다. 결제 알림으로 들어온 결제는 승인번호가 없어 같은 카드, 같은 금액, 시각 10분 이내로 겹침을 본다. 알림 초안과 카드번호 끝 4자리 짝은 이 DB에도 넣지 않는다. 설계 문서 9절
-- `import_batches.source`는 가져온 파일의 모양이다. `xlsx`, `html`, `csv` 가운데 하나이고 확장자가 아니라 내용으로 가린다. 파일 이름은 이름과 카드번호 끝자리가 들어 있을 수 있어 남기지 않는다. 기록 가져오기는 이 셋이 아닌 값이 든 파일을 받지 않는다. 2026-10-05 작업 013
+- `import_batches.source`는 가져온 파일의 모양이다. `xlsx`, `xls`, `html`, `csv` 가운데 하나이고 확장자가 아니라 내용으로 가린다. 파일 이름은 이름과 카드번호 끝자리가 들어 있을 수 있어 남기지 않는다. 기록 가져오기는 이 넷이 아닌 값이 든 파일을 받지 않는다. 2026-10-05 작업 013, `xls`는 2026-10-06 작업 017
 - 엑셀 가져오기는 같은 카드의 같은 승인번호를 한 번만 받는다. `(user_card_id, approval_no)`에 `approval_no IS NOT NULL AND deleted_at IS NULL` 조건의 부분 유니크 인덱스를 둔다. E31
 - 엑셀 가져오기가 붙인 취소는 `import_cancels`에 한 줄씩 둔다. 결제의 `cancelled_amount`는 이 줄들과 앱에서 적은 취소의 합이다. 묶음을 되돌리면 그 묶음의 취소만 뺀다. E32, E34
 - `import_mappings`는 사용자가 짝지은 열이다. 머리 줄의 sha256마다 하나이고 열 이름 대신 열 번호만 남긴다. 기록 내보내기에 담지 않는다. E30
 - `app_state`는 기록이 아닌 앱 상태다. 마지막으로 기록을 내보낸 시각 `last_export`와 표로 옮긴 담긴 목록 파일의 지문 `bundled_catalog`다. 설정의 기록 내보내기 줄이 `last_export`로 "마지막으로 내보낸 날"을 보인다. 작업 012 설계 4절
 - `catalog_card_files`는 카드 규칙 파일을 지문마다 한 줄로 둔다. 앱에 담긴 파일은 앱 판이 바뀐 뒤 처음 켤 때 옮기고, 받은 파일은 지문을 확인해 넣는다. 켤 때 담긴 목록과 받아 둔 목록이 가리키지 않는 줄을 지운다. 앱 판이 바뀐 뒤부터 `catalog_cache.body`는 한 벌 카탈로그가 아니라 목록 파일이다. 작업 014 설계 2절
 - `merchant_categories`는 사용자가 고른 가게 이름별 업종이다. 열쇠는 간편결제 이름과 영문 괄호, 회사 표시, 띄어쓰기를 뺀 가게 이름이고 원래 이름은 두지 않는다. 결제의 업종을 정할 때 가맹점 업종보다 먼저 쓴다. 기록 내보내기에 담는다. 작업 016 설계 3절, E62
-- 설정의 기록 내보내기는 `catalog_cache`, `catalog_card_files`, `import_mappings`, `app_state`를 뺀 표 아홉을 JSON 한 파일로 쓴다. 표마다 표나 칸이 마지막으로 바뀐 표 정의 번호를 두어, 그보다 옛 번호 파일에는 그 표가 없어도 받는다. 가져오기는 한 트랜잭션에서 표를 비우고 파일의 행을 넣는다. 작업 006 설계 6절
+- `import_card_codes`는 카드사 파일의 카드 칸 값과 보유 카드의 짝이다. 값은 카드번호 일부라 폰 안에만 두고 기록 내보내기에 담지 않는다. 카드를 지우면 그 카드의 짝을 지우고, 기록 가져오기는 보유 카드를 다시 넣어 짝이 모두 지워진다. 표 정의 6번. 작업 017 설계 3절, E60
+- 설정의 기록 내보내기는 `catalog_cache`, `catalog_card_files`, `import_mappings`, `import_card_codes`, `app_state`를 뺀 표 아홉을 JSON 한 파일로 쓴다. 표마다 표나 칸이 마지막으로 바뀐 표 정의 번호를 두어, 그보다 옛 번호 파일에는 그 표가 없어도 받는다. 가져오기는 한 트랜잭션에서 표를 비우고 파일의 행을 넣는다. 작업 006 설계 6절
 - 표 정의는 칸과 표를 더하기만 하고 새 칸에는 기본값을 둔다. `PRAGMA user_version`에 돌린 번호를 적고, 이미 낸 번호의 SQL은 고치지 않고 새 번호로 더한다
