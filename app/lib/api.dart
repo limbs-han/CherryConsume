@@ -43,8 +43,12 @@ class CardHit {
       issuerName = j['issuer_name'],
       kind = j['kind'],
       annualFee = j['annual_fee'],
-      tiers = List<int>.from(j['tiers']);
+      tiers = List<int>.from(j['tiers']),
+      discontinued = j['status'] == 'discontinued';
   final String id, name, issuerName, kind;
+
+  /// 신규 발급이 끝난 카드. 이미 가진 사람이 등록한다. E19
+  final bool discontinued;
 
   /// 카드사 코드. 카드사 색 칸에 쓴다. 작업 011 설계 2절 A1
   final String? issuer;

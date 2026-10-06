@@ -15,10 +15,12 @@ final _space = RegExp(r'\s+');
 
 String _key(String text) => text.replaceAll(_space, '').toLowerCase();
 
-/// 판매 중인 카드만 새로 등록한다. 단종 카드는 검색에서 숨긴다. E19
+/// 판매 중인 카드와 단종 카드를 새로 등록한다. 단종 카드도 유효기간까지 실적과 혜택이 그대로다. closed는 숨긴다. E19
+bool _listed(CatalogCard c) => c.status != 'closed';
+
 CatalogCard registrable(Store s, String cardId) {
   final card = s.catalog.cards[cardId];
-  if (card == null || card.status != 'on_sale') {
+  if (card == null || !_listed(card)) {
     throw ApiError(404, '등록할 수 있는 카드가 아니다');
   }
   return card;
@@ -95,7 +97,7 @@ List<int> shownTiers(List<int>? tiers) => [
 List<Json> issuers(Store s) {
   final selling = {
     for (final c in s.catalog.cards.values)
-      if (c.status == 'on_sale') c.issuer,
+      if (_listed(c)) c.issuer,
   };
   return [
     for (final i in s.catalog.issuers.values)
@@ -129,7 +131,7 @@ List<Json> cards(Store s, {String q = '', String? issuer}) {
   final out = <Json>[];
   for (final c in s.catalog.cards.values) {
     final issuerName = s.catalog.issuers[c.issuer]!.name;
-    if (c.status != 'on_sale' || (issuer != null && c.issuer != issuer)) {
+    if (!_listed(c) || (issuer != null && c.issuer != issuer)) {
       continue;
     }
     if (want.isNotEmpty &&
@@ -155,10 +157,14 @@ List<Json> cards(Store s, {String q = '', String? issuer}) {
       'kind': c.kind,
       'annual_fee': fees.isEmpty ? null : fees.reduce((a, b) => a < b ? a : b),
       'tiers': shownTiers(s.engine.ctx.headOn(c.id, month)?.tiers),
+      'status': c.status,
     });
   }
+  // 같은 카드사 안에서 판매 중인 카드를 단종 카드보다 위에 둔다. E19
+  int rank(Json c) => c['status'] == 'on_sale' ? 0 : 1;
   return out..sort((a, b) {
-    final i = (a['issuer_name'] as String).compareTo(b['issuer_name']);
+    var i = (a['issuer_name'] as String).compareTo(b['issuer_name']);
+    if (i == 0) i = rank(a) - rank(b);
     return i != 0 ? i : (a['name'] as String).compareTo(b['name']);
   });
 }

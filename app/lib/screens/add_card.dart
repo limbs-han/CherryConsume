@@ -19,7 +19,7 @@ String cardLine(CardHit c) {
   final spend = c.tiers.isEmpty
       ? '실적 무관'
       : '실적 ${c.tiers.map((t) => man(t).replaceAll('만', '')).join('/')}만';
-  return '$kind · $fee · $spend';
+  return [kind, fee, spend, if (c.discontinued) '신규 발급 중단'].join(' · ');
 }
 
 /// 카드 요청 설문 주소. 사용자가 Google 설문을 만들면 적는다. 비어 있으면 요청 줄을 두지 않는다.

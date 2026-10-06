@@ -42,14 +42,28 @@ void main() {
       'kind': 'credit',
       'annual_fee': 15000,
       'tiers': [300000, 500000, 1000000],
+      'status': 'on_sale',
     });
   });
 
-  test('test_discontinued_card_is_hidden', () {
-    // E19
+  test('단종 카드도 검색과 등록이 되고 판매 중인 카드 아래에 둔다', () {
+    // E19. 2026-10-06 사용자가 단종 카드도 등록하기로 했다
     final (:s, clock: _) = fresh((j) {
       for (final c in j['cards'] as List) {
         if (c['id'] == 'shinhan-mrlife') c['status'] = 'discontinued';
+      }
+    });
+    final shinhan = cards(s, issuer: 'shinhan');
+    expect(shinhan.last['name'], '신한카드 Mr.Life');
+    expect(shinhan.last['status'], 'discontinued');
+    expect(shinhan.first['status'], 'on_sale');
+    expect(preview(s, 'shinhan-mrlife')['tier_source'], isNotNull);
+  });
+
+  test('closed 카드는 검색과 등록에서 뺀다', () {
+    final (:s, clock: _) = fresh((j) {
+      for (final c in j['cards'] as List) {
+        if (c['id'] == 'shinhan-mrlife') c['status'] = 'closed';
       }
     });
     expect(names(cards(s)), isNot(contains('신한카드 Mr.Life')));

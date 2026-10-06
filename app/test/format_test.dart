@@ -59,6 +59,17 @@ void main() {
       'tiers': [300000, 500000, 1000000],
     });
     expect(cardLine(hit), '신용 · 연회비 1.5만 · 실적 30/50/100만');
+    // 단종 카드는 줄 끝에 붙인다. E19
+    final old = CardHit({
+      'id': 'shinhan-mrlife',
+      'name': '신한카드 Mr.Life',
+      'issuer_name': '신한카드',
+      'kind': 'credit',
+      'annual_fee': 15000,
+      'tiers': <int>[],
+      'status': 'discontinued',
+    });
+    expect(cardLine(old), '신용 · 연회비 1.5만 · 실적 무관 · 신규 발급 중단');
   });
 
   test('홈 카드 한 줄. 구간을 지키려면 남은 금액', () {
