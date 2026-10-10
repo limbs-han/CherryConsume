@@ -1,0 +1,338 @@
+schema_version: 2
+id: nh-f20016
+issuer: nh
+name: 올리 POINT 체크카드
+kind: check
+product_codes:
+  - '90010042'
+  - F20016
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010042', fetched_at: 2026-10-10, review_no: 2026-3845, review_valid_until: 2027-06-30}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: ['과태료(범칙금), 우체국 우편요금, 연체료, 각종 수수료와 이자, 포인트로 결제한 금액은 실적과 적립에서 빠진다']
+    ranked:
+      - {key: smart-first, top: 1}
+      - {key: smart-second, top: 2}
+    limits:
+      - {key: smart, per: month, amount: 5000}
+    stacks:
+      - {key: main}
+      - key: smart
+        pick: priority
+        order: [smart-online-first, smart-mart-first, smart-goods-first, smart-telecom-first, smart-subscription-first, smart-transit-first, smart-taxi-first, smart-coffee-first, smart-overseas-first, smart-online-second, smart-mart-second, smart-goods-second, smart-telecom-second, smart-subscription-second, smart-transit-second, smart-taxi-second, smart-coffee-second, smart-overseas-second]
+    benefits:
+      - key: base-point-0-2
+        title: 국내외 NH포인트 0.2% 기본 적립
+        source: page
+        evidence: [국내/외 이용가맹점 0.2% NH포인트 적립, 적립한도 및 전월실적 조건이 없습니다.]
+        target: {all: true}
+        reward: {type: points, program: nh_point, rate: 0.2}
+      - key: smart-online-first
+        title: 스마트 적립 1위 온라인쇼핑·배달앱 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '① 온라인쇼핑 / 배달앱 | 11번가, G마켓, 옥션, 쿠팡, 농협몰 / 배달의민족, 요기요', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [auction, baemin, coupang, eleven_st, gmarket, nh_mall, yogiyo]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+        area: online
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-mart-first
+        title: 스마트 적립 1위 오프라인 마트 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '② 오프라인쇼핑 / 잡화 | 이마트, 홈플러스, 롯데마트, 하나로마트 / 올리브영, 다이소', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+          - {channel: offline}
+        area: offline
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-goods-first
+        title: 스마트 적립 1위 잡화 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '② 오프라인쇼핑 / 잡화 | 이마트, 홈플러스, 롯데마트, 하나로마트 / 올리브영, 다이소', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+        area: offline
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+        unmodeled: ['역사, 백화점, 할인점(아울렛) 입점 매장 결제는 이용금액과 적립에서 빠진다']
+      - key: smart-telecom-first
+        title: 스마트 적립 1위 이동통신 자동납부 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '③ 이동통신 / 구독 | SKT, KT, LGU+ 자동납부 / 유튜브 프리미엄, 넷플릭스, 웨이브, 멜론 정기결제', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+          - billing: [autopay]
+        area: telecom
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-subscription-first
+        title: 스마트 적립 1위 구독 정기결제 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '③ 이동통신 / 구독 | SKT, KT, LGU+ 자동납부 / 유튜브 프리미엄, 넷플릭스, 웨이브, 멜론 정기결제', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [melon, netflix, wavve, youtube_premium]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+          - billing: [subscription]
+        area: telecom
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-transit-first
+        title: 스마트 적립 1위 후불 대중교통 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '④ 대중교통 / 택시 | 지하철, 시내외버스 / 택시 *대중교통은 실물카드 후불교통(RF) 결제건에 한함', 20만원이상 | 5천 NH포인트]
+        target:
+          categories: [transit.bus_city, transit.bus_intercity, transit.subway]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+          - billing: [postpaid_transit]
+          - payment_not: [mobile_tmoney]
+        area: transport
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-taxi-first
+        title: 스마트 적립 1위 택시 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '④ 대중교통 / 택시 | 지하철, 시내외버스 / 택시 *대중교통은 실물카드 후불교통(RF) 결제건에 한함', 20만원이상 | 5천 NH포인트]
+        target:
+          categories: [taxi]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+        area: transport
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-coffee-first
+        title: 스마트 적립 1위 커피·편의점 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, '⑤ 커피 / 편의점 | 스타벅스, 이디야, 투썸플레이스 / GS25, CU, 세븐일레븐 *스타벅스는 사이렌오더 포함', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [cu, ediya, gs25, seven_eleven, starbucks, twosome]
+        when:
+          - {ranked: smart-first}
+          - {region: domestic}
+        area: coffee
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+        unmodeled: ['역사, 백화점, 할인점(아울렛) 입점 매장 결제는 이용금액과 적립에서 빠진다']
+      - key: smart-overseas-first
+        title: 스마트 적립 1위 해외 0.4% 추가
+        source: page
+        evidence: [1위 영역 기본적립 0.2% + 추가적립 0.4% = 총 0.6% 적립, ⑥ 해외 | 해외 전 가맹점(해외 온라인쇼핑 포함), 20만원이상 | 5천 NH포인트]
+        target: {all: true}
+        when:
+          - {ranked: smart-first}
+          - {region: overseas}
+        area: overseas
+        reward: {type: points, program: nh_point, rate: 0.4}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-online-second
+        title: 스마트 적립 2위 온라인쇼핑·배달앱 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '① 온라인쇼핑 / 배달앱 | 11번가, G마켓, 옥션, 쿠팡, 농협몰 / 배달의민족, 요기요', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [auction, baemin, coupang, eleven_st, gmarket, nh_mall, yogiyo]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+        area: online
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-mart-second
+        title: 스마트 적립 2위 오프라인 마트 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '② 오프라인쇼핑 / 잡화 | 이마트, 홈플러스, 롯데마트, 하나로마트 / 올리브영, 다이소', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+          - {channel: offline}
+        area: offline
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-goods-second
+        title: 스마트 적립 2위 잡화 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '② 오프라인쇼핑 / 잡화 | 이마트, 홈플러스, 롯데마트, 하나로마트 / 올리브영, 다이소', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+        area: offline
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+        unmodeled: ['역사, 백화점, 할인점(아울렛) 입점 매장 결제는 이용금액과 적립에서 빠진다']
+      - key: smart-telecom-second
+        title: 스마트 적립 2위 이동통신 자동납부 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '③ 이동통신 / 구독 | SKT, KT, LGU+ 자동납부 / 유튜브 프리미엄, 넷플릭스, 웨이브, 멜론 정기결제', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+          - billing: [autopay]
+        area: telecom
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-subscription-second
+        title: 스마트 적립 2위 구독 정기결제 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '③ 이동통신 / 구독 | SKT, KT, LGU+ 자동납부 / 유튜브 프리미엄, 넷플릭스, 웨이브, 멜론 정기결제', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [melon, netflix, wavve, youtube_premium]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+          - billing: [subscription]
+        area: telecom
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-transit-second
+        title: 스마트 적립 2위 후불 대중교통 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '④ 대중교통 / 택시 | 지하철, 시내외버스 / 택시 *대중교통은 실물카드 후불교통(RF) 결제건에 한함', 20만원이상 | 5천 NH포인트]
+        target:
+          categories: [transit.bus_city, transit.bus_intercity, transit.subway]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+          - billing: [postpaid_transit]
+          - payment_not: [mobile_tmoney]
+        area: transport
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-taxi-second
+        title: 스마트 적립 2위 택시 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '④ 대중교통 / 택시 | 지하철, 시내외버스 / 택시 *대중교통은 실물카드 후불교통(RF) 결제건에 한함', 20만원이상 | 5천 NH포인트]
+        target:
+          categories: [taxi]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+        area: transport
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+      - key: smart-coffee-second
+        title: 스마트 적립 2위 커피·편의점 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, '⑤ 커피 / 편의점 | 스타벅스, 이디야, 투썸플레이스 / GS25, CU, 세븐일레븐 *스타벅스는 사이렌오더 포함', 20만원이상 | 5천 NH포인트]
+        target:
+          merchants: [cu, ediya, gs25, seven_eleven, starbucks, twosome]
+        when:
+          - {ranked: smart-second}
+          - {region: domestic}
+        area: coffee
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+        unmodeled: ['역사, 백화점, 할인점(아울렛) 입점 매장 결제는 이용금액과 적립에서 빠진다']
+      - key: smart-overseas-second
+        title: 스마트 적립 2위 해외 0.2% 추가
+        source: page
+        evidence: [2위 영역 기본적립 0.2% + 추가적립 0.2% = 총 0.4% 적립, ⑥ 해외 | 해외 전 가맹점(해외 온라인쇼핑 포함), 20만원이상 | 5천 NH포인트]
+        target: {all: true}
+        when:
+          - {ranked: smart-second}
+          - {region: overseas}
+        area: overseas
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 200000}
+        stack: smart
+    unmodeled: ['해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다. 월말 이용이 다음 달 실적이 될 수 있다', 국제공항 라운지 연 1회 무료이용은 전월실적 50만원 이상이고 카드 사용등록월 다음 달부터다. 결제 혜택이 아니라 계산하지 않는다, 추가적립은 이용월 다음 달 15일 이후 한 번에 적립된다. 영역 순위는 달이 끝나야 정해져 달 중간 값은 잠정값이다]
+open_questions:
+  - {path: 'revisions[0].ranked', question: 해외 커피·편의점·온라인 결제가 ①~⑤ 영역과 ⑥ 해외 영역 가운데 어디에 쌓이는지 원문에 없다. 두 영역에 함께 쌓으면 순위가 부풀어 ①~⑤는 국내 결제만 세었다., assumed: '①~⑤ 국내, ⑥ 해외'}
+  - {path: 'revisions[0].limits', question: 원문은 추가적립 한도 5천 하나만 적었다. 1위와 2위 추가적립이 한도를 함께 쓰는지 따로 쓰는지 문구가 없다, assumed: 함께 쓴다}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다. 상품출시일은 2020-08-25다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].ranked', question: 영역 이용금액 순위에서 취소를 결제한 달과 취소 접수월 중 어디서 빼는지 문구가 없다, assumed: 비움}
+  - {path: 'revisions[0].benefits[smart-mart-first].when', question: ② 영역 이름이 오프라인쇼핑이라 마트 4곳은 오프라인 결제만 넣었다. 마트 온라인몰 결제가 영역에 드는지 문구가 없다, assumed: 오프라인만}
+  - {path: 'revisions[0].benefits[base-point-0-2].reward', question: 원 미만 포인트 처리 문구가 없다, assumed: floor}
+notes: 2026-10-10 상품 페이지(준법감시인 심의필 2026-3845)를 대조했다. 상품출시일 2020-08-25. 상품설명서 PDF는 찾지 못했다. 스마트 적립은 6개 영역 중 당월 이용금액 1위 영역에 0.4%, 2위 영역에 0.2%를 기본 0.2%에 더한다. 1위와 2위를 ranked 두 그룹으로 두고, 1위 영역은 두 그룹에 모두 들어 smart 묶음의 priority로 0.4%만 받는다. 같은 금액이면 영역 번호 순서로 정해 혜택 순서를 영역 번호 순으로 두었다. 추가적립만 전월실적 20만원 이상, 월 5천 포인트 한도다. 신규 특례는 카드사용등록일부터 다음 달 말일까지 실적 미달이어도 제공한다는 공통 문구를 따랐다.
