@@ -1,0 +1,94 @@
+schema_version: 2
+id: lotte-c12833-a12833
+issuer: lotte
+name: LIKIT on 체크카드
+kind: check
+product_codes: [C12833-A12833]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12833-A12833', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [상품권·기프트카드 구매와 포인트 충전은 캐시백 제외]
+    facts:
+      - {key: first-issuance-eligible, type: bool, scope: card, ask: '만기·해지 후 재발급이 아닌 이 상품 최초 발급 카드인가요? 시작일은 이번 카드 최초 등록·사용일입니다.'}
+    benefits:
+      - key: online-3pct-30
+        title: 온라인 3% 캐시백 30만원 구간
+        source: manual
+        evidence: [온라인 | 3% | 3천원 | 4천원, 온라인쇼핑몰·오픈마켓 | 5% | 2천원 | 4천원]
+        target: {all: true}
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 3000}
+        tiers:
+          from: 300000
+          to: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+      - key: market-5pct-30
+        title: 온라인 5% 캐시백 30만원 구간
+        source: manual
+        evidence: [온라인 | 3% | 3천원 | 4천원, 온라인쇼핑몰·오픈마켓 | 5% | 2천원 | 4천원]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, ssg_com, tmon]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 2000}
+        tiers:
+          from: 300000
+          to: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [PG·간편결제 가맹점명으로 확인되면 쇼핑몰 5% 대상에서 제외한다]
+      - key: online-3pct-50
+        title: 온라인 3% 캐시백 50만원 구간
+        source: manual
+        evidence: [온라인 | 3% | 3천원 | 4천원, 온라인쇼핑몰·오픈마켓 | 5% | 2천원 | 4천원]
+        target: {all: true}
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+        tiers: {from: 500000}
+      - key: market-5pct-50
+        title: 온라인 5% 캐시백 50만원 구간
+        source: manual
+        evidence: [온라인 | 3% | 3천원 | 4천원, 온라인쇼핑몰·오픈마켓 | 5% | 2천원 | 4천원]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, ssg_com, tmon]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+        tiers: {from: 500000}
+        unmodeled: [PG·간편결제 가맹점명으로 확인되면 쇼핑몰 5% 대상에서 제외한다]
+    unmodeled: [장애인 고용부담금·이자·수수료는 전월실적 제외이며 캐시백 제외 목록과 구분한다, 본인 및 가족카드 실적과 캐시백 한도 합산, 매출표 접수 뒤 취소 한도가 복원되며 복원 이전 결제는 승인 당시 한도를 적용한다, 다른 롯데카드 캐시백과 중복이면 큰 금액 하나만 적용한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+notes: 2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2019-08-30이며 현행 조건 전체의 시행일 근거로 사용하지 않았다.
