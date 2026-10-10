@@ -1,0 +1,161 @@
+schema_version: 2
+id: hana-17504
+issuer: hana
+name: JADE Classic
+short_name: 하나 JADE Classic
+kind: credit
+product_codes:
+  - '17504'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 115000}
+  - {scope: global, brand: unionpay, amount: 115000}
+  - {scope: global, brand: visa, amount: 120000}
+  - {scope: global, brand: mastercard, amount: 120000}
+  - {scope: global, brand: amex, amount: 120000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504', fetched_at: &id001 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      month_offset: {}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: [가족카드의 적립과 한도를 본인카드와 합산한다. 해외는 최종 원화 청구금액으로 계산한다.]
+    limits:
+      - {key: special, per: month, amount: 100000}
+    benefits:
+      - key: digital-content-50
+        title: 디지털 컨텐츠 50% 하나머니 적립
+        source: page
+        evidence: ['디지털 컨텐츠 자동납부 시, 50% 하나머니 적립 제공 (지난달 실적 50만원 이상, 월 적립 한도 1만 하나머니)', '디지털 컨텐츠 | 넷플릭스, 디즈니플러스, 유튜브 프리미엄, Wavve, 티빙, 멜론, 지니, FLO, 스포티파이 | 50% | 1만 하나머니', '자동납부 결제 건만 서비스 제공되며, 포인트, 캐시, 머니충전, 컨텐츠 개별 결제, 간편결제 및 앱스토어를 통한 결제건(인앱결제)은 서비스 제외됨']
+        target:
+          merchants: [disney_plus, flo, genie, melon, netflix, spotify, tving, wavve, youtube_premium]
+        when:
+          - payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, mobile_tmoney, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+            billing: [autopay, subscription]
+        reward: {type: points, program: hana_money, rate: 50, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: coffee-50
+        title: 커피 50% 하나머니 적립
+        source: page
+        evidence: ['커피 이용금액 50% 하나머니 적립 제공 (지난달 실적 50만원 이상, 월 적립 한도 5천 하나머니)', 커피 | 스타벅스 | 50% | 5천 하나머니, '스타벅스 오프라인 결제, 공식앱 또는 공식홈페이지를 통한 주문 및 결제에 한하여 서비스가 제공되며, 별개의 배달앱 혹은 식당 예약앱을 통한 결제는 서비스 제외됨']
+        target:
+          merchants: [starbucks]
+        reward: {type: points, program: hana_money, rate: 50, round: round}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        unmodeled: [스타벅스 공식 주문만 제공하며 입점 매장과 배달앱 및 식당 예약앱 결제는 제외한다.]
+      - key: taxi-50
+        title: 택시 50% 하나머니 적립
+        source: page
+        evidence: ['택시 이용금액 50% 하나머니 적립 제공 (지난달 실적 50만원 이상, 월 적립 한도 5천 하나머니)', '택시 | 택시업종, 카카오T, UT | 50% | 5천 하나머니', '카카오T와 UT의 경우 공식 앱 또는 홈페이지를 통한 택시 결제건에한하여 서비스가 제공되며, 대리운전·퀵 서비스·주차·기차 등택시 이외의 결제건은 서비스가 제외됨']
+        target:
+          exclude_categories: [transit.rail]
+          categories: [taxi]
+          merchants: [kakao_t, ut]
+        reward: {type: points, program: hana_money, rate: 50, round: round}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        unmodeled: ['카카오T와 UT는 공식 앱이나 홈페이지의 택시 결제만 제공한다. 대리운전, 퀵서비스, 주차, 기차는 제외한다.']
+      - key: base-1
+        title: 국내외 일반 1% 적립
+        source: page
+        target: {all: true}
+        reward: {type: points, program: hana_money, rate: 1, round: round}
+      - key: special-overseas
+        title: 해외 1.5%
+        source: page
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: hana_money, rate: 1.5, round: round}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+      - key: special-airline
+        title: 지정 항공 1.5%
+        source: page
+        target:
+          merchants: [asiana_airlines, jeju_air, jin_air, korean_air]
+        when: []
+        reward: {type: points, program: hana_money, rate: 1.5, round: round}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: ['공식 홈페이지와 앱 또는 오프라인 매장에서 직접 결제한 건만 제공한다. 여행사, 구매대행사이트, 온라인 쇼핑몰을 거친 결제는 제외한다.']
+      - key: special-dutyfree
+        title: 지정 면세점 1.5%
+        source: page
+        target:
+          merchants: [lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_dfs, shinsegae_dfs_online]
+        when: []
+        reward: {type: points, program: hana_money, rate: 1.5, round: round}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: ['공식 홈페이지와 앱 또는 오프라인 매장에서 직접 결제한 건만 제공한다. 여행사, 구매대행사이트, 온라인 쇼핑몰을 거친 결제는 제외한다.']
+      - key: special-travel
+        title: 지정 여행 1.5%
+        source: page
+        target:
+          merchants: [agoda, expedia, hana_tour, hotels_com]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hana_money, rate: 1.5, round: round}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: [지정 업체 공식 홈페이지와 앱에서 직접 결제한 건만 제공한다. 몰 이동 결제는 제외한다. 하나투어 오프라인은 별도 혜택 규칙에 있다.]
+      - key: special-hana-tour-offline
+        title: 하나투어 오프라인 1.5%
+        source: page
+        target:
+          merchants: [hana_tour]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 1.5, round: round}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+      - key: special-shopping-online
+        title: 지정 쇼핑몰 1.2%
+        source: page
+        target:
+          merchants: [coupang, kurly, lotte_on, ssg_com, the_hyundai_com]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hana_money, rate: 1.2, round: round}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: [공식 홈페이지와 앱에서 직접 결제한 건만 제공한다. 다른 쇼핑몰로 이동해 결제한 건은 제외한다.]
+      - key: special-shopping-offline
+        title: 지정 백화점 아울렛 마트 주유 1.2%
+        source: page
+        target:
+          merchants: [altteul_fuel, emart, gs_caltex, hd_oilbank, homeplus, hyundai_department, hyundai_premium_outlet, lotte_department, lotte_mart, lotte_premium_outlet, s_oil, shinsegae_department, shinsegae_simon, sk_energy, traders]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 1.2, round: round}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: ['백화점, 아울렛, 마트의 상설 임대매장은 제외한다. 롯데마트맥스는 제외한다.']
+    unmodeled: ['바우처는 본인에게 연 1회 택1 제공한다. 첫해 50만원 이용, 이후 직전 1년 600만원 이용이 필요하다. 호텔다이닝 10만원 할인, 신세계상품권 10만원, SK주유권 5만원 2매, 배달의민족 상품권 10만원, 하나머니 9만원 중 고른다.', '라운지는 본인 가족 동반자 통합 일 3회 연 3회. 첫해 전월 50만원, 이후 직전 1년 600만원 이용이 필요하다. 서비스 연도는 발급월부터 12개월이다.', 프리미엄 바우처와 라운지의 발급연도 실적 및 신청과 사용 이력에 따른 혜택은 자동 계산하지 않는다. 일반 거래의 하나머니 적립만 계산한다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정. 일반 거래 계산 지원 범위로만 승인 검토한다. 자동 계산하지 않는 추가 서비스는 사용자에게 명확히 안내한다.
