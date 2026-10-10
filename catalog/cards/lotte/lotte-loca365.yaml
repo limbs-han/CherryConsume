@@ -20,7 +20,7 @@ revisions:
     source: page
     tiers: [0, 500000]
     spend:
-      exclude_categories: [annual_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express]
+      exclude_categories: [annual_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express]
       month_offset: {transit.bus_city: 1, transit.subway: 1}
     new_card: {until: next_month_end, tier: 500000, from: issue}
     benefit_exclusions:

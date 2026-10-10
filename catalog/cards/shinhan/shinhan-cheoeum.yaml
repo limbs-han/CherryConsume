@@ -21,10 +21,10 @@ revisions:
     source: page
     tiers: [0, 300000, 500000, 1000000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
     new_card: {tier: 300000}
     benefit_exclusions:
-      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
       unmodeled: [이 카드로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체가 적립 제외, 포인트로 결제한 거래의 포인트 금액은 적립 제외]
     facts:
       - {key: instant_pay, type: bool, scope: card, ask: 이 카드로 쓴 일시불 금액을 그 달 안에 즉시결제하나요}

@@ -27,7 +27,7 @@ revisions:
       tier: 400000
       tier_by_benefit: {weekend-delivery: 0, weekend-dining: 0}
     benefit_exclusions:
-      categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, transit.rail, utility.water]
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, transit.rail, utility.water]
       unmodeled: [이 카드로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체가 적립 제외, 포인트 사용 거래의 포인트 금액은 적립과 적립률 산정에서 빠진다]
     limits:
       - key: integrated

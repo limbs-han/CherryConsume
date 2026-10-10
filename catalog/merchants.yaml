@@ -604,3 +604,223 @@
   name: KPE 접수
   category: education.exam
   aliases: [KPE]
+- key: wellrix_rental
+  name: 웰릭스렌탈
+  category: other
+  aliases: [웰릭스렌탈]
+- key: cuckoo_rental
+  name: 쿠쿠 렌탈
+  category: other
+  aliases: [쿠쿠 렌탈]
+- key: chungho_rental
+  name: 청호나이스 렌탈
+  category: other
+  aliases: [청호나이스 렌탈]
+- key: bodyfriend_rental
+  name: 바디프랜드 렌탈
+  category: other
+  aliases: [바디프랜드 렌탈]
+- key: hyundai_rental_service
+  name: 현대렌탈서비스
+  category: other
+  aliases: [현대렌탈서비스]
+- key: daemyung_imready
+  name: 대명아임레디
+  category: other
+  aliases: [대명아임레디]
+- key: coway_rental
+  name: 코웨이 렌탈
+  category: other
+  aliases: [코웨이 렌탈]
+- key: sk_intellix
+  name: SK인텔릭스
+  category: other
+  aliases: [SK인텔릭스]
+- key: bs_rental
+  name: BS렌탈
+  category: other
+  aliases: [BS렌탈]
+- key: samsung_subscription
+  name: 삼성전자 구독
+  category: other
+  aliases: [삼성전자 구독]
+- key: coway_life_solution
+  name: 코웨이라이프솔루션
+  category: other
+  aliases: [코웨이라이프솔루션]
+- key: spotify
+  name: 스포티파이
+  category: streaming
+  aliases: [스포티파이]
+- key: korean_air
+  name: 대한항공
+  category: travel.airline
+  aliases: [대한항공]
+- key: asiana_airlines
+  name: 아시아나항공
+  category: travel.airline
+  aliases: [아시아나항공]
+- key: jin_air
+  name: 진에어
+  category: travel.airline
+  aliases: [진에어]
+- key: jeju_air
+  name: 제주항공
+  category: travel.airline
+  aliases: [제주항공]
+- key: hana_tour
+  name: 하나투어
+  category: travel.agency
+  aliases: [하나투어]
+- key: agoda
+  name: 아고다
+  category: travel.agency
+  aliases: [아고다]
+- key: expedia
+  name: 익스피디아
+  category: travel.agency
+  aliases: [익스피디아]
+- key: hotels_com
+  name: 호텔스닷컴
+  category: travel.agency
+  aliases: [호텔스닷컴]
+- key: shinsegae_simon
+  name: 신세계사이먼
+  category: department_store
+  aliases: [신세계사이먼]
+- key: hyundai_premium_outlet
+  name: 현대프리미엄아울렛
+  category: department_store
+  aliases: [현대프리미엄아울렛]
+- key: lotte_premium_outlet
+  name: 롯데프리미엄아울렛
+  category: department_store
+  aliases: [롯데프리미엄아울렛]
+- key: altteul_fuel
+  name: 알뜰주유소
+  category: fuel
+  aliases: [알뜰주유소]
+- key: gs_the_fresh
+  name: GS더프레시
+  category: grocery_mart
+  aliases: [GS더프레시]
+- key: shilla_dfs
+  name: 신라면세점
+  category: travel.duty_free
+  aliases: [신라면세점]
+- key: lotte_dfs
+  name: 롯데면세점
+  category: travel.duty_free
+  aliases: [롯데면세점]
+- key: shinsegae_dfs
+  name: 신세계면세점
+  category: travel.duty_free
+  aliases: [신세계면세점]
+- key: mammoth_coffee
+  name: 매머드커피
+  category: cafe
+  aliases: [매머드커피]
+- key: t_universe_pass
+  name: T우주패스
+  category: streaming
+  aliases: [T우주패스]
+- key: galleria
+  name: 갤러리아
+  category: department_store
+  aliases: [갤러리아]
+- key: dong_a_department
+  name: 동아백화점
+  category: department_store
+  aliases: [동아백화점]
+- key: daegu_department
+  name: 대구백화점
+  category: department_store
+  aliases: [대구백화점]
+- key: ak_plaza
+  name: AK플라자
+  category: department_store
+  aliases: [AK플라자]
+- key: nc_daejeon_yuseong
+  name: NC 대전유성점
+  category: department_store
+  aliases: [NC 대전유성점]
+- key: shinsegae_premium_outlet
+  name: 신세계사이먼 프리미엄 아울렛
+  category: other
+  aliases: [신세계사이먼 프리미엄 아울렛]
+- key: samsung_card_shopping
+  name: 삼성카드 쇼핑
+  category: online_shopping
+  aliases: [삼성카드 쇼핑]
+- key: woongjin_thinkbig
+  name: 웅진씽크빅
+  category: education.study_material
+  aliases: [웅진씽크빅]
+- key: kyowon
+  name: 교원
+  category: education.study_material
+  aliases: [교원]
+- key: daekyo
+  name: 대교
+  category: education.study_material
+  aliases: [대교]
+- key: hansol_education
+  name: 한솔교육
+  category: education.study_material
+  aliases: [한솔교육]
+- key: woori_won_mobile
+  name: 우리WON모바일
+  category: telecom.mobile
+  aliases: [우리WON모바일]
+- key: payment_teacher
+  name: 결제선생
+  category: education.academy
+  aliases: [결제선생]
+- key: millie
+  name: 밀리의서재
+  category: streaming
+  aliases: [밀리의서재]
+- key: kyobo_sam
+  name: 교보문고 sam
+  category: streaming
+  aliases: [교보문고 sam]
+- key: yes24_crema_club
+  name: YES24 크레마클럽
+  category: streaming
+  aliases: [YES24 크레마클럽]
+- key: coway
+  name: 코웨이
+  category: other
+  aliases: [코웨이]
+- key: lg_appliance_subscription
+  name: LG전자 가전구독
+  category: other
+  aliases: [LG전자 가전구독]
+- key: chatgpt
+  name: ChatGPT
+  category: streaming
+  aliases: [ChatGPT]
+- key: baemin_club
+  name: 배민클럽
+  category: streaming
+  aliases: [배민클럽]
+- key: kurly_members
+  name: 컬리멤버스
+  category: streaming
+  aliases: [컬리멤버스]
+- key: tous_les_jours
+  name: 뚜레쥬르
+  category: restaurant.bakery
+  aliases: [뚜레쥬르, TOUS les JOURS]
+- key: lfmall
+  name: LFmall
+  category: online_shopping
+  aliases: [LFmall, LF몰, 엘에프몰, lfmall.co.kr]
+- key: nh_mall
+  name: 농협몰
+  category: online_shopping
+  aliases: [농협몰, NH농협몰, nonghyupmall.com]
+- key: ministop
+  name: 미니스톱
+  category: convenience
+  aliases: [미니스톱, MINISTOP]

@@ -24,13 +24,13 @@ revisions:
     source: notice-14253
     tiers: [0, 400000, 800000, 1200000]
     spend:
-      exclude_categories: [education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
       exclude_applied: 1
     new_card: {until: next_month_end, tier: 400000, from: registration}
     benefit_exclusions:
       when_any:
         - {interest_free: true}
-      categories: [education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
     options:
       - key: combo
         title: 원더카드 맞춤 혜택 조합

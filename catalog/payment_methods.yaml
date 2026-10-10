@@ -36,3 +36,4 @@
   name: 배민페이
   statement_names: [배민페이]
 - {key: mobile_tmoney, name: 모바일티머니}
+- {key: eleven_pay, name: 11PAY}

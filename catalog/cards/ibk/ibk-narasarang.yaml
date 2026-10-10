@@ -177,7 +177,7 @@ revisions:
         source: page
         evidence: [파워업 서비스 『Npay포인트』 (전월 이용실적 25만원 이상), Npay에 등록된 IBK나라사랑카드로 결제 시 결제 금액의 10% Npay 포인트 적립, '1일 1회, 건당 최대 1,000원 적립, 온·오프라인 결제건 모두 포함', 전월 이용실적 | 월 최대 적립 횟수 | 월 최대 적립 한도, '기본 | 25만원 이상 | 5회 | 5,000원', '프로모션 | 50만원 이상 | 7회 | 7,000원', '100만원 이상 | 10회 | 10,000원', ※ 프로모션은 2026.12.31.일까지 운영, IBK나라사랑카드와 연결된 네이버 계정으로 Npay 포인트 적립, 'Npay 포인트 적립 제외 업종 : 각종 세금(국세, 지방세, 관세 등), 공과금(장애인 고용부담금, 전기요금, 우편요금, 도시가스요금, 상하수도요금, 여권발급비용, 과태료, 범칙금, 벌금 등), 4대보험(건강보험, 국민연금, 고용보험, 산재보험), 국가·공공기관·공공단체에서 개설한 가맹점 이용금액, 대학(대학원) 등록금, 초중고 학부모부담금, 각종 수수료 및 이자, 상품권/가맹점포인트/선불카드 구입 및 충전, 아파트관리비, 매출취소금액', Npay포인트 적립서비스는 Npay에 등록된 IBK나라사랑카드로 국내 가맹점 결제 시 적립 적용됩니다.]
         target:
-          exclude_categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+          exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
           all: true
         when:
           - payment: [naver_pay]

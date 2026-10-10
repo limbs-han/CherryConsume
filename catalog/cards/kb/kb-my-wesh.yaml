@@ -26,13 +26,13 @@ revisions:
     source: page
     tiers: [0, 400000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
       exclude_applied: 1
     new_card: {until: next_month_end, tier: 400000, from: registration}
     benefit_exclusions:
       when_any:
         - {interest_free: true}
-      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
       unmodeled: [정부지원금(보육료·유치원보조비·바우처) 결제 제외, 신차구매청구(환급) 할인 전표 제외, 결제대행업체(PG)나 별도 전용 가맹점번호로 승인되는 일부 간편결제 결제 제외, '무승인전표(자판기, 터널통행료, 항공기내 이용 등)는 할인하지 않는다']
     facts:
       - {key: birth_month, type: month, scope: user, ask: KB국민카드에 등록된 생일이 몇 월인가요}

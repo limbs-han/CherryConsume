@@ -38,6 +38,8 @@
     - {code: tuition, name: 대학 등록금}
     - {code: school_fee, name: 유치원·초중고 납입금}
     - {code: exam, name: 어학시험}
+    - {code: primary_secondary_fee, name: 초중고 학교납입금과 스쿨뱅킹}
+    - {code: kindergarten, name: 유치원}
 - code: travel
   name: 여행
   children:
@@ -51,7 +53,11 @@
     - {code: electricity, name: 전기요금}
     - {code: gas, name: 도시가스}
     - {code: water, name: 수도요금}
-- {code: tax, name: 세금}
+- code: tax
+  name: 세금
+  children:
+    - {code: local, name: 지방세}
+    - {code: national, name: 국세}
 - code: insurance
   name: 보험료
   children:
@@ -62,7 +68,11 @@
   children:
     - {code: salon, name: 미용실}
     - {code: cosmetics, name: 화장품}
-- {code: gift_card, name: 상품권}
+- code: gift_card
+  name: 상품권
+  children:
+    - {code: prepaid_card, name: 기프트카드}
+    - {code: voucher, name: 일반 상품권}
 - {code: prepaid_charge, name: 선불 충전}
 - {code: apartment_fee, name: 아파트관리비}
 - {code: rent, name: 임대료}
@@ -75,3 +85,6 @@
   children:
     - {code: vet, name: 동물병원}
 - {code: other, name: 기타}
+- {code: pub, name: 주점·바}
+- {code: childcare, name: 어린이집}
+- {code: maternity_center, name: 산후조리원}

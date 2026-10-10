@@ -25,7 +25,7 @@ revisions:
           when: {region: overseas}
     new_card: {until: next_month_end, tier: 1000000, from: receipt}
     benefit_exclusions:
-      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
     stacks:
       - key: main
         pick: priority

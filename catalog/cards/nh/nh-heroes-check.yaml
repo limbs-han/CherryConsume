@@ -21,7 +21,7 @@ revisions:
     tiers: [0, 200000]
     spend:
       basis: prev_calendar_month
-      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
       interest_free: count
       installment: full_at_purchase
       cancellation: cancel_month

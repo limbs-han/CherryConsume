@@ -25,7 +25,7 @@ revisions:
     source: page
     tiers: [0, 500000, 1000000, 1500000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.water]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.water]
       exclude_applied: 0
     new_card: {until: next_month_end, tier: 500000, from: registration}
     benefit_exclusions:

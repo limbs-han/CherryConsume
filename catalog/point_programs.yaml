@@ -15,3 +15,4 @@
 - {key: ibk_point, name: IBK포인트, won_per_point: 1}
 - {key: ok_cashbag, name: OK캐쉬백, won_per_point: 1}
 - {key: baemin_point, name: 배민포인트, won_per_point: 1}
+- {key: eleven_pay_point, name: 11PAY 포인트, won_per_point: 1}

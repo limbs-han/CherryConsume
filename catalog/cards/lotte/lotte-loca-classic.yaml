@@ -18,12 +18,12 @@ revisions:
     source: page
     tiers: [0, 1500000]
     spend:
-      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
     new_card: {until: next_month_end, tier: 1500000, from: issue}
     benefit_exclusions:
       when_any:
         - {interest_free: true}
-      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
       unmodeled: [오토·스마트 캐시백을 신청한 이용금액은 할인에서 빠진다, 장애인 고용부담금은 할인에서 빠진다]
     benefits:
       - key: all-0-5

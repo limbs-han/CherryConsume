@@ -33,7 +33,7 @@ revisions:
         title: 국내 가맹점 0.3% 하나머니 적립
         evidence: [국내 가맹점 하나머니 적립 서비스, 서비스 내용 | 적립률 | 월 한도, 국내 가맹점 이용 시 | 0.3% | 없음, 지난달 실적에 관계없이 서비스 제공, 매출 접수된 국내 일시불 이용금액에 따라 적립 혜택을 제공하며 취소가 접수된 월에서 적립된 하나머니를 차감 반영, '국세, 지방세, 공과금(인터넷/모바일앱을통한 공과금 납부금액 포함),국민연금/고용보험료/산재보험료/건강보험료 납부금액,상품권 및 기프트카드 구매, 선불카드 및 선불전자지급수단(하나머니 등) 충전금액,수도/전기요금, 아파트관리비, 부동산임대료, 스쿨뱅킹, 도시가스 요금,대학등록금, 대학원등록금, 초·중·고 학교납입금, 국내외ATM이용금액은 적립 제외', '적립기준: 하나머니 (1하나머니=1원)', 소수점 이하 금액은 반올림]
         target:
-          exclude_categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+          exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
           all: true
         when:
           - {region: domestic}
