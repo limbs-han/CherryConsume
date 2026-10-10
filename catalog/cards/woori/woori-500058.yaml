@@ -1,0 +1,238 @@
+schema_version: 2
+id: woori-500058
+issuer: woori
+name: 카드의정석2 DAILY
+kind: credit
+product_codes:
+  - '500058'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+  - {scope: domestic, form: mobile, amount: 19000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 19000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      unmodeled: ['정부지원금, 신차구매, 환금성 업종, 의약품 전용몰·제약회사, 수수료·이자·대출, 우편요금·여권발급비·벌금·공공기관 이용금액은 제외한다', 다른 쿠폰·프로모션과 중복 불가, PG·간편결제 전용 가맹점명으로 확인되는 가맹점별 특별 할인 제외]
+    facts:
+      - {key: first-issuance-eligible, type: bool, scope: card, ask: '만기·해지 후 재발급이 아닌 이 상품 최초 발급 카드인가요? 시작일은 이번 카드 최초 등록·사용일입니다.'}
+    limits:
+      - key: fixed
+        per: month
+        amount: {0: 3000, 500000: 3000, 1000000: 6000, 2000000: 12000}
+      - {key: subscription, per: month, amount: 5000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [fixed-consumption-5pct, fixed-delivery, fixed-online-shopping, fixed-offline-shopping, fixed-daiso, fixed-taxi, fixed-kakao-taxi, fixed-fuel, fixed-telecom, regular-subscription-50pct, basic-1pct]
+        spill: none
+    benefits:
+      - key: basic-1pct
+        title: 국내외 1만원 이상 기본1% 할인
+        source: page
+        evidence: [국내외 1만원 이상 기본1% 할인]
+        target: {all: true}
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 1}
+      - key: fixed-consumption-5pct
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          categories: [pub, restaurant]
+        when:
+          - amount: {min: 30000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [음식점·주점은 백화점과 할인점 입점 매장 제외]
+      - key: fixed-delivery
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - amount: {min: 30000}
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [지정 배달앱 음식·음료 앱내 주문만. 멤버십·기타 서비스 제외]
+      - key: fixed-online-shopping
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          merchants: [coupang, kurly, ssg_com]
+        when:
+          - amount: {min: 30000}
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [상품 구매만. 멤버십·기타 서비스·입점·임대매장 제외]
+      - key: fixed-offline-shopping
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          merchants: [emart, lotte_mart]
+        when:
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [상품 구매만. 멤버십·기타 서비스·입점·임대매장 제외]
+      - key: fixed-daiso
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          merchants: [daiso]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [상품 구매만. 멤버십·기타 서비스·입점·임대매장 제외]
+      - key: fixed-taxi
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          categories: [taxi]
+        when:
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+      - key: fixed-kakao-taxi
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          exclude_categories: [transit.rail]
+          merchants: [kakao_t]
+        when:
+          - amount: {min: 30000}
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [카카오T 택시호출만. 기차 등 다른 서비스 제외]
+      - key: fixed-fuel
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        when:
+          - amount: {min: 30000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [휘발유·경유·등유 주유만. LPG 제외]
+      - key: fixed-telecom
+        title: 고정소비 5% 할인
+        source: page
+        evidence: [고정소비 5% 할인]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 30000}
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fixed}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [휴대전화 자동납부만. 인터넷·집전화 결합상품 제외]
+      - key: regular-subscription-50pct
+        title: 디지털 정기결제50% 할인
+        source: page
+        evidence: [디지털 정기결제50% 할인]
+        target:
+          merchants: [disney_plus, netflix, t_universe_pass, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+          - billing_not: [in_app]
+          - payment: [physical_card]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: subscription}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 홈페이지·앱 직접 정기결제만. 간편결제·인앱·업그레이드·1회성 결제·수수료 제외]
+    unmodeled: [해외·교통·통신은 접수월 실적. 국내 취소가 매월 1~2일에 접수되면 전월 실적에서 차감한다, 신규 특례 시작일은 수령등록일과 사용개시일 중 빠른 날을 보유 시작일에 입력한다, 특별할인 한도 초과 이후 다음 결제부터 기본할인 제공]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+notes: 2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2026-06-02이며 현행 조건 전체의 시행일 근거로 사용하지 않았다.
