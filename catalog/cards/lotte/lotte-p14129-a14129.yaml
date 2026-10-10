@@ -1,0 +1,37 @@
+schema_version: 2
+id: lotte-p14129-a14129
+issuer: lotte
+name: 토스 LIKIT ALL 롯데카드
+kind: credit
+product_codes: [P14129-A14129]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 14000}
+  - {scope: global, brand: visa, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14129-A14129', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14129-A14129_0920.pdf', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2022-08-22
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: original_month, exclude_applied: 0}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 고속도로 통행요금, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원발급 수수료, 관세 납부, 인지세, 송달료, 이자 및 각종 수수료는 할인 제외다', 롯데카드의 다른 결제일 할인과 겹치면 할인이 더 큰 혜택 하나만 받는다]
+    benefits:
+      - key: payment-date-discount-1
+        title: 국내외 가맹점 1% 결제일 할인
+        source: manual
+        evidence: [국내외 가맹점 | 1% | 조건없음 | 없음, 할부 이용 시 이용일 기준 전체 할부 이용 금액에 대하여 혜택이 제공됩니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1}
+    unmodeled: [해외 이용금액은 롯데카드에 접수되는 일자를 기준으로 할인한다. 월말 해외 결제는 다음 달 할인으로 잡힐 수 있다, 롯데카드가 주는 L.POINT 적립은 없다]
+open_questions:
+  - {path: annual_fees, question: '상품설명서는 해외겸용 VISA, MASTER 15,000원이고 2026-10-10 상품 페이지 연회비 표에는 Visa 15,000원만 있다. Mastercard 신규 발급이 지금도 되는지 확인한다', assumed: 'Mastercard 15,000원 유지'}
+  - {path: 'revisions[0].benefits[payment-date-discount-1].reward', question: 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-10 상품 페이지와 상품설명서(2022년 9월 기준, 여신금융협회 심의필 제2022-C1a-07682호)를 대조했다. 두 원문의 혜택 문구가 같다. 신용카드다. 출시일 2022-08-22 뒤 혜택 변경 문구가 없어 출시일을 시행일로 둔다. 실적 조건과 한도가 없어 실적 규칙은 쓰지 않는다. 가족카드는 발급하지 않는다.
