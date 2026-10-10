@@ -15,7 +15,11 @@ from cherry_core.pipeline.seed import digest
 BASE = Path(__file__).resolve().parent
 ROOT = BASE.parents[1]
 CAT = BASE / "combined/catalog"
-OUT = ROOT / "docs/work/008-catalog-all-cards/release-2026-10-10"
+import sys
+
+# 두 번째 승인 묶음부터는 폴더 이름과 올리기 이름 꼬리를 받는다. 예: package.py release-2026-10-10b 20261010b
+OUT = ROOT / "docs/work/008-catalog-all-cards" / (sys.argv[1] if len(sys.argv) > 1 else "release-2026-10-10")
+TAG = sys.argv[2] if len(sys.argv) > 2 else "20261010"
 EXPANDS = sorted(p.name for p in BASE.glob("expand[0-9]*") if p.is_dir())
 
 
@@ -60,6 +64,9 @@ def main():
     cards = []
     for candidate in candidates:
         cid, rel = candidate["card_id"], candidate["path"]
+        # 이미 운영에 들어가 저장소 catalog/에 있는 카드는 이번 묶음에서 뺀다
+        if (ROOT / "catalog" / rel).exists():
+            continue
         text = files[rel]
         if conflicts := new_card_conflicts(
             text, staged, packets[cid]["draft"]["issuer"], rel
@@ -81,7 +88,7 @@ def main():
                 "annual_fees": data["annual_fees"],
                 "open_questions": data.get("open_questions", []),
                 "group": candidate["group"],
-                "incoming": f"release-20261010-{cid}",
+                "incoming": f"release-{TAG}-{cid}",
             }
         )
     for rel, text in shared_changed.items():
@@ -137,7 +144,7 @@ def main():
         for name in ("new-tests", "existing-tests", "school-tests")
     }
     assert (
-        checks["new-tests"]["cards"] == len(cards)
+        checks["new-tests"]["cards"] == len(candidates)
         and checks["new-tests"]["cases"] == cases
     )
     assert all(not r["failures"] for r in checks.values())
