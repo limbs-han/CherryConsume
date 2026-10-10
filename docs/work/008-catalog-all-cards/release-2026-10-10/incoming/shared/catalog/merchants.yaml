@@ -808,3 +808,19 @@
   name: 컬리멤버스
   category: streaming
   aliases: [컬리멤버스]
+- key: tous_les_jours
+  name: 뚜레쥬르
+  category: restaurant.bakery
+  aliases: [뚜레쥬르, TOUS les JOURS]
+- key: lfmall
+  name: LFmall
+  category: online_shopping
+  aliases: [LFmall, LF몰, 엘에프몰, lfmall.co.kr]
+- key: nh_mall
+  name: 농협몰
+  category: online_shopping
+  aliases: [농협몰, NH농협몰, nonghyupmall.com]
+- key: ministop
+  name: 미니스톱
+  category: convenience
+  aliases: [미니스톱, MINISTOP]

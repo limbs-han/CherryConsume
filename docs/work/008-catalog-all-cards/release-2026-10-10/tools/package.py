@@ -54,7 +54,7 @@ def main():
     packets = {}
     for folder in [
         ROOT / "tmp/card-ready-review" / g for g in ("mixed", "nh", "others")
-    ] + [BASE / g for g in ("recommended-mixed", "recommended-others")]:
+    ] + [BASE / g for g in ("recommended-mixed", "recommended-others", "expand1")]:
         packets.update({r["draft"]["card_id"]: r for r in read(folder / "packet.json")})
     cards = []
     for candidate in candidates:
@@ -96,7 +96,7 @@ def main():
     shutil.copytree(
         previous / "verification", OUT / "verification/previous", dirs_exist_ok=True
     )
-    for group in ("hana8", "recommended-mixed", "recommended-others"):
+    for group in ("hana8", "recommended-mixed", "recommended-others", "expand1"):
         dest = OUT / "research" / group
         dest.mkdir(parents=True, exist_ok=True)
         for filename in (
@@ -113,9 +113,15 @@ def main():
         for r in read(BASE / "triage-results.json")
     }
     results.update({r["card_id"]: r for r in read(previous / "all-results.json")})
-    results.update(
-        {r["card_id"]: r for r in read(BASE / "combined/research-results.json")}
-    )
+    research = read(BASE / "combined/research-results.json")
+    # 승인 전에 id를 상품 코드로 바꾼 카드는 초안의 옛 id 줄을 새 id로 옮긴다. expand1의 토스 LIKIT ALL
+    for r in research:
+        if r.get("draft_card_id"):
+            results[r["card_id"]] = {
+                **results.pop(r["draft_card_id"]),
+                "draft_card_id": r["draft_card_id"],
+            }
+    results.update({r["card_id"]: r for r in research})
     for cid in ids:
         results[cid].update(status="ready", approved=False, final_engine_checked=True)
     assert len(results) == 2421
@@ -170,7 +176,7 @@ def main():
     lines = [
         f"# 출시용 카드 승인 목록\n\n새 카드 {len(cards)}장을 준비했다. 운영 반영 뒤 기존 카드와 합쳐 {checks['total_catalog_cards']}장이다. 운영 반영은 아직 하지 않았다.",
         f"새 카드 손계산 {cases}개, 기존 손계산 {checks['existing-tests']['cases']}개, 교육비 분류 연결 {checks['school-tests']['cases']}개가 앱 계산과 일치했다. 카탈로그 오류 {checks['catalog_errors']}개와 경고 {checks['catalog_warnings']}개. 실제 승인 함수 검사와 상품 중복 검사를 통과했다.",
-        "## 이번 목록에서 확인할 내용\n\n- JADE Classic는 거래별 하나머니 적립을 계산한다. 바우처와 라운지는 자동 계산하지 않는다.\n- 현대 X는 전월실적에 따른 거래별 1% 할인을 계산한다. 연간 500만원당 2만원 캐시백과 라운지·발레파킹은 자동 계산하지 않는다.\n- 미미의 09:00 정각 포함 여부는 공식 문구가 명확하지 않아 09:00 미만으로 계산한다.\n- zgm 구독의 일부 페이 제외 이름은 공식 문구에 없어 확인 안내로 남겼다.\n- 매출표 접수 순서, 입점 매장, 과거 최초 결제 이력처럼 현재 결제 입력으로 알 수 없는 조건은 카드 상세 안내로 남겼다.",
+        "## 이번 목록에서 확인할 내용\n\n- JADE Classic는 거래별 하나머니 적립을 계산한다. 바우처와 라운지는 자동 계산하지 않는다.\n- 현대 X는 전월실적에 따른 거래별 1% 할인을 계산한다. 연간 500만원당 2만원 캐시백과 라운지·발레파킹은 자동 계산하지 않는다.\n- 미미의 09:00 정각 포함 여부는 공식 문구가 명확하지 않아 09:00 미만으로 계산한다.\n- zgm 구독의 일부 페이 제외 이름은 공식 문구에 없어 확인 안내로 남겼다.\n- 매출표 접수 순서, 입점 매장, 과거 최초 결제 이력처럼 현재 결제 입력으로 알 수 없는 조건은 카드 상세 안내로 남겼다.\n- 2026-10-10 expand1로 8장을 더했다. 올리 POINT는 해외 결제가 커피·편의점 등 ①~⑤ 영역 순위에 함께 쌓이지 않게 국내 결제만 세었다. 해피포인트 하나 체크의 취소분 차감 방식은 자동 계산하지 않는다.\n- 새 공통 가맹점 뚜레쥬르, LFmall, 농협몰, 미니스톱을 더했다. 미니스톱은 기존 카드의 편의점 혜택에, 뚜레쥬르는 제과 혜택에 새로 걸린다. 두 업종 모두 원문 범위 안이다.",
         "## 카드 목록\n\n| 카드 | 연회비 | 계산 범위 |\n|---|---:|---|",
     ]
     table_rows = []

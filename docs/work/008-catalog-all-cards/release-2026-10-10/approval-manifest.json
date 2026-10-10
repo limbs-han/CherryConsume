@@ -1101,6 +1101,440 @@
       ],
       "group": "recommended-others",
       "incoming": "release-20261010-woori-500058"
+    },
+    {
+      "card_id": "hana-10222",
+      "name": "길한통 체크카드",
+      "path": "cards/hana/hana-10222.yaml",
+      "draft_id": "117ab633-d835-459f-9826-6a341d9ca9c1",
+      "sha256": "25b9a2d17887fa186aa744e2a53b73b3220047242e38571bb509c9e8cbffc5c7",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=10222",
+          "fetched_at": "2026-10-10",
+          "review_no": "L-20-0563"
+        },
+        {
+          "id": "leaflet",
+          "kind": "manual_pdf",
+          "url": "https://m.hanacard.co.kr/leaflet/12/12129_20260128.pdf",
+          "fetched_at": "2026-10-10",
+          "review_no": "L-26-0164"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "원문 실적 제외는 \"공과금, 도시가스 이용금액\"이다. 전기와 수도가 공과금에 드는지 원문만으로 단정할 수 없어 utility 전체를 뺐다.",
+          "assumed": "utility 전체"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다.",
+          "assumed": "2026-01-28"
+        },
+        {
+          "path": "revisions[0].benefits[lunch-time-5].when",
+          "question": "\"오전 11시 ~ 오후 2시 사이\"에서 14:00 정각 결제가 포함되는지 원문이 불명확하다. 14:00 미만으로 계산한다.",
+          "assumed": "11:00 이상 14:00 미만"
+        },
+        {
+          "path": "revisions[0].benefits[lunch-time-5].when",
+          "question": "원문은 평일이 임시공휴일이면 제외한다고만 적었다. 평일에 걸린 일반 공휴일도 제외로 계산한다.",
+          "assumed": "holidays exclude"
+        },
+        {
+          "path": "revisions[0].spend",
+          "question": "실적 제외의 아이행복 정부지원금은 업종으로 가릴 수 없다.",
+          "assumed": "실적에 넣음"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-hana-10222"
+    },
+    {
+      "card_id": "hana-151",
+      "name": "해피포인트 하나 체크카드",
+      "path": "cards/hana/hana-151.yaml",
+      "draft_id": "14a442c2-5699-4a87-a1a7-75adc429d291",
+      "sha256": "ebfdc0fde14b23307e9f4d5b4ac3a5f442ce281bb95384f8d98e502ae3b26521",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=2014",
+          "fetched_at": "2026-10-10"
+        },
+        {
+          "id": "leaflet",
+          "kind": "manual_pdf",
+          "url": "https://m.hanacard.co.kr/leaflet/03/03857_20210929.pdf",
+          "fetched_at": "2026-10-10",
+          "review_no": "L-21-1986"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다.",
+          "assumed": "2021-09-29"
+        },
+        {
+          "path": "revisions[0].spend",
+          "question": "원문에 이 카드의 실적 제외 항목과 취소 반영 달이 없다. 하나카드 기본값인 전월 1일~말일, 취소 달 반영, 제외 업종 없음으로 둔다.",
+          "assumed": "제외 업종 없음"
+        },
+        {
+          "path": "revisions[0].benefits[movie-3000].target",
+          "question": "상품 페이지는 프리머스도 영화 캐쉬백 대상으로 적었지만 상품설명서에는 없다. 가맹점 목록에 프리머스가 없어 넣지 않았다.",
+          "assumed": "롯데시네마와 메가박스만"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-hana-151"
+    },
+    {
+      "card_id": "hana-282",
+      "name": "하나멤버스 1Q 체크카드",
+      "path": "cards/hana/hana-282.yaml",
+      "draft_id": "0141e076-6f79-4921-987a-8db23269cda0",
+      "sha256": "ec298f6861ffabc3a3ff8793839a613b4fa9cadc374c8e530cc5b8d4dda9aaf0",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4094",
+          "fetched_at": "2026-10-10"
+        },
+        {
+          "id": "leaflet",
+          "kind": "manual_pdf",
+          "url": "https://m.hanacard.co.kr/leaflet/10/10041_20260306.pdf",
+          "fetched_at": "2026-10-10",
+          "review_no": "L-26-0409"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "원문 실적 제외는 \"공과금, 도시가스 이용금액\"이다. 전기와 수도가 공과금에 드는지 원문만으로 단정할 수 없어 utility 전체를 뺐다.",
+          "assumed": "utility 전체"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다.",
+          "assumed": "2026-03-06"
+        },
+        {
+          "path": "revisions[0].benefits[transit-5].limits",
+          "question": "\"각 업종별 적립횟수 월 최대 5회\"가 대중교통에도 걸리는지 불명확하다. 대중교통은 월 이용액 합계로 다음 달 한 번 적립하므로 횟수 한도를 두지 않았다.",
+          "assumed": "횟수 한도 없음"
+        },
+        {
+          "path": "revisions[0].options[overseas_pay].default",
+          "question": "트래블로그 스위치에 동의하면 외화 하나머니 결제로 자동 설정되지만 동의 여부는 사용자마다 달라 기본값을 두지 않았다.",
+          "assumed": "등록할 때 묻는다"
+        },
+        {
+          "path": "revisions[0].spend",
+          "question": "외화 하나머니로 결제한 해외 이용액이 전월 실적에 들어가는지 원문에 없다.",
+          "assumed": "실적에 넣음"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-hana-282"
+    },
+    {
+      "card_id": "hana-94264",
+      "name": "트래블GO 체크카드",
+      "path": "cards/hana/hana-94264.yaml",
+      "draft_id": "742ce1a5-7c2b-4c8d-91a8-989912841019",
+      "sha256": "d6801eeb5fa75718a3a945d59164bd43ab6992d3afb06fbcbffa47d7b6e298ae",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18064",
+          "fetched_at": "2026-10-10"
+        },
+        {
+          "id": "leaflet",
+          "kind": "manual_pdf",
+          "url": "https://m.hanacard.co.kr/leaflet/15/15105_20251229.pdf",
+          "fetched_at": "2026-10-10",
+          "review_no": "L-25-0564"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다. 출시일은 2024-08-13이다.",
+          "assumed": "2025-12-29"
+        },
+        {
+          "path": "revisions[0].benefits[transit-5].limits",
+          "question": "\"각 서비스 영역별 월 최대 5회 적립\"이 월 합산으로 다음 달 한 번 적립하는 대중교통에도 걸리는지 불명확하다. 횟수 한도를 두지 않았다.",
+          "assumed": "횟수 한도 없음"
+        },
+        {
+          "path": "revisions[0].benefits[subscription-5].when",
+          "question": "\"간편 결제 건\" 제외가 어느 결제수단까지인지 원문에 목록이 없다. 온라인 간편결제 8종만 뺐고 삼성페이, 애플페이, 하나Pay, 쿠페이는 넣었다.",
+          "assumed": "eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay 제외"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-hana-94264"
+    },
+    {
+      "card_id": "kb-09314",
+      "name": "LFmall 신용카드",
+      "path": "cards/kb/kb-09314.yaml",
+      "draft_id": "4e51f8f9-6501-4291-8f9c-b2c5bf964308",
+      "sha256": "0ca9dd0fda8a0a0cad7c8107cb5348d2db93dbae7f74a21ac18b30715ccae930",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09314",
+          "fetched_at": "2026-10-10",
+          "review_no": "제2022-C1a-08824호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 원문은 2022.10.07 출시라고만 적었다. 수집일을 잠정 적용 시작일로 둔다.",
+          "assumed": "2026-10-10"
+        },
+        {
+          "path": "revisions[0].spend.basis",
+          "question": "상품 페이지에 전월 이용실적 집계 기준 문구가 없다. KB 카드사 기본값인 전월 1일부터 말일 승인 기준으로 둔다. 상품설명서로 확인해야 한다.",
+          "assumed": "prev_calendar_month"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-kb-09314"
+    },
+    {
+      "card_id": "lotte-p14129-a14129",
+      "name": "토스 LIKIT ALL 롯데카드",
+      "path": "cards/lotte/lotte-p14129-a14129.yaml",
+      "draft_id": "509d757d-e3d1-430d-aafb-b43b869404a5",
+      "sha256": "6fbacfd481cb1c1318053c3fd1957edc81c7cc5dd1fc7b0c4138727b712109a2",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14129-A14129",
+          "fetched_at": "2026-10-10"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14129-A14129_0920.pdf",
+          "fetched_at": "2026-10-10"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 14000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "annual_fees",
+          "question": "상품설명서는 해외겸용 VISA, MASTER 15,000원이고 2026-10-10 상품 페이지 연회비 표에는 Visa 15,000원만 있다. Mastercard 신규 발급이 지금도 되는지 확인한다",
+          "assumed": "Mastercard 15,000원 유지"
+        },
+        {
+          "path": "revisions[0].benefits[payment-date-discount-1].reward",
+          "question": "원 미만 처리 문구가 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-lotte-p14129-a14129"
+    },
+    {
+      "card_id": "nh-f20016",
+      "name": "올리 POINT 체크카드",
+      "path": "cards/nh/nh-f20016.yaml",
+      "draft_id": "bc73a0d0-0412-48fa-9870-132c15473aeb",
+      "sha256": "dab1cea2c4dc0b31515fe3a34c0ad336431de11b7276e9bab56dfccf7c0cfd41",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010042",
+          "fetched_at": "2026-10-10",
+          "review_no": "2026-3845",
+          "review_valid_until": "2027-06-30"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].ranked",
+          "question": "해외 커피·편의점·온라인 결제가 ①~⑤ 영역과 ⑥ 해외 영역 가운데 어디에 쌓이는지 원문에 없다. 두 영역에 함께 쌓으면 순위가 부풀어 ①~⑤는 국내 결제만 세었다.",
+          "assumed": "①~⑤ 국내, ⑥ 해외"
+        },
+        {
+          "path": "revisions[0].limits",
+          "question": "원문은 추가적립 한도 5천 하나만 적었다. 1위와 2위 추가적립이 한도를 함께 쓰는지 따로 쓰는지 문구가 없다",
+          "assumed": "함께 쓴다"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다. 상품출시일은 2020-08-25다",
+          "assumed": "2026-10-05"
+        },
+        {
+          "path": "revisions[0].ranked",
+          "question": "영역 이용금액 순위에서 취소를 결제한 달과 취소 접수월 중 어디서 빼는지 문구가 없다",
+          "assumed": "비움"
+        },
+        {
+          "path": "revisions[0].benefits[smart-mart-first].when",
+          "question": "② 영역 이름이 오프라인쇼핑이라 마트 4곳은 오프라인 결제만 넣었다. 마트 온라인몰 결제가 영역에 드는지 문구가 없다",
+          "assumed": "오프라인만"
+        },
+        {
+          "path": "revisions[0].benefits[base-point-0-2].reward",
+          "question": "원 미만 포인트 처리 문구가 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-nh-f20016"
+    },
+    {
+      "card_id": "samsung-aap1544",
+      "name": "네이버페이 taptap",
+      "path": "cards/samsung/samsung-aap1544.yaml",
+      "draft_id": "cc4ce7b7-031e-4ee6-85a2-8f63853aae89",
+      "sha256": "b8eaa46a60f2400f6bb02fa2c6ae9e3656c9ab7bad2d21b038204326c8074015",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1544",
+          "fetched_at": "2026-10-10"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtjCAe6v7rl2u3NQeOXgEta4%3D&sn=1",
+          "fetched_at": "2026-10-10"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 상품 출시일은 2017-11-17이고 상품설명서는 2023.6판이다",
+          "assumed": "2026-10-05"
+        },
+        {
+          "path": "revisions[0].benefits",
+          "question": "포인트의 원 미만 처리가 공식 문구에 없다",
+          "assumed": "floor"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "실적 제외의 대중교통 범위가 적혀 있지 않아 taptap O처럼 시내버스와 지하철로 두었다. 삼성카드는 사회보험료를 공과금으로 분류해 insurance.social을 뺐다",
+          "assumed": "transit.bus_city, transit.subway, insurance.social"
+        }
+      ],
+      "group": "expand1",
+      "incoming": "release-20261010-samsung-aap1544"
     }
   ],
   "shared_files": [
@@ -1162,7 +1596,7 @@
     },
     {
       "path": "merchants.yaml",
-      "sha256": "8091b98df1e32a190a1b7cd5bf62cf6fe56fcb7ecce7919b613fb30ee0082588"
+      "sha256": "0309adc024f70a88fc0e79e3fae4679b3d55b8c2c55e16056040790e4ba52903"
     },
     {
       "path": "payment_methods.yaml",

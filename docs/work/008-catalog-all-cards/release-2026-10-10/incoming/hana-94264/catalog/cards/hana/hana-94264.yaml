@@ -1,0 +1,123 @@
+schema_version: 2
+id: hana-94264
+issuer: hana
+name: 트래블GO 체크카드
+short_name: 하나 트래블GO 체크
+kind: check
+product_codes:
+  - '94264'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18064', fetched_at: 2026-10-10}
+  - {id: leaflet, kind: manual_pdf, url: 'https://m.hanacard.co.kr/leaflet/15/15105_20251229.pdf', fetched_at: 2026-10-10, review_no: L-25-0564}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: 2025-12-29
+    effective_from_estimated: true
+    source: leaflet
+    tiers: [0, 200000, 500000]
+    spend:
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+    limits:
+      - {key: basic, per: month, amount: 5000}
+      - {key: premium, per: month, amount: 5000}
+    benefits:
+      - key: convenience-5
+        title: 편의점 1만원 이상 5% 적립
+        source: leaflet
+        evidence: ['편의점 | CU, GS25, 세븐일레븐, 이마트24 | 5% | 건당 1만원 이상 | 5천 하나머니 | 20만원 이상', 각 서비스 영역별 월 최대 5회 적립, '편의점/커피/베이커리 : 오프라인 결제 건에 한하여 서비스 제공', 소수점 이하 금액은 반올림되어 적립]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, count: 5}
+          - {shared: basic}
+        tiers: {from: 200000}
+        unmodeled: ['대형시설물(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트) 입점 점포와 임대매장 결제는 제외된다']
+      - key: cafe-bakery-5
+        title: 커피·베이커리 1만원 이상 5% 적립
+        source: leaflet
+        evidence: ['커피/베이커리 | 스타벅스, 커피빈, 파리바게뜨, 뚜레쥬르 | 5% | 건당 1만원 이상', 각 서비스 영역별 월 최대 5회 적립, 배달앱이나 식당 예약앱을 통한 주문 결제 제외]
+        target:
+          merchants: [coffee_bean, paris_baguette, starbucks, tous_les_jours]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, count: 5}
+          - {shared: basic}
+        tiers: {from: 200000}
+        unmodeled: ['대형시설물(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트) 입점 점포와 임대매장 결제는 제외된다']
+      - key: transit-5
+        title: 버스·지하철 월 5만원 이상 5% 적립
+        source: leaflet
+        evidence: ['대중교통 | 버스, 지하철 | 5% | 월 통합 5만원 이상', '대중교통 : 시외버스, 고속버스, 철도(KTX/SRT/ITX)는 제외됨', 대중교통 영역 적립 서비스는 매출 접수된 다음달 8영업일 이내 하나머니 적립]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+          - month_total: {min: 50000}
+        reward: {type: points, basis: month_total, program: hana_money, rate: 5, round: round}
+        limits:
+          - {shared: basic}
+        tiers: {from: 200000}
+      - key: subscription-5
+        title: 유튜브 프리미엄·넷플릭스·쿠팡와우 정기결제 5% 적립
+        source: leaflet
+        evidence: ['구독 | 유튜브 프리미엄, 넷플릭스, 쿠팡와우멤버십 | 5% | 건당 7천원 이상 | 5천 하나머니 | 50만원 이상', '구독 : 월 정기결제 건에 한하여 매월 제공되며, 유튜브 프리미엄/넷플릭스 이용시 포인트, 캐시, 머니충전, 컨텐츠 개별 결제, 간편 결제 건 및 앱스토어를 통한 결제 건(인앱 결제)은 서비스에서 제외됨']
+        target:
+          merchants: [coupang_wow, netflix, youtube_premium]
+        when:
+          - {region: domestic}
+          - billing: [subscription]
+          - amount: {min: 7000}
+          - payment_not: [eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, count: 5}
+          - {shared: premium}
+        tiers: {from: 500000}
+      - key: living-5
+        title: 통신요금·전기·가스요금 자동납부 5만원 이상 5% 적립
+        source: leaflet
+        evidence: ['생활비 | SKT, KT, LG U+, 전기/가스요금 | 5% | 건당 5만원 이상 | 5천 하나머니 | 50만원 이상', '(통신요금) SKT, KT, LGU+의 자동이체 요금(결합상품 요금 포함)으로 청구된 경우에 한하여 서비스 제공되며, 알뜰폰 통신요금 및 자동이체로 납부하지 않은 금액은 서비스에서 제외됨', '(전기/가스요금) 하나카드로 자동납부 등록이 가능한 가맹점에 한하여 서비스 제공되며, 가정용(주택용)·일부 영업용 대상이며, 관리사무소 일괄 납부 건은 서비스에서 제외됨']
+        target:
+          categories: [utility.electricity, utility.gas]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - {region: domestic}
+          - billing: [autopay]
+          - amount: {min: 50000}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, count: 5}
+          - {shared: premium}
+        tiers: {from: 500000}
+        unmodeled: [전기·가스요금은 가정용과 일부 영업용만 대상이다]
+      - key: overseas-fee-free
+        title: 해외 가맹점 국제브랜드수수료 1.1% 면제
+        source: leaflet
+        evidence: [해외 가맹점 이용 시 | 해외 서비스 수수료 면제(건당 US$0.5) | 국제브랜드 수수료 면제(이용금액의 1.1%), 지난달 실적에 관계없이 서비스 제공, 해외 이용금액은 하나카드 전산상 해외 가맹점 매출로 분류된 경우에 한함]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.1}
+        unmodeled: [건당 US$0.5 해외서비스수수료 면제는 달러 정액이라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다. 출시일은 2024-08-13이다., assumed: '2025-12-29'}
+  - {path: 'revisions[0].benefits[transit-5].limits', question: '"각 서비스 영역별 월 최대 5회 적립"이 월 합산으로 다음 달 한 번 적립하는 대중교통에도 걸리는지 불명확하다. 횟수 한도를 두지 않았다.', assumed: 횟수 한도 없음}
+  - {path: 'revisions[0].benefits[subscription-5].when', question: '"간편 결제 건" 제외가 어느 결제수단까지인지 원문에 목록이 없다. 온라인 간편결제 8종만 뺐고 삼성페이, 애플페이, 하나Pay, 쿠페이는 넣었다.', assumed: 'eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay 제외'}
+notes: 2026-10-10 공식 상품 페이지(상세 번호 CD_PD_SEQ=18064, 목록 상품 번호 94264)와 상품설명서(준법심의 L-25-0564)에서 옮겼다. 하나머니 잔액으로 결제하는 하나머니 전용 체크카드다. 국내는 원화 하나머니, 해외는 외화 하나머니에서 나간다. 연회비 없음. 초안의 국내 가맹점 5% 한 혜택은 목록 요약을 잘못 옮긴 것이라 영역 다섯 개로 나눴다. 20만 구간의 편의점, 커피·베이커리, 대중교통이 월 5천을 같이 쓰고 50만 구간의 구독과 생활비가 다른 월 5천을 같이 쓴다. 50만 구간은 20만 구간 영역도 받는다. 적립은 매출 접수된 일시불 이용금액 기준이고 체크카드라 할부가 없어 조건을 두지 않았다. 해외 ATM 인출 수수료 면제와 국내외 ATM 이용금액 실적 제외는 결제가 아니라 넣지 않았다. 적립 제외는 수도요금만 빼고 전기·가스요금은 생활비 영역 대상이라 남겼다. 실적 제외의 그외 공과금은 utility와 tax로 넣었다.

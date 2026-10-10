@@ -1000,36 +1000,31 @@
     "approved": false
   },
   {
-    "draft_id": "0141e076-6f79-4921-987a-8db23269cda0",
     "card_id": "hana-282",
-    "issuer": "hana",
-    "status": "source_review_pending",
-    "problems": [
-      "warning: revisions@2026-10-05.benefits[convenience-bakery-cafe-5pct-points]: 비율이 5% 이상인데 한도가 없다"
+    "status": "ready",
+    "reason": "편의점·베이커리·커피 건당 1만원 이상 5%와 업종별 월 5회, 대중교통 월 5만원 이상 5%(월 합산), 월 통합 5천, 20만 구간, 신규 특례, 외화 하나머니 설정 시 해외 수수료 면제(옵션)를 모두 표현했고 사례가 통과한다.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4094",
+      "https://m.hanacard.co.kr/leaflet/10/10041_20260306.pdf"
     ],
-    "doc_paths": [
-      "2026-10-04/hana/_issuer/ix-282-page-3820b4b1b145.html"
+    "case_count": 13,
+    "unmodeled": [
+      "본인카드, 모바일카드, 가족카드의 사용금액, 적립한도, 적립횟수를 합산한다",
+      "아이행복 정부지원금은 실적에서 빠진다",
+      "transit-5: 공항버스는 적립 대상이지만 업종으로 가리지 못해 시내버스로 넣어야 계산된다",
+      "transit-5: 철도는 코레일과 SRT 현장, 공식 홈페이지, 앱 결제만 대상이고 여행사와 편의점 승차권 판매대리점 결제는 제외된다",
+      "overseas-fee-free: 건당 US$0.5 해외서비스수수료 면제는 달러 정액이라 계산하지 않는다",
+      "overseas-fee-free: 트래블로그 스위치는 국내외겸용 Visa 카드를 발급하고 외화 하나머니에 가입한 내국인 회원만 쓸 수 있다"
     ],
-    "name": "하나멤버스 1Q 체크카드",
-    "kind": "check",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=282",
-    "pdf_urls": [],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 2,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [
-      "2026-10-05/benefits[convenience-bakery-cafe-5pct-points]: 비율이 5% 이상인데 한도가 없다"
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다. 가정: 2026-03-06",
+      "revisions[0].benefits[transit-5].limits: \"각 업종별 적립횟수 월 최대 5회\"가 대중교통에도 걸리는지 불명확하다. 대중교통은 월 이용액 합계로 다음 달 한 번 적립하므로 횟수 한도를 두지 않았다. 가정: 횟수 한도 없음",
+      "revisions[0].options[overseas_pay].default: 트래블로그 스위치에 동의하면 외화 하나머니 결제로 자동 설정되지만 동의 여부는 사용자마다 달라 기본값을 두지 않았다. 가정: 등록할 때 묻는다",
+      "revisions[0].spend: 외화 하나머니로 결제한 해외 이용액이 전월 실적에 들어가는지 원문에 없다. 가정: 실적에 넣음"
     ],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   },
   {
     "draft_id": "e334d92a-0b4e-4289-951a-6d0aac6bf7b3",
@@ -1195,36 +1190,28 @@
     "group": "recommended-mixed"
   },
   {
-    "draft_id": "742ce1a5-7c2b-4c8d-91a8-989912841019",
     "card_id": "hana-94264",
-    "issuer": "hana",
-    "status": "source_review_pending",
-    "problems": [
-      "warning: revisions@2026-10-05.benefits[domestic-5pct-points]: 비율이 5% 이상인데 한도가 없다"
+    "status": "ready",
+    "reason": "20만 구간 편의점·커피베이커리·대중교통(월 5만원 합산)과 50만 구간 구독·생활비 자동납부를 두 개의 월 5천 공유 한도로 나누고 영역별 5회, 반올림, 신규 특례, 해외 수수료 1.1% 면제를 표현했다. 초안의 국내 전 가맹점 5%는 틀린 값이라 바로잡았다.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18064",
+      "https://m.hanacard.co.kr/leaflet/15/15105_20251229.pdf"
     ],
-    "doc_paths": [
-      "2026-10-04/hana/_issuer/ix-94264-page-272d2e208da6.html"
+    "case_count": 13,
+    "unmodeled": [
+      "convenience-5: 대형시설물(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트) 입점 점포와 임대매장 결제는 제외된다",
+      "cafe-bakery-5: 대형시설물(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트) 입점 점포와 임대매장 결제는 제외된다",
+      "living-5: 전기·가스요금은 가정용과 일부 영업용만 대상이다",
+      "overseas-fee-free: 건당 US$0.5 해외서비스수수료 면제는 달러 정액이라 계산하지 않는다"
     ],
-    "name": "트래블GO 체크카드",
-    "kind": "check",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=94264",
-    "pdf_urls": [],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [
-      "2026-10-05/benefits[domestic-5pct-points]: 비율이 5% 이상인데 한도가 없다"
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다. 출시일은 2024-08-13이다. 가정: 2025-12-29",
+      "revisions[0].benefits[transit-5].limits: \"각 서비스 영역별 월 최대 5회 적립\"이 월 합산으로 다음 달 한 번 적립하는 대중교통에도 걸리는지 불명확하다. 횟수 한도를 두지 않았다. 가정: 횟수 한도 없음",
+      "revisions[0].benefits[subscription-5].when: \"간편 결제 건\" 제외가 어느 결제수단까지인지 원문에 목록이 없다. 온라인 간편결제 8종만 뺐고 삼성페이, 애플페이, 하나Pay, 쿠페이는 넣었다. 가정: eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay 제외"
     ],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   },
   {
     "draft_id": "6a5005db-be07-43d3-8101-5d8ef3477882",
@@ -12150,34 +12137,28 @@
     "approved": false
   },
   {
-    "draft_id": "4e51f8f9-6501-4291-8f9c-b2c5bf964308",
     "card_id": "kb-09314",
-    "issuer": "kb",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-04/kb/_issuer/ix-09314-page-d19c3c6780bc.html"
+    "status": "ready",
+    "reason": "상품 페이지에서 LFmall 5% 청구할인(월 한도 0 구간 5천원, 30만 구간 2만원)과 국내외 0.5% 포인트리 적립, 실적 제외, 생애 최초 발급 실적 유예를 모두 옮겼다. 실적 제외에 무승인전표가 없어 후불교통 문제가 없다. 할인받은 결제의 실적 전액 제외는 혜택 exclude_applied 1로 담았다. 공통 가맹점 lfmall 제안이 필요하다(needed/kb-09314.json).",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09314"
     ],
-    "name": "LFmall 신용카드",
-    "kind": "credit",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09314",
-    "pdf_urls": [
-      "https://img2.kbcard.com/obj/card/download/09314__prdctOpmn_20221228.pdf"
+    "case_count": 16,
+    "unmodeled": [
+      "호텔·백화점·대형마트·철도역사 입점 가맹점과 PG 전용 가맹점 결제는 할인과 적립 제외",
+      "정부지원금(보육료·유치원보조비·바우처)과 신차구매청구(환급)할인 전표는 실적과 적립 제외",
+      "부분 무이자 할부도 실적과 적립 제외. 결제 입력의 무이자 여부에 부분 무이자도 표시해야 함",
+      "월 할인한도는 가족카드와 합산",
+      "할인과 적립 한도는 전표 매입 순서"
     ],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 3,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "open_questions": [
+      "적용 시작일을 몰라 수집일 2026-10-10으로 둠",
+      "연회비가 페이지 머리 15,000원과 연회비 표 25,000원(표 요약이 GS SHOP 카드)으로 어긋나 비워 둠. 상품설명서 PDF로 확인 필요",
+      "상품 페이지에 실적 집계 기준 문구가 없어 KB 기본값 전월 1일~말일 승인 기준으로 둠"
+    ],
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   },
   {
     "draft_id": "be446683-121a-4751-bf6d-0d464166f2ac",
@@ -19761,35 +19742,29 @@
     "approved": false
   },
   {
-    "draft_id": "cc4ce7b7-031e-4ee6-85a2-8f63853aae89",
     "card_id": "samsung-aap1544",
-    "issuer": "samsung",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-05/samsung/_issuer/ix-aap1544-page-448888c8c121.html",
-      "2026-10-05/samsung/_issuer/ix-aap1544-pdf-9617472bce71.pdf"
-    ],
-    "name": "네이버페이 taptap",
-    "kind": "credit",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1544",
-    "pdf_urls": [
+    "status": "ready",
+    "reason": "상품설명서 2023.6판의 기본 0.5%, 일상·온라인 패키지 10%·5%·3,000P, 한도, 적립률 우선순위와 한도 소진 뒤 다음 거래 대체 적립, 혜택 적용분 실적 제외, 발급월+1개월 특례를 모두 표현했다. 카탈로그 오류 0(남은 오류 3건은 kb-09314), 경고 0, 사례 11개 통과. 미니스톱 가맹점은 needed/samsung-aap1544.json으로 제안",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1544",
       "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtjCAe6v7rl2u3NQeOXgEta4%3D&sn=1"
     ],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 6,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "case_count": 11,
+    "unmodeled": [
+      "다이어트할부와 삼성카드 할인이 적용된 일시불·할부 이용금액은 적립하지 않는다",
+      "고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다",
+      "커피전문점·편의점은 백화점·쇼핑몰 임대매장 결제를 적립하지 않는다",
+      "적립은 승인 시점 기준이고 해외 결제와 무승인 결제는 매출전표 접수 시점 기준이다",
+      "네이버페이 포인트는 다음 달 20일에 적립된다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시행일을 확인하지 못해 원문 수집일 2026-10-05로 두었다. 출시일 2017-11-17, 설명서 2023.6판",
+      "포인트의 원 미만 처리가 공식 문구에 없어 버림으로 두었다",
+      "실적 제외 대중교통 범위가 없어 taptap O처럼 시내버스와 지하철로, 사회보험료는 삼성카드 공과금 분류에 따라 insurance.social로 뺐다"
+    ],
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   },
   {
     "draft_id": "f7d98d60-5bdb-4ec6-a474-72cf248908ff",
@@ -20709,35 +20684,26 @@
     "approved": false
   },
   {
-    "draft_id": "90fa6e4b-e82b-4a5e-8451-4269fd30759e",
     "card_id": "samsung-aap1817",
-    "issuer": "samsung",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-05/samsung/_issuer/ix-aap1817-page-0b7e0a1ce1a2.html",
-      "2026-10-05/samsung/_issuer/ix-aap1817-pdf-8299a3d2e194.pdf"
-    ],
-    "name": "모니모A 카드",
-    "kind": "credit",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1817",
-    "pdf_urls": [
+    "status": "blocked",
+    "reason": "기본 적립률 0.5%/1%, 보험 9%·생활 1% 추가 적립, 스타벅스 5,000원 할인이 모두 전월 모니모 앱 로그인 인정 일수(7일 이상, 스타벅스는 매일 100%)로 갈린다. 매달 바뀌는 앱 활동 상태라 결제 입력으로 알 수 없고, 카드 답(Fact)으로 영구 고정하면 안 된다는 결정에 걸린다. 보험 9% 대상 보험은 모니모 앱 안 목록에만 있어 공식 수치로 대상을 정할 수 없다. 카드 파일과 사례는 쓰지 않았다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1817",
       "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoeOoib3pVsLOXBy58BCn1U%3D&sn=1"
     ],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "case_count": 0,
+    "unmodeled": [
+      "전월 모니모 앱 로그인 인정 일수 7일 이상이면 기본 1%, 미만이면 0.5%",
+      "보험 9%와 생활 필수 영역 1% 추가 적립은 로그인 7일 이상과 전월 30만원 이상이 함께 필요",
+      "스타벅스 5,000원 할인은 전월 매일 로그인과 전월 30만원 이상이 필요",
+      "보험 9% 대상은 모니모 앱의 모니모A 카드 혜택 대상 보험 안내 목록",
+      "자체 가맹점번호로 승인되는 간편결제·키오스크 결제 제외"
+    ],
+    "open_questions": [
+      "로그인 일수처럼 매달 바뀌는 앱 활동 조건을 담을 모델이 필요한지 사용자 결정 필요",
+      "보험 9% 대상 보험사·상품 목록의 공식 공개본"
+    ],
+    "group": "expand1"
   },
   {
     "draft_id": "44a314c2-fdd4-4bbb-acad-70c77cd26b28",
@@ -31728,32 +31694,36 @@
     "approved": false
   },
   {
-    "draft_id": "caf5b9b5-bb3d-4e12-83d2-652b70c67a04",
     "card_id": "woori-834632",
-    "issuer": "woori",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-05/woori/_issuer/ix-834632-page-bfcd0d0f61e0.html"
+    "status": "blocked",
+    "reason": "카드 파일과 사례 23개는 통과한다. 다만 두 가지가 금액을 바꾼다. 1) 신규 특례 기간 놀이공원 50% 할인은 그 기간 국내 이용 누적 30만원을 채운 다음 날부터인데 이 조건을 담을 칸이 없어 특례 기간에는 0으로 계산한다. 2) 전기차 충전 1.5%의 '후불교통카드 충전에 한함'이 무엇인지 상품안내장 PDF(내려받기 팝업)를 열지 못해 확인하지 못했다. 새 가맹점 8개도 공통 파일에 들어가야 한다.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632"
     ],
-    "name": "카드의정석 POINT CHECK",
-    "kind": "check",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
-    "pdf_urls": [],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "case_count": 23,
+    "unmodeled": [
+      "인터넷·유선전화 결합상품으로 신청한 휴대전화 요금은 적립 제외",
+      "전기차 충전은 후불교통카드 충전에 한함",
+      "커피는 백화점·대형마트 안 매장과 미군부대 매장 제외",
+      "영화 예매 대행사이트 결제 제외",
+      "LPG충전소 제외",
+      "정부지원금액 적립 제외",
+      "고속버스는 차내 단말기와 앱 결제만 제외라고 적혀 있으나 업종 전체를 뺌",
+      "놀이공원은 본인회원만, 대상 이용권 종류 문구 없음",
+      "교통카드와 통신료 자동납부는 매출표 접수일 기준 실적",
+      "취소 매출표가 1~2일 접수되면 전월 실적에서 뺌",
+      "가족카드 포인트는 본인에게 합산, 실적과 한도는 카드별",
+      "신규 특례 기간 놀이공원 할인은 기간 안 국내 30만원 달성 다음 날부터라 계산하지 않음"
+    ],
+    "open_questions": [
+      "현재 혜택 시작일 미확인. 초안 수집일 2026-10-05로 추정",
+      "명세서 교통-버스가 시외버스를 포함하는지. 시내버스와 지하철만 넣음",
+      "전기차 충전 후불교통카드 충전에 한함의 뜻",
+      "놀이공원 현장할인 결제에도 기본 포인트를 주는지. 둘 다 받는 것으로 둠",
+      "원 미만 포인트 처리 문구 없음. 버림",
+      "새 가맹점 8개 필요. needed/woori-834632.json"
+    ],
+    "group": "expand1"
   },
   {
     "draft_id": "97e7310e-0d57-49ef-b138-588e9181c3a6",
@@ -32281,32 +32251,28 @@
     "approved": false
   },
   {
-    "draft_id": "117ab633-d835-459f-9826-6a341d9ca9c1",
     "card_id": "hana-10222",
-    "issuer": "hana",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-04/hana/_issuer/ix-10222-page-5e3f1c33467b.html"
+    "status": "ready",
+    "reason": "평일 11시~14시 국내 오프라인 일반음식점·커피·편의점 건당 5천원 이상 5% 캐쉬백, 20만/40만 구간 월 5천/1만 한도, 캐쉬백 받은 결제 실적 제외, 신규 특례, 해외 국제브랜드수수료 0.6% 면제를 표현했고 사례가 통과한다.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=10222",
+      "https://m.hanacard.co.kr/leaflet/12/12129_20260128.pdf"
     ],
-    "name": "길한통 체크카드",
-    "kind": "check",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=10222",
-    "pdf_urls": [],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 5,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "case_count": 13,
+    "unmodeled": [
+      "overseas-fee-free: 건당 US$0.5 해외이용수수료 면제는 달러 정액이라 계산하지 않는다",
+      "overseas-fee-free: 하나은행 결제계좌를 쓰지 않으면 해외 이용이 되지 않는다",
+      "lunch-time-5: 백화점·할인점·아울렛·쇼핑몰·공항·호텔·리조트·역사 입점 점포는 제외된다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다. 가정: 2026-01-28",
+      "revisions[0].benefits[lunch-time-5].when: \"오전 11시 ~ 오후 2시 사이\"에서 14:00 정각 결제가 포함되는지 원문이 불명확하다. 14:00 미만으로 계산한다. 가정: 11:00 이상 14:00 미만",
+      "revisions[0].benefits[lunch-time-5].when: 원문은 평일이 임시공휴일이면 제외한다고만 적었다. 평일에 걸린 일반 공휴일도 제외로 계산한다. 가정: holidays exclude",
+      "revisions[0].spend: 실적 제외의 아이행복 정부지원금은 업종으로 가릴 수 없다. 가정: 실적에 넣음"
+    ],
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   },
   {
     "draft_id": "7caef4dc-38ff-4252-9c33-a37b497ff389",
@@ -32712,36 +32678,27 @@
     "approved": false
   },
   {
-    "draft_id": "14a442c2-5699-4a87-a1a7-75adc429d291",
     "card_id": "hana-151",
-    "issuer": "hana",
-    "status": "source_review_pending",
-    "problems": [
-      "warning: revisions@2026-10-05.benefits[happy-point-merchant-20]: 비율이 5% 이상인데 한도가 없다"
+    "status": "ready",
+    "reason": "25만 구간 생활(마트·주유·병원·인터넷쇼핑) 2만원당 200원, 그 밖 2만원당 100원, 영화 1만원 이상 3천원, 월 통합 1만원, 해외 제외, 발급 다음달 말까지 특례를 표현했다. 초안의 20% 캐쉬백은 같은 페이지의 다른 상품(해피포인트 더블 체크카드)이라 뺐다.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=2014",
+      "https://m.hanacard.co.kr/leaflet/03/03857_20210929.pdf"
     ],
-    "doc_paths": [
-      "2026-10-04/hana/_issuer/ix-151-page-f35be81ad859.html"
+    "case_count": 9,
+    "unmodeled": [
+      "아이사랑카드로 전환 등록하면 어린이집 정부지원금은 실적과 모든 혜택에서 빠진다",
+      "기타 제 수수료는 캐쉬백에서 제외된다",
+      "life-200: 주유 중 충전소 결제는 생활 캐쉬백이 아니라 일반 캐쉬백 2만원당 100원이다"
     ],
-    "name": "해피포인트 하나 체크카드",
-    "kind": "check",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=151",
-    "pdf_urls": [],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [
-      "2026-10-05/benefits[happy-point-merchant-20]: 비율이 5% 이상인데 한도가 없다"
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다. 가정: 2021-09-29",
+      "revisions[0].spend: 원문에 이 카드의 실적 제외 항목과 취소 반영 달이 없다. 하나카드 기본값인 전월 1일~말일, 취소 달 반영, 제외 업종 없음으로 둔다. 가정: 제외 업종 없음",
+      "revisions[0].benefits[movie-3000].target: 상품 페이지는 프리머스도 영화 캐쉬백 대상으로 적었지만 상품설명서에는 없다. 가맹점 목록에 프리머스가 없어 넣지 않았다. 가정: 롯데시네마와 메가박스만"
     ],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   },
   {
     "draft_id": "bf54c6bb-a6a2-47e2-a7a6-dc1058fec541",
@@ -44317,34 +44274,25 @@
     "approved": false
   },
   {
-    "draft_id": "86b7cb1d-ce3c-4470-be8a-4a29a6f62097",
     "card_id": "kb-04368",
-    "issuer": "kb",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-04/kb/_issuer/ix-04368-page-141f312a655e.html"
+    "status": "blocked",
+    "reason": "혜택(kt M mobile 자동납부 30만 구간 7천원, 70만 구간 1만1천원, 승인금액까지 전액, 월 합산)과 생애 최초 발급 실적 유예 3,500원은 모두 옮겼고 사례 15개가 통과한다. 다만 전월 실적 제외에 무승인전표(대중교통, 공항버스)가 있어 kb-07964 등과 같은 후불교통 문제다. transit 전체를 빼면 일반 승인 철도를 잘못 빼고, 넣으면 후불교통이 실적 경계에서 할인을 더 준다. Spend billing 제외 기능 추가 뒤 ready로 다시 검토한다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04368"
     ],
-    "name": "KB국민 kt M mobile Ⅱ 카드",
-    "kind": "credit",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04368",
-    "pdf_urls": [
-      "https://img2.kbcard.com/obj/card/download/04368__prdctOpmn_20260626.pdf"
+    "case_count": 15,
+    "unmodeled": [
+      "PG나 간편결제 전용 가맹점 승인 결제는 할인 제외",
+      "월 할인한도는 가족카드와 합산",
+      "할인 한도는 전표 매입 순서",
+      "해외 이용금액은 매입 완료일 기준 일시불만 실적",
+      "정부지원금 결제와 자판기·터널통행료·항공기내 무승인 전표는 실적 제외"
     ],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "open_questions": [
+      "적용 시작일을 몰라 수집일 2026-10-10으로 둠",
+      "무승인 후불교통(대중교통, 공항버스) 실적 제외를 담을 Spend billing 제외 기능 필요"
+    ],
+    "group": "expand1"
   },
   {
     "draft_id": "ff034c1f-88b0-4331-8ce2-38ad0eb1eb26",
@@ -46167,34 +46115,22 @@
     "approved": false
   },
   {
-    "draft_id": "f23269d0-9e33-4d9f-b4d8-bfdb74ffc7a8",
     "card_id": "kb-09218",
-    "issuer": "kb",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-04/kb/_issuer/ix-09218-page-3af2631853be.html"
-    ],
-    "name": "KB국민 탄탄대로 온리유 티타늄카드",
-    "kind": "credit",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09218",
-    "pdf_urls": [
+    "status": "blocked",
+    "reason": "상품 페이지가 운영 종료(재발급만 가능)라 status는 discontinued여야 하는데 색인은 on_sale이다. 페이지에는 주유 130~200점/L, 다이렉트 자동차보험 1만원 연1회, 차량정비·주차·세차 10% 적립의 머리 문구만 있고 실적 구간, 리터당 점수 구간, 월 한도, 대상 정유사는 상품설명서 PDF에만 있다. img2.kbcard.com PDF는 robots.txt가 막아 KB 카드사 메모대로 받지 않았다. 또 실적 제외에 무승인전표(교통요금)가 있어 후불교통만 빼는 Spend 기능 없이는 실적 경계를 틀린다. 카드 파일과 사례는 만들지 않았다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09218",
       "https://img2.kbcard.com/obj/card/download/09218__prdctOpmn_20231201.pdf"
     ],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "상품설명서 PDF(09218__prdctOpmn_20231201.pdf)를 사람이 받아 주유 적립 구간, 정비·주차·세차 10% 적립 한도, 자동차보험 할인 실적 조건 확인 필요",
+      "판매 상태를 discontinued(재발급만)로 고쳐야 함",
+      "무승인전표(교통요금) 실적 제외를 담을 Spend billing 제외 기능 필요",
+      "연회비 30,000원은 페이지 머리 값만 확인. 브랜드별 금액 미확인"
+    ],
+    "group": "expand1"
   },
   {
     "draft_id": "46d5f6d5-4035-41bd-9116-a6fb6efc0929",
@@ -52146,36 +52082,6 @@
     "approved": false
   },
   {
-    "draft_id": "509d757d-e3d1-430d-aafb-b43b869404a5",
-    "card_id": "lotte-1795",
-    "issuer": "lotte",
-    "status": "source_review_pending",
-    "problems": [
-      "warning: product_codes: 비어 있다. 갱신 때 같은 카드를 찾지 못한다"
-    ],
-    "doc_paths": [
-      "2026-10-05/lotte/_issuer/ix-1795-pdf-b352c7a1a29d.pdf"
-    ],
-    "name": "토스 LIKIT ALL 롯데카드",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "pdf_urls": [
-      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14129-A14129_0920.pdf"
-    ],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 3,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
-  },
-  {
     "draft_id": "75db1082-48ad-4e9f-83c2-6537d98c4abe",
     "card_id": "lotte-1799",
     "issuer": "lotte",
@@ -55913,32 +55819,30 @@
     "approved": false
   },
   {
-    "draft_id": "bc73a0d0-0412-48fa-9870-132c15473aeb",
     "card_id": "nh-f20016",
-    "issuer": "nh",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-04/nh/_issuer/ix-f20016-page-1e0a8a8c95a1.html"
+    "status": "ready",
+    "reason": "체크카드. 기본 0.2% 적립과 6개 영역 중 당월 이용금액 1위 0.4%, 2위 0.2% 추가적립을 ranked 두 그룹과 priority 묶음으로 담았다. 추가적립만 전월 20만원 이상, 월 5천 포인트 한도, 신규 등록 다음 달 말까지 특례. 사례가 통과한다.",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010042"
     ],
-    "name": "올리 POINT 체크카드",
-    "kind": "check",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010042",
-    "pdf_urls": [],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "case_count": 23,
+    "unmodeled": [
+      "잡화, 커피, 편의점의 역사·백화점·할인점(아울렛) 입점 매장 결제는 영역 이용금액과 적립 제외",
+      "과태료, 우체국 우편요금, 연체료, 수수료·이자, 포인트 결제분은 실적과 적립 제외",
+      "해외, 교통카드, 통신료 자동이체는 매출표 접수일 기준 실적",
+      "국제공항 라운지 연 1회(전월 50만원 이상)는 결제 혜택이 아니라 계산 안 함",
+      "영역 순위는 달 끝에 정해져 달 중간 값은 잠정값"
+    ],
+    "open_questions": [
+      "현재 혜택 시작일 미확인. 초안 수집일 2026-10-05로 추정",
+      "영역 순위에서 취소를 빼는 달 문구 없음",
+      "② 오프라인쇼핑의 마트 4곳은 오프라인만 넣음",
+      "원 미만 포인트 처리 문구 없음. 버림",
+      "새 가맹점 nh_mall(농협몰) 필요. needed/nh-f20016.json"
+    ],
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   },
   {
     "draft_id": "9e9a13e8-fb77-41b5-b02b-7863e7100292",
@@ -58694,35 +58598,30 @@
     "approved": false
   },
   {
-    "draft_id": "a01f3cdd-c385-4b07-abe8-2179dfc82463",
     "card_id": "samsung-abp0291",
-    "issuer": "samsung",
-    "status": "source_review_pending",
-    "problems": [],
-    "doc_paths": [
-      "2026-10-05/samsung/_issuer/ix-abp0291-page-dbcfab061445.html",
-      "2026-10-05/samsung/_issuer/ix-abp0291-pdf-bf03dc3c3e7c.pdf"
-    ],
-    "name": "신세계 삼성지엔미포인트 체크카드",
-    "kind": "check",
-    "sale_status": "on_sale",
-    "recommended": false,
-    "requested": false,
-    "page_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP0291",
-    "pdf_urls": [
+    "status": "blocked",
+    "reason": "핵심 혜택 조건을 지금 모델로 표현할 수 없다. 빅포인트 기본 0.2%·더블 0.4%는 그해 1월 1일부터 누적 이용 300만원을 넘긴 매출 접수 다음날부터 두 배가 되는 연간 누적 조건이다. 놀이공원·워터파크, CGV·메가박스, 닥터카, S-OIL은 직전 3개월 월평균 30만원 조건이고 신규·무실적 회원 추가·교체 발급 시 발급월+2개월 1회 특례다. 이마트 6,000원은 전월 이마트 이용 20만원 이상과 발급 후 6개월 조건이다. 실적 basis는 prev_calendar_month, billing_cycle, none뿐이다. 아웃백 10% 현장할인은 설명서에 제목과 건당 20만원·주류 제외만 있고 실적 조건이 없다. 신세계백화점 할인은 쿠폰 지급이라 결제 혜택이 아니다. 카드 파일과 사례는 쓰지 않았다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP0291",
       "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlETurRUC7ACR%2Fq4JAPj8uQ%3D&sn=1"
     ],
-    "benefit_count": 1,
-    "revision_count": 1,
-    "open_questions_count": 4,
-    "has_annual_fees": false,
-    "has_errors": false,
-    "current_errors": [],
-    "current_warnings": [],
-    "resolved_benefit_count": 1,
-    "model_valid": true,
-    "source_review_complete": false,
-    "approved": false
+    "case_count": 0,
+    "unmodeled": [
+      "연간 이용금액 300만원 이상 시점 다음날부터 빅포인트 적립률 두 배(0.2%→0.4%, 더블 0.4%→0.8%)",
+      "더블 적립 대상 이마트 및 홈쇼핑·온라인 쇼핑몰의 범위",
+      "직전 3개월 월평균 이용금액 30만원 조건(놀이공원·워터파크, CGV·메가박스, 닥터카, S-OIL)",
+      "신규 회원과 직전 3개월 무실적 회원의 추가·교체 발급 시 발급월+2개월 1회 특례",
+      "전월 이마트 일시불·할부 이용금액 20만원 이상, 발급 후 6개월까지 이마트 6,000원 캐시백",
+      "S-OIL 리터당 40 보너스포인트는 본사 고시 휘발유가로 리터 환산(소수점 반올림)",
+      "신세계백화점 5% 할인은 전자할인쿠폰 지급 방식",
+      "신세계포인트 적립은 1,000원 단위로 적립"
+    ],
+    "open_questions": [
+      "아웃백 10% 현장할인의 실적 조건과 횟수가 설명서(2023.12판)에 없다",
+      "상품 페이지에 발급 중단 문구는 없으나 출시일 칸이 비어 있어 판매 상태 재확인 필요",
+      "직전 3개월 평균 실적과 연간 누적 실적 조건을 담을 모델이 필요한지 사용자 결정 필요"
+    ],
+    "group": "expand1"
   },
   {
     "draft_id": "0e026475-8654-4370-a182-12a0cdd8dc21",
@@ -86374,5 +86273,29 @@
     "draft_issues": [],
     "research_status": "blocked",
     "requires_user_rule_judgment": false
+  },
+  {
+    "card_id": "lotte-p14129-a14129",
+    "status": "ready",
+    "reason": "신용카드. 국내외 가맹점 1% 결제일 할인, 실적 조건과 한도 없음. 무이자할부와 원문 제외 업종을 할인 제외로 담았고 사례가 통과한다.",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14129-A14129",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14129-A14129_0920.pdf"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원발급 수수료·관세·인지세·송달료, 이자와 수수료는 할인 제외",
+      "롯데카드의 다른 결제일 할인과 겹치면 큰 혜택 하나만",
+      "해외 이용은 롯데카드 접수일 기준으로 할인",
+      "롯데카드 L.POINT 적립 없음"
+    ],
+    "open_questions": [
+      "상품 페이지 연회비 표에 Visa만 있다. Mastercard 15,000원 발급이 지금도 되는지",
+      "원 미만 처리 문구 없음. 버림으로 둠"
+    ],
+    "draft_card_id": "lotte-1795",
+    "group": "expand1",
+    "approved": false,
+    "final_engine_checked": true
   }
 ]

@@ -54,7 +54,8 @@ def main():
     candidates = read(ROOT / "tmp/card-ready-review/combined/candidates.json")
     candidates = [{**c, "group": "previous-ready"} for c in candidates]
     common_requests, group_results = [], []
-    for group in ("hana8", "recommended-mixed", "recommended-others"):
+    # expand1은 2026-10-10 이어받은 뒤의 추가 조사 묶음이다
+    for group in ("hana8", "recommended-mixed", "recommended-others", "expand1"):
         folder = BASE / group
         if not (folder / "result.json").exists():
             continue

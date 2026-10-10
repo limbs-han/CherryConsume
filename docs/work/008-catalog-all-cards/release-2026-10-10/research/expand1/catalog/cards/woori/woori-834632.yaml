@@ -1,0 +1,207 @@
+schema_version: 2
+id: woori-834632
+issuer: woori
+name: 카드의정석 POINT CHECK
+kind: check
+product_codes:
+  - '834632'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632', fetched_at: 2026-10-10, review_no: 2026-C02275}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000, 800000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {amusement-park-50: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - amount: {below: 10000}
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_express, utility]
+      unmodeled: [정부지원금액은 적립 제외다, 고속버스는 차내 단말기와 고속버스 App 결제만 적립 제외라고 적혀 있으나 고속버스 업종 전체를 뺐다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 500000: 20000, 800000: 30000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [special-telecom-earn, special-transit-earn, special-ev-earn, special-coffee-earn, special-movie-earn, half-department-earn, half-mart-earn, half-online-earn, half-fuel-earn, half-overseas-earn, basic-earn]
+        spill: none
+      - {key: pay}
+      - {key: park}
+    benefits:
+      - key: basic-earn
+        title: 국내 기본 0.3% 적립
+        source: page
+        evidence: [기본 | 상기 가맹점 외 국내 적립 대상 가맹점 | 0.3%, 전월 국내 가맹점 이용금액 30만원 이상 시 적립, 기본/특별/추가 통합 월 적립한도 | 1만점 | 2만점 | 3만점]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: woori_moa_point, rate: 0.3}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: special-telecom-earn
+        title: 이동통신 자동납부 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 이동통신, 대중교통, 전기차충전, 커피, 영화 | 1.5%', '이동통신 | SKT, KT, LG U+, 헬로모바일, KTM모바일, U+유모바일', '휴대전화 요금에 한하며, 본 카드로 대상 통신사에 자동납부 신청 후 결제한 건에 대해서만 적립', '인터넷, 유선전화 등 결합상품 신청 시에는 적립 제외']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [hello_mobile, kt, kt_m_mobile, lg_uplus, media_log, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [인터넷이나 유선전화와 결합상품으로 신청한 휴대전화 요금은 적립 제외다]
+      - key: special-transit-earn
+        title: 대중교통 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 이동통신, 대중교통, 전기차충전, 커피, 영화 | 1.5%', '대중교통 | 명세서에 교통-버스, 교통-지하철로 표시되는 매출']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: special-ev-earn
+        title: 전기차 충전 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 이동통신, 대중교통, 전기차충전, 커피, 영화 | 1.5%', '전기차 충전 | 환경부(한국자동차환경협회), 한국전기차충전, 한국전력공사, GS차지비', 후불교통카드 충전에 한함]
+        target:
+          merchants: [gs_chargev, happy_charger, kepco_ev, me_ev_charger]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [후불교통카드 충전에 한한다고 적혀 있다. 대상 결제 방식을 결제 기록으로 가리지 못한다]
+      - key: special-coffee-earn
+        title: 커피 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 이동통신, 대중교통, 전기차충전, 커피, 영화 | 1.5%', '커피 | 스타벅스, 엔제리너스, 이디야', '커피브랜드의 상품권, 선불카드 구매/충전 등의 이용금액은 적립 제외', '백화점/대형마트 내 매장, 미군부대 매장 제외']
+        target:
+          merchants: [angel_in_us, ediya, starbucks]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점·대형마트 안 매장과 미군부대 매장은 적립 제외다]
+      - key: special-movie-earn
+        title: 영화 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 이동통신, 대중교통, 전기차충전, 커피, 영화 | 1.5%', '영화 | CGV, 롯데시네마', 예매 대행사이트를 통해 결제 시 적립 제외]
+        target:
+          merchants: [cgv, lotte_cinema]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [예매 대행사이트로 결제하면 적립 제외다]
+      - key: half-department-earn
+        title: 백화점 0.5% 적립
+        source: page
+        evidence: ['백화점, 대형마트, 온라인쇼핑, 주유, 해외 | 0.5%', '백화점 | 신세계백화점, 현대백화점, 롯데백화점', 온라인결제 적립 제외]
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: woori_moa_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: half-mart-earn
+        title: 대형마트 0.5% 적립
+        source: page
+        evidence: ['백화점, 대형마트, 온라인쇼핑, 주유, 해외 | 0.5%', '대형마트 | 이마트, 홈플러스, 롯데마트, 트레이더스 홀세일 클럽, 롯데마트맥스', 온라인결제 적립 제외]
+        target:
+          merchants: [emart, homeplus, lotte_mart, lotte_mart_max, traders]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: woori_moa_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: half-online-earn
+        title: 온라인쇼핑 0.5% 적립
+        source: page
+        evidence: ['백화점, 대형마트, 온라인쇼핑, 주유, 해외 | 0.5%', '온라인쇼핑 | 11번가, G마켓, 옥션, 롯데ON, 쿠팡, 티몬, 롯데홈쇼핑, 우리WON마켓']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_homeshopping, lotte_on, tmon, woori_won_market]
+        reward: {type: points, program: woori_moa_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: half-fuel-earn
+        title: 주유 0.5% 적립
+        source: page
+        evidence: ['백화점, 대형마트, 온라인쇼핑, 주유, 해외 | 0.5%', '주유 | SK주유소, GS칼텍스, HD현대오일뱅크, S-OIL * LPG충전소 제외']
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: points, program: woori_moa_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [LPG충전소는 적립 제외다]
+      - key: half-overseas-earn
+        title: 해외 0.5% 적립
+        source: page
+        evidence: ['백화점, 대형마트, 온라인쇼핑, 주유, 해외 | 0.5%', 해외 가맹점 | 해외직구 및 온라인결제 포함]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: woori_moa_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: pay-additional-earn
+        title: 주요 간편결제 1.5% 추가 적립
+        source: page
+        evidence: ['주요 간편결제 : 네이버페이, 카카오페이, PAYCO, SSGPAY', 전월 국내 가맹점 이용금액 30만원 이상 시 적립, 추가적립은 주요 간편결제에 본 카드를 등록하여 온라인/오프라인에서 사용한 경우에 제공]
+        target: {all: true}
+        when:
+          - payment: [kakao_pay, naver_pay, payco, ssg_pay]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: pay
+      - key: amusement-park-50
+        title: 롯데아쿠아리움과 주요 놀이공원 50% 현장할인
+        source: page
+        evidence: [롯데아쿠아리움 및 주요 놀이공원 50% 현장할인, '롯데월드 아쿠아리움, 롯데월드, 에버랜드, 이월드(대구), 경주월드, 통도환타지아', '통합 월 1회, 연 2회, 본인회원 한정', 전월 국내가맹점 이용금액 30만원 이상 시 제공, '단, 카드 수령등록일로부터 다음달 말일까지는 국내 가맹점 30만원 이상 시, 그 다음날부터 제공']
+        target:
+          merchants: [e_world, everland, gyeongju_world, lotte_world, lotte_world_aquarium, tongdo_fantasia]
+        reward: {type: onsite_discount, rate: 50}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 2}
+        tiers: {from: 300000}
+        stack: park
+        unmodeled: [본인회원만 받는다. 할인 대상 이용권 종류는 원문에 없다]
+    unmodeled: [교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다, 취소 매출표가 매월 1~2일에 접수되면 전월 실적에서 뺀다, 가족카드 포인트는 본인회원에게 합산 적립되지만 전월실적과 적립 한도는 카드별로 따로 본다, 신규 특례 기간 놀이공원 할인은 그 기간 국내 가맹점 이용금액이 30만원 이상이 된 다음 날부터 받는다. 이 조건을 담지 못해 특례 기간에는 놀이공원 할인을 계산하지 않는다, 모아포인트와 우리WON꿀머니는 1점에 1원이다. 가입자에게는 꿀머니로 적립되지만 계산은 모아포인트로 표시한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다. 상품출시일은 2018-04-02다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[special-transit-earn].target', question: 명세서에 교통-버스로 표시되는 매출이 시외버스를 포함하는지 문구가 없다, assumed: 시내버스와 지하철만}
+  - {path: 'revisions[0].benefits[special-ev-earn].unmodeled', question: 전기차 충전의 후불교통카드 충전에 한함이 무엇을 뜻하는지 상품안내장 PDF로 확인한다. PDF는 내려받기 프로그램 팝업이라 열지 못했다, assumed: 대상 가맹점 결제 전부}
+  - {path: 'revisions[0].new_card.tier_by_benefit', question: 신규 특례 기간 놀이공원 할인은 기간 안 국내 이용 30만원 달성 다음 날부터라 계산하지 않았다. 담을 칸이 생기면 고친다, assumed: 0}
+  - {path: 'revisions[0].benefits[amusement-park-50].stack', question: 놀이공원 현장할인 결제에도 기본 포인트를 주는지 문구가 없다, assumed: 둘 다 받음}
+  - {path: 'revisions[0].benefits[basic-earn].reward', question: 원 미만 포인트 처리 문구가 없다, assumed: floor}
+notes: 2026-10-10 상품 페이지(준법 심의필 2026-C02275, 2026년 9월 기준)를 브라우저로 열어 대조했다. 상품출시일 2018-04-02. 상품안내장 PDF는 다운로드 팝업이라 열지 못했다. 모든 적립과 놀이공원 할인은 전월 국내 가맹점 이용금액 30만원 이상이다. 해외 이용은 실적에서 빠진다. 실적 제외 문구는 해외, 현금서비스, 카드론, 수수료, 이자, 연회비뿐이다. 특별 1.5%, 0.5% 영역, 기본 0.3%는 하나만 받고 간편결제 1.5%는 더해 받는다. 기본·특별·추가가 월 한도 하나를 같이 쓴다. 결제건당 1만원 미만은 적립 제외다.

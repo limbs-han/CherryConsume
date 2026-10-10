@@ -1,0 +1,238 @@
+card: woori-834632
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 30만원 직전은 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 전월 국내 30만원 미만이면 모든 적립 없음
+- name: 실적 30만원 경계 커피 특별 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {special-coffee-earn: 150}
+  calc: 10,000 × 1.5% = 150
+- name: 결제건당 1만원 미만 적립 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 9,999원은 1만원 미만이라 적립 제외
+- name: 국내 기본 0.3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 300}
+  calc: 100,000 × 0.3% = 300
+- name: 원 미만 버림
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12345, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 37}
+  calc: 12,345 × 0.3% = 37.035, 버림 37
+- name: 이동통신 자동납부 특별 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {special-telecom-earn: 750}
+  - payment: 1
+    benefits: {basic-earn: 150}
+  calc: 자동납부 50,000 × 1.5% = 750. 자동납부가 아니면 기본 0.3% = 150
+- name: 대중교통 특별 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway}
+  expect:
+  - payment: 0
+    benefits: {special-transit-earn: 150}
+  calc: 10,000 × 1.5% = 150
+- name: 전기차 충전 특별 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: gs_chargev}
+  expect:
+  - payment: 0
+    benefits: {special-ev-earn: 300}
+  calc: 20,000 × 1.5% = 300
+- name: 영화 특별 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv}
+  expect:
+  - payment: 0
+    benefits: {special-movie-earn: 225}
+  calc: 15,000 × 1.5% = 225
+- name: 백화점과 대형마트는 오프라인만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-05T11:00, amount: 100000, merchant: lotte_department, channel: online}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {half-department-earn: 500}
+  - payment: 1
+    benefits: {basic-earn: 300}
+  - payment: 2
+    benefits: {half-mart-earn: 500}
+  calc: 오프라인 100,000 × 0.5% = 500. 온라인 결제는 기본 0.3% = 300
+- name: 온라인쇼핑과 주유
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: sk_energy}
+  expect:
+  - payment: 0
+    benefits: {half-online-earn: 250}
+  - payment: 1
+    benefits: {half-fuel-earn: 250}
+  calc: 50,000 × 0.5% = 250
+- name: 해외 0.5%이고 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {half-overseas-earn: 500}
+    counted: 0
+  calc: 해외 100,000 × 0.5% = 500. 전월실적은 국내 가맹점만이라 0
+- name: 간편결제 추가 적립은 더해 받음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, payment_method: naver_pay}
+  - {at: 2026-11-06T10:00, amount: 20000, category: restaurant.general, payment_method: kakao_pay}
+  - {at: 2026-11-07T10:00, amount: 20000, category: restaurant.general, payment_method: toss_pay}
+  expect:
+  - payment: 0
+    benefits: {special-coffee-earn: 150, pay-additional-earn: 150}
+  - payment: 1
+    benefits: {basic-earn: 60, pay-additional-earn: 300}
+  - payment: 2
+    benefits: {basic-earn: 60}
+  calc: 특별 150 + 네이버페이 1.5% 150. 기본 60 + 카카오페이 300. 토스페이는 대상 아님
+- name: 30만 구간 통합 한도 1만점 직전과 직후
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 3000000, category: restaurant.general}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 9000}
+  - payment: 1
+    benefits: {special-coffee-earn: 1000}
+  - payment: 2
+    benefits: {}
+  calc: 9,000 적립 뒤 1,500 중 남은 1,000만. 한도를 다 써 그 뒤 0
+- name: 50만 구간 직전은 1만점 한도
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4000000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 10000}
+  calc: 4,000,000 × 0.3% = 12,000이지만 30만 구간 한도 10,000
+- name: 50만 구간 2만점 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4000000, category: restaurant.general}
+  - {at: 2026-11-06T10:00, amount: 4000000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 12000}
+  - payment: 1
+    benefits: {basic-earn: 8000}
+  calc: 12,000 뒤 한도 20,000의 남은 8,000
+- name: 80만 구간 직전
+  prev_month_spend: 799999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 20000}
+  calc: 30,000이 계산되지만 50만 구간 한도 20,000
+- name: 80만 구간 3만점 한도
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 11000000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 30000}
+  calc: 33,000이 계산되지만 80만 구간 한도 30,000
+- name: 세금과 상품권 적립 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: tax.local}
+  - {at: 2026-11-05T11:00, amount: 50000, category: gift_card.voucher}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 100000
+  - payment: 1
+    benefits: {}
+    counted: 50000
+  calc: 세금과 상품권은 적립 제외. 실적 제외 목록에는 없어 실적에 넣음
+- name: 놀이공원 50% 현장할인과 기본 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: everland}
+  - {at: 2026-11-20T10:00, amount: 30000, merchant: lotte_world}
+  expect:
+  - payment: 0
+    benefits: {amusement-park-50: 30000, basic-earn: 90}
+  - payment: 1
+    benefits: {basic-earn: 90}
+  calc: 결제 30,000은 50% 할인 뒤 금액이라 할인 30,000. 기본 30,000 × 0.3% = 90. 같은 달 두 번째는 월 1회를 넘어 할인 없음
+- name: 놀이공원 연 2회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-03-05T10:00, amount: 30000, merchant: everland}
+  - {at: 2026-03-10T10:00, amount: 300000, category: restaurant.general}
+  - {at: 2026-04-05T10:00, amount: 30000, merchant: lotte_world}
+  - {at: 2026-04-10T10:00, amount: 300000, category: restaurant.general}
+  - {at: 2026-05-05T10:00, amount: 30000, merchant: e_world}
+  expect:
+  - payment: 0
+    benefits: {amusement-park-50: 30000, basic-earn: 90}
+  - payment: 2
+    benefits: {amusement-park-50: 30000, basic-earn: 90}
+  - payment: 4
+    benefits: {basic-earn: 90}
+  calc: 3월, 4월 할인으로 연 2회를 써 5월은 할인 없음. 3월과 4월 실적은 330,000원
+- name: 신규 특례 30만 구간 적립, 놀이공원은 계산 안 함
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: everland}
+  expect:
+  - payment: 0
+    benefits: {special-coffee-earn: 150}
+  - payment: 1
+    benefits: {basic-earn: 90}
+  calc: 10월 등록이라 11월 말까지 30만 구간 적립. 놀이공원은 특례 기간 별도 조건이라 0
+- name: 신규 특례 지난 뒤 실적 미달
+  prev_month_spend: 0
+  holder: {started_on: '2026-09-15'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 9월 등록 특례는 10월 말까지. 11월은 전월 0원이라 적립 없음

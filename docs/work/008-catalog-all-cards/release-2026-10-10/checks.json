@@ -1,7 +1,7 @@
 {
   "new-tests": {
-    "cards": 30,
-    "cases": 391,
+    "cards": 38,
+    "cases": 499,
     "failures": []
   },
   "existing-tests": {
@@ -14,18 +14,18 @@
     "cases": 28,
     "failures": []
   },
-  "new_cards": 30,
-  "total_catalog_cards": 51,
+  "new_cards": 38,
+  "total_catalog_cards": 59,
   "catalog_errors": 0,
   "catalog_warnings": 0,
   "local_approval_errors": 0,
-  "changed_files": 47,
+  "changed_files": 55,
   "shared_files": 17,
   "duplicate_products": 0,
   "all_status_counts": {
-    "source_review_pending": 2135,
-    "ready": 30,
-    "blocked": 236,
+    "source_review_pending": 2122,
+    "ready": 38,
+    "blocked": 241,
     "exclude": 20
   },
   "operational_writes": 0

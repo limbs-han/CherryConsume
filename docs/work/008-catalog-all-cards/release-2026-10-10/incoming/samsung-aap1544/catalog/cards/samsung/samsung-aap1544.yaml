@@ -1,0 +1,184 @@
+schema_version: 2
+id: samsung-aap1544
+issuer: samsung
+name: 네이버페이 taptap
+short_name: 네이버페이 taptap
+search_names: [taptap, 네이버페이 탭탭, 탭탭]
+kind: credit
+product_codes: [AAP1544]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1544', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtjCAe6v7rl2u3NQeOXgEta4%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - payment: [mobile_tmoney]
+      categories: [prepaid_charge]
+      unmodeled: [다이어트할부와 삼성카드 할인이 적용된 일시불·할부 이용금액은 적립하지 않는다]
+    options:
+      - key: package
+        title: 라이프스타일 패키지
+        choices:
+          - {key: daily, title: 일상 패키지 네이버페이 온라인 10%·커피·편의점·배달앱 5%}
+          - {key: online, title: '온라인 패키지 네이버페이 온라인 10%·3,000P 추가'}
+        change: next_month
+    limits:
+      - {key: daily-npay-10, per: month, amount: 5000}
+      - {key: daily-life-5, per: month, amount: 5000}
+      - {key: online-npay-10, per: month, amount: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [daily-npay-10, online-npay-10, daily-coffee-5, daily-starbucks-5, daily-convenience-5, daily-delivery-5, base-0-5]
+        spill: none
+      - {key: extra}
+    benefits:
+      - key: daily-npay-10
+        title: '[일상 패키지] 네이버페이 온라인 간편결제 10% 적립'
+        source: manual
+        evidence: [네이버페이 온라인 간편결제를 통해 결제 시 10% 네이버페이 포인트 적립, '월 적립한도는 5,000 포인트입니다.', 전월 일시불 및 할부 이용금액 30만원 이상 시 제공됩니다., 적립한도 초과 시 다음 거래건부터 기본 0.5% 적립이 적용됩니다.]
+        target:
+          exclude_categories: [education.tuition, insurance.social, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+          all: true
+        when:
+          - option:
+              package: [daily]
+          - payment: [naver_pay]
+          - {channel: online}
+        reward: {type: points, program: npay_point, rate: 10}
+        limits:
+          - {shared: daily-npay-10}
+        tiers: {from: 300000}
+        unmodeled: ['고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
+      - key: daily-coffee-5
+        title: '[일상 패키지] 커피전문점 5% 적립'
+        source: manual
+        evidence: [커피전문점·편의점·배달앱 5% 네이버페이 포인트 적립, '통합 월 적립한도는 5,000 포인트입니다.', '커피전문점(오프라인) 스타벅스, 투썸플레이스, 카페베네, 탐앤탐스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋', '커피전문점, 편의점의 경우 오프라인 매장 결제건에 한하며, 백화점, 쇼핑몰 내 임대매장 결제건은 제외됩니다.']
+        target:
+          exclude_categories: [gift_card]
+          merchants: [angel_in_us, artisee, cafe_bene, coffee_bean, hollys, pascucci, paul_bassett, tom_n_toms, twosome]
+        when:
+          - option:
+              package: [daily]
+          - {channel: offline}
+        reward: {type: points, program: npay_point, rate: 5}
+        limits:
+          - {shared: daily-life-5}
+        tiers: {from: 300000}
+        unmodeled: [백화점·쇼핑몰 임대매장 결제는 적립하지 않는다]
+      - key: daily-starbucks-5
+        title: '[일상 패키지] 스타벅스 5% 적립'
+        source: manual
+        evidence: [커피전문점·편의점·배달앱 5% 네이버페이 포인트 적립, '통합 월 적립한도는 5,000 포인트입니다.', 스타벅스의 경우 사이렌 오더 결제건도 적립 혜택이 적용됩니다.]
+        target:
+          exclude_categories: [gift_card]
+          merchants: [starbucks]
+        when:
+          - option:
+              package: [daily]
+        reward: {type: points, program: npay_point, rate: 5}
+        limits:
+          - {shared: daily-life-5}
+        tiers: {from: 300000}
+        unmodeled: [매장 결제와 사이렌오더만 적립하고 백화점·쇼핑몰 임대매장은 제외한다]
+      - key: daily-convenience-5
+        title: '[일상 패키지] 편의점 5% 적립'
+        source: manual
+        evidence: [커피전문점·편의점·배달앱 5% 네이버페이 포인트 적립, '통합 월 적립한도는 5,000 포인트입니다.', '편의점(오프라인) CU, 세븐일레븐, GS25, 미니스톱']
+        target:
+          exclude_categories: [gift_card]
+          merchants: [cu, gs25, ministop, seven_eleven]
+        when:
+          - option:
+              package: [daily]
+          - {channel: offline}
+        reward: {type: points, program: npay_point, rate: 5}
+        limits:
+          - {shared: daily-life-5}
+        tiers: {from: 300000}
+        unmodeled: [백화점·쇼핑몰 임대매장 결제는 적립하지 않는다]
+      - key: daily-delivery-5
+        title: '[일상 패키지] 배달앱 5% 적립'
+        source: manual
+        evidence: [커피전문점·편의점·배달앱 5% 네이버페이 포인트 적립, '통합 월 적립한도는 5,000 포인트입니다.', '배달앱(온라인) 배달의민족, 요기요, 쿠팡이츠', 배달앱의 경우 각 대상점 홈페이지 및 앱을 통한 결제건에 한해 제공됩니다.(가맹점 직접 결제건 제외)]
+        target:
+          exclude_categories: [gift_card]
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - option:
+              package: [daily]
+          - {channel: online}
+        reward: {type: points, program: npay_point, rate: 5}
+        limits:
+          - {shared: daily-life-5}
+        tiers: {from: 300000}
+      - key: online-npay-10
+        title: '[온라인 패키지] 네이버페이 온라인 간편결제 10% 적립'
+        source: manual
+        evidence: [네이버페이 온라인 간편결제를 통해 결제 시 10% 네이버페이 포인트 적립, '월 적립한도는 10,000 포인트입니다.', 전월 일시불 및 할부 이용금액 30만원 이상 시 제공됩니다., 적립한도 초과 시 다음 거래건부터 기본 0.5% 적립이 적용됩니다.]
+        target:
+          exclude_categories: [education.tuition, insurance.social, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+          all: true
+        when:
+          - option:
+              package: [online]
+          - payment: [naver_pay]
+          - {channel: online}
+        reward: {type: points, program: npay_point, rate: 10}
+        limits:
+          - {shared: online-npay-10}
+        tiers: {from: 300000}
+        unmodeled: ['고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
+      - key: online-extra-3000
+        title: '[온라인 패키지] 네이버페이 온라인 7만원 이상 3,000P 추가'
+        source: manual
+        evidence: ['네이버페이 온라인 간편결제를 통해 건별 70,000원 이상 결제 시 3,000 네이버페이 포인트 추가 적립', '월 1회, 연 12회 제공됩니다.', 본 혜택은 네이버페이 온라인 간편결제 시 10% 네이버페이 포인트 적립 혜택과 중복 적용됩니다.]
+        target:
+          exclude_categories: [education.tuition, insurance.social, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+          all: true
+        when:
+          - option:
+              package: [online]
+          - payment: [naver_pay]
+          - {channel: online}
+          - amount: {min: 70000}
+        reward: {type: points, program: npay_point, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 12}
+        tiers: {from: 300000}
+        stack: extra
+        unmodeled: ['고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
+      - key: base-0-5
+        title: 국내외 가맹점 0.5% 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 국내외 온오프라인 가맹점 기본 0.5% 네이버페이 포인트 적립', 해외겸용카드로 해외 이용 시에도 적립 혜택이 적용됩니다.(해외 가맹점 및 해외 직접구매 이용건), 본 혜택은 다른 적립 혜택과 중복 적용되지 않습니다.]
+        target:
+          exclude_categories: [education.tuition, insurance.social, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+          all: true
+        reward: {type: points, program: npay_point, rate: 0.5}
+        exclude_applied: 0
+        unmodeled: ['고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
+    unmodeled: ['적립은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다', 네이버페이 포인트는 매월 1일~말일 매출전표 접수 금액에 대해 다음 달 20일에 적립된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 상품 출시일은 2017-11-17이고 상품설명서는 2023.6판이다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits', question: 포인트의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통 범위가 적혀 있지 않아 taptap O처럼 시내버스와 지하철로 두었다. 삼성카드는 사회보험료를 공과금으로 분류해 insurance.social을 뺐다, assumed: 'transit.bus_city, transit.subway, insurance.social'}
+notes: 2026-10-10 상품설명서(2023.6판, 심의필 2017-C1a-12219호) 대조. 카드 신청은 네이버페이에서만 받는다. 연회비 해외겸용 Mastercard와 국내전용 모두 15,000원(기본 7,000+제휴 8,000), 가족카드 없음. 적립은 중복되지 않고 적립률이 높은 혜택이 먼저다. 10% 한도를 넘긴 다음 결제부터 커피·편의점·배달앱은 5%, 나머지는 0.5%다. 3,000P 추가 적립만 10%와 겹쳐 받는다. 실적 제외는 10%·5%·3,000P 적립이 적용된 이용금액, 국세·지방세·공과금, 아파트 관리비, 대학 등록금, 대중교통, 택시, 상품권, 선불카드 충전이다. 0.5% 적립 건은 실적에 들어간다. 발급월+1개월까지 패키지 혜택은 실적과 관계없이 준다. 패키지는 매월 바꿀 수 있고 신청 다음 달 1일에 반영된다. 네이버페이 포인트 1포인트는 1원.

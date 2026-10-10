@@ -1,0 +1,83 @@
+schema_version: 2
+id: hana-151
+issuer: hana
+name: 해피포인트 하나 체크카드
+short_name: 하나 해피포인트 체크
+kind: check
+product_codes:
+  - '151'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=2014', fetched_at: 2026-10-10}
+  - {id: leaflet, kind: manual_pdf, url: 'https://m.hanacard.co.kr/leaflet/03/03857_20210929.pdf', fetched_at: 2026-10-10, review_no: L-21-1986}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: 2021-09-29
+    effective_from_estimated: true
+    source: leaflet
+    tiers: [0, 250000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: []
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 250000, from: issue}
+    benefit_exclusions:
+      categories: [education.tuition, gift_card, insurance, tax, utility]
+      unmodeled: [기타 제 수수료는 캐쉬백에서 제외된다]
+    limits:
+      - {key: cashback, per: month, amount: 10000}
+    benefits:
+      - key: life-200
+        title: 마트·주유·병원·인터넷쇼핑 2만원당 200원 캐쉬백
+        source: leaflet
+        evidence: ['생활밀착 업종 사용 금액 2만원당 200원 캐쉬백 해당 업종 : 마트 / 주유 / 병원 / 인터넷쇼핑', 전월 사용실적 25만원 이상 시 서비스 제공, 월 최대 캐쉬백 한도 1만원, 국세/지방세 납부분 해외사용분 대학등록금 등 캐쉬백 제외]
+        target:
+          categories: [fuel, grocery_mart, hospital, online_shopping]
+        when:
+          - {region: domestic}
+        reward:
+          type: cashback
+          per_unit: {unit: 20000, amount: 200}
+        limits:
+          - {shared: cashback}
+        tiers: {from: 250000}
+        unmodeled: [주유 중 충전소 결제는 생활 캐쉬백이 아니라 일반 캐쉬백 2만원당 100원이다]
+      - key: movie-3000
+        title: 롯데시네마·메가박스 1만원 이상 3천원 캐쉬백
+        source: leaflet
+        evidence: ['롯데시네마, 메가박스 10,000원 이상 결제 시 3,000원 캐쉬백', 월 최대 캐쉬백 한도 1만원]
+        target:
+          merchants: [lotte_cinema, megabox]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {shared: cashback}
+        tiers: {from: 250000}
+      - key: general-100
+        title: 그 밖의 국내 이용 2만원당 100원 캐쉬백
+        source: leaflet
+        evidence: ['그 외 업종 2만원당 100원 캐쉬백 기타 업종 : 생활밀착 업종 및 영화 캐쉬백 대상 가맹점 사용분 제외', 월 최대 캐쉬백 한도 1만원]
+        target:
+          exclude_categories: [fuel, grocery_mart, hospital, online_shopping]
+          all: true
+          exclude_merchants: [lotte_cinema, megabox]
+        when:
+          - {region: domestic}
+        reward:
+          type: cashback
+          per_unit: {unit: 20000, amount: 100}
+        limits:
+          - {shared: cashback}
+        tiers: {from: 250000}
+    unmodeled: [아이사랑카드로 전환 등록하면 어린이집 정부지원금은 실적과 모든 혜택에서 빠진다, 매출 취소 시 이미 캐쉬백된 금액은 다음 매출의 캐쉬백에서 뺀다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다., assumed: '2021-09-29'}
+  - {path: 'revisions[0].spend', question: '원문에 이 카드의 실적 제외 항목과 취소 반영 달이 없다. 하나카드 기본값인 전월 1일~말일, 취소 달 반영, 제외 업종 없음으로 둔다.', assumed: 제외 업종 없음}
+  - {path: 'revisions[0].benefits[movie-3000].target', question: 상품 페이지는 프리머스도 영화 캐쉬백 대상으로 적었지만 상품설명서에는 없다. 가맹점 목록에 프리머스가 없어 넣지 않았다., assumed: 롯데시네마와 메가박스만}
+notes: 2026-10-10 공식 상품 페이지(상세 번호 CD_PD_SEQ=2014, 목록 상품 번호 151)와 상품설명서(준법심의 L-21-1986)에서 옮겼다. 같은 페이지의 해피포인트 더블 체크카드(해피포인트 가맹점 20% 캐쉬백, 5천원 이상, 월 5천원, 월 4회, 실적 20만원)는 다른 상품이라 이 카드에 넣지 않았다. 해피포인트 가맹점 5% 적립은 해피포인트 멤버십 기능이라 결제 카드 혜택으로 계산하지 않는다. 하나은행 자동화기기와 전자금융 수수료 월 10회 면제도 결제가 아니라 넣지 않았다. 2만원당 캐쉬백은 결제 건마다 2만원 미만을 버린다. 상품설명서 예시가 같은 날 65,000원과 18,000원을 각각 600원과 0원으로 계산한다. 캐쉬백은 소수점이 생기지 않는다.

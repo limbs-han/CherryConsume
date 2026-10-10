@@ -1,0 +1,125 @@
+card: kb-04368
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 자동납부 양수
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-m-mobile-automatic-discount: 7000}, counted: 0}
+  calc: 30만 구간 월 할인금액 7,000원. 할인받은 결제는 전액 실적 제외
+- name: 70만 구간 자동납부 양수
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-m-mobile-automatic-discount: 11000}, counted: 0}
+  calc: 70만 구간 월 할인금액 11,000원
+- name: 70만 경계 직전 699999
+  prev_month_spend: 699999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-m-mobile-automatic-discount: 7000}}
+  calc: 699,999원은 30만 구간 7,000원
+- name: 30만 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 33000}
+  calc: 실적 유예기간이 아니면 30만원 미만은 할인 없음. 할인받지 않아 실적 33,000원
+- name: 승인금액이 할인금액보다 작으면 승인금액까지
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-m-mobile-automatic-discount: 9000}, counted: 0}
+  calc: 원문 예시. 70만 구간 자동이체 9,000원이면 9,000원 할인
+- name: 여러 건 합산 월 한도 직전과 직후
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 6999, merchant: kt_m_mobile, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 5000, merchant: kt_m_mobile, billing: autopay}
+  - {at: 2026-11-07T10:00, amount: 5000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-m-mobile-automatic-discount: 6999}}
+  - {payment: 1, benefits: {kt-m-mobile-automatic-discount: 1}}
+  - {payment: 2, benefits: {}}
+  calc: 월 7,000원 중 6,999원 사용 뒤 남은 1원, 셋째는 한도 소진 0원
+- name: 자동납부가 아닌 즉시납부 제외
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: normal}
+  expect:
+  - {payment: 0, benefits: {}, counted: 33000}
+  calc: kt M mobile 자동이체 건만 할인
+- name: 타 통신사 자동이체 제외
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 33000}
+  calc: 타 통신사 자동이체는 할인 제외
+- name: 신규 유예 등록 다음 달 30만 미만 3500원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-m-mobile-automatic-discount: 3500}, counted: 0}
+  calc: 사용등록 다음 달 말일까지 실적 30만원 미만이면 월 3,500원
+- name: 신규 유예 중 등록월 실적 30만 이상이면 해당 구간
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-m-mobile-automatic-discount: 7000}}
+  calc: 등록월 실적 30만원 이상이면 다음 달 30만 구간 7,000원
+- name: 신규 유예 끝난 달
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 9월 등록이면 10월 말일로 유예 끝. 11월 30만원 미만은 할인 없음
+- name: 생애 최초 발급 아니면 유예 없음
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: false}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 재발급이나 가족카드 단독 발급은 유예 미적용
+- name: 아파트관리비 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: apartment_fee}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 아파트관리비는 실적 제외
+- name: 무이자할부는 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 120000, category: online_shopping, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 120000}
+  calc: 실적 제외 목록에 무이자할부가 없어 120,000원 실적 인정
+- name: 일반 승인 철도 승차권은 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 무승인전표만 실적 제외. 일반 승인 철도 승차권 10,000원은 실적 인정

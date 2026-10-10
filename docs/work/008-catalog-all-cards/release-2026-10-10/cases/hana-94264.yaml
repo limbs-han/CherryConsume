@@ -1,0 +1,181 @@
+card: hana-94264
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 시작 편의점 5% 반올림
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10010, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 501}
+    counted: 10010
+  calc: 10,010원 x 5% = 500.5에서 소수점 이하 반올림 501하나머니
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: emart24}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만원보다 1원 적어 0원
+- name: 1만원 미만과 온라인 제외
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9999, merchant: gs25}
+  - {at: 2026-11-04T11:00, amount: 10000, merchant: starbucks, channel: online}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: tous_les_jours}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits: {cafe-bakery-5: 1000}
+  calc: 9,999원은 1만원 미만 0원. 온라인은 오프라인만 대상이라 0원. 뚜레쥬르 20,000원 x 5% = 1,000
+- name: 영역별 월 5회 직전과 직후
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 10000, merchant: seven_eleven}
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: seven_eleven}
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: gs25}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: gs25}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 500}
+  - payment: 1
+    benefits: {convenience-5: 500}
+  - payment: 2
+    benefits: {convenience-5: 500}
+  - payment: 3
+    benefits: {convenience-5: 500}
+  - payment: 4
+    benefits: {convenience-5: 500}
+  - payment: 5
+    benefits: {}
+  calc: 편의점 영역은 월 5회 2,500까지 받고 6번째는 0원
+- name: 20만 구간 월 5천 한도 직전과 직후, 50만 구간 한도는 따로
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 99980, merchant: starbucks}
+  - {at: 2026-11-04T11:00, amount: 10000, merchant: cu}
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: paris_baguette}
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {cafe-bakery-5: 4999}
+  - payment: 1
+    benefits: {convenience-5: 1}
+  - payment: 2
+    benefits: {}
+  - payment: 3
+    benefits: {subscription-5: 850}
+  calc: 99,980원 x 5% = 4,999. 남은 1만 받고 다음 0원. 넷플릭스는 다른 5천 한도라 17,000원 x 5% = 850
+- name: 구독은 50만 구간부터
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원보다 1원 적어 구독 0원
+- name: 구독 7천원 경계와 간편결제, 인앱 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 6999, merchant: youtube_premium, payment_method: physical_card}
+  - {at: 2026-11-06T09:00, amount: 7000, merchant: coupang_wow, payment_method: physical_card}
+  - {at: 2026-11-07T09:00, amount: 14900, merchant: youtube_premium, payment_method: naver_pay}
+  - {at: 2026-11-08T09:00, amount: 14900, merchant: youtube_premium, billing: in_app, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {subscription-5: 350}
+  - payment: 2
+    benefits: {}
+  - payment: 3
+    benefits: {}
+  calc: 6,999원은 7천원 미만 0원. 7,000원 x 5% = 350. 네이버페이 결제와 인앱 결제는 제외 0원
+- name: 생활비 자동납부 5만원 경계와 50만 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 49999, merchant: skt}
+  - {at: 2026-11-06T09:00, amount: 50000, merchant: kt, billing: normal}
+  - {at: 2026-11-07T09:00, amount: 50000, merchant: lg_uplus}
+  - {at: 2026-11-08T09:00, amount: 60000, category: utility.electricity, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits: {living-5: 2500}
+  - payment: 3
+    benefits: {living-5: 2500}
+  calc: 49,999원은 5만원 미만 0원. 자동이체 아닌 KT는 0원. LG유플러스 50,000원 2,500. 전기 60,000원 3,000 중 남은 2,500만
+- name: 대중교통 월 5만원 문턱과 반올림
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 30000, category: transit.bus_city}
+  - {at: 2026-11-10T08:00, amount: 20009, category: transit.subway}
+  - {at: 2026-11-12T08:00, amount: 1, category: transit.subway}
+  - {at: 2026-11-15T08:00, amount: 60000, category: transit.rail}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 30000
+  - payment: 1
+    benefits: {transit-5: 2500}
+  - payment: 2
+    benefits: {transit-5: 1}
+  - payment: 3
+    benefits: {}
+  calc: 합계 50,009원 x 5% = 2,500.45에서 반올림 2,500. 50,010원이면 2,500.5에서 2,501이라 1 더함. 철도는 제외 0원
+- name: 해외 가맹점 수수료 1.1% 면제
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: cafe, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-fee-free: 1100}
+  calc: 실적과 관계없이 100,000원 x 1.1% = 1,100원
+- name: 실적 제외 국세와 수도요금
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: tax}
+  - {at: 2026-11-04T11:00, amount: 60000, category: utility.water, billing: autopay}
+  - {at: 2026-11-04T12:00, amount: 60000, category: utility.gas, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 0
+  - payment: 2
+    benefits: {living-5: 3000}
+    counted: 0
+  calc: 국세와 수도요금은 적립과 실적에서 빠짐. 가스요금 60,000원은 실적에서 빠지지만 생활비 5% 3,000
+- name: 신규 특례 기간 안은 20만 구간
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu}
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 500}
+  - payment: 1
+    benefits: {}
+  calc: 10월 등록이면 11월 말까지 20만 이상 50만 미만 기준이라 편의점 500, 구독 0원
+- name: 신규 특례 기간 뒤
+  prev_month_spend: 0
+  holder: {started_on: '2026-09-15'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 9월 등록 특례는 10월 말에 끝나 전월 0원이면 0원
