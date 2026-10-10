@@ -11,6 +11,8 @@ from cherry_core.catalog.canonical import canonical_text
 BASE = Path(__file__).resolve().parent
 ROOT = BASE.parents[1]
 OUT = BASE / "combined"
+# 2026-10-10 이어받은 뒤의 추가 조사 묶음. expand1, expand2처럼 이름 붙인 폴더를 차례로 합친다
+EXPANDS = sorted(p.name for p in BASE.glob("expand[0-9]*") if p.is_dir())
 CAT = OUT / "catalog"
 
 
@@ -55,7 +57,7 @@ def main():
     candidates = [{**c, "group": "previous-ready"} for c in candidates]
     common_requests, group_results = [], []
     # expand1은 2026-10-10 이어받은 뒤의 추가 조사 묶음이다
-    for group in ("hana8", "recommended-mixed", "recommended-others", "expand1"):
+    for group in ("hana8", "recommended-mixed", "recommended-others", *EXPANDS):
         folder = BASE / group
         if not (folder / "result.json").exists():
             continue

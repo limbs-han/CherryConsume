@@ -16,6 +16,7 @@ BASE = Path(__file__).resolve().parent
 ROOT = BASE.parents[1]
 CAT = BASE / "combined/catalog"
 OUT = ROOT / "docs/work/008-catalog-all-cards/release-2026-10-10"
+EXPANDS = sorted(p.name for p in BASE.glob("expand[0-9]*") if p.is_dir())
 
 
 def read(path):
@@ -54,7 +55,7 @@ def main():
     packets = {}
     for folder in [
         ROOT / "tmp/card-ready-review" / g for g in ("mixed", "nh", "others")
-    ] + [BASE / g for g in ("recommended-mixed", "recommended-others", "expand1")]:
+    ] + [BASE / g for g in ("recommended-mixed", "recommended-others", *EXPANDS)]:
         packets.update({r["draft"]["card_id"]: r for r in read(folder / "packet.json")})
     cards = []
     for candidate in candidates:
@@ -96,7 +97,7 @@ def main():
     shutil.copytree(
         previous / "verification", OUT / "verification/previous", dirs_exist_ok=True
     )
-    for group in ("hana8", "recommended-mixed", "recommended-others", "expand1"):
+    for group in ("hana8", "recommended-mixed", "recommended-others", *EXPANDS):
         dest = OUT / "research" / group
         dest.mkdir(parents=True, exist_ok=True)
         for filename in (
