@@ -1,0 +1,108 @@
+schema_version: 2
+id: hana-282
+issuer: hana
+name: 하나멤버스 1Q 체크카드
+short_name: 하나 1Q 체크
+kind: check
+product_codes:
+  - '282'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4094', fetched_at: 2026-10-10}
+  - {id: leaflet, kind: manual_pdf, url: 'https://m.hanacard.co.kr/leaflet/10/10041_20260306.pdf', fetched_at: 2026-10-10, review_no: L-26-0409}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: 2026-03-06
+    effective_from_estimated: true
+    source: leaflet
+    tiers: [0, 200000]
+    spend:
+      exclude_categories: [gift_card, prepaid_charge, tax, transit, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    options:
+      - key: overseas_pay
+        title: 트래블로그 스위치 해외결제 설정
+        choices:
+          - {key: check, title: 체크 결제}
+          - {key: hana_money, title: 외화 하나머니 결제}
+        default: null
+        change: immediate
+    limits:
+      - {key: money, per: month, amount: 5000}
+    benefits:
+      - key: convenience-5
+        title: CU·GS25·세븐일레븐 1만원 이상 5% 적립
+        source: leaflet
+        evidence: ['편의점 | CU, GS25, 세븐일레븐 | 1만원 이상 사용 시 건당 5% 하나머니 적립', 월 최대 5천 하나머니, 각 업종별 하나머니 적립횟수 월 최대 5회, 지난 달 1일부터 말일까지 사용금액 20만원 이상 시 서비스 제공]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5}
+        limits:
+          - {per: month, count: 5}
+          - {shared: money}
+        tiers: {from: 200000}
+      - key: bakery-5
+        title: 파리바게뜨·뚜레쥬르 1만원 이상 5% 적립
+        source: leaflet
+        evidence: ['베이커리 | 파리바게뜨, 뚜레쥬르 | 1만원 이상 사용 시 건당 5% 하나머니 적립', 월 최대 5천 하나머니, 각 업종별 하나머니 적립횟수 월 최대 5회]
+        target:
+          merchants: [paris_baguette, tous_les_jours]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5}
+        limits:
+          - {per: month, count: 5}
+          - {shared: money}
+        tiers: {from: 200000}
+      - key: coffee-5
+        title: 스타벅스·커피빈 1만원 이상 5% 적립
+        source: leaflet
+        evidence: ['커피 | 스타벅스, 커피빈 | 1만원 이상 사용 시 건당 5% 하나머니 적립', 월 최대 5천 하나머니, 각 업종별 하나머니 적립횟수 월 최대 5회]
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5}
+        limits:
+          - {per: month, count: 5}
+          - {shared: money}
+        tiers: {from: 200000}
+      - key: transit-5
+        title: 대중교통 월 5만원 이상 5% 적립
+        source: leaflet
+        evidence: ['대중교통 | 버스, 지하철 | 월 사용금액 5만원 이상 시 5% 하나머니 적립', '대중교통 적립 대상 : 시내버스, 마을버스, 광역버스, 공항버스, 지하철, 철도(KTX/SRT 포함), 공항철도', '대중교통 적립 제외 대상 : 시외버스, 고속버스', 월 최대 5천 하나머니]
+        target:
+          categories: [transit.bus_city, transit.rail, transit.subway]
+        when:
+          - month_total: {min: 50000}
+        reward: {type: points, basis: month_total, program: hana_money, rate: 5}
+        limits:
+          - {shared: money}
+        tiers: {from: 200000}
+        unmodeled: [공항버스는 적립 대상이지만 업종으로 가리지 못해 시내버스로 넣어야 계산된다, '철도는 코레일과 SRT 현장, 공식 홈페이지, 앱 결제만 대상이고 여행사와 편의점 승차권 판매대리점 결제는 제외된다']
+      - key: overseas-fee-free
+        title: 외화 하나머니 결제 시 해외 국제브랜드수수료 1% 면제
+        source: leaflet
+        evidence: [해외 이용 수수료 면제 서비스(외화 하나머니 결제 시), 해외 가맹점 이용 시 | 해외서비스 수수료 면제 | 국제브랜드 수수료 면제, '체크 결제로 설정 후 해외 가맹점 이용 시 해외서비스 수수료 $0.5, 국제브랜드수수료(Visa 1.0%, Mastercard 1.0%)가 부과됩니다.', 해외 이용금액은 하나카드 전산상 해외 가맹점 매출로 분류된 경우에 한합니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - option:
+              overseas_pay: [hana_money]
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [건당 US$0.5 해외서비스수수료 면제는 달러 정액이라 계산하지 않는다, 트래블로그 스위치는 국내외겸용 Visa 카드를 발급하고 외화 하나머니에 가입한 내국인 회원만 쓸 수 있다]
+    unmodeled: ['본인카드, 모바일카드, 가족카드의 사용금액, 적립한도, 적립횟수를 합산한다', 아이행복 정부지원금은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 "공과금, 도시가스 이용금액"이다. 전기와 수도가 공과금에 드는지 원문만으로 단정할 수 없어 utility 전체를 뺐다.', assumed: utility 전체}
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품설명서 준법심의일을 잠정 시작일로 둔다., assumed: '2026-03-06'}
+  - {path: 'revisions[0].benefits[transit-5].limits', question: '"각 업종별 적립횟수 월 최대 5회"가 대중교통에도 걸리는지 불명확하다. 대중교통은 월 이용액 합계로 다음 달 한 번 적립하므로 횟수 한도를 두지 않았다.', assumed: 횟수 한도 없음}
+  - {path: 'revisions[0].options[overseas_pay].default', question: 트래블로그 스위치에 동의하면 외화 하나머니 결제로 자동 설정되지만 동의 여부는 사용자마다 달라 기본값을 두지 않았다., assumed: 등록할 때 묻는다}
+  - {path: 'revisions[0].spend', question: 외화 하나머니로 결제한 해외 이용액이 전월 실적에 들어가는지 원문에 없다., assumed: 실적에 넣음}
+notes: 2026-10-10 공식 상품 페이지(상세 번호 CD_PD_SEQ=4094, 목록 상품 번호 282)와 상품설명서(준법심의 L-26-0409)에서 옮겼다. 연회비 없음. 하나머니 1하나머니 = 1원. 적립 비율의 반올림 문구가 없어 원 미만은 버린다. 하나머니 적립은 체크 결제에만 주므로 해외에서 외화 하나머니로 결제하면 적립 대신 수수료 면제를 받는다. 해외 ATM 인출 수수료 면제는 결제가 아니라 계산하지 않는다. 실적 제외의 대중교통 전체 사용금액은 transit 전체로, 공과금과 도시가스는 utility로 넣었다. 초안의 편의점·베이커리·커피 한 혜택은 업종별 5회 횟수 한도 때문에 셋으로 나눴다.
