@@ -1,0 +1,224 @@
+schema_version: 2
+id: samsung-abp1689
+issuer: samsung
+name: 국민행복 삼성체크카드 V2
+kind: check
+product_codes: [ABP1689]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [국가바우처 이용건 제외. 어린이집·유치원 보육료·유아학비 본인부담금은 캐시백 적용]
+    facts:
+      - {key: first-issuance-eligible, type: bool, scope: card, ask: '이 카드가 탈회 후 재발급이 아닌 최초 발급 카드인가요? 등록한 시작일은 이번 카드 발급일이어야 합니다.'}
+    limits:
+      - key: shopping
+        per: month
+        amount: {0: 2000, 300000: 2000, 600000: 4000, 1000000: 6000}
+      - key: medical-education
+        per: month
+        amount: {0: 2000, 300000: 2000, 600000: 4000, 1000000: 6000}
+    benefits:
+      - key: shopping-department
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [ak_plaza, daegu_department, dong_a_department, galleria, hyundai_department, lotte_department, nc_daejeon_yuseong, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [백화점 비쇼핑 결제·임대매장 제외]
+      - key: shopping-outlet
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [hyundai_premium_outlet, shinsegae_premium_outlet]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [아울렛 비쇼핑 결제·임대매장 제외]
+      - key: shopping-mart
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [emart, homeplus, lotte_mart, traders]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [마트 비쇼핑 결제·임대매장 제외]
+      - key: shopping-online
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, interpark, lotte_on, samsung_card_shopping, ssg_com, tmon, wemakeprice]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 온라인쇼핑몰 결제만]
+      - key: shopping-daiso
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [daiso]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [비쇼핑 결제·임대매장 제외]
+      - key: shopping-fresh
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [kurly, oasis_market]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 사이트·앱 결제만]
+      - key: medical
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          categories: [hospital, maternity_center, pharmacy]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: medical-education}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [요양병원·보건소·동물병원 제외]
+      - key: academy
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          categories: [education.academy]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: medical-education}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [입시·보습·외국어·예체능계 학원만]
+      - key: study
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [daekyo, hansol_education, kyowon, woongjin_thinkbig]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: medical-education}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [지정 학습지 가맹점만]
+      - key: online-book
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          merchants: [aladin, interpark_book, kyobo_book, yes24]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: medical-education}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 온라인서점 결제만]
+      - key: childcare
+        title: 쇼핑·의료교육2% 캐시백
+        source: manual
+        evidence: [쇼핑·의료교육2% 캐시백]
+        target:
+          categories: [childcare, education.kindergarten]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: medical-education}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [국공립·사립 어린이집·유치원은 정부 지원금을 뺀 본인부담금만]
+    unmodeled: [국가바우처 사용 기능. 임신·출산·육아 등 주관기관 지원대상과 정책에 따른다. 현금혜택 합계에 넣지 않는다, 신세계백화점 제휴 할인쿠폰과 신세계포인트 적립은 해당 홈페이지 조건에 따른다. 상품 본문에 금액이 없어 합계에 넣지 않는다, 해외·무승인 거래는 접수 시점으로 혜택·실적 반영. 취소는 취소전표 접수월 이용금액에서 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+notes: 2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2020-10-30이며 현행 조건 전체의 시행일 근거로 사용하지 않았다.
