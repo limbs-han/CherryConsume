@@ -1,0 +1,31 @@
+card: nh-f20001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 월요일 0.2% 2만원 기준
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T12:00, amount: 19999, category: other}
+  - {at: 2026-11-02T13:00, amount: 50000, category: other}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {weekday-0-2: 100}}
+  calc: 19,999원은 2만원 미만 0. 50,000 x 0.2% = 100
+- name: 50만 직전 일요일 0.2%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-01T12:00, amount: 100000, category: other}
+  expect:
+  - {payment: 0, benefits: {sunday-0-2: 200}}
+  calc: 100,000 x 0.2% = 200
+- name: 50만 일요일 국내 0.3% 국외 0.2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-01T12:00, amount: 100000, category: other}
+  - {at: 2026-11-01T13:00, amount: 100000, category: other, region: overseas}
+  - {at: 2026-11-07T13:00, amount: 100000, category: other}
+  expect:
+  - {payment: 0, benefits: {sunday-domestic-0-3: 300}}
+  - {payment: 1, benefits: {sunday-overseas-0-2: 200}}
+  - {payment: 2, benefits: {weekday-0-2: 200}}
+  calc: 일요일 국내 300, 국외 200, 토요일은 평일 0.2% 200

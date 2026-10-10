@@ -1,0 +1,71 @@
+schema_version: 2
+id: hana-12792
+issuer: hana
+name: 국민 행복 카드
+short_name: 하나 국민행복
+search_names: [국민행복 카드, 국민행복카드]
+kind: credit
+product_codes:
+  - '12792'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41012792P&CD_PD_SEQ=12792', fetched_at: 2026-10-10, review_no: L-26-0397}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-02-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+    limits:
+      - {key: life, per: month, amount: 10000, count: 5}
+    benefits:
+      - key: childcare-10k
+        title: 어린이집·유치원 본인부담금 월 1만원 청구할인
+        source: page
+        evidence: ['어린이집, 유치원 결제금액 중 본인부담금 1만원 할인(월 1회)', 본인부담금이 1만원 미만일 경우 청구금액만 할인, 지난달 1일부터 말일까지의(승인시점 기준) 국내외 일시불/할부 이용금액 50만원 이상 시 서비스 제공]
+        target:
+          categories: [childcare, education.kindergarten]
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [정부 바우처로 낸 금액은 할인 대상이 아니고 본인부담금만 할인한다. 결제 기록이 본인부담금이라고 보고 계산한다]
+      - key: cafe-10
+        title: 스타벅스·커피빈 10% 청구할인
+        source: page
+        evidence: [스타벅스, 커피빈 | 10% | 통합 월 5회, 통합 월 1만원 한도, BC카드에 등록된 가맹점 업종을 기준으로 서비스 제공]
+        target:
+          merchants: [coffee_bean, starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+      - key: hospital-pharmacy-5
+        title: 병원·약국 5% 청구할인
+        source: page
+        evidence: [병원업종 | 5% | 약국업종 | 5%, '커피전문점 10% / 병원,약국업종 5%할인(통합 월5회 /1만원까지 할인)']
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+    unmodeled: [국가바우처와 임신·출산 진료비 바우처 결제는 업종으로 가릴 수 없어 실적과 혜택에서 따로 빼지 않는다, 모든 할인은 BC카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. 카드 출시는 2020-10-22이다., assumed: '2026-02-12'}
+  - path: revisions[0].benefits[cafe-10].tiers
+    question: 상품 페이지의 커피·병원·약국 할인 서비스 제공 조건은 지난달 30만원 이상이고, 보육료 할인은 50만원 이상이다. 같은 페이지 안에서 숫자가 달라 상품설명서 대조가 필요하다. 덜 주는 쪽인 50만원으로 둔다.
+    assumed: '500000'
+notes: '2026-10-10 공식 상품 페이지(준법심의 L-26-0397)에서 옮겼다. 연회비 면제. BC 계열 상품이라 가맹점 업종은 BC 기준이다. 실적 제외: 국세, 지방세, 공과금, 4대보험, 상품권·기프트카드, 선불 충전, 도시가스·수도·전기, 아파트관리비, 대학등록금, 초중고 납입금, 무이자할부, 어린이집·유치원 이용금액과 바우처 이용금액, 할인 받은 매출 전체. 신규 발급 특례는 원문에 없다.'

@@ -1,0 +1,43 @@
+card: woori-102865
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 스타벅스 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 1500}, counted: 0}
+  calc: 15,000 × 10% = 1,500. 생활 혜택 적용 금액은 실적 제외
+- name: 30만 직전은 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}, counted: 15000}
+  calc: 0 구간이라 혜택 없고 실적에 그대로
+- name: 건당 1만원 미만 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9999}
+  calc: 건당 1만원 미만이라 없음
+- name: 60만 구간 생활 통합 월 5천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: cu, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 40000, merchant: paul_bassett}
+  expect:
+  - {payment: 0, benefits: {convenience-10: 2000}}
+  - {payment: 1, benefits: {coffee-10: 3000}}
+  calc: 2,000 뒤 남은 한도 3,000. 40,000 × 10% = 4,000을 3,000으로 자른다
+- name: 버스·지하철 월 5만원 넘으면 10% 월 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 30000, category: transit.bus_city, billing: postpaid_transit}
+  - {at: 2026-11-10T08:00, amount: 25000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  - {payment: 1, benefits: {transit-10: 3000}, counted: 0}
+  calc: 합 55,000 × 10% = 5,500을 30만 구간 월 3,000으로 자른다. 버스·지하철은 실적 제외

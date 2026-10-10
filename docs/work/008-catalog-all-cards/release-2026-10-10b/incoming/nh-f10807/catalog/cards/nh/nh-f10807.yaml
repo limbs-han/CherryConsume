@@ -1,0 +1,644 @@
+schema_version: 2
+id: nh-f10807
+issuer: nh
+name: NH올원더풀카드
+short_name: 올원더풀
+kind: credit
+product_codes:
+  - '90010604'
+  - F10807
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 28000}
+  - {scope: global, brand: mastercard, amount: 30000}
+  - {scope: global, brand: unionpay, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010604', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-01-28'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: [결제대행업체나 간편결제 가맹점명으로 승인된 결제와 백화점·대형마트·역사 입점 임대매장은 대상 가맹점으로 식별되지 않아 빠진다, 다른 NH농협카드 행사 혜택과 겹치면 큰 금액만 준다, '과태료, 우체국 우편요금, 가상화폐 거래소, 각종 수수료와 이자, 포인트로 결제한 금액은 실적과 혜택에서 빠진다']
+    options:
+      - key: pack
+        title: 서비스팩
+        choices:
+          - {key: discount, title: 할인 PACK}
+          - {key: points, title: 적립 PACK}
+        default: null
+        change: next_month
+    ranked:
+      - {key: smart-first, top: 1}
+      - {key: smart-second, top: 2}
+    limits:
+      - key: living
+        per: month
+        amount: {400000: 8000, 800000: 15000}
+      - key: health
+        per: month
+        amount: {400000: 8000, 800000: 15000}
+      - key: transport
+        per: month
+        amount: {400000: 8000, 800000: 15000}
+      - key: leisure
+        per: month
+        amount: {400000: 8000, 800000: 15000}
+      - {key: smart, per: month, amount: 10000}
+    stacks:
+      - {key: main}
+      - key: smart
+        pick: priority
+        order: [smart-health-first, smart-hb-first, smart-dept-first, smart-mart-first, smart-homeshopping-first, smart-travel-first, smart-airline-first, smart-digital-first, smart-movie-first, smart-cafe-first, smart-health-second, smart-hb-second, smart-dept-second, smart-mart-second, smart-homeshopping-second, smart-travel-second, smart-airline-second, smart-digital-second, smart-movie-second, smart-cafe-second]
+    benefits:
+      - key: d-dept-5
+        title: 할인 PACK 백화점 5% 청구할인
+        source: page
+        evidence: ['백화점 | 롯데, 신세계, 현대, AK, 갤러리아 | 5%', (백화점/대형마트) 오프라인 직접 결제 건에 한해 적용, '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [ak_plaza, galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - option:
+              pack: [discount]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: d-mart-5
+        title: 할인 PACK 대형마트 5% 청구할인
+        source: page
+        evidence: ['대형마트 | 하나로마트, 이마트, 롯데마트 | 5%', '(대형마트) 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼 등)은 제외', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [emart, lotte_mart, nh_hanaro_mart]
+        when:
+          - option:
+              pack: [discount]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: d-homeshopping-5
+        title: 할인 PACK 홈쇼핑 5% 청구할인
+        source: page
+        evidence: ['홈쇼핑 | GS SHOP, CJ온스타일, 현대홈쇼핑, 롯데홈쇼핑, NS홈쇼핑 | 5%', (홈쇼핑) TV / 전화 이용 건 포함, '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [cj_onstyle, gs_shop, hyundai_homeshopping, lotte_homeshopping, ns_homeshopping]
+        when:
+          - option:
+              pack: [discount]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: d-fuel-5
+        title: 할인 PACK 주유소·충전소 5% 청구할인
+        source: page
+        evidence: ['주유소, 가스·전기차 충전소 | 5%', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          categories: [fuel]
+        when:
+          - option:
+              pack: [discount]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: living}
+        tiers: {from: 400000}
+        unmodeled: [전기차 충전은 환경부 공공급속충전기 충전요금 현장결제와 멤버십카드 간편결제만 대상이다]
+      - key: d-telecom-3
+        title: 할인 PACK 이동통신요금 자동납부 3% 청구할인
+        source: page
+        evidence: [이동통신요금 자동납부 | 3%, '(이동통신요금 자동납부) SKT, KT, LGU+ 자동납부 시 월 1회 할인 제공, 알뜰폰 통신사 및 TV/인터넷 요금은 제외']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - option:
+              pack: [discount]
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: living}
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+      - key: d-apartment-3
+        title: 할인 PACK 아파트관리비 자동납부 3% 청구할인
+        source: page
+        evidence: [아파트관리비 자동납부 | 3%, '(아파트관리비 자동납부) 월 1회 아파트관리비 업종 자동납부 건에 한하며, 아파트관리비 이용금액은 전월실적에서 제외']
+        target:
+          categories: [apartment_fee]
+        when:
+          - option:
+              pack: [discount]
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: living}
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+      - key: d-hospital-pharmacy-10
+        title: 할인 PACK 병원·약국 10% 청구할인
+        source: page
+        evidence: ['병원, 약국 | 10%', '(병원) 병원, 의원, 한의원 이용 시 적용되며 동물병원은 제외', 오프라인 직접 결제 건에 한해 적용, '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          categories: [hospital, pharmacy]
+        when:
+          - option:
+              pack: [discount]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: health}
+        tiers: {from: 400000}
+      - key: d-salon-10
+        title: 할인 PACK 미용실 10% 청구할인
+        source: page
+        evidence: ['미용실, 피부미용원 | 10%', 오프라인 직접 결제 건에 한해 적용, '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          categories: [beauty.salon]
+        when:
+          - option:
+              pack: [discount]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: health}
+        tiers: {from: 400000}
+      - key: d-sports-5
+        title: 할인 PACK 스포츠시설 5% 청구할인
+        source: page
+        evidence: ['종합스포츠센터, 헬스장, 골프연습장, 요가, 필라테스 | 5%', 오프라인 직접 결제 건에 한해 적용, '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          categories: [sports]
+        when:
+          - option:
+              pack: [discount]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: health}
+        tiers: {from: 400000}
+      - key: d-transit-15
+        title: 할인 PACK 후불 버스·지하철 15% 청구할인
+        source: page
+        evidence: ['버스, 지하철 | 15%', '(버스, 지하철) 버스, 지하철 후불교통 이용 시 적용', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - option:
+              pack: [discount]
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: transport}
+        tiers: {from: 400000}
+      - key: d-rail-taxi-5
+        title: 할인 PACK KTX·SRT·고속버스·택시 5% 청구할인
+        source: page
+        evidence: ['KTX, SRT, 고속버스, 택시 | 5%', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          categories: [taxi, transit.bus_express]
+          merchants: [korail, srt]
+        when:
+          - option:
+              pack: [discount]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: transport}
+        tiers: {from: 400000}
+      - key: d-digital-30
+        title: 할인 PACK 유튜브프리미엄·넷플릭스 정기결제 30% 청구할인
+        source: page
+        evidence: ['디지털구독 | 유튜브프리미엄, 넷플릭스 | 30%', '(디지털구독) 대상 가맹점 공식 홈페이지/앱에서 본 카드로 이용권 정기결제 시 제공되며, 이외 결제방법(일부 페이결제 등)을 통한 이용 및 1회성 결제, 인앱결제(구글플레이, 앱스토어 등)는 서비스 제외', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - option:
+              pack: [discount]
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+        unmodeled: [공식 홈페이지나 앱에서 이 카드로 직접 정기결제한 건만 대상이다. 일부 페이 결제는 빠진다]
+      - key: d-movie-10
+        title: 할인 PACK 영화관 10% 청구할인
+        source: page
+        evidence: ['영화관 | CGV, 롯데시네마, 메가박스 | 10%', '(영화관) 온/오프라인 이용 시 제공, 영화예매/결제에 한하며 상품권 구매 및 매점 이용은 제외', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - option:
+              pack: [discount]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+        unmodeled: [영화관 매점 이용은 빠진다]
+      - key: d-cafe-10
+        title: 할인 PACK 카페 10% 청구할인
+        source: page
+        evidence: ['카페 | 스타벅스, 투썸플레이스, 이디야, 커피빈 | 10%', '(카페,베이커리) 앱 주문 및 상품권 · 선불카드 구매/충전 제외 (단, 스타벅스 사이렌오더는 서비스 제공)', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [coffee_bean, ediya, twosome]
+        when:
+          - option:
+              pack: [discount]
+          - billing_not: [app_prepay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+      - key: d-starbucks-10
+        title: 할인 PACK 스타벅스 10% 청구할인
+        source: page
+        evidence: ['카페 | 스타벅스, 투썸플레이스, 이디야, 커피빈 | 10%', '(카페,베이커리) 앱 주문 및 상품권 · 선불카드 구매/충전 제외 (단, 스타벅스 사이렌오더는 서비스 제공)', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [starbucks]
+        when:
+          - option:
+              pack: [discount]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+      - key: d-bakery-5
+        title: 할인 PACK 베이커리 5% 청구할인
+        source: page
+        evidence: ['베이커리 | 파리바게트, 뚜레쥬르, 파리크라상 | 5%', '(카페,베이커리) 앱 주문 및 상품권 · 선불카드 구매/충전 제외 (단, 스타벅스 사이렌오더는 서비스 제공)', '영역별 월 할인한도 40만원 이상~80만원 미만 8천원, 80만원 이상 1만5천원']
+        target:
+          merchants: [paris_baguette, paris_croissant, tous_les_jours]
+        when:
+          - option:
+              pack: [discount]
+          - billing_not: [app_prepay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+      - key: p-base-1
+        title: 적립 PACK 국내외 1% NH포인트 기본 적립
+        source: page
+        evidence: [기본적립 국내·외 가맹점 1.0% NH포인트 적립, 국내·외 가맹점 | 1.0% | 40만원 이상 | 일 1만 NH포인트 월 5만 NH포인트]
+        target: {all: true}
+        when:
+          - option:
+              pack: [points]
+        reward: {type: points, program: nh_point, rate: 1}
+        limits:
+          - {per: day, amount: 10000}
+          - {per: month, amount: 50000}
+        tiers: {from: 400000}
+      - key: smart-health-first
+        title: 스마트적립 1위 건강 병원·약국 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '① 건강 | 병원, 약국, 안경점', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          categories: [hospital, pharmacy]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+        area: health
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-hb-first
+        title: 스마트적립 1위 H&B 스포츠시설·미용실 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '② H&B | 종합스포츠센터, 헬스장, 골프연습장, 요가, 필라테스, 미용실, 피부미용원', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          categories: [beauty.salon, sports]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+        area: hb
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-dept-first
+        title: 스마트적립 1위 쇼핑 백화점 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '③ 쇼핑 | 백화점 롯데, 신세계, 현대, AK, 갤러리아 / (백화점/대형마트) 오프라인 직접 결제 건에 한해 적용', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [ak_plaza, galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+          - {channel: offline}
+        area: shopping
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-mart-first
+        title: 스마트적립 1위 쇼핑 대형마트 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '③ 쇼핑 | 대형마트 하나로마트, 이마트, 롯데마트', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [emart, lotte_mart, nh_hanaro_mart]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+          - {channel: offline}
+        area: shopping
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-homeshopping-first
+        title: 스마트적립 1위 쇼핑 홈쇼핑 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '③ 쇼핑 | 홈쇼핑 GS SHOP, CJ온스타일, 현대홈쇼핑, 롯데홈쇼핑, NS홈쇼핑', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [cj_onstyle, gs_shop, hyundai_homeshopping, lotte_homeshopping, ns_homeshopping]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+        area: shopping
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-travel-first
+        title: 스마트적립 1위 여행 KTX·SRT·고속버스·여행사 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '④ 여행 | KTX, SRT, 고속버스, 항공사, 여행사', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          categories: [transit.bus_express, travel.agency]
+          merchants: [korail, srt]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+        area: travel
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-airline-first
+        title: 스마트적립 1위 여행 국내 항공사 홈페이지·앱 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', (항공사) 국내 항공사 홈페이지 또는 모바일 앱을 통한 항공권 구매 시에 한함, 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [asiana_airlines, jeju_air, jin_air, korean_air]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+          - {channel: online}
+        area: travel
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-digital-first
+        title: 스마트적립 1위 여가 디지털구독 정기결제 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '⑤ 여가 | 디지털구독 유튜브프리미엄, 넷플릭스', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+          - billing: [subscription]
+        area: leisure
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-movie-first
+        title: 스마트적립 1위 여가 영화관·스타벅스 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '⑤ 여가 | 영화관 CGV, 롯데시네마, 메가박스 / 카페 스타벅스', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [cgv, lotte_cinema, megabox, starbucks]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+        area: leisure
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-cafe-first
+        title: 스마트적립 1위 여가 카페·베이커리 3% 추가
+        source: page
+        evidence: ['1위 영역 : 기본적립 1.0% + 추가적립 3.0% = 총 4.0% 적립', '⑤ 여가 | 카페 투썸플레이스, 이디야, 커피빈 / 베이커리 파리바게트, 뚜레쥬르, 파리크라상', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [coffee_bean, ediya, paris_baguette, paris_croissant, tous_les_jours, twosome]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-first}
+          - billing_not: [app_prepay]
+        area: leisure
+        reward: {type: points, program: nh_point, rate: 3}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-health-second
+        title: 스마트적립 2위 건강 병원·약국 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '① 건강 | 병원, 약국, 안경점', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          categories: [hospital, pharmacy]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+        area: health
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-hb-second
+        title: 스마트적립 2위 H&B 스포츠시설·미용실 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '② H&B | 종합스포츠센터, 헬스장, 골프연습장, 요가, 필라테스, 미용실, 피부미용원', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          categories: [beauty.salon, sports]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+        area: hb
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-dept-second
+        title: 스마트적립 2위 쇼핑 백화점 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '③ 쇼핑 | 백화점 롯데, 신세계, 현대, AK, 갤러리아 / (백화점/대형마트) 오프라인 직접 결제 건에 한해 적용', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [ak_plaza, galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+          - {channel: offline}
+        area: shopping
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-mart-second
+        title: 스마트적립 2위 쇼핑 대형마트 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '③ 쇼핑 | 대형마트 하나로마트, 이마트, 롯데마트', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [emart, lotte_mart, nh_hanaro_mart]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+          - {channel: offline}
+        area: shopping
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-homeshopping-second
+        title: 스마트적립 2위 쇼핑 홈쇼핑 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '③ 쇼핑 | 홈쇼핑 GS SHOP, CJ온스타일, 현대홈쇼핑, 롯데홈쇼핑, NS홈쇼핑', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [cj_onstyle, gs_shop, hyundai_homeshopping, lotte_homeshopping, ns_homeshopping]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+        area: shopping
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-travel-second
+        title: 스마트적립 2위 여행 KTX·SRT·고속버스·여행사 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '④ 여행 | KTX, SRT, 고속버스, 항공사, 여행사', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          categories: [transit.bus_express, travel.agency]
+          merchants: [korail, srt]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+        area: travel
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-airline-second
+        title: 스마트적립 2위 여행 국내 항공사 홈페이지·앱 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', (항공사) 국내 항공사 홈페이지 또는 모바일 앱을 통한 항공권 구매 시에 한함, 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [asiana_airlines, jeju_air, jin_air, korean_air]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+          - {channel: online}
+        area: travel
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-digital-second
+        title: 스마트적립 2위 여가 디지털구독 정기결제 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '⑤ 여가 | 디지털구독 유튜브프리미엄, 넷플릭스', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+          - billing: [subscription]
+        area: leisure
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-movie-second
+        title: 스마트적립 2위 여가 영화관·스타벅스 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '⑤ 여가 | 영화관 CGV, 롯데시네마, 메가박스 / 카페 스타벅스', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [cgv, lotte_cinema, megabox, starbucks]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+        area: leisure
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+      - key: smart-cafe-second
+        title: 스마트적립 2위 여가 카페·베이커리 2% 추가
+        source: page
+        evidence: ['2위 영역 : 기본적립 1.0% + 추가적립 2.0% = 총 3.0% 적립', '⑤ 여가 | 카페 투썸플레이스, 이디야, 커피빈 / 베이커리 파리바게트, 뚜레쥬르, 파리크라상', 스마트적립 | 40만원 이상 | 월 적립한도 1만 NH포인트]
+        target:
+          merchants: [coffee_bean, ediya, paris_baguette, paris_croissant, tous_les_jours, twosome]
+        when:
+          - option:
+              pack: [points]
+          - {ranked: smart-second}
+          - billing_not: [app_prepay]
+        area: leisure
+        reward: {type: points, program: nh_point, rate: 2}
+        limits:
+          - {shared: smart}
+        tiers: {from: 400000}
+        stack: smart
+    unmodeled: ['안경점 5% 할인과 스마트적립 건강 영역의 안경점, 피부미용원은 공통 업종이 없어 계산하지 않는다', 카카오T대리 자동결제 5% 할인은 택시와 구별할 수 없어 계산하지 않는다, '해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다. 월말 이용이 다음 달 실적이 될 수 있다', 스마트적립 추가적립은 이용월 다음 달 15일 이후 한 번에 적립된다. 영역 순위는 달이 끝나야 정해져 달 중간 값은 잠정값이다, 서비스팩 변경은 신청 다음 달 1일부터 적용된다, 국제브랜드 프리미엄 선택 서비스는 결제 혜택이 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 카드 신규출시일 2026-01-28로 두었다, assumed: '2026-01-28'}
+  - {path: 'revisions[0].benefits[d-rail-taxi-5].target', question: KTX 대상에 코레일 가맹점 전체를 넣었다. KTX가 아닌 일반열차 결제가 빠지는지 문구가 없다, assumed: 코레일 전체}
+  - {path: 'revisions[0].benefits[smart-airline-first].target', question: 국내 항공사 중 공통 가맹점에 있는 4곳만 넣었다. 다른 국내 항공사는 계산하지 않는다, assumed: '대한항공, 아시아나, 진에어, 제주항공'}
+  - {path: 'revisions[0].limits', question: 스마트적립 월 1만 포인트를 1위와 2위가 함께 쓰는지 문구가 없다, assumed: 함께 쓴다}
+  - {path: 'revisions[0].benefits[d-fuel-5].target', question: LPG 충전소와 전기차 충전소가 공통 업종 fuel에 드는지 확인하지 못했다, assumed: fuel 업종 결제만}
+notes: 2026-10-10 상품 페이지(여신금융협회 심의필 제2026-C1a-10033호, 2026.07.02)를 대조했다. 신규출시 2026-01-28. 할인 PACK과 적립 PACK 중 하나를 고르고 변경은 다음 달 1일부터다. 할인 PACK은 4개 영역 월 한도가 따로다. 적립 PACK 스마트적립은 5개 영역 중 당월 이용금액 1위 +3%, 2위 +2%이고 같은 금액이면 영역 번호 순이라 혜택 순서를 영역 번호 순으로 두었다. 초안의 영역별 고정 할인 8천원과 1만5천원은 한도를 혜택으로 잘못 옮긴 것이라 지웠다.

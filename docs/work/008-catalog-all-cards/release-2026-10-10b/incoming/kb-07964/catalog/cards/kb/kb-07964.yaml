@@ -1,0 +1,214 @@
+schema_version: 2
+id: kb-07964
+issuer: kb
+name: KB국민 노리2 체크카드 KB Pay
+short_name: KB 노리2 KB Pay
+kind: check
+product_codes:
+  - '07964'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07964', fetched_at: &id001 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000, 400000, 600000, 800000]
+    spend:
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['정부지원금 결제는 실적에서 제외한다. 무승인 자판기, 터널통행료는 실적에서 제외한다. 해외 이용액은 매입 완료월에 반영한다.', '입점 점포, PG 전용 가맹점, 서비스 미제공 간편결제 가맹점은 할인 제외될 수 있다.']
+    limits:
+      - key: integrated_20
+        per: month
+        amount: {0: 3000, 200000: 20000, 300000: 20000, 400000: 30000, 600000: 40000, 800000: 50000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: coffee-10
+        title: 커피 10% 할인
+        source: page
+        evidence: ['[일상] 커피 할인 스타벅스, 커피빈 10% 할인 (월 할인한도 : 3천원)']
+        target:
+          merchants: [coffee_bean, starbucks]
+        when: []
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 3000}
+        tiers: {from: 0}
+        unmodeled: []
+      - key: mobile-10
+        title: 모바일 10% 할인
+        source: page
+        evidence: ['[일상] 모바일 할인 구글플레이스토어, 앱스토어 10% 할인 (월 할인한도 : 5천원)']
+        target:
+          merchants: [app_store, google_play]
+        when: []
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 5000}
+        tiers: {from: 200000}
+        unmodeled: []
+      - key: culture-10
+        title: 문화 10% 할인
+        source: page
+        evidence: ['[일상] 문화 할인 인터파크 티켓 10% 할인 (월 할인한도 : 7천원)']
+        target:
+          merchants: [interpark]
+        when: []
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 7000}
+        tiers: {from: 200000}
+        unmodeled: [인터파크 공연 티켓만 제공한다.]
+      - key: beauty-5
+        title: 뷰티 5% 할인
+        source: page
+        evidence: ['[일상] 뷰티 할인 올리브영, 미용실 업종 5% 할인 (월 할인한도 : 2천원)']
+        target:
+          categories: [beauty.salon]
+          merchants: [olive_young]
+        when: []
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+        unmodeled: []
+      - key: convenience-5
+        title: 편의점 5% 할인
+        source: page
+        evidence: ['[일상] 편의점 할인 GS25, CU 5% 할인 (월 할인한도 : 2천원)']
+        target:
+          merchants: [cu, gs25]
+        when: []
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+        unmodeled: []
+      - key: subscription-1000
+        title: 구독 1,000원 할인
+        source: page
+        evidence: ['[일상] 구독 할인 넷플릭스, 유튜브프리미엄 1,000원 할인 (월 할인한도 : 2천원)']
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 2000}
+          - {per: month, count: 2}
+        tiers: {from: 200000}
+        unmodeled: []
+      - key: delivery-1000
+        title: 배달 1,000원 할인
+        source: page
+        evidence: ['[일상] 배달 할인 배달의민족, 요기요 1,000원 할인 (월 할인한도 : 1천원)']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 1000}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        unmodeled: []
+      - key: telecom-2500
+        title: 이동통신 2,500원 할인
+        source: page
+        evidence: ['[일상] 이동통신 할인 SKT, KT, LG U+, Liiv M 2,500원 할인 (월 할인한도 : 2천5백원)']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - amount: {min: 50000}
+          - billing: [autopay]
+        reward: {type: cashback, fixed: 2500}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 2500}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        unmodeled: []
+      - key: movie-4000
+        title: 영화 4,000원 할인
+        source: page
+        evidence: ['[일상] 영화 할인 CGV 4,000원 할인 (월 할인한도 : 8천원)']
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 4000}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 8000}
+          - {per: month, count: 2}
+        tiers: {from: 200000}
+        unmodeled: [매점과 상품권은 제외한다. 공식 홈페이지와 앱 또는 현장 결제만 제공한다.]
+      - key: amusement-15000
+        title: 놀이공원 15,000원 할인
+        source: page
+        evidence: ['[일상] 놀이공원 할인 에버랜드, 롯데월드 15,000원 할인 (월 할인한도 : 1만5천원)']
+        target:
+          merchants: [everland, lotte_world]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, fixed: 15000}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 15000}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        unmodeled: [입장권 결제만 제공한다. 매점과 상품권은 제외한다.]
+      - key: kbpay-offline-2pct
+        title: KB Pay 오프라인 2% 추가 할인
+        source: page
+        evidence: ['[KB Pay] 오프라인 할인 오프라인 가맹점에서 KB Pay 결제 시 2% 추가 (월 할인한도 : 3천원)', 전월 이용실적 30만원 이상 시 제공]
+        target: {all: true}
+        when:
+          - channel: offline
+            payment: [kb_pay]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        stack: kbpay
+        unmodeled: []
+      - key: kbpay-online-2pct
+        title: KB Pay 온라인 2% 추가 할인
+        source: page
+        evidence: ['[KB Pay] 온라인 할인 온라인 가맹점에서 KB Pay 결제 시 2% 추가 (월 할인한도 : 2천원)', 전월 이용실적 30만원 이상 시 제공]
+        target: {all: true}
+        when:
+          - channel: online
+            payment: [kb_pay]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: integrated_20}
+          - {per: month, amount: 2000}
+        tiers: {from: 300000}
+        stack: kbpay
+        unmodeled: []
+    unmodeled: []
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정. 수집 페이지에서 KB Pay 탭으로 확인한 상품이다. Global 상품은 별도 상품이며 이 파일의 혜택을 적용하지 않는다. 2026-10-10 새 방식으로 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다.

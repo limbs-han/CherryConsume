@@ -1,0 +1,162 @@
+schema_version: 2
+id: hana-19109
+issuer: hana
+name: '#MY WAY(샵 마이웨이) 카드'
+short_name: 하나 MY WAY
+search_names: [MY WAY, 마이웨이카드, 샵 마이웨이]
+kind: credit
+product_codes:
+  - '19109'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=15444', fetched_at: 2026-10-11, review_no: A-26-2223}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-05-28
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 600000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+    limits:
+      - key: shopping
+        per: month
+        count: {200000: 1, 600000: 2, 1000000: 3}
+    benefits:
+      - key: transit-300
+        title: 버스·지하철 1,200원당 300원 청구할인
+        source: page
+        evidence: ['대중교통 | 버스,지하철 | 10 | 20 | 30 | 3백원', '대중교통 할인 건 수 산정방식: 월 합산 대중교통요금 청구금액/1,200원 (소수점 이하 절사)', '대중교통 할인 대상 : 시내버스, 마을버스, 광역버스, 공항버스, 지하철', '대중교통 할인 제외 대상 : 시외버스, 고속버스']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+        reward:
+          type: billing_discount
+          per_unit: {unit: 1200, amount: 300}
+        limits:
+          - per: month
+            amount: {200000: 3000, 600000: 6000, 1000000: 9000}
+        tiers: {from: 200000}
+        exclude_applied: 0
+        unmodeled: [원문은 한 달 대중교통 청구액 합을 1, 200원으로 나눠 건수를 센다. 앱은 결제마다 1, 200원 단위로 세므로 원문보다 적게 나올 수 있다]
+      - key: coffee-300
+        title: 커피 4사 건당 300원 청구할인
+        source: page
+        evidence: ['커피 | 스타벅스, 커피빈, 이디야, 투썸플레이스 | 10 | 20 | 30 | 3백원', '커피, 편의점 할인 제외 대상 : 대형시설물 입점 점포(백화점, 할인점, 쇼핑몰,휴게소, 공항, 호텔, 리조트)']
+        target:
+          merchants: [coffee_bean, ediya, starbucks, twosome]
+        when:
+          - {region: domestic}
+          - amount: {min: 300}
+        reward: {type: billing_discount, fixed: 300}
+        limits:
+          - per: month
+            count: {200000: 10, 600000: 20, 1000000: 30}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점·쇼핑몰·휴게소·공항·호텔·리조트 입점 점포는 제외한다]
+      - key: convenience-300
+        title: 편의점 4사 건당 300원 청구할인
+        source: page
+        evidence: ['편의점 | GS25, CU, 이마트24, 세븐일레븐 | 10 | 20 | 30 | 3백원']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - amount: {min: 3000}
+        reward: {type: billing_discount, fixed: 300}
+        limits:
+          - per: month
+            count: {200000: 10, 600000: 20, 1000000: 30}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점·쇼핑몰·휴게소·공항·호텔·리조트 입점 점포는 제외한다]
+      - key: digital-3000
+        title: 디지털 구독 건당 3,000원 청구할인
+        source: page
+        evidence: ['디지털 구독 | YouTube Premium, NETFLIX, 쿠팡 로켓와우 | 1 | 2 | 3 | 3천원']
+        target:
+          merchants: [coupang_wow, netflix, youtube_premium]
+        when:
+          - {region: domestic}
+          - amount: {min: 3000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - per: month
+            count: {200000: 1, 600000: 2, 1000000: 3}
+        tiers: {from: 200000}
+      - key: fuel-3000
+        title: 정유 4사 주유 건당 3,000원 청구할인
+        source: page
+        evidence: ['주유/충전 | 주유(SK에너지, GS칼텍스, S-OIL, HD현대오일뱅크), 충전(EV충전) | 1 | 2 | 3 | 3천원']
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        when:
+          - {region: domestic}
+          - amount: {min: 3000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - per: month
+            count: {200000: 1, 600000: 2, 1000000: 3}
+        tiers: {from: 200000}
+        unmodeled: [같은 영역의 EV 충전은 업종 키가 없어 계산하지 않는다]
+      - key: shopping-mart-3000
+        title: 대형마트 3사 건당 3,000원 청구할인
+        source: page
+        evidence: ['쇼핑 | 대형마트: 이마트, 롯데마트, 홈플러스 * 창고형 할인매장(트레이더스 홀세일 클럽, 롯데마트맥스), 각 마트의 온라인매장 제외 | 1 | 2 | 3 | 3천원']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+          - amount: {min: 30000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 200000}
+        unmodeled: [롯데마트맥스는 제외한다]
+      - key: shopping-store-3000
+        title: 백화점·온라인쇼핑 건당 3,000원 청구할인
+        source: page
+        evidence: ['- 백화점: 신세계, 현대, 롯데백화점 - 온라인쇼핑: 쿠팡, G마켓, 옥션, 11번가, GS SHOP, 롯데홈쇼핑 | 1 | 2 | 3 | 3천원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, gs_shop, hyundai_department, lotte_department, lotte_homeshopping, shinsegae_department]
+        when:
+          - {region: domestic}
+          - amount: {min: 30000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 200000}
+      - key: living-3000
+        title: 통신·전기·도시가스 자동이체 건당 3,000원 청구할인
+        source: page
+        evidence: ['생활요금 | 통신(SKT, KT, LGU+) / 전기 / 도시가스 자동이체 요금 | 1 | 2 | 3 | 3천원', '통신 : 알뜰폰 통신요금 및 자동이체로 납부하지 않은 통신요금 제외', '전기/도시가스 : 자동이체로 납부하지 않은 전기요금/도시가스 요금 제외']
+        target:
+          categories: [utility.electricity, utility.gas]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 30000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - per: month
+            count: {200000: 1, 600000: 2, 1000000: 3}
+        tiers: {from: 200000}
+    unmodeled: [결제대행업체나 간편결제 가맹점으로 접수된 결제는 할인에서 빠진다, 후불교통 등 무승인 매출은 매입 접수일 기준으로 실적과 할인에 반영한다, 대중교통 할인은 월 1회 교통요금 청구 때 적용한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. 카드 출시는 2022-08-26이다., assumed: '2026-05-28'}
+  - {path: 'revisions[0].benefits[coffee-300].when', question: '건당 결제 조건 표가 대중교통·커피 3백원 이상, 편의점·디지털 구독·주유 3천원 이상, 쇼핑·생활요금 3만원 이상으로 칸을 묶었다. 커피가 3백원인지 표 배치 확인이 필요하다.', assumed: 커피 300원 이상}
+  - {path: annual_fees, question: '원문은 국내전용과 국내외 겸용 연회비가 모두 20,000원이라고만 적고 국제 브랜드 이름이 없다.', assumed: 국내전용 20000만 적음}
+notes: 2026-10-11 공식 상품 페이지(상세 번호 CD_PD_SEQ=15444, 목록 상품 번호 19109, 준법심의 A-26-2223)에서 옮겼다. 영역마다 지난달 실적 20만/60만/100만원에 월 할인 건수가 다르고 통합 금액 한도는 없다. 실적에서 빠지는 할인 매출은 커피·편의점·디지털 구독·주유·쇼핑·생활요금이고 대중교통 할인 매출은 실적에 남는다. 최초 사용등록일~다음 달 말일은 20만~60만원 구간. 청구할인 제외에 자동이체 전기·도시가스는 들지 않는다.

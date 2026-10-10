@@ -1,0 +1,86 @@
+card: kb-01914
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 CU 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu}
+  expect:
+  - {payment: 0, benefits: {cvs-cu: 1000}, counted: 10000}
+  calc: 1구간 건당 1천원. 할인받아도 실적에서 빼지 않는다
+- name: 1만원 미만 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: cu}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 이용금액 1만원 이상만
+- name: 30만 경계 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 할인 없음
+- name: 60만 구간 스타벅스 영역 한도 4천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {coffee-starbucks: 2000}}
+  - {payment: 1, benefits: {coffee-starbucks: 2000}}
+  - {payment: 2, benefits: {}}
+  calc: 건당 2천원, 영역 한도 4천원
+- name: 그 밖의 영역 각각
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cgv}
+  - {at: 2026-11-05T11:00, amount: 10000, merchant: tenbyten}
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: coupang, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-05T13:00, amount: 20000, merchant: olive_young}
+  - {at: 2026-11-05T14:00, amount: 20000, merchant: yes24, channel: online}
+  - {at: 2026-11-05T15:00, amount: 20000, merchant: interpark_ticket}
+  - {at: 2026-11-05T16:00, amount: 30000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {movie-cgv: 1000}}
+  - {payment: 1, benefits: {shopping-tenbyten: 1000}}
+  - {payment: 2, benefits: {easypay-online: 1000}}
+  - {payment: 3, benefits: {beauty-oliveyoung: 1000}}
+  - {payment: 4, benefits: {books-online: 1000}}
+  - {payment: 5, benefits: {culture-interpark: 1000}}
+  - {payment: 6, benefits: {transit-bus-express: 1000}}
+  calc: 1구간 건당 1천원
+- name: 카카오페이 카카오T 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: kakao_t, channel: online, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 카카오T 제외
+- name: 신규 유예 1구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu}
+  expect:
+  - {payment: 0, benefits: {cvs-cu: 1000}}
+  calc: 유예기간 1구간
+- name: 후불교통 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 후불교통요금 실적 제외
+- name: 일반 승인 철도 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 철도는 실적에 남긴다

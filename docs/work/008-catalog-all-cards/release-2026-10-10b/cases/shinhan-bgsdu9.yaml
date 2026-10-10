@@ -1,0 +1,43 @@
+card: shinhan-bgsdu9
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 편의점 5%와 방과 후 2%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-03T17:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 2999, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {today-convenience-5: 500, today-after-2: 200}, counted: 10000}
+  - {payment: 1, benefits: {}, counted: 2999}
+  calc: 10,000 × 5% = 500, 오후 5시라 2% 200 더함. 2,999는 3천원 미만
+- name: 패스트푸드 영역 한도 1천 포인트
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 30000, category: restaurant.fastfood, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {today-food-5: 1000}, counted: 30000}
+  calc: 30,000 × 5% = 1,500이지만 영역 월 1천 포인트
+- name: 카페 5%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 6000, merchant: ediya, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {today-cafe-5: 300}, counted: 6000}
+  calc: 6,000 × 5% = 300
+- name: 쇼핑 1만원 이상 3천 포인트
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: musinsa, channel: online, payment_method: physical_card}
+  - {at: 2026-11-10T10:00, amount: 20000, merchant: zigzag, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-3000: 3000}, counted: 10000}
+  - {payment: 1, benefits: {}, counted: 20000}
+  calc: 1만원 이상 3,000 포인트. 월 1회라 두 번째 없음
+- name: 실적 10만원 직전이면 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-03T17:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 10만원 미만 구간

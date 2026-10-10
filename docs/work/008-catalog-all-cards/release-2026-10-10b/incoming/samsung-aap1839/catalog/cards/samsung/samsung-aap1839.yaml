@@ -1,0 +1,127 @@
+schema_version: 2
+id: samsung-aap1839
+issuer: samsung
+name: KT 할부 S 삼성카드
+short_name: KT 할부 S
+search_names: [KT 할부 S, KT할부S]
+kind: credit
+product_codes: [AAP1839]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1839', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnT1O%2BKVoaI%2BLc39jvd%2F0V0%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 400000
+      tier_by_benefit: {coffee-5: 800000, convenience-5: 800000, delivery-5: 800000, starbucks-5: 800000}
+      from: issue
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    options:
+      - key: light_installment
+        title: KT 라이트할부 이용 여부
+        choices:
+          - {key: none, title: 라이트할부 미이용. KT 통신요금 할인을 받는다}
+          - {key: using, title: 'KT 라이트할부 이용 중. 월 10,000~20,000원 결제대금 차감을 받는다'}
+        default: none
+        change: next_month
+        unsupported: [using]
+    limits:
+      - key: telecom
+        per: month
+        amount: {400000: 3000, 800000: 5000, 1200000: 8000}
+      - key: coffee
+        per: month
+        amount: {800000: 3000, 1200000: 5000}
+      - key: convenience-delivery
+        per: month
+        amount: {800000: 3000, 1200000: 5000}
+    benefits:
+      - key: kt-telecom
+        title: KT 통신요금 정기결제 할인
+        source: manual
+        evidence: ['KT 통신요금 정기결제 시 KT 월 통신요금 3,000~8,000원 결제일할인', '전월 이용금액대별 통합 월 할인한도 40만원 이상 3,000원, 80만원 이상 5,000원, 120만원 이상 8,000원', 'KT 통신요금 정기결제 합산 금액이 월 할인한도보다 적은 경우, 정기결제금액만큼 카드 결제대금에서 자동 차감']
+        target:
+          merchants: [kt]
+        when:
+          - option:
+              light_installment: [none]
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {shared: telecom}
+        tiers: {from: 400000}
+      - key: coffee-5
+        title: 커피전문점 5% 할인
+        source: manual
+        evidence: [커피전문점 5% 결제일할인, '스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '전월 이용금액대별 통합 월 할인한도 80만원 이상 3,000원, 120만원 이상 5,000원', '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [blue_bottle, coffee_bean, ediya, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 800000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: starbucks-5
+        title: 스타벅스 5% 할인
+        source: manual
+        evidence: [커피전문점 5% 결제일할인, '단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 800000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 백화점·할인점·쇼핑몰 임대매장은 제외한다]
+      - key: convenience-5
+        title: 편의점 5% 할인
+        source: manual
+        evidence: [편의점/배달앱 5% 결제일할인, '편의점 CU, GS25, 세븐일레븐, 이마트24', '편의점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: convenience-delivery}
+        tiers: {from: 800000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: delivery-5
+        title: 배달앱 5% 할인
+        source: manual
+        evidence: [편의점/배달앱 5% 결제일할인, '배달앱 배달의민족, 요기요, 쿠팡이츠', '배달앱은 공식 홈페이지/앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: convenience-delivery}
+        tiers: {from: 800000}
+    unmodeled: ['KT 라이트할부 이용 시 결제대금 차감(전월 40만원 이상 10,000원, 80만원 이상 15,000원, 120만원 이상 20,000원, 월 1회)은 결제 하나에 붙는 혜택이 아니라 계산하지 않는다. 라이트할부 이용 여부는 혜택 제공월의 전월 말일 기준이다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 상품 출시일은 2024-08-06이고 상품설명서는 2024.8판이다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통은 후불교통기능·모바일교통기능 결제건이다. 새 방식대로 시내버스와 지하철을 뺐다. 삼성카드는 사회보험료를 공과금으로 분류해 insurance.social도 뺐다, assumed: 'transit.bus_city, transit.subway, insurance.social'}
+  - {path: 'revisions[0].benefits[kt-telecom].when', question: KT 통신요금 정기결제를 자동납부로 보았다. 정기결제 2건 이상이면 통합 한도 안에서 할인한다, assumed: 'billing: autopay'}
+notes: 2026-10-10 상품설명서(2024.8판, 여신금융협회 심의필 제2024-C1a-09538호)와 상품 페이지 대조. 연회비 국내전용과 해외겸용 Mastercard 모두 25,000원(기본 7,000+제휴 18,000). 홈페이지와 앱에서만 신청한다. KT 24/36개월 라이트할부는 KT 단말기 구매 할부 상품이고 연 5.9%, 7.0% 할부수수료가 붙는다. 라이트할부를 이용 중이면 통신요금 할인 대신 결제대금 차감을 받고, 완납 다음 달부터 통신요금 할인으로 바뀐다. 라이트할부 차감은 계산하지 않아 using 선택지는 미지원이다. 발급월+1개월까지 통신요금은 40만 구간, 커피·편의점·배달앱은 80만 구간 혜택을 준다. 실적 제외는 무이자할부, 4대보험, 국세·지방세·공과금, 아파트관리비, 부동산 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통(후불교통·모바일교통), 택시, 기프트·선불카드 구매와 충전, 상품권이다. 할인 받은 결제도 실적에 넣는다.

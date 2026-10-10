@@ -1,0 +1,89 @@
+schema_version: 2
+id: samsung-aap1855
+issuer: samsung
+name: 삼성 iD STATION 카드 (SK에너지)
+short_name: iD STATION SK에너지
+search_names: [iD STATION, 삼성 iD STATION 카드, 아이디 스테이션 SK에너지]
+kind: credit
+product_codes: [AAP1855]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1855', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtrBfeOFksYXPPuNZv99E%2Bj4%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-02-13'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, fuel, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    benefits:
+      - key: sk-fuel-10
+        title: SK에너지 주유 10% 할인
+        source: manual
+        evidence: [SK주유(충전)소에서 주유 시 10% 결제일할인, '주유 주유소, LPG충전소', '전월 이용금액대별 통합 월 할인한도 40만원 이상 15,000원, 80만원 이상 25,000원, 120만원 이상 35,000원', LPG충전소는 SK가스 포함, SK주유(충전)소 이용금액은 전월 이용금액에서 제외]
+        target:
+          merchants: [sk_energy]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 15000, 800000: 25000, 1200000: 35000}
+        tiers: {from: 400000}
+      - key: telecom-5
+        title: 통신요금 정기결제 5% 할인
+        source: manual
+        evidence: [통신요금 정기결제 시 5% 결제일할인, 'SKT/KT/LG U+/알뜰폰(SK텔링크, KT스카이라이프, KT M모바일, 헬로모바일, 미디어로그) 이동통신요금', SK브로드밴드/KT/KT스카이라이프/LG U+ 인터넷/유선통신요금, '통합 월 할인한도 : 5,000원', 전월 이용금액 40만원 이상 시 제공]
+        target:
+          merchants: [hello_mobile, kt, kt_m_mobile, kt_skylife, lg_uplus, media_log, sk_broadband, sk_telink, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: ['알뜰폰 결합상품요금, 사물인터넷 요금, 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다']
+      - key: cvs-5
+        title: 편의점 5% 할인
+        source: manual
+        evidence: [편의점 5% 결제일할인, '편의점 CU, GS25, 세븐일레븐, 이마트24', '통합 월 할인한도 : 5,000원', '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: online-5
+        title: 온라인쇼핑몰 5% 할인
+        source: manual
+        evidence: [온라인쇼핑몰 5% 결제일할인, '쿠팡, 네이버플러스 스토어, SSG.COM, 롯데ON, G마켓, 옥션, 11번가, 삼성카드 쇼핑', '통합 월 할인한도 : 5,000원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_on, naver_plus_store, samsung_card_shopping, ssg_com]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+    unmodeled: [SK가스 LPG충전소 10% 할인은 가맹점이 없어 담지 않았다, '스피드메이트 엔진오일 20,000원 현장할인과 차량 점검·타이어 무료 서비스는 계산하지 않는다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2025-02-13이고 상품설명서는 2026.7판(제2026-C1a-08439호)이다. 출시일을 시행일로 두었다, assumed: '2025-02-13'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문은 SK주유(충전)소 이용금액만 실적에서 빼지만 실적 제외를 가맹점으로 적을 수 없어 주유 업종 전체를 뺐다. 다른 주유소 결제가 실적에 덜 잡힌다. 대중교통은 후불·모바일교통 결제라 시내버스와 지하철을 뺐다, assumed: 'fuel, transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits[telecom-5].when', question: 통신요금 정기결제를 자동납부로 보았다, assumed: 'billing: autopay'}
+  - {path: status, question: 상품 페이지에서 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-10 상품설명서(2026.7판, 여신금융협회 심의필 제2026-C1a-08439호) 확인. 연회비 국내전용과 해외겸용 Mastercard 모두 15,000원(기본 7,000+제휴 8,000). 발급월+1개월까지 40만 구간 혜택을 준다. 통신·편의점·온라인쇼핑 5%는 영역마다 월 5,000원 한도다. 실적 제외는 SK주유(충전)소, 4대보험, 국세·지방세·공과금, 아파트관리비, 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통(후불·모바일교통), 택시, 기프트·선불카드, 상품권이다. 후불교통기능이 탑재되어 발급된다.

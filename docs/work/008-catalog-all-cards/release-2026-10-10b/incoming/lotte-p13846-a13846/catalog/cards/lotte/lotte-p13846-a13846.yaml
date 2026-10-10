@@ -1,0 +1,82 @@
+schema_version: 2
+id: lotte-p13846-a13846
+issuer: lotte
+name: LOCA 100 Life
+kind: credit
+product_codes: [P13846-A13846]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13846-A13846', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 750000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 750000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+    benefits:
+      - key: fuel
+        title: 주유 5% 결제일 할인
+        source: page
+        evidence: [주유 5% 75만원 이상 1만원, 지난달(1일~말일) 이용실적 75만원 미만 이용 시에도 0.5% 할인혜택이 제공됩니다., LPG 충전소 이용금액은 혜택이 제공되지 않습니다.]
+        target:
+          categories: [fuel]
+        reward:
+          type: billing_discount
+          rate: {0: 0.5, 750000: 5}
+        limits:
+          - {per: month, amount: 10000}
+      - key: insurance
+        title: 보험료 자동납부 5% 결제일 할인
+        source: page
+        evidence: [보험료 5% 75만원 이상 1만원, 'LOCA 100 Life 카드로 자동이체 연결된 보험료 자동납부 건만 혜택이 제공되며, 모든 간편결제(카카오페이, 네이버페이, 페이코 등) 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [insurance.private]
+        when:
+          - payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+            billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 750000}
+      - key: telecom
+        title: 이동통신 자동납부 5% 결제일 할인
+        source: page
+        evidence: [이동통신 5% 75만원 이상 5천원, 'SKT, KT, LG U+ 이동통신요금 자동납부 건만 혜택이 제공됩니다.', '인터넷, TV 등과 결합상품 및 알뜰폰 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 750000}
+      - key: hospital-pharmacy
+        title: 병원·약국 5% 결제일 할인
+        source: page
+        evidence: [병원·약국 5% 75만원 이상 5천원, '롯데카드에 병원, 약국으로 등록된 가맹점 업종 기준으로 혜택이 제공되며, 산후조리원, 요양병원, 재활원, 의료재단, 보건복지협회 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 750000}
+    unmodeled: [주유 할인에서 LPG 충전소는 빠지지만 주유 업종으로 가려내지 않는다, 지난달 75만원 미만 0.5% 할인은 주유에만 넣었다. 보험료·이동통신·병원약국에도 줄 수 있다. 따로 적힌 한도가 없어 75만원 이상과 같은 월 한도로 두었다, 자동차보험료 3만원 결제일 할인은 손해보험 건당 30만원 이상 연 1회이고 첫해 뒤에는 지난 1년 이용실적 600만원 이상이 조건이라 계산하지 않는다, '요양병원, 재활원, 의료재단, 보건복지협회는 병원·약국 할인에서 빠진다', 이동통신 할인에서 인터넷·TV 결합상품과 알뜰폰 요금은 빠진다, 무이자 할부 혜택을 받은 결제는 다른 할인을 받지 않는다, 가족카드 이용금액도 본인 실적에 더하고 할인 한도는 본인과 가족카드가 합산한다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', LOCA 100 Life가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2021-06-22이고 상품 페이지 심의는 2024년 11월이다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits', question: 지난달 75만원 미만 0.5% 할인이 주유만인지 생활업종 네 가지 모두인지 원문이 생활업종 표 아래에 한 줄로만 적었다. 덜 주는 쪽으로 주유에만 넣었다, assumed: 주유만 0.5%}
+notes: 2026-10-10 상품 페이지 대조. 상품설명서 PDF 주소는 찾지 못했다. 신규 발급 특례는 발급일부터 다음 달 말일까지 생활업종 5%라 75만 구간으로 넣었다. 실적 제외의 대중교통(버스, 지하철)은 시외버스까지 빼 실적이 적게 잡히는 쪽으로 두었다.

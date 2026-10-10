@@ -1,0 +1,72 @@
+schema_version: 2
+id: hana-11584
+issuer: hana
+name: 애터미 Any PLUS 카드
+short_name: 하나 애터미 Any PLUS
+kind: credit
+product_codes:
+  - '11584'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 17000}
+  - {scope: global, brand: unionpay, amount: 17000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11584', fetched_at: 2026-10-10, review_no: A-26-0974}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+    benefits:
+      - key: domestic-0-7
+        title: 국내 가맹점 0.7% 청구할인
+        source: page
+        evidence: [국내 가맹점 | 0.7% | 조건없음 | 제한없음 | 제한없음, 국내 온라인 대상 가맹점 할인 제외]
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 0.7}
+      - key: pharmacy-online-0-7
+        title: 제약 업종 온라인 0.7% 청구할인
+        source: page
+        evidence: [제약 업종으로 등록된 가맹점은 온라인 결제 시에도 국내 가맹점 0.7% 할인 제공]
+        target:
+          categories: [pharmacy]
+        when:
+          - {region: domestic}
+          - {channel: online}
+        reward: {type: billing_discount, rate: 0.7}
+      - key: domestic-online-1-7
+        title: 국내 온라인 가맹점 1.7% 청구할인 (월 10만원)
+        source: page
+        evidence: [국내 온라인 가맹점 | 1.7% | 조건없음 | 10만원/월 | 제한없음, '국내 온라인 가맹점은 월 할인한도 10만원까지 서비스 제공하며, 할인한도 초과 시 국내 가맹점 할인을 제공하지 않습니다.']
+        target:
+          exclude_categories: [pharmacy]
+          all: true
+        when:
+          - {region: domestic}
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1.7}
+        limits:
+          - {per: month, amount: 100000}
+      - key: overseas-1-7
+        title: 해외 가맹점 1.7% 청구할인 (월 1만원)
+        source: page
+        evidence: [해외 가맹점 | 1.7% | 조건없음 | 1만원/월 | 제한없음, '해외 단기카드 대출(현금서비스), 해외 현금인출 이용금액 할인 제외']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.7}
+        limits:
+          - {per: month, amount: 10000}
+    unmodeled: [국내 온라인 가맹점은 하나카드에 등록된 온라인 가맹점 기준이라 앱의 온라인 결제 표시와 다를 수 있다, 해외 사이트라도 국내 전자지급결제대행사를 거쳐 국내 가맹점으로 결제되면 국내 일반 또는 온라인 할인을 받는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 규칙이 시작된 날을 찾지 못해 수집한 날로 두었다. 카드 출시는 2019-10-30이다., assumed: '2026-10-10'}
+notes: 2026-10-10 공식 상품 페이지(준법심의 A-26-0974)에서 옮겼다. 연회비 국내외겸용 Mastercard, UPI 17,000원. 전월 실적, 할인 횟수 조건이 없다. 무이자 할부는 할인 제외. 온라인 1.7%는 월 한도를 다 쓰면 0.7%도 주지 않으므로 온라인과 오프라인 혜택을 채널로 나눴다.

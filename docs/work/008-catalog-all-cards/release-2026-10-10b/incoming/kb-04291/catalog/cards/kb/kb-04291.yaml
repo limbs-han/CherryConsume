@@ -1,0 +1,105 @@
+schema_version: 2
+id: kb-04291
+issuer: kb
+name: 캐시노트 KB국민카드
+short_name: KB 캐시노트
+kind: credit
+product_codes:
+  - '04291'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04291', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      unmodeled: [PG 결제대행 가맹점과 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다, '무승인전표(공항버스, 자판기, 터널통행료, 항공기내)는 할인에서 빠진다']
+    limits:
+      - {key: high-amount, per: month, amount: 50000}
+    benefits:
+      - key: cashnote-membership
+        title: 캐시노트 플러스 멤버십 청구할인
+        source: page
+        evidence: [캐시노트 멤버십 청구할인 | 1구간(50만원) 7천원 | 2구간(100만원) 11천원 | 3구간(150만원) 15천원, 캐시노트 플러스 멤버십 | 50만원 이상 7천원 | 100만원 이상 11천원 | 150만원 이상 15천원, 캐시노트 KB국민카드로 캐시노트 멤버십 할인받은 이용건(해당 매출 전체)]
+        target:
+          merchants: [cashnote]
+        reward: {type: billing_discount, fixed: 15000}
+        limits:
+          - {per: month, count: 1}
+          - per: month
+            amount: {500000: 7000, 1000000: 11000, 1500000: 15000}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        notes: 할인받은 멤버십 결제는 전체를 실적에서 뺀다
+      - key: all-01
+        title: 국내외 가맹점 0.1% 청구할인
+        source: page
+        evidence: [국내외 가맹점 청구할인 | 0.1% | 무제한, 국내외 가맹점 50만원 이상 0.1% 없음]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.1}
+        tiers: {from: 500000}
+      - key: business-03
+        title: 전자상거래·주유·통신 0.3% 청구할인
+        source: page
+        evidence: ['사업지원영역 청구할인 (전자상거래,주유,통신업종) | 0.3% | 5만원', 서비스 대상 업종은 KB국민카드에 등록된 가맹점 업종 분류 기준을 따름]
+        target:
+          categories: [fuel, online_shopping, telecom]
+        reward: {type: billing_discount, rate: 0.3}
+        limits:
+          - {per: month, amount: 50000}
+        tiers: {from: 500000}
+      - key: high-amount-04
+        title: 건당 50만원 이상 0.4% 청구할인
+        source: page
+        evidence: [고액결제(건당승인) 청구할인 | 50만원 0.4% | 100만원 0.8% | 150만원 1.0% | 5만원, 전월 이용실적 50만원 이상]
+        target: {all: true}
+        when:
+          - amount: {min: 500000, below: 1000000}
+        reward: {type: billing_discount, rate: 0.4}
+        limits:
+          - {shared: high-amount}
+        tiers: {from: 500000}
+      - key: high-amount-08
+        title: 건당 100만원 이상 0.8% 청구할인
+        source: page
+        evidence: [고액결제(건당승인) 청구할인 | 50만원 0.4% | 100만원 0.8% | 150만원 1.0% | 5만원]
+        target: {all: true}
+        when:
+          - amount: {min: 1000000, below: 1500000}
+        reward: {type: billing_discount, rate: 0.8}
+        limits:
+          - {shared: high-amount}
+        tiers: {from: 500000}
+      - key: high-amount-10
+        title: 건당 150만원 이상 1.0% 청구할인
+        source: page
+        evidence: [고액결제(건당승인) 청구할인 | 50만원 0.4% | 100만원 0.8% | 150만원 1.0% | 5만원]
+        target: {all: true}
+        when:
+          - amount: {min: 1500000}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: high-amount}
+        tiers: {from: 500000}
+    unmodeled: ['정부지원금(보육료·유치원보조비·바우처), 현금서비스·카드론, 수수료·이자·연체료는 실적에서 빠진다', 해외 이용금액은 매입 완료 기준으로 실적 달을 나누고 일시불만 센다, 할인은 전표 매입 순서대로 한도에서 차감한다, 실적 유예기간은 본인회원이 이 카드를 생애 처음 발급받은 경우만 적용하고 가족카드 단독 발급에는 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2024년 6월 25일 출시만 적었다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits', question: '국내외 0.1%, 사업지원 0.3%, 고액결제 할인이 한 결제에 겹쳐 적용되는지 원문에 없다. 가장 큰 하나만 주는 쪽으로 두었다', assumed: 모두 main 묶음}
+  - {path: 'revisions[0].benefits[business-03].target', question: 원문의 전자상거래 업종을 공통 온라인 쇼핑 업종으로 옮겼다. KB 업종 분류와 범위가 다를 수 있다, assumed: online_shopping}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].new_card', question: 실적 유예기간에 몇 구간 혜택을 주는지 원문은 이용실적이 없어도 서비스를 제공한다고만 적었다. 가장 낮은 1구간으로 두었다, assumed: 500000}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 캐시노트 플러스 멤버십 결제에 쓸 공통 가맹점 cashnote가 필요하다. 개인사업자 전용이라는 문구는 상품 페이지에 없다.

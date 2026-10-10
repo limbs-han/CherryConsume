@@ -1,0 +1,788 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "vic_market",
+      "name": "빅마켓",
+      "category": "grocery_mart",
+      "aliases": [
+        "빅마켓"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtt%2FCVin7XowUF9Aumz%2Fca70%3D&sn=1",
+    "evidence": [
+      "- 할인점 : \u0007이마트(에브리데이, 트레이더스 포함), 홈플러스, 롯데마트, 빅마켓",
+      "- 할인점 : \u0007이마트(에브리데이, 트레이더스 포함), 홈플러스, 롯데마트, 빅마켓"
+    ],
+    "card_ids": [
+      "samsung-abp1383",
+      "samsung-abp1384"
+    ]
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "education.primary_secondary_fee",
+      "name": "초중고 납입금"
+    },
+    "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf",
+    "evidence": [
+      "디지로카 Paris 카드가 아닌 롯데카드 이용금액, 모든 무이자할부 이용금액, 국세, 지방세, 수도요금, 도시가스비, 공과금, 건강보험, 국민연금, 고용보험, 산재 보험, 초·중·고교 납입금, 대학등록금, LH·SH 공사 공공임대료, 부동산 임대료, 장애인 고용부담금, 아파트관리비, 오토·스마트 캐시백 신청 이용 금액, 기프트· 선불카드 충전 및 구매, 포인트 충전, 상품권(모바일 상품권 포함) 구매, 대중교통 (시내·광역·시외버스, 지하철), 택시, 고속도로 통행요금, 고속버스, 무승인전표 (자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원 발급 수수료, 관세 납부, 인지세, 송달료, 단기카드 대출(현금서비스), 장기카드대출(카드론), 연회비, 이자 및 각종 수수료",
+      "디지로카 Paris 카드가 아닌 롯데카드 이용금액, 온라인쇼핑 (쿠팡, 네이버페이, 11번가, G마켓, 옥션, SSG.COM, 롯데ON, 롯데홈쇼핑) 이용금액, 모든 무이자할부 이용금액, 국세, 지방세, 수도요금, 도시가스비, 공과금, 건강보험, 국민연금, 고용보험, 산재보험, 초·중·고교 납입금, 대학등록금, LH·SH 공사 공공임대료, 부동산 임대료, 장애인 고용부담금, 아파트관리비, 오토·스마트 캐시백 신청 이용 금액, 기프트·선불카드 충전 및 구매, 포인트 충전, 상품권(모바일 상품권 포함) 구매, 대중교통(시내·광역·시외버스, 지하철), 택시, 고속도로 통행요금, 고속버스, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원 발급 수수료, 관세 납부, 인지세, 송달료, 단기카드대출(현금서비스), 장기카드대출(카드론), 연회비, 이자 및 각종 수수료",
+      "초·중·고교 납입금, 대학등록금, LH·SH 공사 공공임대료, 부동산 임대료, 장애인"
+    ],
+    "card_ids": [
+      "lotte-p14728-a14728",
+      "woori-500058",
+      "shinhan-bubdgr",
+      "samsung-abp1689",
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "mammoth_coffee",
+      "name": "매머드커피",
+      "category": "cafe",
+      "aliases": [
+        "매머드커피"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055",
+    "evidence": [
+      "커 피 | 스타벅스, 폴바셋, 투썸플레이스, 매머드커피 · 스타벅스 : 사이렌오더를 통한 결제 건도 적립 제공 · 폴바셋, 투썸플레이스, 매머드커피 : 온라인 결제 건 적립 제외 ※ 커피브랜드의 상품권, 선불카드 구매/충전 등의 이용금액은 적립 제외 ※ 백화점/대형할인점/면세점/공항/미군부대/리조트 등 일부 입점 매장은 적립 제외"
+    ],
+    "card_ids": [
+      "woori-500055"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "gs_the_fresh",
+      "name": "GS더프레시",
+      "category": "grocery_mart",
+      "aliases": [
+        "GS더프레시"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055",
+    "evidence": [
+      "쇼 핑 | 이마트, 롯데마트, 홈플러스 홈플러스 익스프레스, GS 더프레시, 롯데슈퍼(롯데프레시) ※ 온라인 결제 건 적립 제외"
+    ],
+    "card_ids": [
+      "woori-500055"
+    ]
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "pub",
+      "name": "주점·바"
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+    "evidence": [
+      "식비 | 음식점/주점 업종, 배달의민족, 쿠팡이츠, 요기요 | 5%",
+      "식비 | [음식점/주점 업종] 음식점/주점 업종 : 한식, 일식, 중식, 양식, 뷔페, 패스트푸드, 스넥, 기타 요식업, 주점/바 음식점 매장이 백화점/할인점 등에 입점된 매장인 경우는 할인 제외 [배달의민족, 쿠팡이츠, 요기요] 공식 배달앱에서 ‘앱 내 카드결제‘ 통한 온라인 결제 건에 한하여 할인 제공 공식 배달앱에서 가맹점 직접 결제(만나서/현장 카드 결제 등)는 할인 제외 공식 배달앱 내 입점된 음식점에서 음식 및 음료 주문하는 경우에 한하며, 멤버십, 테이블 오더, 물품 구매(커머스, 편의점, 마트)등 이외 기타 결제는 할인 제외"
+    ],
+    "card_ids": [
+      "woori-500058"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "t_universe_pass",
+      "name": "T우주패스",
+      "category": "streaming",
+      "aliases": [
+        "T우주패스"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+    "evidence": [
+      "넷플릭스, 유튜브 프리미엄, 티빙, 디즈니플러스, T우주패스 | 50% | 5천원"
+    ],
+    "card_ids": [
+      "woori-500058",
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kfc",
+      "name": "KFC",
+      "category": "restaurant.fastfood",
+      "aliases": [
+        "KFC"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html",
+    "evidence": [
+      "패스트푸드 : KFC, 크리스피크림도넛, 배스킨라빈스"
+    ],
+    "card_ids": [
+      "shinhan-bggc7q"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "krispy_kreme",
+      "name": "크리스피크림도넛",
+      "category": "restaurant.bakery",
+      "aliases": [
+        "크리스피크림도넛"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html",
+    "evidence": [
+      "패스트푸드 : KFC, 크리스피크림도넛, 배스킨라빈스"
+    ],
+    "card_ids": [
+      "shinhan-bggc7q"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kream",
+      "name": "크림",
+      "category": "online_shopping",
+      "aliases": [
+        "크림"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html",
+    "evidence": [
+      "패스트푸드 : KFC, 크리스피크림도넛, 배스킨라빈스",
+      "온라인 쇼핑 : 쿠팡, 무신사, 지그재그, 에이블리, 크림"
+    ],
+    "card_ids": [
+      "shinhan-bggc7q"
+    ]
+  },
+  {
+    "file": "payment_methods.yaml",
+    "definition": {
+      "key": "heyyoung_pay",
+      "name": "헤이영페이"
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html",
+    "evidence": [
+      "신한 SOL페이(신한 슈퍼SOL로 결제 포함), 삼성페이, 헤이영페이"
+    ],
+    "card_ids": [
+      "shinhan-bggc7q"
+    ]
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "transit.tram",
+      "name": "트램"
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "해외 대중교통: 버스, 지하철, 트램 등"
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "transit.airport_rail",
+      "name": "공항철도"
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "국내 대중교통: 시내버스, 시외버스, 지하철, 공항버스, 공항철도"
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "familymart_japan",
+      "name": "일본 Familymart",
+      "category": "convenience",
+      "aliases": [
+        "일본 Familymart"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "Familymart, Lawson, Seven-Eleven"
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lawson_japan",
+      "name": "일본 Lawson",
+      "category": "convenience",
+      "aliases": [
+        "일본 Lawson"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "Familymart, Lawson, Seven-Eleven"
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "seven_eleven_japan",
+      "name": "일본 Seven-Eleven",
+      "category": "convenience",
+      "aliases": [
+        "일본 Seven-Eleven"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "Familymart, Lawson, Seven-Eleven"
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lotte_mart_vietnam",
+      "name": "베트남 롯데마트",
+      "category": "grocery_mart",
+      "aliases": [
+        "베트남 롯데마트"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "베트남 롯데마트 5% 결제일 할인",
+      "베트남 내 롯데마트만 가능하며 국내 및 다른 국가의 경우 할인 서비스가 제공되지 않습니다."
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "grab_vietnam",
+      "name": "베트남 Grab",
+      "category": "other",
+      "aliases": [
+        "베트남 Grab"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "베트남 Grab 5% 결제일 할인",
+      "베트남 내 Grab 앱 이용건만 가능하며 국내 및 다른 국가의 경우 할인 서비스가 제공되지 않습니다."
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "starbucks_us",
+      "name": "미국 스타벅스",
+      "category": "cafe",
+      "aliases": [
+        "미국 스타벅스"
+      ]
+    },
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+    "evidence": [
+      "미국 스타벅스 5% 결제일 할인",
+      "미국 내 스타벅스 이용건만 가능하며 국내 및 다른 국가의 경우 할인 서비스가 제공되지 않습니다."
+    ],
+    "card_ids": [
+      "shinhan-bubdgr"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "galleria",
+      "name": "갤러리아",
+      "category": "department_store",
+      "aliases": [
+        "갤러리아"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "백화점 | 신세계/롯데/현대/갤러리아/동아/대구백화점, AK플라자, NC 대전 유성점"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "dong_a_department",
+      "name": "동아백화점",
+      "category": "department_store",
+      "aliases": [
+        "동아백화점"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "쇼핑·의료교육2% 캐시백"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "daegu_department",
+      "name": "대구백화점",
+      "category": "department_store",
+      "aliases": [
+        "대구백화점"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "백화점 | 신세계/롯데/현대/갤러리아/동아/대구백화점, AK플라자, NC 대전 유성점"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ak_plaza",
+      "name": "AK플라자",
+      "category": "department_store",
+      "aliases": [
+        "AK플라자"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "백화점 | 신세계/롯데/현대/갤러리아/동아/대구백화점, AK플라자, NC 대전 유성점"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "nc_daejeon_yuseong",
+      "name": "NC 대전유성점",
+      "category": "department_store",
+      "aliases": [
+        "NC 대전유성점"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "백화점 | 신세계/롯데/현대/갤러리아/동아/대구백화점, AK플라자, NC 대전 유성점"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "childcare",
+      "name": "어린이집"
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "의료·산후조리원·학원·학습지·온라인서점·어린이집·유치원 2% 캐시백",
+      "어린이집 | 국공립·사립 어린이집",
+      "* \u0007어린이집·유치원은 정부 지원금을 제외한 금액에 한함"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "education.kindergarten",
+      "name": "유치원"
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "의료·산후조리원·학원·학습지·온라인서점·어린이집·유치원 2% 캐시백",
+      "유치원 | 국공립·사립 유치원",
+      "* \u0007어린이집·유치원은 정부 지원금을 제외한 금액에 한함"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "shinsegae_premium_outlet",
+      "name": "신세계사이먼 프리미엄 아울렛",
+      "category": "other",
+      "aliases": [
+        "신세계사이먼 프리미엄 아울렛"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "프리미엄 아울렛 | 신세계사이먼 프리미엄 아울렛, 현대프리미엄아울렛"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_premium_outlet",
+      "name": "현대프리미엄아울렛",
+      "category": "department_store",
+      "aliases": [
+        "현대프리미엄아울렛"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "프리미엄 아울렛 | 신세계사이먼 프리미엄 아울렛, 현대프리미엄아울렛"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "samsung_card_shopping",
+      "name": "삼성카드 쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "삼성카드 쇼핑"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "온라인쇼핑몰 | 삼성카드 쇼핑, G마켓, 옥션, 11번가, 인터파크, 쿠팡, 티몬, 위메프, SSG.COM, 롯데ON"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "maternity_center",
+      "name": "산후조리원"
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "의료·산후조리원·학원·학습지·온라인서점·어린이집·유치원 2% 캐시백",
+      "산후조리원 | 산후조리원",
+      "* \u0007의료·산후조리원은 오프라인 일반 결제건에 한하며, 요양병원, \u0007 보건소, 동물병원은 제외"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "woongjin_thinkbig",
+      "name": "웅진씽크빅",
+      "category": "education.study_material",
+      "aliases": [
+        "웅진씽크빅"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "쇼핑·의료교육2% 캐시백"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kyowon",
+      "name": "교원",
+      "category": "education.study_material",
+      "aliases": [
+        "교원"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "학습지 | 씽크빅, 교원, 대교, 한솔교육"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "daekyo",
+      "name": "대교",
+      "category": "education.study_material",
+      "aliases": [
+        "대교"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "학습지 | 씽크빅, 교원, 대교, 한솔교육"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hansol_education",
+      "name": "한솔교육",
+      "category": "education.study_material",
+      "aliases": [
+        "한솔교육"
+      ]
+    },
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+    "evidence": [
+      "학습지 | 씽크빅, 교원, 대교, 한솔교육"
+    ],
+    "card_ids": [
+      "samsung-abp1689"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "woori_won_mobile",
+      "name": "우리WON모바일",
+      "category": "telecom.mobile",
+      "aliases": [
+        "우리WON모바일"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "통신 | SKT, KT, LG U+ 우리WON모바일, KT M모바일, U+유모바일, SK세븐모바일"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "payment_teacher",
+      "name": "결제선생",
+      "category": "education.academy",
+      "aliases": [
+        "결제선생"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "교육/도서 | 결제선생(학원업종), 학습지업종 밀리의서재, 교보문고 sam, YES24 크레마클럽",
+      "결제선생 : 결제선생에서 발송된 비대면 청구서를 통해 학원업종*에서 결제한 건에 대해 할인 제공",
+      "※ 결제선생은 우리WON페이를 통한 간편결제 및 자동결제한 건에 대해 할인 제공(카드정보 입력 결제 등 일반결제 시 할인제공 불가)"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "millie",
+      "name": "밀리의서재",
+      "category": "streaming",
+      "aliases": [
+        "밀리의서재"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "교육/도서 | 결제선생(학원업종), 학습지업종 밀리의서재, 교보문고 sam, YES24 크레마클럽",
+      "※ 도서 업종(밀리의서재, 교보문고sam, YES24 크레마클럽)은 인앱결제(구글 플레이스토어, 앱스토어 등) 결제 시 할인 제공 불가"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kyobo_sam",
+      "name": "교보문고 sam",
+      "category": "streaming",
+      "aliases": [
+        "교보문고 sam"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "교육/도서 | 결제선생(학원업종), 학습지업종 밀리의서재, 교보문고 sam, YES24 크레마클럽",
+      "※ 도서 업종(밀리의서재, 교보문고sam, YES24 크레마클럽)은 인앱결제(구글 플레이스토어, 앱스토어 등) 결제 시 할인 제공 불가"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "yes24_crema_club",
+      "name": "YES24 크레마클럽",
+      "category": "streaming",
+      "aliases": [
+        "YES24 크레마클럽"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "교육/도서 | 결제선생(학원업종), 학습지업종 밀리의서재, 교보문고 sam, YES24 크레마클럽",
+      "※ 도서 업종(밀리의서재, 교보문고sam, YES24 크레마클럽)은 인앱결제(구글 플레이스토어, 앱스토어 등) 결제 시 할인 제공 불가"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "coway",
+      "name": "코웨이",
+      "category": "other",
+      "aliases": [
+        "코웨이"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "렌탈 | 코웨이, SK인텔릭스(구. SK매직), LG전자 가전구독"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "sk_intellix",
+      "name": "SK인텔릭스",
+      "category": "other",
+      "aliases": [
+        "SK인텔릭스"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "렌탈 | 코웨이, SK인텔릭스(구. SK매직), LG전자 가전구독"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lg_appliance_subscription",
+      "name": "LG전자 가전구독",
+      "category": "other",
+      "aliases": [
+        "LG전자 가전구독"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "렌탈 | 코웨이, SK인텔릭스(구. SK매직), LG전자 가전구독"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "chatgpt",
+      "name": "ChatGPT",
+      "category": "streaming",
+      "aliases": [
+        "ChatGPT"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "디지털구독 | 유튜브 프리미엄, 넷플릭스, 디즈니플러스, 티빙 ChatGPT | 30%",
+      "ChatGPT의 경우 해외결제를 통한 USD결제 건에 한하여 혜택 제공"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "baemin_club",
+      "name": "배민클럽",
+      "category": "streaming",
+      "aliases": [
+        "배민클럽"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "멤버십 | 쿠팡 와우멤버십, 네이버플러스 멤버십, 배민클럽,컬리멤버스, T우주패스"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kurly_members",
+      "name": "컬리멤버스",
+      "category": "streaming",
+      "aliases": [
+        "컬리멤버스"
+      ]
+    },
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+    "evidence": [
+      "멤버십 | 쿠팡 와우멤버십, 네이버플러스 멤버십, 배민클럽,컬리멤버스, T우주패스"
+    ],
+    "card_ids": [
+      "woori-500045"
+    ]
+  }
+]

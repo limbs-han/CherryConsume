@@ -1,0 +1,114 @@
+schema_version: 2
+id: hyundai-13725
+issuer: hyundai
+name: Kia Members 경차전용카드
+short_name: 현대 기아 경차
+search_names: [Kia Members 경차카드, 기아 경차전용카드, 기아멤버스 경차전용카드]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 5000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AO7-20260203-0822-01_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EA%B8%B0%EC%95%84_%EA%B2%BD%EC%B0%A8_V1_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-10, review_no: 제2025-C1a-05494호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000]
+    spend:
+      exclude_categories: [annual_fee, education.tuition, tax, utility.gas]
+      interest_free: exclude
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    options:
+      - key: fuel_type
+        title: 주유 할인 신청 유종
+        choices:
+          - {key: gasoline_diesel, title: 휘발유·경유}
+          - {key: lpg, title: LPG}
+        default: null
+        change: immediate
+        unsupported: [lpg]
+    limits:
+      - key: fuel
+        per: month
+        amount: {300000: 20000, 700000: 30000}
+    benefits:
+      - key: fuel-200
+        title: HD현대오일뱅크·SK에너지 리터당 200원 청구 할인
+        source: manual
+        evidence: [HD현대오일뱅크/SK에너지에서 주유 시 리터당 200원·400원 청구 할인, 30만~70만원 미만 200원 월간한도 2만원, '유류비 결제금액 기준 1회 6만원, 1일 12만원 한도 내 청구 할인 적용', 주유 할인서비스는 최초 신청 유종에 한해 제공, 경유는 휘발유 기준으로 환산 후 할인]
+        target:
+          merchants: [hd_oilbank, sk_energy]
+        when:
+          - option:
+              fuel_type: [gasoline_diesel]
+        reward: {type: billing_discount, per_liter: 200}
+        limits:
+          - {per: txn, base: 60000}
+          - {per: day, base: 120000}
+          - {shared: fuel}
+        tiers: {from: 300000, to: 300000}
+        exclude_applied: 1
+        unmodeled: [리터는 HD현대오일뱅크·SK에너지 공시 휘발유가로 환산하고 경유도 휘발유가로 환산한다]
+      - key: fuel-400
+        title: HD현대오일뱅크·SK에너지 리터당 400원 청구 할인
+        source: manual
+        evidence: [HD현대오일뱅크/SK에너지에서 주유 시 리터당 200원·400원 청구 할인, 70만원 이상 400원 월간한도 3만원, '유류비 결제금액 기준 1회 6만원, 1일 12만원 한도 내 청구 할인 적용', 주유 할인서비스는 최초 신청 유종에 한해 제공]
+        target:
+          merchants: [hd_oilbank, sk_energy]
+        when:
+          - option:
+              fuel_type: [gasoline_diesel]
+        reward: {type: billing_discount, per_liter: 400}
+        limits:
+          - {per: txn, base: 60000}
+          - {per: day, base: 120000}
+          - {shared: fuel}
+        tiers: {from: 700000}
+        exclude_applied: 1
+        unmodeled: [리터는 HD현대오일뱅크·SK에너지 공시 휘발유가로 환산하고 경유도 휘발유가로 환산한다]
+      - key: car-insurance-30k
+        title: 현대해상 자동차 보험료 3만원 청구 할인
+        source: manual
+        evidence: [현대해상 자동차 보험료 결제 시 청구 할인, 전월 이용금액 30만원 이상 시 할인, 3만원 이상 결제 시 3만원 청구 할인(연 1회), 연간 서비스 이용한도는 매년 1월 1일부터 12월 31일 기준, 할인 적용 시 M포인트 적립 제외]
+        target:
+          merchants: [hyundai_marine]
+        when:
+          - amount: {min: 30000}
+        reward: {type: billing_discount, fixed: 30000}
+        limits:
+          - {per: year, count: 1}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [현대해상 결제 중 자동차 보험료만 할인한다]
+      - key: base-mpoint-0-5
+        title: 국내 가맹점 0.5% M포인트 적립
+        source: manual
+        evidence: [국내 가맹점에서 0.5% M포인트 적립, '1회 이용금액 1,000원 단위 미만은 절사 후 적립', 무이자할부 및 당사의 모든 할인서비스 이용금액 제외, 1회 및 연간 적립한도 무제한]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward:
+          type: points
+          program: hyundai_m_point
+          per_unit: {unit: 1000, amount: 5}
+      - key: gs-caltex-60p
+        title: GS칼텍스 리터당 60 M포인트 적립
+        source: manual
+        evidence: [GS칼텍스 주유 시 리터당 60 M포인트 적립, '일 2회, 1회 10만원 한도, LPG 제외', M포인트 기본 적립과 중복 적용 불가, 무이자할부 및 LPG 충전소 이용금액 제외]
+        target:
+          merchants: [gs_caltex]
+        reward: {type: points, program: hyundai_m_point, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 2}
+        unmodeled: [LPG 충전은 적립하지 않는다, 리터는 GS칼텍스가 통지한 휘발유가로 환산하고 등유와 경유도 휘발유가로 환산한다, 일부 주유소는 적립하지 않는다, '1회 이용금액의 1,000원 미만은 버린 뒤 리터를 센다']
+    unmodeled: [기아멤버스 포인트 0.1% 추가 적립은 공통 포인트에 없어 계산하지 않는다, LPG 충전소 리터당 100원·200원 할인은 공통 업종에 LPG가 없어 계산하지 않는다, 경차 유류세 환급은 유류세 환급 대상자 전용 카드의 정부 환급이라 계산하지 않는다, AUTO Q 차량 정비 2만원 할인은 공통 가맹점이 없어 계산하지 않는다, 현대자동차·기아 자동차 구매 1.5% M포인트와 기아 인증중고차 1.5% M포인트는 공통 가맹점이 없어 계산하지 않는다, 제휴 온라인쇼핑몰 추가 M포인트는 현대카드 홈페이지를 거쳐 접속해야 해 계산하지 않는다, 실적과 혜택의 가맹점은 현대카드 가맹점 등록 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2017-08-21이고 이 가이드북은 2026년 2월 기준이다. 그 사이 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.cancellation', question: 가이드북은 매출취소로 전월 이용금액이 변동될 수 있다고만 적었다, assumed: cancel_month}
+  - {path: 'revisions[0].new_card.from', question: 가이드북은 발급월 포함 2개월이라고 적었다, assumed: issue}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용 5,000원이고 2~5년차는 면제다. 같은 가이드북의 경차전용카드(유류세환급)는 연회비가 없고 유류세 환급 대상자만 발급하는 별도 카드라 담지 않았다. 실적은 전월 1일~말일 일시불과 할부이고 세금, 도시가스, 대학 등록금, 할인 받은 결제, 무이자 할부를 뺀다. 주유 할인은 최초 신청 유종만 받는다. 휘발유·경유는 HD현대오일뱅크·SK에너지 리터당 200원(30만 이상, 월 2만원)과 400원(70만 이상, 월 3만원), 1회 6만원·1일 12만원 결제액까지다. 보험 할인도 30만 이상이고 연 1회다. 신규 발급 시 발급월 포함 2개월간 30만 구간 서비스를 주고 70만원 이상이면 그 구간이다. 할인 받은 결제는 M포인트를 적립하지 않아 한 묶음에 둔다. 혜택 제외는 카드사 파일 기본값이 원문보다 넓어 덜 주는 쪽이다.

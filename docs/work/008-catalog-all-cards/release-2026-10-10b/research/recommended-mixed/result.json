@@ -1,0 +1,201 @@
+[
+  {
+    "card_id": "hana-12782",
+    "status": "ready",
+    "reason": "공식 원문 대조와 실제 앱 엔진 손계산 통과. 독립 검토와 운영 승인 대기.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12782"
+    ],
+    "case_count": 5,
+    "changed_files": [
+      "catalog/cards/hana/hana-12782.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [
+      "domestic-03",
+      "domestic-pay-04",
+      "overseas-04"
+    ],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  },
+  {
+    "card_id": "hana-94257",
+    "status": "blocked",
+    "reason": "교통 영역의 월 합산 3만원과 대상별 결제조건을 함께 적용하는 계산 미지원. 지원 가능한 8개 혜택 작성. 잘못된 목록 주소를 실제 상품 코드 18058로 보완했다.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=94257",
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18058"
+    ],
+    "case_count": 8,
+    "changed_files": [
+      "catalog/cards/hana/hana-94257.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [
+      "delivery-5",
+      "life-telecom-5",
+      "life-utility-5",
+      "subscription-streaming-10",
+      "subscription-membership-10"
+    ],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  },
+  {
+    "card_id": "kb-07964",
+    "status": "blocked",
+    "reason": "Spend.exclude_billing 기능이 없어 후불교통 무승인 전표만 실적에서 제외할 수 없다. 실적 경계에서 혜택 과지급 가능. 지원 가능한 거래 규칙과 손계산은 보존했다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07964"
+    ],
+    "case_count": 19,
+    "changed_files": [
+      "catalog/cards/kb/kb-07964.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  },
+  {
+    "card_id": "hana-17504",
+    "status": "ready",
+    "reason": "공식 원문 대조와 실제 앱 엔진 손계산 통과. 독립 검토와 운영 승인 대기.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+    ],
+    "case_count": 17,
+    "changed_files": [
+      "catalog/cards/hana/hana-17504.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [
+      "base-1",
+      "special-overseas",
+      "special-airline",
+      "special-dutyfree",
+      "special-travel",
+      "special-hana-tour-offline",
+      "special-shopping-online",
+      "special-shopping-offline"
+    ],
+    "scope": "일반 거래의 적립과 할인 계산. 바우처와 라운지 및 발급연도 누적 보상은 자동 계산하지 않음."
+  },
+  {
+    "card_id": "hana-19149",
+    "status": "blocked",
+    "reason": "핵심 영역별 연속 3일 2배 적립 조건 미지원. 일반 결제 9개 혜택은 작성했다.",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19149"
+    ],
+    "case_count": 9,
+    "changed_files": [
+      "catalog/cards/hana/hana-19149.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [
+      "base-05",
+      "online-pay-1",
+      "allday-delivery-2",
+      "allday-transit-3",
+      "allday-taxi-3",
+      "allday-taxi-app-3",
+      "allday-online-shopping-2",
+      "allday-oasis-offline-2",
+      "allday-store-2"
+    ],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  },
+  {
+    "card_id": "kb-09122",
+    "status": "blocked",
+    "reason": "Spend.exclude_billing 기능이 없어 후불교통 무승인 전표만 실적에서 제외할 수 없다. 실적 경계에서 혜택 과지급 가능. 지원 가능한 거래 규칙과 손계산은 보존했다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09122"
+    ],
+    "case_count": 10,
+    "changed_files": [
+      "catalog/cards/kb/kb-09122.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  },
+  {
+    "card_id": "kb-09771",
+    "status": "blocked",
+    "reason": "해외 수수료 면제 및 실적 채워드림 적용일부터 월말까지의 혜택 계산 미지원. 선택팩 14개 혜택은 작성했다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09771"
+    ],
+    "case_count": 14,
+    "changed_files": [
+      "catalog/cards/kb/kb-09771.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [
+      "daily-fuel",
+      "daily-delivery",
+      "daily-telecom",
+      "daily-insurance-app",
+      "daily-shopping",
+      "daily-convenience",
+      "daily-hobby",
+      "family-bills",
+      "family-grocery",
+      "family-care",
+      "family-academy",
+      "family-mart",
+      "family-cafe",
+      "family-kids-cafe"
+    ],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  },
+  {
+    "card_id": "kb-09790",
+    "status": "blocked",
+    "reason": "Spend.exclude_billing 기능이 없어 후불교통 무승인 전표만 실적에서 제외할 수 없다. 실적 경계에서 혜택 과지급 가능. 지원 가능한 거래 규칙과 손계산은 보존했다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09790"
+    ],
+    "case_count": 12,
+    "changed_files": [
+      "catalog/cards/kb/kb-09790.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  },
+  {
+    "card_id": "hyundai-xpe4",
+    "status": "ready",
+    "reason": "공식 원문 대조와 실제 앱 엔진 손계산 통과. 독립 검토와 운영 승인 대기.",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=XPE4",
+      "https://www.hyundaicard.com/upload/card/20260330_X.pdf"
+    ],
+    "case_count": 4,
+    "changed_files": [
+      "catalog/cards/hyundai/hyundai-xpe4.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [
+      "basic-1"
+    ],
+    "scope": "일반 거래의 적립과 할인 계산. 바우처와 라운지 및 발급연도 누적 보상은 자동 계산하지 않음."
+  },
+  {
+    "card_id": "hyundai-mzroe3",
+    "status": "ready",
+    "reason": "공식 원문 대조와 실제 앱 엔진 손계산 통과. 독립 검토와 운영 승인 대기.",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MZROE3",
+      "https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_ZERO%20Ed3_%ED%8F%AC%EC%9D%B8%ED%8A%B8_260330.pdf"
+    ],
+    "case_count": 4,
+    "changed_files": [
+      "catalog/cards/hyundai/hyundai-mzroe3.yaml"
+    ],
+    "reviewed_item_count": 7,
+    "new_benefit_keys": [],
+    "scope": "공식 원문에서 구조화한 일반 거래 계산"
+  }
+]

@@ -1,0 +1,62 @@
+card: woori-102717
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 국내 0.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {simple-discount-0-7: 70}, counted: 10000}
+  calc: 10,000 × 0.7% = 70. 30만 미만이라 커피 할인 없음
+- name: 건당 100만원 이상 1.0%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1000000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {simple-discount-1-0: 10000}}
+  calc: 1,000,000 × 1% = 10,000. 0.7%와 중복 없음
+- name: 30만 구간 주유 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: s_oil}
+  expect:
+  - {payment: 0, benefits: {fuel-discount-60: 3229}, counted: 0}
+  calc: 100,000 × 60 ÷ 1,858 = 3,229.2 내림 3,229. Daily 적용 건은 실적 제외
+- name: 30만 직전 주유는 0.7%만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: s_oil}
+  expect:
+  - {payment: 0, benefits: {simple-discount-0-7: 700}, counted: 100000}
+  calc: 0 구간이라 주유 할인 없음. 100,000 × 0.7% = 700
+- name: 50만 구간 주유 80원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: hd_oilbank}
+  expect:
+  - {payment: 0, benefits: {fuel-discount-80: 4305}}
+  calc: 100,000 × 80 ÷ 1,858 = 4,305.7 내림 4,305
+- name: 100만 구간 주유 100원과 월 7천원 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: s_oil}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: s_oil}
+  expect:
+  - {payment: 0, benefits: {fuel-discount-100: 5382}}
+  - {payment: 1, benefits: {fuel-discount-100: 1618}}
+  calc: 건당 10만원까지만 계산. 100,000 × 100 ÷ 1,858 = 5,382. 둘째는 월 7,000원 중 남은 1,618
+- name: 30만 구간 후불 대중교통 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-discount-10: 150}, counted: 0}
+  calc: 1,500 × 10% = 150
+- name: 30만 구간 커피 건당 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {coffee-discount-10: 1000}, counted: 0}
+  calc: 20,000 × 10% = 2,000 중 건당 1,000. 0.7% 140보다 커서 커피 할인

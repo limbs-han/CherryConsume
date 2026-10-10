@@ -1,0 +1,59 @@
+card: ibk-12113120002
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 다이소 20% 월 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {daiso-20pct: 4000}}
+  - {payment: 1, benefits: {daiso-20pct: 1000}}
+  calc: 20,000원 × 20% = 4,000원. 둘째는 월 5,000원에 남은 1,000원
+- name: 경계 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 편의점 5% 1만원까지
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {convenience-5pct: 500}}
+  calc: 10,000원까지 × 5% = 500원
+- name: 쿠팡 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {coupang-10pct: 1000}}
+  calc: 10,000원까지 × 10% = 1,000원
+- name: 미용실 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: beauty.salon}
+  expect:
+  - {payment: 0, benefits: {beauty-10pct: 3000}}
+  calc: 30,000원 × 10% = 3,000원
+- name: 영화 2천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cgv, channel: offline}
+  expect:
+  - {payment: 0, benefits: {cinema-2k: 2000}}
+  calc: 1만원 이상 2,000원
+- name: 커피 10%와 20만 구간 통합한도
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: starbucks, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: twosome, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: hollys, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-10pct: 2000}}
+  - {payment: 1, benefits: {coffee-10pct: 2000}}
+  - {payment: 2, benefits: {coffee-10pct: 1000}}
+  calc: 각 2,000원. 셋째는 통합한도 5,000원에 남은 1,000원

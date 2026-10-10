@@ -1,0 +1,50 @@
+card: ibk-12113090852
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 후불교통 버스 100원과 월 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transport-100: 100}, counted: 0}
+  calc: 건당 100원. 후불교통은 실적 제외
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T08:00, amount: 1500, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 편의점 5% 1만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  calc: 10,000원까지 × 5% = 500원
+- name: 쿠팡 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 8000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-shop-10: 800}}
+  calc: 8,000원 × 10% = 800원
+- name: 영화 4천원과 30만 구간 통합한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: starbucks, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 12000, merchant: cgv, channel: offline}
+  expect:
+  - {payment: 0, benefits: {cafe-10: 1000}}
+  - {payment: 1, benefits: {movie-4k: 4000}}
+  calc: 커피 10,000원까지 × 10% = 1,000원. 영화 4,000원. 합 5,000원이 통합한도
+- name: 50만 구간 영화
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: megabox, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: megabox, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {movie-4k: 4000}}
+  calc: 1만원 미만은 할인 없음. 1만원 이상 4,000원

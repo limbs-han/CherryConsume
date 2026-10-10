@@ -1,0 +1,138 @@
+card: hana-10222
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 시작 평일 점심 음식점 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {lunch-time-5: 500}
+    counted: 0
+  calc: 10,000원 x 5% = 500원. 캐쉬백 받은 결제는 실적에서 빠져 0원
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 20만원보다 1원 적어 캐쉬백 0원. 혜택이 없어 10,000원이 실적에 들어감
+- name: 40만 구간 직전 한도 5천
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, category: cafe}
+  expect:
+  - payment: 0
+    benefits: {lunch-time-5: 5000}
+  calc: 300,000원 x 5% = 15,000원이 20만 구간 월 한도 5,000원에 걸림
+- name: 40만 구간 시작 한도 1만
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, category: cafe}
+  expect:
+  - payment: 0
+    benefits: {lunch-time-5: 10000}
+  calc: 300,000원 x 5% = 15,000원이 40만 구간 월 한도 10,000원에 걸림
+- name: 월 한도 직전과 직후
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 99980, category: convenience}
+  - {at: 2026-11-05T12:00, amount: 10000, category: convenience}
+  - {at: 2026-11-06T12:00, amount: 10000, category: convenience}
+  expect:
+  - payment: 0
+    benefits: {lunch-time-5: 4999}
+  - payment: 1
+    benefits: {lunch-time-5: 1}
+  - payment: 2
+    benefits: {}
+  calc: 99,980원 x 5% = 4,999원. 남은 1원만 받고 그다음은 0원
+- name: 건당 5천원 미만과 5천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 4999, category: restaurant.general}
+  - {at: 2026-11-04T12:30, amount: 5000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {lunch-time-5: 250}
+  calc: 4,999원은 최소 금액 미달 0원. 5,000원 x 5% = 250원
+- name: 점심 시간 경계
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:59, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-04T11:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-04T13:59, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-04T14:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {lunch-time-5: 500}
+  - payment: 2
+    benefits: {lunch-time-5: 500}
+  - payment: 3
+    benefits: {}
+  calc: 11:00 이상 14:00 미만만 5%. 10:59와 14:00은 0원
+- name: 토요일과 평일 공휴일 제외
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-10-09T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 2026-11-07은 토요일, 2026-10-09 한글날은 금요일 공휴일이라 0원
+- name: 온라인과 대상 아닌 업종
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general, channel: online}
+  - {at: 2026-11-04T12:10, amount: 10000, category: restaurant.fastfood}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 국내 오프라인만 대상이라 온라인 0원. 패스트푸드는 일반음식점이 아니라 0원
+- name: 해외 가맹점 수수료 0.6% 면제
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: restaurant.general, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-fee-free: 300}
+    counted: 50000
+  calc: 실적과 관계없이 50,000원 x 0.6% = 300원. 점심 캐쉬백은 국내만이라 0원
+- name: 실적 제외 국세
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: tax}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 국세는 혜택 대상이 아니고 실적에서도 빠져 0원
+- name: 신규 특례 기간 안
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {lunch-time-5: 500}
+  calc: 10월 사용 등록이면 11월 말까지 20만 구간으로 보아 500원
+- name: 신규 특례 기간 뒤
+  prev_month_spend: 0
+  holder: {started_on: '2026-09-15'}
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 9월 등록 특례는 10월 말에 끝나 전월 0원이면 0원

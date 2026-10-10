@@ -1,0 +1,72 @@
+card: woori-104183
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 SK 주유 120원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-discount-40: 6458}, counted: 0}
+  calc: 100,000 × 120 ÷ 1,858 = 6,458.5 내림 6,458. 할인받은 건은 실적 제외
+- name: 40만 직전 주유는 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 0 구간이라 할인 없음. 할인받지 않아 실적에 그대로
+- name: 200만 구간 400원과 건당 10만원
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-discount-200: 21528}}
+  calc: 건당 10만원까지만 계산. 100,000 × 400 ÷ 1,858 = 21,528.5 내림 21,528
+- name: 주유 통합 월 4회
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-01T10:00, amount: 10000, merchant: sk_energy, channel: offline}
+  - {at: 2026-11-02T10:00, amount: 10000, merchant: sk_energy, channel: offline}
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: sk_energy, channel: offline}
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: sk_energy, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 3, benefits: {fuel-discount-40: 645}}
+  - {payment: 4, benefits: {}}
+  calc: 10,000 × 120 ÷ 1,858 = 645.8 내림 645. 다섯째는 월 4회를 넘어 할인 없음
+- name: 편의점 7%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {convenience-7: 700}, counted: 0}
+  calc: 10,000 × 7% = 700
+- name: 커피 7%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {coffee-7: 700}}
+  calc: 10,000 × 7% = 700
+- name: OTT 정기결제 7%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {ott-7: 1190}}
+  calc: 17,000 × 7% = 1,190
+- name: 80만 구간 150원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-discount-80: 8073}}
+  calc: 100,000 × 150 ÷ 1,858 = 8,073.2 내림 8,073
+- name: 120만 구간 250원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-discount-120: 13455}}
+  calc: 100,000 × 250 ÷ 1,858 = 13,455.3 내림 13,455

@@ -1,0 +1,129 @@
+schema_version: 2
+id: shinhan-bgkcza
+issuer: shinhan
+name: 신한카드 Way 체크(쥬라기)
+short_name: 신한 Way 체크
+kind: check
+product_codes: [BGKCZA]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1216885_2206.html', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2022-03-04
+    source: page
+    tiers: [0, 200000, 500000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.gas, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.gas, utility.water]
+      unmodeled: [포인트로 결제한 금액과 신한카드 서비스가 적용된 거래는 적립하지 않는다]
+    limits:
+      - {key: life, per: month, amount: 8000}
+      - {key: combined, per: month, amount: 16000}
+    benefits:
+      - key: transport
+        title: 대중교통 최대 5% 적립
+        source: page
+        evidence: [대중교통(버스/지하철) 이용 시 최대 5% 적립, '마이신한포인트로 적립되며, 월간 적립한도는 8천원 입니다.', 후불교통기능을 이용한 터치(RF)거래시 할인 적용됩니다., 고속버스 이용 건에 대해서는 서비스가 적용되지 않습니다., '20만원 이상 50만원 미만 1%, 50만원 이상 80만원 미만 3%, 80만원 이상 5%']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1, 500000: 3, 800000: 5}
+        limits:
+          - {per: month, amount: 8000}
+          - {shared: combined}
+        tiers: {from: 200000}
+        unmodeled: [시외버스가 대상인지 원문에 없어 시내버스와 지하철만 계산한다]
+      - key: life-telecom
+        title: 통신요금 최대 2% 적립
+        source: page
+        evidence: ['통신요금: SKT, KT, LGU+', '통신요금은 순수 통신요금 결제금액 자동이체만 대상이며, 약정금액 대납, 지점을 통한 월납, 알뜰폰은 적립 제외됩니다.', '20만원 이상 50만원 미만 1%, 50만원 이상 80만원 미만 1.5%, 80만원 이상 2%']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1, 500000: 1.5, 800000: 2}
+        limits:
+          - {shared: life}
+          - {shared: combined}
+        tiers: {from: 200000}
+      - key: life-convenience
+        title: 편의점·생활잡화 최대 2% 적립
+        source: page
+        evidence: ['편의점/생활잡화: GS25, CU, 세븐일레븐, 이마트24, 올리브영, 다이소', 편의점/생활잡화는 오프라인 매장에 한하여 적용되며, 인터넷이나 모바일앱을 통한 온라인 거래는 적용되지 않습니다.]
+        target:
+          merchants: [cu, daiso, emart24, gs25, olive_young, seven_eleven]
+        when:
+          - {channel: offline}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1, 500000: 1.5, 800000: 2}
+        limits:
+          - {shared: life}
+          - {shared: combined}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점 입점 매장은 적립하지 않는다]
+      - key: life-digital
+        title: 디지털컨텐츠 최대 2% 적립
+        source: page
+        evidence: ['디지털컨텐츠: 유튜브프리미엄, 넷플릭스, 왓차, 웨이브, 디즈니플러스', 디지털컨텐츠의 경우 공식 홈페이지(앱)을 통해 직접 신청한 정기결제(자동이체)이용건에 한하여 적용됩니다.]
+        target:
+          merchants: [disney_plus, netflix, watcha, wavve, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1, 500000: 1.5, 800000: 2}
+        limits:
+          - {shared: life}
+          - {shared: combined}
+        tiers: {from: 200000}
+        unmodeled: [앱 내 결제와 앱마켓 결제와 통신요금 합산 결제는 적립하지 않는다]
+      - key: life-cafe
+        title: 커피전문점 최대 2% 적립
+        source: page
+        evidence: ['커피전문점: 커피전문점 업종', '백화점, 할인점, 면세점, 공항 등에 입점된 매장 및 상품권, 선불카드 구입/충전 건은 할인 적용되지 않습니다.']
+        target:
+          categories: [cafe]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1, 500000: 1.5, 800000: 2}
+        limits:
+          - {shared: life}
+          - {shared: combined}
+        tiers: {from: 200000}
+        unmodeled: ['백화점, 할인점, 면세점, 공항 입점 커피전문점은 적립하지 않는다']
+      - key: overseas-1-3
+        title: 해외 1.3% 적립
+        source: page
+        evidence: [해외 이용금액에 대해 1.3% 적립, 전월 이용금액 관계없이 제공, 일/월/한도 제한 없음, '해외 일시불만 적용되며, 해외 일시불 거래 후 할부로 전환하는 경우는 제외됩니다.']
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 1.3}
+        unmodeled: [해외겸용 Visa 카드로 발급한 경우만 받는다]
+    unmodeled: [일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 서비스는 이용한 거래 순서대로 적용한다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비는 페이지 HTML 기준 Visa 0원. 대중교통은 월 8천 포인트, 생활편의(통신, 편의점·생활잡화, 디지털컨텐츠, 커피)는 합산 월 8천 포인트, 둘을 합쳐 월 1만 6천 포인트까지다. 적립률은 전월 20만, 50만, 80만원 구간마다 다르다. 해외 1.3%는 전월 실적과 관계없다. 무이자할부 거래는 적립하지 않는다. 전월 실적 제외: 현금서비스, 카드론, 연회비, 수수료, 이자, 기프트카드와 선불카드, 상품권과 선불전자지급수단, 국세, 지방세, 수도, 4대보험, 초중고 납입금, 관리비, 도시가스, 전기, 취소. 신규 발급 회원은 등록월 다음 달 말까지 20만~50만원 구간을 적용한다. 2026-10-10 새 방식대로 후불교통 반영월 구분 대신 시내버스와 지하철을 실적에서 뺐다.'

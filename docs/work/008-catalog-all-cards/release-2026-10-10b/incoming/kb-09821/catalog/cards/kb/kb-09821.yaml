@@ -1,0 +1,110 @@
+schema_version: 2
+id: kb-09821
+issuer: kb
+name: KB 마라톤카드
+short_name: KB 마라톤
+kind: credit
+product_codes:
+  - '09821'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+  - {scope: domestic, form: mobile, amount: 24000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 24000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09821', fetched_at: '2026-10-10', review_no: 제2026-C1a-01855호}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-02-23'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: [정부지원금은 할인에서 빠진다, 결제대행업체(PG)나 간편결제 가맹점으로 분류된 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 업종 할인에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: runable-20
+        title: 러너블 20% 청구할인
+        source: page
+        evidence: [러너블 | 티켓 / 스토어 | 20% | 1만원 | 1만5천원, 러너블 APP 내 티켓 및 스토어 구매 시 제공, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB 마라톤카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 할인혜택 50% 제공(단 월 할인한도는 5천원으로 적용)]
+        target:
+          merchants: [runable]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - per: month
+            amount: {0: 5000, 400000: 10000, 800000: 15000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: ott-30
+        title: OTT 정기결제 30% 청구할인
+        source: page
+        evidence: [OTT 정기결제 | 30% | 5천원 | 1만원, 'OTT: 넷플릭스, 유튜브 프리미엄, 티빙, 디즈니플러스', 공식 홈페이지 및 모바일(앱)을 통한 정기결제 시 제공, ※ 간편결제 또는 앱스토어를 통한 인앱 결제건 등은 제외, 실적유예기간 월 할인한도는 2천5백원으로 적용]
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        when:
+          - payment: [physical_card]
+            billing_not: [in_app]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - per: month
+            amount: {0: 2500, 400000: 5000, 800000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [공식 홈페이지와 앱 정기결제만 할인한다]
+      - key: convenience-5
+        title: 편의점 업종 5% 청구할인
+        source: page
+        evidence: [편의점 업종 | 5% | 2천원 | 5천원, '백화점, 마트 등 일부 입점 매장 및 온라인 가맹점 결제 건 제외', 실적유예기간 월 할인한도는 1천원으로 적용]
+        target:
+          categories: [convenience]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 5000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: medical-5
+        title: 병원·약국 업종 5% 청구할인
+        source: page
+        evidence: [병원/약국 업종 | 5% | 5천원 | 1만원, '병원 업종: 종합병원, 일반 치과 한방병원, 일반 치과 한의원', 실적유예기간 월 할인한도는 2천5백원으로 적용]
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 2500, 400000: 5000, 800000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: ['스포츠 업종 5% 할인(월 1만원, 80만원 이상 1만5천원)은 대상이 스포츠용품점, 레저용품점, 종합스포츠센터 업종뿐인데 공통 업종 sports가 골프·헬스 등까지 넓어 계산하지 않는다', 부분 무이자할부 이용금액도 실적에서 빠진다, 가족카드 이용분은 본인과 실적과 한도를 합산한다, '정부지원금, 도시가스, 자판기·터널 이용료·항공기내 같은 무승인 전표는 실적에서 빠진다', 할인 받은 이용 건은 금액 전체가 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2026.02.23 출시라고만 적었다. 현재 규칙의 시작일로 잠정 적용한다., assumed: '2026-02-23'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits[runable-20].when', question: 러너블 앱 안 티켓과 스토어 결제만 할인한다. 공통 가맹점 runable을 새로 더해야 하고 앱 결제를 온라인으로 둔다, assumed: 'merchant runable, channel online'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 실적 유예는 생애 최초 발급만 facts로 확인하고 원문이 적은 유예 월 한도를 0 구간에 둔다. 초안의 웨이브는 원문 OTT 목록에 없어 뺐다.

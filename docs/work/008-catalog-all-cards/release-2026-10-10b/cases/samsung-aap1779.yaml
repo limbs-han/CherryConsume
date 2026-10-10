@@ -1,0 +1,57 @@
+card: samsung-aap1779
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 1% 생활 1.2% 특별 1.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: shinsegae_department, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 300000, merchant: korean_air, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {life-1-2: 1200}}
+  - {payment: 2, benefits: {dept-1-2: 1200}}
+  - {payment: 3, benefits: {overseas-1-5: 1500}}
+  - {payment: 4, benefits: {airline-1-5: 4500}}
+  calc: 100,000 × 1% = 1,000, × 1.2% = 1,200 두 건, × 1.5% = 1,500, 300,000 × 1.5% = 4,500. 실적 무관, 한도 없음
+- name: 50만 구간 디지털콘텐츠 스타벅스
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-06T09:00, amount: 14000, merchant: youtube_premium, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-07T09:00, amount: 12000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-08T09:00, amount: 12000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-50: 8500}}
+  - {payment: 1, benefits: {digital-50: 1500}}
+  - {payment: 2, benefits: {starbucks-3000: 3000}}
+  - {payment: 3, benefits: {domestic-1: 120}}
+  calc: 17,000 × 50% = 8,500, 남은 한도 1,500. 스타벅스 월 1회 3,000, 두 번째는 1% 120
+- name: 50만 직전이면 디지털 할인 없이 1%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-1: 170}}
+  calc: 0 구간이라 1% 170
+- name: 택시는 적립과 실적 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 택시는 적립과 실적에서 뺀다
+- name: 배달앱 면세점 공연
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T19:00, amount: 30000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T15:00, amount: 200000, merchant: shilla_dfs, payment_method: physical_card}
+  - {at: 2026-11-04T15:00, amount: 100000, merchant: interpark_ticket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-1-2: 360}}
+  - {payment: 1, benefits: {dfs-1-5: 3000}}
+  - {payment: 2, benefits: {ticket-1-5: 1500}}
+  calc: 30,000 × 1.2% = 360, 200,000 × 1.5% = 3,000, 100,000 × 1.5% = 1,500

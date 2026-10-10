@@ -1,0 +1,88 @@
+schema_version: 2
+id: samsung-aap1869
+issuer: samsung
+name: T PREMIUM 삼성카드
+short_name: T PREMIUM
+search_names: [T PREMIUM, T프리미엄, 티 프리미엄]
+kind: credit
+product_codes: [AAP1869]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: amex, amount: 50000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1869', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmntgQRrnSxh9Z%2FEKtcj6gg%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-05-12'
+    source: manual
+    tiers: [0, 800000, 1600000, 2500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 800000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    options:
+      - key: light_installment
+        title: SKT 라이트할부 이용 여부
+        choices:
+          - {key: none, title: 라이트할부 미이용. SKT 통신요금 할인을 받는다}
+          - {key: using, title: 'SKT 라이트할부 이용 중. 월 25,000~60,000원 결제대금 차감을 받는다'}
+        default: none
+        change: next_month
+        unsupported: [using]
+    benefits:
+      - key: skt-telecom
+        title: SKT·SK브로드밴드·SK 세븐모바일 통신요금 할인
+        source: manual
+        evidence: ['통신요금 정기결제 시 월 통신요금 7,000~20,000원 결제일할인', '통신 SKT, SK브로드밴드, SK 세븐모바일', '전월 이용금액대별 월 할인한도 80만원 이상 7,000원, 160만원 이상 14,000원, 250만원 이상 20,000원', '통신요금 정기결제 합산 금액이 월 할인한도보다 적은 경우, 정기결제금액만큼 카드 결제대금에서 자동 차감']
+        target:
+          merchants: [sk_broadband, sk_telink, skt]
+        when:
+          - option:
+              light_installment: [none]
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {800000: 7000, 1600000: 14000, 2500000: 20000}
+        tiers: {from: 800000}
+      - key: overseas-5
+        title: 해외 5% 할인
+        source: manual
+        evidence: [해외 5% 결제일할인, 해외 가맹점 및 해외 직접구매 이용건, '전월 이용금액대별 월 할인한도 160만원 미만 50,000원, 160만원 이상 70,000원']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 50000, 1600000: 70000}
+        unmodeled: [해외 온라인 거래라도 국내 가맹점번호로 승인되는 결제(국내 전자지급 결제대행사 등)는 할인하지 않는다]
+      - key: airline-3
+        title: 항공 3% 할인
+        source: manual
+        evidence: [여행/항공 3% 결제일할인, 항공 대한항공/아시아나항공/제주항공/진에어/티웨이항공, '전월 이용금액대별 월 할인한도 80만원 이상 15,000원, 160만원 이상 30,000원, 250만원 이상 60,000원', '항공은 공식 홈페이지/앱을 통한 결제건에 한하며, 다른 여행사, 항공권 구매 대행 사이트를 통한 결제건은 제외']
+        target:
+          merchants: [asiana_airlines, jeju_air, jin_air, korean_air, tway_air]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - per: month
+            amount: {800000: 15000, 1600000: 30000, 2500000: 60000}
+        tiers: {from: 800000}
+    unmodeled: ['SKT 라이트할부 이용 시 결제대금 차감(전월 80만원 이상 25,000원, 160만원 이상 40,000원, 250만원 이상 60,000원, 월 1회)은 결제 하나에 붙는 혜택이 아니라 계산하지 않는다. 라이트할부 이용 여부는 혜택 제공월의 전월 말일 기준이다', 여행 3%의 호텔·콘도·리조트(국내 오프라인)는 숙박 업종이 모텔과 펜션까지 넓어 담지 않았다. 항공과 같은 월 할인한도를 쓴다, 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일 2025-05-12와 상품설명서 2025.5판을 시행일로 두었다, assumed: '2025-05-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통은 후불교통기능·모바일교통기능 결제건이다. 새 방식대로 시내버스와 지하철을 뺐다. 삼성카드는 사회보험료를 공과금으로 분류해 insurance.social도 뺐다, assumed: 'transit.bus_city, transit.subway, insurance.social'}
+  - {path: 'revisions[0].benefits[skt-telecom].when', question: 통신요금 정기결제를 자동납부로 보았다, assumed: 'billing: autopay'}
+notes: 2026-10-10 상품설명서(2025.5판, 여신금융협회 심의필 제2025-C1a-06117호)와 상품 페이지 대조. 해외겸용 아멕스 단일이고 연회비 50,000원(기본 7,000+제휴 43,000). SKT 24/36개월 라이트할부는 SKT 단말기 50만원 이상, 연 5.9%·7.0% 할부수수료다. 라이트할부를 이용 중이면 통신요금 할인 대신 결제대금 차감을 받고 완납 다음 달부터 통신요금 할인으로 바뀐다. 차감은 계산하지 않아 using 선택지는 미지원이다. 발급월+1개월까지 80만 구간 혜택을 준다. 실적 제외는 무이자할부, 4대보험, 국세·지방세·공과금, 아파트관리비, 부동산 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통(후불교통·모바일교통), 택시, 기프트·선불카드, 상품권이다. 할인 받은 결제도 실적에 넣는다.

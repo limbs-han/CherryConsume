@@ -1,0 +1,112 @@
+schema_version: 2
+id: hyundai-to
+issuer: hyundai
+name: the Orange
+short_name: 현대 the Orange
+search_names: [the Orange, 더 오렌지, 현대카드 the Orange]
+kind: credit
+product_codes: [TO]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 200000}
+  - {scope: global, brand: visa, amount: 200000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0621_11.hc?cardflag=TO', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/20260330_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Orange.pdf', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 1000000, from: receipt}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+    limits:
+      - {key: online-10, per: month, amount: 10000}
+      - {key: dining-10, per: month, amount: 10000}
+      - {key: tech-10, per: month, amount: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [extra-online-10pct, extra-dining-10pct, extra-tech-10pct, tech-telecom-10, tech-inapp-10, basic-point-1pct]
+        spill: split
+    benefits:
+      - key: basic-point-1pct
+        title: 국내외 가맹점 1% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1% M포인트 적립, 1회 및 연간 적립 한도 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립]
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1, round: round}
+        tiers: {from: 500000}
+      - key: extra-online-10pct
+        title: 온라인몰 10% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 100만원 이상 시 온라인몰 10% M포인트 적립, '온라인몰 : 네이버플러스 스토어, 쿠팡, 무신사, KREAM, 29CM', '대상 영역별 월 1만 M포인트 적립 한도(본인+가족 카드 합산 기준, 적립 한도 초과 시 기본 혜택 적립률 적용)', 쿠팡의 경우 쿠팡이츠 결제 건은 추가 혜택 제외, 추가 혜택 적용 시 기본 혜택은 중복 제공되지 않음]
+        target:
+          merchants: [coupang, kream, musinsa, naver_plus_store, twentynine_cm]
+          exclude_merchants: [coupang_eats]
+        reward: {type: points, program: hyundai_m_point, rate: 10, round: round}
+        limits:
+          - {shared: online-10}
+        tiers: {from: 1000000}
+        unmodeled: [네이버플러스 스토어는 naver.com 도메인으로 확인되는 가맹점만 추가 적립한다, 공식 홈페이지와 앱 안의 결제만 추가 적립하고 연결된 다른 사이트나 앱에서 결제하면 1%다]
+      - key: extra-dining-10pct
+        title: 다이닝 10% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 100만원 이상 시 다이닝 10% M포인트 적립, '다이닝 : 일반음식점', 대상 영역별 월 1만 M포인트 적립 한도]
+        target:
+          categories: [restaurant.general]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: hyundai_m_point, rate: 10, round: round}
+        limits:
+          - {shared: dining-10}
+        tiers: {from: 1000000}
+        unmodeled: [간편결제나 PG 가맹점명으로 승인된 결제는 일반음식점으로 보지 않아 추가 적립하지 않는다]
+      - key: extra-tech-10pct
+        title: 테크 디지털 콘텐츠·AI 구독 10% M포인트 적립
+        source: manual
+        evidence: ['디지털 콘텐츠 서비스 : 넷플릭스, 유튜브 프리미엄, 디즈니+, 멜론, 지니', 'AI 구독 서비스 : ChatGPT, Perplexity AI, Google One', 디지털 콘텐츠 서비스 및 AI 구독 서비스의 경우 서비스별 공식 홈페이지 및 앱에서 결제한 건에 한해 추가 혜택 적용, 대상 영역별 월 1만 M포인트 적립 한도]
+        target:
+          merchants: [chatgpt, disney_plus, genie, google_one, melon, netflix, perplexity, youtube_premium]
+        reward: {type: points, program: hyundai_m_point, rate: 10, round: round}
+        limits:
+          - {shared: tech-10}
+        tiers: {from: 1000000}
+        unmodeled: [서비스별 공식 홈페이지와 앱에서 결제한 건만 추가 적립한다, AI 구독은 월 또는 연 단위 구독 결제만 추가 적립한다]
+      - key: tech-telecom-10
+        title: 테크 이동통신 요금 10% M포인트 적립
+        source: manual
+        evidence: ['이동통신 요금 : SKT, KT, LG U+', 이동통신 요금은 정기결제 신청 후 매달 발생한 결제 건에 대해 추가 혜택 적용, '비정기 결제 건 및 알뜰폰·선불폰·결합상품(인터넷, TV, 유선전화 등) 요금 추가 혜택 제외', 대상 영역별 월 1만 M포인트 적립 한도]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: hyundai_m_point, rate: 10, round: round}
+        limits:
+          - {shared: tech-10}
+        tiers: {from: 1000000}
+        unmodeled: ['결합상품(인터넷, TV, 유선전화 등) 요금은 추가 적립하지 않는다']
+      - key: tech-inapp-10
+        title: 테크 인앱 결제 10% M포인트 적립
+        source: manual
+        evidence: ['인앱 결제 : 애플 앱스토어, 구글 플레이', 대상 영역별 월 1만 M포인트 적립 한도]
+        target:
+          merchants: [app_store, google_play]
+        reward: {type: points, program: hyundai_m_point, rate: 10, round: round}
+        limits:
+          - {shared: tech-10}
+        tiers: {from: 1000000}
+    unmodeled: ['웰니스 영역(피부과, 헬스장·필라테스·요가·테니스장·수영장) 10% 적립은 공통 업종이 원문 대상보다 넓어 계산하지 않는다', 적립 혜택과 영역 한도는 매출전표 접수 순서로 적용한다, 실적과 영역 한도는 본인과 가족 카드를 합산한다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, TV 수신료와 고속도로 통행료·후불하이패스는 적립하지 않는다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다, 월 적립 한도를 넘긴 뒤 혜택 받은 결제를 취소하면 이전 결제에 다음 달 15일경 적립한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북은 2026년 3월 판이다. 그 전부터 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa Signature) 200,000원(기본 50,000+제휴 150,000), 가족카드 50,000원. 전월 50만 이상 국내외 1% M포인트(한도 없음, 건별 반올림). 전월 100만 이상 온라인몰·다이닝·웰니스·테크 영역 10% M포인트, 영역별 월 1만 M포인트이고 넘으면 1%. 추가 혜택은 기본 1%를 대신한다. 테크 영역은 디지털 콘텐츠, AI 구독, 이동통신 요금, 인앱 결제를 한 한도로 묶는다. 실적은 전월 1일~말일 일시불과 할부이고 공과금, 상품권·선불카드, 연회비를 뺀다. 취소는 승인월 실적에서 빼고 해외 이용은 취소 발생월에서 뺀다. 신규 발급 시 카드 수령 등록월 다음 달 이용 건까지 50만·100만 미만도 혜택을 준다. 결제 건 혜택 아님 연간 15만원 바우처(누적·연간 실적 조건), M 긴급적립, 공항 라운지 연 5회, 발레파킹 월 5회, 메탈 플레이트.

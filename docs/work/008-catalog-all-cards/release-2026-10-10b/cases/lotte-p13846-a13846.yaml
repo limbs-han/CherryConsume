@@ -1,0 +1,59 @@
+card: lotte-p13846-a13846
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 5%와 월 1만원 한도
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: fuel}
+  - {at: 2026-11-10T10:00, amount: 150000, category: fuel}
+  expect:
+  - payment: 0
+    benefits: {fuel: 5000}
+  - payment: 1
+    benefits: {fuel: 5000}
+  calc: 100000 x 5% = 5000. 150000 x 5% = 7500이지만 남은 한도 5000
+- name: 75만원 1원 모자라면 주유 0.5%
+  prev_month_spend: 749999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: fuel}
+  - {at: 2026-11-05T10:00, amount: 50000, category: hospital}
+  expect:
+  - payment: 0
+    benefits: {fuel: 500}
+  - payment: 1
+    benefits: {}
+  calc: 100000 x 0.5% = 500. 병원은 75만 미만이라 없음
+- name: 보험료 자동납부 5% 한도 1만원
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 300000, category: insurance.private, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {insurance: 10000}
+  calc: 300000 x 5% = 15000, 한도 10000
+- name: 이동통신 자동납부 5%
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-25T10:00, amount: 60000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom: 3000}
+  calc: 60000 x 5% = 3000
+- name: 병원 5% 한도 5천원
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, category: hospital}
+  expect:
+  - payment: 0
+    benefits: {hospital-pharmacy: 5000}
+  calc: 200000 x 5% = 10000, 한도 5000
+- name: 신규 발급 특례 기간은 75만 구간
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: pharmacy}
+  expect:
+  - payment: 0
+    benefits: {hospital-pharmacy: 2500}
+  calc: 10월 발급이라 11월 말까지 75만 구간. 50000 x 5% = 2500

@@ -1,0 +1,45 @@
+schema_version: 2
+id: lotte-1860
+issuer: lotte
+name: SK인텔릭스 X LOCA
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00028_20251030_10003.pdf', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefits:
+      - key: subscription-discount
+        title: SK인텔릭스 구독료 자동납부 결제일 할인
+        source: manual
+        evidence: ['30만원 이상 13,000원', '70만원 이상 16,000원', '150만원 이상 25,000원', SK인텔릭스 X LOCA로 SK인텔릭스 구독료 자동 납부 연결 시에만 결제일 할인 혜택을 받으실 수 있습니다., 구독료가 구독료 할인 한도보다 적을 경우 구독료 만큼만 할인됩니다., 지난달 이용 금액이 30만원 미만인 경우는 결제일 할인이 되지 않습니다.]
+        target:
+          merchants: [sk_intellix]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 700000: 16000, 1500000: 25000}
+        tiers: {from: 300000}
+    unmodeled: [SK인텔릭스 24·36개월 장기 할부 이용금액은 실적에서 빠지지만 결제 입력으로 가려내지 않는다. 장기 할부를 기록하면 실적이 실제보다 크게 잡힐 수 있다, '장기 할부 캐시백 13,000·16,000·25,000원은 할부 이용 다음 달부터 36개월차까지 매월 26일 지급이라 계산하지 않는다. 구독료 할인과 함께 쓰면 캐시백이 우선이고 구독료 할인은 없다', '지난달 장·단기카드대출 이용잔액이 300만원 이상이면 구독료 할인 한도 2,000원을 더 준다. 대출 잔액 입력이 없어 계산하지 않는다', 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', SK인텔릭스 X LOCA가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 온라인 판매 목록과 공시 목록에 상품 코드가 없어 id를 공시 색인 번호로 두었다. 제휴 채널 전용 판매로 보인다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2023-09-04이고 설명서는 2025년 9월 기준이다, assumed: '2026-10-10'}
+notes: 2026-10-10 상품설명서 대조. 신규 발급 특례는 발급일부터 다음 달 말일까지 13,000원 한도라 30만 구간으로 넣었다. 구독료가 한도보다 적으면 구독료만큼 할인이라 100% 할인에 월 한도로 적었다.

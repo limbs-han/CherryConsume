@@ -1,0 +1,78 @@
+card: ibk-12113380004
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 쿠팡 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {living-online-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원
+- name: 경계 직전 499999
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 이마트 오프라인 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {living-offline-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원
+- name: 스타벅스 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {living-coffee-1: 100}}
+  calc: 10,000원 × 1% = 100원
+- name: 버스 1% 실적 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {living-transit-1: 15}, counted: 0}
+  calc: 1,500원 × 1% = 15원. 후불교통은 실적 제외
+- name: 택시 오프라인 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T23:00, amount: 15000, category: taxi, channel: offline}
+  expect:
+  - {payment: 0, benefits: {living-taxi-1: 150}}
+  calc: 15,000원 × 1% = 150원
+- name: 카카오T 온라인 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T23:00, amount: 15000, merchant: kakao_t, channel: online}
+  expect:
+  - {payment: 0, benefits: {living-kakaot-1: 150}}
+  calc: 15,000원 × 1% = 150원
+- name: 주유 월 50만원 인정
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 600000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {living-fuel-1: 5000}}
+  calc: 500,000원까지 × 1% = 5,000원
+- name: 통신 자동이체 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 50000, merchant: kt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-telecom-1: 500}}
+  calc: 50,000원 × 1% = 500원
+- name: 넷플릭스 정기결제 5%와 통합한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 17000, merchant: netflix, billing: subscription}
+  - {at: 2026-11-05T08:00, amount: 2000000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T08:00, amount: 17000, merchant: netflix, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {membership-5: 850}}
+  - {payment: 1, benefits: {living-online-1: 19150}}
+  - {payment: 2, benefits: {}}
+  calc: 17,000원 × 5% = 850원. 쿠팡 20,000원 중 남은 통합한도 19,150원. 셋째는 한도 소진

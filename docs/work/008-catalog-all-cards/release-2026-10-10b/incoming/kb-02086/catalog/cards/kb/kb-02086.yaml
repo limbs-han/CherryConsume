@@ -1,0 +1,114 @@
+schema_version: 2
+id: kb-02086
+issuer: kb
+name: KB국민 그린카드(서울형)
+short_name: KB 그린카드 서울형
+kind: credit
+product_codes:
+  - '02086'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02086', fetched_at: '2026-10-10', review_no: 제2024-C1a-14704호}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2024-11-25'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 적립에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 처음 발급받았나요? 해지 후 다시 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - key: extra
+        per: month
+        amount: {0: 5000, 200000: 5000, 500000: 5000, 1000000: 10000, 1500000: 10000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: extra, pick: best}
+    benefits:
+      - key: eco-base-0-5
+        title: 국내외 가맹점 0.5% 에코머니 적립
+        source: page
+        evidence: [일시불 및 할부이용금액 0.5% 에코머니포인트 적립, 국내외 가맹점 신용판매 매출액의 0.5%를 적립한도 없이 적립해 드립니다., 전월이용실적 20만원 이상시 제공, 최초 사용등록일로부터 60일이 포함되는 월말까지 이용실적에 관계없이 에코머니포인트 적립 제공 (단 해지 후 재발급 제외)]
+        target: {all: true}
+        reward: {type: points, program: eco_money, rate: 0.5}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: shopping-extra
+        title: 대형마트·백화점·인터넷쇼핑몰 0.5~2.5% 에코머니 추가적립
+        source: page
+        evidence: ['쇼핑 : 대형마트 및 백화점, 6대 인터넷쇼핑몰 (G마켓, 옥션, 인터파크, 11번가, 롯데ON, 신세계몰)', 쇼핑 | 적립률 | 0.5% | 1% | 1.5% | 2.5%, 월간 통합 적립한도 | 월 5000점 까지 | 월 10000점 까지, 1구간(20만원 이상) 2구간(50만원 이상) 3구간(100만원 이상) 4구간(150만원 이상)]
+        target:
+          categories: [department_store]
+          merchants: [auction, eleven_st, emart, gmarket, homeplus, interpark, lotte_mart, lotte_on]
+        reward:
+          type: points
+          program: eco_money
+          rate: {0: 0.5, 200000: 0.5, 500000: 1, 1000000: 1.5, 1500000: 2.5}
+        limits:
+          - {shared: extra}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: extra
+        notes: 신세계몰은 공통 가맹점 ssg_com이 이마트몰까지 넓어 넣지 않았다. 대형마트는 이마트, 홈플러스, 롯데마트만 넣었다
+      - key: bus-subway-extra
+        title: 버스·지하철 9.5~19.5% 에코머니 추가적립
+        source: page
+        evidence: ['대중교통업종 : 시내버스, 고속/시외버스, 지하철, 철도', 대중교통/철도 | 버스/지하철 적립률 | 9.5% | 19.5%, 월간 통합 적립한도 | 월 5000점까지 | 월 10000점까지]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward:
+          type: points
+          program: eco_money
+          rate: {0: 9.5, 200000: 9.5, 500000: 9.5, 1000000: 19.5, 1500000: 19.5}
+        limits:
+          - {shared: extra}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: extra
+        unmodeled: [후불교통 적립은 실제 이용일이 아니라 이용대금명세서의 이용일 달로 계산된다]
+      - key: rail-extra
+        title: 철도 4.5~9.5% 에코머니 추가적립
+        source: page
+        evidence: [철도 적립률 | 4.5% | 9.5%, 월간 통합 적립한도 | 월 5000점까지 | 월 10000점까지]
+        target:
+          categories: [transit.rail]
+        reward:
+          type: points
+          program: eco_money
+          rate: {0: 4.5, 200000: 4.5, 500000: 4.5, 1000000: 9.5, 1500000: 9.5}
+        limits:
+          - {shared: extra}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: extra
+    unmodeled: [탄소포인트제·에코마일리지 에너지 절감 적립과 친환경 제품·에코머니 가맹점 적립은 카드 결제 혜택이 아니라 계산하지 않는다, 실적 유예는 사용등록일로부터 60일이 포함되는 월말까지인데 사용등록 다음 달 말일까지만 계산한다, 대중교통 무승인 전표와 정부지원금은 실적에서 빠진다, 가족카드 이용분은 본인과 실적과 적립한도를 합산한다, KB국민카드 포인트리는 쌓이지 않는다. 연회비는 없지만 다른 KB국민카드를 가지면 그 카드 기준 연회비가 청구된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2011.8.18 출시와 2024.11.25 심의필만 적었다. 심의일을 현재 규칙의 시작일로 잠정 적용한다., assumed: '2024-11-25'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].limits[extra]', question: 원문 표는 쇼핑과 대중교통·철도에 각각 월간 통합 적립한도를 적었다. 따로인지 함께인지 분명하지 않아 함께 쓰는 쪽으로 둔다, assumed: shared}
+  - {path: 'revisions[0].benefits[bus-subway-extra].reward.rate', question: 원문 표의 9.5%와 19.5%가 1·2구간과 3·4구간에 걸친 것으로 읽었다. 철도 4.5%와 9.5%도 같다, assumed: '20만·50만 9.5%, 100만·150만 19.5%'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 기본 0.5% 적립에 쇼핑과 교통 추가적립을 더한다. 원문 쇼핑·교통 비율은 기본 적립에 더하는 추가적립률이다.

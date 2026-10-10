@@ -1,0 +1,69 @@
+card: hyundai-32285
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 NOL 10% 적립과 실적 포함
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: yanolja, channel: online}
+  expect:
+  - {payment: 0, benefits: {nol-platform-10: 10000}, counted: 100000}
+  calc: 100,000원 × 10% = 10,000P. 40만 구간 월 1만 한도. NOL 결제는 적립과 상관없이 실적에 든다
+- name: 40만 직전 399999 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 40만원 미만은 적립 없음
+- name: 커피와 편의점이 월 5천 한도를 같이 쓴다
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 3000}, counted: 0}
+  - {payment: 1, benefits: {convenience-10: 2000}, counted: 0}
+  calc: 3,000P 뒤 남은 한도 2,000P. 적립받은 결제는 실적 제외
+- name: 80만 구간 CGV 10% 월 8천 한도
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-06T20:00, amount: 100000, merchant: cgv}
+  expect:
+  - {payment: 0, benefits: {movie-10: 8000}, counted: 0}
+  calc: 10,000P 중 80만 구간 월 8,000P
+- name: 40만 구간 시내버스 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-07T08:00, amount: 1500, category: transit.bus_city}
+  expect:
+  - {payment: 0, benefits: {transit-10: 150}, counted: 0}
+  calc: 1,500원 × 10% = 150P
+- name: 40만 구간 넷플릭스 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-08T09:00, amount: 17000, merchant: netflix, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {digital-10: 1700}, counted: 0}
+  calc: 17,000원 × 10% = 1,700P
+- name: 40만 구간 롯데프리미엄아울렛 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-08T15:00, amount: 30000, merchant: lotte_premium_outlet}
+  expect:
+  - {payment: 0, benefits: {outlet-10: 3000}, counted: 0}
+  calc: 30,000원 × 10% = 3,000P
+- name: 40만 구간 해외 10% 월 5천 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-09T10:00, amount: 80000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-10: 5000}, counted: 0}
+  calc: 8,000P 중 월 5,000P
+- name: 편의점 온라인 결제 제외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-09T10:00, amount: 20000, merchant: cu, channel: online}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 편의점은 현장 결제만 적립

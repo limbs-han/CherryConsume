@@ -1,0 +1,84 @@
+card: lotte-1925
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 관리비 자동납부 10% 50만 구간 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-25T10:00, amount: 200000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {apartment-fee: 6000}
+    counted: 200000
+  calc: 200000 x 10% = 20000, 50만 구간 한도 6000. 관리비는 실적에 들어감
+- name: 관리비 100만 구간 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-25T10:00, amount: 200000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {apartment-fee: 10000}
+  calc: 200000 x 10% = 20000, 100만 구간 한도 10000
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-25T10:00, amount: 200000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원보다 1원 적어 할인 없음
+- name: 쿠팡 건당 2만원 이상 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 19000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {online-shopping: 2500}
+  - payment: 1
+    benefits: {}
+  calc: 50000 x 5% = 2500. 19000원은 2만원 미만이라 없음
+- name: 배달앱 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-08T19:00, amount: 30000, merchant: yogiyo, channel: online}
+  expect:
+  - payment: 0
+    benefits: {delivery: 1500}
+  calc: 30000 x 5% = 1500
+- name: 이동통신 월 1회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 60000, merchant: lg_uplus, billing: autopay}
+  - {at: 2026-11-20T10:00, amount: 60000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom: 3000}
+  - payment: 1
+    benefits: {}
+  calc: 60000 x 5% = 3000. 월 1회라 두 번째는 없음
+- name: 지하철 접수 건 2만원 이상 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 60000, category: transit.subway}
+  expect:
+  - payment: 0
+    benefits: {transit: 3000}
+  calc: 60000 x 5% = 3000
+- name: 스트리밍 정기결제 1,500원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-12T10:00, amount: 13500, merchant: netflix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {streaming: 1500}
+  calc: 월 1회 1500원
+- name: 신규 발급 특례 기간은 50만 구간
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-25T10:00, amount: 200000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {apartment-fee: 6000}
+  calc: 10월 발급이라 11월 말까지 50만 구간 한도 6000

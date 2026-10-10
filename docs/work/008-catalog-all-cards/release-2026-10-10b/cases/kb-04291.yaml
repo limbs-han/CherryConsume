@@ -1,0 +1,40 @@
+card: kb-04291
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 멤버십 7천원과 0.1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: cashnote, channel: online}
+  - {at: 2026-11-06T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {cashnote-membership: 7000}, counted: 0}
+  - {payment: 1, benefits: {all-01: 100}, counted: 100000}
+  calc: 1구간 멤버십 7천원, 할인받은 멤버십 결제는 실적 제외. 100,000 x 0.1% = 100
+- name: 150만 구간 멤버십 15천원 주유 0.3%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: cashnote, channel: online}
+  - {at: 2026-11-06T10:00, amount: 100000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {cashnote-membership: 15000}}
+  - {payment: 1, benefits: {business-03: 300}}
+  calc: 3구간 15천원. 100,000 x 0.3% = 300이 0.1%보다 크다
+- name: 고액결제 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 600000, category: other}
+  - {at: 2026-11-06T10:00, amount: 1200000, category: other}
+  - {at: 2026-11-07T10:00, amount: 2000000, category: other}
+  expect:
+  - {payment: 0, benefits: {high-amount-04: 2400}}
+  - {payment: 1, benefits: {high-amount-08: 9600}}
+  - {payment: 2, benefits: {high-amount-10: 20000}}
+  calc: 600,000 x 0.4% = 2,400. 1,200,000 x 0.8% = 9,600. 2,000,000 x 1% = 20,000. 고액 합계 32,000은 5만원 안
+- name: 50만 경계 직전
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 600000, category: other}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만원 미만 할인 없음

@@ -1,0 +1,184 @@
+schema_version: 2
+id: woori-103490
+issuer: woori
+name: 위비트래블 J 체크카드
+kind: check
+product_codes:
+  - '103490'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103490', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-10-13'
+    source: page
+    tiers: [0, 200000, 500000, 700000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 각종 수수료·이자·우편·여권·벌금·공공기관 이용금액 제외', 다른 우리카드 이벤트 혜택 적용매출은 이벤트별 조건에 따라 제외]
+    facts:
+      - {key: first-issuance-eligible, type: bool, scope: card, ask: '만기·해지 후 같은 상품을 다시 발급받은 것이 아닌 이 상품 최초 발급 카드인가요? 시작일은 카드 수령(사용)등록일과 사용개시일 중 빠른 날입니다.'}
+    limits:
+      - key: shopping
+        per: month
+        amount: {0: 2000, 200000: 2000, 500000: 4000, 700000: 6000}
+      - key: food
+        per: month
+        amount: {0: 3000, 200000: 3000, 500000: 6000, 700000: 9000}
+      - key: daily
+        per: month
+        amount: {0: 3000, 200000: 3000, 500000: 6000, 700000: 9000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [pay-5, shopping-5, olive-young-5, coffee-5, delivery-5, transit-5, telecom-5]
+        spill: none
+    benefits:
+      - key: pay-5
+        title: 국내 쇼핑 간편결제 5% 캐시백
+        source: page
+        evidence: [국내 쇼핑 5% 캐시백, '간편결제 우리WON페이, 네이버페이', 모바일 단말을 이용한 국내 오프라인 결제 건은 캐시백 제외, 매출 건당 최대 1천원까지 캐시백 제공]
+        target: {all: true}
+        when:
+          - {channel: online}
+          - payment: [naver_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: shopping}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+      - key: shopping-5
+        title: 국내 쇼핑 온라인 5% 캐시백
+        source: page
+        evidence: [국내 쇼핑 5% 캐시백, '쿠팡, 무신사, 29CM : 공식 앱 및 홈페이지를 통한 온라인 결제 건에 한함']
+        target:
+          merchants: [coupang, musinsa, twentynine_cm]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: shopping}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 직접 가맹점 결제만. 멤버십·상품권·입점·임대매장 제외]
+      - key: olive-young-5
+        title: 올리브영 5% 캐시백
+        source: page
+        evidence: [국내 쇼핑 5% 캐시백, '올리브영 : 오프라인 결제건에 한하며, 대형시설물 입점점포 및 임대매장은 캐시백 제외']
+        target:
+          merchants: [olive_young]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: shopping}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 직접 가맹점 결제만. 멤버십·상품권·입점·임대매장 제외]
+      - key: coffee-5
+        title: 스타벅스 사이렌오더 5% 캐시백
+        source: page
+        evidence: [국내 푸드 5% 캐시백, 스타벅스 공식 앱을 통한 사이렌오더 결제 건에 한함]
+        target:
+          merchants: [starbucks]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: food}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [스타벅스 사이렌오더만. 입점·임대매장·상품권·충전 제외]
+      - key: delivery-5
+        title: 배달·주문 5% 캐시백
+        source: page
+        evidence: [국내 푸드 5% 캐시백, '배달의민족, 쿠팡이츠, 컬리', 배달 앱에서 '앱 내 카드결제' 통한 온라인 결제 건에 한하여 캐시백 제공]
+        target:
+          merchants: [baemin, coupang_eats, kurly]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: food}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [배달의민족·쿠팡이츠·마켓컬리 공식 온라인 주문만. 현장·상품권 결제와 컬리 멤버십 정기결제 제외]
+      - key: transit-5
+        title: 대중교통 5% 캐시백
+        source: page
+        evidence: [국내 일상 5% 캐시백, '시내버스, 지하철', 후불교통기능을 이용한 터치(RF) 거래 건에 한하여 캐시백 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: daily}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [후불 시내버스·지하철만. 시외·고속·공항버스와 공항철도 직통 제외]
+      - key: telecom-5
+        title: 이동통신 5% 캐시백
+        source: page
+        evidence: ['SKT, KT, LG U+', 본 카드로 대상 통신사에 휴대전화 요금 자동납부 신청 후 결제 건에 한함]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - billing: [autopay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: daily}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [휴대전화 자동납부만. 인터넷·집전화 결합상품과 알뜰폰 제외]
+    unmodeled: ['일본 여행 서비스(세븐일레븐·패밀리마트·로손 50%, 일본 스타벅스·맥도날드 50%, 반기 5천원·연 1만원 한도, 전월 30만원 이상)는 결제 국가를 입력으로 가릴 수 없어 계산하지 않는다', '해외(일본) 오프라인 가맹점 10% 캐시백(건당 1천원, 해외 월 한도)은 일본 가맹점만 대상이라 계산하지 않는다', 해외 결제 시 해외서비스 수수료와 국제브랜드 수수료 면제. 수수료 금액은 합계에 넣지 않는다, 교통카드 이용금액과 통신료 자동납부는 매출표 접수일 기준으로 그 달 실적에 넣는다. 국내 취소가 1~2일에 접수되면 전월 실적에서 뺀다, 쇼핑·푸드·일상 서비스 중 네이버페이·우리WON페이는 간편결제 영역으로 먼저 적용한다, 통합 월 캐시백 한도 1만·2만·3만원은 영역별 한도의 합과 같다, 신규 특례는 이 상품 최초 발급만. 시작일은 수령(사용)등록일과 사용개시일 중 빠른 날, 위비트래블 체크카드와 실적과 서비스를 따로 센다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 원문은 아파트 관리비(임대료)뿐이고 부동산 임대료를 따로 적지 않았다. 월세 카드납부도 빠지는지, assumed: 빠진다}
+  - {path: 'revisions[0].benefits', question: 캐시백 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2025-10-13. 연회비 없음, 만 17세 이상 개인, 가족카드 불가. 국내외 캐시백 서비스는 위비트래블 체크카드(woori-103489)와 같은 구조와 한도라 같은 혜택 key를 썼다. 일본 전용 혜택은 결제 국가를 가릴 수 없어 뺐다.

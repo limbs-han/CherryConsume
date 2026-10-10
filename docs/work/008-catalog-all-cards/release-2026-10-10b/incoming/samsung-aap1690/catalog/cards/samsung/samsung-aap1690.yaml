@@ -1,0 +1,111 @@
+schema_version: 2
+id: samsung-aap1690
+issuer: samsung
+name: 요기요 삼성카드
+short_name: 요기요 삼성
+search_names: [요기요 삼성카드, 요기요카드]
+kind: credit
+product_codes: [AAP1690]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1690', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlLl46VuvWmEzc%2FQrX5D%2BME%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2020-10-29'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, 간편결제 자체 가맹점번호로 승인되는 일부 간편결제는 할인하지 않을 수 있다]
+    limits:
+      - key: yogiyo
+        per: month
+        amount: {0: 5000, 300000: 6000, 600000: 12000, 900000: 20000}
+      - key: daily-5
+        per: month
+        amount: {300000: 3000, 600000: 6000, 900000: 10000}
+    benefits:
+      - key: yogiyo-1
+        title: 요기요 1% 할인
+        source: manual
+        evidence: [요기요 1%·10% 결제일할인, '30만원 미만 1%, 월 할인한도 5,000원', '공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: yogiyo}
+        tiers: {to: 0}
+      - key: yogiyo-10
+        title: 요기요 10% 할인
+        source: manual
+        evidence: [요기요 1%·10% 결제일할인, '30만원 이상 10%, 월 할인한도 30만원 이상 6,000원, 60만원 이상 12,000원, 90만원 이상 20,000원', '공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외', 요기요 10% 할인이 적용된 전체 이용금액은 전월 이용금액에서 제외]
+        target:
+          merchants: [yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: yogiyo}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: daily-5
+        title: 커피전문점·편의점·다이소 5% 할인
+        source: manual
+        evidence: [커피전문점·편의점·생활잡화 5% 결제일할인, '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 카페베네, 탐앤탐스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋, 블루보틀', '편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', 생활잡화 다이소, '통합 월 할인한도 30만원 이상 3,000원, 60만원 이상 6,000원, 90만원 이상 10,000원', '오프라인 결제건에 한하며, 임대매장은 제외', 커피전문점·편의점·생활잡화 5% 할인이 적용된 전체 이용금액은 전월 이용금액에서 제외]
+        target:
+          merchants: [angel_in_us, artisee, blue_bottle, cafe_bene, coffee_bean, cu, daiso, ediya, emart24, gs25, hollys, ministop, pascucci, paul_bassett, seven_eleven, tom_n_toms, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily-5}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [임대매장은 할인하지 않는다]
+      - key: starbucks-5
+        title: 스타벅스 5% 할인
+        source: manual
+        evidence: ['단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily-5}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+      - key: streaming-10
+        title: 스트리밍 정기결제 10% 할인
+        source: manual
+        evidence: [스트리밍 이용료 정기결제 시 10% 결제일할인, '넷플릭스, 웨이브, 티빙, 왓챠, 멜론, FLO', '통합 월 할인한도 : 3,000원', 전월 이용금액 30만원 이상 시 제공, 앱스토어를 통한 결제건(인앱 결제) 제외]
+        target:
+          merchants: [flo, melon, netflix, tving, watcha, wavve]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+    unmodeled: [삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '할인과 전월 이용금액은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2020-10-29이고 상품설명서는 2022.8판이다. 출시일을 시행일로 두었다, assumed: '2020-10-29'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통을 시내버스와 지하철로 보았다. 초중고 납입금은 유치원을 함께 담은 education.school_fee도 뺐다, assumed: 'transit.bus_city, transit.subway, education.school_fee'}
+  - {path: status, question: 상품 페이지에서 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-10 상품설명서(2022.8판, 여신금융협회 심의필 제2020-C1a-09857호) 확인. 연회비 국내전용과 해외겸용 Mastercard 모두 10,000원(기본 7,000+제휴 3,000). 발급월+1개월까지 30만 구간 혜택을 준다. 요기요 10%와 커피·편의점·다이소 5% 할인을 받은 결제는 실적에서 빠지고 요기요 1%와 스트리밍 할인은 실적에 넣는다. 실적 제외는 4대보험, 국세·지방세·공과금, 초중고 납입금, 대학 등록금, 대중교통, 택시, 아파트관리비, 임대료, 기프트·선불카드, 상품권이다. 후불교통기능이 탑재되어 발급된다.

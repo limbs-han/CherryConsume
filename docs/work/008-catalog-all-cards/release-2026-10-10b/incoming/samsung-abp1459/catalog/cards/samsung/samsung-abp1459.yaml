@@ -1,0 +1,53 @@
+schema_version: 2
+id: samsung-abp1459
+issuer: samsung
+name: SC제일은행 삼성체크카드 CASHBACK
+short_name: SC제일 삼성체크 CASHBACK
+search_names: [SC제일 캐시백 체크, SC제일은행 CASHBACK]
+kind: check
+product_codes: [ABP1459]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1459', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtsXApgktxc09I3C4ZIFY0TU%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {basis: none}
+    new_card: null
+    benefit_exclusions:
+      categories: [education.tuition, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: ['휴대폰알림서비스(S.InfoCare), 스마트오토서비스, 이마트 이클럽, 포인트 사용, 일부 가맹점 의약품 결제건은 캐시백하지 않는다']
+    stacks:
+      - key: main
+        pick: priority
+        order: [cashback-food, cashback-general]
+        spill: none
+    benefits:
+      - key: cashback-food
+        title: 음식점·주유·할인점 0.3% 캐시백
+        source: manual
+        evidence: [업종 및 연간 이용금액에 따라 0.2%~0.6% 캐시백, '음식점, 주유, 할인점 0.3%(300만원 미만) 0.6%(300만원 이상)', '음식점 한식, 양식, 일식, 중식, 뷔페, 패밀리레스토랑, 간이음식점, 패스트푸드 등 모든 외식 가맹점', 주유 전국 주유소 및 LPG충전소, '할인점 이마트(에브리데이, 트레이더스 포함), 홈플러스, 롯데마트, 빅마켓']
+        target:
+          categories: [fuel, restaurant.fastfood, restaurant.general]
+          merchants: [emart, emart_everyday, homeplus, lotte_mart, traders]
+        reward: {type: cashback, rate: 0.3}
+        unmodeled: [백화점·할인점 안 일부 임대매장과 식품매장은 일반 가맹점 기준으로 적용될 수 있다, 이마트 에브리데이 상품공급점 결제는 일반 가맹점 기준이다]
+      - key: cashback-general
+        title: 일반 가맹점 0.2% 캐시백
+        source: manual
+        evidence: [일반 가맹점 0.2%(300만원 미만) 0.4%(300만원 이상)]
+        target: {all: true}
+        reward: {type: cashback, rate: 0.2}
+    unmodeled: ['카드 발급월부터 1년 동안의 누적 이용금액이 300만원에 이르면 다음 날부터 일반 가맹점 0.4%, 음식점·주유·할인점 0.6%로 오른다. 연간 누적은 계산하지 않아 낮은 비율로만 계산한다', 'CGV 3,000원 할인과 놀이공원 50%·워터파크 30% 현장할인은 직전 3개월 월평균 이용금액 30만원 이상 조건이라 계산하지 않는다', 캐시백은 매월 15일 결제계좌로 입금된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 상품 출시일은 2016-05-30이다, assumed: '2026-10-05'}
+  - {path: status, question: 상품설명서 관리번호의 유효기간이 2023-10-31로 적혀 있다. 상품 페이지는 열려 있고 발급 중단 문구는 없어 판매 중으로 두었다, assumed: on_sale}
+  - {path: 'revisions[0].benefits[cashback-food].target', question: 빅마켓은 공통 가맹점에 없어 넣지 않았다. 홈플러스 익스프레스가 홈플러스에 드는지 원문에 없어 넣지 않았다, assumed: 'emart, emart_everyday, homeplus, lotte_mart, traders'}
+notes: 2026-10-10 상품안내장(SC제일은행 삼성체크카드 YOUNG·CASHBACK·POINT 공용, 준법심의 P3121-16-1155)과 상품 페이지 대조. 초안의 대중교통·이동통신 10%와 편의점·커피·제과 1,000원은 YOUNG 카드, 빅포인트 적립은 POINT 카드 혜택이라 뺐다. 연회비 없음. 캐시백에는 전월 실적 조건이 없다. 연간 누적 300만원 상향 비율과 직전 3개월 평균 조건의 공통 서비스는 계산하지 않아 혜택이 실제보다 적게 나올 수 있다. 후불교통 기능은 만 19세 이상 신청자에게 준다.

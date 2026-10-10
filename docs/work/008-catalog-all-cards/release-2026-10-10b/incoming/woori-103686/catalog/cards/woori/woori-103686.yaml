@@ -1,0 +1,174 @@
+schema_version: 2
+id: woori-103686
+issuer: woori
+name: 카드의정석 TEN
+kind: credit
+product_codes:
+  - '103686'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103686', fetched_at: '2026-10-10', review_no: 2026-C1h-15196}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2024-05-30'
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 각종 수수료·이자, 우편요금·여권발급비·과태료·공공기관 가맹점은 할인 제외', 우리카드 이벤트 혜택을 받은 매출은 할인 제외]
+    limits:
+      - key: ten
+        per: month
+        amount: {400000: 10000, 800000: 20000}
+      - key: ten-coffee
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - key: ten-convenience
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - key: ten-transit
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - key: ten-telecom
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - key: ten-overseas
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - key: one
+        per: month
+        amount: {400000: 10000, 800000: 20000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [ten-coffee-10, ten-convenience-10, ten-transit-10, ten-taxi-10, ten-kakao-t-10, ten-telecom-10, ten-overseas-10, one-dining-1, one-pay-1]
+    benefits:
+      - key: ten-coffee-10
+        title: 커피 10% 청구할인
+        source: page
+        evidence: ['커피 | 스타벅스, 투썸플레이스, 이디야커피, 메가MGC커피, 컴포즈커피, 매머드커피', 스타벅스(사이렌오더) 및 커피브랜드 공식 앱을 통한 결제 건 포함, 40만원 이상 | 5천원 | 1만원, 80만원 이상 | 1만원 | 2만원]
+        target:
+          merchants: [compose_coffee, ediya, mammoth_coffee, mega_coffee, starbucks, twosome]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ten-coffee}
+          - {shared: ten}
+        tiers: {from: 400000}
+        unmodeled: [백화점·대형할인점·면세점·공항·미군부대·리조트 등 입점 매장은 할인 제외]
+      - key: ten-convenience-10
+        title: 편의점 10% 청구할인
+        source: page
+        evidence: ['편의점 | CU, GS25, 세븐일레븐', 오프라인 일반 결제 건에 한함]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ten-convenience}
+          - {shared: ten}
+        tiers: {from: 400000}
+        unmodeled: [백화점·대형할인점·면세점·공항·미군부대·리조트 등 입점 매장은 할인 제외]
+      - key: ten-transit-10
+        title: 후불 버스·지하철 10% 청구할인
+        source: page
+        evidence: ['교통 | 버스, 지하철, 택시', '버스, 지하철 : 후불교통요금 이용 건에 한하여 할인 제공(고속버스, 시외버스, 공항버스, 공항철도(직통열차) 이용금액은 할인 제외)']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ten-transit}
+          - {shared: ten}
+        tiers: {from: 400000}
+        unmodeled: [공항버스와 공항철도 직통열차는 할인 제외]
+      - key: ten-taxi-10
+        title: 택시 오프라인 10% 청구할인
+        source: page
+        evidence: ['택시 : 오프라인 결제 및 카카오T(택시) 이용 건에 한하여 할인 제공']
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ten-transit}
+          - {shared: ten}
+        tiers: {from: 400000}
+      - key: ten-kakao-t-10
+        title: 카카오T 택시 10% 청구할인
+        source: page
+        evidence: ['택시 : 오프라인 결제 및 카카오T(택시) 이용 건에 한하여 할인 제공']
+        target:
+          merchants: [kakao_t]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ten-transit}
+          - {shared: ten}
+        tiers: {from: 400000}
+        unmodeled: [카카오T는 택시 이용 건만 대상]
+      - key: ten-telecom-10
+        title: 이동통신 자동납부 10% 청구할인
+        source: page
+        evidence: ['이동통신 | SKT, KT, LGU+', 휴대전화 요금에 한하며 본 카드로 대상 통신사에 자동납부 신청 후 결제한 건에 대해서만 할인 제공, '인터넷, 유선전화 등 결합상품 신청 시에는 할인 제외']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ten-telecom}
+          - {shared: ten}
+        tiers: {from: 400000}
+        unmodeled: [휴대전화 요금만 대상이고 인터넷·유선전화 등 결합상품은 할인 제외]
+      - key: ten-overseas-10
+        title: 해외 10% 청구할인
+        source: page
+        evidence: [해외 | 해외 온/오프라인 가맹점, 해외 이용금액은 우리카드 전산상 해외 가맹점 매출로 분류된 경우에 한하며 당사 매출표 접수일 기준으로 반영됨]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ten-overseas}
+          - {shared: ten}
+        tiers: {from: 400000}
+        unmodeled: [해외 이용금액은 매출표 접수일 기준 달로 반영된다]
+      - key: one-dining-1
+        title: 음식점·주점 1% 청구할인
+        source: page
+        evidence: ['음식점/주점 | 음식점, 주점', 40만원 이상 | 1만원, 80만원 이상 | 2만원, TEN Discount 서비스와 중복 시 할인율이 높은 TEN Discount 서비스를 우선하여 할인 제공]
+        target:
+          categories: [pub, restaurant]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: one}
+        tiers: {from: 400000}
+      - key: one-pay-1
+        title: 온라인 간편결제 1% 청구할인
+        source: page
+        evidence: ['온라인 간편결제 | 우리WON페이, 네이버페이, 카카오페이', 해당 간편결제에 본 카드를 등록하여 온라인에서 결제 시 할인 제공, '모바일 단말을 이용한 국내 오프라인 결제 건(매장 내 QR, 바코드, 스마트폰 MST/NFC 기능 등)은 할인 미제공']
+        target: {all: true}
+        when:
+          - {channel: online}
+          - payment: [kakao_pay, naver_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: one}
+        tiers: {from: 400000}
+    unmodeled: [해외 이용금액·교통카드 이용금액·통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, '실적 제외에 정부지원금, 수수료·이자, 공공기관 가맹점·과태료·여권발급비가 들어간다', 가족카드 실적과 한도는 본인카드와 별도]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일을 따로 찾지 못해 상품 출시일로 두었다, assumed: '2024-05-30'}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-05-30. 연회비 국내전용·Mastercard 12,000원. 전월 국내외 40만/80만 이상 TEN 5개 영역(커피, 편의점, 교통, 이동통신, 해외) 10% 영역별 월 5천/1만원, 통합 월 1만/2만원. ONE 음식점·주점과 온라인 간편결제 1% 통합 월 1만/2만원. 겹치면 TEN 우선. 신규 발급 실적 특례는 페이지에 없다.

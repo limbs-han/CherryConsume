@@ -1,0 +1,176 @@
+schema_version: 2
+id: hana-93
+issuer: hana
+name: 그린 카드
+short_name: 하나 그린카드
+search_names: [그린카드, 에코머니 카드]
+kind: credit
+product_codes:
+  - '93'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=1215', fetched_at: 2026-10-11, review_no: A-26-0657}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-03-20
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: receipt}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - {region: overseas}
+    ranked:
+      - {key: top2, cancellation: cancel_month, top: 2}
+    limits:
+      - {key: top2, per: month, amount: 10000}
+      - key: transit
+        per: month
+        amount: {200000: 5000, 1000000: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [rail-express-5, top-mart, top-department, top-fuel, top-academy, top-hospital, base]
+        spill: split
+      - {key: transit}
+    benefits:
+      - key: base
+        title: 국내 가맹점 0.2~0.8% 에코머니 적립
+        source: page
+        evidence: [국내 가맹점 이용금액 0.2% ~ 0.8% 에코머니 포인트 적립, 기본 적립율 | 0.2% | 0.4% | 0.6% | 0.8%, '포인트 적립 제외 대상 : 제세공과금, APT관리비, 대학등록금, 후불교통, 무이자할부']
+        target:
+          exclude_categories: [apartment_fee, education.tuition, insurance.social, tax, transit.bus_city, transit.subway, utility]
+          all: true
+        reward:
+          type: points
+          program: eco_money
+          rate: {200000: 0.2, 500000: 0.4, 1000000: 0.6, 1500000: 0.8}
+        tiers: {from: 200000}
+      - key: top-mart
+        title: 많이 쓴 2개 업종 대형할인점 1~4% 적립
+        source: page
+        evidence: [5대 업종 중 매월 매출금액이 가장 큰 2개 업종에 대해 기본적립율의 5배(1%~4%) 에코머니 포인트 적립, '대형할인점 | 이마트, 롯데마트, 홈플러스, 농협 하나로클럽 등 전국 모든 대형할인점 (이마트everyday, 롯데슈퍼, 홈플러스express, 농협하나로마트 및 인터넷몰 제외)', '서비스 이용안내 : 가장 많이 쓴 2개 업종 적립은 업종별 월 5천점 월 통합 최대 1만점 한도로 적립']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+          - {ranked: top2}
+        reward:
+          type: points
+          program: eco_money
+          rate: {200000: 1, 500000: 2, 1000000: 3, 1500000: 4}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: top2}
+        tiers: {from: 200000}
+        unmodeled: [이마트·롯데마트·홈플러스 밖의 대형할인점(농협 하나로클럽 등)은 가맹점 키가 없어 넣지 않았다]
+      - key: top-department
+        title: 많이 쓴 2개 업종 백화점 1~4% 적립
+        source: page
+        evidence: ['백화점 | 롯데, 신세계, 현대, 갤러리아 등 전국 모든 백화점(인터넷몰 제외)']
+        target:
+          categories: [department_store]
+        when:
+          - {channel: offline}
+          - {ranked: top2}
+        reward:
+          type: points
+          program: eco_money
+          rate: {200000: 1, 500000: 2, 1000000: 3, 1500000: 4}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: top2}
+        tiers: {from: 200000}
+      - key: top-fuel
+        title: 많이 쓴 2개 업종 주유 1~4% 적립
+        source: page
+        evidence: ['주유 | SK에너지, GS칼텍스, S-OIL, 현대오일뱅크 등 전국 모든 주유소(LPG 포함)']
+        target:
+          categories: [fuel]
+        when:
+          - {ranked: top2}
+        reward:
+          type: points
+          program: eco_money
+          rate: {200000: 1, 500000: 2, 1000000: 3, 1500000: 4}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: top2}
+        tiers: {from: 200000}
+      - key: top-academy
+        title: 많이 쓴 2개 업종 학원 1~4% 적립
+        source: page
+        evidence: [학원 | 전국 모든 학원(인터넷 결제 제외)]
+        target:
+          categories: [education.academy]
+        when:
+          - {channel: offline}
+          - {ranked: top2}
+        reward:
+          type: points
+          program: eco_money
+          rate: {200000: 1, 500000: 2, 1000000: 3, 1500000: 4}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: top2}
+        tiers: {from: 200000}
+      - key: top-hospital
+        title: 많이 쓴 2개 업종 병·의원 1~4% 적립
+        source: page
+        evidence: ['병·의원 | 전국 모든 병원, 의원, 한의원(약국, 동물병원 제외)']
+        target:
+          categories: [hospital]
+        when:
+          - {ranked: top2}
+        reward:
+          type: points
+          program: eco_money
+          rate: {200000: 1, 500000: 2, 1000000: 3, 1500000: 4}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: top2}
+        tiers: {from: 200000}
+      - key: transit-eco
+        title: 버스·지하철 10~20% 에코머니 적립
+        source: page
+        evidence: [버스, 지하철 10~20% 에코머니 포인트 적립, 전월 실적 | 20만원 이상~100만원 미만 | 100만원 이상 | 적립율 | 10% | 20%, '서비스 이용 안내 : 버스+지하철 월 이용금액 1만원 이상시 제공, 이용대금 명세서 상 교통요금 승인일 기준으로 전월실적 산정', 대중교통(버스, 지하철, KTX, 고속버스) 통합한도 | 5, 000점 | 10, 000점]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - month_total: {min: 10000}
+        reward:
+          type: points
+          basis: month_total
+          program: eco_money
+          rate: {200000: 10, 1000000: 20}
+        limits:
+          - {shared: transit}
+        tiers: {from: 200000}
+        stack: transit
+      - key: rail-express-5
+        title: KTX·고속버스 5% 에코머니 적립
+        source: page
+        evidence: [KTX, 고속버스 5% 에코머니 포인트 적립, '서비스 제공처 : 철도 및 고속버스터미널 등록 가맹점(BC카드 가맹점등록 기준)', '서비스 이용 안내 : 일 1회, 월2회']
+        target:
+          categories: [transit.bus_express, transit.rail]
+        reward: {type: points, program: eco_money, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: transit}
+        tiers: {from: 200000}
+    unmodeled: [녹색매장 친환경 인증제품 구매 적립과 에코머니 제휴 가맹점 적립은 품목과 가맹점 목록이 따로 있어 계산하지 않는다, '전국 문화·레저시설 무료입장과 10~50% 현장할인(자연휴양림, 국립공원 야영장·주차장)은 업종 키가 없어 계산하지 않는다', 전기·수도·가스 절감 탄소포인트 인센티브는 결제가 아니라 계산하지 않는다, 가족카드는 본인과 실적을 합치지 않고 카드마다 따로 본다, 모든 서비스는 BC카드에 등록된 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. 카드 출시는 2011-07-20이다., assumed: '2026-03-20'}
+  - {path: 'revisions[0].benefits[top-mart]', question: 원문 요약은 "5배 추가 적립"이라 적고 표는 업종 적립율 1~4%만 적었다. 기본 적립에 더하는지 대신하는지 불명확해 덜 주는 쪽인 대신으로 둔다., assumed: 기본 적립을 대신함}
+  - {path: 'revisions[0].ranked', question: 순위를 매기는 5대 업종 매출금액이 오프라인 결제만 세는지 원문에 없다., assumed: 대상 결제만 셈}
+notes: 2026-10-11 공식 상품 페이지(상세 번호 CD_PD_SEQ=1215, 목록 상품 번호 93, 준법심의 A-26-0657)에서 옮겼다. 연회비 면제. BC 계열. 실적은 전월 1일~말일 국내 이용금액이고 해외매출, 제세공과금, 상품권, 대학등록금, 아파트관리비, 후불교통 이용금액을 뺀다. 해외매출은 적립에서도 빠진다. 카드 수령일부터 다음 달 말일까지는 20만원 구간으로 본다. 2~3개월 무이자 할부는 계산하지 않는다.

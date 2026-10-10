@@ -1,0 +1,126 @@
+schema_version: 2
+id: hana-19153
+issuer: hana
+name: MOVING카드 GLOBAL모드
+short_name: 하나 MOVING GLOBAL
+search_names: [MOVING카드 GLOBAL, 무빙카드 글로벌]
+kind: credit
+product_codes:
+  - '19153'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19153', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-07-01
+    source: page
+    tiers: [0]
+    spend:
+      basis: none
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    options:
+      - key: mode
+        title: MOVING 모드
+        choices:
+          - {key: global, title: GLOBAL 모드}
+          - {key: other, title: 하나Pay에서 바꾼 다른 모드}
+        default: global
+        change: immediate
+        unsupported: [other]
+    limits:
+      - {key: three_day, per: month, amount: 30000}
+    benefits:
+      - key: online-pay-1
+        title: 온라인 간편결제 1% 적립
+        source: page
+        evidence: ['온라인 간편결제 | 하나페이, 삼성페이, 네이버페이,카카오페이,페이코 | 1.0% | 2.0% | 3만 하나머니', 모바일 단말을 이용한 오프라인 가맹점 결제는 서비스 제외됨]
+        target: {all: true}
+        when:
+          - channel: online
+            payment: [hana_pay, kakao_pay, naver_pay, payco, samsung_pay]
+          - option:
+              mode: [global]
+        reward: {type: points, program: hana_money, rate: 1, round: round}
+        limits:
+          - {shared: three_day}
+      - key: online-shop-1
+        title: 온라인 쇼핑 1% 적립
+        source: page
+        evidence: ['온라인 쇼핑 | 쿠팡, 네이버플러스스토어, SSG.COM, 컬리, 오아시스마켓', '온라인 쇼핑 : 공식 홈페이지(온라인/모바일앱)을 통한 결제 건에 한하여 서비스가 제공되며', 온라인식품 - 오아시스마켓은 오프라인 결제 시에도 서비스 제공됨]
+        target:
+          merchants: [coupang, kurly, naver_plus_store, oasis_market, ssg_com]
+        when:
+          - {channel: online}
+          - option:
+              mode: [global]
+        reward: {type: points, program: hana_money, rate: 1, round: round}
+        limits:
+          - {shared: three_day}
+        notes: 오아시스마켓 오프라인 결제도 원문 대상이지만 계산하지 않는다
+      - key: store-1
+        title: 마트·슈퍼마켓·편의점 1% 적립
+        source: page
+        evidence: ['마트 | 이마트, 트레이더스 홀세일 클럽, 롯데마트, 농협 하나로마트', '슈퍼마켓 | GS THE Fresh, 롯데슈퍼, 이마트에브리데이, 노브랜드', '편의점 | GS25, CU, 이마트24, 세븐일레븐', '마트/슈퍼마켓/백화점: 오프라인 결제 건에 한하여 서비스 제공', '편의점 : 오프라인 결제 건에 한하여 서비스 제공됨']
+        target:
+          merchants: [cu, emart, emart24, emart_everyday, gs25, gs_the_fresh, lotte_mart, lotte_super, nh_hanaro_mart, seven_eleven, traders]
+        when:
+          - {channel: offline}
+          - option:
+              mode: [global]
+        reward: {type: points, program: hana_money, rate: 1, round: round}
+        limits:
+          - {shared: three_day}
+        unmodeled: [마트 상설·임대 매장은 제외된다]
+        notes: 노브랜드는 가맹점 키가 없어 계산하지 않는다
+      - key: fuel-1
+        title: 주유 1% 적립
+        source: page
+        evidence: ['주유 | SK에너지, GS칼텍스, S-Oil, HD현대오일뱅크, 알뜰주유소', '주유 : 오프라인으로 주유 및 LPG 충전하는 건에 한하여 서비스 제공됨']
+        target:
+          merchants: [altteul_fuel, gs_caltex, hd_oilbank, s_oil, sk_energy]
+        when:
+          - {channel: offline}
+          - option:
+              mode: [global]
+        reward: {type: points, program: hana_money, rate: 1, round: round}
+        limits:
+          - {shared: three_day}
+      - key: travel-1
+        title: 항공·여행사·면세 1% 적립
+        source: page
+        evidence: ['항공 | 대한항공, 제주항공, 진에어, 티웨이항공', '여행사 | 호텔스닷컴, 아고다, 익스피디아, 트립닷컴, 하나투어', '면세 | 신세계면세점, 롯데면세점, 신라면세점, 현대면세점', '항공/면세 : 공식 홈페이지(온라인/모바일앱) 및 오프라인 매장을 통한 결제 시에만 서비스 제공되며, 여행사, 구매대행사이트, 온라인쇼핑몰을 통한 결제 건은 서비스 제외됨', '여행 : 공식 홈페이지(온라인/모바일앱)을 통한 결제 시에만 서비스 제공되며', 여행 - 하나투어는 오프라인 결제 시에도 서비스 제공됨]
+        target:
+          merchants: [agoda, expedia, hana_tour, hotels_com, hyundai_dfs_online, jeju_air, jin_air, korean_air, lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_dfs, shinsegae_dfs_online]
+        when:
+          - option:
+              mode: [global]
+        reward: {type: points, program: hana_money, rate: 1, round: round}
+        limits:
+          - {shared: three_day}
+        unmodeled: [여행사 영역은 공식 홈페이지와 앱 결제만 적립한다. 하나투어는 오프라인도 적립한다]
+        notes: 티웨이항공, 트립닷컴, 현대면세점 매장은 가맹점 키가 없어 계산하지 않는다
+      - key: overseas-2
+        title: 해외 가맹점 2% 적립
+        source: page
+        evidence: [해외 | 해외 가맹점 | 2.0% | 30만 하나머니, '해외 : 해외 가맹점 매출로 분류된 경우에 한하여 서비스 제공', 『3일 쓰면 2배 적립』과 『GLOBAL 적립』은 중복 제공되지 않음]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - option:
+              mode: [global]
+        reward: {type: points, program: hana_money, rate: 2, round: round}
+        limits:
+          - {per: month, amount: 300000}
+    unmodeled: [영역별로 3일 연속 1원 이상 이용하면 기본 1% 대신 2%를 적립한다. 연속 이용일 조건을 계산하지 못해 기본 1%만 계산한다, 가맹점 정보가 결제대행업체나 간편결제 가맹점으로 찍히면 영역 적립에서 빠진다, 해외결제를 외화 하나머니로 설정하면 적립 대신 해외 이용 수수료 면제를 준다. GLOBAL 모드 신용 결제의 해외이용수수료 면제도 계산하지 않는다, 가족카드 전월·일 이용금액과 월 적립한도는 본인카드와 합산된다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 3일 연속 이용 2배 적립을 계산하려면 연속 이용일 조건이 필요하다. 지금은 기본 1%만 계산해 혜택을 적게 보여 준다, assumed: 기본 1%만}
+notes: MOVING카드의 GLOBAL 모드. 같은 카드의 ALLDAY 모드 hana-19149는 3일 연속 2배 적립을 계산하지 못해 보류였다. 이 모드는 해외 2% 적립이 주 혜택이고 연속 조건이 혜택을 늘리기만 해서 기본 1%만으로 담는다. 카드 출시 2026-07-01. 연회비 국내전용·국내외겸용(Mastercard) 20,000원. 지난달 실적 조건 없음. 하나Pay에서 모드를 바꿀 수 있어 options로 두고 다른 모드는 계산하지 않는다. 한 건에 적립금액이 큰 서비스 하나만 준다. 하나머니 소수점 이하 반올림. 2026-10-10 상품 페이지 원문으로 작성.

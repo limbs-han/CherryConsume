@@ -1,0 +1,111 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "daeguro",
+      "name": "대구로",
+      "category": "delivery_app",
+      "aliases": [
+        "대구로",
+        "대구로 배달",
+        "DAEGURO"
+      ]
+    },
+    "card_id": "hana-16797",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16797",
+    "evidence": "\"대구로\"앱 : 지역 경제 활성화 및 소상공인 지원을 위한 공공 배달앱. (특화서비스)대구로 배달/포장/예약 앱 결제 시 10% 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "daeguro_taxi",
+      "name": "대구로 택시",
+      "category": "taxi",
+      "aliases": [
+        "대구로 택시",
+        "대구로택시"
+      ]
+    },
+    "card_id": "hana-16797",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16797",
+    "evidence": "\"대구로 택시\"앱 : 대구지역 특화 택시 호출 앱. (특화서비스)대구로 택시 앱 결제 시 10% 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_marine",
+      "name": "현대해상",
+      "category": "insurance.private",
+      "aliases": [
+        "현대해상",
+        "현대해상화재보험",
+        "현대해상 다이렉트"
+      ]
+    },
+    "card_id": "hyundai-13725",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AO7-20260203-0822-01_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EA%B8%B0%EC%95%84_%EA%B2%BD%EC%B0%A8_V1_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "현대해상 자동차 보험료 결제 시 청구 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "vips",
+      "name": "빕스",
+      "category": "restaurant.general",
+      "aliases": [
+        "빕스",
+        "VIPS",
+        "CJ푸드빌 빕스"
+      ]
+    },
+    "card_id": "ibk-12112580001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=258&PDCD=0001&pageId=CA01010000",
+    "evidence": "아웃백, 빕스 10% 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "on_the_border",
+      "name": "온더보더",
+      "category": "restaurant.general",
+      "aliases": [
+        "온더보더",
+        "ON THE BORDER"
+      ]
+    },
+    "card_id": "ibk-12112930002",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=293&PDCD=0002&pageId=CA01010000",
+    "evidence": "아웃백, 온더보더, VIPS"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "tenbyten",
+      "name": "텐바이텐",
+      "category": "online_shopping",
+      "aliases": [
+        "텐바이텐",
+        "10X10"
+      ]
+    },
+    "card_id": "kb-01914",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01914",
+    "evidence": "텐바이텐 | 직영 홈페이지( www.10x10.co.kr ) 및 직영 매장(대학로점) 이용분만 할인 제공"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "interpark_ticket",
+      "name": "인터파크티켓",
+      "category": "other",
+      "aliases": [
+        "인터파크티켓",
+        "NOL 티켓",
+        "INTERPARK TICKET"
+      ]
+    },
+    "card_id": "kb-01914",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01914",
+    "evidence": "문화 | 인터파크티켓 | 공연 예매 이용분만 할인 제공"
+  }
+]

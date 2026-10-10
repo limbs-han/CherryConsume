@@ -1,0 +1,65 @@
+card: hana-19153
+holder:
+  started_on: '2026-08-01'
+  options:
+    - {option: mode, choice: global, effective_from: 2026-07-01}
+cases:
+- name: 해외 가맹점 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-2: 2000}
+  calc: 100,000 x 2% = 2,000
+- name: 해외 아고다는 2%만 받음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: agoda, channel: online, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-2: 2000}
+  calc: 여행 1%와 해외 2%는 중복되지 않아 큰 쪽 2%
+- name: 온라인 간편결제 1% 반올림
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 12350, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {online-pay-1: 124}
+  calc: 12,350 x 1% = 123.5를 반올림 124
+- name: 편의점 오프라인 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {store-1: 100}
+  calc: 10,000 x 1% = 100
+- name: 알뜰주유소 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: altteul_fuel, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-1: 500}
+  calc: 50,000 x 1% = 500
+- name: 쿠팡 온라인 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {online-shop-1: 300}
+  calc: 30,000 x 1% = 300
+- name: 국내 대한항공 1%와 통합 한도 3만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 2900000, merchant: korean_air, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: lotte_dfs, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {travel-1: 29000}
+  - payment: 1
+    benefits: {travel-1: 1000}
+  calc: 2,900,000 x 1% = 29,000. 다음 200,000 x 1% = 2,000인데 통합 한도 30,000에서 1,000 남음

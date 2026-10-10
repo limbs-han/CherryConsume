@@ -1,0 +1,55 @@
+card: hana-13823
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내외 가맹점 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-merchants-0-2: 20}
+  calc: 10,000 x 0.2% = 20
+- name: 페이결제 0.4%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: restaurant.general, payment_method: kakao_pay}
+  expect:
+  - payment: 0
+    benefits: {pay-methods-0-4: 40}
+  calc: 10,000 x 0.4% = 40
+- name: 이마트 오프라인 페이결제도 쇼핑 0.6% 우선
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: samsung_pay}
+  expect:
+  - payment: 0
+    benefits: {shopping-0-6: 300}
+  calc: 50,000 x 0.6% = 300
+- name: 배민 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 25000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-0-8: 200}
+  calc: 25,000 x 0.8% = 200
+- name: 지하철 1.0% 절사
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 1550, category: transit.subway, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-1-0: 15}
+  calc: 1,550 x 1% = 15.5에서 절사 15
+- name: 통합 한도 소진 뒤 페이결제 0.4%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9000000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {shopping-0-6: 50000}
+  - payment: 1
+    benefits: {pay-methods-0-4: 200}
+  calc: 9,000,000 x 0.6% = 54,000이 한도 50,000에 걸림. 다음 이마트 페이결제는 0.4% 200

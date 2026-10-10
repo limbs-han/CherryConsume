@@ -1,0 +1,45 @@
+card: nh-m21017
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 직전 해외 캐시백 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만이라 0
+- name: 해외 2% 건당 1만원 기준
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 9999, category: other, region: overseas}
+  - {at: 2026-11-04T13:00, amount: 50000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {overseas-cashback-2: 1000}}
+  calc: 9,999원은 1만원 미만 0. 50,000 x 2% = 1,000
+- name: 20만 구간 스타벅스 0.5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks, category: cafe}
+  expect:
+  - {payment: 0, benefits: {life-cashback-0-5: 50}}
+  calc: 10,000 x 0.5% = 50
+- name: 50만 구간 지하철 1%와 교보 온라인 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  - {at: 2026-11-04T13:00, amount: 20000, merchant: kyobo_book, channel: online}
+  - {at: 2026-11-04T14:00, amount: 20000, merchant: kyobo_book, channel: offline}
+  expect:
+  - {payment: 0, benefits: {life-cashback-1: 100}}
+  - {payment: 1, benefits: {life-kyobo-online-1: 200}}
+  - {payment: 2, benefits: {}}
+  calc: 10,000 x 1% = 100. 교보 온라인 20,000 x 1% = 200. 오프라인은 0
+- name: 20만 구간 교보 온라인 0.5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T13:00, amount: 20000, merchant: kyobo_book, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-kyobo-online-0-5: 100}}
+  calc: 20,000 x 0.5% = 100

@@ -1,0 +1,55 @@
+card: kb-01664
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 CGV 스타벅스 통합 1만원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 30000, merchant: cgv}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: starbucks}
+  - {at: 2026-11-07T10:00, amount: 9000, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {cgv-35: 7000}, counted: 30000}
+  - {payment: 1, benefits: {starbucks-20: 3000}}
+  - {payment: 2, benefits: {}}
+  calc: CGV 2만원까지 35% = 7,000. 스타벅스 15,000 x 20% = 3,000. 통합한도 1만원 소진. GS25 1만원 미만 제외
+- name: 30만 구간 교통 통신
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 15000, category: transit.subway}
+  - {at: 2026-11-04T08:00, amount: 10000, category: transit.bus_express}
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 30000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {transit-10: 1500}, counted: 0}
+  - {payment: 1, benefits: {transit-10: 500}, counted: 10000}
+  - {payment: 2, benefits: {telecom-2500: 2500}}
+  - {payment: 3, benefits: {}, counted: 30000}
+  calc: 교통 월 2만원까지 10%. 15,000 x 10% = 1,500, 남은 5,000 x 10% = 500. 통신 5만원 이상 2,500. 지하철은 실적 제외, 철도는 실적 포함
+- name: 20만 구간 교통 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 15000, category: transit.subway}
+  - {at: 2026-11-04T19:00, amount: 60000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {restaurant-20: 10000}}
+  calc: 교통은 30만원 이상. 아웃백 5만원까지 20% = 10,000
+- name: 100만 구간 에버랜드 교보문고 GS25
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 60000, merchant: everland, channel: offline}
+  - {at: 2026-11-08T10:00, amount: 30000, merchant: kyobo_book}
+  - {at: 2026-11-09T10:00, amount: 25000, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {theme-park-50: 25000}}
+  - {payment: 1, benefits: {kyobo-5: 1500}}
+  - {payment: 2, benefits: {gs25-5: 1000}}
+  calc: 5만원까지 50% = 25,000. 30,000 x 5% = 1,500. GS25 2만원까지 5% = 1,000
+- name: 20만 경계 직전
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만 할인 없음

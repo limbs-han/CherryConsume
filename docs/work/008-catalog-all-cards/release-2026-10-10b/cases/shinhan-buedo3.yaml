@@ -1,0 +1,38 @@
+card: shinhan-buedo3
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 대중교통과 통신요금 10% 통합 한도 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {essential-transport-10: 150}, counted: 0}
+  - {payment: 1, benefits: {essential-telecom-10: 4850}, counted: 60000}
+  calc: 1,500 × 10% = 150, 지하철은 실적 제외. 60,000 × 10% = 6,000이지만 통합 한도 5,000 - 150 = 4,850
+- name: 커피 1만원 기준 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 15000, category: cafe, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T18:00, amount: 5000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-coffee-convenience-10: 1000}, counted: 15000}
+  - {payment: 1, benefits: {}, counted: 5000}
+  calc: 10,000 × 10% = 1,000. 같은 날 두 번째는 일 1회 초과
+- name: 배달앱과 쇼핑 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 8000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-delivery-10: 800}, counted: 8000}
+  - {payment: 1, benefits: {daily-shopping-10: 1000}, counted: 20000}
+  calc: 8,000 × 10% = 800. 쿠팡 10,000 기준 × 10% = 1,000
+- name: 실적 30만원 직전이면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 5000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 5000}
+  calc: 30만원 미만 구간

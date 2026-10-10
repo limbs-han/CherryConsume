@@ -1,0 +1,92 @@
+schema_version: 2
+id: nh-f20573
+issuer: nh
+name: 폼 체크카드
+short_name: 폼 체크
+kind: check
+product_codes:
+  - '90010508'
+  - F20573
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010508', fetched_at: 2026-10-10, review_no: 2026-3845, review_valid_until: 2027-06-30}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·대형마트·할인점(아울렛)·역사 입점 매장과 별도 가맹점번호로 승인되는 PG·간편결제는 할인에서 빠질 수 있다, 대상 가맹점의 선물하기와 모바일상품권·쿠폰 구매는 빠진다]
+    limits:
+      - {key: small_day, per: day, count: 1}
+      - {key: small_month, per: month, count: 5}
+    benefits:
+      - key: daily-200
+        title: 편의점·패스트푸드·커피 건당 200원 할인
+        source: page
+        evidence: ['편의점 | GS25, CU | 건당 200원 할인 *건당 이용조건 없음 | 통합 일 1회 / 월 5회', '패스트푸드 | 맥도날드, 롯데리아', '커피 | 이디야, 빽다방, 메가MGC', 편의점/패스트푸드/커피/뷰티&팬시 할인은 현장 결제시에만 제공됩니다.]
+        target:
+          merchants: [cu, ediya, gs25, lotteria, mcdonalds, mega_coffee, paik_coffee]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, fixed: 200}
+        limits:
+          - {shared: small_day}
+          - {shared: small_month}
+        tiers: {from: 100000}
+      - key: beauty-500
+        title: 올리브영 건당 500원 할인
+        source: page
+        evidence: ['뷰티&팬시 | 올리브영, 아트박스 | 건당 500원 할인 *건당 1만원 이상 결제 시', 편의점/패스트푸드/커피/뷰티&팬시 할인은 현장 결제시에만 제공됩니다.]
+        target:
+          merchants: [olive_young]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 500}
+        limits:
+          - {shared: small_day}
+          - {shared: small_month}
+        tiers: {from: 100000}
+      - key: transit-5
+        title: 시내·마을버스·지하철 5% 할인
+        source: page
+        evidence: ['대중교통 | 시내·마을버스, 지하철 | 5% 할인 *건당 이용조건 없음 | 월 1천원 한도', '대중교통 혜택은 후불교통카드로 발급 시 제공됩니다. (공항리무진, 공항/고속/시외버스, 통행료는 제외)']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 1000}
+        tiers: {from: 100000}
+      - key: nh-pay-online-0-2
+        title: NH페이 국내 온라인 0.2% 할인
+        source: page
+        evidence: [NH페이 | 국내 온라인 전가맹점 | 0.2% 할인 *건당 이용조건 없음 | 월 1천원 한도]
+        target: {all: true}
+        when:
+          - payment: [nh_pay]
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.2}
+        limits:
+          - {per: month, amount: 1000}
+        tiers: {from: 100000}
+    unmodeled: [아트박스는 가맹점 키가 없어 계산하지 않는다, 서점(교보문고·YES24) 할인은 페이지 글에서 할인 값이 뽑히지 않아 계산하지 않는다, '가상화폐 거래소, 과태료·범칙금, 우체국 우편요금, 카드대출, 수수료·이자·연체료, 포인트 사용분은 실적에서 빠진다', 만 12~18세 전용 카드다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[beauty-500].limits', question: 혜택표 한도 칸이 병합이라 뷰티&팬시가 통합 일 1회·월 5회에 들어가는지 글로 확실하지 않다, assumed: 들어간다}
+  - {path: 'revisions[0].unmodeled', question: 서점 행의 할인 값과 한도를 페이지 글에서 찾지 못했다. 상품안내장 F20573.pdf로 확인한다, assumed: 계산하지 않음}
+notes: 2026-10-10 상품 페이지(준법감시인 심의필 2026-3845)를 대조했다. 만 12~18세 개인 발급, 국내전용·유니온페이 연회비 0원. 전월 10만원 이상에서 모든 혜택을 준다. 신규 특례는 최초 사용등록일부터 다음 달 말일까지다. 초안의 편의점을 업종 전체로 잡은 것을 GS25·CU로 좁히고 패스트푸드와 커피를 같은 통합 한도에 더했다.

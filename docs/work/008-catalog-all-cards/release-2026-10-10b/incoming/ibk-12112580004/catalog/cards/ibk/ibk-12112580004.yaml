@@ -1,0 +1,152 @@
+schema_version: 2
+id: ibk-12112580004
+issuer: ibk
+name: K-패스(신용)
+kind: credit
+product_codes:
+  - '12112580004'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 2000}
+  - {scope: global, brand: master, amount: 4000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=258&PDCD=0004&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2026-2084호, review_valid_until: 2029-03-19}
+  - {id: manual, kind: manual_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/20250116155638402266212793224.pdf', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-03-20
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, taxi, transit.bus_city, transit.bus_express, transit.rail, transit.subway]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    limits:
+      - {key: transit-day, per: day, count: 3}
+      - {key: transit-month, per: month, amount: 10000}
+      - {key: general-day, per: day, count: 1}
+      - {key: general-month, per: month, amount: 5000, count: 2}
+    benefits:
+      - key: transit-weekday
+        title: 평일 버스·지하철 1회 100~200원 청구할인
+        source: page
+        evidence: ['대중교통[버스, 지하철, 기타(유료도로 등)] 최대 300원 할인', '1일 3회, 월 1만원 한도(환승요금 제외)', 전월 실적 | 20만원 이상 시 | 50만원 이상 시 | 평 일 | 1회당 100원 할인 | 1회당 200원 할인 |, '버스/지하철 : 후불교통카드 사용 가능한 전지역']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+          - day:
+              in: [mon, tue, wed, thu, fri]
+              holidays: exclude
+        reward:
+          type: billing_discount
+          fixed: {200000: 100, 500000: 200}
+        limits:
+          - {shared: transit-day}
+          - {shared: transit-month}
+        tiers: {from: 200000}
+        unmodeled: [환승요금은 할인하지 않는다]
+      - key: transit-weekend
+        title: 주말·공휴일 버스·지하철 1회 200~300원 청구할인
+        source: page
+        evidence: ['대중교통[버스, 지하철, 기타(유료도로 등)] 최대 300원 할인', '1일 3회, 월 1만원 한도(환승요금 제외)', 주말(공휴일 포함) | 1회당 200원 할인 | 1회당 300원 할인 |]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+          - day:
+              in: [sat, sun]
+              holidays: include
+        reward:
+          type: billing_discount
+          fixed: {200000: 200, 500000: 300}
+        limits:
+          - {shared: transit-day}
+          - {shared: transit-month}
+        tiers: {from: 200000}
+        unmodeled: [환승요금은 할인하지 않는다]
+      - key: rail-express-5
+        title: 철도·고속버스 5% 청구할인
+        source: page
+        evidence: ['일반교통(철도, 고속버스, 택시) 5% 할인', '1일 1회, 월 2회, 월 5천원 한도', '철 도 : KORAIL(한국철도공사) 매표소 / 온라인 [www.korail.com] / 공식 앱을 통한 예매', '고속버스 : 고속버스터미널 매표소 / 온라인 [www.kobus.co.kr / www.hticket.co.kr] / 고속버스 앱을 통한 예매']
+        target:
+          categories: [transit.bus_express, transit.rail]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: general-day}
+          - {shared: general-month}
+        tiers: {from: 200000}
+        unmodeled: [철도는 KORAIL 매표소와 홈페이지·공식 앱 예매만 대상이다]
+      - key: taxi-5
+        title: 택시 5% 청구할인
+        source: page
+        evidence: ['일반교통(철도, 고속버스, 택시) 5% 할인', '1일 1회, 월 2회, 월 5천원 한도', '택 시 : 신용카드 사용가능 택시 전체', ※ 앱을 통한 결제는 할인이 제공되지 않습니다.]
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: general-day}
+          - {shared: general-month}
+        tiers: {from: 200000}
+      - key: fuel-gs-40
+        title: GS칼텍스 리터당 40원 청구할인
+        source: page
+        evidence: ['주유(GS칼텍스, LPG포함) 리터당 40원 할인', '1일 1회, 월 4회, 회당 주유금액 10만원 한도']
+        target:
+          merchants: [gs_caltex]
+        reward: {type: billing_discount, per_liter: 40}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 4}
+        tiers: {from: 200000}
+        notes: 원문은 GS칼텍스 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: telecom-3
+        title: 휴대폰요금 자동이체 3% 청구할인
+        source: page
+        evidence: ['통신(SKT, KT, LG U+ 휴대폰요금 자동이체) 3% 할인', '월 1회, 최초 승인건, 최대 1,200원 할인한도, 해당 통신사(SKT, KT, LG U+) 자동이체 필수']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {per: month, amount: 1200, count: 1}
+        tiers: {from: 200000}
+      - key: dining-10
+        title: 아웃백·빕스 10% 청구할인
+        source: page
+        evidence: ['외식(아웃백, 빕스) 10% 할인', '통합 월 1회, 1회 이용금액 10만원 한도']
+        target:
+          merchants: [outback, vips]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+      - key: movie-2000
+        title: 메가박스·CGV 온라인 예매 2천원 청구할인
+        source: page
+        evidence: ['영화[메가박스, CGV(공식 홈페이지 또는 앱을 통한 온라인예매)] 2천원 할인', '통합 월 1회, 연 6회']
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+        tiers: {from: 200000}
+        notes: 온라인 예매 조건이 CGV에만 붙는지 둘 다인지 원문이 분명하지 않아 둘 다 온라인 예매만 계산한다
+    unmodeled: [K-패스 대중교통 마일리지 환급은 정부 사업이라 계산하지 않는다, 유료도로와 터널 후불교통 300원 할인은 담을 업종이 없어 계산하지 않는다, '백화점·할인점 2~3개월 무이자할부, 주요 놀이공원 할인, 환전 우대, 대중교통 상해보험은 계산하지 않는다', 각종 간편결제로 결제하면 할인되지 않을 수 있다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다, 카드 사용 등록 다음 달 말까지 50만원 이상 쓰면 다음 달 대중교통 할인이 그 구간으로 올라간다. 평소 전월실적 규칙과 같게 계산한다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적에서 빼는 교통특화 서비스 이용금액을 대중교통과 일반교통 대상 업종 전체로 보았다. 할인받은 건만 빼는 뜻일 수도 있다, assumed: 'transit.bus_city, transit.subway, transit.rail, transit.bus_express, taxi'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '실적 제외 문구가 교통특화 이용금액과 APT관리비뿐이라 세금, 공과금, 상품권은 실적에 넣었다', assumed: 포함}
+notes: 2026-10-10 expand2 조사. 후불교통 기능만 있는 카드다. 연회비는 발급일부터 1년 국내 이용 240만원 이상이면 다음 해 면제다

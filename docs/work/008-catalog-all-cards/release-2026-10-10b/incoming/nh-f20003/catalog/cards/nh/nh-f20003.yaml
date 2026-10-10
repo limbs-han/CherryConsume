@@ -1,0 +1,154 @@
+schema_version: 2
+id: nh-f20003
+issuer: nh
+name: 라이언 치즈 체크카드
+kind: check
+product_codes:
+  - '90010013'
+  - F20003
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010013', fetched_at: 2026-10-10, review_no: 2026-3845, review_valid_until: 2027-06-30}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 200000
+      tier_by_benefit: {bonus-cheezzz: 0, triple-cheezzz-beauty: 0, triple-cheezzz-bookstores: 0, triple-cheezzz-education-exam: 0, triple-cheezzz-overseas: 0, triple-cheezzz-performance: 0, triple-cheezzz-transit: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: ['장·단기카드대출, 할부와 SMS 수수료, 이자와 연체료, 포인트로 결제한 금액은 실적과 적립에서 빠진다']
+    limits:
+      - {key: cheezzz_monthly, per: month, amount: 30000}
+    benefits:
+      - key: single-cheezzz-weekday
+        title: Single Cheezzz 월~금 0.5% NH포인트 적립
+        source: page
+        evidence: [Single Cheezzz! (월~금 0.5% NH포인트 적립), '커피 | 스타벅스(싸이렌오더 포함), 투썸플레이스, 커피빈', '편의점 | CU, GS25', '영화 | CGV, 롯데시네마, 메가박스', '온라인쇼핑 | G마켓, 11번가, 쿠팡, 티몬, 농협몰', '배달앱 | 배달의 민족, 요기요', ※ 전월실적 20만원 이상 시 제공]
+        target:
+          merchants: [baemin, cgv, coffee_bean, coupang, cu, eleven_st, gmarket, gs25, lotte_cinema, megabox, nh_mall, starbucks, tmon, twosome, yogiyo]
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: points, program: nh_point, rate: 0.5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 200000}
+        unmodeled: [커피는 상품권·선불카드 구매·충전과 앱 결제가 빠진다. 스타벅스 사이렌오더는 받는다, 영화는 매점과 예매대행사이트 결제가 빠진다, '역사, 백화점, 아울렛, 쇼핑몰 입점 매장은 빠진다']
+      - key: double-cheezzz-weekend
+        title: Double Cheezzz 토·일 1% NH포인트 적립
+        source: page
+        evidence: ['Double Cheezzz! (토,일 1% NH포인트 적립)', Single Cheezzz와 같은 대상업종 및 가맹점, ※ 전월실적 20만원 이상 시 제공]
+        target:
+          merchants: [baemin, cgv, coffee_bean, coupang, cu, eleven_st, gmarket, gs25, lotte_cinema, megabox, nh_mall, starbucks, tmon, twosome, yogiyo]
+        when:
+          - day:
+              in: [sat, sun]
+        reward: {type: points, program: nh_point, rate: 1}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 200000}
+        unmodeled: [커피는 상품권·선불카드 구매·충전과 앱 결제가 빠진다. 스타벅스 사이렌오더는 받는다, 영화는 매점과 예매대행사이트 결제가 빠진다, '역사, 백화점, 아울렛, 쇼핑몰 입점 매장은 빠진다']
+      - key: triple-cheezzz-transit
+        title: Triple Cheezzz 교통 1.5% NH포인트 적립
+        source: page
+        evidence: [Triple Cheezzz! (요일 관계없이 1.5% NH포인트 적립), '교통 | 지하철, 시내·마을버스, 택시, SRT, KTX, 시외·고속버스, 쏘카', ※ 전월실적 30만원 이상 시 제공]
+        target:
+          categories: [taxi, transit]
+          merchants: [socar]
+        reward: {type: points, program: nh_point, rate: 1.5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 300000}
+        unmodeled: [철도는 SRT와 KTX만 대상이다. 다른 열차 결제는 빠질 수 있다]
+      - key: triple-cheezzz-overseas
+        title: Triple Cheezzz 해외 일시불 1.5% NH포인트 적립
+        source: page
+        evidence: [Triple Cheezzz! (요일 관계없이 1.5% NH포인트 적립), '해외 | 해외 일시불 ※ 온·오프라인 결제건 적립 단, ATM 이용 제외', ※ 전월실적 30만원 이상 시 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: nh_point, rate: 1.5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 300000}
+      - key: triple-cheezzz-education-exam
+        title: Triple Cheezzz 어학시험 1.5% NH포인트 적립
+        source: page
+        evidence: [Triple Cheezzz! (요일 관계없이 1.5% NH포인트 적립), '어학시험 : 토익(스피킹), 텝스, JPT, KPE', ※ 전월실적 30만원 이상 시 제공]
+        target:
+          merchants: [jpt, kpe, teps, toeic]
+        reward: {type: points, program: nh_point, rate: 1.5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 300000}
+      - key: triple-cheezzz-bookstores
+        title: Triple Cheezzz 서점 1.5% NH포인트 적립
+        source: page
+        evidence: [Triple Cheezzz! (요일 관계없이 1.5% NH포인트 적립), '서점 | 교보문고, 영풍문고, 반디앤루니스, 예스24, 알라딘, 인터파크도서 ※ 온·오프라인 결제건 적립', ※ 전월실적 30만원 이상 시 제공]
+        target:
+          merchants: [aladin, interpark_book, kyobo_book, yes24, youngpoong_book]
+        reward: {type: points, program: nh_point, rate: 1.5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 300000}
+        unmodeled: [반디앤루니스는 가맹점 키가 없어 계산하지 않는다]
+      - key: triple-cheezzz-performance
+        title: Triple Cheezzz 인터파크티켓 1.5% NH포인트 적립
+        source: page
+        evidence: [Triple Cheezzz! (요일 관계없이 1.5% NH포인트 적립), 공연ㆍ전시 | 인터파크티켓, ※ 전월실적 30만원 이상 시 제공]
+        target:
+          merchants: [interpark_ticket]
+        reward: {type: points, program: nh_point, rate: 1.5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 300000}
+      - key: triple-cheezzz-beauty
+        title: Triple Cheezzz 미용·올리브영 1.5% NH포인트 적립
+        source: page
+        evidence: [Triple Cheezzz! (요일 관계없이 1.5% NH포인트 적립), 'H & B | 미용업종, 올리브영, 랄라블라 ※ 오프라인 이용건에 한함', ※ 전월실적 30만원 이상 시 제공]
+        target:
+          categories: [beauty.salon]
+          merchants: [olive_young]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: nh_point, rate: 1.5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 300000}
+        unmodeled: [랄라블라는 가맹점 키가 없어 계산하지 않는다, '역사, 백화점, 아울렛, 쇼핑몰 입점 매장은 빠진다']
+      - key: bonus-cheezzz
+        title: Bonus Cheezzz 유튜브·넷플릭스·유료 앱 5% NH포인트 적립
+        source: page
+        evidence: ['Bonus Cheezzz! (유튜브, 넷플릭스, 유료 어플리케이션 결제 5% NH포인트 적립)', 전월실적 30만원 이상 시 제공, 결제수단(정보) 혹은 지불방법관리에 해당카드로 등록 이용 시 제공, '애플 앱스토어·구글 플레이스토어 결제 가맹점이 ‘YOUTUBE’, ‘NETFLIX’, ‘APPLE’, ‘GOOGLE’로 매출 발생한 건에 한함']
+        target:
+          merchants: [app_store, google_play, netflix, youtube_premium]
+        reward: {type: points, program: nh_point, rate: 5}
+        limits:
+          - {shared: cheezzz_monthly}
+        tiers: {from: 300000}
+        unmodeled: ['매출 가맹점명이 YOUTUBE, NETFLIX, APPLE, GOOGLE인 건만 받는다']
+    unmodeled: ['해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다. 월말 이용이 다음 달 실적이 될 수 있다', 국제공항 라운지 연 1회 무료이용은 전월실적 50만원 이상이고 카드 사용등록월 다음 달부터다. 결제 혜택이 아니라 계산하지 않는다, 'Triple과 Bonus Cheezzz는 카드 사용등록 달에 주지 않고, 사용등록일부터 다음 달 말일까지 실적 미달 특례도 없다', Triple Cheezzz 종합스포츠센터·요가·수영·문화센터 1.5%는 공통 업종이 스포츠 전체라 다른 스포츠에도 붙어 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다. 상품출시일은 2019-11-20이다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[triple-cheezzz-education-exam].target', question: 자기계발 칸의 오프라인 이용건 한정 문구가 스포츠센터 줄에만 붙어 있다. 어학시험에도 적용되는지 문구가 분명하지 않다, assumed: 어학시험은 채널 조건 없음}
+  - {path: 'revisions[0].benefits[triple-cheezzz-overseas].when', question: 해외에서 Single·Double 대상 가맹점을 쓰면 해외 1.5%와 겹쳐 받는지 문구가 없다, assumed: 큰 쪽 하나만}
+  - {path: 'revisions[0].benefits[single-cheezzz-weekday].when', question: 월~금에 공휴일이 들어가는지 문구가 없다, assumed: 요일만 본다}
+notes: 2026-10-10 상품 페이지(준법감시인 심의필 2026-3845)를 대조했다. 상품출시일 2019-11-20. 상품설명서 PDF는 찾지 못했다. Single·Double은 전월 20만원 이상, Triple·Bonus는 30만원 이상이고 넷이 월 3만 포인트 한도를 함께 쓴다. 신규 특례는 Single·Double만 사용등록일부터 다음 달 말일까지 20만 구간으로 준다. 초안의 Single·Double 전가맹점 대상, 교통·자기계발·서점·뷰티 20만 구간, Bonus 금액 조건을 원문대로 고쳤다.

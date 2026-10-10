@@ -1,0 +1,96 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "cashnote",
+      "name": "캐시노트",
+      "category": "other",
+      "aliases": [
+        "캐시노트",
+        "Cashnote",
+        "한국신용데이터"
+      ]
+    },
+    "card_id": "kb-04291",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04291",
+    "evidence": "캐시노트 멤버십 청구할인. 할인 대상 캐시노트 플러스 멤버십"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "mega_mart",
+      "name": "메가마트",
+      "category": "grocery_mart",
+      "aliases": [
+        "메가마트",
+        "MEGAMART"
+      ]
+    },
+    "card_id": "woori-834221",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834221",
+    "evidence": "대형마트 | 이마트, 홈플러스, 롯데마트, 메가마트, Y-MART(영암마트) / 창고형 할인매장 | 트레이더스 홀세일 클럽, 이케아, 롯데마트맥스"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ymart",
+      "name": "Y-MART(영암마트)",
+      "category": "grocery_mart",
+      "aliases": [
+        "영암마트",
+        "Y-MART",
+        "와이마트"
+      ]
+    },
+    "card_id": "woori-834221",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834221",
+    "evidence": "대형마트 | 이마트, 홈플러스, 롯데마트, 메가마트, Y-MART(영암마트) / 창고형 할인매장 | 트레이더스 홀세일 클럽, 이케아, 롯데마트맥스"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lotte_mart_max",
+      "name": "롯데마트맥스",
+      "category": "grocery_mart",
+      "aliases": [
+        "롯데마트맥스",
+        "롯데마트 맥스",
+        "MAXX"
+      ]
+    },
+    "card_id": "woori-834221",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834221",
+    "evidence": "대형마트 | 이마트, 홈플러스, 롯데마트, 메가마트, Y-MART(영암마트) / 창고형 할인매장 | 트레이더스 홀세일 클럽, 이케아, 롯데마트맥스"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lohbs_plus",
+      "name": "롭스플러스",
+      "category": "other",
+      "aliases": [
+        "롭스플러스",
+        "롭스",
+        "LOHB'S"
+      ]
+    },
+    "card_id": "woori-834221",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834221",
+    "evidence": "잡화 | 올리브영, 롭스플러스(LOHB'S+), 시코르, 다이소"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "chicor",
+      "name": "시코르",
+      "category": "beauty.cosmetics",
+      "aliases": [
+        "시코르",
+        "CHICOR"
+      ]
+    },
+    "card_id": "woori-834221",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834221",
+    "evidence": "잡화 | 올리브영, 롭스플러스(LOHB'S+), 시코르, 다이소"
+  }
+]

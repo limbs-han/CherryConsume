@@ -1,0 +1,114 @@
+schema_version: 2
+id: lotte-p13746-a13746
+issuer: lotte
+name: LOCA LIKIT
+kind: credit
+product_codes: [P13746-A13746]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13746-A13746', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card:
+      until: next_month_end
+      tier: 400000
+      tier_by_benefit: {starbucks-50: 0, starbucks-pay-60: 0}
+      from: issue
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - {key: starbucks, per: month, amount: 10000}
+    benefits:
+      - key: starbucks-50
+        title: 스타벅스 50% 결제일 할인
+        source: page
+        evidence: [스타벅스 50% 결제일 할인, 실물카드로 결제하면 50% 할인 혜택이 제공됩니다., 스타벅스 할인 혜택은 월 1만원 한도 내에서 제공됩니다., '현장 결제 건에만 제공되며, 백화점, 마트 등에 입점한 매장에서는 할인 혜택이 제공되지 않을 수 있습니다.', 'LOCA LIKIT 카드를 발급받은 첫달에는 스타벅스 할인 혜택이 제공되지 않으며, 그 다음 달부터 지난달 이용금액 40만원 이상 시 혜택이 제공됩니다.']
+        target:
+          merchants: [starbucks]
+        when:
+          - channel: offline
+            card_month: {min: 1}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: starbucks}
+        tiers: {from: 400000}
+      - key: starbucks-pay-60
+        title: 간편결제 스타벅스 60% 결제일 할인
+        source: page
+        evidence: [간편결제(Pay)를 통해 스타벅스 이용 시 60% 할인 혜택이 제공됩니다., '예: 삼성페이 등 모든 간편결제(Pay)']
+        target:
+          merchants: [starbucks]
+        when:
+          - channel: offline
+            payment: [apple_pay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, toss_pay]
+            card_month: {min: 1}
+        reward: {type: billing_discount, rate: 60}
+        limits:
+          - {shared: starbucks}
+        tiers: {from: 400000}
+      - key: movie-50
+        title: 롯데시네마·CGV 50% 결제일 할인
+        source: page
+        evidence: ['롯데시네마, CGV 50% 결제일 할인', 영화 할인 혜택은 월 1만원 한도 내에서 제공됩니다., 건당 1만원 이상 이용 시 할인 혜택이 제공됩니다.]
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 400000}
+      - key: transit-10
+        title: 시내버스·지하철 10% 결제일 할인
+        source: page
+        evidence: ['시내버스, 지하철 10% 결제일 할인', 대중교통 할인 혜택은 월 5천원 한도 내에서 제공됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+      - key: telecom-10
+        title: 이동통신 10% 결제일 할인
+        source: page
+        evidence: ['SKT, KT, LG U+ 10% 결제일 할인', 이동통신 할인 혜택은 월 5천원 한도 내에서 제공됩니다., '이동통신요금 자동이체 연결 건에만 제공되며, 인터넷·TV 등 결합상품 결제 건 및 알뜰폰·선불폰 이용요금 결제 건은 할인 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+      - key: delivery-5
+        title: 배달의민족·쿠팡이츠 5% 결제일 할인
+        source: page
+        evidence: ['배달의 민족, 쿠팡이츠 5% 결제일 할인', 배달앱 할인 혜택은 월 5천원 한도 내에서 제공됩니다., '공식 홈페이지 및 앱을 통한 결제 건에만 제공되며, 배달원 또는 가맹점 직접 결제건은 할인 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+    unmodeled: [백화점·마트 등에 입점한 스타벅스 매장은 할인되지 않을 수 있다, 스타벅스 간편결제 60%는 모든 간편결제가 대상이다. 결제수단을 넣지 않으면 50%로 계산한다, 영화 할인은 현장 결제와 공식 홈페이지·앱 예매만이다. 기프티콘·상품권 등 예매 밖의 결제는 할인하지 않는다, '이동통신 할인에서 인터넷·TV 결합상품, 알뜰폰·선불폰 요금은 빠진다', 가족카드 이용금액도 본인 실적에 더하고 할인 한도는 본인과 가족카드가 합산한다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', LOCA LIKIT이 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2021-06-18이고 상품 페이지 심의는 2024년 11월이다, assumed: '2026-10-10'}
+notes: 2026-10-10 상품 페이지 대조. 상품설명서 PDF 주소는 찾지 못했다. 신규 발급 특례는 발급일부터 다음 달 말일까지 영화, 대중교통, 이동통신, 배달앱만 실적 무관이라 40만 구간으로 넣고 스타벅스는 특례에서 빼고 발급 첫달 제외를 달았다. 실적 제외의 대중교통(버스, 지하철)은 시외버스까지 빼 실적이 적게 잡히는 쪽으로 두었다. 할인받은 결제 전액이 실적에서 빠진다.

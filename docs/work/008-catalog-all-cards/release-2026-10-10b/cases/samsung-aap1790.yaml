@@ -1,0 +1,51 @@
+card: samsung-aap1790
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 병의원 20% 50만 구간 월 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, category: hospital, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, category: pharmacy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-20: 6000}, counted: 30000}
+  - {payment: 1, benefits: {medical-20: 4000}, counted: 30000}
+  calc: 30,000 × 20% = 6,000. 약국 6,000이나 남은 한도 4,000. 할인 받아도 실적 인정
+- name: 50만 직전이면 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 0 구간
+- name: 보험 할인점 헬스뷰티 100만 구간
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: insurance.private, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 20000, merchant: amore_mall, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {insurance-10: 5000}}
+  - {payment: 1, benefits: {mart-10: 5000}}
+  - {payment: 2, benefits: {health-beauty-20: 4000}}
+  calc: 50,000 × 10% = 5,000, 50,000 × 10% = 5,000, 20,000 × 20% = 4,000. 각 한도 10,000 안
+- name: 이동통신 렌탈 멤버십 통합 월 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-25T09:00, amount: 40000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-26T09:00, amount: 30000, merchant: coway_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-10: 4000}}
+  - {payment: 1, benefits: {life-10: 1000}}
+  calc: 40,000 × 10% = 4,000. 코웨이 3,000이나 남은 1,000
+- name: 해외 1%와 무이자할부 실적 인정
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: restaurant, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 90000, merchant: emart, installment_months: 3, interest_free: true, payment_method: physical_card}
+  - {at: 2026-11-06T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {}, counted: 90000}
+  - {payment: 2, benefits: {}, counted: 0}
+  calc: 100,000 × 1% = 1,000. 무이자할부는 할인 제외지만 실적 인정. 지하철은 실적 제외

@@ -1,0 +1,130 @@
+schema_version: 2
+id: woori-104183
+issuer: woori
+name: SK 주유 400 우리카드
+kind: credit
+product_codes:
+  - '104167'
+  - '104183'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: visa, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104183', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-12-05'
+    source: page
+    tiers: [0, 400000, 800000, 1200000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - {key: fuel_count, per: month, count: 4}
+    benefits:
+      - key: fuel-discount-40
+        title: SK주유소 리터당 120원 청구할인
+        source: page
+        evidence: [전월 국내외 가맹점 이용실적 | 할인액(ℓ당) | 월 할인한도, '40만원 이상 ~ 80만원 미만 | 120원 | 15,000원', 통합 월 4회 제공, 1회 주유 이용금액 기준 최대 10만원까지 할인 적용, 오프라인 매장 결제 건에 한하여 할인 제공]
+        target:
+          merchants: [sk_energy]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 120}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, amount: 15000}
+          - {shared: fuel_count}
+        tiers: {from: 400000, to: 400000}
+      - key: fuel-discount-80
+        title: SK주유소 리터당 150원 청구할인
+        source: page
+        evidence: ['80만원 이상 ~ 120만원 미만 | 150원 | 25,000원', 통합 월 4회 제공, 1회 주유 이용금액 기준 최대 10만원까지 할인 적용]
+        target:
+          merchants: [sk_energy]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 150}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, amount: 25000}
+          - {shared: fuel_count}
+        tiers: {from: 800000, to: 800000}
+      - key: fuel-discount-120
+        title: SK주유소 리터당 250원 청구할인
+        source: page
+        evidence: ['120만원 이상 ~ 200만원 미만 | 250원 | 35,000원', 통합 월 4회 제공, 1회 주유 이용금액 기준 최대 10만원까지 할인 적용]
+        target:
+          merchants: [sk_energy]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 250}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, amount: 35000}
+          - {shared: fuel_count}
+        tiers: {from: 1200000, to: 1200000}
+      - key: fuel-discount-200
+        title: SK주유소 리터당 400원 청구할인
+        source: page
+        evidence: ['200만원 이상 | 400원 | 45,000원', 통합 월 4회 제공, 1회 주유 이용금액 기준 최대 10만원까지 할인 적용]
+        target:
+          merchants: [sk_energy]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 400}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, amount: 45000}
+          - {shared: fuel_count}
+        tiers: {from: 2000000}
+      - key: convenience-7
+        title: 편의점 7% 청구할인
+        source: page
+        evidence: [편의점 7% 청구할인 ※ 전월실적 40만원 이상시 제공, '대상 가맹점 | CU, GS25, 세븐일레븐', 월 할인한도 | 5, 000원, 오프라인 매장 결제 건에 한하여 할인 제공]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+      - key: coffee-7
+        title: 커피 7% 청구할인
+        source: page
+        evidence: [커피 7% 청구할인 ※ 전월실적 40만원 이상시 제공, '대상 가맹점 | 스타벅스, 투썸플레이스, 폴바셋', 월 할인한도 | 5, 000원, 오프라인 매장 및 공식 앱을 통한 사이렌오더/투썸오더/크라운오더 결제 건 할인 제공]
+        target:
+          merchants: [paul_bassett, starbucks, twosome]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+      - key: ott-7
+        title: OTT 자동납부 7% 청구할인
+        source: page
+        evidence: [OTT 자동납부 7% 청구할인 ※ 전월실적 40만원 이상시 제공, '대상 가맹점 | 넷플릭스, 와우멤버십, 유튜브 프리미엄', 월 할인한도 | 5, 000원, 공식 홈페이지를 통한 스트리밍 구독 서비스 정기결제 건에 한하여 할인 제공, '1회성 일반구매 결제, 구글 플레이/애플 앱스토어 등 앱마켓을 통한 인앱결제, 통신요금 포함 결제 시 할인 제외']
+        target:
+          merchants: [coupang_wow, netflix, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+    unmodeled: [주유 할인은 LPG 충전 제외, 주유 할인은 이용금액을 SK에너지 보통휘발유 공시가로 나눈 리터의 소수점 이하를 버린 뒤 리터당 할인액을 곱한다. 계산은 reference 기름값으로 환산한다, 가족카드는 할인 대상에서 제외되고 가족카드 이용실적은 본인카드 실적에 합산된다, 전용 가맹점번호로 승인되는 PG와 일부 간편결제는 할인 제외, 백화점·대형마트·면세점·공항·미군부대·리조트 등 입점 매장 할인 제외, 실적 제외 공공요금에는 과태료·범칙금·여권발급비용과 국가·공공기관 가맹점 이용금액도 들어간다, 실적 제외에 정부지원금 바우처와 LH·SH 등 공공임대료가 들어간다, 해외가맹점·교통카드·통신료 자동납부 금액은 매출표 접수일 기준으로 그 달 실적에 넣는다, 국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다, 신규 특례는 최초 발급 카드에만 주고 시작일은 사용등록일과 사용개시일 중 빠른 날이다, 고속버스는 차내단말기와 고속버스 앱 결제만 실적 제외인데 고속버스 전체를 뺐다]
+open_questions:
+  - {path: 'revisions[0].benefits[fuel-discount-40].reward', question: 원문은 리터 수를 먼저 버림하고 리터당 할인액을 곱한다. 엔진은 금액 × 리터당 할인액 ÷ 기름값을 마지막에 버림해 건당 리터당 할인액 미만만큼 더 줄 수 있다, assumed: 엔진 계산 그대로}
+  - {path: 'revisions[0].benefits', question: 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2025-12-05. 연회비는 국내전용·해외겸용(VISA) 모두 2만5천원(기본 7천원, 제휴 1만8천원), 가족카드 연회비 없음. 이 카드로 할인받은 이용금액 전체가 실적에서 빠진다. 혜택은 모두 전월 국내외 실적 40만원 이상일 때 준다. SK 주유 400 청소년 가족카드(104167)는 혜택이 같은 상품이라 이 카드로 등록한다.

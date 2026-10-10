@@ -1,0 +1,170 @@
+card: kb-09790
+cases:
+- name: 교육 실적 399999
+  prev_month_spend: 399999
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 1000000
+    category: education.academy
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 교육 실적 399999
+- name: 교육 실적 400000
+  prev_month_spend: 400000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 1000000
+    category: education.academy
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      edu-5pct-40k: 10000
+  calc: 교육 실적 400000
+- name: 교육 실적 799999
+  prev_month_spend: 799999
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 1000000
+    category: education.academy
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      edu-5pct-40k: 10000
+  calc: 교육 실적 799999
+- name: 교육 실적 800000
+  prev_month_spend: 800000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 1000000
+    category: education.academy
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      edu-5pct-80k: 20000
+  calc: 교육 실적 800000
+- name: 교육 실적 1599999
+  prev_month_spend: 1599999
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 1000000
+    category: education.academy
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      edu-5pct-80k: 20000
+  calc: 교육 실적 1599999
+- name: 교육 실적 1600000
+  prev_month_spend: 1600000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 1000000
+    category: education.academy
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      edu-5pct-160k: 30000
+  calc: 교육 실적 1600000
+- name: KB Pay 교육 5퍼센트 추가
+  prev_month_spend: 800000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: education.academy
+    payment_method: kb_pay
+  expect:
+  - payment: 0
+    benefits:
+      edu-5pct-80k: 500
+      edu-kbpay-add: 500
+  calc: KB Pay 교육 5퍼센트 추가
+- name: 병원 생활 혜택 한도
+  prev_month_spend: 800000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 120000
+    category: hospital
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      life-5pct-80k: 5000
+  calc: 병원 생활 혜택 한도
+- name: 신규 교육 5천원 한도
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 200000
+    category: education.study_material
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      edu-5pct-40k: 5000
+  calc: 신규 교육 5천원 한도
+  holder:
+    started_on: '2026-10-01'
+    facts:
+      first_personal_issue: true
+- name: 신규 생활 영역 실적유예 없음
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: hospital
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 신규 생활 영역 실적유예 없음
+  holder:
+    started_on: '2026-10-01'
+    facts:
+      first_personal_issue: true
+- name: 일반 승인 철도 승차권은 실적 포함
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: transit.rail
+    billing: normal
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 전월 실적 제외는 무승인 전표다. 일반 승인 철도 승차권 10000원은 실적에 포함한다.
+- name: 가족카드 단독 발급 신규특례 없음
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-01'
+    facts:
+      first_personal_issue: false
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 200000
+    category: education.academy
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 가족카드 단독 발급은 생애 최초 본인 신규 특례 대상이 아니다.
+- name: 후불교통 무승인 전표 실적 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: transit.subway
+    billing: postpaid_transit
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 무승인 후불교통은 지하철 업종 제외로 실적 0원

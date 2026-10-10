@@ -1,0 +1,58 @@
+card: hyundai-to
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 쿠팡 10% 적립
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {extra-online-10pct: 5000}, counted: 50000}
+  calc: 50,000 × 10% = 5,000P. 기본 1%는 겹치지 않는다
+- name: 온라인몰 월 1만P 한도를 넘은 금액은 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: musinsa, channel: online}
+  expect:
+  - {payment: 0, benefits: {extra-online-10pct: 10000, basic-point-1pct: 500}, counted: 150000}
+  calc: 100,000원에 10% 10,000P, 남은 50,000원에 1% 500P
+- name: 100만 직전은 1%만
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {basic-point-1pct: 500}, counted: 50000}
+  calc: 50만 구간이라 1% 500P
+- name: 테크 영역은 통신 자동납부, 콘텐츠가 한도를 같이 쓰고 비정기 통신 결제는 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-06T09:00, amount: 80000, merchant: kt}
+  - {at: 2026-11-07T09:00, amount: 30000, merchant: kt, billing: normal}
+  - {at: 2026-11-08T09:00, amount: 30000, merchant: netflix}
+  expect:
+  - {payment: 0, benefits: {tech-telecom-10: 8000}, counted: 80000}
+  - {payment: 1, benefits: {basic-point-1pct: 300}, counted: 30000}
+  - {payment: 2, benefits: {extra-tech-10pct: 2000, basic-point-1pct: 100}, counted: 30000}
+  calc: 자동납부 8,000P. 비정기 결제는 1% 300P. 넷플릭스는 남은 2,000P를 20,000원에, 남은 10,000원은 1% 100P
+- name: 일반음식점 10%
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-09T19:00, amount: 43215, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {extra-dining-10pct: 4322}, counted: 43215}
+  calc: 43,215 × 10% = 4,321.5, 반올림 4,322P
+- name: 50만 직전은 혜택 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 50만 미만
+- name: 신규 수령 다음 달까지 100만 구간
+  holder: {started_on: 2026-11-02}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-10T10:00, amount: 20000, merchant: app_store}
+  expect:
+  - {payment: 0, benefits: {tech-inapp-10: 2000}, counted: 20000}
+  calc: 수령월이라 전월 0원도 100만 구간. 20,000 × 10% = 2,000P

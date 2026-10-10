@@ -1,0 +1,70 @@
+card: kb-09561
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 일상 다섯 영역 통합 한도 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  - {at: 2026-11-05T11:00, amount: 20000, merchant: musinsa, channel: online, payment_method: kb_pay}
+  - {at: 2026-11-05T12:00, amount: 20000, category: cafe, payment_method: kb_pay}
+  - {at: 2026-11-05T13:00, amount: 20000, merchant: cu, channel: offline, payment_method: kb_pay}
+  - {at: 2026-11-05T14:00, amount: 20000, merchant: cgv, payment_method: kb_pay}
+  - {at: 2026-11-05T15:00, amount: 20000, merchant: cgv, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {daily-online-shopping: 2000}, counted: 0}
+  - {payment: 1, benefits: {daily-online-fashion: 2000}}
+  - {payment: 2, benefits: {daily-coffee: 2000}}
+  - {payment: 3, benefits: {daily-convenience: 2000}}
+  - {payment: 4, benefits: {daily-movie: 2000}}
+  - {payment: 5, benefits: {}}
+  calc: 각 2000원, 다섯 건으로 통합 1만원 소진
+- name: 120만 구간 건당 1만원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {daily-online-shopping: 10000}}
+  calc: 15000원이지만 건당 1만원
+- name: KB Pay가 아니면 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: KB Pay 결제만
+- name: 30만 경계 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: cafe, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 할인 없음
+- name: 온라인 항공 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: korean_air, channel: online, payment_method: kb_pay}
+  - {at: 2026-11-06T10:00, amount: 300000, merchant: korean_air, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {travel-online-5: 15000}}
+  - {payment: 1, benefits: {travel-online-5: 5000}}
+  calc: 15000, 다음은 월 2만원 한도 남은 5000
+- name: 철도 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {rail-bus-10: 5000}, counted: 0}
+  calc: 50000 x 10%
+- name: 신규 유예 일상 월 5천원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: cafe, payment_method: kb_pay}
+  - {at: 2026-11-06T10:00, amount: 40000, category: cafe, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {daily-coffee: 4000}}
+  - {payment: 1, benefits: {daily-coffee: 1000}}
+  calc: 유예기간 월 5000원 한도

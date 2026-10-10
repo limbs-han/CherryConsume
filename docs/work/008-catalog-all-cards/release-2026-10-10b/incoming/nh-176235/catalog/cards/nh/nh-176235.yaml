@@ -1,0 +1,208 @@
+schema_version: 2
+id: nh-176235
+issuer: nh
+name: 국민행복카드(체크)
+short_name: NH 국민행복 체크
+kind: check
+product_codes:
+  - '176235'
+  - '90000320'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90000320', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000, 500000, 700000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [childcare, education.kindergarten, education.tuition, gift_card, hospital, insurance.social, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·대형마트 입점 점포는 할인 제외, 정부지원금 바우처로 결제한 금액은 실적과 할인에서 빠진다. 바우처 자체는 계산하지 않는다]
+    options:
+      - key: type
+        title: 서비스 유형
+        choices:
+          - {key: baby, title: A형 for Baby}
+          - {key: children, title: B형 for Children}
+          - {key: green, title: C형 for Green Life}
+        default: null
+        change: next_month
+    limits:
+      - key: ab-integrated
+        per: month
+        amount: {300000: 5000, 500000: 7000, 700000: 10000, 1000000: 15000}
+      - {key: c-integrated, per: month, amount: 10000}
+    benefits:
+      - key: baby-medical-3
+        title: A형 병·의원 3% 캐시백
+        source: page
+        evidence: ['병·의원, 조산원, 산후조리원 업종(정부지원금 제외) 3% 할인(캐시백)', '※ 월 2회, 최대 1만 5천원 한도']
+        target:
+          categories: [hospital]
+        when:
+          - option:
+              type: [baby]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, count: 2}
+          - {per: month, amount: 15000}
+          - {shared: ab-integrated}
+        tiers: {from: 300000}
+        unmodeled: [조산원과 산후조리원은 공통 업종이 없어 계산하지 않는다]
+      - key: baby-online-shop-3
+        title: A형 온라인 쇼핑몰 3% 캐시백
+        source: page
+        evidence: [주요 온라인 쇼핑몰 3% 할인(캐시백), '· G마켓, 옥션, 11번가, 쿠팡, 롯데홈쇼핑, 티몬, 보리보리', '※ 월 2회, 3만원 이상 이용 건에 한함']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_homeshopping, tmon]
+        when:
+          - option:
+              type: [baby]
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, count: 2}
+          - {shared: ab-integrated}
+        tiers: {from: 300000}
+        unmodeled: [보리보리는 공통 가맹점이 없어 계산하지 않는다]
+      - key: children-education-3
+        title: B형 어린이집·유치원·학원 3% 캐시백
+        source: page
+        evidence: [어린이집 및 유치원(정부지원금 제외) 학원 업종 3% 할인(캐시백), '※ 월 2회, 최대 1만 5천원 한도']
+        target:
+          categories: [childcare, education.academy, education.kindergarten]
+        when:
+          - option:
+              type: [children]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, count: 2}
+          - {per: month, amount: 15000}
+          - {shared: ab-integrated}
+        tiers: {from: 300000}
+      - key: baby-coffee-10
+        title: A형·B형 커피 전문점 10% 캐시백
+        source: page
+        evidence: [주요 커피 전문점 10% 할인(캐시백), '· 스타벅스, 커피빈, 카페베네', '※ 월 4회, 1만원 이상 이용 건에 한함', ※ 상품권구매 및 백화점/대형마트 입점 점포 할인제외]
+        target:
+          merchants: [cafe_bene, coffee_bean, starbucks]
+        when:
+          - option:
+              type: [baby, children]
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, count: 4}
+          - {shared: ab-integrated}
+        tiers: {from: 300000}
+      - key: baby-restaurant-5
+        title: A형·B형 패밀리레스토랑 5% 캐시백
+        source: page
+        evidence: [주요 패밀리레스토랑 5% 할인(캐시백), '· 아웃백, 온더보더, VIPS', ※ 월 1회, ※ 백화점/대형마트 입점 점포 할인제외]
+        target:
+          merchants: [outback]
+        when:
+          - option:
+              type: [baby, children]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, count: 1}
+          - {shared: ab-integrated}
+        tiers: {from: 300000}
+        unmodeled: [온더보더와 VIPS는 공통 가맹점이 없어 계산하지 않는다]
+      - key: baby-telecom-1k
+        title: A형·B형 이동통신요금 자동이체 1천원 캐시백
+        source: page
+        evidence: [이동통신요금 자동이체 시 1천원 할인(캐시백), '※ 월 1회, 최초 접수분에 한함']
+        target:
+          categories: [telecom.mobile]
+        when:
+          - option:
+              type: [baby, children]
+          - billing: [autopay]
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: ab-integrated}
+        tiers: {from: 300000}
+      - key: baby-transit-3
+        title: A형·B형 시내버스·지하철 3% 캐시백
+        source: page
+        evidence: ['전국 시내버스, 지하철 3% 할인(캐시백)', ※ 월 1천 5백원 한도]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - option:
+              type: [baby, children]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 1500}
+          - {shared: ab-integrated}
+        tiers: {from: 300000}
+      - key: green-eco-points
+        title: C형 에코머니 기본 적립
+        source: page
+        evidence: [국내 가맹점 이용액의 0.2~0.5% 에코머니 포인트 적립, '전월실적 20만원 ~ 0.2%, 50만원 ~ 0.3%, 100만원 ~ 0.4%, 150만원 ~ 0.5%', '포인트 적립 제외: 후불교통요금, 무이자할부 이용금액, 제세공과금, APT관리비, 대학등록금, 정부지원금 매출']
+        target:
+          exclude_categories: [apartment_fee, education.tuition, insurance.social, tax, utility]
+          all: true
+        when:
+          - option:
+              type: [green]
+          - {region: domestic}
+          - billing_not: [postpaid_transit]
+        reward:
+          type: points
+          program: eco_money
+          rate: {200000: 0.2, 500000: 0.3, 1000000: 0.4, 1500000: 0.5}
+        tiers: {from: 200000}
+      - key: green-movie-2000
+        title: C형 영화관 2천원 캐시백
+        source: page
+        evidence: [주요 영화관 2천원 할인(캐시백), '· CGV, 메가박스, 롯데시네마', '※ 일 1회, 월 2회, 전월이용실적 30만원 이상 시 제공', '[통합 할인한도기준] 30만원 ~ 1만원']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - option:
+              type: [green]
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: c-integrated}
+        tiers: {from: 300000}
+      - key: green-coffee-10
+        title: C형 커피 전문점 10% 캐시백
+        source: page
+        evidence: [주요 커피 전문점 10% 할인(캐시백), '· 스타벅스, 커피빈, 카페베네', '※ 일 1회, 월 2회, 전월이용실적 30만원 이상 시 제공', ※ 1만원 이상 이용 건에 한함, ※ 상품권구매 및 백화점/대형마트 입점 점포 할인제외]
+        target:
+          merchants: [cafe_bene, coffee_bean, starbucks]
+        when:
+          - option:
+              type: [green]
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: c-integrated}
+        tiers: {from: 300000}
+    unmodeled: ['A형·B형 딸기가 좋아 놀이시설 3% 할인(일 1회, 1만원 이상)은 공통 가맹점이 없어 계산하지 않는다', 'B형 주요 놀이공원 자유이용권 50% 현장할인(통합 월 1회, 연 10회, 본인한정)은 대상 놀이공원 목록이 없어 계산하지 않는다', 공통 서비스 딸기가 좋아 성인 1인 무료입장과 음료교환권은 계산하지 않는다, 실적에서 조산원·산후조리원·정부지원금 매출이 빠지지만 공통 업종이 없어 실적에 넣는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 원문에서 찾지 못해 확인한 날로 두었다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].limits[ab-integrated]', question: A형·B형 통합 월 할인한도가 커피·패밀리레스토랑·통신·교통까지 모든 A형·B형 할인에 함께 걸리는지 문구가 없다, assumed: 모든 A형·B형 할인에 함께 건다}
+  - {path: 'revisions[0].limits[c-integrated]', question: C형 할인한도 1만원이 영화관과 커피 할인에 함께 걸리는지 문구가 없다, assumed: 함께 건다}
+  - {path: 'revisions[0].benefits[green-eco-points]', question: 에코머니 기본 적립을 C형 영화관·커피 할인 결제에도 더해 주는지 문구가 없다, assumed: 같은 결제에서는 큰 혜택 하나만}
+  - {path: 'revisions[0].spend.cancellation', question: 취소 매출의 실적 차감 시점 문구를 찾지 못했다, assumed: cancel_month}
+notes: 2026-10-10 상품 페이지를 대조했다. 연회비 없음. 서비스 유형 A·B·C 중 하나를 고르고 매월 1일~말일 변경 신청분이 다음 달 1일부터 적용된다. A형·B형 할인은 전월실적 30만원부터이고 통합 월 한도 5천·7천·1만·1만5천원. C형 에코머니 기본 적립은 20만원부터 0.2~0.5%, 영화관·커피 할인은 30만원부터 월 1만원 한도. 최초 발급 후 다음 달 말일까지는 실적 미달이어도 최소 구간으로 제공. 정부 바우처는 카드사 부가서비스가 아니라 계산하지 않는다.

@@ -1,0 +1,157 @@
+card: nh-f10793
+cases:
+- name: 음식점 시간 경계 04:59
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T04:59
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 대상 시간은 05:00 이상 09:00 미만. 대상이면 10000 × 50% = 5000.
+- name: 음식점 시간 경계 05:00
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T05:00
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits:
+      breakfast-50: 5000
+  calc: 대상 시간은 05:00 이상 09:00 미만. 대상이면 10000 × 50% = 5000.
+- name: 음식점 시간 경계 08:59
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T08:59
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits:
+      breakfast-50: 5000
+  calc: 대상 시간은 05:00 이상 09:00 미만. 대상이면 10000 × 50% = 5000.
+- name: 음식점 시간 경계 09:00
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T09:00
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 대상 시간은 05:00 이상 09:00 미만. 대상이면 10000 × 50% = 5000.
+- name: 실적 40만원 직전
+  prev_month_spend: 399999
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T07:00
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 399999 < 400000이므로 0.
+- name: 신규 등록월 실적 면제
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-01'
+  payments:
+  - at: 2026-10-10T07:00
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits:
+      breakfast-50: 5000
+  calc: 사용등록월부터 다음달 말까지 40만원 구간 적용. 10000 × 50% = 5000.
+- name: 일 1회와 월 4회 경계
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T07:00
+    amount: 10000
+    category: restaurant.fastfood
+  - at: 2026-10-10T07:00
+    amount: 10000
+    category: restaurant.fastfood
+  - at: 2026-10-11T07:00
+    amount: 10000
+    category: restaurant.fastfood
+  - at: 2026-10-12T07:00
+    amount: 10000
+    category: restaurant.fastfood
+  - at: 2026-10-13T07:00
+    amount: 10000
+    category: restaurant.fastfood
+  - at: 2026-10-14T07:00
+    amount: 10000
+    category: restaurant.fastfood
+  expect:
+  - payment: 0
+    benefits:
+      breakfast-50: 5000
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits:
+      breakfast-50: 5000
+  - payment: 3
+    benefits:
+      breakfast-50: 5000
+  - payment: 4
+    benefits:
+      breakfast-50: 5000
+  - payment: 5
+    benefits: {}
+  calc: 첫날 두 번째는 일 1회 초과. 서로 다른 날 네 번 5000원씩 합계 20000. 다섯째 날은 월 4회 초과.
+- name: 건별 5천원 상한
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T07:00
+    amount: 20000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits:
+      breakfast-50: 5000
+  calc: 20000 × 50% = 10000이나 일 최대 5000.
+- name: 제과점 제외
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T07:00
+    amount: 10000
+    category: restaurant.bakery
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 원문 대상 음식점 업종에 제과점은 없다.
+- name: 무이자할부 혜택 제외
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T07:00
+    amount: 10000
+    category: restaurant.general
+    interest_free: true
+    installment_months: 3
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 무이자할부 할인 제외. 승인금액은 실적에 반영.

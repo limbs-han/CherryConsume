@@ -1,0 +1,68 @@
+schema_version: 2
+id: hana-11321
+issuer: hana
+name: VIVA+ 체크카드
+short_name: 하나 VIVA+ 체크
+search_names: [VIVA+, 비바+, 비바플러스]
+kind: check
+product_codes:
+  - '11321'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=9047', fetched_at: 2026-10-10, review_no: L-21-2166}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2021-09-29
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    limits:
+      - key: lunch
+        per: month
+        amount: {300000: 5000, 600000: 10000}
+    benefits:
+      - key: overseas-fee-free
+        title: 해외 가맹점 국제브랜드수수료 1% 면제
+        source: page
+        evidence: [해외 가맹점 물품 구매 시 | 건당 $0.5 면제 | 이용 금액의 1% 면제, 지난달 카드 사용 금액 및 이용횟수에 관계 없이 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+        exclude_applied: 0
+        unmodeled: [건당 US$0.5 해외이용수수료 면제는 달러 정액이라 계산하지 않는다, 하나은행 결제계좌를 쓰지 않으면 해외 이용이 되지 않는다]
+      - key: lunch-cashback
+        title: 평일 점심 음식점·커피·편의점 7% 캐쉬백
+        source: page
+        evidence: ['평일 오전 11시~ 오후 2시 사이에 국내일반음식점(한식/중식/양식/일식 등), 커피, 편의점 업종에서 건당 5천원 이상 결제 시 해당 결제 금액의 7% 캐쉬백', 지난달 이용금액 | 30만원 이상 이용 시 | 60만원 이상 이용 시 | 통합한도 | 5천원 | 1만원, '국내 오프라인 이용금액에 한함, 백화점/할인점/아울렛/쇼핑몰/공항/호텔/리조트/역사 입점 점포 제외', 평일이 임시공휴일 경우 캐쉬백 제외]
+        target:
+          categories: [cafe, convenience, restaurant.general]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+          - amount: {min: 5000}
+          - day:
+              in: [mon, tue, wed, thu, fri]
+              holidays: exclude
+          - time: {from: '11:00', to: '14:00'}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {shared: lunch}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·아울렛·쇼핑몰·공항·호텔·리조트·역사 입점 점포는 제외된다]
+    unmodeled: [실적 제외의 아이행복 정부지원금은 업종으로 가릴 수 없어 실적에 넣는다, 교통요금 등 무승인 매입은 매출전표가 접수된 달의 이용금액에 들어간다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다., assumed: '2021-09-29'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 공과금, 도시가스, 아파트 관리비 자동이체다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체와 아파트관리비 전체를 뺐다.', assumed: utility와 apartment_fee 전체}
+  - {path: 'revisions[0].benefits[lunch-cashback].when', question: '"오전 11시~오후 2시 사이"에서 14:00 정각 결제가 포함되는지 원문이 불명확하다.', assumed: '11:00 이상 14:00 미만'}
+  - {path: 'revisions[0].benefits[lunch-cashback].when', question: 원문은 평일이 임시공휴일이면 제외한다고만 적었다. 평일에 걸린 일반 공휴일도 제외로 계산한다., assumed: holidays exclude}
+notes: 2026-10-10 공식 상품 페이지(상세 번호 CD_PD_SEQ=9047, 목록 상품 번호 11321, 준법심의 L-21-2166)에서 옮겼다. 연회비 면제, 발급수수료 2,000원은 다음 달 말일까지 1만원 이상 쓰면 돌려준다. 해외 ATM 인출 건당 US$3 면제는 결제가 아니라 계산하지 않는다. 캐쉬백 적용 금액은 실적에서 빠진다.

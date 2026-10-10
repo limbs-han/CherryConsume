@@ -1,0 +1,37 @@
+card: hana-13539
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 병원 0.4%와 동물병원, 약국
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital}
+  - {at: 2026-11-04T11:00, amount: 10000, category: pet.vet}
+  - {at: 2026-11-04T12:00, amount: 999, category: pharmacy}
+  expect:
+  - payment: 0
+    benefits: {hospital-pharmacy-0-4: 120}
+  - payment: 1
+    benefits: {hospital-pharmacy-0-4: 40}
+  - payment: 2
+    benefits: {hospital-pharmacy-0-4: 3}
+  calc: 30,000 x 0.4% = 120, 10,000 x 0.4% = 40, 999 x 0.4% = 3.996에서 소수점 버려 3
+- name: 3대 마트 0.3%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart}
+  expect:
+  - payment: 0
+    benefits: {grocery-mart-0-3: 150}
+  calc: 50,000 x 0.3% = 150하나머니
+- name: 그 밖의 가맹점 0.2%와 세금 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-05T11:00, amount: 100000, category: tax}
+  expect:
+  - payment: 0
+    benefits: {all-merchants-0-2: 20}
+  - payment: 1
+    benefits: {}
+  calc: 10,000 x 0.2% = 20. 세금은 적립 제외

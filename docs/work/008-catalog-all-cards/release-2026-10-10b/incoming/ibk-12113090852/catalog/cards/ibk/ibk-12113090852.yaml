@@ -1,0 +1,110 @@
+schema_version: 2
+id: ibk-12113090852
+issuer: ibk
+name: K-패스(체크)
+kind: check
+product_codes:
+  - '12113090852'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+  - {scope: global, brand: master, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=309&PDCD=0852&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2024-2062호, review_valid_until: 2027-04-04}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2024-04-08
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 500000: 10000}
+    benefits:
+      - key: transport-100
+        title: 버스·지하철 건당 100원 청구할인
+        source: page
+        evidence: ['대중교통(버스, 지하철) 건당 100원 할인', 후불교통카드로 이용한 건에 한함(환승요금 제외), 매출표 접수일 기준으로 월 최대 1천원 할인(월 10회 한도)]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, fixed: 100}
+        limits:
+          - {per: month, count: 10}
+          - {per: month, amount: 1000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [환승 요금은 할인하지 않는다, 할인 달은 매출표 접수일 기준이다]
+      - key: convenience-5
+        title: 편의점·올리브영 5% 청구할인
+        source: page
+        evidence: ['편의점(GS25, CU, 세븐일레븐, 올리브영) 5% 할인', '통합 1일1회, 월2회, 1회 이용금액 1만원 한도', 온라인(간편결제 등) 결제 건은 할인 제외]
+        target:
+          merchants: [cu, gs25, olive_young, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: online-shop-10
+        title: 쿠팡·티몬·위메프 10% 청구할인
+        source: page
+        evidence: ['쇼핑(쿠팡, 티몬, 위메프) 10% 할인', '통합 1일1회, 월2회, 1회 이용금액 1만원 한도', 상품권 구매는 할인 제외]
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: movie-4k
+        title: CGV·롯데시네마·메가박스 4천원 청구할인
+        source: page
+        evidence: ['영화(CGV, 롯데시네마, 메가박스) 4천원 할인', 현장 및 온라인 예매 시, '통합 월1회, 연12회, 건당 1만원 이상 결제 시', 예매 대행 사이트를 통한 예매 시 할인 제외]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 12}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [예매 대행 사이트 결제는 할인하지 않는다]
+      - key: cafe-10
+        title: 주요 커피전문점 10% 청구할인
+        source: page
+        evidence: ['커피(스타벅스, 커피빈, 카페베네, 탐앤탐스, 엔제리너스, 투썸플레이스, 할리스, 달.콤) 10% 할인', '통합 1일1회, 월2회, 1회 이용금액 1만원 한도', 현장결제와 각 커피 브랜드의 공식앱을 통한 온라인 결제 건에 한함, 백화점 및 할인(아울렛)점 입점 매장은 제외]
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, hollys, starbucks, tom_n_toms, twosome]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [달.콤은 가맹점 목록에 없어 계산하지 않는다, 백화점·할인(아울렛)점 입점 매장은 할인하지 않는다]
+    unmodeled: [K-패스 정부 마일리지는 카드 할인이 아니라 계산하지 않는다, '주요 놀이공원 할인(통합 월 1회, 연 2회, 통합한도 별도)은 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다', 금융우대서비스는 결제 할인이 아니라 계산하지 않는다, 카드 사용 등록일부터 다음 달 말까지 50만원 이상 쓰면 다음 달 그 구간 한도를 주는 특례는 계산하지 않는다, 각종 간편결제로 결제하면 할인되지 않을 수 있다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 후불교통을 시내버스와 지하철 업종 제외로 옮겼다. 후불교통 유료도로 이용분은 담을 업종이 없다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다, assumed: '2024-04-08'}
+notes: 2026-10-10 expand4 조사. 상품 페이지에서 옮겼다. 후불교통 전용 체크카드다. 놀이공원 외 할인은 모두 통합할인한도를 함께 쓴다고 보았다

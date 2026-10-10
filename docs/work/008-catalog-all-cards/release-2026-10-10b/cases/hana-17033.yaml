@@ -1,0 +1,59 @@
+card: hana-17033
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 버스 후불교통 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {transit-10-30: 150}
+    counted: 1500
+  calc: 1,500원 x 10% = 150원. 교통 이용액도 실적에 들어감
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0원
+- name: 30만 구간 한도 3천원과 60만 구간 한도 6천원
+  prev_month_spend: 599999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 50000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {transit-10-30: 3000}
+  calc: 50,000원 x 10% = 5,000원이 30만 구간 월 한도 3,000원에 걸림
+- name: 60만 구간 지하철 한도 6천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 100000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {transit-10-60: 6000}
+  calc: 100,000원 x 10% = 10,000원이 월 한도 6,000원에 걸림
+- name: 올리브영과 다이소 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: olive_young}
+  - {at: 2026-11-05T11:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: daiso, channel: online}
+  expect:
+  - payment: 0
+    benefits: {drugstore-1: 500}
+  - payment: 1
+    benefits: {daiso-1: 200}
+  - payment: 2
+    benefits: {}
+  calc: 50,000원 x 1% = 500원, 20,000원 x 1% = 200원. 다이소 온라인은 대상이 아님
+- name: 스타벅스 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {coffee-1: 100}
+  calc: 10,000원 x 1% = 100원

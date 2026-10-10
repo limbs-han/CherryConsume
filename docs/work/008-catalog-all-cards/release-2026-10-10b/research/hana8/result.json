@@ -1,0 +1,154 @@
+[
+  {
+    "card_id": "hana-12395",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395"
+    ],
+    "case_count": 19,
+    "finding_count": 2,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-12395.yaml",
+    "verification": {
+      "format_changed_files": 2,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    },
+    "new_card_interpretation": "최초 사용등록월과 다음달은 원문에 안내된 최저 구간으로 모델링한다. 높은 실적에 추가 제공한다는 공식 근거가 없으므로 신규 기간 상위 구간을 지급하지 않는다. 기존 최저 구간 보장 해석은 철회한다.",
+    "new_benefit_key": "first-registration-rental-8k",
+    "followup_cases": "수정 전 신규 높은 실적 등록월과 다음달 4개 실패 확인. 수정 후 8장 139개 통과. 세 번째 달부터 실제 상위 구간 제공 확인.",
+    "sha256": "0eb4111fb041ad5a7f6f302bea710de4ea534b2d2f1f40c2dfa11220551364df"
+  },
+  {
+    "card_id": "hana-15349",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349"
+    ],
+    "case_count": 20,
+    "finding_count": 3,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-15349.yaml",
+    "verification": {
+      "format_changed_files": 2,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    },
+    "new_card_interpretation": "최초 사용등록월과 다음달은 원문에 안내된 최저 구간으로 모델링한다. 높은 실적에 추가 제공한다는 공식 근거가 없으므로 신규 기간 상위 구간을 지급하지 않는다. 기존 최저 구간 보장 해석은 철회한다.",
+    "new_benefit_key": "first-registration-daemyung-12k",
+    "followup_cases": "수정 전 신규 높은 실적 등록월과 다음달 4개 실패 확인. 수정 후 8장 139개 통과. 세 번째 달부터 실제 상위 구간 제공 확인.",
+    "sha256": "9fdaba986a515254cab801fd20eb2706306cae8ea5a5f47b183443164103a332"
+  },
+  {
+    "card_id": "hana-17403",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403"
+    ],
+    "case_count": 18,
+    "finding_count": 3,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-17403.yaml",
+    "verification": {
+      "format_changed_files": 0,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    }
+  },
+  {
+    "card_id": "hana-18023",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023"
+    ],
+    "case_count": 12,
+    "finding_count": 4,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-18023.yaml",
+    "verification": {
+      "format_changed_files": 0,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    }
+  },
+  {
+    "card_id": "hana-17398",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398"
+    ],
+    "case_count": 18,
+    "finding_count": 3,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-17398.yaml",
+    "verification": {
+      "format_changed_files": 0,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    }
+  },
+  {
+    "card_id": "hana-11810",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810"
+    ],
+    "case_count": 16,
+    "finding_count": 3,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-11810.yaml",
+    "verification": {
+      "format_changed_files": 0,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    }
+  },
+  {
+    "card_id": "hana-18068",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068"
+    ],
+    "case_count": 18,
+    "finding_count": 3,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-18068.yaml",
+    "verification": {
+      "format_changed_files": 0,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    }
+  },
+  {
+    "card_id": "hana-19410",
+    "status": "ready",
+    "reason": "공식 대조 지적 반영 완료. 공통 업종과 지정 가맹점 정의는 needed_common.json으로 제안. 메모리 병합 검사와 실제 앱 엔진 대조 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410"
+    ],
+    "case_count": 18,
+    "finding_count": 3,
+    "judgment_item_count": 1,
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\release-card-expansion\\hana8\\catalog\\cards\\hana\\hana-19410.yaml",
+    "verification": {
+      "format_changed_files": 0,
+      "combined_definition_errors": 0,
+      "combined_definition_warnings": 0,
+      "engine_failures": 0
+    }
+  }
+]

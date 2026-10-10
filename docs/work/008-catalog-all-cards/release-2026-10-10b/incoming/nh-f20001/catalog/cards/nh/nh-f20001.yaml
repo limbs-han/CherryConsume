@@ -1,0 +1,81 @@
+schema_version: 2
+id: nh-f20001
+issuer: nh
+name: NH1934 체크카드
+short_name: NH1934 체크
+kind: check
+product_codes:
+  - '90010004'
+  - F20001
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010004', fetched_at: 2026-10-10, review_no: 2026-3845, review_valid_until: 2027-06-30}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+    benefit_exclusions:
+      categories: [education.tuition, gift_card, tax]
+      unmodeled: [우체국 우편요금 등 제세공과금은 청구할인에서 빠진다]
+    benefits:
+      - key: weekday-0-2
+        title: 월~토 국내·외 0.2% 청구할인
+        source: page
+        evidence: [평일(월~토) | 국내·외 가맹점 0.2% 청구할인 | 없음, 청구할인 서비스는 2만원 이상 사용 건에 한해 제공됩니다.]
+        target: {all: true}
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri, sat]
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 0.2}
+      - key: sunday-0-2
+        title: 일요일 국내·외 0.2% 청구할인
+        source: page
+        evidence: [주말(일요일) | 국내·외 가맹점 0.2% 청구할인 | 50만원 미만 시, 청구할인 서비스는 2만원 이상 사용 건에 한해 제공됩니다.]
+        target: {all: true}
+        when:
+          - day:
+              in: [sun]
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 0.2}
+        tiers: {from: 0, to: 0}
+      - key: sunday-domestic-0-3
+        title: 일요일 국내 0.3% 청구할인
+        source: page
+        evidence: [국내 가맹점 0.3% 청구할인 / 국외 가맹점 0.2% 청구할인 | 50만원 이상 시, 청구할인 서비스는 2만원 이상 사용 건에 한해 제공됩니다.]
+        target: {all: true}
+        when:
+          - day:
+              in: [sun]
+          - {region: domestic}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 0.3}
+        tiers: {from: 500000}
+      - key: sunday-overseas-0-2
+        title: 일요일 국외 0.2% 청구할인
+        source: page
+        evidence: [국내 가맹점 0.3% 청구할인 / 국외 가맹점 0.2% 청구할인 | 50만원 이상 시, 청구할인 서비스는 2만원 이상 사용 건에 한해 제공됩니다.]
+        target: {all: true}
+        when:
+          - day:
+              in: [sun]
+          - {region: overseas}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 0.2}
+        tiers: {from: 500000}
+    unmodeled: [해외 이용금액과 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다, 가족카드 실적은 본인 실적과 합산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다. 부가서비스 유지 기준 신규출시일은 2019-10-25다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits', question: 혜택표가 칸 병합이라 50만원 이상 구간의 국내 0.3%와 국외 0.2%가 일요일 행에만 붙는지 글로 확실하지 않다, assumed: 일요일에만 붙는다}
+  - {path: 'revisions[0].spend', question: 페이지에 이용실적 제외 목록이 따로 없다, assumed: 제외 업종 없음}
+  - {path: 'revisions[0].benefits', question: 할인 한도 문구가 없다, assumed: 한도 없음}
+notes: 2026-10-10 상품 페이지(준법감시인 심의필 2026-3845)를 대조했다. 마스터카드 연회비 0원, 온라인 신청 전용. 교통카드 이용대금은 다음 달 실적에 반영된다는 문구로 버스·지하철을 한 달 늦췄다. 신규 특례는 가장 낮은 구간과 같아 적지 않았다.

@@ -1,0 +1,66 @@
+schema_version: 2
+id: hana-14783
+issuer: hana
+name: 로마드 하나카드
+short_name: 하나 로마드
+kind: credit
+product_codes:
+  - '14783'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 18000}
+  - {scope: global, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=14783', fetched_at: 2026-10-10, review_no: L-26-0583}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+    benefits:
+      - key: lomad-autopay-13k
+        title: 로마드 구독 요금 자동이체 월 13,000원 청구할인
+        source: page
+        evidence: [지난달 이용실적 30만원 이상 시 제공 / 월 최대 1만 3천원 할인 한도, 로마드(LOMAD) 구독 요금이 1만 3천원보다 적을 경우 승인금액만큼 청구 할인 적용, '로마드(LOMAD) 구독 요금 8천원 건 2회 발생 시 → 각 8천원, 5천원(총1만 3천원) 청구 할인', 실적 제외 대상 ... 로마드 구독 요금 자동이체 금액]
+        target:
+          merchants: [lomad]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 13000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: online-shopping-3
+        title: G마켓·옥션·11번가·롯데홈쇼핑·GS SHOP 3% 청구할인
+        source: page
+        evidence: ['온라인쇼핑 | 30만원 | 3% | 5,000원', '온라인 쇼핑 청구 할인 : G마켓, 옥션, 11번가, 롯데홈쇼핑, GS SHOP', '온라인 쇼핑 청구 할인서비스 제외 대상 : 상품권 및 기프트카드 구매']
+        target:
+          merchants: [auction, eleven_st, gmarket, gs_shop, lotte_homeshopping]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+      - key: starbucks-5
+        title: 스타벅스 5% 청구할인
+        source: page
+        evidence: ['스타벅스 | 5% | 5,000원', '스타벅스 청구할인 서비스 제외 대상 : 백화점/쇼핑몰/마트 등 입점점포 이용금액, 상품권 구매, 선불카드(기프트카드 포함) 구매 및 충전금액']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+    unmodeled: ['로마드 구독 요금 자동이체 금액은 할인을 받지 않은 달에도 실적에서 빠지지만, 여기서는 할인을 받은 결제만 실적에서 뺀다', '스타벅스와 온라인 쇼핑 할인은 대형시설 입점 점포, 상품권 구매, 선불카드 충전에서 제외된다', 별도 전용 가맹점번호로 승인되는 일부 간편결제는 할인 대상에서 빠질 수 있다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 규칙이 시작된 날을 찾지 못해 수집한 날로 두었다. 카드 출시는 2022-02-15다., assumed: '2026-10-10'}
+  - {path: annual_fees, question: '원문은 "국내전용, 국내외겸용 18,000원"이고 국내외겸용 브랜드를 적지 않았다.', assumed: 브랜드 구분 없이 18000}
+notes: 2026-10-10 공식 상품 페이지(준법심의 L-26-0583)에서 옮겼다. 연회비 국내전용과 국내외겸용 18,000원(기본 18,000원, 제휴 0원). 로마드 할인은 결제 금액이 1만 3천원보다 적으면 결제 금액만큼, 달 합계 1만 3천원까지라 100% 할인에 월 한도를 걸었다. 무이자 할부는 실적과 할인에서 모두 빠진다.

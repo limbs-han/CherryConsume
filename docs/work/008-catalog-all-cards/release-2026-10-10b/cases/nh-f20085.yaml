@@ -1,0 +1,82 @@
+card: nh-f20085
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 전가맹점 기본 0.2% 실적 없이
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 20}, counted: 10000}
+  calc: 10,000 × 0.2% = 20. 실적과 한도 없음
+- name: 하나로마트 0.3%가 기본을 대신
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: nh_hanaro_mart}
+  expect:
+  - {payment: 0, benefits: {agri-point-0-3: 30}}
+  calc: 농협 판매장 10,000 × 0.3% = 30. 기본 0.2%와 겹치지 않음
+- name: NH Pay 국내 결제 0.1% 추가
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.general, payment_method: nh_pay}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: nh_hanaro_mart, payment_method: nh_pay}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 20, nhpay-point-0-1: 10}}
+  - {payment: 1, benefits: {agri-point-0-3: 30, nhpay-point-0-1: 10}}
+  calc: 일반 0.2+0.1 = 0.3% 30. 농협 판매장 0.3+0.1 = 0.4% 40
+- name: 실적 20만 직전 배달앱은 기본만
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: baemin}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 40}}
+  calc: 라이프 적립은 전월 20만원 이상. 기본 40만
+- name: 20만 구간 배달앱 5% 일 1회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: baemin}
+  - {at: 2026-11-05T19:00, amount: 20000, merchant: yogiyo}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 40, delivery-5: 1000}}
+  - {payment: 1, benefits: {base-point-0-2: 40}}
+  calc: 20,000 × 5% = 1,000. 배달앱 통합 일 1회라 같은 날 둘째는 기본만
+- name: 쿠팡 와우 20% 월 1회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 7890, merchant: coupang_wow}
+  - {at: 2026-11-20T10:00, amount: 7890, merchant: coupang_wow}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 15, membership-coupang-20: 1578}}
+  - {payment: 1, benefits: {base-point-0-2: 15}}
+  calc: 7,890 × 20% = 1,578. 기본 15.78 버림 15. 같은 가맹점 월 1회
+- name: 네이버 멤버십 20%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4900, merchant: naver_plus_membership}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 9, membership-naver-20: 980}}
+  calc: 4,900 × 20% = 980. 기본 9.8 버림 9
+- name: 넷플릭스 정기결제 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 34, video-10: 1700}}
+  calc: 17,000 × 10% = 1,700
+- name: 라이프 월 통합 3천 포인트 한도
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription, channel: online}
+  - {at: 2026-11-06T10:00, amount: 14000, merchant: youtube_premium, billing: subscription, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 34, video-10: 1700}}
+  - {payment: 1, benefits: {base-point-0-2: 28, video-10: 1300}}
+  calc: 1,700 다음 1,400 중 남은 1,300
+- name: 상품권은 적립과 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: gift_card.voucher}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 상품권 구매는 실적과 적립 제외

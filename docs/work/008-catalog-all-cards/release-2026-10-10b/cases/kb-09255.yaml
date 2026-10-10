@@ -1,0 +1,186 @@
+card: kb-09255
+holder:
+  started_on: '2025-01-01'
+  options:
+    - {option: mode, choice: auto, effective_from: '2025-01-01'}
+cases:
+  - name: '[A] 음식 3%는 건당 1만원 이상'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-02T12:00, amount: 9900, category: restaurant.general}
+      - {at: 2026-11-03T12:00, amount: 10000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {}, counted: 9900}
+      - {payment: 1, benefits: {a-food-3: 300}, counted: 10000}
+    calc: 9,900원은 건당 1만원 미만이라 없음. 10,000 × 3% = 300
+  - name: 50만 구간 경계 직전 499999는 선택서비스 없음
+    prev_month_spend: 499999
+    payments:
+      - {at: 2026-11-03T12:00, amount: 10000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {}, counted: 10000}
+    calc: 전월 499,999원은 50만 미만이라 선택서비스 없음
+  - name: '[A] 음식 영역 월 3천원 한도'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-04T19:00, amount: 99980, category: restaurant.general}
+      - {at: 2026-11-05T19:00, amount: 20000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {a-food-3: 2999}, counted: 99980}
+      - {payment: 1, benefits: {a-food-3: 1}, counted: 20000}
+    calc: 99,980 × 3% = 2,999.4라 2,999. 다음 600원 중 영역 한도 3,000 − 2,999 = 1
+  - name: '[A] 교육 3% 오프라인 학원'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-01T10:00, amount: 50000, category: education.academy}
+    expect:
+      - {payment: 0, benefits: {a-education-3: 1500}, counted: 50000}
+    calc: 50,000 × 3% = 1,500
+  - name: '[A] 병원 3%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-07T10:00, amount: 30000, category: hospital}
+    expect:
+      - {payment: 0, benefits: {a-medical-3: 900}, counted: 30000}
+    calc: 30,000 × 3% = 900
+  - name: '[A] 해외와 인터넷면세점은 한 영역 월 3천원'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-05T02:00, amount: 80000, category: other, region: overseas, channel: online}
+      - {at: 2026-11-06T14:00, amount: 50000, merchant: lotte_dfs_online, channel: online}
+    expect:
+      - {payment: 0, benefits: {a-overseas-3: 2400}, counted: 80000}
+      - {payment: 1, benefits: {a-dutyfree-3: 600}, counted: 50000}
+    calc: 해외 80,000 × 3% = 2,400. 면세점 50,000 × 3% = 1,500이지만 같은 영역 한도 3,000 − 2,400 = 600
+  - name: '[B] 마트 5% 오프라인'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-06T11:00, amount: 40000, merchant: emart}
+    expect:
+      - {payment: 0, benefits: {b-mart-5: 2000}, counted: 40000}
+    calc: 40,000 × 5% = 2,000
+  - name: '[B] 주유 5%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-06T11:00, amount: 50000, merchant: sk_energy}
+    expect:
+      - {payment: 0, benefits: {b-fuel-5: 2500}, counted: 50000}
+    calc: 50,000 × 5% = 2,500
+  - name: '[B] 이동통신 5%는 건당 3만원 이상'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-25T06:00, amount: 29990, merchant: skt}
+      - {at: 2026-11-25T06:10, amount: 40000, merchant: kt}
+    expect:
+      - {payment: 0, benefits: {}, counted: 29990}
+      - {payment: 1, benefits: {b-telecom-5: 2000}, counted: 40000}
+    calc: 29,990원은 3만원 미만이라 없음. 40,000 × 5% = 2,000이고 이동통신 이용액 69,990으로 B그룹 1위
+  - name: '[B] 소셜커머스 5%, 50만 구간은 그룹 1위만'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-03T21:00, amount: 50000, merchant: coupang, channel: online}
+      - {at: 2026-11-10T11:00, amount: 40000, merchant: emart}
+    expect:
+      - {payment: 0, benefits: {b-social-5: 2500}, counted: 50000}
+      - {payment: 1, benefits: {}, counted: 40000}
+    calc: 소셜 50,000 > 마트 40,000이라 소셜만. 50,000 × 5% = 2,500
+  - name: '[B] 100만 구간은 그룹 상위 2개'
+    prev_month_spend: 1000000
+    payments:
+      - {at: 2026-11-03T21:00, amount: 50000, merchant: coupang, channel: online}
+      - {at: 2026-11-10T11:00, amount: 40000, merchant: emart}
+      - {at: 2026-11-12T08:00, amount: 30000, merchant: sk_energy}
+    expect:
+      - {payment: 0, benefits: {b-social-5: 2500}, counted: 50000}
+      - {payment: 1, benefits: {b-mart-5: 2000}, counted: 40000}
+      - {payment: 2, benefits: {}, counted: 30000}
+    calc: 상위 2개는 소셜, 마트. 주유는 3위라 없음
+  - name: '[C] 스포츠 7%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-08T10:00, amount: 30000, category: sports}
+    expect:
+      - {payment: 0, benefits: {c-sports-7: 2100}, counted: 30000}
+    calc: 30,000 × 7% = 2,100
+  - name: '[C] 대중교통 7%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-08T08:00, amount: 20000, category: transit.subway}
+    expect:
+      - {payment: 0, benefits: {c-transit-7: 1400}, counted: 20000}
+    calc: 20,000 × 7% = 1,400. 실적 제외 목록에 교통이 없어 실적 포함
+  - name: '[C] 뷰티 7%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-08T15:00, amount: 20000, merchant: olive_young}
+    expect:
+      - {payment: 0, benefits: {c-beauty-7: 1400}, counted: 20000}
+    calc: 20,000 × 7% = 1,400
+  - name: '[C] 편의점 7%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-08T22:00, amount: 10000, merchant: cu}
+    expect:
+      - {payment: 0, benefits: {c-cvs-7: 700}, counted: 10000}
+    calc: 10,000 × 7% = 700
+  - name: '[D] 커피 10%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-09T09:00, amount: 10000, category: cafe}
+    expect:
+      - {payment: 0, benefits: {d-coffee-10: 1000}, counted: 10000}
+    calc: 10,000 × 10% = 1,000
+  - name: '[D] 제과·패스트푸드 10%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-09T12:00, amount: 10000, merchant: mcdonalds}
+    expect:
+      - {payment: 0, benefits: {d-bakery-fastfood-10: 1000}, counted: 10000}
+    calc: 10,000 × 10% = 1,000
+  - name: '[D] 배달앱 10%'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-09T19:00, amount: 25000, merchant: baemin, channel: online}
+    expect:
+      - {payment: 0, benefits: {d-delivery-10: 2500}, counted: 25000}
+    calc: 25,000 × 10% = 2,500
+  - name: '[D] 구독과 영화는 한 영역 월 3천원'
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-10T00:00, amount: 17000, merchant: netflix, channel: online, billing: subscription}
+      - {at: 2026-11-11T19:00, amount: 15000, merchant: cgv}
+    expect:
+      - {payment: 0, benefits: {d-sub-movie-10: 1700}, counted: 17000}
+      - {payment: 1, benefits: {d-movie-10: 1300}, counted: 15000}
+    calc: 17,000 × 10% = 1,700. 영화 1,500이지만 영역 한도 3,000 − 1,700 = 1,300
+  - name: 50만 구간 통합 한도 1만2천원
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-02T12:00, amount: 100000, category: restaurant.general}
+      - {at: 2026-11-03T12:00, amount: 60000, merchant: coupang, channel: online}
+      - {at: 2026-11-04T12:00, amount: 50000, category: sports}
+      - {at: 2026-11-05T12:00, amount: 30000, category: cafe}
+    expect:
+      - {payment: 0, benefits: {a-food-3: 3000}}
+      - {payment: 1, benefits: {b-social-5: 3000}}
+      - {payment: 2, benefits: {c-sports-7: 3000}}
+      - {payment: 3, benefits: {d-coffee-10: 3000}}
+    calc: 영역마다 한도 3,000씩 네 영역 합 12,000이 통합 한도와 같음
+  - name: 무이자할부는 선택서비스 제외
+    prev_month_spend: 500000
+    payments:
+      - {at: 2026-11-06T11:00, amount: 40000, merchant: emart, installment_months: 3, interest_free: true}
+    expect:
+      - {payment: 0, benefits: {}}
+    calc: 무이자할부 이용금액은 선택서비스 제외
+  - name: 신규 실적유예로 첫 달 50만 구간
+    prev_month_spend: 0
+    holder:
+      started_on: '2026-10-15'
+      options:
+        - {option: mode, choice: auto, effective_from: '2026-10-15'}
+    payments:
+      - {at: 2026-11-03T12:00, amount: 10000, category: restaurant.general}
+    expect:
+      - {payment: 0, benefits: {a-food-3: 300}, counted: 10000}
+    calc: 등록 다음 달 말까지 1구간 적용. 10,000 × 3% = 300

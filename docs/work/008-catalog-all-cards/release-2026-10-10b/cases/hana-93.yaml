@@ -1,0 +1,88 @@
+card: hana-93
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 기본 0.2%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {base: 20}
+  calc: 10,000원 x 0.2% = 20점
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만원 미만이라 적립 없음
+- name: 150만 구간 기본 0.8%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {base: 80}
+  calc: 10,000원 x 0.8% = 80점
+- name: 많이 쓴 업종 주유 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: fuel}
+  expect:
+  - payment: 0
+    benefits: {top-fuel: 500}
+  calc: 주유가 이번 달 대상 업종 상위 2개 안. 50,000원 x 1% = 500점
+- name: 업종 한도 5천
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 200000, category: hospital}
+  expect:
+  - payment: 0
+    benefits: {top-hospital: 5000, base: 600}
+  calc: 4% 한도 5,000점은 125,000원까지. 남은 75,000원 x 기본 0.8% = 600점
+- name: 백화점 오프라인
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: department_store, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {top-department: 1000}
+  calc: 100,000원 x 1% = 1,000점
+- name: 이마트 오프라인
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {top-mart: 1000}
+  calc: 100,000원 x 1% = 1,000점
+- name: 학원 오프라인
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: education.academy, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {top-academy: 1000}
+  calc: 100,000원 x 1% = 1,000점
+- name: KTX 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: transit.rail}
+  expect:
+  - payment: 0
+    benefits: {rail-express-5: 2500}
+  calc: 50,000원 x 5% = 2,500점
+- name: 버스 지하철 월 1만원 이상 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 6000, category: transit.subway}
+  - {at: 2026-11-05T08:00, amount: 6000, category: transit.bus_city}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {transit-eco: 1200}
+  calc: 한 달 합 12,000원이 1만원을 넘는 순간 12,000원 x 10% = 1,200점. 후불교통은 실적 제외

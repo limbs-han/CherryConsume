@@ -1,0 +1,66 @@
+schema_version: 2
+id: hana-12942
+issuer: hana
+name: 하나 원큐 카드
+short_name: 하나 원큐
+search_names: [1Q카드, 원큐카드]
+kind: credit
+product_codes:
+  - '12942'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41012942P&CD_PD_SEQ=12942', fetched_at: 2026-10-10, review_no: A-26-0400}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-02-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    stacks:
+      - key: main
+        pick: priority
+        order: [hanapay-1-8, overseas-1-8, domestic-0-8]
+        spill: split
+    benefits:
+      - key: hanapay-1-8
+        title: 하나페이 결제 1.8% 하나머니 적립
+        source: page
+        evidence: [하나페이에 카드를 등록하여 결제하는 건 1.8% 하나머니 적립 (월 최대 10만 하나머니), '적립대상이 중복으로 해당되는 경우 하나페이 결제 적립률(1.8%)이 우선 적용되며, 하나페이 결제 적립한도 초과 시 전가맹점 적립률(0.8%)이 적용됩니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - payment: [hana_pay]
+        reward: {type: points, program: hana_money, rate: 1.8}
+        limits:
+          - {per: month, amount: 100000}
+      - key: overseas-1-8
+        title: 해외 전가맹점 1.8% 하나머니 적립
+        source: page
+        evidence: [해외 전 가맹점 이용 시 | 1.8% | 월 최대 1만 하나머니, 해외 매출은 최종 원화 청구금액에 대하여 적립 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: hana_money, rate: 1.8}
+        limits:
+          - {per: month, amount: 10000}
+      - key: domestic-0-8
+        title: 국내 전가맹점 0.8% 하나머니 적립
+        source: page
+        evidence: [국내 전 가맹점 0.8% 하나머니 적립 (적립한도 없음)]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: hana_money, rate: 0.8}
+    unmodeled: [하나페이 결제가 해외 가맹점에서 이루어지면 해외 적립으로만 계산한다, 해외 1.8% 한도를 넘긴 해외 결제는 적립하지 않는 것으로 계산한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. 카드 출시는 2020-11-27이다., assumed: '2026-02-12'}
+  - {path: 'revisions[0].benefits[overseas-1-8].limits', question: 해외 1.8% 월 1만 하나머니를 넘긴 해외 결제에 다른 적립이 있는지 원문에 없다., assumed: 적립 없음}
+notes: '2026-10-10 공식 상품 페이지(준법심의 A-26-0400)에서 옮겼다. 연회비 국내전용·VISA 15,000원. 전월 실적과 횟수 조건 없음. 하나페이 1.8% 한도를 넘긴 금액은 0.8%로 받는다. 서비스 제외 매출: 국세, 지방세, 공과금, 4대보험, 상품권·기프트카드, 선불 충전, 도시가스·수도·전기, 아파트관리비, 부동산임대료, 스쿨뱅킹, 대학·대학원 등록금, 초중고 납입금, 무이자할부. 하나머니 소수점 이하 절사.'

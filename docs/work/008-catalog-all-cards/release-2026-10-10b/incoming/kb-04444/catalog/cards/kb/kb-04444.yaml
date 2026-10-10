@@ -1,0 +1,127 @@
+schema_version: 2
+id: kb-04444
+issuer: kb
+name: AK KB국민카드
+short_name: KB AK
+kind: credit
+product_codes:
+  - '04444'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04444', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility]
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: [PG 결제대행 가맹점과 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다, 정부지원금 결제는 할인에서 빠진다]
+    limits:
+      - {key: life-5, per: month, amount: 15000}
+    benefits:
+      - key: ak-plaza-5
+        title: AK PLAZA 5% 청구할인
+        source: page
+        evidence: [AK PLAZA 청구할인 | 30만원 이상 60만원 미만 | 5% | 10천원 | 이용건당 5만원이상, AK PLAZA 내 별도 임대매장 및 일부 매장은 제외, AK mall(www.akmall.com) 포함]
+        target:
+          merchants: [ak_mall, ak_plaza]
+        when:
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000, to: 300000}
+        unmodeled: [AK PLAZA 안 별도 임대매장과 일부 매장은 빠진다]
+      - key: ak-plaza-7
+        title: AK PLAZA 7% 청구할인
+        source: page
+        evidence: [AK PLAZA 청구할인 | 60만원이상 90만원 미만 | 7% | 14천원 | 이용건당 5만원이상, AK PLAZA 내 별도 임대매장 및 일부 매장은 제외, AK mall(www.akmall.com) 포함]
+        target:
+          merchants: [ak_mall, ak_plaza]
+        when:
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 14000}
+        tiers: {from: 600000, to: 600000}
+        unmodeled: [AK PLAZA 안 별도 임대매장과 일부 매장은 빠진다]
+      - key: ak-plaza-10
+        title: AK PLAZA 10% 청구할인
+        source: page
+        evidence: [AK PLAZA 청구할인 | 90만원 이상 | 10% | 20천원 | 이용건당 5만원이상, AK PLAZA 내 별도 임대매장 및 일부 매장은 제외, AK mall(www.akmall.com) 포함]
+        target:
+          merchants: [ak_mall, ak_plaza]
+        when:
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 20000}
+        tiers: {from: 900000}
+        unmodeled: [AK PLAZA 안 별도 임대매장과 일부 매장은 빠진다]
+      - key: life-5
+        title: 학원·커피·미용실 5% 청구할인
+        source: page
+        evidence: ['학원, 패밀리레스토랑,커피,미용실 | 5% | 15천원 | 이용건당 1만원이상', AK KB국민카드로 30만원(일시불+할부) 이상 이용 시 할인 제공]
+        target:
+          categories: [beauty.salon, cafe, education.academy]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life-5}
+        tiers: {from: 300000}
+        notes: 패밀리레스토랑은 담을 업종이 없어 뺐다
+      - key: happypoint-10
+        title: 해피포인트 가맹점 10% 청구할인
+        source: page
+        evidence: [해피포인트 | 10% | 5천원, '해당 가맹점: 파리바게트, 던킨도너츠, 베스킨라빈스 등']
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        unmodeled: [파리바게뜨·던킨·배스킨라빈스 밖의 해피포인트 가맹점은 계산하지 않는다]
+      - key: jeju-air-10
+        title: 제주항공 10% 청구할인
+        source: page
+        evidence: [제주항공 10% 청구할인, 제주항공 | 10천원 | 외화 결제 건 제외]
+        target:
+          merchants: [jeju_air]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        unmodeled: [외화 결제는 빠진다]
+      - key: movie-3500
+        title: CGV·메가박스 온라인 예매 3,500원 청구할인
+        source: page
+        evidence: ['CGV/메가박스 온라인 영화 예매 시 승인건당 3,500원 청구할인', '카드 별 1일 2회, 월 4회, 연 10회 이내', AK KB국민카드로 30만원(일시불+할부) 이상 이용 시 할인 제공]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 3500}
+        limits:
+          - {per: day, count: 2}
+          - {per: month, count: 4}
+          - {per: year, count: 10}
+        tiers: {from: 300000}
+    unmodeled: ['놀이공원 현장할인(롯데월드 종합이용권 50%, 에버랜드 자유이용권 50%, 캐리비안베이 30%)은 이용권 매수 제한이 있어 계산하지 않는다', AK PLAZA 안 AK 멤버스 마일리지 0.2% 적립은 포인트 정보가 없어 계산하지 않는다, 할인받은 결제는 실적에서 전부 빠지지만 놀이공원 현장할인 결제는 빠지지 않는다, 해외 이용금액은 매입 완료 기준으로 실적 달을 나누고 일시불만 센다, 할인은 전표 매입 순서대로 한도에서 차감한다, 실적 유예기간은 본인회원이 처음 사용등록한 경우만 적용하고 가족카드 단독 발급에는 없다, '현금서비스·카드론, 수수료·이자·연체료는 실적에서 빠진다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2017년 10월 24일 출시만 적었다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[jeju-air-10].reward', question: 원문 표에 제주항공 할인율 칸이 해피포인트와 합쳐져 있다. 요약의 제주항공 10% 청구할인으로 옮겼다, assumed: 10}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 기본 포인트리는 적립되지 않는다. 연회비는 기본 7천원과 제휴 5천원을 더한 1만2천원이다.

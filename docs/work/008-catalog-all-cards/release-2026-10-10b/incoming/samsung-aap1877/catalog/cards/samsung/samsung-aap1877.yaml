@@ -1,0 +1,270 @@
+schema_version: 2
+id: samsung-aap1877
+issuer: samsung
+name: 삼성 iD SELECT ON 카드
+short_name: iD SELECT ON
+search_names: [iD SELECT ON, 삼성 iD SELECT ON 카드, 아이디 셀렉트 온]
+kind: credit
+product_codes: [AAP1877]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1877', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtq48gopBb02wYjHGH1VoGro%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-07-02'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다', '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    options:
+      - key: select
+        title: SELECT 서비스 옵션
+        choices:
+          - {key: dining, title: '음식점 주중 5%/주말 10%, 온라인쇼핑 5%'}
+          - {key: shopping, title: '온라인쇼핑 주중 5%/주말 10%, 음식점 5%'}
+          - {key: easypay, title: 온라인 간편결제 1%}
+        default: null
+        change: next_month
+    limits:
+      - key: dining-a
+        per: month
+        amount: {300000: 5000, 600000: 10000}
+      - {key: online-a, per: month, amount: 5000}
+      - key: online-b
+        per: month
+        amount: {300000: 5000, 600000: 10000}
+      - {key: dining-b, per: month, amount: 5000}
+      - {key: coffee, per: month, amount: 5000}
+      - {key: taxi-socar, per: month, amount: 5000}
+      - key: digital
+        per: month
+        amount: {300000: 5000, 600000: 10000}
+    benefits:
+      - key: dining-weekday-5
+        title: 음식점 주중 5% 할인
+        source: manual
+        evidence: ['음식점 주중 5%/주말 10%, 온라인패션몰/온라인쇼핑몰 5% 결제일할인', '주중(월~목요일) 5%, 주말(금~일요일) 10%', '음식점 한식, 양식, 일식, 중식, 뷔페, 패밀리레스토랑, 패스트푸드', '음식점 30만원 이상 5,000원, 60만원 이상 10,000원', '음식점은 오프라인 결제건에 한하며, 백화점, 쇼핑몰 등의 임대매장은 제외', 음식점/온라인패션몰/온라인쇼핑몰 5% 할인 또는 10% 할인 혜택이 제공된 전체 이용금액은 전월 이용금액에서 제외]
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        when:
+          - option:
+              select: [dining]
+          - day:
+              in: [mon, tue, wed, thu]
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: dining-a}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [백화점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: dining-weekend-10
+        title: 음식점 주말 10% 할인
+        source: manual
+        evidence: ['주중(월~목요일) 5%, 주말(금~일요일) 10%', '음식점 30만원 이상 5,000원, 60만원 이상 10,000원']
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        when:
+          - option:
+              select: [dining]
+          - day:
+              in: [fri, sat, sun]
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: dining-a}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [백화점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: dining-online-5
+        title: 온라인쇼핑 5% 할인 (음식점 옵션)
+        source: manual
+        evidence: ['온라인패션몰 무신사, W컨셉, 나이키닷컴, SSF SHOP, 29CM, 지그재그', '온라인쇼핑몰 쿠팡, 네이버플러스 스토어, SSG.COM, G마켓, 옥션, 11번가, 컬리, 삼성카드 쇼핑', '온라인패션몰/온라인쇼핑몰 5,000원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, musinsa, naver_plus_store, nike_com, samsung_card_shopping, ssf_shop, ssg_com, twentynine_cm, wconcept, zigzag]
+        when:
+          - option:
+              select: [dining]
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online-a}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: shopping-weekday-5
+        title: 온라인쇼핑 주중 5% 할인
+        source: manual
+        evidence: ['온라인패션몰/온라인쇼핑몰 주중 5%/주말 10%, 음식점 5% 결제일할인', '온라인 패션몰/온라인 쇼핑몰 30만원 이상 5,000원, 60만원 이상 10,000원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, musinsa, naver_plus_store, nike_com, samsung_card_shopping, ssf_shop, ssg_com, twentynine_cm, wconcept, zigzag]
+        when:
+          - option:
+              select: [shopping]
+          - day:
+              in: [mon, tue, wed, thu]
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online-b}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: shopping-weekend-10
+        title: 온라인쇼핑 주말 10% 할인
+        source: manual
+        evidence: ['주중(월~목요일) 5%, 주말(금~일요일) 10%', '온라인 패션몰/온라인 쇼핑몰 30만원 이상 5,000원, 60만원 이상 10,000원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, musinsa, naver_plus_store, nike_com, samsung_card_shopping, ssf_shop, ssg_com, twentynine_cm, wconcept, zigzag]
+        when:
+          - option:
+              select: [shopping]
+          - day:
+              in: [fri, sat, sun]
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: online-b}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: shopping-dining-5
+        title: 음식점 5% 할인 (쇼핑 옵션)
+        source: manual
+        evidence: ['5% 음식점 한식, 양식, 일식, 중식, 뷔페, 패밀리레스토랑, 패스트푸드', '음식점 5,000원', '음식점은 오프라인 결제건에 한하며, 백화점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        when:
+          - option:
+              select: [shopping]
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: dining-b}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [백화점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: easypay-1
+        title: 온라인 간편결제 1% 할인
+        source: manual
+        evidence: ['전월 이용금액 관계없이, 할인한도 없이 온라인 간편결제 1% 결제일할인', '삼성페이, 네이버페이, 카카오페이, PAYCO, 스마일페이, coupay, SSGPAY, L.PAY, 토스페이', '국내 온라인 가맹점에 한하며, 오프라인 매장 결제건(바코드, QR코드, 스마트폰 NFC/MST 등)은 제외']
+        target: {all: true}
+        when:
+          - option:
+              select: [easypay]
+          - {channel: online}
+          - {region: domestic}
+          - payment: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 1}
+      - key: delivery-5
+        title: 배달앱 5% 할인
+        source: manual
+        evidence: [배달앱/커피전문점/택시/카셰어링 5% 결제일할인, '배달앱 배달의민족, 쿠팡이츠, 요기요 월 할인한도 5,000원', 전월 이용금액 30만원 이상 시 제공, '배달앱은 공식 홈페이지/앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+      - key: coffee-5
+        title: 커피전문점 5% 할인
+        source: manual
+        evidence: ['커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀, 메가커피, 컴포즈커피 월 할인한도 5,000원', '커피전문점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [blue_bottle, coffee_bean, compose_coffee, ediya, mega_coffee, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: starbucks-5
+        title: 스타벅스 5% 할인
+        source: manual
+        evidence: ['단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 300000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+      - key: taxi-5
+        title: 택시 5% 할인
+        source: manual
+        evidence: ['택시 택시, 카셰어링 쏘카 월 할인한도 5,000원', 카셰어링은 공식 홈페이지/앱을 통한 결제건에 한함]
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: taxi-socar}
+        tiers: {from: 300000}
+      - key: socar-5
+        title: 쏘카 5% 할인
+        source: manual
+        evidence: ['택시 택시, 카셰어링 쏘카 월 할인한도 5,000원', 카셰어링은 공식 홈페이지/앱을 통한 결제건에 한함]
+        target:
+          merchants: [socar]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: taxi-socar}
+        tiers: {from: 300000}
+      - key: digital-50
+        title: 인앱 결제·디지털콘텐츠 50% 할인
+        source: manual
+        evidence: [인앱 결제/디지털콘텐츠 50% 결제일할인, '인앱 결제 구글플레이, 앱스토어', 디지털콘텐츠 넷플릭스/디즈니+/유튜브/티빙 정기결제건, '30만원 이상 5,000원, 60만원 이상 10,000원', 디지털콘텐츠의 유튜브는 유튜브 프리미엄 결제건에 한함, '결제 수단에 해당 카드 등록 후 결제 시 혜택 제공(단, 간편결제건은 제외)']
+        target:
+          merchants: [app_store, google_play]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 300000}
+        unmodeled: [간편결제로 낸 인앱 결제는 할인하지 않는다]
+      - key: ott-50
+        title: 디지털콘텐츠 정기결제 50% 할인
+        source: manual
+        evidence: [디지털콘텐츠 넷플릭스/디즈니+/유튜브/티빙 정기결제건, '30만원 이상 5,000원, 60만원 이상 10,000원']
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 300000}
+      - key: overseas-2
+        title: 해외 2% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 2% 결제일할인', 해외 가맹점 및 해외 직접구매 이용건, 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+    unmodeled: [삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2025-07-02이고 상품설명서는 2025.7판이다. 출시일을 시행일로 두었다, assumed: '2025-07-02'}
+  - {path: 'revisions[0].benefits[dining-weekday-5].target', question: '음식점(한식, 양식, 일식, 중식, 뷔페, 패밀리레스토랑, 패스트푸드)을 일반음식점과 패스트푸드로 보았다. 제과점은 넣지 않았다', assumed: 'restaurant.general, restaurant.fastfood'}
+  - {path: 'revisions[0].benefit_exclusions.categories', question: '할인 제외 대중교통은 후불교통·모바일교통 결제이고 고속버스는 차내 단말기·앱 결제다. 업종을 나눌 수 없어 시내버스, 지하철, 고속버스 전체를 혜택에서 뺐다', assumed: 'transit.bus_city, transit.subway, transit.bus_express'}
+  - {path: status, question: 상품 페이지에서 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-10 상품설명서(2025.7판, 여신금융협회 심의필 제2025-C1a-09518호) 확인. 연회비 국내전용과 해외겸용 Mastercard 모두 20,000원(기본 7,000+제휴 13,000). SELECT 옵션은 셋 중 하나를 고르고 바꾸면 다음 달 1일부터 반영된다. 발급월+1개월까지 30만 구간 혜택을 준다. 음식점·온라인쇼핑 5%와 10% 할인을 받은 결제는 실적에서 빠진다. 실적 제외는 4대보험, 국세·지방세·공과금, 아파트관리비, 임대료, 유치원·초중고 납입금, 대학 등록금, 기프트·선불카드, 상품권이다. 대중교통과 택시는 실적에 넣는다.

@@ -1,0 +1,112 @@
+schema_version: 2
+id: hyundai-zwe2
+issuer: hyundai
+name: 현대카드Z work Edition2
+short_name: 현대 Z work
+search_names: [Z work Edition2, 제트 워크, 현대카드Z work]
+kind: credit
+product_codes: [ZWE2]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZWE2', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/Z%20work%20Ed2_V5_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81.pdf', fetched_at: 2026-10-10, review_no: 제2026-C1a-14464호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    limits:
+      - key: transit
+        per: month
+        amount: {500000: 6000, 1000000: 10000}
+    benefits:
+      - key: online-mall-10
+        title: 온라인 쇼핑몰 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 네이버쇼핑, 쿠팡, G마켓, 옥션, 11번가, SSG.COM, 컬리', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 대상 온라인 쇼핑몰 통합 1일 1회 할인 적용, 쿠팡의 경우 쿠팡이츠 결제 건은 혜택 제외]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, naver_plus_store, ssg_com]
+          exclude_merchants: [coupang_eats]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [네이버쇼핑은 naver.com 도메인으로 확인되는 가맹점만 할인한다, 공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱에서 결제하면 제외한다]
+      - key: convenience-10
+        title: 편의점 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : GS25, CU, 세븐일레븐, 이마트24', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 대상 편의점 통합 1일 1회 할인 적용]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+      - key: coffee-10
+        title: 커피전문점 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 스타벅스, 투썸플레이스, 커피빈, 폴바셋', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 대상 커피전문점 통합 1일 1회 할인 적용, '백화점, 할인점, 쇼핑몰 내 입점매장 및 공동가맹점 제외']
+        target:
+          merchants: [coffee_bean, paul_bassett, starbucks, twosome]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [백화점·할인점·쇼핑몰 안의 입점 매장과 공동가맹점은 할인하지 않는다]
+      - key: transit-10
+        title: 시내버스·지하철 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 시내버스, 지하철, 택시', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 시외버스 및 고속버스 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: transit}
+        tiers: {from: 500000}
+      - key: taxi-10
+        title: 택시 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 시내버스, 지하철, 택시', 택시의 경우 1일 1회 할인 적용, '택시 앱 이용 시, 현대카드에 등록된 가맹점 및 업종 분류 기준에 따라 혜택 적용']
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: day, count: 1}
+          - {shared: transit}
+        tiers: {from: 500000}
+        unmodeled: [택시 앱 결제는 현대카드에 등록된 가맹점과 업종 분류가 택시일 때만 할인한다]
+      - key: book-10
+        title: 도서 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 교보문고(오프라인 매장 포함), YES24', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 대상 도서 영역 통합 1일 1회 할인 적용]
+        target:
+          merchants: [kyobo_book, yes24]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [온라인은 공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱에서 결제하면 제외한다]
+    unmodeled: [간편결제나 온라인 결제에서 가맹점이 현대카드 분류로 확인되지 않으면 할인하지 않는다, 영역별 한도와 1일 1회는 매출전표 접수 순서로 적용한다, 실적과 한도는 본인과 가족 카드를 합산한다, 고속도로 통행료와 후불하이패스는 실적에서 뺀다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2024-01-19이고 이 가이드북은 2026년 9월 기준이다. 그 사이 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].new_card.from', question: 가이드북은 카드 발급월부터 다음 달 이용 건까지라고만 적었다, assumed: issue}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 20,000원(기본 10,000+제휴 10,000), 가족카드 5,000원. 다섯 영역 10% 청구 할인, 영역마다 월 6천원(50만 이상)과 1만원(100만 이상) 한도. 온라인 쇼핑몰, 편의점, 커피, 도서는 영역 통합 1일 1회이고 대중교통은 택시만 1일 1회다. 실적은 전월 1일~말일 일시불과 할부, 할인 받은 결제 전체와 무이자 할부를 뺀다. 취소는 승인월 실적에서 뺀다. 신규 발급 시 발급월 다음 달 이용 건까지 50만 미만도 50만 구간이다. 할인 제외는 카드사 파일 혜택 제외보다 좁지만 대상 영역과 겹치지 않는다.

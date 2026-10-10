@@ -1,0 +1,45 @@
+card: ibk-12113420001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 동물병원 30% 월 1만원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: pet.vet, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 20000, category: pet.vet, channel: offline}
+  expect:
+  - {payment: 0, benefits: {pet-vet-30: 6000}}
+  - {payment: 1, benefits: {pet-vet-30: 4000}}
+  calc: 20,000원 × 30% = 6,000원. 둘째는 월 1만원에 남은 4,000원
+- name: 경계 직전 399999
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: pet.vet, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 쿠팡 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-shopping-10: 3000}}
+  calc: 30,000원 × 10% = 3,000원
+- name: 커피 10% 월 5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 5000}}
+  calc: 60,000원 × 10% = 6,000원이지만 월 5,000원 한도
+- name: 마트 5%와 통합한도 1만5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: emart, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gs25, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 50000, category: pet.vet, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-5: 10000}}
+  - {payment: 1, benefits: {convenience-5: 5000}}
+  - {payment: 2, benefits: {}}
+  calc: 마트 10,000원, 편의점 5,000원으로 40만 구간 통합한도 15,000원을 다 써 동물병원은 0원

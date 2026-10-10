@@ -1,0 +1,46 @@
+schema_version: 2
+id: lotte-p15803-a15803
+issuer: lotte
+name: 바디프랜드 X LOCA
+kind: credit
+product_codes: [P15803-A15803]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15803-A15803', fetched_at: '2026-10-10'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00024_20251231_10001.pdf', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 800000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefits:
+      - key: rental-discount
+        title: 바디프랜드 렌탈료 자동납부 결제일 할인
+        source: manual
+        evidence: ['30만원 이상 10,000원', '80만원 이상 15,000원', '200만원 이상 30,000원', 자동납부 필수, 바디프랜드 X LOCA 로 바디프랜드 렌탈료 자동 납부 연결시에만 결제일 할인 혜택을 받으실 수 있습니다., 렌탈료가 렌탈료 할인 한도보다 적을 경우 렌탈료 만큼만 할인됩니다., 지난달 이용 금액이 30만원 미만인 경우는 결제일 할인이 되지 않습니다.]
+        target:
+          merchants: [bodyfriend_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 10000, 800000: 15000, 2000000: 30000}
+        tiers: {from: 300000}
+    unmodeled: [바디프랜드 24·36개월 장기 할부 이용금액과 오토 할부서비스 이용금액은 실적에서 빠지지만 결제 입력으로 가려내지 않는다. 장기 할부를 기록하면 실적이 실제보다 크게 잡힐 수 있다, '장기 할부 캐시백 10,000·15,000·30,000원은 할부 이용 다음 달부터 36개월차까지 매월 26일 지급이라 계산하지 않는다. 렌탈료 할인과 함께 쓰면 캐시백이 우선이고 렌탈료 할인은 없다', 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '정부지원금, TV 수신료, 포인트 충전, 티머니 인증, 기후동행카드 충전과 결제, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 바디프랜드 X LOCA가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2025-10-24이다, assumed: '2026-10-10'}
+notes: 2026-10-10 상품 페이지와 상품설명서 대조. 신규 발급 특례는 발급일부터 다음 달 말일까지 10,000원 한도라 30만 구간으로 넣었다. 렌탈료가 한도보다 적으면 렌탈료만큼 할인이라 100% 할인에 월 한도로 적었다.

@@ -1,0 +1,43 @@
+card: shinhan-bcbdna
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 생활쇼핑 5만원 이상 15%와 미만 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, category: grocery_mart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, category: convenience, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {living-15: 7500}, counted: 0}
+  - {payment: 1, benefits: {living-10: 2000}, counted: 0}
+  calc: 50,000 × 15% = 7,500. 20,000 × 10% = 2,000. 할인 받은 매출은 실적 제외
+- name: 커피 1만원 이상만 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 10000, category: cafe, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 9999, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cafe-bakery-10: 1000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 9999}
+  calc: 10,000 × 10% = 1,000. 9,999는 1만원 미만이라 없음
+- name: 주말 이마트 10% 5만원 기준
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T15:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekend-mart-10: 5000}, counted: 0}
+  calc: 2026-11-07 토요일. 50,000 × 10% = 5,000
+- name: 주말 롯데시네마 현장 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-08T15:00, amount: 12000, merchant: lotte_cinema, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekend-lotte-cinema: 5000}, counted: 0}
+  calc: 일요일 1만원 이상 5,000원
+- name: 실적 30만원 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, category: grocery_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만원 미만 구간

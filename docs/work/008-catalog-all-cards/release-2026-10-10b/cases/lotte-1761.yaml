@@ -1,0 +1,65 @@
+card: lotte-1761
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 25개월 이내 통신요금 1만원 할인과 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-first-25m: 10000}
+    counted: 0
+  calc: 한도 10,000원 안에서 요금 전액 할인이라 10,000. 할인받은 결제는 실적에서 빠짐
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 55000
+  calc: 30만원보다 1원 적어 할인 없음
+- name: 120만 구간 요금이 한도보다 적으면 요금만큼
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 15000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-first-25m: 15000}
+  calc: 한도 20,000원보다 요금 15,000원이 적어 15,000
+- name: 발급월 포함 25번째 달은 앞 표
+  prev_month_spend: 700000
+  holder: {started_on: '2024-10-15'}
+  payments:
+  - {at: 2026-10-20T10:00, amount: 55000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-first-25m: 15000}
+  calc: 2024년 10월이 1개월째라 2026년 10월이 25개월째. 70만 구간 15,000
+- name: 26번째 달부터 뒤 표
+  prev_month_spend: 700000
+  holder: {started_on: '2024-10-15'}
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-after-25m: 8000}
+  calc: 2026년 11월은 26개월째라 70만 구간 8,000
+- name: 신규 발급 특례 기간은 실적 없어도 1만원
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-first-25m: 10000}
+  calc: 10월 발급이라 11월 말까지 30만 구간으로 보아 10,000
+- name: 자동납부가 아니면 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: lg_uplus, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부 건만 할인

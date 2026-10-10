@@ -1,0 +1,44 @@
+card: samsung-aap1762
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 교통 택시 통합 5천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 30000, category: transit.subway, payment_method: physical_card}
+  - {at: 2026-11-03T23:00, amount: 30000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-10: 3000}, counted: 0}
+  - {payment: 1, benefits: {taxi-10: 2000}, counted: 0}
+  calc: 30,000 × 10% = 3,000, 택시 3,000이나 남은 2,000. 교통과 택시는 실적 제외
+- name: 40만 직전이면 10% 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-02T09:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 0 구간
+- name: 80만 구간 통신 스트리밍 커피 편의점
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-25T09:00, amount: 80000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-06T09:00, amount: 40000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-07T09:00, amount: 30000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mobile-10: 8000}, counted: 0}
+  - {payment: 1, benefits: {streaming-10: 1700}}
+  - {payment: 2, benefits: {coffee-cvs-10: 4000}}
+  - {payment: 3, benefits: {starbucks-10: 2000}}
+  calc: 80,000 × 10% = 8,000, 17,000 × 10% = 1,700. 편의점 4,000 뒤 스타벅스 남은 2,000
+- name: 해외 항공 철도 1.5% 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 200000, merchant: jeju_air, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 60000, merchant: korail, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1-5: 1500}, counted: 100000}
+  - {payment: 1, benefits: {airline-1-5: 3000}}
+  - {payment: 2, benefits: {rail-1-5: 900}, counted: 60000}
+  calc: 1,500, 3,000, 900. 1.5% 할인은 실적 인정

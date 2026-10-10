@@ -1,0 +1,133 @@
+{
+  "reviewed_at": "2026-10-09",
+  "scope": "추가 4장 공식 원문 독립검토. 카드 파일 수정 없음. 카드사 defaults 및 공통 제안 함께 확인.",
+  "cards": [
+    {
+      "card_id": "nh-f20004",
+      "reviewed_file_sha256": "14b1b22388defbc1ffe88efbf42a08b7e60464845bb605cc0c71a8bd2f1ea9d6",
+      "sources_reviewed": ["https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010030", "nh/texts/nh-f20004.txt", "nh/catalog/issuers/nh.yaml"],
+      "web_verified": true,
+      "findings": [
+        {
+          "path": "revisions[0].spend / unmodeled",
+          "file_value": "실적 제외 목록에 포인트 사용분, 카드대출, 수수료, 이자, 연체료가 없고 미지원 메모도 없음",
+          "official_value": "포인트 사용분, 카드대출, 할부 및 SMS수수료, 이자/연체료는 전월실적 제외",
+          "source": "어피치 스윗 체크카드 공식 상품 페이지 서비스 이용조건",
+          "evidence": "포인트(전부/일부) 결제 시 포인트 사용분",
+          "severity": "조건이 빠짐",
+          "example": "일반 이용 29만원에 포인트 5000원을 사용한 1만원 결제를 더하면 실적은 295000원이다. 포인트 사용분을 그대로 넣으면 300000원으로 잘못 계산해 다음 달 혜택을 줄 수 있다. 표현할 칸이 없으면 미지원으로 기록해야 한다."
+        },
+        {
+          "path": "revisions[0].unmodeled 실적 접수일 기준",
+          "file_value": "해외 접수일 기준만 있음",
+          "official_value": "교통카드 이용금액과 통신료 자동이체금액도 매출표 접수일 기준 합산",
+          "source": "어피치 스윗 체크카드 공식 상품 페이지 서비스 이용조건",
+          "evidence": "교통카드 이용금액 및 통신료 자동이체금액은 매출표 접수일 기준",
+          "severity": "조건이 빠짐",
+          "example": "월말 이용과 다음달 접수가 서로 다르면 실적 구간이 달라질 수 있다. NH 카드사 파일 notes에는 일부 카드 예시만 있고 이 카드의 예외가 구조로 적용되지 않는다."
+        },
+        {
+          "path": "annual_fees",
+          "file_value": "국내 및 브랜드 공란 global 0원 두 행",
+          "official_value": "국내전용, Mastercard, UPI 각각 0원",
+          "source": "어피치 스윗 체크카드 공식 상품 페이지 연회비 표",
+          "evidence": "브랜드 이미지 대체문구 국내전용 / 마스터카드 / 유피아이",
+          "severity": "표기만 다름",
+          "example": "해외브랜드 두 종류가 한 행으로 합쳐져 있다. 금액은 맞다."
+        }
+      ],
+      "uncertainties": [
+        {
+          "path": "revisions[0].spend.exclude_categories education.school_fee",
+          "file_value": "유치원·초중고 납입금 전체를 가리키는 공통 업종 제외",
+          "official_value": "교육비(학부모부담금)만 명시. 유치원 납입금 전체 포함 여부 불명확",
+          "source": "어피치 스윗 체크카드 공식 상품 페이지 서비스 이용조건",
+          "evidence": "교육비(학부모부담금)",
+          "severity": "조건이 빠짐",
+          "recommendation": "유치원까지 모든 납입금이 학부모부담금으로 분류되는지 open_questions에 남긴다. 다른 카드사의 유치원·초중고 문구를 NH에 그대로 적용하지 않는다."
+        }
+      ],
+      "confirmed": ["종류 check/판매중/연회비 0", "온라인 지정3페이 3%, 오프라인카페·뷰티4%, 1만원 최소와 스타벅스 사이렌오더 예외", "5% 재미서비스에는 1만원 최소 조건이 없음", "간편+다양한 합산 월3000/6000, 재미 별도 월2000", "신규 등록 다음달말 최소구간 및 라운지 등록월 제외/실적50만원/연1회"]
+    },
+    {
+      "card_id": "nh-f10085",
+      "reviewed_file_sha256": "c04eae15a304531a24dc1a58bff3f4082b64d710b288f83d8425d281a2548f2e",
+      "sources_reviewed": ["https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010178", "nh/texts/nh-f10085.txt", "nh/catalog/issuers/nh.yaml"],
+      "web_verified": true,
+      "findings": [],
+      "uncertainties": [
+        {
+          "path": "revisions[0].benefit_exclusions.categories education.school_fee",
+          "file_value": "유치원·초중고 납입금 전체를 가리키는 공통 업종 제외. open_questions 비어 있음",
+          "official_value": "교육비(학부모부담금)만 명시. 유치원 납입금 전체 포함 여부 불명확",
+          "source": "zgm.the pay카드 공식 상품 페이지 할인서비스 제외대상",
+          "evidence": "대학(대학원)등록금, 교육비(학부모부담금)",
+          "severity": "조건이 빠짐",
+          "example": "유치원 결제를 전부 제외할 공식 근거가 확인되지 않았다. 일반 유치원 결제10만원이 학부모부담금으로 분류되지 않는 경우 기본1% 1000원을 적게 계산할 가능성이 있다.",
+          "recommendation": "확정 불일치로 단정하지 말고 정확한 대상 범위 확인 질문을 남긴다."
+        }
+      ],
+      "confirmed": ["신용/판매중, 국내·MC 모바일6000/실물12000", "무실적 기본1% 무한도, NH온라인1.7%/기타지정10페이온라인1.2%, 특별공유월100000", "기본·온라인 중복불가, 특별한도 소진 후 기본. best/none는 한도 적용 후 금액비교하므로 소진 후 기본 선택 가능", "제약업종과 의약품전용몰 온라인 결제는 특별 제외/기본만 제공", "무이자·포인트사용분 및 부대비용 제외는 구조와 미지원 메모에 보존됨"]
+    },
+    {
+      "card_id": "shinhan-bccbyf",
+      "reviewed_file_sha256": "9f3b5fa0428d79f3fd21d4e38324f1e3cbe1e3740f66332c0c5412df0cd622d5",
+      "sources_reviewed": ["https://www.shinhancard.com/pconts/html/card/apply/credit/1188443_2207.html", "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201907220001", "https://www.shinhancard.com/mob/static/js/cmm/card/card-default-2024.js", "https://m.11st.co.kr/products/MW/benefit-popup/9412763006?appVCA=0", "others/packet.json", "others/shinhan-bccbyf-api.json", "others/shinhan-card-util.js"],
+      "web_verified": "상품 페이지 및 11번가 공식 안내 성공. metadata와 코드 JS 웹 접근 실패여서 저장된 공식 응답 확인.",
+      "findings": [
+        {
+          "path": "revisions[0].benefits / unmodeled / open_questions",
+          "file_value": "기본0.5%와 11번가11PAY 특별1%만 있음. 프로모션4% 추가 적립에 대한 미지원 설명/확인질문 없음",
+          "official_value": "11번가 공식 안내는 신용 최대5%와 프로모션4% 적립을 표시. 전월30만원 미만1000P, 30~60만원 미만10000P, 60만원 이상20000P 한도. 공식metadata serviceList A0108480도 4% 추가적립을 표시",
+          "source": "11번가 공식 상품 할인/혜택 popup 및 신한카드 상품정보 API",
+          "evidence": "신용카드 프로모션 적립 4%는 전월 카드 이용 실적에 따라 차등 적용",
+          "severity": "조건이 빠짐",
+          "example": "프로모션 적용 시 전월60만원, 11PAY 일시불10만원 결제는 특별1000P와 추가4000P 합계5000P이다. 파일은1000P만 계산해4000P 적게 표시한다.",
+          "recommendation": "행사 기간과 실적 제외, 신규 특례, 다른 적립과의 중복 기준을 추가 확인한다. 즉시 4%를 추측해 계산하기보다 공식 안내를 source에 더하고 미지원 혜택과 확인 질문을 남긴다."
+        },
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "첫 결제 할인 안내 없음",
+          "official_value": "11번가 공식 상품 popup에 신용 첫 결제25000원 할인 표시",
+          "source": "11번가 공식 상품 할인/혜택 popup",
+          "evidence": "11번가 신한카드 첫 결제할인 / 신용카드 25,000원 할인",
+          "severity": "조건이 빠짐",
+          "recommendation": "행사성 혜택이고 자세한 최소결제액/기간/발급기준이 없으므로 계산값으로 넣지 말고 추가 확인할 행사 안내로 남긴다."
+        }
+      ],
+      "uncertainties": [
+        {
+          "path": "프로모션 4%의 할부 제외",
+          "file_value": "상품 페이지 기반 공통 제외는 무이자할부만 제외",
+          "official_value": "11번가 popup 프로모션 안내는 할부 이용거래 전부 제외라고 표시",
+          "source": "11번가 공식 상품 할인/혜택 popup 포인트 적립제외",
+          "evidence": "할부 이용거래",
+          "severity": "조건이 빠짐",
+          "recommendation": "상품페이지 기본/특별 무이자제외를 바꾸지 말고 프로모션만 일시불 제한인지 별도로 확인한다."
+        }
+      ],
+      "confirmed": ["신용/판매중. API applyEnableFlag true", "Mastercard 8000/S&5000. API afeInfoList 브랜드1/8과 코드JS Master/S& 일치", "국내외 기본0.5%, 11번가11PAY특별1% 무실적무한도", "특별 대상 가맹점은 기본 제외라고 공식이 명시하므로 11번가 일반카드결제 기본0% 구조는 원문 문자와 일치. 별도 과소계산 지적하지 않음", "11PAY1P=1원은 11번가 공식 popup에서 확인", "상품페이지의 무이자/공과금/등록금/포인트사용분 제외와 카드구조 일치. 포인트사용분은 미지원으로 보존"]
+    },
+    {
+      "card_id": "shinhan-bcdbyg",
+      "reviewed_file_sha256": "40e8cb2eaa1c6634b0e2f6ffe3910572100064dfc8d2fd271dda0ce169b4ae48",
+      "sources_reviewed": ["https://www.shinhancard.com/pconts/html/card/apply/check/1187965_2206.html", "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201907220002", "https://www.shinhancard.com/mob/static/js/cmm/card/card-default-2024.js", "https://m.11st.co.kr/products/MW/benefit-popup/9412763006?appVCA=0", "others/packet.json", "others/shinhan-bcdbyg-api.json", "others/shinhan-card-util.js"],
+      "web_verified": "상품 페이지 및 11번가 공식 안내 성공. metadata와 코드 JS는 저장된 공식 응답 확인.",
+      "findings": [
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "첫 결제 할인 안내 없음",
+          "official_value": "11번가 공식 상품 popup에 체크 첫 결제5000원 할인 표시",
+          "source": "11번가 공식 상품 할인/혜택 popup",
+          "evidence": "11번가 신한카드 첫 결제할인 / 체크카드 5,000원 할인",
+          "severity": "조건이 빠짐",
+          "recommendation": "상세 행사 기준이 없으므로 확정 계산하지 말고 추가 확인할 행사 안내로 기록한다."
+        }
+      ],
+      "confirmed": ["체크/판매중. API applyEnableFlag true", "국내전용 및 Mastercard 연회비0. API 브랜드0/1, 코드JS Local/Master 일치", "국내외 기본0.1%, 11번가11PAY0.5%, 무실적무한도", "특별적립 대상 가맹점 기본제외는 공식문구와 일치. 11PAY없이11번가 결제는 기본0%로 판단", "11PAY1P=1원은 11번가 공식 popup에서 확인", "체크의4% 추가적립은 공식 popup과 API 어느 쪽에도 없음"]
+    }
+  ],
+  "minor_omissions": [
+    {"cards": ["shinhan-bccbyf", "shinhan-bcdbyg"], "path": "revisions[0].unmodeled", "file_value": "가족발급 불가와 적립시기/회원가입 조건 없음", "official_value": "가족카드 발급불가, 11PAY회원가입 후 포인트조회/사용 가능, 당월 매출접수분 익월20일 적립", "source": "각 신한 공식 상품 페이지 카드 발급 유의사항 및 포인트 관련 세부사항", "evidence": "가족카드 발급 불가", "severity": "표기만 다름", "note": "현재 혜택액 계산에는 영향 없음. 카드 안내를 보존하려면 같이 기록한다."}
+  ]
+}

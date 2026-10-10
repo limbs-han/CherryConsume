@@ -1,0 +1,48 @@
+schema_version: 2
+id: hana-13539
+issuer: hana
+name: 모두의 건강 체크카드
+short_name: 하나 모두의 건강 체크
+kind: check
+product_codes:
+  - '13539'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=13539', fetched_at: 2026-10-10, review_no: A-26-0344}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    benefits:
+      - key: hospital-pharmacy-0-4
+        title: 병원·동물병원·약국 0.4% 적립
+        source: page
+        evidence: [병원/동물병원/약국 | 병원/동물병원/약국 업종 | 0.4%, '병원/동물병원/약국 : 산후조리원, 의료재단, 재활원 이용금액 제외', 소수점 이하 금액은 절사 됩니다.]
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        reward: {type: points, program: hana_money, rate: 0.4}
+      - key: grocery-mart-0-3
+        title: 이마트·롯데마트·홈플러스 0.3% 적립
+        source: page
+        evidence: ['마트 | 이마트, 홈플러스, 롯데마트 | 0.3%', '마트 : 기업형슈퍼마켓(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼), 창고형할인마트(이마트 트레이더스, 롯데 빅마켓), 노브랜드 및 각 마트의 임대매장 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        reward: {type: points, program: hana_money, rate: 0.3}
+      - key: all-merchants-0-2
+        title: 국내외 전가맹점 0.2% 적립
+        source: page
+        evidence: [전가맹점 | 병원/동물병원/약국/3대마트 외 | 0.2%, 전월 실적 및 횟수 제한 없이 0.2% 적립]
+        target: {all: true}
+        reward: {type: points, program: hana_money, rate: 0.2}
+    unmodeled: [병원 적립에서 의료재단과 재활원 이용금액은 빠진다, 마트 적립에서 노브랜드와 각 마트의 임대매장은 빠진다, 해외 이용은 수수료를 더한 최종 원화 출금액에 적립한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 규칙이 시작된 날을 찾지 못해 수집한 날로 두었다. 카드 출시는 2021-04-16이다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[all-merchants-0-2]', question: '마트 적립에서 빠지는 이마트 에브리데이, 트레이더스 같은 곳이 전가맹점 0.2% 적립은 받는지 원문에 없다.', assumed: 0.2% 적립}
+notes: 2026-10-10 공식 상품 페이지(준법심의 A-26-0344)에서 옮겼다. 연회비 면제, 발급수수료 2천원은 수령 다음달 말일까지 1만원 이상 쓰면 돌려준다. 전월 실적 조건이 없다. 세 적립은 결제 하나에 큰 것 하나만 받는다.

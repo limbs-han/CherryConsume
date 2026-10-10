@@ -1,0 +1,56 @@
+schema_version: 2
+id: lotte-p14114-a14114
+issuer: lotte
+name: MY RENTAL+ 롯데카드
+kind: credit
+product_codes: [P14114-A14114]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14114-A14114', fetched_at: '2026-10-10'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2022-A00018_20260908_10004.pdf', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefits:
+      - key: rental-discount
+        title: 롯데렌탈 월 대여료 자동결제 결제일 할인
+        source: manual
+        evidence: ['50만원 이상 100만원 미만 월 5,000원', '100만원 이상 150만원 미만 월 15,000원', '150만원 이상 월 30,000원', '롯데렌탈 렌탈 상품 월 대여료 자동결제 시, 혜택이 월 1회 제공됩니다.', 할인받을 금액보다 월 대여료 자동결제 금액이 적을 경우 월 대여료 자동결제 금액만큼만 할인이 적용됩니다.]
+        target:
+          merchants: [lotte_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {500000: 5000, 1000000: 15000, 1500000: 30000}
+            count: 1
+        tiers: {from: 500000}
+      - key: fuel-5pct
+        title: 주유소 5% 결제일 할인
+        source: manual
+        evidence: [모든 주유소(LPG 포함) 5% 및 전기차 충전 50% 결제일 할인, '할인한도는 월 5,000원까지 제공됩니다.', 지난달 1일~말일까지 MY RENTAL+ 롯데카드로 50만원 이상 이용시 혜택이 제공됩니다.]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+    unmodeled: [주유소 할인은 휘발유·경유·LPG만이다. 등유 등 다른 유종은 할인하지 않는다, '전기차 충전 50% 할인은 주유와 월 5,000원 한도를 함께 쓰지만 전기차 충전 업종이 없어 계산하지 않는다', '카카오 대리운전 2,000원 결제일 할인(월 1회)은 가맹점이 없어 계산하지 않는다', 'G car와 세차클링 이용료 10% 결제일 할인(통합 월 5,000원)은 가맹점이 없어 계산하지 않는다', 가족카드 이용금액도 본인 실적에 더하고 할인 한도는 본인과 가족카드가 합산한다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '포인트 충전, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', MY RENTAL+ 롯데카드가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2022-06-29이고 설명서는 2026년 8월 기준이다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[rental-discount].target', question: 공통 가맹점 lotte_rental(롯데렌탈)이 필요하다. needed/lotte-p14114-a14114.json에 제안했다}
+notes: 2026-10-10 상품 페이지와 상품설명서 대조. 신규 발급 특례는 발급일부터 다음 달 말일까지 실적 무관 혜택이고 대여료는 5,000원이라 50만 구간으로 넣었다. 발급월 이용금액이 높으면 그 구간을 준다는 원문과 맞다. 대여료가 할인금액보다 적으면 대여료만큼이라 100% 할인에 월 한도와 월 1회로 적었다. 실적 제외의 대중교통(버스, 지하철)은 시외버스까지 빼 실적이 적게 잡히는 쪽으로 두었다.

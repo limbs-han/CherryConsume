@@ -1,0 +1,335 @@
+card: kb-07964
+cases:
+- name: coffee-10 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-10: 1000
+  calc: coffee-10 양수 혜택
+- name: mobile-10 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: google_play
+  expect:
+  - payment: 0
+    benefits:
+      mobile-10: 1000
+  calc: mobile-10 양수 혜택
+- name: culture-10 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: interpark
+  expect:
+  - payment: 0
+    benefits:
+      culture-10: 1000
+  calc: culture-10 양수 혜택
+- name: beauty-5 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: olive_young
+  expect:
+  - payment: 0
+    benefits:
+      beauty-5: 500
+  calc: beauty-5 양수 혜택
+- name: convenience-5 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: cu
+  expect:
+  - payment: 0
+    benefits:
+      convenience-5: 500
+  calc: convenience-5 양수 혜택
+- name: subscription-1000 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: netflix
+  expect:
+  - payment: 0
+    benefits:
+      subscription-1000: 1000
+  calc: subscription-1000 양수 혜택
+- name: delivery-1000 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: baemin
+  expect:
+  - payment: 0
+    benefits:
+      delivery-1000: 1000
+  calc: delivery-1000 양수 혜택
+- name: telecom-2500 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 50000
+    category: telecom.mobile
+    payment_method: physical_card
+    merchant: skt
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      telecom-2500: 2500
+  calc: telecom-2500 양수 혜택
+- name: movie-4000 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: cgv
+  expect:
+  - payment: 0
+    benefits:
+      movie-4000: 4000
+  calc: movie-4000 양수 혜택
+- name: amusement-15000 양수 혜택
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 30000
+    category: other
+    payment_method: physical_card
+    merchant: everland
+  expect:
+  - payment: 0
+    benefits:
+      amusement-15000: 15000
+  calc: amusement-15000 양수 혜택
+- name: 20만원 미만 모바일 제외
+  prev_month_spend: 199999
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: google_play
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만원 미만 모바일 제외
+- name: 커피 실적 없이 3천원 한도
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 40000
+    category: other
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-10: 3000
+  calc: 커피 실적 없이 3천원 한도
+- name: 구독 9999원 제외
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 9999
+    category: other
+    payment_method: physical_card
+    merchant: netflix
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 구독 9999원 제외
+- name: 30만원 직전 KB Pay 추가 없음
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-10: 1000
+  calc: 30만원 직전 KB Pay 추가 없음
+- name: KB Pay offline 추가 한도
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 200000
+    category: other
+    payment_method: kb_pay
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      kbpay-offline-2pct: 3000
+  calc: KB Pay offline 추가 한도
+- name: KB Pay online 추가 한도
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 200000
+    category: other
+    payment_method: kb_pay
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      kbpay-online-2pct: 2000
+  calc: KB Pay online 추가 한도
+- name: 커피와 KB Pay 중복
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: kb_pay
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-10: 1000
+      kbpay-offline-2pct: 200
+  calc: 커피와 KB Pay 중복
+- name: 80만원 통합 한도 5만원
+  prev_month_spend: 800000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: everland
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: cgv
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: interpark
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: google_play
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: starbucks
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: olive_young
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: cu
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: netflix
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: baemin
+    payment_method: physical_card
+    billing: normal
+  - at: 2026-10-12T12:00
+    amount: 100000
+    merchant: skt
+    payment_method: physical_card
+    billing: autopay
+    category: telecom.mobile
+  expect:
+  - payment: 0
+    benefits:
+      amusement-15000: 15000
+  - payment: 1
+    benefits:
+      movie-4000: 4000
+  - payment: 2
+    benefits:
+      culture-10: 7000
+  - payment: 3
+    benefits:
+      mobile-10: 5000
+  - payment: 4
+    benefits:
+      coffee-10: 3000
+  - payment: 5
+    benefits:
+      beauty-5: 2000
+  - payment: 6
+    benefits:
+      convenience-5: 2000
+  - payment: 7
+    benefits:
+      subscription-1000: 1000
+  - payment: 8
+    benefits:
+      delivery-1000: 1000
+  - payment: 9
+    benefits:
+      telecom-2500: 2500
+  calc: 각 개별 한도를 순서대로 적용. 합계 42500원으로 50000원 아래다.
+- name: 일반 승인 철도 승차권은 실적 포함
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: transit.rail
+    billing: normal
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 전월 실적 제외는 무승인 전표다. 일반 승인 철도 승차권 10000원은 실적에 포함한다.
+- name: 후불교통 무승인 전표 실적 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: transit.subway
+    billing: postpaid_transit
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 무승인 후불교통은 지하철 업종 제외로 실적 0원

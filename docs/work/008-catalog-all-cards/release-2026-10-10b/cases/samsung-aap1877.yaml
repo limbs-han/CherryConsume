@@ -1,0 +1,71 @@
+card: samsung-aap1877
+holder:
+  started_on: '2026-01-01'
+  options:
+    - {option: select, choice: dining, effective_from: 2026-01-01}
+cases:
+- name: 음식점 옵션 주중 5% 주말 10% 60만 구간
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-06T19:00, amount: 60000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-07T19:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-03T20:00, amount: 200000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {dining-weekday-5: 5000}, counted: 0}
+  - {payment: 1, benefits: {dining-weekend-10: 5000}}
+  - {payment: 2, benefits: {}, counted: 50000}
+  - {payment: 3, benefits: {dining-online-5: 5000}, counted: 0}
+  calc: 2일 월요일 100,000 × 5% = 5,000, 6일 금요일 60,000 × 10% = 6,000이나 남은 5,000. 한도 소진 뒤 결제는 실적 인정. 쿠팡 10,000이나 한도 5,000
+- name: 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 0 구간
+- name: 쇼핑 옵션 30만 구간
+  holder:
+    options:
+      - {option: select, choice: shopping, effective_from: 2026-01-01}
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T20:00, amount: 40000, merchant: musinsa, channel: online, payment_method: physical_card}
+  - {at: 2026-11-07T20:00, amount: 40000, merchant: gmarket, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 200000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-weekday-5: 2000}}
+  - {payment: 1, benefits: {shopping-weekend-10: 3000}}
+  - {payment: 2, benefits: {shopping-dining-5: 5000}}
+  calc: 40,000 × 5% = 2,000, 40,000 × 10% = 4,000이나 남은 3,000. 음식점 10,000이나 한도 5,000
+- name: 간편결제 옵션 온라인 1%
+  holder:
+    options:
+      - {option: select, choice: easypay, effective_from: 2026-01-01}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T20:00, amount: 100000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {easypay-1: 1000}}
+  calc: 100,000 × 1% = 1,000. 실적 무관
+- name: 생활 5%와 디지털 50%와 해외 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T19:00, amount: 30000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 60000, merchant: mega_coffee, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 60000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 60000, category: taxi, payment_method: physical_card}
+  - {at: 2026-11-06T09:00, amount: 60000, merchant: socar, channel: online, payment_method: physical_card}
+  - {at: 2026-11-07T09:00, amount: 6000, merchant: google_play, channel: online, payment_method: physical_card}
+  - {at: 2026-11-08T09:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-09T09:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 1500}}
+  - {payment: 1, benefits: {coffee-5: 3000}}
+  - {payment: 2, benefits: {starbucks-5: 2000}}
+  - {payment: 3, benefits: {taxi-5: 3000}, counted: 60000}
+  - {payment: 4, benefits: {socar-5: 2000}}
+  - {payment: 5, benefits: {digital-50: 3000}}
+  - {payment: 6, benefits: {ott-50: 2000}}
+  - {payment: 7, benefits: {overseas-2: 2000}}
+  calc: 배달 1,500. 커피 3,000 뒤 스타벅스 남은 2,000. 택시 3,000 뒤 쏘카 남은 2,000. 인앱 3,000 뒤 넷플릭스 남은 2,000. 해외 2,000

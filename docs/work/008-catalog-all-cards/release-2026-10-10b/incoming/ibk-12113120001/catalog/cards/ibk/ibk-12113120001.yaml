@@ -1,0 +1,153 @@
+schema_version: 2
+id: ibk-12113120001
+issuer: ibk
+name: 참! 좋은 다이소카드(신용)
+kind: credit
+product_codes:
+  - '12113120001'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: unionpay, amount: 10000}
+  - {scope: global, brand: visa, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=312&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2026-5441호, review_valid_until: 2029-07-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/2025120111303220368914590976824.pdf', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-07-07
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, education.tuition, fuel, gift_card, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.rail, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: receipt}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [무이자할부 이용금액은 할인하지 않는다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 700000: 20000, 1500000: 40000}
+    benefits:
+      - key: daiso-30
+        title: 다이소 30% 청구할인
+        source: page
+        evidence: ['[다이소 라이프서비스] 다이소 결제금액의 30% 청구할인(온라인몰 제외)', '5천원이상 결제 시, 1일 1회, 월 최대 1만원 할인', 다이소 라이프서비스는 월간 통합할인한도 내 제공]
+        target:
+          merchants: [daiso]
+        when:
+          - {channel: offline}
+          - amount: {min: 5000}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['대형마트·할인점, 지하철 역사, 휴게소 등에 입점한 다이소 매장은 할인하지 않는다']
+      - key: fuel-40
+        title: 전 주유소 리터당 40원 청구할인
+        source: page
+        evidence: ['[부가서비스] 전 주유소 리터당 40원 할인', '통합 1일 1회, 월 2회, 1회 주유금액 10만원 한도, 유류, LPG포함', '산정방식 : 주유(충전)금액 ÷ SK에너지 고시 휘발율가 × 40원']
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 40}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+        tiers: {from: 300000}
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: convenience-olive-10
+        title: 편의점·올리브영 10% 청구할인
+        source: page
+        evidence: ['[다이소 라이프서비스] CU, GS25, 세븐일레븐 10% 할인', '올리브영과 통합하여 1일 1회, 월 2회, 1회 이용금액 1만원 한도', 백화점·할인(아울렛)점 입점 매장 제외, '[다이소 라이프서비스] 올리브영 10% 할인']
+        target:
+          merchants: [cu, gs25, olive_young, seven_eleven]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인(아울렛)점 입점 매장은 할인하지 않는다]
+      - key: mart-5
+        title: 대형마트 5% 청구할인
+        source: page
+        evidence: ['[부가서비스] 이마트, 홈플러스, 롯데마트, 농협하나로클럽 5% 할인', '통합 월 1회, 1회 이용금액 10만원 한도', '기업형 슈퍼마켓(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼) 및 인터넷(PG업체)을 통해 결제되는 경우 할인 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [농협은 하나로클럽만 대상이고 일반 하나로마트는 원문에 없다, 기업형 슈퍼마켓은 할인하지 않는다]
+      - key: online-20
+        title: 쿠팡·티몬·위메프 20% 청구할인
+        source: page
+        evidence: ['[다이소 라이프서비스] 쿠팡, 티몬, 위메프 20% 할인', '통합 1일 1회, 월 2회, 1회 이용금액 1만원 한도']
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: salon-20
+        title: 미용실·이용원 20% 청구할인
+        source: page
+        evidence: ['[다이소 라이프서비스] 미용실, 이용원 20% 할인', '통합 월 1회, 연 12회, 1회 이용금액 5만원 한도', 백화점·할인(아울렛)점 입점 매장과 BC카드 가맹점 미용실/이용원 업종으로 등록되지 않은 가맹점은 할인 제외]
+        target:
+          categories: [beauty.salon]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 1}
+          - {per: year, count: 12}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인(아울렛)점 입점 매장은 할인하지 않는다]
+      - key: movie-4000
+        title: CGV·롯데시네마 4천원 청구할인
+        source: page
+        evidence: ['[다이소 라이프서비스] CGV, 롯데시네마 4천원 할인', '통합 월 1회, 연 12회, 1만원 이상 결제 시 제공(현장/온라인/앱 예매 포함)', '예매 대행 사이트(인터파크, 네이버영화 등)를 통한 예매 시 할인 제외']
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 12}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['인터파크, 네이버영화 같은 예매 대행 사이트 결제는 할인하지 않는다']
+      - key: coffee-20
+        title: 주요 커피전문점 20% 청구할인
+        source: page
+        evidence: ['[다이소 라이프서비스] 주요 커피전문점 20% 할인', '스타벅스, 커피빈, 카페베네, 탐앤탐스, 할리스, 엔제리너스, 투썸플레이스 20% 할인', '통합 1일 1회, 월 3회, 1회 이용금액 2만원 한도']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, hollys, starbucks, tom_n_toms, twosome]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점 및 할인(아울렛)점 입점 매장은 할인하지 않는다]
+    unmodeled: [다이소 멤버십 포인트 자동적립은 다이소가 주는 것이라 계산하지 않는다, '주요 놀이공원 할인(통합 월 1회, 연 2회)은 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다', '삼성페이, 카카오페이, 네이버페이, 페이코 같은 간편결제는 할인되지 않을 수 있다', 가족카드 이용실적은 본인 실적과 합산하지 않고 카드별로 본다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 문구 교통요금을 버스·지하철·철도·고속·시외버스·택시 업종 전체로 보았다. 후불교통만 빼는 뜻일 수도 있다, assumed: 'transit 전체, taxi'}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다, assumed: '2026-07-07'}
+notes: 2026-10-10 expand3 조사. 상품 페이지를 대조했다. 다이소 라이프서비스 여섯 영역만 통합할인한도를 쓰고 주유와 마트 부가서비스는 한도 밖이다. 신규 발급은 카드 수령일부터 다음 달 말까지 통합할인한도 1만원과 부가서비스를 실적과 관계없이 준다

@@ -1,0 +1,437 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "nol_interpark",
+      "name": "NOL 인터파크",
+      "category": "travel.agency",
+      "aliases": [
+        "NOL 인터파크",
+        "NOL 인터파크투어",
+        "NOL 티켓",
+        "인터파크투어",
+        "인터파크티켓"
+      ]
+    },
+    "card_id": "hyundai-32285",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AZG-20260323-1455-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_NOL_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "NOL · NOL 인터파크(NOL 인터파크투어/NOL 티켓) · 트리플 이용 금액의 10% 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "triple",
+      "name": "트리플",
+      "category": "travel.agency",
+      "aliases": [
+        "트리플",
+        "TRIPLE"
+      ]
+    },
+    "card_id": "hyundai-32285",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AZG-20260323-1455-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_NOL_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "NOL · NOL 인터파크(NOL 인터파크투어/NOL 티켓) · 트리플 이용 금액의 10% 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "starfield",
+      "name": "스타필드",
+      "category": "other",
+      "aliases": [
+        "스타필드",
+        "STARFIELD"
+      ]
+    },
+    "card_id": "hyundai-32285",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AZG-20260323-1455-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_NOL_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "프리미엄아울렛 : 현대프리미엄아울렛, 롯데프리미엄아울렛, 신세계프리미엄아울렛, 스타필드"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ridi",
+      "name": "리디",
+      "category": "streaming",
+      "aliases": [
+        "리디",
+        "RIDI",
+        "리디북스"
+      ]
+    },
+    "card_id": "hyundai-32285",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AZG-20260323-1455-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_NOL_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "디지털 콘텐츠 서비스 : 넷플릭스, 유튜브 프리미엄, 디즈니+, 왓챠, 멜론, 지니, 리디"
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "parent": "sports",
+      "code": "golf",
+      "name": "골프장·골프연습장"
+    },
+    "card_id": "hyundai-32285",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AZG-20260323-1455-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_NOL_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "골프 : 골프장/골프연습장(업종)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "vips",
+      "name": "빕스",
+      "category": "restaurant.general",
+      "aliases": [
+        "빕스",
+        "VIPS",
+        "CJ푸드빌 빕스"
+      ]
+    },
+    "card_id": "ibk-12112580004",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=258&PDCD=0004&pageId=CA01010000",
+    "evidence": "외식(아웃백, 빕스) 10% 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "blacksmith",
+      "name": "블랙스미스",
+      "category": "restaurant.general",
+      "aliases": [
+        "블랙스미스",
+        "BLACKSMITH"
+      ]
+    },
+    "card_id": "ibk-12113000001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=300&PDCD=0001&pageId=CA01010000",
+    "evidence": "[Life in Yong-In] 아웃백, 빕스, 블랙스미스, 토다이, 온더보더, 애슐리 20% 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "todai",
+      "name": "토다이",
+      "category": "restaurant.general",
+      "aliases": [
+        "토다이",
+        "TODAI"
+      ]
+    },
+    "card_id": "ibk-12113000001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=300&PDCD=0001&pageId=CA01010000",
+    "evidence": "[Life in Yong-In] 아웃백, 빕스, 블랙스미스, 토다이, 온더보더, 애슐리 20% 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "on_the_border",
+      "name": "온더보더",
+      "category": "restaurant.general",
+      "aliases": [
+        "온더보더",
+        "ON THE BORDER"
+      ]
+    },
+    "card_id": "ibk-12113000001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=300&PDCD=0001&pageId=CA01010000",
+    "evidence": "[Life in Yong-In] 아웃백, 빕스, 블랙스미스, 토다이, 온더보더, 애슐리 20% 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ashley",
+      "name": "애슐리",
+      "category": "restaurant.general",
+      "aliases": [
+        "애슐리",
+        "애슐리퀸즈",
+        "ASHLEY"
+      ]
+    },
+    "card_id": "ibk-12113000001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=300&PDCD=0001&pageId=CA01010000",
+    "evidence": "[Life in Yong-In] 아웃백, 빕스, 블랙스미스, 토다이, 온더보더, 애슐리 20% 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "bulgogi_brothers",
+      "name": "불고기브라더스",
+      "category": "restaurant.general",
+      "aliases": [
+        "불고기브라더스",
+        "BULGOGI BROTHERS"
+      ]
+    },
+    "card_id": "ibk-12113000001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=300&PDCD=0001&pageId=CA01010000",
+    "evidence": "[Life in Yong-In] 불고기브라더스 20% 현장할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "dalkomm",
+      "name": "달콤커피",
+      "category": "cafe",
+      "aliases": [
+        "달콤커피",
+        "달.콤 커피",
+        "DAL.KOMM"
+      ]
+    },
+    "card_id": "ibk-12113000001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=300&PDCD=0001&pageId=CA01010000",
+    "evidence": "주요 커피전문점 20% 할인 (스타벅스, 커피빈, 카페베네, 탐앤탐스, 할리스, 엔제리너스, 달.콤 커피 20% 할인)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "home_and_shopping",
+      "name": "홈앤쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "홈앤쇼핑",
+        "홈&쇼핑",
+        "HNSMALL"
+      ]
+    },
+    "card_id": "ibk-12113380004",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0004&pageId=CA01010000",
+    "evidence": "[홈쇼핑] GS홈쇼핑, 롯데홈쇼핑, 현대홈쇼핑, CJ홈쇼핑, NS홈쇼핑, 홈&쇼핑"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "gs_shop",
+      "name": "GS SHOP",
+      "category": "online_shopping",
+      "aliases": [
+        "GS SHOP",
+        "GS샵",
+        "지에스샵",
+        "GS홈쇼핑"
+      ]
+    },
+    "card_id": "ibk-12113380004",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0004&pageId=CA01010000",
+    "evidence": "[홈쇼핑] GS홈쇼핑, 롯데홈쇼핑, 현대홈쇼핑, CJ홈쇼핑, NS홈쇼핑, 홈&쇼핑"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "cj_onstyle",
+      "name": "CJ온스타일",
+      "category": "online_shopping",
+      "aliases": [
+        "CJ온스타일",
+        "CJ ONSTYLE",
+        "CJ오쇼핑"
+      ]
+    },
+    "card_id": "ibk-12113380004",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0004&pageId=CA01010000",
+    "evidence": "[홈쇼핑] GS홈쇼핑, 롯데홈쇼핑, 현대홈쇼핑, CJ홈쇼핑, NS홈쇼핑, 홈&쇼핑"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_homeshopping",
+      "name": "현대홈쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "현대홈쇼핑",
+        "Hmall",
+        "현대H몰"
+      ]
+    },
+    "card_id": "ibk-12113380004",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0004&pageId=CA01010000",
+    "evidence": "[홈쇼핑] GS홈쇼핑, 롯데홈쇼핑, 현대홈쇼핑, CJ홈쇼핑, NS홈쇼핑, 홈&쇼핑"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ns_homeshopping",
+      "name": "NS홈쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "NS홈쇼핑",
+        "NS몰"
+      ]
+    },
+    "card_id": "ibk-12113380004",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0004&pageId=CA01010000",
+    "evidence": "[홈쇼핑] GS홈쇼핑, 롯데홈쇼핑, 현대홈쇼핑, CJ홈쇼핑, NS홈쇼핑, 홈&쇼핑"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "yeogi_eottae",
+      "name": "여기어때",
+      "category": "travel.hotel",
+      "aliases": [
+        "여기어때",
+        "여기어때컴퍼니",
+        "GCCOMPANY"
+      ]
+    },
+    "card_id": "lotte-p15841-a15841",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15841-A15841",
+    "evidence": "영화·여행 | 롯데시네마, CGV, 메가박스, 여기어때, NOL(야놀자), 트립닷컴"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "trip_com",
+      "name": "트립닷컴",
+      "category": "travel.agency",
+      "aliases": [
+        "트립닷컴",
+        "Trip.com",
+        "TRIP.COM"
+      ]
+    },
+    "card_id": "lotte-p15841-a15841",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15841-A15841",
+    "evidence": "영화·여행 | 롯데시네마, CGV, 메가박스, 여기어때, NOL(야놀자), 트립닷컴"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "paris_croissant",
+      "name": "파리크라상",
+      "category": "restaurant.bakery",
+      "aliases": [
+        "파리크라상",
+        "PARIS CROISSANT"
+      ]
+    },
+    "card_id": "nh-f10807",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010604",
+    "evidence": "베이커리 | 파리바게트, 뚜레쥬르, 파리크라상 | 5%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "tway_air",
+      "name": "티웨이항공",
+      "category": "travel.airline",
+      "aliases": [
+        "티웨이항공",
+        "티웨이",
+        "T'way"
+      ]
+    },
+    "card_id": "samsung-aap1786",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpykgaA2lVM8pemgAZOa%2Fjw%3D&sn=1",
+    "evidence": "항공 대한항공, 아시아나항공, 제주항공, 진에어, 티웨이항공"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "nike_com",
+      "name": "나이키닷컴",
+      "category": "online_shopping",
+      "aliases": [
+        "나이키닷컴",
+        "nike.com",
+        "NIKE.COM"
+      ]
+    },
+    "card_id": "samsung-aap1878",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvQfnu2tPnahWJcrLOcSyNs%3D&sn=1",
+    "evidence": "온라인 패션몰 무신사, W컨셉, 나이키닷컴, SSF SHOP, 29CM, 지그재그"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ssf_shop",
+      "name": "SSF SHOP",
+      "category": "online_shopping",
+      "aliases": [
+        "SSF SHOP",
+        "SSF샵",
+        "에스에스에프샵"
+      ]
+    },
+    "card_id": "samsung-aap1878",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvQfnu2tPnahWJcrLOcSyNs%3D&sn=1",
+    "evidence": "온라인 패션몰 무신사, W컨셉, 나이키닷컴, SSF SHOP, 29CM, 지그재그"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "toss_shopping",
+      "name": "토스쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "토스쇼핑",
+        "토스 쇼핑"
+      ]
+    },
+    "card_id": "samsung-aap1882",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtkSzT8YKgRyqoOyS5bcuom4%3D&sn=1",
+    "evidence": "15% 토스쇼핑 토스쇼핑"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "toss_prime",
+      "name": "토스프라임",
+      "billing": "subscription",
+      "category": "streaming",
+      "aliases": [
+        "토스프라임",
+        "토스 프라임"
+      ]
+    },
+    "card_id": "samsung-aap1882",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtkSzT8YKgRyqoOyS5bcuom4%3D&sn=1",
+    "evidence": "토스프라임 토스프라임 정기결제건"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hanwha_eagles_ticket",
+      "name": "한화이글스 홈경기 입장권",
+      "category": "sports",
+      "aliases": [
+        "한화이글스 입장권",
+        "한화이글스 티켓",
+        "이글스 티켓"
+      ]
+    },
+    "card_id": "samsung-aap1909",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnF5jo13yfmFFOLYCgWgmnk%3D&sn=1",
+    "evidence": "입장권 한화이글스 홈경기 입장권"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hanwha_eagles_store",
+      "name": "한화이글스 팀스토어",
+      "category": "other",
+      "aliases": [
+        "이글스 레플리카 형지엘리트 샵",
+        "한화이글스 MD샵",
+        "이글스샵"
+      ]
+    },
+    "card_id": "samsung-aap1909",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnF5jo13yfmFFOLYCgWgmnk%3D&sn=1",
+    "evidence": "팀스토어 온라인 이글스 레플리카 형지엘리트 샵, 오프라인 대전 한화생명 볼파크 내 한화이글스 MD샵"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "sungsimdang",
+      "name": "성심당",
+      "category": "restaurant.bakery",
+      "aliases": [
+        "성심당"
+      ]
+    },
+    "card_id": "samsung-aap1909",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnF5jo13yfmFFOLYCgWgmnk%3D&sn=1",
+    "evidence": "델리 성심당, 파리바게뜨, 뚜레쥬르, 던킨, 배스킨라빈스, 써브웨이"
+  }
+]

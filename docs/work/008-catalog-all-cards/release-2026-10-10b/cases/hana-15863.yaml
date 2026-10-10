@@ -1,0 +1,78 @@
+card: hana-15863
+holder:
+  started_on: '2026-01-01'
+  options:
+    - {option: combo, choice: living, effective_from: 2025-07-01}
+cases:
+- name: 40만 구간 관리비 10% 한도 4천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: apartment_fee}
+  expect:
+  - payment: 0
+    benefits: {living-utility-10: 4000}
+    counted: 0
+  calc: 50,000 x 10% = 5,000원이 40만 구간 한도 4,000원에 걸림. 할인 받은 결제는 실적 제외
+- name: 40만 구간 직전은 혜택 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 40만원 미만이라 0원
+- name: 80만 구간 병원 오프라인 10%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 50000, category: pharmacy, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {living-hospital-10: 3000}
+  - payment: 1
+    benefits: {living-hospital-10: 3000}
+  calc: 30,000 x 10% = 3,000. 다음 50,000 x 10% = 5,000인데 80만 구간 한도 6,000에서 3,000 남음
+- name: 120만 구간 주유 오프라인 10%
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 70000, merchant: sk_energy, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {living-fuel-10: 7000}
+  calc: 70,000 x 10% = 7,000. 한도 12,000 안
+- name: 택시 업종과 카카오T 앱 선결제 한도 공유
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: taxi, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: kakao_t, billing: app_prepay}
+  expect:
+  - payment: 0
+    benefits: {living-taxi-10: 3000}
+  - payment: 1
+    benefits: {living-taxi-app-10: 1000}
+  calc: 30,000 x 10% = 3,000. 카카오T 20,000 x 10% = 2,000인데 공유 한도 4,000에서 1,000 남음
+- name: 커피 40만 구간 한도 8천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: ediya}
+  expect:
+  - payment: 0
+    benefits: {living-coffee-10: 8000}
+  calc: 100,000 x 10% = 10,000이 한도 8,000에 걸림
+- name: 세탁업종 오프라인 10%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: laundry, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {living-laundry-10: 2000}
+  calc: 20,000 x 10% = 2,000
+- name: 무이자할부는 할인 없음
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, category: hospital, channel: offline, installment_months: 3, interest_free: true}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 무이자할부는 원더 서비스 제외

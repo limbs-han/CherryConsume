@@ -1,0 +1,188 @@
+schema_version: 2
+id: kb-01552
+issuer: kb
+name: KB국민 스타체크카드
+short_name: KB 스타체크
+kind: check
+product_codes:
+  - '01552'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01552', fetched_at: '2026-10-10', review_no: 260522-01722-HPP}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-05-22'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000, 300000: 10000, 500000: 20000, 1000000: 50000}
+      - {key: fuel-base, per: month, base: 300000}
+    benefits:
+      - key: gs-weekday-50
+        title: GS칼텍스 주중 리터당 50원 환급할인
+        source: page
+        evidence: [GS칼텍스 | 리터당 주중 50원 주말 60원 | 이용금액 건당 10만원까지(월 이용금액 30만원까지) | 20만원 이상 시, GS칼텍스 본사 휘발유 고시가 기준 (경유 등유는 휘발유가 기준으로 환산하여 적용), '할인제외 : LPG 이용금액']
+        target:
+          merchants: [gs_caltex]
+        when:
+          - channel: offline
+            day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: cashback, per_liter: 50}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel-base}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [LPG 충전은 빠진다]
+      - key: gs-weekend-60
+        title: GS칼텍스 주말 리터당 60원 환급할인
+        source: page
+        evidence: [GS칼텍스 | 리터당 주중 50원 주말 60원 | 이용금액 건당 10만원까지(월 이용금액 30만원까지) | 20만원 이상 시]
+        target:
+          merchants: [gs_caltex]
+        when:
+          - channel: offline
+            day:
+              in: [sat, sun]
+              holidays: ignore
+        reward: {type: cashback, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel-base}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [LPG 충전은 빠진다]
+      - key: everland-50
+        title: 에버랜드 50% 환급할인
+        source: page
+        evidence: [에버랜드 | 50% | 이용금액 건당 3만원~5만원까지 할인 적용, '이용금액 건당 3만원~5만원까지 할인 적용(1회 최대 할인금액 25,000원)', '제공조건 : 현장 티켓 구매', '할인제외 : 인터넷 예매']
+        target:
+          merchants: [everland]
+        when:
+          - channel: offline
+            amount: {min: 30000}
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [현장 티켓 구매만 할인한다]
+      - key: family-restaurant-10
+        title: 아웃백·VIPS 10% 환급할인
+        source: page
+        evidence: [아웃백 VIPS | 10% | 이용금액 건당 3만원~10만원까지 할인 적용, '할인제외 : 상품권 구매 / 백화점·대형할인점 입점 점포']
+        target:
+          merchants: [outback, vips]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [백화점·대형할인점 입점 점포는 빠진다]
+      - key: cgv-3000
+        title: CGV 3천원 환급할인
+        source: page
+        evidence: [CGV | 3000원 | 이용금액 건당 7천원 이상 시 할인(월 2회/연 12회), '제공조건 : 현장 구매 및 CGV 웹사이트·CGV 앱 결제', '할인제외 : 상품권 구매 / 매점 이용금액']
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 7000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, count: 2}
+          - {per: year, count: 12}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [영화 티켓만 할인하고 매점은 빠진다]
+      - key: transit-5
+        title: 대중교통 5% 할인
+        source: page
+        evidence: [대중교통(버스·지하철) | 5% | 월 이용금액 2만원까지 할인 적용 | 30만원 이상 시, '후불교통(시내버스, 지하철) 5% 청구할인', 실제 카드이용일이 아닌 이메일 이용내역서상 기재된 이용일 기준으로 할인 적용됩니다., 고속/시외버스 5% 환급할인]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [후불교통 할인은 이용내역서에 적힌 이용일 달로 계산된다]
+      - key: telecom-2500
+        title: 이동통신요금 자동이체 2천5백원 환급할인
+        source: page
+        evidence: [이동통신요금 자동이체 | 2500원 | 이용금액 건당 5만원 이상 시 할인(월 1회) | 30만원 이상 시, '제공조건 : 해당 카드로 3대 이동통신사(SKT, KT, LG U+) 자동이체 등록', '할인 제외 : 유무선 통신요금 통합 청구금액']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 50000}
+        reward: {type: cashback, fixed: 2500}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [유무선 통신요금 통합 청구금액은 빠진다]
+      - key: kyobo-3
+        title: 교보문고 3% 환급할인
+        source: page
+        evidence: [교보문고 | 3% | 이용금액 건당 2만원~5만원까지 할인 적용, '제공조건 : 현장구매 및 교보문고 홈페이지·교보문고 앱 결제', '할인 제외 : 핫트랙스 이용금액']
+        target:
+          merchants: [kyobo_book]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [핫트랙스 이용금액은 빠진다]
+      - key: oliveyoung-5
+        title: 올리브영 5% 환급할인
+        source: page
+        evidence: [올리브영 | 5% | 이용금액 건당 3만원~5만원까지 할인 적용, '할인제외 : 상품권 및 선불카드 구입·충전금액 / 백화점·대형할인점 입점 점포']
+        target:
+          merchants: [olive_young]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [백화점·대형할인점 입점 점포는 빠진다]
+      - key: openmarket-3
+        title: G마켓·옥션 3% 환급할인
+        source: page
+        evidence: [G마켓 옥션 | 3% | 이용금액 건당 3만원~10만원까지 할인 적용, 제휴사이트 링크로 구매 또는 PG결제 등으로 인한 가맹점정보 확인 불가시 할인서비스 적용이 불가합니다.]
+        target:
+          merchants: [auction, gmarket]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+    unmodeled: [최초 발급 후 사용등록일로부터 30일까지 전월 실적 없이 통합한도 5천원 안에서 할인하는 유예는 30일 단위를 담을 수 없어 계산하지 않는다, 스타체크 동일계열카드를 함께 가지면 통합할인한도와 유예 기준을 함께 쓴다, '무승인 금액(자판기, 터널통행료, 기차·고속버스 취소 반환 수수료)과 정부지원금은 실적에서 빠진다', 통합할인한도는 본인 회원 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2007년 3월 8일 출시와 2026.05.22 심의필만 적었다. 심의일을 현재 규칙의 시작일로 잠정 적용한다., assumed: '2026-05-22'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits[gs-weekend-60].when', question: 원문은 주말이라고만 적었다. 공휴일은 주말로 보지 않는다, assumed: 'sat, sun'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 해외 이용금액은 실적에서 빠진다. 주유 리터 환산은 공통 휘발유 기준가를 쓴다. 공통 가맹점 vips가 필요하다.

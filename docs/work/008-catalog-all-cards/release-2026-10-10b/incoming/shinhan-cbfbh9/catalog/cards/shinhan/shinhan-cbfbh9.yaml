@@ -1,0 +1,141 @@
+schema_version: 2
+id: shinhan-cbfbh9
+issuer: shinhan
+name: 신한카드 경차사랑 Life
+short_name: 신한 경차사랑 Life
+kind: credit
+product_codes: [CBFBH9, CBFBHA, CBFBHB, CBFBHC, CBFBHD, CBFBHE]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1188377_2207.html', fetched_at: 2026-10-10}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201802220001', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [fuel, gift_card.prepaid_card, prepaid_charge, tax.local, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {tier: 300000}
+    options:
+      - key: fuel
+        title: 카드에 등록한 경차의 유종
+        choices:
+          - {key: gasoline_diesel, title: 휘발유·경유}
+          - {key: lpg, title: LPG}
+        default: null
+        change: immediate
+    limits:
+      - key: fuel_discount
+        per: month
+        amount: {300000: 10000, 700000: 15000, 1000000: 20000}
+      - key: life
+        per: month
+        amount: {300000: 10000, 700000: 15000, 1000000: 20000}
+    stacks:
+      - {key: tax_refund}
+    benefits:
+      - key: fuel-tax-refund-gasoline
+        title: 경차 유류세 환급 휘발유·경유 리터당 250원
+        source: page
+        evidence: ['휘발유/경유: 250원/ℓ', 연간한도 30만원(2026년 12월 31일까지 시행), 한국석유공사에서 공시하는 지역별 평균판매 유가를 기준으로 주유량(리터)을 산정, '경차 유류세 환급 방법: 결제일할인', '경형자동차 유류세 환급 지침에 의거하여 유류결제대금 1회 6만원, 1일 12만원까지 유류세 환급이 가능하며, 1회 48리터 초과 주유 시 부정사용으로 인정되어 환급이 제한됩니다.']
+        target:
+          categories: [fuel]
+        when:
+          - option:
+              fuel: [gasoline_diesel]
+        reward: {type: billing_discount, per_liter: 250}
+        limits:
+          - {per: txn, base: 60000}
+          - {per: day, base: 120000}
+          - {per: year, amount: 300000}
+        stack: tax_refund
+        valid_until: 2026-12-31
+        unmodeled: [주유량은 한국석유공사가 공시하는 광역시·도별 평균 판매가격으로 환산한다. 앱은 전국 평균 휘발유 가격 하나로 환산해 지역과 경유 가격 차이만큼 실제 환급액과 다를 수 있다., 1회 48리터를 넘게 주유하면 부정사용으로 보아 환급하지 않는다., 카드 앞면에 적힌 차량에 주유한 경우만 환급한다.]
+      - key: fuel-discount-80
+        title: 주유소 리터당 80원 할인
+        source: page
+        evidence: [(주유할인) 모든 주유소 및 충전소 80원/ℓ 할인, 30만원 이상 70만원 미만 | 1만원, 70만원 이상 100만원 미만 | 1만 5천원, 100만원 이상 | 2만원, '주유할인은 SK에너지 고시유가를 기준으로 주유량(ℓ)을 산정하여 제공합니다.(휘발유, 경유: 휘발유 고시가 적용, LPG: LPG고시가 적용)', '1일 2회, 1회 최대 5만원까지 주유금액에 한하여 제공됩니다.(단, 신청카드의 유종에 대하여 할인 제공되며, 그 외 유종에 대해서는 할인 불가)']
+        target:
+          categories: [fuel]
+        when:
+          - option:
+              fuel: [gasoline_diesel]
+        reward: {type: billing_discount, per_liter: 80}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 2}
+          - {shared: fuel_discount}
+        tiers: {from: 300000}
+        unmodeled: [주유량은 SK에너지 고시유가로 환산한다. 앱은 전국 평균 휘발유 가격으로 환산한다.]
+      - key: life-convenience
+        title: 편의점 10% 할인
+        source: page
+        evidence: ['(생활서비스) 편의점, 병원/약국, 커피전문점 10% 할인, 주말 3대 마트 5% 할인', '편의점, 병원/약국, 커피전문점 각각 일 1회, 월 5회 횟수 제한이 있으며, 1회 승인금액 1만원을 한도로 최대 1천원까지 할인서비스가 적용됩니다.', 30만원이상 70만원미만 | 1만원, 70만원이상 100만원미만 | 1만 5천원, 100만원이상 | 2만원]
+        target:
+          categories: [convenience]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: life-medical
+        title: 병원·약국 10% 할인
+        source: page
+        evidence: ['편의점, 병원/약국, 커피전문점 각각 일 1회, 월 5회 횟수 제한이 있으며, 1회 승인금액 1만원을 한도로 최대 1천원까지 할인서비스가 적용됩니다.', '병원/약국 10% 할인 서비스대상 가맹점에서 동물병원은 제외, 치과, 한의원 포함하여 제공합니다.']
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: life-cafe
+        title: 커피전문점 10% 할인
+        source: page
+        evidence: ['편의점, 병원/약국, 커피전문점 각각 일 1회, 월 5회 횟수 제한이 있으며, 1회 승인금액 1만원을 한도로 최대 1천원까지 할인서비스가 적용됩니다.']
+        target:
+          categories: [cafe]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: weekend-mart-5
+        title: 주말 3대 마트 5% 할인
+        source: page
+        evidence: ['주말 3대 마트(롯데마트, 이마트, 홈플러스) 일1회, 승인금액 기준 1회 5만원까지 할인 적용(온라인 할인마트 및 SSM 제외)', 주말 할인서비스는 공휴일 여부와 상관없이 토요일/일요일에 해당되며, 토요일/일요일 외 공휴일은 해당되지 않습니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+          - day:
+              in: [sat, sun]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {shared: life}
+        tiers: {from: 300000}
+    unmodeled: [LPG 차량의 유류세 환급(리터당 160.82원)과 LPG 리터당 80원 할인은 원 미만 단가와 LPG 고시가 환산을 담지 못해 계산하지 않는다., '한화손해보험 다이렉트 자동차보험을 인터넷이나 모바일로 가입해 1회 20만원 이상 30만원 미만 결제하면 2만원, 30만원 이상이면 3만원을 연 1회 할인한다. 가맹점 키가 없어 계산하지 않는다.', 발급 대상은 1가구 1경차 소유자이고 카드 명의자와 차량 명의자가 같아야 한다., 경차 유류세 환급은 한 카드사에서만 받을 수 있다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[fuel-tax-refund-gasoline]', question: 유류세 환급에도 간편결제와 무이자할부 제외가 적용되는지 상품 페이지에 없다. 신한 기본 제외를 그대로 두었다, assumed: 카드사 기본 제외 적용}
+  - {path: 'revisions[0].benefits[fuel-tax-refund-gasoline]', question: 유류세 환급이 전월 실적과 무관한지 원문에 명시가 없다. 실적 조건 없이 두었다, assumed: 실적 조건 없음}
+notes: '신한카드 경차사랑 Life 상품 페이지와 상세 API 기준. 연회비는 API의 Local과 VISA 모두 0원. 카드 출시 2018.02.22, 여신금융협회 심의필 제2020-C1a-06464호. 전월 실적 제외: 주유소와 충전소 이용거래, 카드대출, 지방세, 수도요금, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 거래취소. 교통 이용금액은 전전월 기준. 신규 발급 회원은 등록월 다음 달 말까지 30만~70만원 구간 한도. 주유할인과 생활서비스 한도표가 따로 있어 한도 키를 둘로 나눴다. 유류세 환급은 2026-12-31까지 시행이라 그날까지만 둔다.'

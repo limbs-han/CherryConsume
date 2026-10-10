@@ -1,0 +1,57 @@
+card: woori-103496
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 메가커피 5% 건당 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: mega_coffee}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: compose_coffee}
+  expect:
+  - {payment: 0, benefits: {coffee-5: 500}, counted: 10000}
+  - {payment: 1, benefits: {coffee-5: 1000}}
+  calc: 10,000 × 5% = 500. 30,000 × 5% = 1,500을 건당 1,000으로 자른다
+- name: 20만 직전은 커피 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: mega_coffee}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 편의점 오프라인 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  calc: 10,000 × 5% = 500
+- name: 배달앱 온라인 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 18000, merchant: baemin, channel: online}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 900}}
+  calc: 18,000 × 5% = 900
+- name: 아웃백 5만원 이상 하반기 1회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 60000, merchant: outback}
+  - {at: 2026-12-05T19:00, amount: 60000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {outback-h2: 5000}}
+  - {payment: 1, benefits: {}}
+  calc: 7~12월 1회. 두 번째는 없음
+- name: 여행 실적 없어도 5% 월 5천원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: yanolja, channel: online}
+  expect:
+  - {payment: 0, benefits: {travel-5: 500}}
+  calc: 10,000 × 5% = 500. 전월 실적 조건 없음
+- name: 아웃백 상반기 5만원 이상
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-03-05T19:00, amount: 50000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {outback-h1: 5000}}
+  calc: 1~6월 1회 5,000

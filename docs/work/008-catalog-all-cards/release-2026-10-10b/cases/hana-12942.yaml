@@ -1,0 +1,44 @@
+card: hana-12942
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {domestic-0-8: 80}
+  calc: 10,000원 x 0.8% = 80원
+- name: 하나페이 1.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general, payment_method: hana_pay}
+  expect:
+  - payment: 0
+    benefits: {hanapay-1-8: 180}
+  calc: 10,000원 x 1.8% = 180원
+- name: 하나페이 한도 넘친 금액 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 6000000, category: other, payment_method: hana_pay}
+  expect:
+  - payment: 0
+    benefits: {hanapay-1-8: 100000, domestic-0-8: 3555}
+  calc: 1.8% 한도 10만원은 5,555,555원까지. 남은 444,445원 x 0.8% = 3,555.56원 버림 3,555원
+- name: 해외 1.8% 한도 1만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1000000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-1-8: 10000}
+  calc: 1,000,000원 x 1.8% = 18,000원이 월 1만에 걸림
+- name: 무이자 할부 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, interest_free: true, installment_months: 3}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 무이자할부는 적립 제외

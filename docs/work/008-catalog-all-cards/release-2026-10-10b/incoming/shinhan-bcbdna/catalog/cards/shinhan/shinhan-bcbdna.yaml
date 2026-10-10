@@ -1,0 +1,122 @@
+schema_version: 2
+id: shinhan-bcbdna
+issuer: shinhan
+name: 신한카드 Deep Store(우리먹거리)
+short_name: 신한 Deep Store 우리먹거리
+kind: credit
+product_codes: [BCBDNA]
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: amex, amount: 13000}
+  - {scope: global, brand: mastercard, amount: 16000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1229261_2207.html', fetched_at: 2026-10-10}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/searchPagingFixedCardProductList?listID=202001020012&pageSize=8&index=1', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 900000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, gift_card.prepaid_card, insurance.social, prepaid_charge, tax, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 1
+    new_card: {tier: 300000}
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 15000, 600000: 25000, 900000: 35000, 1200000: 50000}
+      - {key: living_count, per: month, count: 8}
+    benefits:
+      - key: living-15
+        title: 생활쇼핑 5만원 이상 15% 할인
+        source: page
+        evidence: [생활쇼핑 기본 10% 결제일 할인이 적용됩니다., 1회 이용금액 5만원 이상 시 추가 5% 결제일 할인(총 15% 할인)이 적용됩니다., '월 8회 (단, 1회 이용금액 5만원 이상 15% 할인 서비스는 월 8회 생활쇼핑 할인 내 월 최대 4회 적용)', 1회 이용금액 10만원까지 할인이 적용됩니다.(1회 이용금액 10만원 이상인 거래건은 10만원 기준으로 할인 적용), 오프라인 매장에 한하여 적용되며 온라인몰 및 상품권 구매, 문화센터 등 비쇼핑 항목은 생활쇼핑 할인 서비스에서 제외됩니다., 3대 할인점(이마트/롯데마트/홈플러스) 및 창고형 할인매장(이마트 트레이더스/롯데 VIC마켓)은 생활쇼핑 할인 서비스에서 제외됩니다., '생활쇼핑 가맹점 업종: 슈퍼마켓/할인점/편의점/농협(마트)/정육점/생활잡화/식품잡화/수입상품점/주류판매/청과물/농수산물/농가공산품/복지매점/보훈매장/사원전용매장/농수축협직판장/미곡상/대량양판점/연쇄점/연금매장점']
+        target:
+          categories: [convenience, grocery_mart]
+          exclude_merchants: [emart, homeplus, lotte_mart, traders]
+        when:
+          - {channel: offline}
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 4}
+          - {shared: living_count}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: living-10
+        title: 생활쇼핑 10% 할인
+        source: page
+        evidence: [생활쇼핑 기본 10% 결제일 할인이 적용됩니다., 월 8회, 1회 이용금액 10만원까지 할인이 적용됩니다., 오프라인 매장에 한하여 적용되며 온라인몰 및 상품권 구매, 문화센터 등 비쇼핑 항목은 생활쇼핑 할인 서비스에서 제외됩니다., 3대 할인점(이마트/롯데마트/홈플러스) 및 창고형 할인매장(이마트 트레이더스/롯데 VIC마켓)은 생활쇼핑 할인 서비스에서 제외됩니다.]
+        target:
+          categories: [convenience, grocery_mart]
+          exclude_merchants: [emart, homeplus, lotte_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: living_count}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: cafe-bakery-10
+        title: 커피전문점·제과점 10% 할인
+        source: page
+        evidence: [커피전문점/제과점 업종 10% 결제일 할인, '일 1회, 월 3회', 1회 이용금액 1만원 이상인 거래건에 대해 할인이 적용되며, 1회 이용금액 5만원까지 할인이 적용됩니다.]
+        target:
+          categories: [cafe, restaurant.bakery]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: weekend-mart-10
+        title: 주말 3대 할인점 10% 할인
+        source: page
+        evidence: [주말 3대 할인점 10% 결제일 할인, '이마트, 롯데마트, 홈플러스', '이마트트레이더스, 롯데VIC마켓', '기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스), 온라인몰 및 상품권 구매, 문화센터 등 비쇼핑 항목은 3대 할인점 서비스에서 제외됩니다.', 주말 할인서비스는 공휴일 여부와 상관없이 “토요일/일요일”에 해당합니다., '주말 할인 서비스는 서비스 별 각 일 1회, 월 3회까지 적용됩니다.', 1회 이용금액 1만원 이상인 거래건에 대해 할인이 적용되며, 주말 복합쇼핑몰 할인, 3대 할인점 할인 서비스는 1회 이용금액 5만원까지 할인이 적용됩니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart, traders]
+        when:
+          - {channel: offline}
+          - day:
+              in: [sat, sun]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: weekend-lotte-cinema
+        title: 주말 롯데시네마 현장 예매 5천원 할인
+        source: page
+        evidence: [주말 롯데시네마 현장 예매시 5천원 결제일 할인, '현장 영화 예매에 한하여 적용되며 온라인 예매 및 매점 이용, 상품권 구매는 제외됩니다.', '주말 할인 서비스는 서비스 별 각 일 1회, 월 3회까지 적용됩니다.', 1회 이용금액 1만원 이상인 거래건에 대해 할인이 적용되며]
+        target:
+          merchants: [lotte_cinema]
+        when:
+          - {channel: offline}
+          - day:
+              in: [sat, sun]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [롯데시네마 매점 이용과 상품권 구매는 할인하지 않는다.]
+    unmodeled: ['생활쇼핑 업종 중 정육점, 생활잡화, 식품잡화, 수입상품점, 주류판매, 청과물, 농수산물, 복지매점, 보훈매장 같은 업종은 공통 업종이 없어 계산하지 않는다.', 롯데 VIC마켓과 코스트코 같은 창고형 할인매장은 생활쇼핑에서 빠지지만 마트 업종으로만 기록하면 구별하지 못한다., '백화점, 마트, 복합쇼핑몰에 입점한 생활쇼핑, 커피전문점, 제과점 가맹점은 할인하지 않는다.', '주말 복합쇼핑몰 10% 할인은 스타필드 하남·고양, 롯데월드타워 쇼핑몰, 롯데몰 은평·김포공항·수원 지점의 직영 가맹점만 대상이라 지점을 구별하지 못해 계산하지 않는다.', Master 브랜드 해외 일시불 거래의 해외서비스 수수료 0.18% 포인트 적립은 브랜드 선택을 묻지 않아 계산하지 않는다., 전월 실적과 월 할인 횟수는 본인과 가족카드를 합산한다., 할인받은 거래가 같은 달에 취소되면 할인 횟수와 한도가 복원된다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다, assumed: '2026-10-10'}
+notes: '신한카드 Deep Store(우리먹거리) 상품 페이지와 신용카드 목록 API 기준. entryId 202408120003. 연회비는 API 값으로 S&(카드사 기본 브랜드 코드 8, 국내전용 연회비로 아멕스 해외 가맹점 이용) 13,000원, Master 16,000원. 카드 출시 2018.07.10, 심의필 제2018-C1a-08191호. 실적 제외: 할인 적용 매출, 아파트 관리비, 국세, 지방세, 수도요금, 4대보험, 카드대출, 연회비, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 거래취소. 교통 이용금액은 전전월 기준. 신규 발급 회원은 등록월 다음 달 말까지 30만~60만원 구간 한도. 생활쇼핑은 월 8회이고 그중 5만원 이상 15%는 월 4회다. 15%와 10%를 같은 묶음에 두고 월 8회를 함께 쓰는 한도 living_count로 묶었다.'

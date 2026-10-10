@@ -1,0 +1,90 @@
+card: hana-4984
+holder:
+  started_on: '2026-01-01'
+  facts: {hana_bank_account: true}
+cases:
+- name: 30만 구간 마트 10만원마다 5천, 1만 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 99999, merchant: emart}
+  - {at: 2026-11-05T10:00, amount: 1, merchant: homeplus}
+  - {at: 2026-11-06T10:00, amount: 250000, merchant: lotte_mart}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {mart-money: 5000}
+  - payment: 2
+    benefits: {mart-money: 5000}
+  calc: 합계 99,999원은 0, 100,000원에서 5천, 350,000원이면 15,000이지만 30만 구간 월 1만 한도라 5천 더
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: emart}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0
+- name: 60만 구간 백화점 2만 한도, 온라인쇼핑, 주유는 실적 제외
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 500000, merchant: shinsegae_department, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: gs_caltex}
+  expect:
+  - payment: 0
+    benefits: {department-money: 20000}
+  - payment: 1
+    benefits: {online-money: 5000}
+  - payment: 2
+    benefits: {fuel-money: 5000}
+    counted: 0
+  calc: 백화점 500,000원이면 25,000이지만 60만 구간 2만 한도. 쿠팡 10만원 5천. 주유 10만원 5천, 주유는 실적에서 빠짐
+- name: 생활 자동이체와 교통은 합쳐 월 1만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: skt, billing: autopay}
+  - {at: 2026-11-05T10:00, amount: 200000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {life-autopay-money: 5000}
+  - payment: 1
+    benefits: {life-transit-money: 5000}
+  calc: 통신 10만원 5천. 교통 20만원이면 1만이지만 생활 통합 월 1만 한도에 5천만 남음
+- name: 60만 구간 학원과 병원 통합 2만
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 300000, category: education.academy, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 200000, category: hospital}
+  expect:
+  - payment: 0
+    benefits: {academy-money: 15000}
+    counted: 0
+  - payment: 1
+    benefits: {hospital-money: 5000}
+  calc: 학원 30만원 15,000, 학원은 실적에서 빠짐. 병원 20만원이면 1만이지만 통합 2만에 5천 남음
+- name: 60만 직전이면 학원 없음
+  prev_month_spend: 599999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: education.academy, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 학원은 60만원 이상만
+- name: 아파트관리비와 해외, 커피
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: apartment_fee, billing: autopay}
+  - {at: 2026-11-05T10:00, amount: 300000, category: restaurant.general, region: overseas}
+  - {at: 2026-11-06T10:00, amount: 4000, merchant: starbucks}
+  - {at: 2026-11-07T10:00, amount: 5000, merchant: coffee_bean}
+  expect:
+  - payment: 0
+    benefits: {apartment-money: 5000}
+  - payment: 1
+    benefits: {overseas-money: 10000}
+  - payment: 2
+    benefits: {coffee-4000: 4000}
+  - payment: 3
+    benefits: {}
+  calc: 관리비 10만원 이상 5천. 해외 30만원이면 15,000이지만 월 1만. 커피 4천원 할인은 월 1회

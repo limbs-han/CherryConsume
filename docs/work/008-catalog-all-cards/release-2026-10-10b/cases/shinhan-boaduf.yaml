@@ -1,0 +1,29 @@
+card: shinhan-boaduf
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 배민 5%와 배민 외 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {baemin-5: 1000}, counted: 20000}
+  - {payment: 1, benefits: {other-1: 100}, counted: 10000}
+  calc: 20,000 × 5% = 1,000. 10,000 × 1% = 100
+- name: 배민 월 3만원, 배민 외 월 1만원 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 700000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 1200000, category: online_shopping, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {baemin-5: 30000}, counted: 700000}
+  - {payment: 1, benefits: {other-1: 10000}, counted: 1200000}
+  calc: 700,000 × 5% = 35,000이지만 30,000. 1,200,000 × 1% = 12,000이지만 10,000
+- name: 20만원 직전이면 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-03T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 20만원 미만

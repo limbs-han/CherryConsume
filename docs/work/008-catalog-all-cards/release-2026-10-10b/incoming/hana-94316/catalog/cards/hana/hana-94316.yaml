@@ -1,0 +1,129 @@
+schema_version: 2
+id: hana-94316
+issuer: hana
+name: HERO 체크카드
+short_name: 하나 HERO 체크
+search_names: [HERO 체크, 임영웅 체크카드, 히어로 체크카드]
+kind: check
+product_codes:
+  - '94316'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=18643', fetched_at: 2026-10-10, review_no: L-25-0290}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-07-15
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    limits:
+      - key: total
+        per: month
+        amount: {300000: 10000, 700000: 20000}
+    benefits:
+      - key: hero-subscription-10
+        title: 구독 10% 하나머니 적립
+        source: page
+        evidence: ['구독 | 음원/영상 스트리밍 : 멜론, 유튜브프리미엄, 넷플릭스, 디즈니+, Wavve 디지털 멤버십 : 쿠팡로켓와우 | 10% | 2천원 | 2천원', 월 통합 적립 한도 | 1만원 | 2만원]
+        target:
+          merchants: [coupang_wow, disney_plus, melon, netflix, wavve, youtube_premium]
+        reward: {type: points, program: hana_money, rate: 10, round: round}
+        limits:
+          - {per: month, amount: 2000}
+          - {shared: total}
+        tiers: {from: 300000}
+      - key: living-5
+        title: 통신·관리비·전기·가스 5% 하나머니 적립
+        source: page
+        evidence: ['생활비 | 통신요금: SKT, KT, LGU+ 생활요금: 아파트관리비, 전기요금, 가스요금 | 5% | 2천원 | 2천원', '생활비(통신요금) : 결합상품(인터넷, TV, 유선전화 등) 요금은 SKT, SKB, KT, LGU+의 자동이체 요금으로 청구된 경우에 한하여 서비스가 제공됨. 약정금액 대납, 지점을 통한 월납, 알뜰폰, 자동납부로 납부하지 않은 금액은 서비스에서 제외됨']
+        target:
+          categories: [apartment_fee, utility.electricity, utility.gas]
+          merchants: [kt, lg_uplus, skt]
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 2000}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [통신요금은 자동납부만 대상이고 약정금액 대납과 지점 월납은 제외한다. 아파트관리비와 전기·가스요금의 납부 방식 조건은 원문에 없다]
+      - key: mart-5
+        title: 대형마트 5% 하나머니 적립
+        source: page
+        evidence: ['대형마트 | 이마트, 홈플러스, 롯데마트 | 5% | 4천원 | 4천원', '대형마트 : 창고형 할인매장과 상설·임대매장은 서비스에서 제외됨', '대형마트, 슈퍼마켓, 백화점, 병원 영역 및 헬스업종, 골프연습장업종 영역 적립 서비스는 오프라인 결제건에 한하여 제공']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [대형마트 안 상설·임대매장은 제외한다]
+      - key: supermarket-5
+        title: 슈퍼마켓 5% 하나머니 적립
+        source: page
+        evidence: ['슈퍼마켓 | GS THE FRESH, 롯데슈퍼, 이마트에브리데이, 홈플러스익스프레스 | 5% | 4천원 | 4천원']
+        target:
+          merchants: [emart_everyday, gs_the_fresh, homeplus_express, lotte_super]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: total}
+        tiers: {from: 300000}
+      - key: department-5
+        title: 백화점 5% 하나머니 적립
+        source: page
+        evidence: ['백화점 | 신세계백화점, 현대백화점, 롯데백화점 | 5% | 3천원 | 3천원', '백화점 : 상설 및 임대 매장, 상품권 구입, 선불카드(선불전자 지급수단) 충전은 서비스에서 제외됨']
+        target:
+          exclude_categories: [gift_card, prepaid_charge]
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 3000}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [백화점 안 상설·임대 매장은 제외한다]
+      - key: hospital-2
+        title: 병원 2% 하나머니 적립
+        source: page
+        evidence: ['병원 | 종합병원, 일반병원, 치과, 한방병원, 한의원 | 2% | 2천원 | 2천원']
+        target:
+          categories: [hospital]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 2, round: round}
+        limits:
+          - {per: month, amount: 2000}
+          - {shared: total}
+        tiers: {from: 300000}
+      - key: base-0-2
+        title: 국내외 가맹점 0.2% 하나머니 적립
+        source: page
+        evidence: [국내외 | 국내외 가맹점 | 0.2% | - | -, '국내외 가맹점 : 국세, 지방세, 수도/전기요금, 그외 공과금(우편요금, 과태료, 범칙금, 벌금, 국가/공공기관/공공단체가 부과하는 부담금), 도시가스 요금, 아파트관리비, 국민연금/고용보험료/산재보험료/건강보험료 납부 금액, 스쿨뱅킹, 초·중·고 학교납입금, 대학등록금, 대학원등록금, 상품권 및 기프트카드구매,선불카드 및 선불전자지급 수단(하나머니 등)충전 금액, 부동산 임대료, 국내외 ATM 이용금액은 서비스에서 제외됨']
+        target:
+          exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+          all: true
+        reward: {type: points, program: hana_money, rate: 0.2, round: round}
+        limits:
+          - {shared: total}
+        tiers: {from: 300000}
+    unmodeled: ['건강 영역(헬스 업종, 골프연습장 업종, 카카오골프 5%, 월 2천원)은 맞는 업종과 가맹점이 없어 계산하지 않는다', 적립 대상이 겹치면 적립금액이 높은 서비스 하나만 준다, 국내외 ATM 이용금액은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].limits[total]', question: 월 통합 적립 한도 1만원/2만원에 국내외 0.2% 적립도 들어가는지 원문 표만으로 단정할 수 없다. 덜 주는 쪽인 포함으로 둔다., assumed: 포함}
+  - path: revisions[0].benefits[base-0-2].tiers
+    question: 국내외 0.2% 행의 한도 칸이 '-'라 실적 조건이 없는지 원문이 불명확하다. 서비스 제공 조건이 30만원 이상이라 0.2%도 30만원부터로 둔다.
+    assumed: '300000'
+  - {path: 'revisions[0].benefits', question: 영역 한도를 다 쓴 결제에 0.2% 적립을 주는지 원문에 없다., assumed: 주지 않음}
+notes: 2026-10-10 공식 상품 페이지(상세 번호 CD_PD_SEQ=18643, 목록 상품 번호 94316, 준법심의 L-25-0290)에서 옮겼다. 연회비 없음. 발급수수료 2,000원은 다음 달 말일까지 1만원 이상 쓰면 돌려준다. 실적은 지난달 1일~말일 승인 기준 국내외 일시불. 하나머니 소수점 이하 반올림. 한 결제에 적립금액이 높은 서비스 하나만 준다.

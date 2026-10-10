@@ -1,0 +1,55 @@
+card: lotte-p14828-a14828
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 최저 구간 한도와 할인받은 결제 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, category: insurance.private, amount: 50000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {insurance-payment-discount: 13000}
+    counted: 0
+  calc: 최저 구간 한도 13000원 안에서 할인. 할인받은 결제 전체가 실적에서 빠짐
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, category: insurance.private, amount: 50000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 50000
+  calc: 최저 구간보다 1원 적어 할인 없음
+- name: 최고 구간 금액이 한도보다 적으면 그 금액만큼
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-20T10:00, category: insurance.private, amount: 9900, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {insurance-payment-discount: 9900}
+  calc: 한도 25000원보다 결제 9,900원이 적어 9,900
+- name: 최고 구간 한도
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-20T10:00, category: insurance.private, amount: 50000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {insurance-payment-discount: 25000}
+  calc: 최고 구간 한도 25000원
+- name: 신규 발급 특례 기간은 실적 없어도 최저 구간
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-20T10:00, category: insurance.private, amount: 50000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {insurance-payment-discount: 13000}
+  calc: 10월 발급이라 11월 말까지 최저 구간으로 보아 13000원
+- name: 자동납부가 아니면 할인 없음
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-20T10:00, category: insurance.private, amount: 50000, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부 연결 시에만 할인

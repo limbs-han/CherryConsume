@@ -1,0 +1,97 @@
+card: hana-19109
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 지하철 1,450원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1450, category: transit.subway}
+  expect:
+  - payment: 0
+    benefits: {transit-300: 300}
+    counted: 1450
+  calc: 1,450원 / 1,200원 = 1단위 x 300원. 대중교통 할인 매출은 실적에 남는다
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 6000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 6000
+  calc: 20만원 미만이라 할인 없음
+- name: 스타벅스 300원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 6000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {coffee-300: 300}
+    counted: 0
+  calc: 건당 300원. 할인 받은 매출은 실적 제외
+- name: 편의점 3천원 미만과 이상
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 2999, merchant: gs25}
+  - {at: 2026-11-04T09:00, amount: 3000, merchant: gs25}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {convenience-300: 300}
+  calc: 3,000원 이상만 300원
+- name: 20만 구간 넷플릭스 월 1회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 17000, merchant: netflix, billing: autopay}
+  - {at: 2026-11-05T08:00, amount: 17000, merchant: netflix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {digital-3000: 3000}
+  - payment: 1
+    benefits: {}
+  calc: 20만 구간은 월 1건
+- name: 60만 구간 주유 2회
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 50000, merchant: sk_energy}
+  - {at: 2026-11-05T08:00, amount: 50000, merchant: gs_caltex}
+  - {at: 2026-11-06T08:00, amount: 50000, merchant: s_oil}
+  expect:
+  - payment: 0
+    benefits: {fuel-3000: 3000}
+  - payment: 1
+    benefits: {fuel-3000: 3000}
+  - payment: 2
+    benefits: {}
+  calc: 60만 구간은 월 2건
+- name: 쇼핑 마트와 백화점이 건수 함께 씀
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 29999, merchant: emart, channel: offline}
+  - {at: 2026-11-04T09:00, amount: 30000, merchant: emart, channel: offline}
+  - {at: 2026-11-05T08:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {shopping-mart-3000: 3000}
+  - payment: 2
+    benefits: {}
+  calc: 3만원 이상만 대상. 20만 구간 쇼핑 월 1건
+- name: 온라인쇼핑 3천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {shopping-store-3000: 3000}
+  calc: 3만원 이상 쿠팡 3,000원
+- name: 통신 자동이체 3천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 50000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {living-3000: 3000}
+  calc: 3만원 이상 자동이체 3,000원

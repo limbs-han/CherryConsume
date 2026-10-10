@@ -1,0 +1,105 @@
+schema_version: 2
+id: hyundai-179411
+issuer: hyundai
+name: 케이뱅크-현대카드Z play
+short_name: 현대 Z play
+search_names: [Z play, 제트 플레이, 케이뱅크 현대카드Z play]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260804-0944-62_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%BC%80%EC%9D%B4%EB%B1%85%ED%81%AC%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9CZ%20play%20Ed2_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-05, review_no: 제260720-001호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefits:
+      - key: online-mall-10
+        title: 온라인몰 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 네이버플러스 스토어, 쿠팡, G마켓, 옥션, 11번가, SSG.COM, 컬리', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 대상 온라인몰 통합 1일 1회 할인 적용, 쿠팡의 경우 쿠팡이츠 결제 건은 혜택 제외]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, naver_plus_store, ssg_com]
+          exclude_merchants: [coupang_eats]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [네이버플러스 스토어는 naver.com 도메인으로 확인되는 가맹점만 할인한다, 공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱에서 결제하면 제외한다]
+      - key: restaurant-10
+        title: 일반음식점 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 한식, 뷔페, 패스트푸드 등 일반음식점 업종', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 대상 일반음식점 업종 통합 1일 1회 할인 적용]
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+      - key: movie-10
+        title: 영화 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : CGV, 메가박스, 롯데시네마', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 대상 영화 영역 통합 1일 1회 할인 적용, '대상점 매점에서 메뉴(팝콘, 음료 등) 결제 시, 할인 적용 불가']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [매점 메뉴 결제는 할인하지 않는다, 온라인은 공식 홈페이지와 앱 안의 결제만 할인한다]
+      - key: overseas-10
+        title: 해외 가맹점 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 해외 온·오프라인 가맹점', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, 국내외겸용 카드 이용 시에 한해 혜택 제공, 대상 해외 가맹점 통합 1일 1회 할인 적용]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [국내외겸용 카드만 할인하고 국내전용 카드는 제외한다, 국제브랜드 수수료와 해외서비스 수수료는 할인에서 뺀다]
+      - key: digital-10
+        title: 디지털 콘텐츠 서비스 10% 청구 할인
+        source: manual
+        evidence: ['대상점 : 넷플릭스, 유튜브 프리미엄, 디즈니+, 멜론, 지니', 전월 이용 금액 50만원 이상 시 월 6천원 할인, 전월 이용 금액 100만원 이상 시 월 1만원 할인, '통신 요금 내 합산 청구, 앱스토어 결제(인앱 결제)등 가맹점 구분이 불가한 경우 혜택 적용 불가']
+        target:
+          merchants: [disney_plus, genie, melon, netflix, youtube_premium]
+        when:
+          - billing_not: [in_app]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+        tiers: {from: 500000}
+        unmodeled: [넷플릭스·유튜브 프리미엄·디즈니+는 PC 공식 홈페이지에서 결제 수단을 등록해야 할인한다, 통신 요금에 합산 청구되면 할인하지 않는다]
+    unmodeled: [승인된 가맹점명이 PG나 간편결제 이름이면 그 결제는 할인에서 뺀다, 영역별 한도와 1일 1회는 매출전표 접수 순서로 적용한다, 실적과 한도는 본인과 가족 카드를 합산한다, 고속도로 통행료·후불하이패스·TV 수신료는 실적에서 뺀다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2026-04-24이고 이 가이드북은 2026년 10월 기준이다. 그 사이 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[restaurant-10].target', question: 일반음식점 업종에 패스트푸드를 넣고 제과는 넣지 않았다. 현대카드 업종 분류에서 제과점이 일반음식점에 드는지 원문에 없다, assumed: '[restaurant.general, restaurant.fastfood]'}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 20,000원(기본 10,000+제휴 10,000), 가족카드 5,000원. 실적은 전월 1일~말일 일시불과 할부, 할인 받은 결제 전체와 무이자 할부는 실적에서 뺀다. 취소는 승인월 실적에서 빼고 해외는 취소 달에서 뺀다. 신규 발급 시 카드 수령 등록월 다음 달까지 50만 구간 한도를 주고 실제 100만원 이상이면 100만 구간 한도다. 할인 제외는 카드사 파일 혜택 제외보다 좁지만 대상 영역과 겹치지 않는다.

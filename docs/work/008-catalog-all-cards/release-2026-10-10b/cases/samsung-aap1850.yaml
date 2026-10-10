@@ -1,0 +1,54 @@
+card: samsung-aap1850
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 알라딘 15% 30만 구간 월 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T20:00, amount: 50000, merchant: aladin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: aladin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {aladin-15: 7500}, counted: 50000}
+  - {payment: 1, benefits: {aladin-15: 2500}, counted: 50000}
+  calc: 50,000 × 15% = 7,500. 다음 7,500이나 남은 2,500. 할인 받아도 실적 인정
+- name: 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T20:00, amount: 50000, merchant: aladin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 만권당 정기결제 50% 월 6150원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 14900, merchant: aladin, billing: subscription, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mangwondang-50: 6150}}
+  calc: 14,900 × 50% = 7,450이나 한도 6,150
+- name: 온라인쇼핑 학습지 60만 구간
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 40000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 50000, merchant: kyowon, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-5: 2000}}
+  - {payment: 1, benefits: {study-5: 2500}}
+  calc: 40,000 × 5% = 2,000, 50,000 × 5% = 2,500. 각 한도 5,000 안
+- name: 커피 제과점 통합 3천원과 스타벅스 사이렌오더
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 20000, merchant: paris_baguette, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 20000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-bakery-10: 2000}}
+  - {payment: 1, benefits: {starbucks-10: 1000}}
+  calc: 20,000 × 10% = 2,000. 스타벅스 2,000이나 남은 1,000
+- name: 해외 1%와 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: restaurant, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {}, counted: 0}
+  calc: 100,000 × 1% = 1,000. 지하철은 후불교통 실적 제외

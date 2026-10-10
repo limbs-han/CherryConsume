@@ -1,0 +1,39 @@
+card: samsung-aap1824
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 해외 삼성페이 5% 한도 뒤 다음 결제 2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 150000, category: restaurant.general, region: overseas, payment_method: samsung_pay}
+  - {at: 2026-11-03T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: samsung_pay}
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {samsungpay-5: 7500}, counted: 0}
+  - {payment: 1, benefits: {samsungpay-5: 2500}}
+  - {payment: 2, benefits: {overseas-2: 2000}}
+  calc: 150,000 × 5% = 7,500, 남은 한도 2,500, 그 다음 결제는 2% 2,000. 해외는 실적 제외
+- name: 50만 직전 해외 삼성페이는 2%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  calc: 0 구간이라 5% 없음, 2% 2,000
+- name: 50만 구간 인앱 멤버십과 일상 1% 국내 0.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 8000, merchant: google_play, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 7890, merchant: coupang_wow, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: cu, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 100000, category: online_shopping, channel: online, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {digital-50: 4000}}
+  - {payment: 1, benefits: {subscription-50: 3945}}
+  - {payment: 2, benefits: {daily-1: 1000}}
+  - {payment: 3, benefits: {daily-offline-1: 500}}
+  - {payment: 4, benefits: {domestic-0-5: 500}, counted: 100000}
+  - {payment: 5, benefits: {easypay-1: 1000}}
+  calc: 8,000 × 50% = 4,000, 7,890 × 50% = 3,945. 쿠팡 1,000, 편의점 500, 음식점 0.5% 500, 카카오페이 온라인 1,000

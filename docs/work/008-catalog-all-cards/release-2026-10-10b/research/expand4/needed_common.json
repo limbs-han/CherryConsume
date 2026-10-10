@@ -1,0 +1,441 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lomad",
+      "name": "로마드",
+      "category": "other",
+      "aliases": [
+        "로마드",
+        "LOMAD"
+      ]
+    },
+    "card_id": "hana-14783",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=14783",
+    "evidence": "로마드(LOMAD) 구독 요금 자동이체 청구할인, 월 최대 13,000원"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "gs_shop",
+      "name": "GS SHOP",
+      "category": "online_shopping",
+      "aliases": [
+        "GS SHOP",
+        "GS샵",
+        "지에스샵",
+        "GS홈쇼핑"
+      ]
+    },
+    "card_id": "hana-14783",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=14783",
+    "evidence": "온라인 쇼핑 청구 할인 : G마켓, 옥션, 11번가, 롯데홈쇼핑, GS SHOP"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_homeshopping",
+      "name": "현대홈쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "현대홈쇼핑",
+        "Hmall",
+        "현대H몰"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "온라인쇼핑 | GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLES홈쇼핑, NS홈쇼핑, 홈앤쇼핑, G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "cj_onstyle",
+      "name": "CJ온스타일",
+      "category": "online_shopping",
+      "aliases": [
+        "CJ온스타일",
+        "CJ ONSTYLE",
+        "CJ오쇼핑"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "온라인쇼핑 | GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLES홈쇼핑, NS홈쇼핑, 홈앤쇼핑, G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ns_homeshopping",
+      "name": "NS홈쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "NS홈쇼핑",
+        "NS몰"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "온라인쇼핑 | GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLES홈쇼핑, NS홈쇼핑, 홈앤쇼핑, G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "home_and_shopping",
+      "name": "홈앤쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "홈앤쇼핑",
+        "홈&쇼핑",
+        "HNSMALL"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "온라인쇼핑 | GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLES홈쇼핑, NS홈쇼핑, 홈앤쇼핑, G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "sk_broadband",
+      "name": "SK브로드밴드",
+      "billing": "autopay",
+      "category": "telecom.internet_tv",
+      "aliases": [
+        "SK브로드밴드",
+        "SKB",
+        "에스케이브로드밴드"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "통신 | SKT, SKB, KT, LGU+ (자동이체요금)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "wells",
+      "name": "교원웰스",
+      "category": "other",
+      "aliases": [
+        "웰스",
+        "교원웰스",
+        "WELLS"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "렌탈 | 코웨이, 교원웰스, 청호나이스 (자동이체요금)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lg_hellovision",
+      "name": "LG헬로비전",
+      "category": "telecom.internet_tv",
+      "aliases": [
+        "헬로비전"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "케이블TV | LG헬로비전, 티브로드, HCN, 딜라이브 (자동이체요금)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hcn",
+      "name": "HCN",
+      "category": "telecom.internet_tv",
+      "aliases": [
+        "HCN",
+        "에이치씨엔"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "케이블TV | LG헬로비전, 티브로드, HCN, 딜라이브 (자동이체요금)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "dlive",
+      "name": "딜라이브",
+      "category": "telecom.internet_tv",
+      "aliases": [
+        "딜라이브",
+        "D LIVE"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "케이블TV | LG헬로비전, 티브로드, HCN, 딜라이브 (자동이체요금)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "shopping_ntv",
+      "name": "쇼핑엔티",
+      "category": "online_shopping",
+      "aliases": [
+        "쇼핑엔티",
+        "SHOPPING NT"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "온라인쇼핑 | GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLES홈쇼핑, NS홈쇼핑, 홈앤쇼핑, G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "public_homeshopping",
+      "name": "공영쇼핑",
+      "category": "online_shopping",
+      "aliases": [
+        "공영쇼핑",
+        "공영홈쇼핑"
+      ]
+    },
+    "card_id": "hana-4984",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984",
+    "evidence": "온라인쇼핑 | GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLES홈쇼핑, NS홈쇼핑, 홈앤쇼핑, G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "air_busan",
+      "name": "에어부산",
+      "category": "travel.airline",
+      "aliases": [
+        "에어부산",
+        "AIR BUSAN"
+      ]
+    },
+    "card_id": "hana-94350",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18956",
+    "evidence": "항공 | 대한항공, 아시아나항공, 진에어, 에어부산, 에어서울, 제주항공, 티웨이, 이스타 | 3%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "air_seoul",
+      "name": "에어서울",
+      "category": "travel.airline",
+      "aliases": [
+        "에어서울",
+        "AIR SEOUL"
+      ]
+    },
+    "card_id": "hana-94350",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18956",
+    "evidence": "항공 | 대한항공, 아시아나항공, 진에어, 에어부산, 에어서울, 제주항공, 티웨이, 이스타 | 3%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "tway_air",
+      "name": "티웨이항공",
+      "category": "travel.airline",
+      "aliases": [
+        "티웨이",
+        "티웨이항공",
+        "T'WAY"
+      ]
+    },
+    "card_id": "hana-94350",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18956",
+    "evidence": "항공 | 대한항공, 아시아나항공, 진에어, 에어부산, 에어서울, 제주항공, 티웨이, 이스타 | 3%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "eastar_jet",
+      "name": "이스타항공",
+      "category": "travel.airline",
+      "aliases": [
+        "이스타",
+        "이스타항공",
+        "EASTAR JET"
+      ]
+    },
+    "card_id": "hana-94350",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18956",
+    "evidence": "항공 | 대한항공, 아시아나항공, 진에어, 에어부산, 에어서울, 제주항공, 티웨이, 이스타 | 3%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_dfs",
+      "name": "현대백화점면세점",
+      "category": "travel.duty_free",
+      "aliases": [
+        "현대백화점면세점",
+        "현대면세점",
+        "HYUNDAI DUTY FREE"
+      ]
+    },
+    "card_id": "hana-94350",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18956",
+    "evidence": "면세점 | 신라면세점, 신세계면세점, 롯데면세점, 현대백화점면세점 | 3%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kream",
+      "name": "KREAM",
+      "category": "online_shopping",
+      "aliases": [
+        "KREAM",
+        "크림"
+      ]
+    },
+    "card_id": "hyundai-to",
+    "source_url": "https://www.hyundaicard.com/upload/card/20260330_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Orange.pdf",
+    "evidence": "온라인몰 네이버플러스 스토어, 쿠팡, 무신사, KREAM, 29CM"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "perplexity",
+      "name": "Perplexity",
+      "billing": "subscription",
+      "category": "streaming",
+      "aliases": [
+        "Perplexity",
+        "Perplexity AI",
+        "퍼플렉시티"
+      ]
+    },
+    "card_id": "hyundai-to",
+    "source_url": "https://www.hyundaicard.com/upload/card/20260330_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Orange.pdf",
+    "evidence": "AI 구독 서비스 : ChatGPT, Perplexity AI, Google One"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "google_one",
+      "name": "Google One",
+      "billing": "subscription",
+      "category": "streaming",
+      "aliases": [
+        "Google One",
+        "구글 원"
+      ]
+    },
+    "card_id": "hyundai-to",
+    "source_url": "https://www.hyundaicard.com/upload/card/20260330_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Orange.pdf",
+    "evidence": "AI 구독 서비스 : ChatGPT, Perplexity AI, Google One"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "vips",
+      "name": "빕스",
+      "category": "restaurant.general",
+      "aliases": [
+        "빕스",
+        "VIPS"
+      ]
+    },
+    "card_id": "kb-01552",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01552",
+    "evidence": "아웃백·VIPS 10% 환급할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "runable",
+      "name": "러너블",
+      "category": "sports",
+      "aliases": [
+        "러너블",
+        "RUNABLE"
+      ]
+    },
+    "card_id": "kb-09821",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09821",
+    "evidence": "러너블 APP 내 티켓 및 스토어 구매 시 제공"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lotte_rental",
+      "name": "롯데렌탈",
+      "category": "other",
+      "aliases": [
+        "롯데렌탈",
+        "롯데렌터카",
+        "롯데렌탈 장기렌터카",
+        "LOTTE RENTAL"
+      ]
+    },
+    "card_id": "lotte-p14114-a14114",
+    "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2022-A00018_20260908_10004.pdf",
+    "evidence": "롯데렌탈 렌탈 상품 월 대여료 자동결제 시, 혜택이 월 1회 제공됩니다."
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "steam",
+      "name": "스팀",
+      "category": "other",
+      "aliases": [
+        "스팀",
+        "STEAM",
+        "Steam",
+        "STEAMGAMES",
+        "Valve"
+      ]
+    },
+    "card_id": "nh-f20127",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010186",
+    "evidence": "온라인 게임유통 플랫폼 스팀(STEAM) 결제 시 10% NH포인트 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "amore_mall",
+      "name": "아모레몰",
+      "category": "online_shopping",
+      "aliases": [
+        "아모레몰",
+        "아모레퍼시픽몰",
+        "AMOREMALL"
+      ]
+    },
+    "card_id": "samsung-aap1790",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtrEgK%2BuwIruUQhBatFLG95g%3D&sn=1",
+    "evidence": "헬스/뷰티 아모레몰, 초록마을, 삼성카드 쇼핑 헬스케어관. 아모레몰은 공식 홈페이지/앱을 통한 결제건에 한함"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "chorokmaeul",
+      "name": "초록마을",
+      "category": "grocery_mart",
+      "aliases": [
+        "초록마을"
+      ]
+    },
+    "card_id": "samsung-aap1790",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtrEgK%2BuwIruUQhBatFLG95g%3D&sn=1",
+    "evidence": "헬스/뷰티 아모레몰, 초록마을"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lotte_mart_zetta",
+      "name": "롯데마트 제타",
+      "category": "online_shopping",
+      "aliases": [
+        "롯데마트 제타",
+        "제타",
+        "ZETTA"
+      ]
+    },
+    "card_id": "samsung-aap1894",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpSH3WBKCjJ6e8Vmz4ecM6Q%3D&sn=1",
+    "evidence": "롯데마트 제타 5%/10% 결제일할인"
+  }
+]

@@ -1,0 +1,189 @@
+schema_version: 2
+id: kb-09800
+issuer: kb
+name: KB NEED Pay 카드
+short_name: KB NEED Pay
+kind: credit
+product_codes:
+  - '09800'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 19000}
+  - {scope: global, brand: mastercard, amount: 19000}
+  - {scope: domestic, form: mobile, amount: 13000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 13000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09800', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-02-27'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - billing: [postpaid_transit]
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [정부지원금과 신차구매 할인 전표는 할인에서 빠진다, 결제대행업체(PG)나 간편결제 가맹점으로 분류된 결제는 업종 할인에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    options:
+      - key: pay
+        title: 자주 쓰는 간편결제
+        choices:
+          - {key: kb_pay, title: KB Pay}
+          - {key: naver_pay, title: 네이버페이}
+          - {key: kakao_pay, title: 카카오페이}
+          - {key: toss_pay, title: 토스페이}
+        default: null
+        change: next_month
+    stacks:
+      - {key: main, pick: best}
+      - {key: pay, pick: best}
+    benefits:
+      - key: pay-kbpay-15
+        title: KB Pay 15% 청구할인
+        source: page
+        evidence: [KB Pay | 15% | 3천원 | 1만5천원 | 3만원, 국내 온·오프라인 가맹점 이용 시 제공, 최초 발급받은 KB NEED Pay 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지는 전월 이용실적 40만원 미만 시에도 ‘40만원 이상 80만원 미만’ 구간 월 할인한도의 50%까지 할인 제공됩니다., 건당 할인한도는 실적유예기간동안 100% 적용]
+        target: {all: true}
+        when:
+          - region: domestic
+            payment: [kb_pay]
+            option:
+              pay: [kb_pay]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {per: txn, amount: 3000}
+          - per: month
+            amount: {0: 7500, 400000: 15000, 800000: 30000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: pay
+      - key: pay-naverpay-10
+        title: 네이버페이 10% 청구할인
+        source: page
+        evidence: [네이버페이 | 10% | 2천원 | 1만원 | 2만원, 국내 온·오프라인 가맹점 이용 시 제공]
+        target: {all: true}
+        when:
+          - region: domestic
+            payment: [naver_pay]
+            option:
+              pay: [naver_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 2000}
+          - per: month
+            amount: {0: 5000, 400000: 10000, 800000: 20000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: pay
+      - key: pay-kakaopay-10
+        title: 카카오페이 10% 청구할인
+        source: page
+        evidence: [카카오페이 | 10% | 2천원 | 1만원 | 2만원, 국내 온·오프라인 가맹점 이용 시 제공]
+        target: {all: true}
+        when:
+          - region: domestic
+            payment: [kakao_pay]
+            option:
+              pay: [kakao_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 2000}
+          - per: month
+            amount: {0: 5000, 400000: 10000, 800000: 20000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: pay
+      - key: pay-tosspay-10
+        title: 토스페이 10% 청구할인
+        source: page
+        evidence: [토스페이 | 10% | 2천원 | 1만원 | 2만원, 국내 온·오프라인 가맹점 이용 시 제공]
+        target: {all: true}
+        when:
+          - region: domestic
+            payment: [toss_pay]
+            option:
+              pay: [toss_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 2000}
+          - per: month
+            amount: {0: 5000, 400000: 10000, 800000: 20000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: pay
+      - key: digital-30
+        title: 디지털 콘텐츠·멤버십 30% 청구할인
+        source: page
+        evidence: ['디지털 콘텐츠 | 넷플릭스, 유튜브, 디즈니플러스, 티빙, 웨이브, 스포티파이', '멤버십 | 네이버플러스 멤버십, 컬리멤버스, 배민클럽', 디지털 콘텐츠/멤버십 | 30% | 3천원 | 5천원, 결제수단에 해당 카드 등록 후 결제 시 제공(간편결제 이용 시 제외), '인앱결제, 단건결제, 포인트 충전 등은 제외']
+        target:
+          merchants: [baemin_club, disney_plus, kurly_members, naver_plus_membership, netflix, spotify, tving, wavve, youtube_premium]
+        when:
+          - payment: [physical_card]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: txn, amount: 3000}
+          - per: month
+            amount: {0: 2500, 400000: 5000, 800000: 5000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [공식 홈페이지 정기결제 이용권만 할인하고 인앱결제·단건결제·포인트 충전은 제외한다, 유튜브는 프리미엄 멤버십 결제만 할인한다]
+        notes: 네이버플러스 멤버십을 네이버페이로, 컬리멤버스를 컬리페이로, 배민클럽을 배민페이로 정기결제한 건도 원문은 할인하지만 이 파일은 카드 직접 결제만 계산해 덜 준다
+      - key: fashion-kbpay-5
+        title: 온라인 패션몰 KB Pay 5% 청구할인
+        source: page
+        evidence: ['무신사, 지그재그, W컨셉, 29CM, 에이블리에서 KB Pay로 결제한 이용 건', 공식 홈페이지/모바일 앱 결제 시 제공(오프라인 매장 결제 제외), 온라인패션몰 | 5천원, 자주 쓰는 간편결제 할인(KB Pay)과 중복 적용 가능]
+        target:
+          merchants: [ably, musinsa, twentynine_cm, wconcept, zigzag]
+        when:
+          - channel: online
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 2500, 400000: 5000, 800000: 5000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: overseas-2
+        title: 해외 가맹점 2% 청구할인
+        source: page
+        evidence: [해외 온·오프라인 가맹점 이용 시 2% 할인, 할인한도 및 전월 이용실적 조건 없음, 해외 할인은 국내외겸용 카드에 한하여 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+    unmodeled: [전월실적 채워드림은 전월 실적 35만원 이상 40만원 미만일 때 신청하면 40만원 구간 혜택을 주는 서비스로 반기 1회다. 신청 여부를 알 수 없어 계산하지 않는다, 부분 무이자할부 이용금액도 실적에서 빠진다, 가족카드 이용분은 본인과 실적과 한도를 합산한다, '정부지원금, 도시가스, 자판기·터널 이용료·항공기내 같은 무승인 전표는 실적에서 빠진다', 유료도로 후불교통은 담을 업종이 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2026.02.27 출시라고만 적었다. 현재 규칙의 시작일로 잠정 적용한다., assumed: '2026-02-27'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+  - path: revisions[0].benefits[digital-30].limits
+    question: 원문 표의 디지털 콘텐츠 월 한도 5천원이 40만원과 80만원 구간에 같이 걸친 것으로 읽었다
+    assumed: '5000'
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 실적 유예는 생애 최초 발급만 facts로 확인하고 월 한도는 40만원 구간의 50%, 건당 한도는 그대로 둔다. 간편결제 할인은 온라인 패션몰과 네이버플러스 멤버십 할인과 중복된다.

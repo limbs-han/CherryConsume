@@ -1,0 +1,78 @@
+card: ibk-12113000001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 버스 후불교통 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-3: 45}}
+  calc: 1,500원 × 3% = 45원
+- name: 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-60: 3000}}
+  calc: 92,900원 ÷ 1,858원 = 50리터 × 60원 = 3,000원
+- name: 마트 5% 1회 10만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  calc: 100,000원까지 × 5% = 5,000원
+- name: 쿠팡 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-20: 4000}}
+  calc: 20,000원 × 20% = 4,000원
+- name: 영화 4천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cgv, channel: offline}
+  expect:
+  - {payment: 0, benefits: {movie-4000: 4000}}
+  calc: 1만원 이상 결제 4,000원
+- name: 아웃백 20% 통합한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, merchant: outback, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dining-20: 10000}}
+  calc: 60,000원 × 20% = 12,000원 중 30만 구간 통합한도 10,000원
+- name: 150만 구간 아웃백 월 2회
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: outback, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: outback, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: outback, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dining-20: 10000}}
+  - {payment: 1, benefits: {dining-20: 10000}}
+  - {payment: 2, benefits: {}}
+  calc: 각 50,000원 × 20% = 10,000원. 150만 구간 월 2회라 셋째는 없음
+- name: 불고기브라더스 20% 현장할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: bulgogi_brothers, channel: offline}
+  expect:
+  - {payment: 0, benefits: {bulgogi-20: 20000}}
+  calc: 할인 뒤 80,000원은 할인 전 100,000원. 100,000원 × 20% = 20,000원. 통합한도 밖
+- name: 커피 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-20: 2000}}
+  calc: 10,000원 × 20% = 2,000원
+- name: 경계 직전 299999 커피
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음

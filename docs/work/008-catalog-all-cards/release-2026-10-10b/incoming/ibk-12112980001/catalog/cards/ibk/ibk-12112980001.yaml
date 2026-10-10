@@ -1,0 +1,100 @@
+schema_version: 2
+id: ibk-12112980001
+issuer: ibk
+name: AK IBK체크카드
+kind: check
+product_codes:
+  - '12112980001'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=298&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2025-7885호, review_valid_until: 2028-11-16}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-11-19
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.tuition, fuel, gift_card, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: receipt}
+    benefit_exclusions:
+      categories: [gift_card]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 1000000: 20000}
+    benefits:
+      - key: ak-shopping-3
+        title: AK플라자·AK몰 3% 청구할인
+        source: page
+        evidence: ['[AK쇼핑서비스] AK플라자, AK몰 3% 할인', '통합 1일 1회, 건당 3만원 승인 시', 전월 이용실적 | 30만원 이상 | 100만원 이상 | 월간통합할인한도 | 1만원 | 2만원 |, 카드 수령일로부터 다음월 말까지는 카드 이용실적에 관계없이 통합할인한도 1만원을 기본으로 제공]
+        target:
+          merchants: [ak_mall, ak_plaza]
+        when:
+          - amount: {min: 30000}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {per: day, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: ak-members-5
+        title: AK플라자 5% 현장할인
+        source: page
+        evidence: ['[AK멤버스 서비스] AK 플라자 5% 즉시할인', 횟수제한 없이 상시할인 제공, AK플라자 회원(AK멤버스) 가입여부 관계없이 제공, 구매 건당 3만원 이상 시 할인]
+        target:
+          merchants: [ak_plaza]
+        when:
+          - amount: {min: 30000}
+        reward: {type: onsite_discount, rate: 5}
+        notes: 원문에 전월실적 조건이 없어 모든 구간에 둔다. 3% 청구할인과 함께 받는지 원문에 없어 같은 묶음에서 큰 쪽 하나만 계산한다. 3만원 이상은 기록된 할인 뒤 금액으로 본다
+      - key: movie-2000
+        title: CGV·롯데시네마·메가박스 2천원 청구할인
+        source: page
+        evidence: ['[생활서비스] CGV, 롯데시네마, 메가박스 2천원 할인', '통합 월 1회, 연 6회, 1만원 이상 결제 시 제공(현장/온라인 예매 포함)', 전월(1일~말일) 국내 가맹점(일시불/할부) 이용실적이 30만원 이상인 경우 제공]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+        tiers: {from: 300000}
+        unmodeled: ['온라인 예매는 영화관 홈페이지나 앱 예매만 할인하고 인터파크, 네이버영화 같은 제휴사이트 링크 결제는 제외']
+      - key: coffee-10
+        title: 주요 커피전문점 10% 청구할인
+        source: page
+        evidence: ['[생활서비스] 주요 커피 전문점 10% 할인', '스타벅스, 커피빈, 카페베네, 탐앤탐스, 할리스, 엔제리너스, 투썸플레이스 10% 할인', '통합 1일 1회, 월 2회, 1회 이용금액 2만원 한도 내']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, hollys, starbucks, tom_n_toms, twosome]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 할인점·아울렛 입점 매장은 제외될 수 있음]
+      - key: bakery-10
+        title: 주요 베이커리 10% 청구할인
+        source: page
+        evidence: ['[생활서비스] 주요 베이커리 전문점 10% 할인', '파리바게트, 뚜레쥬르, 던킨도너츠, 베스킨라빈스 10% 할인', '통합 1일 1회, 월 2회, 1회 이용금액 2만원 한도 내']
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette, tous_les_jours]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 할인점·아울렛 입점 매장은 제외될 수 있음]
+    unmodeled: ['주요 놀이공원 무료입장과 자유이용권 할인은 통합 월 1회, 연 2회이고 카드 수령월에는 없다. 공원마다 방식이 달라 계산하지 않는다', 당행 전자금융 이체수수료와 ATM 수수료 면제는 결제 혜택이 아니라 계산하지 않는다, 가족카드 이용실적은 본인 실적과 합산하지 않고 카드별로 본다, 월간 통합할인한도는 매출이 정상 처리되는 순서대로 차감한다]
+open_questions:
+  - {path: 'revisions[0].benefits[1]', question: AK멤버스 5% 즉시할인과 AK쇼핑 3% 청구할인을 한 결제에 함께 받는지 원문에 없다, assumed: 둘 중 큰 쪽 하나}
+  - {path: 'revisions[0].spend.exclude_categories', question: 교통카드 이용실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 후불교통 유료도로 이용분은 담을 업종이 없다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 expand2 조사. 공식 상품 페이지에서 옮겼다. 놀이공원과 금융수수료 우대는 계산하지 않는다

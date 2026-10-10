@@ -1,0 +1,152 @@
+schema_version: 2
+id: kb-01605
+issuer: kb
+name: KB국민 WELCOME PLUS 체크카드
+short_name: KB WELCOME PLUS 체크
+kind: check
+product_codes:
+  - '01605'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01605', fetched_at: '2026-10-10', review_no: 200330-00921-HPP}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [transit.bus_city, transit.subway]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사·아울렛 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 발급받았나요?'}
+    limits:
+      - key: integrated
+        per: month
+        amount: {0: 10000, 200000: 10000, 300000: 20000}
+    benefits:
+      - key: mart-weekend-5
+        title: 3대 대형마트 주말 5% 환급할인
+        source: page
+        evidence: ['3대 대형마트 | 이마트, 롯데마트, 홈플러스 | 주말 5% | 1만원 | 2만원 | 건당 3만원 이상 10만원까지', '제공조건 : 오프라인 매장 이용금액', '할인제외 : 홈페이지, 모바일앱 이용금액', 최초 카드 발급 후 사용등록일로부터 다음 달 말일까지는 이용실적이 없는 경우에도 1구간(월간 통합할인한도 1만원) 이내에서 할인 제공됩니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - channel: offline
+            amount: {min: 30000}
+            day:
+              in: [sat, sun]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: integrated}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: telecom-2000
+        title: 이동통신요금 자동납부 2천원 환급할인
+        source: page
+        evidence: ['이동통신요금 자동납부 | SKT, LG U+, KT Olleh | 월 1회 2천원 | 건당 5만원 이상', '제공조건 : 해당 카드로 3대 이동통신사(SKT, LG U+, KT Olleh) 자동이체 등록', '할인제외 : 유·무선 통신요금 통합 청구금액']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 50000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [유·무선 통신요금 통합 청구금액은 제외한다]
+      - key: amusement-30
+        title: 놀이공원 30% 환급할인
+        source: page
+        evidence: ['놀이공원 | 에버랜드, 롯데월드, 서울랜드 | 30% | 건당 3만원 이상 5만원까지', '제공조건 : 현장 티켓 구매', '할인제외 : 인터넷 예매']
+        target:
+          merchants: [everland, lotte_world, seoul_land]
+        when:
+          - channel: offline
+            amount: {min: 30000}
+        reward: {type: cashback, rate: 30}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [현장 티켓 구매만 할인하고 놀이공원 안 식음료나 기념품 결제는 빠질 수 있다]
+      - key: beauty-10
+        title: 올리브영 10% 환급할인
+        source: page
+        evidence: ['뷰티 | 올리브영, 박승철헤어스투디오 | 10% | 건당 3만원 이상 5만원까지', '할인제외 : 상품권 및 선불카드 구입·충전금액, 백화점·대형마트 입점 점포 이용금액']
+        target:
+          merchants: [olive_young]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [박승철헤어스투디오는 가맹점 키가 없어 계산하지 않는다, 백화점·대형마트 입점 점포는 제외한다]
+      - key: pharmacy-5
+        title: 약국 5% 환급할인
+        source: page
+        evidence: [약국 | 약국 업종 | 5% | 건당 3만원 이상 5만원까지]
+        target:
+          categories: [pharmacy]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: gs25-5
+        title: GS25 5% 환급할인
+        source: page
+        evidence: [편의점 | GS25 | 5% | 건당 1만원 이상 2만원까지, '제공조건 : 오프라인 매장 이용금액', '할인제외 : 티머니 이용금액']
+        target:
+          merchants: [gs25]
+        when:
+          - channel: offline
+            amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 20000}
+          - {shared: integrated}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [편의점의 티머니 충전 이용금액은 제외한다]
+    unmodeled: [전월 실적은 KB국민 체크카드 상품별 또는 동일계열 상품별 합산 승인금액이다, 무승인(철도반환수수료 등)과 정부지원금은 실적에서 빠진다, 해외 이용금액은 이 카드 실적에 포함한다, 통합할인한도는 전표 매입 순서대로 차감한다, 티머니·팝카드 기능은 할인 서비스가 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2016년 1월 7일 출시만 적었다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 교통이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 체크카드 공통 실적 기준에서 교통이용금액, 무승인, 정부지원금을 빼고 해외 이용금액은 이 카드만 포함한다. 실적 유예는 생애 최초 발급만 facts로 확인한다.

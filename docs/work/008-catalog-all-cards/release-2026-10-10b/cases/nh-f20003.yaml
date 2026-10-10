@@ -1,0 +1,143 @@
+card: nh-f20003
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 평일 스타벅스 0.5%
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 10000
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      single-cheezzz-weekday: 50
+  calc: 수요일 10,000원 x 0.5% = 50포인트
+- name: 실적 직전 199999 평일 스타벅스
+  prev_month_spend: 199999
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 10000
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만원보다 1원 적어 적립 없음
+- name: 주말 쿠팡 1%
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-11-07T12:00
+    amount: 30000
+    merchant: coupang
+  expect:
+  - payment: 0
+    benefits:
+      double-cheezzz-weekend: 300
+  calc: 토요일 30,000원 x 1% = 300포인트
+- name: 20만 구간은 교통 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 20000
+    category: taxi
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: Triple은 30만원 이상부터라 0
+- name: 30만 구간 택시 1.5%
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 20000
+    category: taxi
+  expect:
+  - payment: 0
+    benefits:
+      triple-cheezzz-transit: 300
+  calc: 20,000원 x 1.5% = 300포인트
+- name: 30만 구간 해외 일시불 1.5%
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 100000
+    category: other
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      triple-cheezzz-overseas: 1500
+  calc: 100,000원 x 1.5% = 1,500포인트
+- name: 30만 구간 토익 1.5%
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 52500
+    merchant: toeic
+  expect:
+  - payment: 0
+    benefits:
+      triple-cheezzz-education-exam: 787
+  calc: 52,500원 x 1.5% = 787.5, 원 미만 버림 787포인트
+- name: 30만 구간 예스24 1.5%
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 20000
+    merchant: yes24
+  expect:
+  - payment: 0
+    benefits:
+      triple-cheezzz-bookstores: 300
+  calc: 20,000원 x 1.5% = 300포인트
+- name: 30만 구간 인터파크티켓 1.5%
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 100000
+    merchant: interpark_ticket
+  expect:
+  - payment: 0
+    benefits:
+      triple-cheezzz-performance: 1500
+  calc: 100,000원 x 1.5% = 1,500포인트
+- name: 30만 구간 오프라인 올리브영 1.5%
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 20000
+    merchant: olive_young
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      triple-cheezzz-beauty: 300
+  calc: 20,000원 x 1.5% = 300포인트
+- name: 30만 구간 넷플릭스 5%
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 17000
+    merchant: netflix
+  expect:
+  - payment: 0
+    benefits:
+      bonus-cheezzz: 850
+  calc: 17,000원 x 5% = 850포인트
+- name: 월 통합 한도 3만
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 1999980
+    category: other
+    region: overseas
+  - at: 2026-11-05T12:00
+    amount: 10000
+    merchant: netflix
+  expect:
+  - payment: 0
+    benefits:
+      triple-cheezzz-overseas: 29999
+  - payment: 1
+    benefits:
+      bonus-cheezzz: 1
+  calc: 1,999,980원 x 1.5% = 29,999.7 버림 29,999포인트, 남은 한도 1포인트

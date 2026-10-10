@@ -1,0 +1,42 @@
+card: kb-09581
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 오픈마켓 KB Pay 중복
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {openmarket-10: 5000, openmarket-kbpay-10: 3000}, counted: 50000}
+  calc: 50,000 x 10% = 5,000(한도 7천). KB Pay 추가 5,000 중 한도 3,000
+- name: 20만 경계 직전
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gmarket, channel: online}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만 할인 없음
+- name: 커피 마트 OTT 영화 통신
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-05T11:00, amount: 20000, merchant: emart, channel: offline}
+  - {at: 2026-11-05T12:00, amount: 14900, merchant: youtube_premium, billing: subscription}
+  - {at: 2026-11-05T13:00, amount: 15000, merchant: cgv}
+  - {at: 2026-11-05T14:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 2000}}
+  - {payment: 1, benefits: {mart-10: 2000}}
+  - {payment: 2, benefits: {ott-20: 2000}}
+  - {payment: 3, benefits: {movie-4000: 4000}}
+  - {payment: 4, benefits: {telecom-3000: 3000}}
+  calc: 2,000 + 2,000 + 2,980 중 한도 2,000 + 4,000 + 3,000
+- name: 놀이공원과 통합한도 2만원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: everland}
+  - {at: 2026-11-06T10:00, amount: 70000, merchant: eleven_st, channel: online}
+  expect:
+  - {payment: 0, benefits: {amusement-15000: 15000}}
+  - {payment: 1, benefits: {openmarket-10: 5000}}
+  calc: 15,000. 오픈마켓 7,000 중 통합 2만원 남은 5,000

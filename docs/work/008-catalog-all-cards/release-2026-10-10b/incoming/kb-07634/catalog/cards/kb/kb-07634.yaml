@@ -1,0 +1,157 @@
+schema_version: 2
+id: kb-07634
+issuer: kb
+name: KB Members Plus 카드
+short_name: KB Members Plus
+kind: credit
+product_codes:
+  - '07634'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: domestic, form: mobile, amount: 14000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07634', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-05-14'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: fuel-5
+        title: 주유·충전소 5% 청구할인
+        source: page
+        evidence: ['대상: 주유소, 충전소 업종', 5% | 2천원 | 4천원 | 1만원, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB Members Plus 카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 월 할인한도의 50% 제공(월 할인한도는 1천원으로 적용)]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 4000, 1600000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [전기차 충전소는 담을 업종이 없어 계산하지 않는다]
+      - key: telecom-5
+        title: 이동통신요금 자동납부 5% 청구할인
+        source: page
+        evidence: ['대상: SKT, KT, LG U+, Liiv M 이동통신 자동납부 요금', '인터넷, IPTV 등 결합상품 제외', 5% | 2천원 | 4천원 | 1만원, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB Members Plus 카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 월 할인한도의 50% 제공(월 할인한도는 1천원으로 적용)]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 4000, 1600000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: academy-5
+        title: 학원 5% 청구할인
+        source: page
+        evidence: ['대상: 기술/사무/가정계학원, 문리계학원, 외국어학원, 기타학원 업종', 5% | 2천원 | 4천원 | 1만원, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB Members Plus 카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 월 할인한도의 50% 제공(월 할인한도는 1천원으로 적용)]
+        target:
+          categories: [education.academy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 4000, 1600000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: movie-5
+        title: 영화 5% 청구할인
+        source: page
+        evidence: ['대상: 영화관 업종', '현장 결제, 공식 홈페이지 및 모바일(앱) 결제 시 제공', '※ 매점, 관람권(상품권)구입, 예매대행사이트 제외', 5% | 2천원 | 4천원 | 1만원, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB Members Plus 카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 월 할인한도의 50% 제공(월 할인한도는 1천원으로 적용)]
+        target:
+          categories: [movie]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 4000, 1600000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [매점, 관람권 구입, 예매대행사이트 결제는 제외한다]
+      - key: ott-5
+        title: OTT 정기결제 5% 청구할인
+        source: page
+        evidence: ['OTT: 넷플릭스, 유튜브 프리미엄, 티빙, 디즈니플러스', 공식 홈페이지 및 모바일(앱)을 통한 정기결제 시 제공, ※ 간편결제 또는 앱스토어를 통한 인앱 결제 건 등은 제외, 5% | 2천원 | 4천원 | 1만원, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB Members Plus 카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 월 할인한도의 50% 제공(월 할인한도는 1천원으로 적용)]
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 4000, 1600000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [공식 홈페이지와 앱의 정기결제만 제공하고 간편결제와 앱스토어 인앱 결제는 제외한다]
+      - key: cafe-5
+        title: 커피 5% 청구할인
+        source: page
+        evidence: ['대상: 커피/음료전문점 업종', '※ 백화점, 마트 등 일부 입점 매장 제외', 5% | 2천원 | 4천원 | 1만원, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB Members Plus 카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 월 할인한도의 50% 제공(월 할인한도는 1천원으로 적용)]
+        target:
+          categories: [cafe]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 4000, 1600000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [백화점, 마트 등 입점 매장은 제외될 수 있다]
+      - key: shopping-5
+        title: 백화점·편의점 5% 청구할인
+        source: page
+        evidence: ['대상: 백화점, 편의점 업종', '백화점: 온라인, 임대매장 결제 및 상품권 구매 제외', '편의점: 백화점, 마트 등 일부 입점 매장 제외', 5% | 2천원 | 4천원 | 1만원, 최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 KB Members Plus 카드 전월 이용실적이 40만원 미만 시 40만원 이상 구간 월 할인한도의 50% 제공(월 할인한도는 1천원으로 적용)]
+        target:
+          categories: [convenience, department_store]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000, 800000: 4000, 1600000: 10000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [백화점 임대매장과 편의점의 백화점·마트 입점 매장은 제외된다]
+        notes: 백화점 온라인 결제 제외를 두 업종 모두 오프라인만으로 담았다. 편의점 온라인 결제는 덜 준다
+    unmodeled: [종합스포츠센터 업종 5% 청구할인은 공통 업종의 스포츠·레저가 더 넓어 계산하지 않는다, 패밀리 레스토랑 업종 5% 청구할인은 일반음식점과 나눌 업종이 없어 계산하지 않는다, 전월 실적은 가족카드 이용분을 포함한다, 해외 이용금액은 매입 완료 기준 일시불만 실적에 넣는다, '정부지원금, 도시가스, 자판기·터널 이용료·항공기내 같은 무승인 전표는 실적에서 빠진다', 유료도로 후불교통은 담을 업종이 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2026.05.14 출시라고만 적었다. 현재 규칙의 시작일로 잠정 적용한다., assumed: '2026-05-14'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].facts', question: 이 상품 페이지에는 실적 유예가 생애 최초 본인 발급에만 적용된다는 문구가 없다. 다른 KB 카드와 같게 보고 덜 주는 쪽으로 fact를 물었다, assumed: first_personal_issue}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 아홉 영역의 할인한도는 영역마다 따로 2천원, 4천원, 1만원이다. 상품설명서 PDF는 글자를 뽑을 수 없어 페이지 표를 따랐다.

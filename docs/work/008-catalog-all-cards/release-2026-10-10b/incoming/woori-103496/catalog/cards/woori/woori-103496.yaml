@@ -1,0 +1,127 @@
+schema_version: 2
+id: woori-103496
+issuer: woori
+name: 카드의정석2 ExK 체크
+kind: check
+product_codes:
+  - '103496'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103496', fetched_at: '2026-10-10', review_no: 2026-C01813}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-02-06'
+    source: page
+    tiers: [0, 200000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 200000
+      tier_by_benefit: {outback-h1: 0, outback-h2: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - {region: overseas}
+      categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 각종 수수료·이자, 우편요금·여권발급비·벌금·공공기관 이용금액, 교통카드 구매·충전은 캐시백 제외', PG·간편결제 전용 가맹점명으로 접수된 건은 캐시백 제외, 백화점·대형마트·면세점·공항·미군부대·리조트·기차역 등 입점 매장은 캐시백 제외, 다른 쿠폰·캐시백 프로모션과 중복 적용 불가]
+    limits:
+      - key: coffee
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+      - key: convenience
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+      - key: delivery
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+      - {key: travel, per: month, amount: 5000}
+    benefits:
+      - key: outback-h1
+        title: 아웃백 5천원 캐시백 (1~6월)
+        source: page
+        evidence: [아웃백 스테이크하우스 5천원 캐시백, 20만원 이상 | 반기별 1회(1~6월 / 7~12월 각 1회), 건당 5만원 이상 결제 시 캐시백 제공]
+        target:
+          merchants: [outback]
+        when:
+          - months: [1, 2, 3, 4, 5, 6]
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 5000}
+        limits:
+          - {per: year, count: 1}
+        tiers: {from: 200000}
+      - key: outback-h2
+        title: 아웃백 5천원 캐시백 (7~12월)
+        source: page
+        evidence: [아웃백 스테이크하우스 5천원 캐시백, 20만원 이상 | 반기별 1회(1~6월 / 7~12월 각 1회), 건당 5만원 이상 결제 시 캐시백 제공]
+        target:
+          merchants: [outback]
+        when:
+          - months: [7, 8, 9, 10, 11, 12]
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 5000}
+        limits:
+          - {per: year, count: 1}
+        tiers: {from: 200000}
+      - key: coffee-5
+        title: 메가MGC커피·컴포즈커피 5% 캐시백
+        source: page
+        evidence: ['커피 | 메가MGC커피, 컴포즈커피', 전월 국내 가맹점 이용실적 20만원 이상 시 캐시백 제공, 20만원 이상~50만원 미만 | 3천원, 50만원 이상 | 6천원, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [compose_coffee, mega_coffee]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: coffee}
+        tiers: {from: 200000}
+        unmodeled: ['오프라인 매장 또는 공식 카페앱 오더 결제만 대상이고 온라인스토어, 단체주문, 멤버십결제는 제외']
+      - key: convenience-5
+        title: GS25·CU 5% 캐시백
+        source: page
+        evidence: ['편의점 | GS25, CU', 편의점 영역은 대상 가맹점에서 오프라인 신용카드 일반 결제 건에 한하여 혜택 제공, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: convenience}
+        tiers: {from: 200000}
+      - key: delivery-5
+        title: 배달의민족·쿠팡이츠 5% 캐시백
+        source: page
+        evidence: ['배달 | 배달의민족, 쿠팡이츠', 배달 영역은 공식 배달앱에서 '앱 내 카드결제' 통한 온라인 결제 건에 한하여 혜택 제공, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: delivery}
+        tiers: {from: 200000}
+        unmodeled: ['입점 음식점의 음식·음료 주문만 대상이고 멤버십 결제, 테이블오더, 커머스 물품구매는 제외']
+      - key: travel-5
+        title: 항공·면세점·NOL 5% 캐시백
+        source: page
+        evidence: [여행 5% 캐시백, 항공권 | 항공사 업종, '면세점 | 롯데면세점, 신세계면세점, 신라면세점', 여행플랫폼 | NOL(야놀자), '전월 실적 조건 없음, 월 캐시백 통합 한도 5천원, 매출 건당 최대 1천원까지 할인 제공']
+        target:
+          categories: [travel.airline]
+          merchants: [lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_dfs, shinsegae_dfs_online, yanolja]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: travel}
+        unmodeled: ['항공권은 공식 홈페이지·앱과 공항 등 오프라인 결제만, 여행사·구매대행·오픈마켓 결제 제외', NOL은 숙소 예매를 공식 홈페이지·앱에서 온라인 결제한 건만 대상]
+    unmodeled: [교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '실적 제외에 신차구매, 의약품 전용몰·제약회사, 정부지원금, 수수료·이자, 당사 이벤트 혜택 적용 매출이 들어간다', 신규 특례는 최초 발급 카드에만 주고 시작일은 사용등록일과 사용개시일 중 빠른 날이다, 신규 특례 기간의 아웃백 캐시백은 국내 20만원 이상 이용한 다음 날부터 주는데 특례 기간에는 주지 않는 것으로 두었다, 가족카드의 실적·횟수·한도는 본인카드와 따로 센다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일을 따로 찾지 못해 상품 출시일로 두었다. 페이지 준법심의필은 2026-C01813(2026.06.23)이다, assumed: '2026-02-06'}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-02-06. 국내전용, 연회비 없음(가족 포함), 만 18세 이상. 커피·편의점·배달은 영역별 월 한도이고 건당 최대 1천원. 결제 건 혜택이 아닌 해외 ATM 인출(건당 500원 수수료, 환율우대 30%, 국제브랜드 수수료 면제, 미국·필리핀·베트남·태국·인도네시아 ExK ATM)과 공항 커피 무료(전월 20만원 이상 연 2회)는 옮기지 않았다. 캐시백은 매출표 접수일에 결제계좌로 입금.

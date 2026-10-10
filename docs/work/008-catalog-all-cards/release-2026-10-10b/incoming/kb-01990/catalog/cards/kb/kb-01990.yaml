@@ -1,0 +1,93 @@
+schema_version: 2
+id: kb-01990
+issuer: kb
+name: LG U+ KB국민체크카드
+short_name: KB LG U+ 체크
+kind: check
+product_codes:
+  - '01990'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01990', fetched_at: '2026-10-10', review_no: 200428-01318-HPP}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 발급받았나요?'}
+    benefits:
+      - key: lgu-telecom
+        title: LG U+ 이동통신요금 자동납부 4~6천원 환급할인
+        source: page
+        evidence: [LG U+ 이동통신요금 자동납부 시 4~6천원 환급할인, 1구간 (30만원 이상 50만원 미만) | 4천원, 2구간 (50만원 이상) | 6천원, 최초 카드발급후 사용등록일로부터 다음달 말일까지는 전월이용실적이 없는 경우에도 2천원 환급할인, '제공조건 : 이용금액 건당 1만원 이상 시 할인 (월 1회)', 유무선결합 통신요금 이용시는 할인대상에서 제외]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [lg_uplus]
+        when:
+          - billing: [autopay]
+            amount: {min: 10000}
+        reward: {type: cashback, fixed: 6000}
+        limits:
+          - {per: month, count: 1}
+          - per: month
+            amount: {0: 2000, 300000: 4000, 500000: 6000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [유무선결합 통신요금은 할인에서 빠진다]
+      - key: starbucks-10
+        title: 스타벅스 10% 환급할인
+        source: page
+        evidence: [스타벅스 10% 환급할인, 1구간 (30만원 이상 50만원 미만) | 2천원, 2구간 (50만원 이상) | 5천원, 최초 카드발급후 사용등록일로부터 다음달 말일까지는 전월이용실적이 없는 경우에도 2천원 환급할인, '제공조건 : 이용금액 건당 1만원 이상 시 할인', 상품권 및 선불카드 구입(충전) 제외]
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 500000: 5000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: cgv-10
+        title: CGV 10% 환급할인
+        source: page
+        evidence: [CGV 10% 환급할인, 1구간 (30만원 이상 50만원 미만) | 2천원, 2구간 (50만원 이상) | 5천원, '제공조건 : 이용금액 건당 1만원 이상 시 할인', '직영 홈페이지 및 App 온라인 예매 시 할인 적용, 상품권 및 매점 이용분 제외']
+        target:
+          merchants: [cgv]
+        when:
+          - channel: online
+            amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 500000: 5000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [CGV 직영 홈페이지와 앱 예매만 할인하고 매점은 빠진다]
+    unmodeled: ['무승인 금액(자판기, 터널통행료, 기차·고속버스 취소 반환수수료), 정부지원금, 포인트리 충전금액, 연체료, 수수료와 이자는 실적에서 빠진다', 할인은 전표 매입 순서대로 한도에서 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2017년 1월 23일 출시만 적었다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 교통이용금액 실적 제외를 후불교통으로 보고 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 원문 표는 스타벅스와 CGV 한도 표 제목도 이동통신할인이라 적었지만 각 혜택 한도로 읽었다. 통신 할인은 월 1회 정액이라 한도만큼 준다.

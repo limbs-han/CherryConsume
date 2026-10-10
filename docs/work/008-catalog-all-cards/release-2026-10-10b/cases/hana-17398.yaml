@@ -1,0 +1,266 @@
+card: hana-17398
+cases:
+- name: 실적 300000 구간 양수
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-13k: 13000
+    counted: 50000
+  calc: 자동납부 50,000원 전액 할인 중 월 13,000원 한도 적용
+- name: 실적 1000000 구간 양수
+  prev_month_spend: 1000000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-18k: 18000
+    counted: 50000
+  calc: 자동납부 50,000원 전액 할인 중 월 18,000원 한도 적용
+- name: 상위 실적 경계 직전 1000000
+  prev_month_spend: 999999
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-13k: 13000
+  calc: 999,999원은 하위 구간 월 13,000원
+- name: 실적 1500000 구간 양수
+  prev_month_spend: 1500000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-25k: 25000
+    counted: 50000
+  calc: 자동납부 50,000원 전액 할인 중 월 25,000원 한도 적용
+- name: 상위 실적 경계 직전 1500000
+  prev_month_spend: 1499999
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-18k: 18000
+  calc: 1,499,999원은 하위 구간 월 18,000원
+- name: 최저 실적 직전
+  prev_month_spend: 299999
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 실적 하한 30만원보다 1원 적으면 0원
+- name: 소액 자동납부 전액 할인
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 1
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-13k: 1
+  calc: 자동납부 1원이 월 한도보다 작아 1원 전액 할인
+- name: 월 합산 한도 직전 도달 소진
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 12999
+    merchant: sk_intellix
+    billing: autopay
+  - at: 2026-11-05T10:00
+    amount: 2
+    merchant: sk_intellix
+    billing: autopay
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-13k: 12999
+  - payment: 1
+    benefits:
+      sk-intelix-sub-13k: 1
+  - payment: 2
+    benefits: {}
+  calc: 12,999원 할인 후 남은 1원만 추가 할인. 그 뒤 0원
+- name: 일반 납부는 제외
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부 아닌 지정 가맹점 결제는 0원
+- name: 다른 가맹점은 제외
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: kt
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 지정 렌탈 가맹점 아닌 KT는 0원
+- name: 상품권 실적 제외
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: gift_card
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 일반 상품권 결제는 혜택 대상 아님, 실적 제외
+- name: 초중고 납입금 실적 제외
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: education.primary_secondary_fee
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 초중고 납입금 10,000원은 실적 제외
+- name: 유치원 납입금 실적 인정
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: education.school_fee
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 유치원 납입금은 초중고 납입금 제외 목록에 없으므로 실적 인정
+- name: 신규 등록월 최저구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-11-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-13k: 13000
+  calc: 등록월에는 실적 0원이어도 월 13,000원
+- name: 신규 다음달까지 최저구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      sk-intelix-sub-13k: 13000
+  calc: 등록 다음달까지 실적 0원이어도 월 13,000원
+- name: 신규 다음다음달 특례 종료
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: sk_intellix
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 등록 다음다음달은 실적 0원으로 혜택 없음
+- name: 할부 실적 이용월 전액
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 30000
+    merchant: emart
+    installment_months: 3
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 30000
+  calc: 일반 가맹점 할부는 혜택 없고 실적 30,000원 전액
+- name: 무이자할부 실적 전액
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 30000
+    merchant: emart
+    installment_months: 3
+    interest_free: true
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 30000
+  calc: 무이자할부 실적 30,000원 전액

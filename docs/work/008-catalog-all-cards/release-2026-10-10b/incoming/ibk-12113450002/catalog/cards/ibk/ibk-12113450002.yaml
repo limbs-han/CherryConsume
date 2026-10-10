@@ -1,0 +1,146 @@
+schema_version: 2
+id: ibk-12113450002
+issuer: ibk
+name: I-Campus 체크(자기개발형)
+kind: check
+product_codes:
+  - '12113450002'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+  - {scope: global, brand: master, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=345&PDCD=0002&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2025-7281호, review_valid_until: 2028-10-29}
+  - {id: leaflet, kind: manual_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/2026022513030927804858218134064.pdf', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-10-30
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 15000}
+      - {key: bookstore, per: month, amount: 2000, count: 1}
+    benefits:
+      - key: transit-10
+        title: 철도·고속버스 10% 청구할인
+        source: page
+        evidence: ['교통(철도, 고속버스) 요금(10% 할인)', '철 도 : KORAIL(한국철도공사) 매표소, 온라인(www.korail.com), 공식 앱을 통한 예매', '고속버스 : 고속버스터미널 매표소, 온라인(www.kobus.co.kr), 고속버스 티머니 앱을 통한 예매', '- 건당 1만원 이상 결제 시 월 최대 2천원 할인(월 2회)']
+        target:
+          categories: [transit.bus_express]
+          merchants: [korail]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 2000}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [코레일과 고속버스 공식 판매처가 아닌 곳의 예매는 할인하지 않는다]
+      - key: telecom-5
+        title: 이동통신요금 자동납부 5% 청구할인
+        source: page
+        evidence: [이동통신 요금(5% 할인), 'SKT, KT, LG U+ 통신요금 자동납부', '- 건당 5만원 이상 결제 시 월 최대 3천원 할인(월 1회)', ※ 순수 통신요금 자동납부 이용금액에 한함]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: academy-5
+        title: 학원 5% 청구할인
+        source: page
+        evidence: [학원 업종(5% 할인), '외국어, 컴퓨터, 기능, 예체능 등 학원 업종', '- 건당 5만원 이상 결제 시 월 최대 3천원 할인(월 1회)', ※ 오프라인 가맹점 한정]
+        target:
+          categories: [education.academy]
+        when:
+          - {channel: offline}
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: bookstore-5
+        title: 교보문고·영풍문고 5% 청구할인
+        source: page
+        evidence: [서점 업종(5% 할인), '교보문고, 영풍문고, YES24', '- 건당 2만원 이상 결제 시 월 최대 2천원 할인(월 1회)']
+        target:
+          merchants: [kyobo_book, youngpoong_book]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: bookstore}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: bookstore-yes24-5
+        title: YES24 온라인 5% 청구할인
+        source: page
+        evidence: [서점 업종(5% 할인), '교보문고, 영풍문고, YES24', '- 건당 2만원 이상 결제 시 월 최대 2천원 할인(월 1회)', ※ YES24는 온라인 가맹점만 가능]
+        target:
+          merchants: [yes24]
+        when:
+          - {channel: online}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: bookstore}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: exam-10
+        title: TOEIC·JPT 응시료 10% 청구할인
+        source: page
+        evidence: [어학시험 응시료(10% 할인), 'TOEIC, JPT 어학시험 응시료', '- 건당 4만원 이상 결제 시 월 최대 4천원 할인(월 1회·연 2회)', ※ 공식 홈페이지를 통한 결제 건만 적용]
+        target:
+          merchants: [jpt, toeic]
+        when:
+          - {channel: online}
+          - amount: {min: 40000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {per: month, count: 1}
+          - {per: year, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: ott-10
+        title: OTT 정기결제 10% 청구할인
+        source: page
+        evidence: [OTT 구독요금(10% 할인), '넷플릭스, 유튜브프리미엄, 디즈니플러스, 티빙', '- 건당 7천원 이상 결제 시 월 최대 1천원 할인(월 1회)', ※ 공식앱 및 홈페이지를 통해 직접 신청한 정기결제 건에 한함    (1회성 결제 건은 할인 제외)]
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+          - amount: {min: 7000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 1000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [공식앱이나 홈페이지에서 직접 신청한 정기결제만 대상이다]
+    unmodeled: [국가·공공기관·공공단체가 개설한 가맹점 이용금액은 실적에서 빠지지만 담을 업종이 없다, 월 할인한도는 할인되는 매출이 정상 처리되는 순서대로 차감한다, 각종 간편결제로 결제하면 할인되지 않을 수 있다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 후불교통 이용대금을 시내버스와 지하철 업종 제외로 옮겼다. 후불교통 유료도로 이용분은 담을 업종이 없다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다, assumed: '2025-10-30'}
+notes: 2026-10-10 expand4 조사. 상품 페이지와 리플릿에서 옮겼다. 발급대상은 개인으로만 적혀 있다. 서점은 YES24만 온라인 조건이 있어 혜택을 둘로 나누고 월 1회와 월 2천원 한도를 bookstore로 함께 쓴다

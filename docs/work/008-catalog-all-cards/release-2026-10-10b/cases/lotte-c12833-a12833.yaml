@@ -1,0 +1,146 @@
+card: lotte-c12833-a12833
+cases:
+- name: 30만원 미만과 오프라인 제외
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 30만원 미만과 오프라인 제외
+- name: 30만원 구간 온라인·쇼핑몰 각 한도
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: other
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 40000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-08T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-3pct-30: 3000
+  - payment: 1
+    benefits:
+      market-5pct-30: 2000
+  - payment: 2
+    benefits: {}
+  calc: 100000×3%=3000, 40000×5%=2000. 각 월 한도를 모두 써 다음 건 0.
+- name: 50만원 구간 두 혜택 중 큰 금액
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 80000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 200000
+    payment_method: physical_card
+    category: other
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      market-5pct-50: 4000
+  - payment: 1
+    benefits:
+      online-3pct-50: 4000
+  calc: 50만원 구간 두 혜택 중 큰 금액
+- name: 신규 등록 다음달 30만원 특례
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-3pct-30: 300
+  calc: 신규 등록 다음달 30만원 특례
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: true
+- name: 상품권 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: gift_card
+    channel: online
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 상품권 제외
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.
+- name: 최초 발급 특례
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-3pct-30: 300
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: true
+- name: 만기·해지 재발급 특례 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: online
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: false

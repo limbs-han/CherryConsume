@@ -1,0 +1,80 @@
+card: ibk-12113120001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 다이소 30% 월 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {daiso-30: 6000}}
+  - {payment: 1, benefits: {daiso-30: 4000}}
+  calc: 20,000원 × 30% = 6,000원. 둘째는 월 1만원 한도에 남은 4,000원
+- name: 다이소 5천원 미만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 4000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 5천원 이상 결제만 할인
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 주유 리터당 40원 통합한도 밖
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-40: 2000}, counted: 0}
+  calc: 92,900원 ÷ 1,858원 = 50리터 × 40원 = 2,000원. 주유는 실적 제외
+- name: 편의점 10% 1만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {convenience-olive-10: 1000}}
+  calc: 10,000원까지 × 10% = 1,000원
+- name: 마트 5% 1회 10만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  calc: 100,000원까지 × 5% = 5,000원
+- name: 쿠팡 20% 1만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-20: 2000}}
+  calc: 10,000원까지 × 20% = 2,000원
+- name: 미용실 20% 5만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: beauty.salon}
+  expect:
+  - {payment: 0, benefits: {salon-20: 8000}}
+  calc: 40,000원 × 20% = 8,000원
+- name: 영화 4천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cgv, channel: offline}
+  expect:
+  - {payment: 0, benefits: {movie-4000: 4000}}
+  calc: 1만원 이상 결제 4,000원
+- name: 커피 20%와 통합한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: twosome, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: hollys, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-20: 4000}}
+  - {payment: 1, benefits: {coffee-20: 4000}}
+  - {payment: 2, benefits: {coffee-20: 2000}}
+  calc: 각 20,000원 × 20% = 4,000원. 셋째는 30만 구간 통합한도 1만원에 남은 2,000원

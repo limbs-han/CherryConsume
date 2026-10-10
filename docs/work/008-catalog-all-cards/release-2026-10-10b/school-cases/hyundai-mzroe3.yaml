@@ -1,0 +1,22 @@
+card: hyundai-mzroe3
+cases:
+- name: 현대 공통 학교납입금 제외에 새 초중고 업종 연결
+  prev_month_spend: 3000000
+  payments:
+  - at: 2026-11-06T12:00
+    amount: 10000
+    category: education.primary_secondary_fee
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 현대 공통 적립 제외의 학교납입금 범위는 초중고 납입금을 포함하므로 0원이다.
+- name: 추가 유치원 업종도 기존 학교납입금처럼 혜택 제외
+  prev_month_spend: 3000000
+  payments:
+  - at: 2026-11-06T12:00
+    amount: 10000
+    category: education.kindergarten
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 기존 학교납입금 제외는 유치원을 포함한다. 새 유치원 업종을 골라도 혜택은 0원이다.

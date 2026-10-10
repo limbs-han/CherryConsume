@@ -1,0 +1,40 @@
+card: hyundai-149298
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 롯데백화점 5% 적립과 실적 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T14:00, amount: 100000, merchant: lotte_department}
+  expect:
+  - {payment: 0, benefits: {lotte-5: 5000}, counted: 0}
+  calc: 100,000원 × 5% = 5,000P. 롯데 대상점은 실적에서 뺀다
+- name: 월 2만 포인트를 넘은 금액은 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-06T14:00, amount: 500000, merchant: lotte_premium_outlet}
+  expect:
+  - {payment: 0, benefits: {lotte-5: 20000, base-1: 1000}, counted: 0}
+  calc: 400,000원 × 5% = 20,000P 한도. 남은 100,000원 × 1% = 1,000P
+- name: 50만 직전 499999 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 50만원 미만은 적립 없음
+- name: 기본 1% 소수점 이하 반올림
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 4958, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {base-1: 50}, counted: 4958}
+  calc: 4,958 × 1% = 49.58 반올림 50P. 가이드북 예시와 같다
+- name: 신규 등록월은 50만 미만도 적립
+  holder: {started_on: 2026-11-02}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-10T12:00, amount: 10000, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {base-1: 100}, counted: 10000}
+  calc: 등록월이라 50만 구간. 10,000원 × 1% = 100P

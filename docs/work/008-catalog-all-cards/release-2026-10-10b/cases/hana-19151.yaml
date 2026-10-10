@@ -1,0 +1,70 @@
+card: hana-19151
+holder:
+  started_on: '2026-08-01'
+  options:
+    - {option: mode, choice: play, effective_from: 2026-07-01}
+cases:
+- name: 50만 구간 커피 30% 반올림과 실적 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 4550, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-30: 1365}
+    counted: 0
+  calc: 4,550 x 30% = 1,365. 적립 받은 매출은 실적에서 빠짐
+- name: 실적 직전 499999는 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 5000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 5000
+  calc: 50만원보다 1원 적어 적립 없음
+- name: 편의점 10%와 월 한도 1만
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 99990, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {convenience-10: 9999}
+  - payment: 1
+    benefits: {convenience-10: 1}
+  calc: 99,990 x 10% = 9,999. 다음 10,000 x 10% = 1,000인데 한도 1만에서 1 남음
+- name: 쿠팡 온라인 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {online-shop-10: 3000}
+  calc: 30,000 x 10% = 3,000
+- name: 배달의민족 온라인 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 25000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-10: 2500}
+  calc: 25,000 x 10% = 2,500
+- name: 무신사 온라인 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: musinsa, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fashion-10: 5000}
+  calc: 50,000 x 10% = 5,000
+- name: 넷플릭스 정기결제 30%와 인앱 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 14900, merchant: youtube_premium, channel: online, billing: in_app, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {digital-30: 5100}
+  - payment: 1
+    benefits: {}
+  calc: 17,000 x 30% = 5,100. 인앱결제는 제외

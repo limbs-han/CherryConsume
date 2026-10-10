@@ -1,0 +1,64 @@
+card: hyundai-zwe2
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 쿠팡 10% 월 6천원 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-mall-10: 6000}, counted: 0}
+  calc: 100,000원 × 10% = 10,000원 중 50만 구간 월 6,000원. 할인 받은 결제는 실적 제외
+- name: 50만 직전 499999 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 50만원 미만은 할인 없음
+- name: 100만 구간 편의점 1일 1회
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: gs25}
+  - {at: 2026-11-06T18:00, amount: 10000, merchant: cu}
+  expect:
+  - {payment: 0, benefits: {convenience-10: 2000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 10000}
+  calc: 첫 결제 2,000원. 같은 날 두 번째 편의점은 1일 1회라 없음
+- name: 택시는 1일 1회, 버스는 횟수 제한 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-07T08:00, amount: 1500, category: transit.bus_city}
+  - {at: 2026-11-07T09:00, amount: 1500, category: transit.bus_city}
+  - {at: 2026-11-07T10:00, amount: 15000, category: taxi}
+  - {at: 2026-11-07T22:00, amount: 12000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {transit-10: 150}, counted: 0}
+  - {payment: 1, benefits: {transit-10: 150}, counted: 0}
+  - {payment: 2, benefits: {taxi-10: 1500}, counted: 0}
+  - {payment: 3, benefits: {}, counted: 12000}
+  calc: 버스 150원씩, 택시 첫 건 1,500원, 같은 날 두 번째 택시는 없음
+- name: 버스와 택시가 월 6천원 한도를 같이 쓴다
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-08T10:00, amount: 50000, category: taxi}
+  - {at: 2026-11-09T10:00, amount: 20000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {taxi-10: 5000}, counted: 0}
+  - {payment: 1, benefits: {transit-10: 1000}, counted: 0}
+  calc: 택시 5,000원 뒤 남은 한도 1,000원
+- name: 100만 구간 교보문고 10% 월 1만원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 150000, merchant: kyobo_book}
+  expect:
+  - {payment: 0, benefits: {book-10: 10000}, counted: 0}
+  calc: 15,000원 중 100만 구간 월 10,000원
+- name: 신규 발급 다음 달까지 50만 구간
+  holder: {started_on: 2026-11-02}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-10T10:00, amount: 20000, merchant: twosome}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 2000}, counted: 0}
+  calc: 발급월이라 전월 0원도 50만 구간. 20,000원 × 10% = 2,000원

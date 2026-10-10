@@ -1,0 +1,107 @@
+schema_version: 2
+id: kb-09790
+issuer: kb
+name: KB NEED Edu 카드
+short_name: KB NEED Edu
+kind: credit
+product_codes:
+  - '09790'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: visa, amount: 26000}
+  - {scope: domestic, form: mobile, amount: 19000}
+  - {scope: global, brand: visa, form: mobile, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09790', fetched_at: &id001 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1600000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [정부지원금 결제와 신차구매 할인 전표는 혜택에서 제외한다. 입점 점포와 PG 전용 가맹점은 할인에서 제외한다.]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: edu-5pct-40k
+        title: 교육 업종 5% 할인 (전월실적 40만원 이상)
+        source: page
+        evidence: [교육 관련 업종* | 5% | 40만원 이상 | 1만원, '교육 관련 업종 : 기술/사무/가정계학원, 예체능계학원, 문리계학원, 외국어학원, 기타학원, 학습지(일부 PG업체를 통한 결제시 할인 미제공)']
+        target:
+          categories: [education.academy, education.study_material]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 5000, 400000: 10000, 800000: 20000, 1600000: 30000}
+        tiers:
+          from: 400000
+          to: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: []
+      - key: edu-5pct-80k
+        title: 교육 업종 5% 할인 (전월실적 80만원 이상)
+        source: page
+        evidence: [교육 관련 업종* | 5% | 80만원 이상 | 2만원]
+        target:
+          categories: [education.academy, education.study_material]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 20000}
+        tiers: {from: 800000, to: 800000}
+        unmodeled: []
+      - key: edu-5pct-160k
+        title: 교육 업종 5% 할인 (전월실적 160만원 이상)
+        source: page
+        evidence: [교육 관련 업종* | 5% | 160만원 이상 | 3만원]
+        target:
+          categories: [education.academy, education.study_material]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 30000}
+        tiers: {from: 1600000}
+        unmodeled: []
+      - key: edu-kbpay-add
+        title: KB Pay 결제 시 교육 업종 추가 3천원 할인
+        source: page
+        evidence: [KB Pay 결제 시 추가 할인 | 5% | 80만원 이상 | 3천원, KB Pay 결제 시 추가 할인 서비스는 실적유예 미적용]
+        target:
+          categories: [education.academy, education.study_material]
+        when:
+          - payment: [kb_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 800000}
+        stack: kbpay
+        unmodeled: []
+      - key: life-5pct-80k
+        title: 병원·약국·카페 5% 할인 (전월실적 80만원 이상)
+        source: page
+        evidence: ['병원, 약국, 커피 | 5% | 80만원 이상 | 5천원']
+        target:
+          categories: [cafe, hospital, pharmacy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 800000}
+        unmodeled: []
+    unmodeled: ['가족카드 실적과 한도는 본인과 합산한다. 무승인 자판기, 터널통행료, 항공기내 결제는 실적에서 제외한다. 전표 매입 순서로 할인한도를 쓴다.', 부분 무이자 할부 이용금액도 전체를 실적에서 제외한다. 결제 입력의 무이자 여부에 부분 무이자도 표시해야 한다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정. 2026-10-10 새 방식으로 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다.

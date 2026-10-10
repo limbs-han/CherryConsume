@@ -1,0 +1,144 @@
+schema_version: 2
+id: samsung-aap1824
+issuer: samsung
+name: 삼성 iD GLOBAL 카드
+short_name: iD GLOBAL
+search_names: [iD GLOBAL, 삼성 iD GLOBAL 카드, 아이디 글로벌]
+kind: credit
+product_codes: [AAP1824]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1824', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtt%2BI3cpvaZuAFvkk52w8o4I%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2024-01-30'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다', '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - key: digital
+        per: month
+        amount: {500000: 10000, 1000000: 20000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [samsungpay-5, overseas-2, digital-50, subscription-50, easypay-1, daily-1, daily-offline-1, domestic-0-5]
+        spill: none
+    benefits:
+      - key: samsungpay-5
+        title: 해외 오프라인 삼성페이 5% 할인
+        source: manual
+        evidence: [해외 오프라인 가맹점에서 삼성페이로 결제 시 5% 결제일할인, '전월 이용금액대별 통합 월 할인한도 50만원 이상 10,000원, 100만원 이상 20,000원', 월 할인한도 초과 시 다음 결제건부터 해외 2% 할인 적용, 삼성페이 앱을 통한 간편결제건(스마트폰 NFC)에 한함]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {channel: offline}
+          - payment: [samsung_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {500000: 10000, 1000000: 20000}
+        tiers: {from: 500000}
+      - key: overseas-2
+        title: 해외 2% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 해외 2% 결제일할인', 해외 가맹점 및 해외 직접구매 이용건, '통합 월 할인한도 : 30만원', 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {per: month, amount: 300000}
+        unmodeled: [해외 온라인 거래라도 국내 가맹점번호로 승인되는 결제(국내 PG 등)는 할인하지 않는다]
+      - key: digital-50
+        title: 인앱 결제·디지털콘텐츠·멤버십 50% 할인
+        source: manual
+        evidence: [인앱 결제/디지털콘텐츠/멤버십 50% 결제일할인, '인앱 결제 구글플레이, 앱스토어', 디지털콘텐츠 넷플릭스/디즈니+/유튜브 프리미엄 정기결제건, 멤버십 쿠팡 로켓와우 멤버십/네이버플러스 멤버십 정기결제건, '50만원 이상 10,000원, 100만원 이상 20,000원', '인앱 결제, 디지털콘텐츠는 국내 온라인 가맹점에 한함', '결제 수단에 해당 카드 등록 후 결제 시 혜택 제공(단, 간편결제건은 제외)']
+        target:
+          merchants: [app_store, google_play]
+        when:
+          - {region: domestic}
+          - {channel: online}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 500000}
+        unmodeled: [간편결제로 낸 결제는 할인하지 않는다]
+      - key: subscription-50
+        title: 디지털콘텐츠·멤버십 정기결제 50% 할인
+        source: manual
+        evidence: [디지털콘텐츠 넷플릭스/디즈니+/유튜브 프리미엄 정기결제건, 멤버십 쿠팡 로켓와우 멤버십/네이버플러스 멤버십 정기결제건]
+        target:
+          merchants: [coupang_wow, disney_plus, naver_plus_membership, netflix, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 500000}
+        unmodeled: [간편결제로 낸 결제는 할인하지 않는다]
+      - key: easypay-1
+        title: 온라인 간편결제 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 일상 필수 영역 1% 결제일할인', '온라인 간편결제 삼성페이, 네이버페이, 카카오페이', '온라인 간편결제는 국내 온라인 가맹점에 한하며, 오프라인 매장 결제건(바코드, QR코드, 스마트폰NFC/MST 등)은 제외']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - {channel: online}
+          - payment: [kakao_pay, naver_pay, samsung_pay]
+        reward: {type: billing_discount, rate: 1}
+      - key: daily-1
+        title: 일상 필수 영역 1% 할인
+        source: manual
+        evidence: ['항공 대한항공, 아시아나항공, 제주항공, 진에어, 티웨이항공', 여행 여행사, 면세점 신라면세점, '리셀쇼핑 크림, 솔드아웃', '온라인쇼핑몰 쿠팡, 티몬, 위메프, SSG.COM, G마켓, 옥션, 11번가, 인터파크, 삼성카드 쇼핑', '홈쇼핑 GS SHOP, CJ온스타일, 롯데홈쇼핑, 현대홈쇼핑', '주유 주유소, LPG충전소', 홈쇼핑은 공식 홈페이지/앱/ARS를 통한 결제건에 한함, '스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          categories: [fuel, travel.agency]
+          merchants: [asiana_airlines, auction, cj_onstyle, coupang, eleven_st, gmarket, gs_shop, hyundai_homeshopping, interpark, jeju_air, jin_air, korean_air, kream, lotte_homeshopping, samsung_card_shopping, shilla_dfs_online, ssg_com, starbucks, tmon, tway_air, wemakeprice]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [스타벅스는 매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다, 신라인터넷면세점은 내국인 전용 공식 홈페이지·앱 결제만 할인한다]
+      - key: daily-offline-1
+        title: 백화점·편의점·커피·신라면세점 1% 할인
+        source: manual
+        evidence: ['백화점 신세계백화점, 롯데백화점, 현대백화점', '편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '백화점은 오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외', '편의점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외', '면세점은 국내 오프라인 매장 및 공식 홈페이지/앱(내국인 전용)을 통한 결제건에 한하며, 임대매장 및 해외 오프라인 매장은 제외']
+        target:
+          merchants: [blue_bottle, coffee_bean, cu, ediya, emart24, gs25, hyundai_department, lotte_department, ministop, seven_eleven, shilla_dfs, shinsegae_department, twosome]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: ['임대매장과 백화점의 쇼핑 외 결제(상품권, 주차장 등)는 1%를 받지 않는다']
+      - key: domestic-0-5
+        title: 국내 가맹점 0.5% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 국내 가맹점 0.5% 결제일할인']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+    unmodeled: ['해외 수수료(브랜드사수수료 1.0%, 해외이용수수료 0.2%) 할인과 공항 라운지는 계산하지 않는다', 리셀쇼핑 솔드아웃은 가맹점이 없어 1%를 담지 않았다. 이 결제는 0.5%로 계산한다, 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2024-01-30이고 상품설명서는 2024.3판이다. 출시일을 시행일로 두었다, assumed: '2024-01-30'}
+  - {path: 'revisions[0].stacks', question: 할인 혜택끼리는 겹치지 않고 큰 쪽 하나로 보았다. 삼성페이 5% 한도를 넘긴 다음 결제부터 해외 2%를 준다, assumed: 'priority, spill none'}
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 고속버스는 차내 단말기와 고속버스 앱 결제만 제외지만 업종을 나눌 수 없어 고속버스 전체를 혜택에서 뺐다, assumed: transit.bus_express}
+  - {path: status, question: 상품 페이지에서 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-10 상품설명서(2024.3판, 여신금융협회 심의필 제2024-C1a-01197호) 확인. 연회비 국내전용과 해외겸용 Mastercard 모두 20,000원(기본 7,000+제휴 13,000). 해외 2%는 월 30만원 한도, 실적 무관. 삼성페이 해외 5%와 인앱·디지털·멤버십 50%는 전월 50만원 이상, 발급월+1개월 유예. 일상 필수 1%와 국내 0.5%는 실적과 한도가 없다. 해외 이용액 전체와 4대보험, 국세·지방세·공과금, 아파트관리비, 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권은 실적에서 빠진다.
