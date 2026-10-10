@@ -1,0 +1,96 @@
+schema_version: 2
+id: nh-f10774
+issuer: nh
+name: zgm shopping카드
+kind: credit
+product_codes: [F10774]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010505', fetched_at: &id001 2026-10-04}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    limits:
+      - {key: online-5-limit, per: month, amount: 15000}
+      - {key: online-10-limit, per: month, amount: 25000}
+      - {key: online-15-limit, per: month, amount: 40000}
+      - {key: offline-5-limit, per: month, amount: 15000}
+      - {key: offline-10-limit, per: month, amount: 25000}
+      - {key: offline-15-limit, per: month, amount: 40000}
+    benefits:
+      - key: online-points-5
+        title: 온라인 쇼핑 5% 포인트 적립
+        evidence: ['① 온라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)', 구분 | 전월실적 50만원 이상~ 100만원 미만 | 100만원 이상~ 150만원 미만 | 150만원 이상, 적립률 | 5% | 10% | 15%]
+        target:
+          categories: [online_shopping]
+        reward: {type: points, program: nh_point, rate: 5}
+        limits:
+          - {shared: online-5-limit}
+        tiers: {from: 0}
+        unmodeled: ['포인트 프로그램 키가 목록에 없음, program 필드 누락']
+      - key: online-points-10
+        title: 온라인 쇼핑 10% 포인트 적립
+        evidence: ['① 온라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)', 구분 | 전월실적 50만원 이상~ 100만원 미만 | 100만원 이상~ 150만원 미만 | 150만원 이상, 적립률 | 5% | 10% | 15%]
+        target:
+          categories: [online_shopping]
+        reward: {type: points, program: nh_point, rate: 10}
+        limits:
+          - {shared: online-10-limit}
+        tiers: {from: 500000}
+        unmodeled: ['포인트 프로그램 키가 목록에 없음, program 필드 누락']
+      - key: online-points-15
+        title: 온라인 쇼핑 15% 포인트 적립
+        evidence: ['① 온라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)', 구분 | 전월실적 50만원 이상~ 100만원 미만 | 100만원 이상~ 150만원 미만 | 150만원 이상, 적립률 | 5% | 10% | 15%]
+        target:
+          categories: [online_shopping]
+        reward: {type: points, program: nh_point, rate: 15}
+        limits:
+          - {shared: online-15-limit}
+        tiers: {from: 1500000}
+        unmodeled: ['포인트 프로그램 키가 목록에 없음, program 필드 누락']
+      - key: offline-points-5
+        title: 오프라인 쇼핑 5% 포인트 적립
+        evidence: ['② 오프라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)', '대상업종 - 백 화 점 : 신세계, 롯데, 현대, 갤러리아, AK플라자', '대상업종 - 대형마트 : 하나로마트ㆍ클럽, 이마트(트레이더스 홀세일 클럽 포함), 홈플러스, 롯데마트(VIC마켓, 맥스 포함)', 구분 | 전월실적 50만원 이상~ 100만원 미만 | 100만원 이상~ 150만원 미만 | 150만원 이상, 적립률 | 5% | 10% | 15%]
+        target:
+          categories: [department_store, grocery_mart]
+        reward: {type: points, program: nh_point, rate: 5}
+        limits:
+          - {shared: offline-5-limit}
+        tiers: {from: 0}
+        unmodeled: ['포인트 프로그램 키가 목록에 없음, program 필드 누락']
+      - key: offline-points-10
+        title: 오프라인 쇼핑 10% 포인트 적립
+        evidence: ['② 오프라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)', '대상업종 - 백 화 점 : 신세계, 롯데, 현대, 갤러리아, AK플라자', '대상업종 - 대형마트 : 하나로마트ㆍ클럽, 이마트(트레이더스 홀세일 클럽 포함), 홈플러스, 롯데마트(VIC마켓, 맥스 포함)', 구분 | 전월실적 50만원 이상~ 100만원 미만 | 100만원 이상~ 150만원 미만 | 150만원 이상, 적립률 | 5% | 10% | 15%]
+        target:
+          categories: [department_store, grocery_mart]
+        reward: {type: points, program: nh_point, rate: 10}
+        limits:
+          - {shared: offline-10-limit}
+        tiers: {from: 500000}
+        unmodeled: ['포인트 프로그램 키가 목록에 없음, program 필드 누락']
+      - key: offline-points-15
+        title: 오프라인 쇼핑 15% 포인트 적립
+        evidence: ['② 오프라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)', '대상업종 - 백 화 점 : 신세계, 롯데, 현대, 갤러리아, AK플라자', '대상업종 - 대형마트 : 하나로마트ㆍ클럽, 이마트(트레이더스 홀세일 클럽 포함), 홈플러스, 롯데마트(VIC마켓, 맥스 포함)', 구분 | 전월실적 50만원 이상~ 100만원 미만 | 100만원 이상~ 150만원 미만 | 150만원 이상, 적립률 | 5% | 10% | 15%]
+        target:
+          categories: [department_store, grocery_mart]
+        reward: {type: points, program: nh_point, rate: 15}
+        limits:
+          - {shared: offline-15-limit}
+        tiers: {from: 1500000}
+        unmodeled: ['포인트 프로그램 키가 목록에 없음, program 필드 누락']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 시행일을 찾지 못해 수집한 날로 두었다}
+  - {path: 'revisions[0]', question: 'spend.exclude_categories: 전월실적 산정에서 제외되는 항목들의 카테고리 키 매핑이 필요합니다.'}
+  - {path: 'revisions[0]', question: 'benefits.reward.program: NH 포인트 프로그램의 키가 포인트 목록에 없습니다. 어떤 키를 사용해야 하나요?'}
+  - {path: 'revisions[0]', question: 'additional-annual-bonus: 연 1회 제공되는 기본 적립 포인트 5% 추가 적립 혜택의 구체적인 포인트 양과 적용 조건을 확인해야 합니다.'}
+  - {path: kind, question: 'kind를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: 발급 기준 안내표입니다. 발급대상 | 개인(신용) 교통구분 | 교통(후불), 비교통 ※ 가족카드 발급가능 ※ 본 상품은 ''모바일카드''발급이 가능합니'}
+  - {path: 'revisions[0]', question: 'benefits[0].reward.program를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: ① 온라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)'}
+  - {path: 'revisions[0]', question: 'benefits[1].reward.program를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: ① 온라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)'}
+  - {path: 'revisions[0]', question: 'benefits[2].reward.program를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: ① 온라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)'}
+  - {path: 'revisions[0]', question: 'benefits[3].reward.program를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: ② 오프라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)'}
+  - {path: 'revisions[0]', question: 'benefits[4].reward.program를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: ② 오프라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)'}
+  - {path: 'revisions[0]', question: 'benefits[5].reward.program를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: ② 오프라인 쇼핑 이용 시 최대 15% NH포인트 적립(최대 40,000P)'}
+notes: 새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다.

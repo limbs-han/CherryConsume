@@ -1,0 +1,376 @@
+{
+  "reviewed_at": "2026-10-10",
+  "scope": "추천 기타 승인 후보9장. 이전 롯데·우리 보고서 중 승인 대상18개 지적과 삼성1689의2개 지적을 현재 파일과 packet 공식 본문으로 다시 대조. 마지막 우리103489 컬리멤버십과500058 음식점입점 제외 안내2개 확인. 카드·카드사 파일 수정 없음.",
+  "reviewed_count": 9,
+  "finding_count": 0,
+  "result": "불일치 없음",
+  "cards": [
+    {
+      "card_id": "woori-500055",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500055.yaml",
+      "sha256": "c4d206b3afb007dd82b7713bc4db7f002235e2109521313170d7af25e68a1cdd",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "checked_sources": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500055-page-9fb3d9fd1eac.html",
+          "kind": "product_page",
+          "text_sha256": "f9c1d9fc07a3ebfe6c7f0d853543d2916ece6cac3fcc6f84189e36c9e5126f4f"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].benefits[special-kakao-taxi-earn].target",
+          "result": "해결",
+          "evidence": "카카오T(택시). 카카오T 앱 내 택시호출 이외 서비스 기차 등 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "result": "해결",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055",
+          "previous_severity": "조건이 빠짐"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "card_id": "woori-103489",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-103489.yaml",
+      "sha256": "3a0ee90018ad41dde1ce0657da0954de897e026b040a25c0d855fda8307f6fc3",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "checked_sources": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-103489-page-6810b1dad6ce.html",
+          "kind": "product_page",
+          "text_sha256": "72648d4ccf2efa34884bd7a2abd3e459b726b80e22a6335f0877e87d6e2b16ee"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].benefits[delivery-5].unmodeled",
+          "result": "해결",
+          "evidence": "컬리 : 멤버십 정기 결제 건 캐시백 제외"
+        },
+        {
+          "path": "revisions[0].benefits[telecom-5].target",
+          "result": "해결",
+          "evidence": "인터넷/집전화 등 결합상품은 할인/캐시백 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].benefits[].unmodeled",
+          "result": "해결",
+          "evidence": "통신/배달/렌탈/디지털의 개별 유의사항은 해당 영역 전용",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489",
+          "previous_severity": "조건이 빠짐"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "card_id": "woori-500044",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500044.yaml",
+      "sha256": "c742d086d392de54f6da952f9284d7e9f41852bf39f00406d2e71e42ae1232a5",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "checked_sources": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500044"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500044-page-b7b8b5affae7.html",
+          "kind": "product_page",
+          "text_sha256": "025dbb9de5da6dbac5930a9cf7bfe3131ff3d7a71a168e1bd473a8841cfa9ef5"
+        }
+      ],
+      "resolved_findings": [],
+      "findings": []
+    },
+    {
+      "card_id": "woori-500045",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500045.yaml",
+      "sha256": "6ce8111fc8d044fa70b301f97c1d189de9b1add2c355978556a6566a24cbbbae",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "checked_sources": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500045-page-1f1ab54445ee.html",
+          "kind": "product_page",
+          "text_sha256": "11d8af3fbdfc1f50e59232ef8a83f0c5bd2b2286dc1fe0db08d7ad64498bbfd1"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "result": "해결",
+          "evidence": "전월 실적 제외 목록에 아파트관리비 없음",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].benefits[rental-15].when",
+          "result": "해결",
+          "evidence": "매월 청구되는 렌탈 자동납부 건에 한하여 할인 제공",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].benefits[book-15].when",
+          "result": "해결",
+          "evidence": "도서 업종은 인앱결제 시 할인 제공 불가",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].benefits[telecom-15].target",
+          "result": "해결",
+          "evidence": "인터넷/집전화 등 결합상품은 할인/캐시백 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "result": "해결",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "previous_severity": "조건이 빠짐"
+        },
+        {
+          "path": "revisions[0].benefits[].unmodeled",
+          "result": "해결",
+          "evidence": "통신/배달/렌탈/디지털의 개별 유의사항은 해당 영역 전용",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "previous_severity": "조건이 빠짐"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "card_id": "woori-500058",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500058.yaml",
+      "sha256": "c57c9d7b0fd2c2bc66abf9a9e727175c0c7327f2c3221ab2941279902ac8f8cd",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "checked_sources": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500058-page-b74014399901.html",
+          "kind": "product_page",
+          "text_sha256": "91ac165dcd8cbe2d6e94a480896c87f0bb9b39ec2e00fa9c070109ed2596c79a"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].benefits[fixed-consumption-5pct].unmodeled",
+          "result": "해결",
+          "evidence": "음식점 매장이 백화점/할인점 등에 입점된 매장인 경우는 할인 제외"
+        },
+        {
+          "path": "revisions[0].benefits[fixed-telecom].target",
+          "result": "해결",
+          "evidence": "인터넷/집전화 등 결합상품은 할인/캐시백 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].benefits[fixed-kakao-taxi].target",
+          "result": "해결",
+          "evidence": "카카오T(택시). 카카오T 앱 내 택시호출 이외 서비스 기차 등 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "previous_severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "result": "해결",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "previous_severity": "조건이 빠짐"
+        },
+        {
+          "path": "revisions[0].benefits[].unmodeled",
+          "result": "해결",
+          "evidence": "통신/배달/렌탈/디지털의 개별 유의사항은 해당 영역 전용",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "previous_severity": "조건이 빠짐"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "card_id": "lotte-c12833-a12833",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/lotte/lotte-c12833-a12833.yaml",
+      "sha256": "ad12aa9b46cab898840e4f2f6a4126a985d4634a18a131db50789ae1ffdcb547",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/lotte.yaml",
+      "issuer_sha256": "e2ad7e51dce0bab14847bcd514c1a9633c27cb006917c1c2ebcf1cfa785c653d",
+      "checked_sources": [
+        "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12833-A12833",
+        "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1606-page-e5305c62a243.html",
+          "kind": "product_page",
+          "text_sha256": "b8aaf7984f55cd9b5c14e290a8521b8e584e9a60754b53c03d4290568a80eddd"
+        },
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1606-pdf-82271149c6b7.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "25f316a4a2674c144a634e2d2bcc149bace69f04e12e5cde9b3500fce254fe90"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "result": "해결",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf",
+          "previous_severity": "조건이 빠짐"
+        },
+        {
+          "path": "revisions[0].benefit_exclusions.unmodeled",
+          "result": "해결",
+          "evidence": "공통 혜택 안내 상품권 및 기프트 카드 구매, 포인트 충전 건 혜택 미적용. 장애인 고용부담금은 지난달 실적 제외 목록",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf",
+          "previous_severity": "조건이 빠짐"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "card_id": "lotte-p14718-a14718",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/lotte/lotte-p14718-a14718.yaml",
+      "sha256": "b37f220f77ecb317d0ee439b178ee64a6475fd629c0cf873b1235ea66794dce1",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/lotte.yaml",
+      "issuer_sha256": "e2ad7e51dce0bab14847bcd514c1a9633c27cb006917c1c2ebcf1cfa785c653d",
+      "checked_sources": [
+        "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14718-A14718",
+        "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00032_20260928_10002.pdf"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1864-page-6faaefaa23f7.html",
+          "kind": "product_page",
+          "text_sha256": "d1e666f920ea337412cc6355dd337197385989eb556d54e323ac7d513c231a0b"
+        },
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1864-pdf-f779bb87f56b.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "6ee33eb45a8a12297812dccfc6d72396401cd12bbc83487e002d7aac8aadbb59"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].benefit_exclusions.unmodeled",
+          "result": "해결",
+          "evidence": "롯데카드의 다른 결제일 할인 혜택과 중복 시",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00032_20260928_10002.pdf",
+          "previous_severity": "표기만 다름"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "card_id": "lotte-p15835-a15835",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/lotte/lotte-p15835-a15835.yaml",
+      "sha256": "422100ba71f9fc5a31eef4531b9b661ecdeeb8e4a12037c39310afdcf08b823f",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/lotte.yaml",
+      "issuer_sha256": "e2ad7e51dce0bab14847bcd514c1a9633c27cb006917c1c2ebcf1cfa785c653d",
+      "checked_sources": [
+        "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15835-A15835",
+        "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00005_20260424_10001.pdf"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1953-page-391009f6b900.html",
+          "kind": "product_page",
+          "text_sha256": "d7a385c1d79e9671a0040f0883d6aee5535d574f2a8fc60838e21e9a41d8e633"
+        },
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1953-pdf-66caefffc9bc.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "473ecd866c5124a53ad2516b30122e55022caa5b4cca6fe5335a70ad17ca4db4"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].benefit_exclusions.unmodeled",
+          "result": "해결",
+          "evidence": "롯데카드의 다른 결제일 할인 혜택과 중복 시",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00005_20260424_10001.pdf",
+          "previous_severity": "표기만 다름"
+        }
+      ],
+      "findings": []
+    },
+    {
+      "card_id": "samsung-abp1689",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/samsung/samsung-abp1689.yaml",
+      "sha256": "08b50759c774ad5b311a4fbf0599633c2b942d3db3c92e28b91a21ad5ba316f0",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/samsung.yaml",
+      "issuer_sha256": "cee70fd98347ca9ea6eecd55f79728ed17f8eec3c2e43aae66ea92df8ed29cb4",
+      "checked_sources": [
+        "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+        "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1689-page-ec21241839d3.html",
+          "kind": "product_page",
+          "text_sha256": "9ea5f80c9f1f1790b13d274e5307c3fb99695e78df1c9e2e68257b327ca3b49f"
+        },
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1689-pdf-a81520750e62.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "11214db7b1c410f0f902cf7b5417b3a6958e2d21d5d9299a47f90dcd19b55f74"
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].new_card",
+          "result": "해결",
+          "evidence": "탈회 후 카드를 재발급받은 경우 전월 이용실적 충족 시 제공",
+          "source_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+          "previous_severity": "조건이 빠짐"
+        },
+        {
+          "path": "revisions[0].benefits[*].unmodeled",
+          "result": "해결",
+          "evidence": "의료·산후조리원은 요양병원, 보건소, 동물병원 제외",
+          "source_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+          "previous_severity": "표기만 다름"
+        }
+      ],
+      "findings": []
+    }
+  ],
+  "limitations": [
+    "웹 공식 URL 접근은 우리2장·삼성1689 성공했으나 동적 상품 상세가 표시되지 않았고 롯데 LIKIT PDF는 오류. 이전 독립검토의 공식 원문 packet 전체 수집 본문으로 상세 조건 재대조.",
+    "운영 반영과 자동 계산 시험의 최종 실행은 부모 작업에 남아 있다. 이 보고서는 해당 파일 지문 기준 공식 조건 재검토 결과다.",
+    "입점 매장·해당 서비스 정기 구독의 세부 구매 목적 등 현재 결제 입력으로 판별할 수 없는 조건은 해당 혜택 안내에 보존한다."
+  ]
+}

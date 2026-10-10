@@ -1,0 +1,306 @@
+schema_version: 2
+id: kb-09771
+issuer: kb
+name: KB YOU Prime 카드
+kind: credit
+product_codes:
+  - '09771'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+  - {scope: global, brand: jcb, amount: 30000}
+  - {scope: domestic, form: mobile, amount: 24000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 24000}
+  - {scope: global, brand: jcb, form: mobile, amount: 24000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09771', fetched_at: &id001 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1600000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [입점 매장과 PG 전용 가맹점은 제외한다. 전월 실적에서 정부지원금과 무승인 결제는 제외한다. 가족카드 실적과 한도는 합산한다.]
+    options:
+      - key: pack
+        title: 혜택 서비스팩
+        choices:
+          - {key: daily, title: 일상팩}
+          - {key: family, title: 가족팩}
+        change: next_month
+    limits:
+      - key: daily-fuel
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: daily-delivery
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: daily-telecom-insurance-app
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: daily-shopping
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: daily-convenience
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: daily-hobby
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: family-bills
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: family-grocery
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: family-care
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: family-academy
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: family-mart
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+      - key: family-cafe-kids
+        per: month
+        amount: {0: 2500, 400000: 5000, 800000: 7000, 1600000: 10000}
+    benefits:
+      - key: daily-fuel
+        title: 일상 주유 충전 10%
+        source: page
+        target:
+          categories: [electric_vehicle_charge, fuel]
+        when:
+          - option:
+              pack: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily-fuel}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: daily-delivery
+        title: 일상 KB Pay 배달 10%
+        source: page
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - option:
+              pack: [daily]
+          - channel: online
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily-delivery}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: daily-telecom
+        title: 일상 이동통신 자동납부 10%
+        source: page
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - option:
+              pack: [daily]
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily-telecom-insurance-app}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: daily-insurance-app
+        title: 일상 보험 앱스토어 10%
+        source: page
+        target:
+          categories: [insurance.private]
+          merchants: [app_store, google_play]
+        when:
+          - option:
+              pack: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily-telecom-insurance-app}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: daily-shopping
+        title: 일상 KB Pay 온라인 쇼핑 5%
+        source: page
+        target:
+          merchants: [coupang, musinsa, naver_plus_store, ohouse, twentynine_cm, wconcept, zigzag]
+        when:
+          - option:
+              pack: [daily]
+          - channel: online
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily-shopping}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: daily-convenience
+        title: 일상 편의점 5%
+        source: page
+        target:
+          merchants: [cu, gs25]
+        when:
+          - option:
+              pack: [daily]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily-convenience}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: daily-hobby
+        title: 일상 스포츠 미용실 5%
+        source: page
+        target:
+          categories: [beauty.salon, sports]
+        when:
+          - option:
+              pack: [daily]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily-hobby}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: family-bills
+        title: 가족 아파트 가스 보험 10%
+        source: page
+        target:
+          categories: [apartment_fee, insurance.private, utility.gas]
+        when:
+          - option:
+              pack: [family]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: family-bills}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: family-grocery
+        title: 가족 KB Pay 온라인 장보기 10%
+        source: page
+        target:
+          merchants: [coupang, kurly, naver_plus_store, oasis_market]
+        when:
+          - option:
+              pack: [family]
+          - channel: online
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: family-grocery}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: family-care
+        title: 가족 병원 약국 미용 세탁 10%
+        source: page
+        target:
+          categories: [beauty.salon, hospital, laundry, pharmacy]
+        when:
+          - option:
+              pack: [family]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: family-care}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: family-academy
+        title: 가족 학원 문화센터 학습지 5%
+        source: page
+        target:
+          categories: [education.academy, education.culture_center, education.study_material]
+        when:
+          - option:
+              pack: [family]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: family-academy}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: family-mart
+        title: 가족 지정 대형마트 5%
+        source: page
+        target:
+          merchants: [emart, lotte_mart, traders]
+        when:
+          - option:
+              pack: [family]
+          - channel: offline
+            amount: {min: 50000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: family-mart}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: family-cafe
+        title: 가족 오프라인 커피 5%
+        source: page
+        target:
+          categories: [cafe]
+        when:
+          - option:
+              pack: [family]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: family-cafe-kids}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: family-kids-cafe
+        title: 가족 키즈카페 5%
+        source: page
+        target:
+          categories: [kids_cafe]
+        when:
+          - option:
+              pack: [family]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: family-cafe-kids}
+        tiers:
+          from: 400000
+          waived_when:
+            card_month: {min: 0, max: 1}
+    unmodeled: [국내외겸용 해외 결제 시 국제브랜드 수수료 1%와 해외서비스 수수료 0.25% 면제. 결제 입력의 원금과 수수료 분리를 계산해야 한다., 전월 실적 채워드림은 35만원 이상 40만원 미만 회원이 1일부터 25일까지 신청. 신청 다음날부터 월말까지 40만원 구간 혜택. 분기 1회 연 4회이며 취소할 수 없다. 신청 이력과 적용일을 별도로 표현해야 한다., '배달 멤버십은 제외한다. 대형마트 주차장, 임대매장, 기업형 슈퍼마켓은 제외한다. 카페 앱주문은 제외한다.']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].unmodeled', question: 핵심 해외 수수료 면제와 전월실적 채워드림 적용 이력을 엔진에서 표현해야 한다. 현재 파일은 출시 승인 대상이 아니다.}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정.

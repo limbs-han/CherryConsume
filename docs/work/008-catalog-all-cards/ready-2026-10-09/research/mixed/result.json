@@ -1,0 +1,3287 @@
+[
+  {
+    "card_id": "hana-11808",
+    "name": "웰릭스렌탈 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11808"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "신용카드 발급 안내로 종류 확인",
+      "렌탈 금액이 월 한도 미만이면 결제액만 할인",
+      "렌탈 자동이체 대상과 마트·커피 대상 교정",
+      "커피·마트 할인 받은 전체 매출 실적 제외",
+      "신규 등록 다음달 말일까지 30만원 구간 적용",
+      "할부 전액·취소 접수월·실적 제외 업종 반영"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-11808.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-discount].target: 가맹점 ['wellrix_rental']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-11808.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-12395",
+    "name": "현대렌탈서비스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급 안내로 신용카드 종류 확인",
+      "대상 가맹점과 자동납부 조건",
+      "잘못된 정액 할인 대신 결제액 전액 월 합산 한도",
+      "실적 구간과 상한 중복 교정",
+      "신규 등록 다음달 말일 최저 구간",
+      "실적 제외·할부 전액·취소 접수월 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-12395.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-auto-8k].target: 가맹점 ['hyundai_rental_service']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-12395.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-auto-13k].target: 가맹점 ['hyundai_rental_service']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-12395.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-15349",
+    "name": "대명아임레디 플러스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급 안내로 신용카드 종류 확인",
+      "대상 가맹점과 자동납부 조건",
+      "잘못된 정액 할인 대신 결제액 전액 월 합산 한도",
+      "실적 구간과 상한 중복 교정",
+      "신규 등록 다음달 말일 최저 구간",
+      "실적 제외·할부 전액·취소 접수월 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-15349.yaml",
+        "question": "error: revisions@2026-10-04.benefits[daemyung-auto-discount].target: 가맹점 ['daemyung_imready']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-15349.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": [
+      "daemyung-auto-discount"
+    ]
+  },
+  {
+    "card_id": "hana-17403",
+    "name": "마이 코웨이 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급 안내로 신용카드 종류 확인",
+      "대상 가맹점과 자동납부 조건",
+      "잘못된 정액 할인 대신 결제액 전액 월 합산 한도",
+      "실적 구간과 상한 중복 교정",
+      "신규 등록 다음달 말일 최저 구간",
+      "실적 제외·할부 전액·취소 접수월 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-17403.yaml",
+        "question": "error: revisions@2026-10-04.benefits[coaway-rental-discount].target: 가맹점 ['coway_rental']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-17403.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-18023",
+    "name": "토스뱅크 하나카드 Wide",
+    "status": "ready",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "신용 일시불 상품 확인",
+      "1%·2% 구간 구분",
+      "전체 공유 월 10만원 한도",
+      "할부 혜택 제외 및 실적에는 전액 포함",
+      "혜택·실적 제외 목록 동일하게 반영",
+      "신규 실적 면제가 없음을 확인"
+    ],
+    "unresolved": [],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-18023.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-19077",
+    "name": "펫프렌즈 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19077"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[2].limits",
+        "question": "국내 가맹점 0.5% 할인에 월 한도 금액이 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].tiers",
+        "question": "국내 가맹점 할인에 전월실적 구간 적용 여부 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[*].target.merchants",
+        "question": "펫프렌즈 몰을 해당 목록의 merchant key로 매핑할 수 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-19077.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-19357",
+    "name": "런데이 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19357"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "kind",
+        "question": "런데이 하나카드가 신용카드인지 체크카드인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[*].reward.per_unit",
+        "question": "포인트 적립 200 하나머니 per km 를 per_unit 로 표현이 맞는지 확인",
+        "assumed": null
+      },
+      {
+        "path": "benefits[*].target.merchants",
+        "question": "벅스, 스포티파이 등 원문에 언급된 가맹점 키가 목록에 없음",
+        "assumed": null
+      },
+      {
+        "path": "benefits[*].reward.fixed",
+        "question": "편의점 및 생활/뷰티 적립이 고정 포인트인지 비율인지 확인",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-19357.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-5866",
+    "name": "쿠쿠 프리멤버쉽 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5866"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "신용카드 발급 안내로 종류 확인",
+      "렌탈 금액이 월 한도 미만이면 결제액만 할인",
+      "렌탈 자동이체 대상과 마트·커피 대상 교정",
+      "커피·마트 할인 받은 전체 매출 실적 제외",
+      "신규 등록 다음달 말일까지 30만원 구간 적용",
+      "할부 전액·취소 접수월·실적 제외 업종 반영"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-5866.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-discount].target: 가맹점 ['cuckoo_rental']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-5866.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-24383",
+    "name": "Hyundai Mobility카드 (CASPER 경차카드)",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AO7-20260319-1351-97_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80_%EC%BA%90%EC%8A%A4%ED%8D%BC%20%EA%B2%BD%EC%B0%A8_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?].reward.fixed",
+        "question": "신차 구매 시 2% 포인트 적립 또는 최대 1.2% 캐시백 중 선택 시 실제 포인트/현금액 산정 방식은?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].reward.fixed",
+        "question": "인증중고차 구매 시 1.5% 포인트 적립 금액 산정 기준은?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].reward.rate",
+        "question": "블루 세이브-오토 이용 시 1.5% 포인트 적립 비율 적용 대상 및 제한은?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].reward.per_liter",
+        "question": "LPG 충전 시 유류세 환급 리터당 금액 160.82원의 적용 여부와 소수점 처리 규칙은?",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "Hyundai Mobility카드 (CASPER 경차카드)의 취소 적용 방식은 cancel_month 혹은 original_month 중 어느 것인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].reward.rate",
+        "question": "자동차보험 포인트 적립 시 적용되는 포인트 비율(또는 고정 포인트) 값은?",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-24383.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113190001",
+    "name": "동반성장카드",
+    "status": "exclude",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=319&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 또는 법인신용등급 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급대상\n기업공용 (사용자지정카드 발급가능)"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113400001",
+    "name": "K-22(Point)",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=340&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?(@.key=='top-points')].reward.program",
+        "question": "TOP포인트 적립 프로그램에 해당하는 포인트 키가 제공된 포인트 목록에 없습니다.",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='ktx-srt-10')].limits[?(@.per=='year')].count",
+        "question": "연간 이용 횟수 제한이 'year' 단위로 표현 가능한지 확인 필요.",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='coffee-20')].when[0].channel",
+        "question": "커피 할인 혜택이 오프라인 전용인지 확인 필요.",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='dept-10')].when[0].channel",
+        "question": "백화점·대형마트 할인 혜택이 오프라인 전용인지 확인 필요.",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12113400001.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113540001",
+    "name": "B-F&B",
+    "status": "exclude",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=354&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급대상\n기업공용 (사용자지정카드 발급가능)"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113580001",
+    "name": "BLISS Mileage",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=358&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[2].when",
+        "question": "바우처 신청 시 전월실적 50만원 이상 및 연회비 납부 여부를 조건으로 포함해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward.program",
+        "question": "바우처 현금환급을 포인트 프로그램으로 표시해야 하는가, 아니면 별도 프로그램 키가 필요한가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12113580001.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-12557",
+    "name": "스피킹맥스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12557"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].target",
+        "question": "장기할부 청구 할인 혜택이 적용되는 가맹점 또는 결제수단 조건이 원문에 명시되어 있는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].target",
+        "question": "생활할인 서비스가 적용되는 구체적인 가맹점 목록 또는 카테고리가 원문에 있는가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-12557.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-14145",
+    "name": "이디야 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=14145"
+    ],
+    "evidence": [],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "sources",
+        "question": "수집한 원문이 상품상세 대신 전체 카드목록이다. 상품별 설명서·실적 제외·신규 조건 재수집 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].target",
+        "question": "Is there any additional category or merchant condition for the 이디야커피 50% discount beyond the listed merchant?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].target",
+        "question": "Which merchants or categories does the 디지털구독 30% discount apply to?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-14145.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-16772",
+    "name": "에너지 더블 카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16772"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[].target.merchants",
+        "question": "EV 충전 할인 대상 가맹점 키가 목록에 존재하지 않음. 정확한 가맹점 키를 확인해야 함.",
+        "assumed": null
+      },
+      {
+        "path": "benefits[].target.categories",
+        "question": "대형마트에 해당하는 정확한 카테고리 키가 목록에 없으며, 'grocery_mart'가 적절한지 확인 필요.",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-16772.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-17398",
+    "name": "SK인텔릭스 플러스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급 안내로 신용카드 종류 확인",
+      "대상 가맹점과 자동납부 조건",
+      "잘못된 정액 할인 대신 결제액 전액 월 합산 한도",
+      "실적 구간과 상한 중복 교정",
+      "신규 등록 다음달 말일 최저 구간",
+      "실적 제외·할부 전액·취소 접수월 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-17398.yaml",
+        "question": "error: revisions@2026-10-04.benefits[sk-intelix-sub-13k].target: 가맹점 ['sk_intellix']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-17398.yaml",
+        "question": "error: revisions@2026-10-04.benefits[sk-intelix-sub-18k].target: 가맹점 ['sk_intellix']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-17398.yaml",
+        "question": "error: revisions@2026-10-04.benefits[sk-intelix-sub-25k].target: 가맹점 ['sk_intellix']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-17398.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-5863",
+    "name": "청호나이스 플러스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5863"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "신용카드 발급 안내로 종류 확인",
+      "렌탈 금액이 월 한도 미만이면 결제액만 할인",
+      "렌탈 자동이체 대상과 마트·커피 대상 교정",
+      "커피·마트 할인 받은 전체 매출 실적 제외",
+      "신규 등록 다음달 말일까지 30만원 구간 적용",
+      "할부 전액·취소 접수월·실적 제외 업종 반영"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-5863.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-discount].target: 가맹점 ['chungho_rental']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-5863.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-142733",
+    "name": "MY COMPANY PARTNERS",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/%EB%B2%95%EC%9D%B8_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_MC%20PARTNERS.pdf"
+    ],
+    "evidence": [
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 법인신용등급 또는 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-16682",
+    "name": "이마트 e카드 Edition2",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AZX-20260324-1756-32_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%9D%B4%EB%A7%88%ED%8A%B8%20e%EC%B9%B4%EB%93%9C_ed2_V6_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.spend.cancellation",
+        "question": "원문에 명시된 spend.cancellation 값이 무엇인지 확인해 주세요.",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[0].reward",
+        "question": "이마트 7대 가맹점 포인트 적립에 대한 reward.rate, fixed, per_unit, per_liter 중 어떤 필드와 값이 적용되는지 확인해 주세요.",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[1].reward",
+        "question": "생활편의영역 포인트 적립에 대한 reward.rate, fixed, per_unit, per_liter 중 어떤 필드와 값이 적용되는지 확인해 주세요.",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[2].reward",
+        "question": "일반 가맹점 포인트 적립에 대한 reward.rate, fixed, per_unit, per_liter 중 어떤 필드와 값이 적용되는지 확인해 주세요.",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-16682.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-19183",
+    "name": "대한항공카드070",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AZG-20260615-2017-91_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%8C%80%ED%95%9C%ED%95%AD%EA%B3%B5_070_V1_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다. 카드 이용대금과 이에 수반되는 모든 수수료를 지정된 대금 결제일에 상환합니다. 금융소비자는 금융소비자보호법 제19조 제1항에 따라 해당 상품 또는 서비스에 대하여 설명을 받을 권리가 있습니다. 자세한 내용 및 이용 조건은 카드 신청 전 현대카드 홈페이지 및 상품설명서, 약관 참고"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "spend.cancellation",
+        "question": "원문에 명시된 취소 적용 방식이 없으므로 어떤 cancellation 값을 사용해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward",
+        "question": "포인트 적립(마일리지) 혜택에 reward에 rate/fixed/per_unit/per_liter 중 어떤 필드를 넣어야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward.program",
+        "question": "마일리지 적립에 해당하는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward",
+        "question": "웰컴보너스 포인트 적립 혜택에 reward에 rate/fixed/per_unit/per_liter 중 어떤 필드를 넣어야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward.program",
+        "question": "웰컴보너스 마일리지 적립에 해당하는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward",
+        "question": "해외 가맹점·국내 면세점 추가 마일리지 적립 혜택에 reward에 rate/fixed/per_unit/per_liter 중 어떤 필드를 넣어야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward.program",
+        "question": "해외 가맹점·국내 면세점 추가 마일리지 적립에 해당하는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].reward",
+        "question": "대한항공 직판 항공권·기내 면세점 추가 마일리지 적립 혜택에 reward에 rate/fixed/per_unit/per_liter 중 어떤 필드를 넣어야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].reward.program",
+        "question": "대한항공 직판 항공권·기내 면세점 추가 마일리지 적립에 해당하는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].reward",
+        "question": "라운지 무료 이용 혜택에 reward에 rate/fixed/per_unit/per_liter 중 어떤 필드를 넣어야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].reward.program",
+        "question": "라운지 무료 이용에 해당하는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[6].reward",
+        "question": "주말 무료 주차 서비스 혜택에 reward에 rate/fixed/per_unit/per_liter 중 어떤 필드를 넣어야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[6].reward.program",
+        "question": "주말 무료 주차 서비스에 해당하는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-19183.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-20684",
+    "name": "배민현대카드 HYBRID",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AEI-20260226-1734-22_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%B0%B0%EB%AF%BC%20%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C_V1.pdf"
+    ],
+    "evidence": [
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?(@.key=='annual-fee-waiver')].when",
+        "question": "연간 이용금액 10만원 이상 조건을 연도 기준(12개월 연속)으로 측정하는지, 혹은 특정 기간(예: 최근 12개월)으로 측정하는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='baemin-app-3')].reward.program",
+        "question": "배민포인트를 어떤 포인트 프로그램 키로 매핑해야 하는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='online-shopping-2')].reward.program",
+        "question": "배민포인트를 어떤 포인트 프로그램 키로 매핑해야 하는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='general-0-5')].reward.program",
+        "question": "배민포인트를 어떤 포인트 프로그램 키로 매핑해야 하는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "공식 원문은 체크결제와 신용전환이 있는 HYBRID다. 현 종류 credit/check 중 상품을 어떻게 등록할지 모델 정의 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-20684.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-22184",
+    "name": "무신사 현대카드 HYBRID",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AEI-20250924-1053-98_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%AC%B4%EC%8B%A0%EC%82%AC%20%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C_V5_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- 결제 취소 시, 취소 발생 월이 아닌 승인 월 이용금액에서 제외되며, 취소금액으로 전월 이용금액 미충족 시 당월 혜택 미제공",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "kind",
+        "question": "공식 원문은 체크결제와 신용전환이 있는 HYBRID다. 현 종류 credit/check 중 상품을 어떻게 등록할지 모델 정의 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-22184.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-35883",
+    "name": "SmileCard Edition3",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AZG-20260320-1131-21_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%8A%A4%EB%A7%88%EC%9D%BC%EC%B9%B4%EB%93%9C_Ed3_V1.pdf"
+    ],
+    "evidence": [
+      "· 결제 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외되며, 취소 금액으로",
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될"
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "/benefits/0/reward/program",
+        "question": "스마일캐시 포인트 프로그램에 해당하는 포인트 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "/benefits/1/reward/program",
+        "question": "스마일캐시 포인트 프로그램에 해당하는 포인트 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "/benefits/1/target/merchants",
+        "question": "G마켓/옥션 외에 추가 적립 대상점으로 포함되는 정확한 가맹점 키 목록은?",
+        "assumed": null
+      },
+      {
+        "path": "/benefits/0/reward/fixed",
+        "question": "스마일캐시 기본 적립에 대한 포인트 고정 적립액(포인트 수) 값은?",
+        "assumed": null
+      },
+      {
+        "path": "/benefits/1/reward/fixed",
+        "question": "스마일캐시 추가 적립에 대한 포인트 고정 적립액(포인트 수) 값은?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-35883.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-yshc",
+    "name": "예스24 현대카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=YSHC",
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260310-1836-74_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%98%88%EC%8A%A424_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다.",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.spend.cancellation",
+        "question": "cancellation 값은 cancel_month 혹은 original_month 중 어느 값인가?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[0].reward.program",
+        "question": "YES포인트에 해당하는 포인트 프로그램 key는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[1].reward.program",
+        "question": "YES포인트에 해당하는 포인트 프로그램 key는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[2].reward.program",
+        "question": "YES포인트에 해당하는 포인트 프로그램 key는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-yshc.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12112050013",
+    "name": "THE Fine 플래티늄 카드(대한항공)",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=205&PDCD=0013&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[1].limits[0].count",
+        "question": "SK 주유소 일일 할인 횟수 2회가 정확히 일일 제한인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].limits[1].count",
+        "question": "월 6회 한정 할인 횟수가 월 제한인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].limits[2].amount",
+        "question": "회당 20만원 한도가 거래당 최대 금액인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].limits[0].count",
+        "question": "휴대폰 통화료 할인 월 1건 제한이 정확한지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].limits[1].amount",
+        "question": "월 5,000원 한도가 고정 할인 한도인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].limits[0].count",
+        "question": "패밀리 레스토랑 월 1회 제한이 정확한지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].limits[1].amount",
+        "question": "패밀리 레스토랑 월 10,000원 한도가 정확한지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].limits[0].count",
+        "question": "헤어샵 월 1회 제한이 정확한지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].limits[1].amount",
+        "question": "헤어샵 월 5,000원 한도가 정확한지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[6].limits[0].count",
+        "question": "화장품샵 월 1회 제한이 정확한지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[6].limits[1].amount",
+        "question": "화장품샵 월 5,000원 한도가 정확한지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "effective_from",
+        "question": "카드 혜택 시행일이 명시되어 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12112050013.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113470004",
+    "name": "IBK포인트3.8 토스 제휴카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=347&PDCD=0004&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.benefits[3].reward.rate",
+        "question": "주유(유류, LPG) 적립률(퍼센트)은 얼마인가요?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[2].limits[0]",
+        "question": "온라인 쇼핑 가맹점별 월 적립한도 10,000포인트를 스키마에 어떻게 표현해야 할까요? (가맹점별 한도 구분 필요)",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12113470004.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-11810",
+    "name": "BS렌탈 플러스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급 안내로 신용카드 종류 확인",
+      "대상 가맹점과 자동납부 조건",
+      "잘못된 정액 할인 대신 결제액 전액 월 합산 한도",
+      "실적 구간과 상한 중복 교정",
+      "신규 등록 다음달 말일 최저 구간",
+      "실적 제외·할부 전액·취소 접수월 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-11810.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-discount-13k].target: 가맹점 ['bs_rental']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-11810.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-discount-23k].target: 가맹점 ['bs_rental']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-11810.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-18463",
+    "name": "하이마트 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18463"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?].limits",
+        "question": "월 할인 한도(통합 한도) 금액 및 적용 방식이 원문에 명시되지 않음, 한도 정의 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-18463.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-12582",
+    "name": "현대카드M2 Platinum BLUEmembers Family",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M%C2%B7M2%20F_104_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "spend.cancellation",
+        "question": "원문에 취소 적용 방식(cancellation) 정보가 없으므로 어떤 값을 사용해야 하는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward.rate",
+        "question": "PRIVIA 여행 할인율이 정확히 9%인지, 혹은 범위가 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward.rate",
+        "question": "PRIVIA 항공권 할인율이 10%인지, 혹은 변동 가능성 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward.rate",
+        "question": "놀이공원 할인율이 30%와 50% 중 어느 비율이 적용되는지 구체적 기준 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].reward.rate",
+        "question": "LF(구.LG패션) 할인율이 10%인지, 20%인지 혹은 매장별 차등 적용되는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].reward.rate",
+        "question": "롯데면세점 할인율이 5%인지, 15%인지 혹은 구간별 적용되는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[6].limits",
+        "question": "CGV·메가박스 할인 시 6,000원 할인 적용 조건 및 연간/월간 한도 외 추가 제한이 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-12582.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-153300",
+    "name": "SC제일은행-대한항공카드060",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260310-1658-84_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SC_%EB%8C%80%ED%95%9C%ED%95%AD%EA%B3%B5%20060_V3.pdf"
+    ],
+    "evidence": [
+      "- \u0007매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외되며, 취소 금액으로 전월 이용 금액 미충족 시 당월 혜택 미제공",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인",
+      "해외 취소는 취소 발생월 차감"
+    ],
+    "unresolved": [
+      {
+        "path": "rules.benefits[0].reward.fixed",
+        "question": "What is the fixed mileage (points) value for the basic mileage accrual per 1,000원?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[1].reward.fixed",
+        "question": "What is the fixed mileage (points) value for the additional mileage accrual per 1,000원?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[2].reward.fixed",
+        "question": "What is the fixed mileage (points) value for the first-year annual bonus of 1,000 miles?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[3].reward.fixed",
+        "question": "What is the fixed mileage (points) value for the subsequent-year annual bonus of 1,000 miles?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[*].reward.program",
+        "question": "What point program corresponds to mileage accrual?",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.exclude_categories",
+        "question": "Confirm mapping of exclusion items (연회비, 제수수료, 국제브랜드 수수료, 해외서비스 수수료, 공과금, 고속도로 통행 요금, 후불하이패스 등) to allowed category keys.",
+        "assumed": [
+          "annual_fee",
+          "apartment_fee",
+          "tax",
+          "utility.electricity",
+          "utility.gas",
+          "rent"
+        ]
+      },
+      {
+        "path": "rules.benefits[extra-miles-2].target",
+        "question": "What merchant or category codes correspond to 대한항공 직판 항공권 and 해외 가맹점 for additional mileage benefit?",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      },
+      {
+        "path": "format",
+        "question": "4 validation errors for CardFile\nopen_questions.5.assumed.str\n  Input should be a valid string [type=string_type, input_value=['annual_fee', 'apartment..., 'utility.gas', 'rent'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type\nopen_questions.5.assumed.int\n  Input should be a valid integer [type=int_type, input_value=['annual_fee', 'apartment..., 'utility.gas', 'rent'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/int_type\nopen_questions.5.assumed.float\n  Input should be a valid number [type=float_type, input_value=['annual_fee', 'apartment..., 'utility.gas', 'rent'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/float_type\nopen_questions.5.assumed.bool\n  Input should be a valid boolean [type=bool_type, input_value=['annual_fee', 'apartment..., 'utility.gas', 'rent'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/bool_type",
+        "assumed": null
+      }
+    ],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-18282",
+    "name": "Kia Members 전기차 신용카드",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AO7-20260507-1059-61_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EA%B8%B0%EC%95%84_%EC%A0%84%EA%B8%B0%EC%B0%A8_V4.pdf"
+    ],
+    "evidence": [
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].target.merchants",
+        "question": "전기차 충전 할인 대상 가맹점 중 제공된 merchant key 목록에 포함되지 않은 가맹점들의 정확한 key를 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].target.merchants",
+        "question": "전기차 충전 할인 대상 가맹점 중 제공된 merchant key 목록에 포함되지 않은 가맹점들의 정확한 key를 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "new_card",
+        "question": "신규 발급 시 발급일 포함 2회차 결제일까지 당월 이용금액 50만원 미만일 경우에도 30% 할인 적용 규칙을 new_card 설정에 어떻게 반영할지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].when.amount.min",
+        "question": "조건에서 amount.min이 전월 실적(당월 이용금액) 기준임을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].when.amount.min",
+        "question": "조건에서 amount.min이 전월 실적(당월 이용금액) 기준임을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.cancellation",
+        "question": "전기차 충전 할인 혜택에 적용할 spend.cancellation 값이 원문에 명시되지 않아 확인이 필요함",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-18282.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-27381",
+    "name": "SSG.COM카드 Edition2(임직원)",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AZX-20260320-1452-98_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SSG%20ed2_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- \u0007결제 취소 시 취소 발생월이 아닌 승인월 이용금액에서 제외되며, 취소금액으로 전월 이용금액 미충족 시 당월 혜택 미제공",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "benefits[?(@.key=='ssg-money-7')].reward.program",
+        "question": "SSG MONEY 포인트 프로그램에 해당하는 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='ssg-money-0-5')].reward.program",
+        "question": "SSG MONEY 포인트 프로그램에 해당하는 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='ssg-money-monthly-3900')].reward.program",
+        "question": "SSG MONEY 포인트 프로그램에 해당하는 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='ssg-money-7')].limits[0].amount",
+        "question": "월 적립 한도 1만 SSG MONEY가 포인트 단위인지 원화 단위인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='ssg-money-monthly-3900')].limits[0].count",
+        "question": "월 1회 제공 제한이 정확히 count 1인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-27381.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-schc",
+    "name": "쏘카카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=SCHC",
+      "https://www.hyundaicard.com/upload/card/T_AZW-20260325-2028-01_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%8F%98%EC%B9%B4%EC%B9%B4%EB%93%9C_V1_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다.",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.spend.cancellation",
+        "question": "쏘카카드의 실적 산정에서 취소를 어느 달에 반영하는지 확인해 주세요.",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[0].reward.program",
+        "question": "쏘카크레딧 포인트 적립에 사용되는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[1].reward.program",
+        "question": "쏘카크레딧 포인트 적립에 사용되는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[2].reward.program",
+        "question": "쏘카크레딧 포인트 적립에 사용되는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[3].reward.program",
+        "question": "쏘카크레딧 포인트 적립에 사용되는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[4].reward.program",
+        "question": "쏘카크레딧 포인트 적립에 사용되는 포인트 프로그램 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-schc.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113030001",
+    "name": "안녕카드(체크)",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=303&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[2].reward.type",
+        "question": "ATM·전자금융수수료 면제 혜택의 정확한 reward.type(예: billing_discount, points 등)과 할인/면제 금액 또는 비율을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward.rate",
+        "question": "ATM·전자금융수수료 면제의 할인 비율 또는 고정 금액을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].reward.type",
+        "question": "외국환수수료 50% 우대 혜택의 reward.type을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].reward.rate",
+        "question": "외국환수수료 50% 우대의 정확한 적용 대상(송금수수료, 환전수수료 등)과 한도(금액) 여부를 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].reward.type",
+        "question": "놀이공원 할인 서비스의 reward.type(예: billing_discount, points 등)과 구체적인 할인 비율·금액·한도(월/연) 등을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].reward.rate",
+        "question": "놀이공원 할인 서비스의 정확한 할인 비율·금액·한도 등을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].reward.type",
+        "question": "문화·레저 할인 서비스의 reward.type과 각 시설별 할인 비율·금액·한도 등을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].reward.rate",
+        "question": "문화·레저 할인 서비스의 정확한 할인 비율·금액·한도 등을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12113030001.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-13836",
+    "name": "모두의 신세계 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=13836"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].target.merchants",
+        "question": "시코르닷컴에 해당하는 merchant key가 목록에 없는데 어떤 key를 사용해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].target.merchants",
+        "question": "놀이공원·워터파크 중 목록에 없는 시설(예: 블루캐니언, 스플라스 리솜 등)의 merchant key는 어떻게 매핑해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].limits[1]",
+        "question": "‘통합 연 5회’ 제한이 해당 혜택에만 적용되는지, 전체 할인 혜택에 적용되는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "모두의 신세계 하나카드는 신용카드인지 체크카드인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].unmodeled",
+        "question": "간편결제 할인 제외 대상 중 매핑 가능한 카테고리 목록을 완전하게 정의해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].unmodeled",
+        "question": "놀이공원·워터파크 할인에서 온라인 예매 제외를 조건으로 구현하려면 어떤 Condition을 사용해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-13836.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-14966",
+    "name": "NEW 렌탈 플러스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=14966"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].target.merchants",
+        "question": "렌탈요금 자동이체 할인 대상 가맹점의 정확한 merchant key를 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "카드가 신용카드인지 체크카드인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-14966.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-15168",
+    "name": "원스토어 1 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15168"
+    ],
+    "evidence": [],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "sources",
+        "question": "수집한 원문이 상품상세 대신 전체 카드목록이다. 상품별 설명서·실적 제외·신규 조건 재수집 필요",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "Is 원스토어 1 하나카드 a credit or check card?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-15168.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-1544",
+    "name": "CLUB SK(클럽 SK)카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=1544"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].reward.fixed",
+        "question": "SK텔레콤 이동통신 요금 할인 금액은 구간별(2,000~15,000원) 중 어떤 금액을 적용해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward.per_liter",
+        "question": "주유 리터당 할인 금액 100원과 150원 중 어떤 경우에 150원을 적용하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward.per_liter",
+        "question": "충전 리터당 할인 금액 35원과 70원 중 어떤 경우에 70원을 적용하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].reward.rate",
+        "question": "마트 할인 5%와 10% 중 어떤 경우에 10%를 적용하나요? (예: 결제계좌 조건)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].reward.rate",
+        "question": "학원 할인 5%와 10% 중 어떤 경우에 10%를 적용하나요? (예: 결제계좌 조건)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].reward.rate",
+        "question": "대중교통 할인 3.5%와 7% 중 어떤 경우에 7%를 적용하나요? (앱 설치 여부)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[6].reward.rate",
+        "question": "외식 할인 5%와 10% 중 어떤 경우에 10%를 적용하나요? (앱 설치 여부)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[7].reward.rate",
+        "question": "커피 할인 2.5%와 5% 중 어떤 경우에 5%를 적용하나요? (앱 설치 여부)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[8].reward.fixed",
+        "question": "영화 할인 1,500원과 3,000원 중 어떤 경우에 3,000원을 적용하나요? (앱 설치 여부)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].target.merchants",
+        "question": "SK텔레콤 통신 요금 할인 적용 대상 가맹점 키는 무엇인가요? (예: kt, lg_uplus, skt 등)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].target.merchants",
+        "question": "주유소 할인 적용 대상 가맹점 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].target.merchants",
+        "question": "충전소 할인 적용 대상 가맹점 키는 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-1544.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-16956",
+    "name": "LG전자 플러스 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16956"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[].target.merchants",
+        "question": "What merchant key corresponds to LG전자 베스트샵?",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "Is this card a credit card or a check card?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-16956.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-18068",
+    "name": "삼성 AI 구독 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급 안내로 신용카드 종류 확인",
+      "대상 가맹점과 자동납부 조건",
+      "잘못된 정액 할인 대신 결제액 전액 월 합산 한도",
+      "실적 구간과 상한 중복 교정",
+      "신규 등록 다음달 말일 최저 구간",
+      "실적 제외·할부 전액·취소 접수월 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-18068.yaml",
+        "question": "error: revisions@2026-10-04.benefits[samsung-subscription-13k].target: 가맹점 ['samsung_subscription']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-18068.yaml",
+        "question": "error: revisions@2026-10-04.benefits[samsung-subscription-18k].target: 가맹점 ['samsung_subscription']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-18068.yaml",
+        "question": "error: revisions@2026-10-04.benefits[samsung-subscription-25k].target: 가맹점 ['samsung_subscription']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-18068.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-18669",
+    "name": "토스뱅크 하나카드 Day",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18669"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].target.merchants",
+        "question": "이디야(에디야)와 같은 커피 가맹점이 목록에 없는데, 해당 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].target.merchants",
+        "question": "토스쇼핑에 해당하는 가맹점 키가 목록에 없는데, 어떤 키를 사용해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].target.categories",
+        "question": "보험 카테고리를 'insurance' 외에 'insurance.private' 혹은 'insurance.social' 중 어느 것으로 지정해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].target.categories",
+        "question": "통신 카테고리를 'telecom.mobile' 외에 다른 세부 카테고리가 있는가?",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "토스뱅크 하나카드 Day가 신용카드인지 체크카드인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-18669.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-19152",
+    "name": "MOVING카드 LIFE모드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19152"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.benefits[6].target",
+        "question": "What merchant or category should be used for EV charging 30% Hana Money accrual?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-19152.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-19360",
+    "name": "SHINSEGAE by JADE HanaCard",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19360"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?].reward.rate",
+        "question": "항공, 면세, 기타 영역(예: 항공, 면세) 의 정확한 할인율이 1.5%인지 1.2%인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].target.merchants",
+        "question": "알뜰주유소, 택시업종 등 원문에 명시된 업종에 대응되는 merchant key가 목록에 존재하는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].when.payment",
+        "question": "디지털 컨텐츠, 커피, 택시 혜택의 자동납부 전용 결제수단을 정확히 지정하기 위한 payment 조건이 무엇인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-19360.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-19410",
+    "name": "코웨이라이프솔루션 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급 안내로 신용카드 종류 확인",
+      "대상 가맹점과 자동납부 조건",
+      "잘못된 정액 할인 대신 결제액 전액 월 합산 한도",
+      "실적 구간과 상한 중복 교정",
+      "신규 등록 다음달 말일 최저 구간",
+      "실적 제외·할부 전액·취소 접수월 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-19410.yaml",
+        "question": "error: revisions@2026-10-04.benefits[coowa-discount-8k].target: 가맹점 ['coway_life_solution']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-19410.yaml",
+        "question": "error: revisions@2026-10-04.benefits[coowa-discount-15k].target: 가맹점 ['coway_life_solution']가 merchants.yaml에 없다",
+        "assumed": null
+      },
+      {
+        "path": "cards/hana/hana-19410.yaml",
+        "question": "error: revisions@2026-10-04.benefits[coowa-discount-25k].target: 가맹점 ['coway_life_solution']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-19410.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-19522",
+    "name": "PBA 하나 체크카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19522"
+    ],
+    "evidence": [
+      "발급대상 : 12세 이상 손님 (단, 연체 등 특이 정보가 있는 경우 발급이 제한될 수 있음)",
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?(@.key=='cashback-tiered')].reward",
+        "question": "캐시백 혜택의 비율 또는 고정 금액은 얼마인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='billiards-50')].limits[0].shared",
+        "question": "당구장 할인에 적용되는 월 한도는 2만원인가, 아니면 1만원(하위 구간)도 존재하는가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-19522.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-5865",
+    "name": "바디프랜드 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5865"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "신용카드 발급 안내로 종류 확인",
+      "렌탈 금액이 월 한도 미만이면 결제액만 할인",
+      "렌탈 자동이체 대상과 마트·커피 대상 교정",
+      "커피·마트 할인 받은 전체 매출 실적 제외",
+      "신규 등록 다음달 말일까지 30만원 구간 적용",
+      "할부 전액·취소 접수월·실적 제외 업종 반영"
+    ],
+    "unresolved": [
+      {
+        "path": "cards/hana/hana-5865.yaml",
+        "question": "error: revisions@2026-10-04.benefits[rental-discount].target: 가맹점 ['bodyfriend_rental']가 merchants.yaml에 없다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-5865.yaml",
+    "core_rules_verified": true,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-7867",
+    "name": "하나로마트 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=7867"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?].target.merchants",
+        "question": "하나로마트 대상점에 해당하는 가맹점 키가 nh_hanaro_mart 외에 다른 키가 있는가",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].reward.type",
+        "question": "커피 할인은 고정 금액 할인인지 비율 할인인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].target.merchants",
+        "question": "통신 할인 적용 대상 가맹점이 telecom 관련 키 외에 추가가 있는가",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-7867.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-8000",
+    "name": "뇌새김 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=8000"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(개인 신용평점 낮음 등) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[?(@.key=='rental-30k')].limits",
+        "question": "렌탈 할인에 횟수 제한이 없는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='rental-70k')].limits",
+        "question": "렌탈 할인에 횟수 제한이 없는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='coffee-20')].when[0].payment",
+        "question": "커피 할인 적용 대상이 KEB 하나은행 결제계좌 이용고객인지, 결제수단(예: hana_pay)인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?(@.key=='coffee-20')].target",
+        "question": "오프라인 이용 제한을 카테고리나 가맹점 조건으로 표현할 방법이 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-8000.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hana-94339",
+    "name": "아정당 하나카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=94339"
+    ],
+    "evidence": [],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "sources",
+        "question": "수집한 원문이 상품상세 대신 전체 카드목록이다. 상품별 설명서·실적 제외·신규 조건 재수집 필요",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "Is 아정당 하나카드 a credit or check card?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hana\\hana-94339.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-12501",
+    "name": "현대카드M-개인택시(일반)",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260507-1805-08_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EA%B0%9C%EC%9D%B8%ED%83%9D%EC%8B%9C_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9%5B1%5D.pdf"
+    ],
+    "evidence": [
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "spend.cancellation",
+        "question": "현대카드M-개인택시(일반) 카드의 spend.cancellation 값은 무엇인가요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward",
+        "question": "경유·LPG·수소 면세 및 보조금 혜택의 reward에 rate, fixed, per_unit, per_liter 중 어느 값을 기록해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward",
+        "question": "SK충전소 1% M포인트 적립의 reward에 rate, fixed, per_unit, per_liter 중 어느 값을 기록해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward",
+        "question": "종합건강검진 할인 혜택의 reward에 rate, fixed, per_unit, per_liter 중 어느 값을 기록해야 하나요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward",
+        "question": "benefits[0].reward에 정확히 하나의 필드(rate, fixed, per_unit, per_liter)를 추가해야 합니다. 어떤 값을 사용해야 할지 확인이 필요합니다.",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward",
+        "question": "benefits[1].reward에 정확히 하나의 필드(rate, fixed, per_unit, per_liter)를 추가해야 합니다. 어떤 값을 사용해야 할지 확인이 필요합니다.",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward",
+        "question": "benefits[2].reward에 정확히 하나의 필드(rate, fixed, per_unit, per_liter)를 추가해야 합니다. 어떤 값을 사용해야 할지 확인이 필요합니다.",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-12501.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-12618",
+    "name": "현대카드M HYBRID",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/260601_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_MX%20%EC%B2%B4%ED%81%AC%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C%EC%B9%B4%EB%93%9C.pdf"
+    ],
+    "evidence": [
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "kind",
+        "question": "카드가 신용카드인지 체크카드인지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "effective_from",
+        "question": "혜택 시행일이 언제인가?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[point-accumulation].reward.rate",
+        "question": "M포인트 적립 비율(포인트 per 원)은 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "공식 원문은 체크결제와 신용전환이 있는 HYBRID다. 현 종류 credit/check 중 상품을 어떻게 등록할지 모델 정의 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-12618.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-12620",
+    "name": "현대카드X HYBRID",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/20250220_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9CMX%20CHECK_HYBRID_V1_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.benefits[0].reward.type",
+        "question": "Is the annual fee waiver considered a billing discount or another reward type?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[1].reward.type",
+        "question": "Is the SMS fee waiver a billing discount per transaction or a monthly fee waiver?",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "Is Hyundai Card X HYBRID a credit card, a check card, or both?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[0].when[0].amount.min",
+        "question": "Is the spend condition for the annual fee waiver based on annual total spend or monthly spend?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[1].when[0].amount.min",
+        "question": "Is the 50,000 KRW threshold for the SMS fee waiver applied per transaction or per month total?",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "공식 원문은 체크결제와 신용전환이 있는 HYBRID다. 현 종류 credit/check 중 상품을 어떻게 등록할지 모델 정의 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-12620.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-12633",
+    "name": "현대카드X3 Edition2",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/20250220_X3%20Edition2.pdf"
+    ],
+    "evidence": [
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.spend.cancellation",
+        "question": "할인 취소 적용 방식(cancellation) 값이 원문에 명시되어 있지 않음. 어떤 값을 사용해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].target.merchants",
+        "question": "프리미엄 아웃렛(롯데, 신세계) 혜택에 해당하는 정확한 가맹점 키를 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].target.merchants",
+        "question": "패션 브랜드(유니클로, ZARA, H&M) 혜택에 해당하는 정확한 가맹점 키를 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-12633.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-13342",
+    "name": "현대카드M CHECK-화물차유가보조금카드",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260507-1856-39_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_M_%ED%99%94%EB%AC%BC%EC%B0%A8_V2%5B1%5D.pdf"
+    ],
+    "evidence": [
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].reward.per_liter",
+        "question": "각 전월 이용금액 구간별 정확한 리터당 할인액을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward.fixed",
+        "question": "정유사 포인트 적립을 포인트 형태로 표현할지, 혹은 별도 포인트 혜택으로 정의할지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward.per_liter",
+        "question": "각 전월 이용금액 구간별 일반 주유소 리터당 할인액을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward.fixed",
+        "question": "일반 주유소 포인트 적립을 포인트 형태로 표현할지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.cancellation",
+        "question": "주문 취소 시 적용되는 취소 규칙(cancellation) 값을 확인해야 함",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-13342.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-13903",
+    "name": "MY COMPANY Executive",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/%EB%B2%95%EC%9D%B8_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_502.pdf"
+    ],
+    "evidence": [
+      "- 상환 능력에 비해 신용카드 이용금액이 과도할 경우, 귀하의 법인신용등급이하락할 수 있습니다.- 법인신용등급 하락 시 금융거래와 관련된 불이익이 발생할 수 있습니다.- 일정 기간 원리금을 연체할 경우, 모든 원리금을 변제할 의무가 발생할 수 있습니다.신용카드 발급이 부적정한 경우(연체금 보유, 법인신용등급 낮음 등) 카드 발급이제한될 수 있습니다. 카드 이용대금과 이에 수반되는 모든 수수료를 지정된 대금 결제일에상환합니다. 금융소비자는 금융소비자보호법 제19조 제1항에 따라 해당 상품 또는서비스에 대하여 설명을 받을 권리가 있습니다.자세한 내용 및 이용 조건은 카드 신청 전 현대카드 홈페이지지 및 상품설명서, 약관 참고"
+    ],
+    "resolved": [
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-148100",
+    "name": "배민 한그릇카드 HYBRID",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AQI-20250120-0929-46_%EB%B0%B0%EB%AF%BC%20Ed2_Hybrid_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_V4_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- \u0007매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외되며, 취소 금액으로 전월 이용 금액 미충족 시 당월 혜택 미제공",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한 될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "rules.limits[?].amount",
+        "question": "Is the per-month point limit for 배민 앱 6000 points correct?",
+        "assumed": null
+      },
+      {
+        "path": "rules.limits[?].amount",
+        "question": "Is the per-month point limit for 커피전문점 4000 points correct?",
+        "assumed": null
+      },
+      {
+        "path": "rules.benefits[?].target.categories",
+        "question": "Should 대중교통 target include both transit.bus_city and transit.subway categories?",
+        "assumed": null
+      },
+      {
+        "path": "rules.new_card.tier",
+        "question": "Is tier 0 appropriate to waive spend threshold for the first month after registration?",
+        "assumed": null
+      },
+      {
+        "path": "kind",
+        "question": "공식 원문은 체크결제와 신용전환이 있는 HYBRID다. 현 종류 credit/check 중 상품을 어떻게 등록할지 모델 정의 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-148100.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-154128",
+    "name": "MY COMPANY the Black",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AQ7-20260427-1640-22_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%B8%94%EB%9E%99_V3.pdf"
+    ],
+    "evidence": [
+      "- 매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외되며, 취소 금액으로 전월 이용 금액 미충족 시 당월 혜택 미제공(단, 해외 이용 금액은 취소 발생월 이용 금액에서 제외)",
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인",
+      "해외 취소는 취소 발생월 차감",
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-154998",
+    "name": "SC제일은행-현대카드ZERO Edition3(포인트형)",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260310-1658-84_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SC_ZERO%20Ed3%20%ED%8F%AC%EC%9D%B8%ED%8A%B8_V3.pdf"
+    ],
+    "evidence": [
+      "· 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.tiers",
+        "question": "전월실적 구간(티어) 하한이 0 외에 다른 값이 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.basis",
+        "question": "포인트 적립 기준이 전월실적이 아닌가? 별도 기준이 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].limits",
+        "question": "포인트 적립에 연간/월간 한도(공유 한도) 존재 여부 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].tiers",
+        "question": "포인트 적립에 티어별 차등 적용 여부 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?]",
+        "question": "M 긴급적립(선지급 포인트 서비스)과 같은 별도 포인트 선지급 혜택이 존재하는지, 상세 조건 및 한도 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.cancellation",
+        "question": "spend.cancellation 값이 원문에 명시되어 있는지 확인 필요",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-154998.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-159415",
+    "name": "이마트 e카드 Basic",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AZX-20260324-1756-32_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%9D%B4%EB%A7%88%ED%8A%B8%20e%EC%B9%B4%EB%93%9C_Basic_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "· 매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외되며, 취소 금액으로",
+      "· 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드"
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인",
+      "해외 취소는 취소 발생월 차감"
+    ],
+    "unresolved": [
+      {
+        "path": "benefits[0].target.exclude_merchants",
+        "question": "일렉트로마트와 노브랜드에 해당하는 가맹점 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].target.merchants",
+        "question": "일렉트로마트와 노브랜드에 해당하는 가맹점 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward.program",
+        "question": "신세계포인트에 해당하는 포인트 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward.program",
+        "question": "신세계포인트에 해당하는 포인트 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-159415.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-17082",
+    "name": "MY COMPANY 법인복지카드",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_A42-20260114-1924-38_%EB%B2%95%EC%9D%B8_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%B3%B5%EC%A7%80%EC%B9%B4%EB%93%9C_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "· 신용카드 발급이 부적정한 경우(연체금 보유, 법인신용등급 낮음 등)"
+    ],
+    "resolved": [
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-17083",
+    "name": "MY COMPANY 연구비카드",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_A42-20260114-1924-38_%EB%B2%95%EC%9D%B8_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%97%B0%EA%B5%AC%EB%B9%84%EC%B9%B4%EB%93%9C_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 법인신용등급 낮음 등) 카드 발급"
+    ],
+    "resolved": [
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-17084",
+    "name": "MY COMPANY 정부구매 전용카드",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/%EB%B2%95%EC%9D%B8_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%A0%95%EB%B6%80%EA%B5%AC%EB%A7%A4%EC%B9%B4%EB%93%9C.pdf"
+    ],
+    "evidence": [
+      "·신용카드 발급이 부적정한 경우(연체금 보유, 법인신용등급 낮음 등) 카 드 발급이 제한될 수 있습니다. · 카드 이용대금과 이에 수반되는 모든 수수 료를 지정된 대금 결제일에 상환합니다. · 금융소비자는 금융소비자보호 법 제19조 제1항에 따라 해당 상품 또는 서비스에 대하여 설명을 받을 권 리가 있습니다."
+    ],
+    "resolved": [
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-173116",
+    "name": "에너지플러스 현대카드",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AQX-20260911-1033-07_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%97%90%EB%84%88%EC%A7%80%ED%94%8C%EB%9F%AC%EC%8A%A4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- \u0007매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외되며, 취소 금액으로 전월 이용 금액 미충족 시 당월 혜택 미제공(단, 해외 이용 금액은 취소 발생월 이용 금액에서 제외)",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제 한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인",
+      "해외 취소는 취소 발생월 차감"
+    ],
+    "unresolved": [
+      {
+        "path": "benefits[gs-caltex-price-diff].reward",
+        "question": "How should the price‑difference discount for regular GS칼텍스 transactions be represented (rate, fixed, per_unit, or per_liter)?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[maintenance-40-80].target",
+        "question": "Which category or merchant codes correspond to the parking, car‑wash, and repair services mentioned?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[gs-caltex-immediate-40-80].when",
+        "question": "How to model the condition that the discount applies only when the payment method is ‘바로주유’ (immediate fueling)?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-173116.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-19182",
+    "name": "대한항공카드030",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AZG-20260615-2017-91_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%8C%80%ED%95%9C%ED%95%AD%EA%B3%B5_030_V1_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다. 카드 이용대금과 이에 수반되는 모든 수수료를 지정된 대금 결제일에 상환합니다. 금융소비자는 금융소비자보호법 제19조 제1항에 따라 해당 상품 또는 서비스에 대하여 설명을 받을 권리가 있습니다. 자세한 내용 및 이용 조건은 카드 신청 전 현대카드 홈페이지 및 상품설명서, 약관 참고"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[welcome-bonus-3000].when",
+        "question": "How to represent the condition of cumulative spend 1,000,000 KRW within 3 months from issuance?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[add-overseas-dutyfree].target",
+        "question": "How to specify that the benefit applies only to overseas merchants and domestic duty‑free merchants?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[add-koreanair].target",
+        "question": "What merchant key should be used for Korean Air direct ticket purchases and in‑flight duty‑free purchases?",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.cancellation",
+        "question": "What is the cancellation policy value (cancel_month or original_month) for spend?",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-19182.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-19382",
+    "name": "MY COMPANY SKYPASS",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/%EB%B2%95%EC%9D%B8_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_502%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%ED%8C%A8%EC%8A%A4.pdf"
+    ],
+    "evidence": [
+      "카드 이용시 제공되는 포인트 및 힐인 혜택 등의 부기서비스는 카드 신규 출시(2020년 5월 15일) 이후 다음과 같은 사유를 제외하고는 변경할 수 없습니다.· 카드사 또는 부기서비스 관련 제휴업체의 휴업·도산·경영위기, 천재지변,금융환경 급변 또는 그 밖에 이에 준하는 사유의 발생단, 다른 제휴업체를 통해 동종의 유사한 부기서비스 제공이 가능한 경우 제외·카드 신규 출시 이후 3년 이상 경과했고 해당 카드의 수익성 유지가어려운 경우, 카드사가 부기서비스를 변경하는 경우에는 부기서비스 변경 사유, 변경 내용 등을 사유 발생 즉시 홈페이지에 게시하고 개별 고지 방법 중 서로 다른 2가지 이상의 방법으로 고지하여 드립니다. 특히 카드 신규 출시 이후 3년 이상 경과했고 해당 카드의 수익성 유지가 어려워져부기서비스를 변경하는 경우에는 변경일 6개월 전부터 서로 다른 2가지이상의 방법으로 개별 개별 고지해 드립니다.·개별 고지 방법 : 서면 교부, 우편 또는 이메일, 전화 또는 팩스, 휴대폰 메시지또는 이에 준하는 전자적 의사표시- 상환 능력에 비해 신용카드 이용금액이 과도할 경우, 귀하의 법인신용등급이하락할 수 있습니다.- 법인신용등급 하락 시 금융거래와 관련된 불이익이 발생할 수 있습니다.- 일정 기간 원리금을 연체할 경우, 모든 원리금을 변제할 의무가 발생할 수있습니다.- 신용카드 발급이 부적정한 경우(연체금 보유, 법인신용등급 낮음 등) 카드 발급이제한될 수 있습니다.- 카드 이용대금과 이에 수반되는 모든 수수료를 지정된 대금 결제일에 상환합니다.- 금융소비자는 금융소비자보호법 제19조 제1항에 따라 해당 상품 또는 서비스에대하여 설명을 받을 권리가 있습니다.- 자세한 내용 및 이용 조건은 카드 신청 전 현대카드 홈페이지 및 상품설명서,약관 참고본 가이드북은 2026년 3월 기준이며, 자세한 내용은 고객센터로 문의하시거나현대카드 홈페이지 상품 설명을 참고 바랍니다.- 일정 기간 원리금을 연체할 경우, 모든 원리금을 변제할 의무가 발생할 수있습니다.준법감시심의필 제 260311-011호 (2026.03.11)"
+    ],
+    "resolved": [
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-22583",
+    "name": "the Pink",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/260513_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Pink.pdf"
+    ],
+    "evidence": [
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits",
+        "question": "M포인트 적립률(기본 적립 1~2% 및 영역별 5% 등)을 포인트 적립 혜택으로 어떻게 표현해야 하나요? rate, fixed, per_unit, per_liter 중 어떤 필드를 사용해야 할지 명확하지 않습니다.",
+        "assumed": null
+      },
+      {
+        "path": "benefits",
+        "question": "프리미엄 쇼핑 영역에서 5% M포인트 적립을 특정 가맹점(예: 백화점 온라인몰, 오프라인 백화점 등)으로 제한하는 경우, merchants 또는 categories 필드에 어떤 값을 넣어야 할까요?",
+        "assumed": null
+      },
+      {
+        "path": "benefits",
+        "question": "신차 구매 시 2% M포인트 적립 및 GS칼텍스 주유 시 리터당 60 포인트 적립(일 2회, 1회 10만원 한도) 혜택을 포인트 적립으로 표현하려면 per_liter와 limit 설정을 어떻게 구성해야 할지 알려주세요.",
+        "assumed": null
+      },
+      {
+        "path": "benefits",
+        "question": "웰컴 바우처(10만원권) 및 연간 보너스(7만 포인트 또는 연회비 7만원 감면)와 같은 고정 금액 혜택을 reward.type이 points가 아닌 다른 타입으로 표현해야 하는지, 혹은 fixed 필드에 금액을 넣어야 하는지 확인이 필요합니다.",
+        "assumed": null
+      },
+      {
+        "path": "benefits",
+        "question": "라운지 무료 이용 및 발레파킹 서비스와 같이 사용 횟수 제한(월 1회, 연 2회 등)이 있는 비포인트 혜택을 어떻게 limits에 정의해야 할지 알려주세요.",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.cancellation",
+        "question": "원문에 명시된 spend.cancellation 값이 없으며, 해당 필드는 필수입니다. 어떤 값을 사용해야 할까요?",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-22583.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-23983",
+    "name": "네이버 현대카드",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AEI-20260320-1510-69_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%84%A4%EC%9D%B4%EB%B2%84%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V1_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9%20%281%29.pdf"
+    ],
+    "evidence": [
+      "- \u0007결제 취소 시 취소 발생 월이 아닌 승인 월 이용금액에서 제외되며, 취소금액으로 전월 이용금액 미충족 시 당월 혜택 미제공",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다. 카드 이용대금과 이에 수반되는 모든 수수료를 지정된 대금 결제일에 상환합니다. 금융소비자는 금융소비자보호법 제19조 제1항에 따라 해당 상품 또는 서비스에"
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "benefits[0].target",
+        "question": "포인트 적립 대상이 되는 구체적인 가맹점 또는 카테고리(예: 네이버플러스 멤버십 적립 대상 아이콘이 있는 가맹점)를 어떻게 매핑해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward",
+        "question": "멤버십 회원과 비회원의 적립률 차이를 스키마에 어떻게 표현해야 하는가? (rate vs fixed vs 별도 조건)",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward",
+        "question": "포인트 적립 혜택에 rate, fixed, per_unit, per_liter 중 어느 필드를 사용해야 하는가? (예: 적립 한도 등)",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-23983.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-27337",
+    "name": "LOTTE DUTY FREE 현대카드",
+    "status": "blocked",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260310-1836-74_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "evidence": [
+      "- \u0007결제 취소 시, 취소 발생월이 아닌 승인월 이용금액에서 제외되며, 취소금액으로 전월 이용금액 미충족 시 당월 혜택 미제공",
+      "- \u0007신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "spend.cancellation",
+        "question": "LDF PAY 적립에 적용되는 취소 반영 방식은 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].target.merchants",
+        "question": "롯데면세점(국내·해외) 및 일반 가맹점에 해당하는 정확한 가맹점 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[?].reward",
+        "question": "장기할부 추가 적립을 포인트(정액) 형태로 어떻게 표현해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward.program",
+        "question": "LDF PAY 적립에 해당하는 포인트 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].reward.program",
+        "question": "LDF PAY 적립에 해당하는 포인트 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].reward.program",
+        "question": "LDF PAY 적립에 해당하는 포인트 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-27337.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-27499",
+    "name": "MY COMPANY ONE",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://www.hyundaicard.com/upload/card/%EB%B2%95%EC%9D%B8_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_MC%20ONE.pdf"
+    ],
+    "evidence": [],
+    "resolved": [
+      "공식 MY COMPANY 기업카드 상품설명서. 개인 소비 카드 대상 밖"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-mzrup",
+    "name": "현대카드 ZERO Up(포인트형)",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MZRUP",
+      "https://www.hyundaicard.com/upload/card/260616_ZERO%20Up%28%ED%8F%AC%EC%9D%B8%ED%8A%B8%ED%98%95%29.pdf"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다.",
+      "· 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이"
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.spend.cancellation",
+        "question": "What is the cancellation rule for spend?",
+        "assumed": null
+      },
+      {
+        "path": "spend.cancellation",
+        "question": "해당 상품 공식 설명서에서 실적 취소 반영월을 확인할 문구가 없다. 개인회원 공통 기준 또는 상품별 공식 FAQ 필요",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-mzrup.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "hyundai-tpe4",
+    "name": "the Purple",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=TPE4",
+      "https://www.hyundaicard.com/upload/card/the%20Purple%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_260811.pdf"
+    ],
+    "evidence": [
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다.",
+      "매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외",
+      "매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외",
+      "- 매출 취소 시 취소 발생월이 아닌 승인월 이용 금액에서 제외",
+      "- 신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 낮음 등) 카드 발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "공식 설명서의 승인월 실적 차감 취소 규칙 확인"
+    ],
+    "unresolved": [
+      {
+        "path": "rules.tiers",
+        "question": "전월실적 구간(티어) 정보가 원문에 명시되어 있지 않습니다. 실제 티어 구간을 확인해야 합니다.",
+        "assumed": null
+      },
+      {
+        "path": "rules.spend.cancellation",
+        "question": "spend.cancellation 값이 원문에 명시되어 있지 않습니다. 적용되는 취소 규칙을 확인해야 합니다.",
+        "assumed": null
+      },
+      {
+        "path": "reward.program",
+        "question": "마일리지·제휴포인트 원화 가치를 임의로 만들 수 없다. 프로그램 정의와 실제 환산방식 필요",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\hyundai\\hyundai-tpe4.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12112390191",
+    "name": "나사렛대학교 학생증 나의알파체크(TOP)",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=239&PDCD=0191&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].reward.rate",
+        "question": "TOP포인트 적립 비율이 거래금액 구간에 따라 달라지는 것을 스키마에 어떻게 표현해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].target.merchants",
+        "question": "불고기브라더스에 해당하는 가맹점 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[3].reward.fixed",
+        "question": "ATM 수수료 면제 시 실제 할인 금액(원)은 어떻게 정의되는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[4].target",
+        "question": "환전 수수료 할인 적용 대상(통화 외에 제한 조건 등)은 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[5].target.merchants",
+        "question": "롯데렌터카에 해당하는 가맹점 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[7].reward.rate",
+        "question": "호텔·콘도·펜션 할인율 구간(20%~65%)을 스키마에 어떻게 표현해야 하는가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12112390191.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12112390306",
+    "name": "나의알파 국민연금안심 체크카드",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=239&PDCD=0306&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].target.exclude_categories",
+        "question": "교통카드 이용금액에 해당하는 정확한 카테고리 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].limits",
+        "question": "포인트 적립에 월별 혹은 연간 한도가 있는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[0].reward",
+        "question": "포인트 적립 혜택에 rate, fixed, per_unit, per_liter 중 어느 필드가 적용되는가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12112390306.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113050001",
+    "name": "IBK컴퍼니카드(일반)",
+    "status": "exclude",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=305&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 또는 법인신용등급 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급대상\n기업공용 (사용자지정카드 발급가능)"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113130001",
+    "name": "마일앤조이카드(대한항공)",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=313&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits[0].limits",
+        "question": "KTX·SRT 10% 할인 혜택에 월별 이용 횟수 또는 금액 한도가 있는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[1].limits",
+        "question": "중국 비자수수료 50% 할인(최대 3만원) 혜택에 월별 이용 횟수 또는 금액 한도가 있는가?",
+        "assumed": null
+      },
+      {
+        "path": "benefits[2].limits",
+        "question": "리무진버스·공항철도·고속도로 이용권 선택 시 1만원 할인 혜택에 월별 이용 횟수 또는 금액 한도가 있는가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12113130001.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113400002",
+    "name": "K-22(Mileage)",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=340&PDCD=0002&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "rules.benefits[*].reward.program",
+        "question": "마일리지 적립에 사용되는 포인트 프로그램 키는 무엇인가?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12113400002.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113460001",
+    "name": "IBK미래(선불)",
+    "status": "exclude",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=346&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "발급대상 | 만 7세 ~ 만 18세 (내국인)"
+    ],
+    "resolved": [
+      "공식 상품은 선불·기프트·mini 수단. 신용·체크만 담는 현 카탈로그 종류로 계산하지 않음"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113530001",
+    "name": "B-RETAIL",
+    "status": "exclude",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=353&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [
+      "발급대상\n기업공용 (사용자지정카드 발급가능)"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12113570001",
+    "name": "BLISS Point",
+    "status": "blocked",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=357&PDCD=0001&pageId=CA01010000"
+    ],
+    "evidence": [
+      "발급대상",
+      "신용카드 발급이 부적정한 경우(연체금 보유, 개인신용평점 등 낮음) 카드발급이 제한될 수 있습니다."
+    ],
+    "resolved": [],
+    "unresolved": [
+      {
+        "path": "benefits",
+        "question": "What are the specific benefit details for vouchers (gift cards, points, mileage) including eligibility, limits, and reward program mapping?",
+        "assumed": null
+      },
+      {
+        "path": "benefits",
+        "question": "What are the exact point accrual rates per category and associated point program keys?",
+        "assumed": null
+      },
+      {
+        "path": "benefits",
+        "question": "Are there any shared limits for point accrual or voucher usage?",
+        "assumed": null
+      },
+      {
+        "path": "revisions[0]",
+        "question": "핵심 혜택 전체의 실적·신규·월한도·제외·중복 대조가 끝나지 않았다. 이 파일은 승인 대상이 아니다",
+        "assumed": null
+      }
+    ],
+    "card_file": "C:\\Users\\SSAFY\\Desktop\\pjt\\cherryConsume\\tmp\\card-ready-review\\mixed\\catalog\\cards\\ibk\\ibk-12113570001.yaml",
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "ibk-12212010011",
+    "name": "IBK Gift 카드",
+    "status": "exclude",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=21&PDTM_CD=201&PDCD=0011&pageId=CA01010000"
+    ],
+    "evidence": [],
+    "resolved": [
+      "공식 상품은 선불·기프트·mini 수단. 신용·체크만 담는 현 카탈로그 종류로 계산하지 않음"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  },
+  {
+    "card_id": "kakaobank-77",
+    "name": "카카오뱅크 mini카드",
+    "status": "exclude",
+    "source_urls": [
+      null,
+      "https://og.kakaobank.io/view/6520e35b-8e87-4c8d-bc9e-fcc42d373536"
+    ],
+    "evidence": [
+      "발급대상 | mini 를 보유한 만 18세 이하 본인 회원"
+    ],
+    "resolved": [
+      "공식 상품은 선불·기프트·mini 수단. 신용·체크만 담는 현 카탈로그 종류로 계산하지 않음"
+    ],
+    "unresolved": [],
+    "card_file": null,
+    "core_rules_verified": false,
+    "new_benefit_keys": []
+  }
+]

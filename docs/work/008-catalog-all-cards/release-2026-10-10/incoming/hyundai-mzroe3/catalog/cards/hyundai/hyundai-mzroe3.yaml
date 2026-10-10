@@ -1,0 +1,37 @@
+schema_version: 2
+id: hyundai-mzroe3
+issuer: hyundai
+name: 현대카드ZERO Edition3(포인트형)
+short_name: 현대 ZERO 포인트
+kind: credit
+product_codes: [MZROE3]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MZROE3', fetched_at: &id001 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_ZERO%20Ed3_%ED%8F%AC%EC%9D%B8%ED%8A%B8_260330.pdf', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend:
+      basis: none
+      exclude_categories: []
+      cancellation: original_month
+      exclude_applied: 0
+    benefits:
+      - key: m-point-earn-1-2
+        title: 1.2% M포인트 적립
+        source: manual
+        evidence: [실적·한도 제한 없이 국내외 가맹점 이용 금액의 1.2% M포인트 적립, 국내외 가맹점 1.2% M포인트 적립]
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1.2, round: round}
+    unmodeled: [M 긴급적립은 선지급 후 상환하는 별도 약정 서비스다. 결제마다 추가 적립되는 혜택이 아니며 일반 적립에 더하지 않는다., 부분 무이자 할부는 수수료를 납부하는 개월의 이용 금액에만 적립한다. 가족카드는 회원별 별도 적립한다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정.

@@ -1,0 +1,148 @@
+card: shinhan-bubdgr
+cases:
+- name: japan-convenience 행사
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: familymart_japan
+    region: overseas
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      japan-convenience: 500
+  calc: japan-convenience 행사
+- name: vietnam-lotte 행사
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: lotte_mart_vietnam
+    region: overseas
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      vietnam-lotte: 500
+  calc: vietnam-lotte 행사
+- name: vietnam-grab 행사
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: grab_vietnam
+    region: overseas
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      vietnam-grab: 500
+  calc: vietnam-grab 행사
+- name: us-starbucks 행사
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: starbucks_us
+    region: overseas
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      us-starbucks: 500
+  calc: us-starbucks 행사
+- name: 국내 편의점 한도와 횟수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 40000
+    payment_method: physical_card
+    merchant: gs25
+  - at: 2026-10-07T12:00
+    amount: 40000
+    payment_method: physical_card
+    merchant: gs25
+  - at: 2026-10-08T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: gs25
+  expect:
+  - payment: 0
+    benefits:
+      domestic-convenience-5pct: 2000
+  - payment: 1
+    benefits:
+      domestic-convenience-5pct: 1000
+  - payment: 2
+    benefits: {}
+  calc: 국내 편의점 한도와 횟수
+- name: 국내·해외 교통 별도
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: transit.bus_city
+    billing: postpaid_transit
+  - at: 2026-10-07T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: transit.bus_city
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      domestic-transit-1pct: 1000
+  - payment: 1
+    benefits:
+      overseas-transit-discount: 1000
+  calc: 국내·해외 교통 별도
+- name: 30만원 미만 국내없음 신규 특례
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: gs25
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만 국내없음 신규 특례
+- name: 신규 다음달 국내특례
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: gs25
+  expect:
+  - payment: 0
+    benefits:
+      domestic-convenience-5pct: 500
+  calc: 신규 다음달 국내특례
+  holder:
+    started_on: '2026-09-15'
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.

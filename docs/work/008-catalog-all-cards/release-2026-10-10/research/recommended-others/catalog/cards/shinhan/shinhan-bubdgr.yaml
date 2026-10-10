@@ -1,0 +1,143 @@
+schema_version: 2
+id: shinhan-bubdgr
+issuer: shinhan
+name: 신한카드 SOL트래블 체크
+kind: check
+product_codes: [BUBDGR]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['포인트 사용금액, 각종 수수료·이자, 다른 신한 할인서비스를 적용받은 거래 전체 제외']
+    benefits:
+      - key: overseas-transit-discount
+        title: 해외 컨택리스 버스·지하철1% 할인
+        source: page
+        evidence: [해외 컨택리스 버스·지하철1% 할인]
+        target:
+          categories: [transit.bus_city, transit.subway, transit.tram]
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {per: month, amount: 3000}
+        unmodeled: ['해외 컨택리스 결제만, 택시 제외. Mastercard 발급만 제공']
+      - key: domestic-convenience-5pct
+        title: 국내 오프라인4대 편의점5% 할인
+        source: page
+        evidence: [국내 오프라인4대 편의점5% 할인]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점 입점매장 제외]
+      - key: domestic-transit-1pct
+        title: 국내 후불 버스·지하철1% 할인
+        source: page
+        evidence: [국내 후불 버스·지하철1% 할인]
+        target:
+          categories: [transit.airport_rail, transit.bus_city, transit.bus_intercity, transit.subway]
+        when:
+          - {region: domestic}
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        unmodeled: ['마을·공항버스·공항철도 포함, 일반 철도·고속버스 제외. RF 터치 결제만']
+      - key: japan-convenience
+        title: 일본3대 편의점5% 할인 행사
+        source: page
+        evidence: [일본3대 편의점 5% 결제일 할인, 해외 가맹점 이용 할인 프로모션은 2026년 12월 31일까지 제공됩니다.]
+        target:
+          merchants: [familymart_japan, lawson_japan, seven_eleven_japan]
+        when:
+          - {region: overseas}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        valid_from: '2026-10-10'
+        valid_until: '2026-12-31'
+        unmodeled: ['해당 국가에서만 제공, 오프라인은 입점·임대매장·상품권·자체ATM 제외. 원화환산 소수점 버림']
+      - key: vietnam-lotte
+        title: 베트남 롯데마트5% 할인 행사
+        source: page
+        evidence: [베트남 롯데마트 5% 결제일 할인, 해외 가맹점 이용 할인 프로모션은 2026년 12월 31일까지 제공됩니다.]
+        target:
+          merchants: [lotte_mart_vietnam]
+        when:
+          - {region: overseas}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        valid_from: '2026-10-10'
+        valid_until: '2026-12-31'
+        unmodeled: ['해당 국가에서만 제공, 오프라인은 입점·임대매장·상품권·자체ATM 제외. 원화환산 소수점 버림']
+      - key: vietnam-grab
+        title: 베트남 Grab5% 할인 행사
+        source: page
+        evidence: [베트남 Grab 5% 결제일 할인, 해외 가맹점 이용 할인 프로모션은 2026년 12월 31일까지 제공됩니다.]
+        target:
+          merchants: [grab_vietnam]
+        when:
+          - {region: overseas}
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        valid_from: '2026-10-10'
+        valid_until: '2026-12-31'
+        unmodeled: ['해당 국가에서만 제공, 오프라인은 입점·임대매장·상품권·자체ATM 제외. 원화환산 소수점 버림']
+      - key: us-starbucks
+        title: 미국 스타벅스5% 할인 행사
+        source: page
+        evidence: [미국 스타벅스 5% 결제일 할인, 해외 가맹점 이용 할인 프로모션은 2026년 12월 31일까지 제공됩니다.]
+        target:
+          merchants: [starbucks_us]
+        when:
+          - {region: overseas}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        valid_from: '2026-10-10'
+        valid_until: '2026-12-31'
+        unmodeled: ['해당 국가에서만 제공, 오프라인은 입점·임대매장·상품권·자체ATM 제외. 원화환산 소수점 버림']
+    unmodeled: [해외 가맹점 결제는 국제브랜드1%·해외서비스0.2% 수수료 면제. 실적·한도 없음. 외화계좌 현지통화 인출이며 DCC 원화거래 불가. 수수료 미부과 거래 제외. 수수료 절감 금액은 계산 합계에 넣지 않는다, 'Master·Cirrus ATM 인출은 건당US$3·국제브랜드1% 면제, 실적·횟수 제한 없음. 현지ATM 운영사 수수료는 별도. 외화인출 자료가 없어 합계에 넣지 않는다', '더라운지 본인 무료입장 반기별1회·연2회. 전월 국내30만원 이상. 신규 등록 다음달 말일까지는 국내 누적30만원 달성 후 이용가능. 앱 이용권은24시간 유효, 탑승자·가입자 이름 일치. 금액 합계에 넣지 않는다', 'CU 지정 행사상품5% 즉시할인, 건당 최대2000원. 실적없음·오프라인·전액 본카드 결제만. 일부 매장·일부 간편결제 제외. 편의점 청구할인과 중복되나 청구할인은 즉시할인 뒤 금액 기준. 품목별 입력이 없어 합계에 넣지 않는다', '2026-12-31까지 Mastercard 트래블 리워드 지정 해외400여 가맹점 최대10% 캐시백. 가맹점별 행사조건 확인 필요, 합계에 넣지 않는다', '국내 교통은 명세서 기재 이용일 기준. 모바일 후불교통은 전월 사용분, 그 외는 전전월 사용분을 실적에 반영한다', 국가 한정 캐시백은 이름에 일본·베트남·미국이 명시된 전용 가맹점만 선택한다. 국가를 모르면 일반 가맹점을 사용하고 국가 행사 혜택은 계산하지 않는다. 행사 실제 조건 확인이 필요하다.]
+open_questions:
+  - {path: 'revisions[0].benefits[japan-convenience].valid_from', question: 프로모션 정확한 시작일은 원문에 없어 확인일 이후부터 계산한다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[vietnam-lotte].valid_from', question: 프로모션 정확한 시작일은 원문에 없어 확인일 이후부터 계산한다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[vietnam-grab].valid_from', question: 프로모션 정확한 시작일은 원문에 없어 확인일 이후부터 계산한다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[us-starbucks].valid_from', question: 프로모션 정확한 시작일은 원문에 없어 확인일 이후부터 계산한다, assumed: '2026-10-10'}
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.month_offset', question: 모바일 후불교통과 실물 후불교통의 실적 반영월을 결제수단별로 구별하는 엔진 기능이 필요하다. 입력으로 식별 가능한 조건이므로 unmodeled 안내만으로 계산 준비 완료로 취급할 수 없다.}
+  - {path: 'revisions[0].spend.month_offset', question: 모바일 후불교통과 실물 후불교통의 실적 반영월을 결제수단별로 구별하는 엔진 기능이 필요하다. 입력으로 식별 가능한 조건이므로 unmodeled 안내만으로 계산 준비 완료로 취급할 수 없다.}
+notes: '2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2024-01-19이며 현행 조건 전체의 시행일 근거로 사용하지 않았다. 부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 계산 기능을 별도 작업으로 지원한 뒤 다시 확인해야 한다. 부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 계산 기능을 별도 작업으로 지원한 뒤 다시 확인해야 한다.'

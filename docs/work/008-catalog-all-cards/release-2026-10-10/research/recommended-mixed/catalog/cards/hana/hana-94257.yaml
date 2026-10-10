@@ -1,0 +1,153 @@
+schema_version: 2
+id: hana-94257
+issuer: hana
+name: 달달 하나 체크카드
+kind: check
+product_codes:
+  - '18058'
+  - '94257'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=94257', fetched_at: &id001 2026-10-05}
+  - {id: correct-page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18058', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: correct-page
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      exclude_categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.electricity, utility.gas, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+      unmodeled: [국내외 ATM 인출은 실적과 적립에서 제외한다. 해외 외화 하나머니로 결제한 경우 하나머니 적립을 제공하지 않는다.]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 700000: 20000, 1000000: 30000}
+      - key: shopping-5
+        per: month
+        amount: {300000: 2000, 700000: 4000, 1000000: 6000}
+      - key: delivery-5
+        per: month
+        amount: {300000: 2000, 700000: 4000, 1000000: 6000}
+      - key: cafe-5
+        per: month
+        amount: {300000: 2000, 700000: 4000, 1000000: 6000}
+      - key: life
+        per: month
+        amount: {300000: 2000, 700000: 4000, 1000000: 6000}
+      - key: subscription
+        per: month
+        amount: {300000: 2000, 700000: 4000, 1000000: 6000}
+    benefits:
+      - key: simple-payment-0-3
+        title: 지정 페이 0.3%
+        source: correct-page
+        target: {all: true}
+        when:
+          - payment: [coupay, eleven_pay, hana_pay, kakao_pay, naver_pay, payco, samsung_pay, ssg_pay]
+        reward: {type: points, program: hana_money, rate: 0.3, round: round}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: shopping-5
+        title: 지정 오프라인 쇼핑 5%
+        source: correct-page
+        target:
+          merchants: [cu, emart, emart24, emart_everyday, gs25, gs_the_fresh, homeplus, homeplus_express, hyundai_department, lotte_department, lotte_mart, lotte_super, seven_eleven, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {shared: integrated}
+          - {shared: shopping-5}
+        tiers: {from: 300000}
+      - key: delivery-5
+        title: 배달 5%
+        source: correct-page
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {shared: integrated}
+          - {shared: delivery-5}
+        tiers: {from: 300000}
+      - key: cafe-5
+        title: 오프라인 커피 5%
+        source: correct-page
+        target:
+          categories: [cafe]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {shared: integrated}
+          - {shared: cafe-5}
+        tiers: {from: 300000}
+      - key: life-telecom-5
+        title: 이동통신 자동납부 5%
+        source: correct-page
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 30000}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {shared: integrated}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: life-utility-5
+        title: 전기 가스 자동납부 5%
+        source: correct-page
+        target:
+          categories: [utility.electricity, utility.gas]
+        when:
+          - billing: [autopay]
+            amount: {min: 30000}
+        reward: {type: points, program: hana_money, rate: 5, round: round}
+        limits:
+          - {shared: integrated}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: subscription-streaming-10
+        title: 정기 스트리밍 10%
+        source: correct-page
+        target:
+          merchants: [disney_plus, netflix, watcha, wavve, youtube_premium]
+        when:
+          - payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, mobile_tmoney, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+            billing: [autopay, subscription]
+        reward: {type: points, program: hana_money, rate: 10, round: round}
+        limits:
+          - {shared: integrated}
+          - {shared: subscription}
+        tiers: {from: 300000}
+      - key: subscription-membership-10
+        title: 쿠팡 와우 정기 10%
+        source: correct-page
+        target:
+          merchants: [coupang_wow]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: points, program: hana_money, rate: 10, round: round}
+        limits:
+          - {shared: integrated}
+          - {shared: subscription}
+        tiers: {from: 300000}
+    unmodeled: ['교통은 버스 지하철, 카카오T 선결제, 지정 주유소 오프라인, 지정 전기차 충전의 월 합산 3만원 이상이면 5% 적립한다. 월 영역별 합산액을 여러 결제조건을 가진 혜택 사이에서 공유하는 기능이 필요하다.', '입점 임대매장, 배달앱과 예약앱 커피 주문은 제외한다. 카카오T 현장 결제와 나중결제는 제외한다.', 외화 하나머니 해외 결제는 적립 대신 해외 수수료 면제를 제공한다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+  - {path: product_codes, question: 94257은 카드 목록 주소였다. 동일한 달달 하나 체크 상품의 실제 코드 18058과 기존 색인 연결을 합쳐야 한다. ID는 유지한다.}
+  - {path: 'revisions[0].benefits', question: 교통 영역 합산 3만원 조건과 다른 결제조건별 적립 계산을 추가해야 한다. 핵심 교통 적립을 누락한 상태로 승인하지 않는다.}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정.

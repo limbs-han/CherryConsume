@@ -1,0 +1,1182 @@
+{
+  "approved": false,
+  "approval_required": true,
+  "job_id": 665396523935248,
+  "base_files_digest": "4ab3144f08a3cde6c477d24d76f744851a2b69f3f29fa8f084f36fe3022f1ab1",
+  "cards": [
+    {
+      "card_id": "hana-11808",
+      "name": "웰릭스렌탈 하나카드",
+      "path": "cards/hana/hana-11808.yaml",
+      "draft_id": "461cd541-9218-4a0d-837f-039baba13647",
+      "sha256": "b2eff4bc03cd13b311f8a671ea058efbc15b1496135737142e7e645a289c05ed",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11808",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "jcb",
+          "amount": 12000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 12000
+        }
+      ],
+      "open_questions": [],
+      "group": "previous-ready",
+      "incoming": "release-20261010-hana-11808"
+    },
+    {
+      "card_id": "hana-5863",
+      "name": "청호나이스 플러스 하나카드",
+      "path": "cards/hana/hana-5863.yaml",
+      "draft_id": "05cea99a-c12b-4b14-8756-4cf708c230bf",
+      "sha256": "d8eceb1666cec26b4d8cb2e8aaf1f18c3bcf300afefb7b47abd7f47024ec20ad",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5863",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "jcb",
+          "amount": 12000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 12000
+        }
+      ],
+      "open_questions": [],
+      "group": "previous-ready",
+      "incoming": "release-20261010-hana-5863"
+    },
+    {
+      "card_id": "hana-5865",
+      "name": "바디프랜드 하나카드",
+      "path": "cards/hana/hana-5865.yaml",
+      "draft_id": "3ca6a278-5bef-4d24-9983-e857282c477b",
+      "sha256": "89c68a4401f44b135b2e079e57aac96104d186968057a229a4e9d8e0f2062087",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5865",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "amount": 12000
+        }
+      ],
+      "open_questions": [],
+      "group": "previous-ready",
+      "incoming": "release-20261010-hana-5865"
+    },
+    {
+      "card_id": "hana-5866",
+      "name": "쿠쿠 프리멤버쉽 하나카드",
+      "path": "cards/hana/hana-5866.yaml",
+      "draft_id": "45cfd035-d295-4ebc-931e-5336d08326de",
+      "sha256": "e35efdc232f38f0571730feda9327eb2f40ec29684a652ab97ee5f7ea9405cce",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5866",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "amount": 12000
+        }
+      ],
+      "open_questions": [],
+      "group": "previous-ready",
+      "incoming": "release-20261010-hana-5866"
+    },
+    {
+      "card_id": "kb-04558",
+      "name": "KMI 기업ID 복지체크카드",
+      "path": "cards/kb/kb-04558.yaml",
+      "draft_id": "9e97de02-d6b2-436a-a93d-a15de910d27e",
+      "sha256": "b30f91708d244ca7a2df714855efb940a24187ec946e08055ecf2ba2defa0be4",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04558",
+          "fetched_at": "2026-10-04",
+          "text_sha256": "4ea182e3d61e4e5491df24927768eb214c783be91dc911ac6216f2040daacab8"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "previous-ready",
+      "incoming": "release-20261010-kb-04558"
+    },
+    {
+      "card_id": "kb-07957",
+      "name": "패밀리포인트 체크카드 (주)뉴부자관광",
+      "path": "cards/kb/kb-07957.yaml",
+      "draft_id": "7413940d-2590-4ebc-b875-8e9e73ea631c",
+      "sha256": "68b9416de9fdd5ac8989234a1f3f109568f8f373bec376daad11c245d9c61ca1",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07957",
+          "fetched_at": "2026-10-04",
+          "text_sha256": "ff924ea7e21943d9b51af78b9f9073e92981ca171730097558b745f901434a6a"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "previous-ready",
+      "incoming": "release-20261010-kb-07957"
+    },
+    {
+      "card_id": "shinhan-bcdbyg",
+      "name": "11번가 신한카드 체크",
+      "path": "cards/shinhan/shinhan-bcdbyg.yaml",
+      "draft_id": "6c3ab899-744c-470f-8b09-feb6a10ea0ce",
+      "sha256": "66d8b6fbc0c9b3792fcfb69d776225d95ea706c864fd16a5186f6e083b1524b5",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1187965_2206.html",
+          "fetched_at": "2026-10-04",
+          "text_sha256": "72ebfbde23c81b5b2688d3f3c01bb8862720d6aca0bc731090267844b6b27a8e"
+        },
+        {
+          "id": "metadata-api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201907220002",
+          "fetched_at": "2026-10-09",
+          "text_sha256": "9b297abb851358a93d4593667adba338d4a86bad18325dfc06f836a9ba4e97e7"
+        },
+        {
+          "id": "brand-code-map",
+          "kind": "api",
+          "url": "https://www.shinhancard.com/mob/static/js/cmm/card/card-default-2024.js",
+          "fetched_at": "2026-10-09"
+        },
+        {
+          "id": "partner-promo-202610",
+          "kind": "promo_page",
+          "url": "https://plan.11st.co.kr/plan/mobile/exhibitions/2042332/detail",
+          "fetched_at": "2026-10-09"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "previous-ready",
+      "incoming": "release-20261010-shinhan-bcdbyg"
+    },
+    {
+      "card_id": "nh-f10783",
+      "name": "zgm 할인카드",
+      "path": "cards/nh/nh-f10783.yaml",
+      "draft_id": "a6a7f826-75c4-48c4-98f1-d7ab352fa77b",
+      "sha256": "54f543136cd1fde13a3a02da94b107f8d4d472844698babccfb229ae3c012a46",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010515",
+          "fetched_at": "2026-10-04",
+          "text_sha256": "dd270b27c14ac72f11bfb7e6631afbe2fb4c4ed9002789a9fff8f946a265b514"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "form": "mobile",
+          "amount": 21000
+        },
+        {
+          "scope": "domestic",
+          "form": "physical",
+          "amount": 27000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "form": "mobile",
+          "amount": 24000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "form": "mobile",
+          "amount": 24000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "form": "physical",
+          "amount": 30000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "form": "physical",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits[living-digital-30].when",
+          "question": "디지털구독에서 제외하는 일부 페이 결제수단 이름을 추가 확인해야 한다. 원문에 특정 이름이 없다.",
+          "assumed": "정기결제와 인앱 제외는 실행하며 공식 사이트 직접결제 여부와 미상 페이는 확인 필요 조건으로 표시한다."
+        }
+      ],
+      "group": "previous-ready",
+      "incoming": "release-20261010-nh-f10783"
+    },
+    {
+      "card_id": "nh-f10793",
+      "name": "미미카드",
+      "path": "cards/nh/nh-f10793.yaml",
+      "draft_id": "85c98298-7722-41f5-b1c7-f40cc6b3a8fd",
+      "sha256": "33fa3d19fa3d0ace7e7ed0039fa27871f1b720dac09e1e25a5a9cedefb7236e2",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010543",
+          "fetched_at": "2026-10-04",
+          "text_sha256": "7fa2a5c6ce44c81c880194be84c96be2ee8b09fc70e117b244b2866d8e751009"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "form": "mobile",
+          "amount": 22000
+        },
+        {
+          "scope": "domestic",
+          "form": "physical",
+          "amount": 28000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "form": "mobile",
+          "amount": 24000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "form": "physical",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits[0].when[0].time.to",
+          "question": "오전 5시부터 오전 9시까지의 원문이 09:00 정각을 포함하는지 추가 확인해야 한다. 현 계산 틀은 끝 시각을 제외한다.",
+          "assumed": "09:00 미만"
+        }
+      ],
+      "group": "previous-ready",
+      "incoming": "release-20261010-nh-f10793"
+    },
+    {
+      "card_id": "hana-11810",
+      "name": "BS렌탈 플러스 하나카드",
+      "path": "cards/hana/hana-11810.yaml",
+      "draft_id": "f9940545-2c8d-4b3a-a9b6-2f5cabba61f4",
+      "sha256": "8181b72bc5642eb4e3264d78e6d0c0f3f7c2cdbde4abc0dbb53763cdc9689e85",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "jcb",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-11810"
+    },
+    {
+      "card_id": "hana-12395",
+      "name": "현대렌탈서비스 하나카드",
+      "path": "cards/hana/hana-12395.yaml",
+      "draft_id": "75f04e62-40c8-441a-b8af-d12e8e3504a8",
+      "sha256": "0eb4111fb041ad5a7f6f302bea710de4ea534b2d2f1f40c2dfa11220551364df",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-12395"
+    },
+    {
+      "card_id": "hana-15349",
+      "name": "대명아임레디 플러스 하나카드",
+      "path": "cards/hana/hana-15349.yaml",
+      "draft_id": "8c547bcd-6d54-4c22-be1a-5853fbe3ef5c",
+      "sha256": "9fdaba986a515254cab801fd20eb2706306cae8ea5a5f47b183443164103a332",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-15349"
+    },
+    {
+      "card_id": "hana-17398",
+      "name": "SK인텔릭스 플러스 하나카드",
+      "path": "cards/hana/hana-17398.yaml",
+      "draft_id": "48660e52-4c28-4f34-bb84-e152354b7a9e",
+      "sha256": "ef2480e034217b7f656b8f4aed03980870d9447ee9f629bf5478abada0392572",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 25000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-17398"
+    },
+    {
+      "card_id": "hana-17403",
+      "name": "마이 코웨이 하나카드",
+      "path": "cards/hana/hana-17403.yaml",
+      "draft_id": "e5218d41-833a-4e2e-969b-51f2f6f792ec",
+      "sha256": "253f8853fdddd241e6c9be5e0ade287a586b3c0637d369e0b16b49f83a8eb4d8",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 25000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-17403"
+    },
+    {
+      "card_id": "hana-18023",
+      "name": "토스뱅크 하나카드 Wide",
+      "path": "cards/hana/hana-18023.yaml",
+      "draft_id": "038fbd00-143f-43b5-9758-d0f2815efc14",
+      "sha256": "cf3922f0946523fc445eac504c49a527df53df32995ad99eaca071bfbb51c664",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-18023"
+    },
+    {
+      "card_id": "hana-18068",
+      "name": "삼성 AI 구독 하나카드",
+      "path": "cards/hana/hana-18068.yaml",
+      "draft_id": "89dbdee2-4eee-4ed2-a99e-390a26327c14",
+      "sha256": "dcc3f9ab3cebb0550a3bdb85a2c25bbe6658044bc11794d4b706ea463040db4d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 25000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-18068"
+    },
+    {
+      "card_id": "hana-19410",
+      "name": "코웨이라이프솔루션 하나카드",
+      "path": "cards/hana/hana-19410.yaml",
+      "draft_id": "d607e8ea-0e70-455c-b554-998cdb12652b",
+      "sha256": "3dd6a234f4797179c406bc636f4386eda9687a83a12bef6b30ab1a6b7f39f2eb",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410",
+          "fetched_at": "2026-10-04"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 23000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 23000
+        }
+      ],
+      "open_questions": [],
+      "group": "hana8",
+      "incoming": "release-20261010-hana-19410"
+    },
+    {
+      "card_id": "hana-12782",
+      "name": "모두의 일상 체크카드",
+      "path": "cards/hana/hana-12782.yaml",
+      "draft_id": "4c7ea06c-2cf3-4c8c-ab51-0f1274d4fd56",
+      "sha256": "d7c9d0d6c1aa8ef5f2478355350611b7f715749d551598a14559113ce8401c20",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12782",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-mixed",
+      "incoming": "release-20261010-hana-12782"
+    },
+    {
+      "card_id": "hana-17504",
+      "name": "JADE Classic",
+      "path": "cards/hana/hana-17504.yaml",
+      "draft_id": "9e637ca8-8a68-42d9-82b7-4099de2184d7",
+      "sha256": "26cc254122567bce9146214f2f670ce21e2c04e7adf8274ce9b8327361530ed0",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 115000
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 115000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 120000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 120000
+        },
+        {
+          "scope": "global",
+          "brand": "amex",
+          "amount": 120000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-mixed",
+      "incoming": "release-20261010-hana-17504"
+    },
+    {
+      "card_id": "hyundai-mzroe3",
+      "name": "현대카드ZERO Edition3(포인트형)",
+      "path": "cards/hyundai/hyundai-mzroe3.yaml",
+      "draft_id": "4df04f8a-1a60-4f3c-84ce-9b630f8b628a",
+      "sha256": "e8928998352d47f399e235ea789c905798f6c85bb0e4ca67d5bcb9c65df099c4",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MZROE3",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_ZERO%20Ed3_%ED%8F%AC%EC%9D%B8%ED%8A%B8_260330.pdf",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "amex",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-mixed",
+      "incoming": "release-20261010-hyundai-mzroe3"
+    },
+    {
+      "card_id": "hyundai-xpe4",
+      "name": "현대카드X",
+      "path": "cards/hyundai/hyundai-xpe4.yaml",
+      "draft_id": "9e7bd826-d265-46d7-8d84-d80f5120bb5a",
+      "sha256": "f783c98bd0c0f107a02bac1bd892561c5e72ed4b759fcd9546ba70dd9564dd49",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=XPE4",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/20260330_X.pdf",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 50000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 50000
+        },
+        {
+          "scope": "global",
+          "brand": "amex",
+          "amount": 50000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-mixed",
+      "incoming": "release-20261010-hyundai-xpe4"
+    },
+    {
+      "card_id": "lotte-c12833-a12833",
+      "name": "LIKIT on 체크카드",
+      "path": "cards/lotte/lotte-c12833-a12833.yaml",
+      "draft_id": "03a1b7dd-27f2-4532-b77c-ff997c11505c",
+      "sha256": "ad12aa9b46cab898840e4f2f6a4126a985d4634a18a131db50789ae1ffdcb547",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12833-A12833",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-lotte-c12833-a12833"
+    },
+    {
+      "card_id": "lotte-p14718-a14718",
+      "name": "디지로카 London",
+      "path": "cards/lotte/lotte-p14718-a14718.yaml",
+      "draft_id": "69513706-397f-48e3-ad86-79f8042bf043",
+      "sha256": "b37f220f77ecb317d0ee439b178ee64a6475fd629c0cf873b1235ea66794dce1",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14718-A14718",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00032_20260928_10002.pdf",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "amex",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-lotte-p14718-a14718"
+    },
+    {
+      "card_id": "lotte-p15835-a15835",
+      "name": "LOCA LIKIT 2.0",
+      "path": "cards/lotte/lotte-p15835-a15835.yaml",
+      "draft_id": "6fca0845-91e1-4a7c-8042-090ed5acbccf",
+      "sha256": "422100ba71f9fc5a31eef4531b9b661ecdeeb8e4a12037c39310afdcf08b823f",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15835-A15835",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00005_20260424_10001.pdf",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "amex",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-lotte-p15835-a15835"
+    },
+    {
+      "card_id": "samsung-abp1689",
+      "name": "국민행복 삼성체크카드 V2",
+      "path": "cards/samsung/samsung-abp1689.yaml",
+      "draft_id": "67c43c54-3320-4510-9584-6feefa8921dc",
+      "sha256": "08b50759c774ad5b311a4fbf0599633c2b942d3db3c92e28b91a21ad5ba316f0",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-samsung-abp1689"
+    },
+    {
+      "card_id": "woori-103489",
+      "name": "위비트래블 체크카드",
+      "path": "cards/woori/woori-103489.yaml",
+      "draft_id": "ffc474a6-fe8e-4a8c-a6a7-81be3f9b5488",
+      "sha256": "3a0ee90018ad41dde1ce0657da0954de897e026b040a25c0d855fda8307f6fc3",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-woori-103489"
+    },
+    {
+      "card_id": "woori-500044",
+      "name": "카드의정석2 SUPER",
+      "path": "cards/woori/woori-500044.yaml",
+      "draft_id": "c29fdbd8-e555-4a63-a8b3-0c749afc9c31",
+      "sha256": "c742d086d392de54f6da952f9284d7e9f41852bf39f00406d2e71e42ae1232a5",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500044",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 30000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-woori-500044"
+    },
+    {
+      "card_id": "woori-500045",
+      "name": "카드의정석2 ROUTINE",
+      "path": "cards/woori/woori-500045.yaml",
+      "draft_id": "fa911f43-95d1-4230-9660-c3b3edaa8f0a",
+      "sha256": "6ce8111fc8d044fa70b301f97c1d189de9b1add2c355978556a6566a24cbbbae",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 28000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 28000
+        },
+        {
+          "scope": "domestic",
+          "form": "mobile",
+          "amount": 22000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "form": "mobile",
+          "amount": 22000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-woori-500045"
+    },
+    {
+      "card_id": "woori-500055",
+      "name": "카드의정석2 EVERYDAY CHECK",
+      "path": "cards/woori/woori-500055.yaml",
+      "draft_id": "80c0291f-3537-4452-95ff-2d5d5b6589c2",
+      "sha256": "c4d206b3afb007dd82b7713bc4db7f002235e2109521313170d7af25e68a1cdd",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-woori-500055"
+    },
+    {
+      "card_id": "woori-500058",
+      "name": "카드의정석2 DAILY",
+      "path": "cards/woori/woori-500058.yaml",
+      "draft_id": "8452b60d-2494-403d-8575-f85d5987cef4",
+      "sha256": "c57c9d7b0fd2c2bc66abf9a9e727175c0c7327f2c3221ab2941279902ac8f8cd",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 25000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        },
+        {
+          "scope": "domestic",
+          "form": "mobile",
+          "amount": 19000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "form": "mobile",
+          "amount": 19000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다.",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "recommended-others",
+      "incoming": "release-20261010-woori-500058"
+    }
+  ],
+  "shared_files": [
+    {
+      "path": "cards/hana/hana-travelog-check.yaml",
+      "sha256": "f60bb34475ea9c98fb3afb70a1884e1766e4a8e0a7839e54551397ec5aaf4bf2"
+    },
+    {
+      "path": "cards/hana/hana-wonder2-daily.yaml",
+      "sha256": "59027a972a226d251f2dd7b946c20570ce2c974aba225ce37e9ec460c0486fcb"
+    },
+    {
+      "path": "cards/hyundai/hyundai-the-green-ed4.yaml",
+      "sha256": "56a115b0467c6cde8e4379c165f5f6ff407f497e8ee6e4a9330d82c33135a2b5"
+    },
+    {
+      "path": "cards/ibk/ibk-narasarang.yaml",
+      "sha256": "b55ae370d6f556aca3ecb6d40fcb1da7de75435be7c5a7c3dabd7e44227d38f9"
+    },
+    {
+      "path": "cards/kb/kb-easy-all-titanium.yaml",
+      "sha256": "4d21cd9eb3a910f7b3a81925c2de1e3fd588df1418a10d0f560c4a6561a724b8"
+    },
+    {
+      "path": "cards/kb/kb-my-wesh.yaml",
+      "sha256": "8d6eb4322cc27ed298108ee6c5581388588f9686860bd37bd9885bc50ba93f65"
+    },
+    {
+      "path": "cards/lotte/lotte-loca-classic.yaml",
+      "sha256": "39942bd0d4c3ecc388fe962ff2b7ad29e8ee829a8720374664cb057e8ffd89ee"
+    },
+    {
+      "path": "cards/lotte/lotte-loca365.yaml",
+      "sha256": "4164e20428c5cfbfff5ed08c2369bcb957a5657dbd55cdef966242de898f1910"
+    },
+    {
+      "path": "cards/nh/nh-heroes-check.yaml",
+      "sha256": "bfbb58d5233d9630caed2cd1fda0871e2d4b9f53f639eb61ccda39c9d5954ba7"
+    },
+    {
+      "path": "cards/samsung/samsung-id-on.yaml",
+      "sha256": "af66cb8eca72a8fa3f58aa0198420e707f49ebe1dc58dbb65d25f53bc3164eb3"
+    },
+    {
+      "path": "cards/shinhan/shinhan-cheoeum.yaml",
+      "sha256": "f2684cc3aa33d29196aee4e5f29dc37389a53e0b7b0288f3780d480c4c747761"
+    },
+    {
+      "path": "cards/shinhan/shinhan-pointplan.yaml",
+      "sha256": "c9439d22cf07c0e0b5052a79dabed3f4f4818e4f48a5a4e30afe416946745a37"
+    },
+    {
+      "path": "categories.yaml",
+      "sha256": "aba1865ca481dd564e3c3bcacbb804ed3e74c9c409f5106dd39e04b4be5dfec3"
+    },
+    {
+      "path": "issuers/hyundai.yaml",
+      "sha256": "0415045dc46f931f363d419c61dcca474edb8cb3e2795d1a07f76ba6e26a6cab"
+    },
+    {
+      "path": "merchants.yaml",
+      "sha256": "8091b98df1e32a190a1b7cd5bf62cf6fe56fcb7ecce7919b613fb30ee0082588"
+    },
+    {
+      "path": "payment_methods.yaml",
+      "sha256": "e2b5a4b0d0feecc7e4a67bf9293dbba9290a3caca34066dde545aaa9f4544deb"
+    },
+    {
+      "path": "point_programs.yaml",
+      "sha256": "cc9aefbf97bfb9c53f5ee58c8c8b1885ef8d714da8e0eb302b91f69385a676e1"
+    }
+  ],
+  "operation_order": [
+    "운영 현재 값과 끊긴 승인 확인",
+    "공통 항목과 기존 카드 분류 연결 승인 후 봇 내보내기 확인",
+    "새 카드별 초안 번호로 승인하고 검수 대기 닫기",
+    "앱 배포용 카탈로그 내보내기 확인"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "draft_cards": 2162,
+  "previous_no_problems": 982,
+  "current_no_errors": 1571,
+  "current_no_errors_with_benefits": 1034,
+  "current_no_errors_or_warnings_with_benefits": 837,
+  "raw_zero_benefits": 575,
+  "model_valid_zero_benefits": 548,
+  "model_invalid": 120,
+  "recommended": 27,
+  "approved": 0,
+  "by_issuer": {
+    "hana": {
+      "drafts": 94,
+      "no_errors_with_benefits": 35
+    },
+    "hyundai": {
+      "drafts": 240,
+      "no_errors_with_benefits": 158
+    },
+    "ibk": {
+      "drafts": 106,
+      "no_errors_with_benefits": 42
+    },
+    "kakaobank": {
+      "drafts": 3,
+      "no_errors_with_benefits": 0
+    },
+    "kb": {
+      "drafts": 363,
+      "no_errors_with_benefits": 220
+    },
+    "lotte": {
+      "drafts": 424,
+      "no_errors_with_benefits": 163
+    },
+    "nh": {
+      "drafts": 65,
+      "no_errors_with_benefits": 31
+    },
+    "samsung": {
+      "drafts": 135,
+      "no_errors_with_benefits": 71
+    },
+    "shinhan": {
+      "drafts": 148,
+      "no_errors_with_benefits": 12
+    },
+    "woori": {
+      "drafts": 584,
+      "no_errors_with_benefits": 302
+    }
+  }
+}

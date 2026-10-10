@@ -1,0 +1,65 @@
+schema_version: 2
+id: hana-5865
+issuer: hana
+name: 바디프랜드 하나카드
+short_name: 바디프랜드 하나
+kind: credit
+product_codes:
+  - '5865'
+status: on_sale
+annual_fees:
+  - {scope: global, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5865', fetched_at: &id001 2026-10-04}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, gift_card, prepaid_charge, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: rental-discount
+        title: 렌탈 자동이체 월 최대 13,000원
+        source: page
+        target:
+          merchants: [bodyfriend_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 13000}
+        tiers: {from: 300000}
+      - key: mart-discount
+        title: 마트 3% 할인
+        source: page
+        target:
+          exclude_categories: [gift_card]
+          merchants: [emart, homeplus, lotte_mart, traders]
+          exclude_merchants: [emart_everyday, homeplus_express, lotte_super]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [마트 내 임대매장 제외]
+      - key: coffee-discount
+        title: 커피빈 10% 할인
+        source: page
+        target:
+          exclude_categories: [gift_card]
+          merchants: [coffee_bean]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [마트·백화점 입점점포 제외]
+    unmodeled: [무승인 교통·통신·해외 매출은 매출 접수 월에 실적 반영한다]
+notes: 2026-10-09 공식 수집 원문 대조. 시행일을 소급하지 않고 수집일 이후 규칙으로 제안한다.

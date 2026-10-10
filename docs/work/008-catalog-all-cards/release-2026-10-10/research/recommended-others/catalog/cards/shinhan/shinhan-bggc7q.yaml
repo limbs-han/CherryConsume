@@ -1,0 +1,273 @@
+schema_version: 2
+id: shinhan-bggc7q
+issuer: shinhan
+name: 신한카드 Hey Young 체크
+kind: check
+product_codes: [BGGC7Q]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 800000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: ['Tmoney 사용, 포인트 사용금액, 각종 수수료·이자·대출 및 다른 신한카드 할인 적용 거래 제외', 가맹점명이 간편결제명으로 찍히는 경우 해당 가맹점 서비스 제외]
+    limits:
+      - key: heyyoung-cashback
+        per: month
+        amount: {200000: 5000, 500000: 10000, 800000: 20000, 1000000: 30000}
+      - {key: cafe, per: day, count: 1}
+      - {key: cafe-month, per: month, count: 5}
+      - {key: living, per: day, count: 1}
+      - {key: living-month, per: month, count: 5}
+    stacks:
+      - key: main
+        pick: priority
+        order: [transport-5pct, telecom-2k, cgv-5k, convenience-1k, cafe-1k, cafe-offline-1k, fastfood-1k, delivery-1k, living-1k, living-daiso-1k, ott-1k, online-1k, overseas-1-2pct, simplepay-1pct]
+        spill: none
+    benefits:
+      - key: transport-5pct
+        title: 후불 버스·지하철5% 캐시백
+        source: page
+        evidence: [후불 버스·지하철5% 캐시백]
+        target:
+          categories: [transit.bus_city, transit.bus_intercity, transit.subway]
+        when:
+          - {region: domestic}
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {shared: heyyoung-cashback}
+        tiers: {from: 200000}
+        unmodeled: ['마을·공항버스 포함, 고속버스·Tmoney 사용 제외']
+      - key: telecom-2k
+        title: 휴대전화 자동납부5만원 이상2000원
+        source: page
+        evidence: [휴대전화 자동납부5만원 이상2000원]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - {region: domestic}
+          - billing: [autopay]
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: heyyoung-cashback}
+        tiers: {from: 200000}
+        unmodeled: ['순수 통신요금만, 알뜰폰·약정 대납·지점 월납 제외']
+      - key: cgv-5k
+        title: CGV2만원 이상5000원
+        source: page
+        evidence: [CGV2만원 이상5000원]
+        target:
+          merchants: [cgv]
+        when:
+          - {region: domestic}
+          - amount: {min: 20000}
+        reward: {type: cashback, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: heyyoung-cashback}
+        tiers: {from: 200000}
+        unmodeled: ['공식 사이트·앱·현장 영화예매만, 매점·상품권·기프트콘 제외']
+      - key: convenience-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [cu, emart24, gs25]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+          - {channel: offline}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: cafe-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [starbucks]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {shared: cafe}
+          - {shared: cafe-month}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: cafe-offline-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [angel_in_us, coffee_bean, ediya, mega_coffee, paik_coffee, paul_bassett, twosome]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+          - {channel: offline}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {shared: cafe}
+          - {shared: cafe-month}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: fastfood-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [baskin_robbins, kfc, krispy_kreme]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+          - {channel: offline}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: delivery-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [ddangyo]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+          - {channel: online}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: living-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [olive_young]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {shared: living}
+          - {shared: living-month}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: living-daiso-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [daiso]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+          - {channel: offline}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {shared: living}
+          - {shared: living-month}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: ott-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [disney_plus, netflix, tving]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+          - {channel: online}
+          - billing: [subscription]
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: online-1k
+        title: 생활 영역1000원 캐시백
+        source: page
+        evidence: [생활 영역1000원 캐시백]
+        target:
+          merchants: [ably, coupang, coupang_eats, kream, musinsa, zigzag]
+        when:
+          - {region: domestic}
+          - amount: {min: 20000}
+          - {channel: online}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: heyyoung-cashback}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+        tiers: {from: 200000}
+        unmodeled: ['입점매장·상품권·충전 제외. 온라인은 공식 사이트·앱 직접 결제만. OTT는 정기결제만, 인앱·통신합산 제외']
+      - key: simplepay-1pct
+        title: 국내 간편결제2만원 이상1% 캐시백
+        source: page
+        evidence: [국내 간편결제2만원 이상1% 캐시백]
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - payment: [heyyoung_pay, samsung_pay, shinhan_sol_pay]
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: heyyoung-cashback}
+        tiers: {from: 200000}
+      - key: overseas-1-2pct
+        title: 해외 일시불1.2% 캐시백
+        source: page
+        evidence: [해외 일시불1.2% 캐시백]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: cashback, rate: 1.2}
+    unmodeled: ['해외ATM 인출 건당US$3 캐시백, 일1회·월1만원. 전월실적 없음. VISA ATM만, 국제 수수료3달러+1.1%는 별도 부과. 외화·ATM인출 입력이 없어 합계에 넣지 않는다', '해외는 매입일, 교통은 전전월 사용분을 전월 실적으로 반영하되 모바일후불교통은 전월 사용분을 반영한다', Tmoney 선불기능은 협약 대학교 학생증 상품만. 금액 합계에 넣지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.month_offset', question: 모바일 후불교통과 실물 후불교통의 실적 반영월을 결제수단별로 구별하는 엔진 기능이 필요하다. 입력으로 식별 가능한 조건이므로 unmodeled 안내만으로 계산 준비 완료로 취급할 수 없다.}
+  - {path: 'revisions[0].spend.month_offset', question: 모바일 후불교통과 실물 후불교통의 실적 반영월을 결제수단별로 구별하는 엔진 기능이 필요하다. 입력으로 식별 가능한 조건이므로 unmodeled 안내만으로 계산 준비 완료로 취급할 수 없다.}
+notes: '2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2020-06-12이며 현행 조건 전체의 시행일 근거로 사용하지 않았다. 부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 통신 인터넷·집전화 제외 수정과 나머지 조건·사례를 후속 자료로 보존. 부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 통신 인터넷·집전화 제외 수정과 나머지 조건·사례를 후속 자료로 보존.'

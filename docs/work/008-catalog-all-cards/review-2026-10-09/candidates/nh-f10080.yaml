@@ -1,0 +1,142 @@
+schema_version: 2
+id: nh-f10080
+issuer: nh
+name: 올바른지구카드
+kind: credit
+product_codes: [F10080]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010158', fetched_at: &id001 2026-10-04}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    benefits:
+      - key: transport-7-40
+        title: 버스·지하철·택시·철도 7% 청구 할인
+        evidence: ['[교통 서비스] 버스/지하철/택시/철도 7% 청구 할인', ‘버스’의 경우 고속·시외버스 포함, ‘택시’의 경우 카카오T택시 자동결제 포함, ‘철도’의 경우 KTX·SRT 포함, '[교통 서비스 통합 할인한도] 교통 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 전월실적 | 40만원이상 80만원미만 | 80만원이상, 월 할인한도 | 1만원 | 2만원]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.rail, transit.subway]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 400000}
+      - key: transport-7-80
+        title: 버스·지하철·택시·철도 7% 청구 할인
+        evidence: ['[교통 서비스] 버스/지하철/택시/철도 7% 청구 할인', ‘버스’의 경우 고속·시외버스 포함, ‘택시’의 경우 카카오T택시 자동결제 포함, ‘철도’의 경우 KTX·SRT 포함, '[교통 서비스 통합 할인한도] 교통 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 전월실적 | 40만원이상 80만원미만 | 80만원이상, 월 할인한도 | 1만원 | 2만원]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.rail, transit.subway]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 20000}
+        tiers: {from: 800000}
+      - key: comm-5-40
+        title: 이동통신요금 5% 청구 할인(월 1건)
+        evidence: ['[생활 서비스] 이동통신요금 5% 청구 할인(월 1건)', 'SKT, KT, LGU+ 자동납부 건에 한함', '[생활 서비스 통합 할인한도] 생활 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 전월실적 | 40만원이상 80만원미만 | 80만원이상, 월 할인한도 | 5천원 | 1만원]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+      - key: comm-5-80
+        title: 이동통신요금 5% 청구 할인(월 1건)
+        evidence: ['[생활 서비스] 이동통신요금 5% 청구 할인(월 1건)', 'SKT, KT, LGU+ 자동납부 건에 한함', '[생활 서비스 통합 할인한도] 생활 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 전월실적 | 40만원이상 80만원미만 | 80만원이상, 월 할인한도 | 5천원 | 1만원]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 800000}
+      - key: openmarket-5-40
+        title: 오픈마켓·배달앱 5% 청구 할인
+        evidence: ['[생활 서비스] 오픈마켓/배달앱 5% 청구 할인', '쿠팡, 11번가, G마켓, 옥션, 농협몰', '배달의 민족, 요기요', '‘오픈마켓’, ‘배달앱’인 경우 간편결제(Pay)로 결제 시 해당 가맹점으로 구분이 불가하여 할인이 제공되지 않을 수 있음', '[생활 서비스 통합 할인한도] 생활 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 월 할인한도 | 5천원 | 1만원]
+        target:
+          merchants: [auction, baemin, coupang, eleven_st, gmarket, nh_hanaro_mart, yogiyo]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: [간편결제(Pay)로 결제 시 가맹점 구분이 불가하여 할인 적용이 안 될 수 있음]
+      - key: openmarket-5-80
+        title: 오픈마켓·배달앱 5% 청구 할인
+        evidence: ['[생활 서비스] 오픈마켓/배달앱 5% 청구 할인', '쿠팡, 11번가, G마켓, 옥션, 농협몰', '배달의 민족, 요기요', '‘오픈마켓’, ‘배달앱’인 경우 간편결제(Pay)로 결제 시 해당 가맹점으로 구분이 불가하여 할인이 제공되지 않을 수 있음', '[생활 서비스 통합 할인한도] 생활 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 월 할인한도 | 5천원 | 1만원]
+        target:
+          merchants: [auction, baemin, coupang, eleven_st, gmarket, nh_hanaro_mart, yogiyo]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 800000}
+        unmodeled: [간편결제(Pay)로 결제 시 가맹점 구분이 불가하여 할인 적용이 안 될 수 있음]
+      - key: sports-hb-5-40
+        title: 스포츠·H&B 매장 5% 청구 할인
+        evidence: ['[생활 서비스] 스포츠/H&B매장 5% 청구 할인 * 온라인결제 제외', '종합스포츠센터, 요가, 수영장, 볼링장', '올리브영, 랄라블라', '[생활 서비스 통합 할인한도] 생활 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 월 할인한도 | 5천원 | 1만원]
+        target:
+          categories: [sports]
+          merchants: [olive_young]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: [‘랄라블라’ 가맹점이 목록에 없음]
+      - key: sports-hb-5-80
+        title: 스포츠·H&B 매장 5% 청구 할인
+        evidence: ['[생활 서비스] 스포츠/H&B매장 5% 청구 할인 * 온라인결제 제외', '종합스포츠센터, 요가, 수영장, 볼링장', '올리브영, 랄라블라', '[생활 서비스 통합 할인한도] 생활 서비스 통합 할인한도 - 전월실적에 따른 월 할인한도 40만원이상 80만원미만, 80만원이상 으로 나타내는 표', 월 할인한도 | 5천원 | 1만원]
+        target:
+          categories: [sports]
+          merchants: [olive_young]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 800000}
+        unmodeled: [‘랄라블라’ 가맹점이 목록에 없음]
+      - key: coffee-2000-40
+        title: 커피전문점 2,000원 청구 할인 (월 2회)
+        evidence: ['커피전문점 2,000원 청구 할인(월 2회)', '스타벅스, 이디야, 커피빈, 투썸플레이스', ※ 이용건당 1만원 이상 결제 시 제공, ※ 전월실적 40만원 이상 시 제공, ※ 스타벅스는 사이렌 오더 결제건도 제공]
+        target:
+          merchants: [coffee_bean, starbucks, twosome]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {per: month, count: 2}
+        tiers: {from: 400000}
+      - key: coffee-2000-80
+        title: 커피전문점 2,000원 청구 할인 (월 2회)
+        evidence: ['커피전문점 2,000원 청구 할인(월 2회)', '스타벅스, 이디야, 커피빈, 투썸플레이스', ※ 이용건당 1만원 이상 결제 시 제공, ※ 전월실적 40만원 이상 시 제공, ※ 스타벅스는 사이렌 오더 결제건도 제공]
+        target:
+          merchants: [coffee_bean, starbucks, twosome]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {per: month, count: 2}
+        tiers: {from: 800000}
+      - key: convenience-1000-40
+        title: 편의점 1,000원 청구 할인 (월 2회)
+        evidence: ['편의점 1,000원 청구 할인(월 2회)', 'GS25, CU', ※ 이용건당 1만원 이상 결제 시 제공, ※ 전월실적 40만원 이상 시 제공]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 2}
+        tiers: {from: 400000}
+      - key: convenience-1000-80
+        title: 편의점 1,000원 청구 할인 (월 2회)
+        evidence: ['편의점 1,000원 청구 할인(월 2회)', 'GS25, CU', ※ 이용건당 1만원 이상 결제 시 제공, ※ 전월실적 40만원 이상 시 제공]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 2}
+        tiers: {from: 800000}
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 시행일을 찾지 못해 수집한 날로 두었다}
+  - {path: kind, question: 'kind를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: 발급 기준 안내표입니다. 발급대상 | 개인(신용) 교통 구분 | 교통(후불), 비교통 ※ 가족카드 발급 가능 ※ 본 상품은 ''모바일카드''발급이 가능'}
+notes: 새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다.

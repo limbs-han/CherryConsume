@@ -1,0 +1,494 @@
+{
+  "reviewed_at": "2026-10-10",
+  "reviewed_count": 9,
+  "scope": "롯데4장 우리5장 독립 공식 원문 대조. 카드 파일 수정 없음",
+  "cards": [
+    {
+      "card_id": "woori-500055",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500055.yaml",
+      "sha256": "0c22de068c46645bfcf5b58df4fa94642d721d02339d982c656bc34c0128eb20",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "source_urls": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500055-page-9fb3d9fd1eac.html",
+          "kind": "product_page",
+          "text_sha256": "f9c1d9fc07a3ebfe6c7f0d853543d2916ece6cac3fcc6f84189e36c9e5126f4f",
+          "text_length": 12634
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].benefits[special-kakao-taxi-earn].target",
+          "file_value": "kakao_t merchant만",
+          "official_value": "택시만. 철도 등 카카오T 다른 서비스 제외",
+          "evidence": "카카오T(택시). 카카오T 앱 내 택시호출 이외 서비스 기차 등 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055",
+          "severity": "금액이 틀림",
+          "scenario": "카카오T 철도승차권이 택시율로 지급될 수 있음. transit.rail 제외 필요"
+        },
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "file_value": "최초발급 판정/안내 없음",
+          "official_value": "최초 해당 상품 발급만 유예",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055",
+          "severity": "조건이 빠짐",
+          "scenario": "재발급 시작일로 등록하면 신규 유예 가능. 처음 해당 카드 발급인지 facts 또는 안내에 보존 필요"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조"
+      },
+      "result": "불일치 있음"
+    },
+    {
+      "card_id": "woori-103489",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-103489.yaml",
+      "sha256": "1a75d1345fc286757ba1bbb3c851c82a7638d285f9b66971f9e49d42253884c0",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "source_urls": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-103489-page-6810b1dad6ce.html",
+          "kind": "product_page",
+          "text_sha256": "72648d4ccf2efa34884bd7a2abd3e459b726b80e22a6335f0877e87d6e2b16ee",
+          "text_length": 12776
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].benefits[telecom-5].target",
+          "file_value": "통신사 merchants만",
+          "official_value": "휴대전화 자동납부만. internet_tv 제외",
+          "evidence": "인터넷/집전화 등 결합상품은 할인/캐시백 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489",
+          "severity": "금액이 틀림",
+          "scenario": "KT 인터넷 단독요금 자동납부도 지급 가능. 입력 업종으로 구분 가능"
+        },
+        {
+          "path": "revisions[0].benefits[].unmodeled",
+          "file_value": "서로 다른 혜택 영역 조건을 여러 혜택에 반복",
+          "official_value": "그 영역에만 해당하는 제외 조건",
+          "evidence": "통신/배달/렌탈/디지털의 개별 유의사항은 해당 영역 전용",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489",
+          "severity": "조건이 빠짐",
+          "scenario": "학습지/아파트관리비도 ChatGPT USD나 직접구독 조건에 매인 것으로 안내될 수 있음. 영역별 문장을 좁혀야 함"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조"
+      },
+      "result": "불일치 있음"
+    },
+    {
+      "card_id": "woori-500044",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500044.yaml",
+      "sha256": "ecd627d9741c96d85dd324c2e02c299e3853f3fee8e67ad9308319da8b2676f8",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "source_urls": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500044"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500044-page-b7b8b5affae7.html",
+          "kind": "product_page",
+          "text_sha256": "025dbb9de5da6dbac5930a9cf7bfe3131ff3d7a71a168e1bd473a8841cfa9ef5",
+          "text_length": 9745
+        }
+      ],
+      "findings": [],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조"
+      },
+      "result": "불일치 없음"
+    },
+    {
+      "card_id": "woori-500045",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500045.yaml",
+      "sha256": "35e3b49cfa5a4ac8087d2c04c5e6b76a349c62884d76d44f2518816d511a48b3",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "source_urls": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500045-page-1f1ab54445ee.html",
+          "kind": "product_page",
+          "text_sha256": "11d8af3fbdfc1f50e59232ef8a83f0c5bd2b2286dc1fe0db08d7ad64498bbfd1",
+          "text_length": 12592
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "apartment_fee 포함",
+          "official_value": "아파트관리비 실적 제외 없음",
+          "evidence": "전월 실적 제외 목록에 아파트관리비 없음",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "severity": "금액이 틀림",
+          "scenario": "아파트관리비10만원 결제로 실적10만원을 빼 다음달 할인 자격을 낮춤"
+        },
+        {
+          "path": "revisions[0].benefits[rental-15].when",
+          "file_value": "billing subscription 및 physical_card만",
+          "official_value": "매월 렌탈 자동납부",
+          "evidence": "매월 청구되는 렌탈 자동납부 건에 한하여 할인 제공",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "severity": "금액이 틀림",
+          "scenario": "billing autopay 렌탈 자동납부가 할인0원. 원문에 없는 결제수단 제한도 제외"
+        },
+        {
+          "path": "revisions[0].benefits[book-15].when",
+          "file_value": "payment physical_card만",
+          "official_value": "인앱결제 제외만 명시",
+          "evidence": "도서 업종은 인앱결제 시 할인 제공 불가",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "severity": "금액이 틀림",
+          "scenario": "직접 정기결제로 가맹점이 정상 확인된 간편결제를 추가로 제외할 근거 없음"
+        },
+        {
+          "path": "revisions[0].benefits[telecom-15].target",
+          "file_value": "통신사 merchants만",
+          "official_value": "휴대전화 자동납부만. internet_tv 제외",
+          "evidence": "인터넷/집전화 등 결합상품은 할인/캐시백 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "severity": "금액이 틀림",
+          "scenario": "KT 인터넷 단독요금 자동납부도 지급 가능. 입력 업종으로 구분 가능"
+        },
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "file_value": "최초발급 판정/안내 없음",
+          "official_value": "최초 해당 상품 발급만 유예",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "severity": "조건이 빠짐",
+          "scenario": "재발급 시작일로 등록하면 신규 유예 가능. 처음 해당 카드 발급인지 facts 또는 안내에 보존 필요"
+        },
+        {
+          "path": "revisions[0].benefits[].unmodeled",
+          "file_value": "서로 다른 혜택 영역 조건을 여러 혜택에 반복",
+          "official_value": "그 영역에만 해당하는 제외 조건",
+          "evidence": "통신/배달/렌탈/디지털의 개별 유의사항은 해당 영역 전용",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045",
+          "severity": "조건이 빠짐",
+          "scenario": "학습지/아파트관리비도 ChatGPT USD나 직접구독 조건에 매인 것으로 안내될 수 있음. 영역별 문장을 좁혀야 함"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조",
+        "half_year": "두 benefit key를 months1~6/7~12로 나누고 각각 own year6만원 한도 사용. 엔진 price.periodKey(year)는 실제 연도 기준이고 own key는 benefit별이므로 반기별독립 및 다음해 초기화 구조는 맞음. 기존 cases는6월소진/7월초기화만 있어 다음해1월 사례 추가 요청."
+      },
+      "result": "불일치 있음"
+    },
+    {
+      "card_id": "woori-500058",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/woori/woori-500058.yaml",
+      "sha256": "7f7b4f43685df578afab80413ca831815692e164f616faa292b6fbed45464fdf",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/woori.yaml",
+      "issuer_sha256": "67f82875a8f971af090202864fad00f16ac50830f0ea7ff8990f3278a8b39c20",
+      "source_urls": [
+        "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/woori/_issuer/ix-500058-page-b74014399901.html",
+          "kind": "product_page",
+          "text_sha256": "91ac165dcd8cbe2d6e94a480896c87f0bb9b39ec2e00fa9c070109ed2596c79a",
+          "text_length": 12139
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].benefits[fixed-telecom].target",
+          "file_value": "통신사 merchants만",
+          "official_value": "휴대전화 자동납부만. internet_tv 제외",
+          "evidence": "인터넷/집전화 등 결합상품은 할인/캐시백 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "severity": "금액이 틀림",
+          "scenario": "KT 인터넷 단독요금 자동납부도 지급 가능. 입력 업종으로 구분 가능"
+        },
+        {
+          "path": "revisions[0].benefits[fixed-kakao-taxi].target",
+          "file_value": "kakao_t merchant만",
+          "official_value": "택시만. 철도 등 카카오T 다른 서비스 제외",
+          "evidence": "카카오T(택시). 카카오T 앱 내 택시호출 이외 서비스 기차 등 제외",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "severity": "금액이 틀림",
+          "scenario": "카카오T 철도승차권이 택시율로 지급될 수 있음. transit.rail 제외 필요"
+        },
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "file_value": "최초발급 판정/안내 없음",
+          "official_value": "최초 해당 상품 발급만 유예",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "severity": "조건이 빠짐",
+          "scenario": "재발급 시작일로 등록하면 신규 유예 가능. 처음 해당 카드 발급인지 facts 또는 안내에 보존 필요"
+        },
+        {
+          "path": "revisions[0].benefits[].unmodeled",
+          "file_value": "서로 다른 혜택 영역 조건을 여러 혜택에 반복",
+          "official_value": "그 영역에만 해당하는 제외 조건",
+          "evidence": "통신/배달/렌탈/디지털의 개별 유의사항은 해당 영역 전용",
+          "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058",
+          "severity": "조건이 빠짐",
+          "scenario": "학습지/아파트관리비도 ChatGPT USD나 직접구독 조건에 매인 것으로 안내될 수 있음. 영역별 문장을 좁혀야 함"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조"
+      },
+      "result": "불일치 있음"
+    },
+    {
+      "card_id": "lotte-c12833-a12833",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/lotte/lotte-c12833-a12833.yaml",
+      "sha256": "b65a27612cb116e302742cb2af69e488ff49c92aed80ae6b50be3023ab928550",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/lotte.yaml",
+      "issuer_sha256": "e2ad7e51dce0bab14847bcd514c1a9633c27cb006917c1c2ebcf1cfa785c653d",
+      "source_urls": [
+        "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12833-A12833",
+        "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1606-page-e5305c62a243.html",
+          "kind": "product_page",
+          "text_sha256": "b8aaf7984f55cd9b5c14e290a8521b8e584e9a60754b53c03d4290568a80eddd",
+          "text_length": 8463
+        },
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1606-pdf-82271149c6b7.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "25f316a4a2674c144a634e2d2bcc149bace69f04e12e5cde9b3500fce254fe90",
+          "text_length": 4758
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].new_card 및 facts/unmodeled",
+          "file_value": "최초발급 판정/안내 없음",
+          "official_value": "최초 해당 상품 발급만 유예",
+          "evidence": "최초 발급. 유효기간 만기 또는 카드 해지 후 동일 상품 발급은 최초 발급 아님",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf",
+          "severity": "조건이 빠짐",
+          "scenario": "재발급 시작일로 등록하면 신규 유예 가능. 처음 해당 카드 발급인지 facts 또는 안내에 보존 필요"
+        },
+        {
+          "path": "revisions[0].benefit_exclusions.unmodeled",
+          "file_value": "장애인 고용부담금 제외",
+          "official_value": "장애인 고용부담금은 실적 제외에만 명시. 캐시백 공통 제외는 상품권/기프트카드 구매, 포인트충전",
+          "evidence": "공통 혜택 안내 상품권 및 기프트 카드 구매, 포인트 충전 건 혜택 미적용. 장애인 고용부담금은 지난달 실적 제외 목록",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf",
+          "severity": "조건이 빠짐",
+          "scenario": "원문 실적 제외와 캐시백 제외의 범위를 혼합한 안내. 입력 계산에 직접 적용된 분류는 아니지만 문장 분리 필요"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조"
+      },
+      "result": "불일치 있음"
+    },
+    {
+      "card_id": "lotte-p14718-a14718",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/lotte/lotte-p14718-a14718.yaml",
+      "sha256": "601175d54831d1bf9846bdf5d1f7ffa7b356f7bf6d9587817e54b1c9dd5d6585",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/lotte.yaml",
+      "issuer_sha256": "e2ad7e51dce0bab14847bcd514c1a9633c27cb006917c1c2ebcf1cfa785c653d",
+      "source_urls": [
+        "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14718-A14718",
+        "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00032_20260928_10002.pdf"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1864-page-6faaefaa23f7.html",
+          "kind": "product_page",
+          "text_sha256": "d1e666f920ea337412cc6355dd337197385989eb556d54e323ac7d513c231a0b",
+          "text_length": 10364
+        },
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1864-pdf-f779bb87f56b.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "6ee33eb45a8a12297812dccfc6d72396401cd12bbc83487e002d7aac8aadbb59",
+          "text_length": 12620
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].benefit_exclusions.unmodeled",
+          "file_value": "다른 카드사 할인과 중복이면 큰 혜택",
+          "official_value": "롯데카드의 다른 결제일 할인 혜택",
+          "evidence": "롯데카드의 다른 결제일 할인 혜택과 중복 시",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00032_20260928_10002.pdf",
+          "severity": "표기만 다름",
+          "scenario": null
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조",
+        "extra_cashback": "즉시결제와 Weekly 추가1%는 상환/출금 정보 조건이라 unmodeled로 명시. 기본0.7%를 줄이거나 대체하지 않음. LOCA 나누기는 기본 캐시백도 제외하므로 안내 보존 필요. 거래 입력만으로 사후전환 판정 못함."
+      },
+      "result": "불일치 있음"
+    },
+    {
+      "card_id": "lotte-p14728-a14728",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/lotte/lotte-p14728-a14728.yaml",
+      "sha256": "0ff786e1d355663a04a6ed773b9cdfab09577102200910a8167345f9ac249149",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/lotte.yaml",
+      "issuer_sha256": "e2ad7e51dce0bab14847bcd514c1a9633c27cb006917c1c2ebcf1cfa785c653d",
+      "source_urls": [
+        "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14728-A14728",
+        "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1865-page-12bb11f56df1.html",
+          "kind": "product_page",
+          "text_sha256": "e12d2286803ac26cd770d460727b5b3fffe5c380a0a3bcdf0705255fb0f732fb",
+          "text_length": 11524
+        },
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1865-pdf-7607eb7b6f42.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "bb80e35d552e990c3c8aa55e2f11aefaa987f0ea10bc14f56ae4d38901411f6f",
+          "text_length": 23268
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].spend.interest_free",
+          "file_value": "count",
+          "official_value": "exclude",
+          "evidence": "이용 실적 산정 시 제외 대상: 모든 무이자할부 이용금액",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf",
+          "severity": "금액이 틀림",
+          "scenario": "무이자 50만원을 실적에 포함해 다음달 쇼핑 2~5%를 지급할 수 있음"
+        },
+        {
+          "path": "revisions[0].spend",
+          "file_value": "지정 온라인쇼핑 제외 없음",
+          "official_value": "쿠팡 네이버페이 11번가 G마켓 옥션 SSG.COM 롯데ON 롯데홈쇼핑 실적 제외",
+          "evidence": "온라인 쇼핑 이용금액은 실적 산정 시 제외됩니다.",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf",
+          "severity": "금액이 틀림",
+          "scenario": "쿠팡 50만원 구매로 다음달 실적을 채우는 과다 지급. Spend의 가맹점별 제외 미지원이므로 업종 전체로 대체하지 말아야 함"
+        },
+        {
+          "path": "revisions[0].new_card",
+          "file_value": null,
+          "official_value": "발급일~다음달 말일까지 실적 없이 쇼핑 기본 할인. 추가3%는 멤버십 조건 필요",
+          "evidence": "최초 발급받은 경우 카드 발급일~다음 달 말일까지 이용실적에 관계없이 결제일 할인 혜택 제공",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf",
+          "severity": "금액이 틀림",
+          "scenario": "신규 전월실적0이면 쿠팡2%가 아닌0.7%만 지급"
+        },
+        {
+          "path": "revisions[0].benefits[online-shop-3*].unmodeled",
+          "file_value": "멤버십 구독료 및 네이버 제외 조건이 2% 혜택에만 있음",
+          "official_value": "5% 혜택에도 쇼핑대상 및 제외 조건 적용",
+          "evidence": "멤버십 구독료에 대해서는 혜택이 제공되지 않습니다. 네이버페이 서비스 제외 대상",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf",
+          "severity": "조건이 빠짐",
+          "scenario": "쿠팡 멤버십 구독료에 추가5%를 줄 수 있음. 네이버항공/보험/렌탈 등은 입력 업종으로 제외 가능"
+        },
+        {
+          "path": "revisions[0].benefit_exclusions.unmodeled",
+          "file_value": "다른 카드사 할인과 중복이면 큰 혜택",
+          "official_value": "롯데카드의 다른 결제일 할인 혜택",
+          "evidence": "롯데카드의 다른 결제일 할인 혜택과 중복 시",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf",
+          "severity": "표기만 다름",
+          "scenario": null
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조"
+      },
+      "calculation_gaps": [
+        {
+          "path": "revisions[0].spend",
+          "reason": "지정 가맹점 전체금액 실적 제외를 Spend가 지원하지 않음. 결제 혜택 적용액만 제외하는 exclude_applied=1도 0.7%만 적용된 쇼핑거래는 맞지만 0원 적용 거래까지 완전히 제외한다고 보장하지 못함. category 전체 온라인쇼핑 제외는 공식 범위보다 넓음."
+        }
+      ],
+      "result": "불일치 있음"
+    },
+    {
+      "card_id": "lotte-p15835-a15835",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/lotte/lotte-p15835-a15835.yaml",
+      "sha256": "3aaec5b3b6d0c775f3ece2cf01523a23c48afce1fc4dd1f496845714956a768e",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/lotte.yaml",
+      "issuer_sha256": "e2ad7e51dce0bab14847bcd514c1a9633c27cb006917c1c2ebcf1cfa785c653d",
+      "source_urls": [
+        "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15835-A15835",
+        "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00005_20260424_10001.pdf"
+      ],
+      "official_documents": [
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1953-page-391009f6b900.html",
+          "kind": "product_page",
+          "text_sha256": "d7a385c1d79e9671a0040f0883d6aee5535d574f2a8fc60838e21e9a41d8e633",
+          "text_length": 8446
+        },
+        {
+          "path": "2026-10-05/lotte/_issuer/ix-1953-pdf-66caefffc9bc.pdf",
+          "kind": "manual_pdf",
+          "text_sha256": "473ecd866c5124a53ad2516b30122e55022caa5b4cca6fe5335a70ad17ca4db4",
+          "text_length": 6463
+        }
+      ],
+      "findings": [
+        {
+          "path": "revisions[0].benefit_exclusions.unmodeled",
+          "file_value": "다른 카드사 할인과 중복이면 큰 혜택",
+          "official_value": "롯데카드의 다른 결제일 할인 혜택",
+          "evidence": "롯데카드의 다른 결제일 할인 혜택과 중복 시",
+          "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00005_20260424_10001.pdf",
+          "severity": "표기만 다름",
+          "scenario": null
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문 신용/체크 구분 및 본인 연회비 일치. 가족 연회비 별도 서비스는 문장 또는 모델 범위 밖",
+        "school_scope": "초중고 제외 원문은 primary_secondary_fee만 적용. 유치원까지 school_fee로 넓히지 않음",
+        "source_access": "공식 URL 열기 시도. 롯데 PDF 및 일부 우리 페이지 내부 오류/동적 본문 누락으로 packet에 저장된 공식 전체 원문을 대조",
+        "issuer": "카드별 명시 조건이 issuer 기본값을 덮어쓰는 것을 포함해 대조"
+      },
+      "result": "불일치 있음"
+    }
+  ],
+  "finding_count": 23,
+  "followup_required": "작성자 수정 중이므로 수정 뒤 카드/issuer 최종 SHA256과 각 지적 해결을 재확인해야 함"
+}

@@ -1,0 +1,42 @@
+schema_version: 2
+id: nh-f10793
+issuer: nh
+name: 미미카드
+kind: credit
+product_codes: [F10793]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010543', fetched_at: &id001 2026-10-04}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    benefits:
+      - key: breakfast-50
+        title: 오전 5시 ~ 오전 9시 음식점 50% 청구할인
+        evidence: [오전 5시 ~ 오전 9시 음식점 50% 청구할인]
+        target:
+          categories: [restaurant.general]
+        reward: {type: billing_discount, rate: 50}
+      - key: daily-5k-month-20k
+        title: 전월실적 40만원 이상 시, 일 1회 최대 5천원 / 월 4회 최대 2만원 할인
+        evidence: ['전월실적 40만원 이상 시, 일 1회 최대 5천원 / 월 4회 최대 2만원까지 할인이 제공됩니다.']
+        target: {all: true}
+        when:
+          - amount: {min: 400000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, amount: 20000}
+        tiers: {from: 400000}
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 시행일을 찾지 못해 수집한 날로 두었다}
+  - {path: 'revisions[0]', question: 'benefits[breakfast-50]: 한도를 적지 않았다. 원문에 한도가 없는지 확인한다'}
+  - {path: 'revisions[0]', question: 'kind: 미미카드가 신용카드인지 체크카드인지 확인 필요'}
+  - {path: 'revisions[0]', question: 'kind_evidence: 카드 종류를 판단할 수 있는 원문 문장 필요'}
+  - {path: 'revisions[0].benefits[0].target.categories', question: '‘음식점’ 업종이 정확히 어떤 카테고리 키에 매핑되는지 확인 필요 (예: restaurant.general 등)'}
+  - {path: 'revisions[0].benefits[1].target.all', question: 일일/월간 할인 혜택이 모든 가맹점에 적용되는지 확인 필요}
+  - {path: kind, question: 'kind를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: 발급 기준 안내표입니다. 발급대상 | 개인(신용) 교통구분 | 교통(후불), 비교통 ※ 가족카드 발급 가능 ※ 본 상품은 ''모바일카드''발급이 가능합'}
+notes: 새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다.

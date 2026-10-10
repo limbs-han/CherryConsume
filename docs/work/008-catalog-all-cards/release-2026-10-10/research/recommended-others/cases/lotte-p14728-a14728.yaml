@@ -1,0 +1,181 @@
+card: lotte-p14728-a14728
+cases:
+- name: 쿠팡 와우 월간 총5%
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-3: 500
+  calc: 쿠팡 와우 월간 총5%
+  holder:
+    facts:
+      membership-coupang: true
+- name: 네이버플러스 월간 총5%
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: naver_pay
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-3-naver: 500
+  calc: 네이버플러스 월간 총5%
+  holder:
+    facts:
+      membership-naver: true
+- name: 우주패스 slim·mini·all 월간 총5%
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: eleven_st
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-3-eleven: 500
+  calc: 우주패스 slim·mini·all 월간 총5%
+  holder:
+    facts:
+      membership-eleven: true
+- name: 롯데 오너스 월간 총5%
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: lotte_on
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-3-lotte: 500
+  calc: 롯데 오너스 월간 총5%
+  holder:
+    facts:
+      membership-lotte: true
+- name: 신세계 유니버스 연간 총5%
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: gmarket
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-3-universe: 500
+  calc: 신세계 유니버스 연간 총5%
+  holder:
+    facts:
+      membership-universe: true
+- name: 롯데홈쇼핑 L.CLUB 연간 총5%
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: lotte_homeshopping
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-3-lclub: 500
+  calc: 롯데홈쇼핑 L.CLUB 연간 총5%
+  holder:
+    facts:
+      membership-lclub: true
+- name: 50만원 미만 기본 할인
+  prev_month_spend: 499999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      all-merchant-0-7: 700
+  calc: 50만원 미만 기본 할인
+- name: 50만원 구간 쇼핑2%와 월 이용액 한도
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 1990000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-08T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-2: 39800
+  - payment: 1
+    benefits:
+      online-shop-2: 200
+  - payment: 2
+    benefits:
+      all-merchant-0-7: 70
+  calc: 199만원×2%=39800. 잔여 이용액 1만원×2%=200이 2만원×0.7%=140보다 크다. 이후 기본70.
+- name: 잔여 혜택과 기본 할인 중 큰 금액
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 1990000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 1000000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-shop-2: 39800
+  - payment: 1
+    benefits:
+      all-merchant-0-7: 7000
+  calc: 잔여 혜택과 기본 할인 중 큰 금액
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits:
+      all-merchant-0-7: 70
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.

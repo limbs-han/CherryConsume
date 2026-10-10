@@ -1,0 +1,241 @@
+schema_version: 2
+id: shinhan-cheoeum
+issuer: shinhan
+name: 신한카드 처음
+short_name: 신한 처음
+kind: credit
+product_codes:
+  - '202404150001'
+  - BSCDJ1
+  - BSCDJK
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1227020_2207.html', fetched_at: 2026-09-29, review_no: 제2025-C1h-16946호, review_valid_until: 2026-11-20}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202404150001', fetched_at: 2026-09-29}
+checked_at: 2026-09-29
+revisions:
+  - effective_from: 2024-04-02
+    source: page
+    tiers: [0, 300000, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [이 카드로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체가 적립 제외, 포인트로 결제한 거래의 포인트 금액은 적립 제외]
+    facts:
+      - {key: instant_pay, type: bool, scope: card, ask: 이 카드로 쓴 일시불 금액을 그 달 안에 즉시결제하나요}
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 500000: 10000, 1000000: 20000}
+      - {key: today-day, per: day, amount: 1000}
+      - key: daily
+        per: month
+        amount: {300000: 5000, 500000: 10000, 1000000: 20000}
+      - key: sub
+        per: month
+        amount: {300000: 5000, 500000: 10000, 1000000: 20000}
+      - key: bonus
+        per: month
+        amount: {300000: 3000, 500000: 6000, 1000000: 10000}
+    stacks:
+      - {key: bonus}
+    benefits:
+      - key: today-food-cafe
+        title: 음식점·카페 5% 적립
+        source: page
+        evidence: [음식점·카페·편의점·온라인쇼핑 5% 마이신한포인트 적립, '음식점: 한식, 중식, 일식, 양식, 일반대중음식, 패스트푸드, 뷔페 업종', '카페: 스타벅스, 블루보틀, 엔제리너스, 이디야, 폴바셋, 투썸플레이스, 빽다방, 커피전문점 업종', '1회 이용금액 최대 1만원까지 서비스가 적용되며, 매일 최대 1천포인트까지만 적립됩니다.', '편의점, 음식점, 카페는 오프라인 매장에서 이용한 경우만 포인트가 적립됩니다.(단, 백화점, 할인점, 면세점, 공항, 기차역 등 임대 매장에서는 포인트가 적립되지 않습니다.)', 배달앱을 통해 이용한 거래는 포인트가 적립되지 않습니다., '오늘도 5% 적립 서비스는 [오늘도 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          categories: [cafe, restaurant.fastfood, restaurant.general]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {shared: today-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·면세점·공항·기차역 등 임대 매장은 제외]
+        notes: 오늘도 5%. 음식점은 한식·중식·일식·양식·일반대중음식·패스트푸드·뷔페 업종, 카페는 스타벅스·블루보틀·엔제리너스·이디야·폴바셋·투썸플레이스·빽다방·커피전문점 업종. 오프라인 매장만. 배달앱 거래 제외. 1회 이용금액 1만원까지, 오늘도 5% 전체 하루 1천P까지
+      - key: today-smart-order
+        title: 스타벅스·투썸플레이스 스마트 오더 5% 적립
+        source: page
+        evidence: [음식점·카페·편의점·온라인쇼핑 5% 마이신한포인트 적립, '카페: 스타벅스, 블루보틀, 엔제리너스, 이디야, 폴바셋, 투썸플레이스, 빽다방, 커피전문점 업종', '스타벅스, 투썸플레이스는 스마트 오더로 이용해도 포인트가 적립됩니다.', '1회 이용금액 최대 1만원까지 서비스가 적용되며, 매일 최대 1천포인트까지만 적립됩니다.', '오늘도 5% 적립 서비스는 [오늘도 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [starbucks, twosome]
+        when:
+          - {channel: online}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {shared: today-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [온라인 결제 중 스마트 오더만 적립된다]
+        notes: 오늘도 5%. 스타벅스, 투썸플레이스는 스마트 오더로 이용해도 적립
+      - key: today-convenience
+        title: 편의점 5% 적립
+        source: page
+        evidence: [음식점·카페·편의점·온라인쇼핑 5% 마이신한포인트 적립, '편의점: CU, GS25, 이마트24, 세븐일레븐', '1회 이용금액 최대 1만원까지 서비스가 적용되며, 매일 최대 1천포인트까지만 적립됩니다.', '편의점, 음식점, 카페는 오프라인 매장에서 이용한 경우만 포인트가 적립됩니다.(단, 백화점, 할인점, 면세점, 공항, 기차역 등 임대 매장에서는 포인트가 적립되지 않습니다.)', '오늘도 5% 적립 서비스는 [오늘도 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {shared: today-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·면세점·공항·기차역 등 임대 매장은 제외]
+        notes: 오늘도 5%. CU, GS25, 이마트24, 세븐일레븐 오프라인 매장만
+      - key: today-online
+        title: 쿠팡·컬리 5% 적립
+        source: page
+        evidence: [음식점·카페·편의점·온라인쇼핑 5% 마이신한포인트 적립, '온라인쇼핑: 쿠팡, 컬리', '1회 이용금액 최대 1만원까지 서비스가 적용되며, 매일 최대 1천포인트까지만 적립됩니다.', '상품권, 선불카드 구입/충전 건은 포인트가 적립되지 않습니다.', '쿠팡 와우 멤버십 요금은 ‘멤버십 20% 적립 서비스’만 적용되며, ‘오늘도 5% 적립 서비스’와 중복으로 적용되지 않습니다.', '오늘도 5% 적립 서비스는 [오늘도 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [coupang, kurly]
+        when:
+          - {channel: online}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {shared: today-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [쿠팡·컬리에서 산 상품권과 선불카드는 제외]
+        notes: 오늘도 5%. 쿠팡 와우 멤버십 요금은 멤버십 20%만 받고 오늘도 5%와 중복되지 않는다. 멤버십은 가맹점이 따로다
+      - key: daily-shop
+        title: 올리브영·KTX 5% 적립
+        source: page
+        evidence: [생활·여행·패션 5% 마이신한포인트 적립, '생활: 올리브영(온·오프라인), 다이소(오프라인), 오늘의집(온라인)', '여행: 택시, KTX, 해외 일시불(해외이용·직구 포함)', 1회 이용금액 최대 5만원까지 서비스가 적용됩니다., '일상 속 5% 적립 서비스는 [일상 속 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [korail, olive_young]
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: daily}
+        tiers: {from: 300000}
+        unmodeled: [코레일 결제 중 KTX만 적립된다]
+        notes: 일상 속 5%. 올리브영은 온·오프라인, 여행 영역의 KTX. 1회 이용금액 5만원까지
+      - key: daily-shop-offline
+        title: 다이소 5% 적립
+        source: page
+        evidence: [생활·여행·패션 5% 마이신한포인트 적립, '생활: 올리브영(온·오프라인), 다이소(오프라인), 오늘의집(온라인)', 1회 이용금액 최대 5만원까지 서비스가 적용됩니다., '일상 속 5% 적립 서비스는 [일상 속 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [daiso]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: daily}
+        tiers: {from: 300000}
+        notes: 일상 속 5%. 다이소는 오프라인만. 1회 이용금액 5만원까지
+      - key: daily-shop-online
+        title: 오늘의집·패션 5% 적립
+        source: page
+        evidence: [생활·여행·패션 5% 마이신한포인트 적립, '생활: 올리브영(온·오프라인), 다이소(오프라인), 오늘의집(온라인)', '패션: 무신사, 지그재그, W컨셉, 29CM, 에이블리', 1회 이용금액 최대 5만원까지 서비스가 적용됩니다., 패션 적립은 대상 가맹점 공식 홈페이지 또는 모바일앱 이용 시에만 제공됩니다., '일상 속 5% 적립 서비스는 [일상 속 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [ably, musinsa, ohouse, twentynine_cm, wconcept, zigzag]
+        when:
+          - {channel: online}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: daily}
+        tiers: {from: 300000}
+        notes: 일상 속 5%. 오늘의집은 온라인, 패션(무신사·지그재그·W컨셉·29CM·에이블리)은 공식 홈페이지나 앱만. 1회 이용금액 5만원까지
+      - key: daily-travel
+        title: 택시 5% 적립
+        source: page
+        evidence: [생활·여행·패션 5% 마이신한포인트 적립, '여행: 택시, KTX, 해외 일시불(해외이용·직구 포함)', 1회 이용금액 최대 5만원까지 서비스가 적용됩니다., '일상 속 5% 적립 서비스는 [일상 속 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          categories: [taxi]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: daily}
+        tiers: {from: 300000}
+        notes: 일상 속 5% 여행 영역의 택시. 해외 결제는 daily-overseas로 나눴다. 1회 이용금액 5만원까지
+      - key: daily-overseas
+        title: 해외 일시불 5% 적립
+        source: page
+        evidence: [생활·여행·패션 5% 마이신한포인트 적립, '여행: 택시, KTX, 해외 일시불(해외이용·직구 포함)', 1회 이용금액 최대 5만원까지 서비스가 적용됩니다., 해외 일시불 적립은 해외겸용(Mastercard)카드 이용 시에만 제공됩니다., 해외 일시불 적립은 최종 원화 청구금액을 기준으로 제공됩니다., 해외 일시불 거래 후 할부로 전환하면 포인트가 적립되지 않습니다., 해외 온라인 사이트 거래 시 국내 가맹점(국내 전자지급 결제 대행사를 통한 결제 등)으로 결제하는 경우 포인트가 적립되지 않습니다., 해외 단기 카드 대출(현금서비스)·해외 현금인출 이용금액·해외 가상화폐 또는 해외 사행성 가맹점 이용 건은 포인트가 적립되지 않습니다., '일상 속 5% 적립 서비스는 [일상 속 5% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: daily}
+        tiers: {from: 300000}
+        unmodeled: [일시불로 결제한 뒤 할부로 바꾸면 적립하지 않는다, 해외 사이트 결제라도 국내 전자지급결제대행사를 거쳐 국내 가맹점으로 결제되면 제외, '해외 현금서비스·현금인출, 해외 가상화폐·사행성 가맹점 이용은 제외']
+        notes: 일상 속 5% 여행 영역의 해외 일시불(해외이용·직구 포함). 해외겸용(Mastercard) 카드로만, 최종 원화 청구금액 기준. 1회 이용금액 5만원까지
+      - key: sub-telecom
+        title: 통신요금 10% 적립
+        source: page
+        evidence: [통신 10%·OTT 15%·멤버십 20% 마이신한포인트 적립, '통신 10% 적립: SKT, KT, LGU+', 통신 적립은 월 1회에 한해서 이용금액 최대 3만원까지 서비스가 적용됩니다., '통신비는 순수 통신요금 자동납부 시에만 포인트가 적립됩니다.(약정금액 대납, 지점을 통한 월납 제외)', '정기결제 최대 20% 적립 서비스는 [정기결제 최대 20% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, base: 30000}
+          - {per: month, count: 1}
+          - {shared: sub}
+        tiers: {from: 300000}
+        unmodeled: [약정금액 대납과 지점을 통한 월납은 제외]
+        notes: 정기결제 최대 20%. SKT, KT, LGU+ 순수 통신요금 자동납부만. 월 1회, 이용금액 3만원까지
+      - key: sub-ott
+        title: OTT 15% 적립
+        source: page
+        evidence: [통신 10%·OTT 15%·멤버십 20% 마이신한포인트 적립, 'OTT 15% 적립: 넷플릭스, 유튜브 프리미엄, 티빙, 디즈니+, SPOTV NOW', 'OTT는 공식 홈페이지를 통한 정기결제(자동이체) 시에만 포인트가 적립됩니다.(1회성 일반구매 결제, 구글 플레이/애플 앱스토어 등 앱마켓을 통한 인앱결제, 통신 요금 포함(합산) 결제 제외)', '정기결제 최대 20% 적립 서비스는 [정기결제 최대 20% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [disney_plus, netflix, spotv_now, tving, youtube_premium]
+        when:
+          - {channel: online}
+          - billing: [subscription]
+        reward: {type: points, program: mysinhan_point, rate: 15}
+        limits:
+          - {shared: sub}
+        tiers: {from: 300000}
+        notes: 정기결제 최대 20%. 넷플릭스, 유튜브 프리미엄, 티빙, 디즈니+, SPOTV NOW 공식 홈페이지 정기결제(자동이체)만. 1회성 일반구매, 앱마켓 인앱결제, 통신요금 합산 결제 제외
+      - key: sub-membership
+        title: 쿠팡 와우·네이버플러스 멤버십 20% 적립
+        source: page
+        evidence: [통신 10%·OTT 15%·멤버십 20% 마이신한포인트 적립, '멤버십 20% 적립: 쿠팡 와우 멤버십, 네이버플러스멤버십', '쿠팡 와우 멤버십 요금은 ‘멤버십 20% 적립 서비스’만 적용되며, ‘오늘도 5% 적립 서비스’와 중복으로 적용되지 않습니다.', '정기결제 최대 20% 적립 서비스는 [정기결제 최대 20% 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 5천 포인트, 50만원 이상 100만원 미만 | 1만 포인트, 100만원 이상 | 2만 포인트]
+        target:
+          merchants: [coupang_wow, naver_plus_membership]
+        when:
+          - {channel: online}
+        reward: {type: points, program: mysinhan_point, rate: 20}
+        limits:
+          - {shared: sub}
+        tiers: {from: 300000}
+        notes: 정기결제 최대 20%. 쿠팡 와우 멤버십, 네이버플러스 멤버십
+      - key: instant-pay
+        title: 즉시결제 0.3% 적립
+        source: page
+        evidence: ['이번 달 일시불 이용금액을 이번 달 ‘즉시결제’하면, 결제금액의 0.3% 마이신한포인트 적립', '계획소비, 즉시결제 순서대로 적립해드려요.', 즉시결제는 신한카드에 접수되어야 가능합니다. 이번 달 이용금액이라고 하더라도 이번 달 내 신한카드에 접수되지 않은 경우 즉시결제가 제한될 수 있습니다., '즉시결제 0.3% 마이신한포인트 적립은 [소비관리 보너스 적립 서비스 월 통합 적립 한도] 내에서 마이신한포인트로 적립됩니다.', 30만원 이상 50만원 미만 | 3천 포인트, 50만원 이상 100만원 미만 | 6천 포인트, 100만원 이상 | 1만 포인트]
+        target: {all: true}
+        when:
+          - {fact: instant_pay}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 0.3}
+        limits:
+          - {shared: bonus}
+        tiers: {from: 300000}
+        stack: bonus
+        unmodeled: [이번 달 일시불 이용금액 중 이번 달 안에 즉시결제한 금액만 적립된다, 이번 달 안에 신한카드에 접수되지 않은 거래는 즉시결제가 제한될 수 있다, 계획소비 적립이 소비관리 보너스 한도를 먼저 쓴다]
+        notes: 소비관리 보너스. 다른 적립과 따로 더해 받는다. 다음 달 25일 적립
+    unmodeled: [해외 이용금액은 매입일 기준으로 실적 달을 정한다, 온라인 결제가 되는 서비스는 해당 업체 사이트나 앱에 직접 접속해 이용한 경우에만 혜택을 준다, 모바일 후불교통카드 이용금액은 전전월이 아니라 전월 이용금액에 들어간다, 'TV수신료, 지방세외수입, 환경개선부담금은 실적과 적립에서 빠진다', 유효기간 만기나 해지 뒤 재발급한 카드는 신규 발급 특례를 받지 못한다, '계획소비 적립. 매월 1~5일 이번 달 목표 소비 금액(30만원 이상, 만원 단위)을 정하면 500P, 이번 달 이용금액이 목표 ±5만원 안이고 30만원 이상이면 5천P. 30만~50만원 구간은 최대 3천P. 즉시결제 적립과 소비관리 보너스 한도를 같이 쓴다']
+notes: '신한카드 처음 상품 페이지와 신한카드 상품 API 기준. 첫 개정 시행일 근거: page. 카드 출시 일자 2024.04.02. 출시 뒤 이 카드의 부가서비스 변경 공지는 없다. 공지사항 전체를 2026-09-29에 확인했다. 2025.11.14 공지는 삼성월렛의 처음(ANNIVERSE) 디자인 적용이라 혜택 변경이 아니다. 같은 목록에 디자인판 신한카드 처음(ANNIVERSE, entryId 202408190001)과 체크카드 신한카드 처음 체크가 따로 있다. 모든 적립은 마이신한포인트(1P=1원). 서비스마다 월 통합 적립 한도가 따로다. 오늘도 5%는 integrated, 일상 속 5%는 daily, 정기결제는 sub, 소비관리 보너스는 bonus. 네 서비스를 다 채우면 월 최대 1만8천/3만6천/7만P. 전월(1일~말일) 거래 시점 이용금액(일시불+할부) 기준. 실적 제외: 카드대출, 연회비, 수수료·이자, 기프트·선불카드, 상품권·선불전자지급수단, 국세·지방세·수도요금·지방세외수입·환경개선부담금, 4대보험, 도시가스·전기요금·아파트관리비·TV수신료, 스쿨뱅킹, 대학(원) 등록금, 거래 취소금액. 적립 제외: 실적 제외 항목, 무이자할부(부분 무이자 포함), 이 카드로 할인 서비스를 받은 거래, 포인트 사용 금액. 카드대출, 수수료, 이자는 결제가 아니라 담지 않았다. 최초 신규 발급 회원은 카드 사용 등록월의 다음 달 말까지 30만~50만원 구간. 그 기간에 50만원 이상 쓰면 다음 달 해당 구간. 후불교통 기능 카드로만 신청 가능. 가족카드 불가.'

@@ -1,0 +1,118 @@
+card: hana-94257
+cases:
+- name: simple-payment-0-3 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: coupay
+    category: other
+  expect:
+  - payment: 0
+    benefits:
+      simple-payment-0-3: 30
+  calc: 10000 곱하기 0.3% = 30. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: shopping-5 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: cu
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      shopping-5: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: delivery-5 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      delivery-5: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: cafe-5 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: cafe
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      cafe-5: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: life-telecom-5 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: other
+    merchant: kt
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      life-telecom-5: 1500
+  calc: 30000 곱하기 5% = 1500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: life-utility-5 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: utility.electricity
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      life-utility-5: 1500
+  calc: 30000 곱하기 5% = 1500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: subscription-streaming-10 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: disney_plus
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      subscription-streaming-10: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: subscription-membership-10 대상 거래 양수 검증
+  prev_month_spend: 1000000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: coupang_wow
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      subscription-membership-10: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.

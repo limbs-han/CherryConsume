@@ -1,0 +1,60 @@
+schema_version: 2
+id: shinhan-bcdbyg
+issuer: shinhan
+name: 11번가 신한카드 체크
+short_name: 신한 11번가 체크
+kind: check
+product_codes: [BCDBYG]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1187965_2206.html', fetched_at: '2026-10-04', text_sha256: 72ebfbde23c81b5b2688d3f3c01bb8862720d6aca0bc731090267844b6b27a8e}
+  - {id: metadata-api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201907220002', fetched_at: '2026-10-09', text_sha256: 9b297abb851358a93d4593667adba338d4a86bad18325dfc06f836a9ba4e97e7}
+  - {id: brand-code-map, kind: api, url: 'https://www.shinhancard.com/mob/static/js/cmm/card/card-default-2024.js', fetched_at: '2026-10-09'}
+  - {id: partner-promo-202610, kind: promo_page, url: 'https://plan.11st.co.kr/plan/mobile/exhibitions/2042332/detail', fetched_at: '2026-10-09'}
+checked_at: '2026-10-09'
+revisions:
+  - effective_from: '2026-10-04'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend:
+      basis: none
+      exclude_categories: []
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {}
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.tuition, gift_card.prepaid_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트를 전액 또는 일부 사용한 거래에서 포인트 사용금액만 적립 제외한다., '해외 현금인출과 카드대출, 수수료 및 이자는 적립 제외한다.']
+    benefits:
+      - key: basic-0-1-percent
+        title: 기본 0.1% 11PAY 포인트
+        source: page
+        evidence: [국내외 가맹점에서 이용한 금액의 0.1%를 11PAY 포인트로 적립]
+        target:
+          all: true
+          exclude_merchants: [eleven_st]
+        reward: {type: points, program: eleven_pay_point, rate: 0.1}
+        unmodeled: [특별적립 포인트 대상 가맹점은 기본적립에서 제외된다.]
+      - key: special-0-5-percent-11st
+        title: 11번가 11PAY 결제 0.5%
+        source: page
+        evidence: [11번가에서 11PAY로 결제 한 금액의 0.5%를 11PAY 포인트로 적립]
+        target:
+          merchants: [eleven_st]
+        when:
+          - payment: [eleven_pay]
+        reward: {type: points, program: eleven_pay_point, rate: 0.5}
+    unmodeled: ['2026년 10월 1일부터 31일까지 첫 11PAY 결제 5,100원 이상이면 5,000원 즉시할인 행사 안내가 있다. 과거 최초 결제 이력과 제외 상품을 현재 결제 입력만으로 확인하지 못하므로 계산 합계에는 넣지 않는다. 본인 인증과 회원 유지, 항공·숙박·티켓·렌탈·휴대폰·관리비·상품권·순금 등의 제외 조건을 공식 행사에서 확인한다.']
+open_questions: []
+notes: |-
+  수집된 공식 원문을 2026-10-09 대조했다. 적용시작일은 원문 수집일로 두었으며 최초 출시 이후 모든 기간의 동일 규칙을 주장하지 않는다.
+  2026-10-01부터 2026-10-31까지 제휴사 첫 결제 행사 안내를 보존한다. 체크는 11pay 등록 카드로 5100원 이상 첫 결제 시 5000원 할인. 신용 대상 추가 4% 및 첫 결제 후 5000P 추가 적립은 체크에 적용하지 않는다. 고객당 1회이며 일부 상품 제외와 11pay 가입조건이 있다. 상품 캠페인 설명으로만 보존하며 카드 결제 계산 혜택에 넣지 않았다.

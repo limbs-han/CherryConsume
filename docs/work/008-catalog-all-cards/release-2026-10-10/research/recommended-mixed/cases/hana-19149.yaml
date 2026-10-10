@@ -1,0 +1,131 @@
+card: hana-19149
+cases:
+- name: base-05 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits:
+      base-05: 50
+  calc: 10000 곱하기 0.5% = 50. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: online-pay-1 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: hana_pay
+    category: other
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-pay-1: 100
+  calc: 10000 곱하기 1% = 100. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: allday-delivery-2 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      allday-delivery-2: 200
+  calc: 10000 곱하기 2% = 200. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: allday-transit-3 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: transit.bus_city
+  expect:
+  - payment: 0
+    benefits:
+      allday-transit-3: 300
+  calc: 10000 곱하기 3% = 300. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: allday-taxi-3 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: taxi
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      allday-taxi-3: 300
+  calc: 10000 곱하기 3% = 300. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: allday-taxi-app-3 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: kakao_t
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      allday-taxi-app-3: 300
+  calc: 10000 곱하기 3% = 300. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: allday-online-shopping-2 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      allday-online-shopping-2: 200
+  calc: 10000 곱하기 2% = 200. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: allday-oasis-offline-2 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: oasis_market
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      allday-oasis-offline-2: 200
+  calc: 10000 곱하기 2% = 200. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: allday-store-2 대상 거래 양수 검증
+  prev_month_spend: 0
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: emart
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      allday-store-2: 200
+  calc: 10000 곱하기 2% = 200. 이 검증은 미지원 핵심조건을 검증하지 않는다.

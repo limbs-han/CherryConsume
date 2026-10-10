@@ -1,0 +1,171 @@
+schema_version: 2
+id: shinhan-pobdhm
+issuer: shinhan
+name: 신한카드 Point Plan 체크
+kind: check
+product_codes: [POBDHM]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1226114_2206.html', fetched_at: 2026-10-05}
+  - {id: annual-fee, kind: promo_page, url: 'https://www.shinhancard.com/pconts/html/benefit/event/1235354_2239.html', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.academy, education.study_material, gift_card, insurance.social, pharmacy, prepaid_charge, tax, transit.rail, utility.water]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 200000
+      tier_by_benefit: {weekend-delivery-1k: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, transit.rail, utility.water]
+      unmodeled: ['제약회사·의약품 전용몰, 포인트 사용금액, 본 카드 할인서비스 적용 거래 제외', 가맹점명이 PG·간편결제 전용명으로 찍히면 가맹점별 서비스 제외]
+    limits:
+      - key: daily-life
+        per: month
+        amount: {200000: 5000, 500000: 10000, 800000: 15000}
+        adjust:
+          - when:
+              months: [5, 12]
+            add: 5000
+    stacks:
+      - {key: main}
+      - {key: sol}
+      - {key: delivery}
+    benefits:
+      - key: domestic-point-0-2
+        title: 국내 건당 0.2% 적립
+        source: page
+        evidence: [국내 건당 0.2% 적립]
+        target:
+          all: true
+          exclude_merchants: [cu, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - amount: {min: 0, below: 20000}
+        reward: {type: points, program: mysinhan_point, rate: 0.2}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 200000}
+      - key: domestic-point-0-4
+        title: 국내 건당 0.4% 적립
+        source: page
+        evidence: [국내 건당 0.4% 적립]
+        target:
+          all: true
+          exclude_merchants: [cu, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - amount: {min: 20000, below: 100000}
+        reward: {type: points, program: mysinhan_point, rate: 0.4}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 200000}
+      - key: domestic-point-0-8
+        title: 국내 건당 0.8% 적립
+        source: page
+        evidence: [국내 건당 0.8% 적립]
+        target:
+          all: true
+          exclude_merchants: [cu, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - amount: {min: 100000, below: 500000}
+        reward: {type: points, program: mysinhan_point, rate: 0.8}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 200000}
+      - key: domestic-point-1-0
+        title: 국내 건당 1% 적립
+        source: page
+        evidence: [국내 건당 1% 적립]
+        target:
+          all: true
+          exclude_merchants: [cu, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - amount: {min: 500000}
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 200000}
+      - key: sol-extra-0-1
+        title: SOL페이 국내 추가0.1% 적립
+        source: page
+        evidence: [SOL페이 국내 추가0.1% 적립]
+        target:
+          all: true
+          exclude_merchants: [cu, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - payment: [shinhan_sol_pay]
+        reward: {type: points, program: mysinhan_point, rate: 0.1}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 200000}
+        stack: sol
+      - key: overseas-point-1
+        title: 해외 일시불1% 적립
+        source: page
+        evidence: [해외 일시불1% 적립]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 200000}
+      - key: weekend-delivery-1k
+        title: 주말 SOL페이 배달2만원 이상1000P
+        source: page
+        evidence: [주말 SOL페이 배달2만원 이상1000P]
+        target:
+          merchants: [baemin, ddangyo, yogiyo]
+        when:
+          - day:
+              in: [sat, sun]
+          - amount: {min: 20000}
+          - {channel: online}
+          - payment: [shinhan_sol_pay]
+        reward: {type: points, program: mysinhan_point, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - per: month
+            count: {0: 1, 200000: 3}
+        stack: delivery
+        unmodeled: [공식 배달앱 앱 내 카드결제에서 SOL페이만. 만나서·현장·다른 페이결제 제외]
+      - key: convenience-5pct
+        title: 오프라인 편의점5% 적립
+        source: page
+        evidence: [오프라인 편의점5% 적립]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, amount: 3000}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점 입점 가맹점명은 제외]
+    unmodeled: ['해외는 매입일, 교통은 전전월 실적. 모바일 후불교통은 전월 사용분을 전월 실적으로 넣는다', 부분취소 시 취소 반영 뒤 최종 결제금액 구간의 적립률로 다시 적립한다, SOL페이는 터치·QR·바코드·NFC 포함이며 ARS·일반·Smart결제는 제외한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.month_offset', question: 모바일 후불교통과 실물 후불교통의 실적 반영월을 결제수단별로 구별하는 엔진 기능이 필요하다. 입력으로 식별 가능한 조건이므로 unmodeled 안내만으로 계산 준비 완료로 취급할 수 없다.}
+  - {path: 'revisions[0].spend.month_offset', question: 모바일 후불교통과 실물 후불교통의 실적 반영월을 결제수단별로 구별하는 엔진 기능이 필요하다. 입력으로 식별 가능한 조건이므로 unmodeled 안내만으로 계산 준비 완료로 취급할 수 없다.}
+notes: '2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2024-01-29이며 현행 조건 전체의 시행일 근거로 사용하지 않았다. 부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 계산 기능을 별도 작업으로 지원한 뒤 다시 확인해야 한다. 부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 계산 기능을 별도 작업으로 지원한 뒤 다시 확인해야 한다.'

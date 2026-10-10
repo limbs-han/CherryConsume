@@ -1,0 +1,78 @@
+schema_version: 2
+id: nh-f10086
+issuer: nh
+name: zgm.streaming카드
+kind: credit
+product_codes: [F10086]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010179', fetched_at: &id001 2026-10-04}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      exclude_categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.private, prepaid_charge, rent, tax, utility.electricity, utility.gas, utility.water]
+    limits:
+      - {key: membership, per: month, amount: 7000}
+      - {key: streaming, per: month, amount: 5000}
+      - {key: starbucks_month, per: month, amount: 5000, count: 2}
+      - {key: online_simple_month, per: month, amount: 3000}
+    benefits:
+      - key: membership-discount
+        title: 멤버십 이용요금 청구 할인
+        evidence: [멤버십 이용요금 7천원 청구 할인, '네이버플러스멤버십, 쿠팡와우멤버십, 컬리패스, 요기패스', '멤버십 서비스 이용요금(건별)이 7천원 미만일 시 결제된 금액만큼 할인되며, 7천원 이상일 시 7천원까지 할인됩니다.', '전월실적 40만원 이상 시 제공되며, 월 할인한도는 7천원입니다.', 'NH페이 이외의 다른 간편결제를 통한 결제, 인앱결제(구글플레이. 앱스토어 등), 별도 PG(결제대행)업체를 통한 결제는 할인이 제외됩니다.', 가맹점별 월 1회 할인이 적용됩니다.]
+        target:
+          merchants: [coupang_wow, kurly, naver_plus_membership]
+        when:
+          - payment: [nh_pay]
+        reward: {type: billing_discount, fixed: 7000}
+        limits:
+          - {shared: membership}
+        tiers: {from: 400000}
+        unmodeled: [컬리패스와 요기패스에 해당하는 정확한 가맹점 키 확인 필요]
+      - key: streaming-discount
+        title: 스트리밍 이용요금 50% 청구 할인
+        evidence: [스트리밍 이용요금 50% 청구 할인, '넷플릭스, 웨이브, 티빙, 디즈니플러스, 유튜브 프리미엄, 멜론', 스트리밍 서비스 이용요금(건별)이 1만원 이상일 시 5천원까지 할인됩니다., '전월실적 40만원 이상 시 제공되며, 통합 월 할인한도는 5천원입니다.', 'NH페이 이외의 다른 간편결제를 통한 결제, 인앱결제(구글플레이. 앱스토어 등), 별도 전용 PG(결제대행)업체 가맹점번호 결제건은 할인이 제외됩니다.', 가맹점별 월 1회 할인이 적용됩니다.]
+        target:
+          merchants: [disney_plus, melon, netflix, tving, wavve, youtube_premium]
+        when:
+          - payment: [nh_pay]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: streaming}
+        tiers: {from: 400000}
+      - key: starbucks-discount
+        title: 스타벅스 사이렌오더 50% 청구 할인
+        evidence: [스타벅스 사이렌오더 50% 청구 할인, 공식 앱에서 본 카드를 이용한 사이렌오더 결제 시 제공됩니다., 전월실적 40만원 이상 시 제공됩니다., '월 할인한도는 5천원이며, 일 1회 월 2회 제공됩니다.', 'NH페이 이외의 다른 간편결제를 통한 결제, 인앱결제(구글플레이. 앱스토어 등)는 할인이 제외됩니다.', '오프라인 결제 및 e-기프트/배송하기, 상품권, 선불카드 구입/충전은 제외됩니다.']
+        target:
+          merchants: [starbucks]
+        when:
+          - payment: [nh_pay]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: day, count: 1}
+          - {shared: starbucks_month}
+        tiers: {from: 400000}
+      - key: online-simple-discount
+        title: 온라인 간편결제 5% 청구 할인
+        evidence: [온라인 간편결제 5% 청구 할인, '할인서비스 제외대상 : 상품권 및 선불카드류 구매(충전 포함), 대학(대학원)등록금, 교육비(학부모부담금), 임대료, 각종 세금 및 공과금, 상하수도요금, 과태료(범칙금), 우체국 우편요금, 사회보험(국민건강/국민연금/고용/산재), 아파트관리비, 도시가스요금, 전기요금, 가상화폐 거래소 이용금액, 단기카드대출(현금서비스), 장기카드대출(카드론), 각종 수수료 및 이자, 연체료, 연회비, 거래취소금액, 포인트(전부/일부) 결제 시 포인트 사용분 등의 이용금액, 무이자 할부(무이자 할부 행사 및 우수고객 무이자 할부 지원 포함) 등의 이용금액', 'NH페이, 삼성페이, 네이버페이, 카카오페이, 쿠페이, 스마일페이, 배민페이, SSG페이, L페이, SK페이, 페이코', 대상 간편결제에 본 카드를 등록 후 국내 온라인결제 시 할인이 제공됩니다., 전월실적 40만원 이상 시 제공됩니다., 건당 2만원 이상 결제건에 대해 적용됩니다, '월 할인한도는 3천원이며, 일 1회 제공됩니다', 오프라인에서 이용한 간편결제건은 제외됩니다.]
+        target: {all: true}
+        when:
+          - payment: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, nh_pay, samsung_pay, smile_pay, ssg_pay]
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {shared: online_simple_month}
+        tiers: {from: 400000}
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 시행일을 찾지 못해 수집한 날로 두었다}
+  - {path: 'revisions[0]', question: 'spend의 exclude_categories: 원문에서 읽은 값이 카드사 기본값과 다르다. 원문과 맞는지 확인한다'}
+  - {path: 'revisions[0].benefits[0].target.merchants', question: '컬리패스와 요기패스에 해당하는 정확한 가맹점 키는 무엇인가?'}
+  - {path: 'revisions[0]', question: 'benefits[1].reward.fixed: 스트리밍 할인에 대한 건당 최대 할인액(5천원) 적용 여부를 명시해야 하는가?'}
+  - {path: 'revisions[0]', question: 'benefits[2].limits[1].count: 스타벅스 월 2회 제공 제한을 count로 표현해야 하는가?'}
+  - {path: kind, question: 'kind를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: 발급 기준 안내표입니다. 발급대상 | 개인(신용) 후불교통 | 교통(후불), 비교통 연회비 안내 카드연회비(기본연회비+제휴연회비)는 보유 카드별로'}
+notes: 새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다.

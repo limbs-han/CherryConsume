@@ -1,0 +1,25 @@
+{
+  "reviewed_at": "2026-10-10",
+  "reviewer": "final_release_risk",
+  "scope": "선택한 30장 통합, 보류 분리, 기존 교육비 분류 연결과 운영 승인 파일 묶음",
+  "result": "돈 계산 문제 없음",
+  "findings": [],
+  "resolved_findings": [
+    {"issue": "기존 학교납입금 제외에 새 유치원 분류 연결 누락", "resolution": "초중고와 유치원 두 분류를 연결하고 28개 계산을 확인했다"},
+    {"issue": "승인 표의 행 사이에 빈 줄이 들어감", "resolution": "package.py에서 표 행은 줄바꿈 한 번으로 연결한다"}
+  ],
+  "checks": {
+    "ready_cards": 30,
+    "catalog_cards": 51,
+    "blocked_included": 0,
+    "new_cases": 391,
+    "existing_cases": 281,
+    "school_cases": 28,
+    "test_failures": 0,
+    "incoming_files": 47,
+    "shared_files": 17,
+    "manifest_hash_mismatches": 0,
+    "operational_writes": 0
+  },
+  "not_reviewed": "개별 원문 대조는 별도 카드 검토자가 확인했다. 운영 현재 골드와 끊긴 승인 확인은 실제 반영 직전에 필요하다."
+}

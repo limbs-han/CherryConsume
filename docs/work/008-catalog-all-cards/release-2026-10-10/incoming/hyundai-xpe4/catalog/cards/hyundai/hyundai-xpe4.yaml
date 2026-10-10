@@ -1,0 +1,36 @@
+schema_version: 2
+id: hyundai-xpe4
+issuer: hyundai
+name: 현대카드X
+kind: credit
+product_codes: [XPE4]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 50000}
+  - {scope: global, brand: visa, amount: 50000}
+  - {scope: global, brand: amex, amount: 50000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=XPE4', fetched_at: &id001 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/20260330_X.pdf', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefits:
+      - key: basic-1
+        title: 국내외 1% 청구할인
+        source: manual
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 500000}
+    unmodeled: ['연간 이용금액 500만원마다 2만원 캐시백, 발급월 포함 12개월에 최대 10만원. 충족한 다음달 15일 이후 지급한다. 결제별 적립으로 나누지 않는다.', 인천공항 라운지와 발레파킹은 각각 일 1회 발급월 포함 12개월 연 2회. 전월 50만원이며 발급 다음달까지 실적 면제한다., 긴급할인은 선지급 후 상환 약정 서비스이므로 결제별 혜택에 더하지 않는다. 가족카드 실적과 한도는 본인과 합산한다., '연간 이용금액 500만원당 2만원, 연 최대 10만원 캐시백은 자동 계산하지 않는다. 공항 라운지와 발레파킹은 자동 계산하지 않는다. 전월 실적에 따른 거래별 1% 할인만 계산한다.', 긴급할인 선지급 약정을 이용 중이면 기본 1% 할인과 연간 캐시백은 긴급할인 상환에 쓰인다. 결제 계좌의 즉시 이익으로 더하지 않는다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정. 일반 거래 계산 지원 범위로만 승인 검토한다. 자동 계산하지 않는 추가 서비스는 사용자에게 명확히 안내한다.

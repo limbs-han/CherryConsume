@@ -1,0 +1,477 @@
+{
+  "reviewed_at": "2026-10-09",
+  "scope": "result.json core_rules_verified:true 12장만 독립 검증",
+  "reviewed_count": 12,
+  "finding_count": 28,
+  "catalog_modified": false,
+  "cards": [
+    {
+      "card_id": "hana-11808",
+      "name": "웰릭스렌탈 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내외겸용 One Way(JCB),mastercard 12,000원",
+          "document": "웰릭스렌탈 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11808",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11808"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-12395",
+      "name": "현대렌탈서비스 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내전용, 국내외겸용 mastercard 20,000원",
+          "document": "현대렌탈서비스 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "현대렌탈서비스 하나카드 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-15349",
+      "name": "대명아임레디 플러스 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내전용,국내외겸용 20,000원 (기본연회비 20,000원 / 제휴연회비 0원)",
+          "document": "대명아임레디 플러스 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "본인·가족카드의 이용실적과 할인 한도는 합산한다",
+          "official_value": "해당 상품 원문에서 확인되지 않음. 현대렌탈서비스 hana-12395 원문에서만 명시됨",
+          "document": "대명아임레디 플러스 하나카드 공식 상품 페이지 서비스 제공 조건",
+          "evidence": "서비스 제공 방법 전체. 본인·가족 합산 문구 없음",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349",
+          "severity": "표기만 다름"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "대명아임레디 플러스 하나카드 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-17403",
+      "name": "마이 코웨이 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "Mastercard 25,000원 (기본연회비 25,000원)\r\n국내전용 25,000원 (기본연회비 25,000원)",
+          "document": "마이 코웨이 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "본인·가족카드의 이용실적과 할인 한도는 합산한다",
+          "official_value": "해당 상품 원문에서 확인되지 않음. 현대렌탈서비스 hana-12395 원문에서만 명시됨",
+          "document": "마이 코웨이 하나카드 공식 상품 페이지 서비스 제공 조건",
+          "evidence": "서비스 제공 방법 전체. 본인·가족 합산 문구 없음",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403",
+          "severity": "표기만 다름"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "마이 코웨이 하나카드 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-18023",
+      "name": "토스뱅크 하나카드 Wide",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내외겸용 Mastercard 20,000원 (기본연회비 20,000원, 제휴연회비 0원)\r\n국내전용 20,000원 (기본연회비 20,000원, 제휴연회비 0원)",
+          "document": "토스뱅크 하나카드 Wide 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "status",
+          "file_value": "on_sale",
+          "official_value": "discontinued",
+          "document": "토스뱅크 하나카드 Wide 공식 상품 페이지",
+          "evidence": "토스뱅크 하나카드 Wide는 발급이 중단되었습니다.",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023",
+          "severity": "표기만 다름"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories 및 benefit_exclusions.categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "토스뱅크 하나카드 Wide 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].benefits[billing-discount-2pct].when",
+          "file_value": "lump_sum만 제한. 첫 등록월 제한은 unmodeled에만 기재",
+          "official_value": "첫 등록월은 실적과 관계없이 40만원 미만 1% 기준. 다음달부터 실제 실적 1% 또는 2%",
+          "document": "토스뱅크 하나카드 Wide 공식 상품 페이지 서비스 제공 조건",
+          "evidence": "사용등록월 말일까지는 카드 실적 40만원 미만 기준",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-5866",
+      "name": "쿠쿠 프리멤버쉽 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내외겸용 12,000원",
+          "document": "쿠쿠 프리멤버쉽 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5866",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5866"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-17398",
+      "name": "SK인텔릭스 플러스 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "Mastercard 25,000원 (기본연회비 25,000원)\r\n국내전용 25,000원 (기본연회비 25,000원)",
+          "document": "SK인텔릭스 플러스 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "본인·가족카드의 이용실적과 할인 한도는 합산한다",
+          "official_value": "해당 상품 원문에서 확인되지 않음. 현대렌탈서비스 hana-12395 원문에서만 명시됨",
+          "document": "SK인텔릭스 플러스 하나카드 공식 상품 페이지 서비스 제공 조건",
+          "evidence": "서비스 제공 방법 전체. 본인·가족 합산 문구 없음",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398",
+          "severity": "표기만 다름"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "SK인텔릭스 플러스 하나카드 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-5863",
+      "name": "청호나이스 플러스 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내외겸용 One Way(JCB), mastercard 12,000원",
+          "document": "청호나이스 플러스 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5863",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5863"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-11810",
+      "name": "BS렌탈 플러스 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내외겸용 mastercard/One Way(JCB) 15,000원\r\n국내외겸용 VISA 20,000원",
+          "document": "BS렌탈 플러스 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "본인·가족카드의 이용실적과 할인 한도는 합산한다",
+          "official_value": "해당 상품 원문에서 확인되지 않음. 현대렌탈서비스 hana-12395 원문에서만 명시됨",
+          "document": "BS렌탈 플러스 하나카드 공식 상품 페이지 서비스 제공 조건",
+          "evidence": "서비스 제공 방법 전체. 본인·가족 합산 문구 없음",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810",
+          "severity": "표기만 다름"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "BS렌탈 플러스 하나카드 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-18068",
+      "name": "삼성 AI 구독 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "VISA 25,000원 (기본연회비 25,000원)\r\n국내전용 25,000원 (기본연회비 25,000원)",
+          "document": "삼성 AI 구독 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "본인·가족카드의 이용실적과 할인 한도는 합산한다",
+          "official_value": "해당 상품 원문에서 확인되지 않음. 현대렌탈서비스 hana-12395 원문에서만 명시됨",
+          "document": "삼성 AI 구독 하나카드 공식 상품 페이지 서비스 제공 조건",
+          "evidence": "서비스 제공 방법 전체. 본인·가족 합산 문구 없음",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068",
+          "severity": "표기만 다름"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "삼성 AI 구독 하나카드 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    },
+    {
+      "card_id": "hana-19410",
+      "name": "코웨이라이프솔루션 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "Mastercard 23,000원 (기본연회비 23,000원, 제휴연회비 0원)\r\n국내전용 23,000원 (기본연회비 23,000원, 제휴연회비 0원 )",
+          "document": "코웨이라이프솔루션 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410",
+          "severity": "금액이 틀림"
+        },
+        {
+          "path": "revisions[0].unmodeled",
+          "file_value": "본인·가족카드의 이용실적과 할인 한도는 합산한다",
+          "official_value": "해당 상품 원문에서 확인되지 않음. 현대렌탈서비스 hana-12395 원문에서만 명시됨",
+          "document": "코웨이라이프솔루션 하나카드 공식 상품 페이지 서비스 제공 조건",
+          "evidence": "서비스 제공 방법 전체. 본인·가족 합산 문구 없음",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410",
+          "severity": "표기만 다름"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "file_value": "education.school_fee. 공통 업종 정의는 유치원·초중고 납입금",
+          "official_value": "초중고 학교 납입금 또는 스쿨뱅킹 제외. 유치원 전체 제외는 명시되지 않음",
+          "document": "코웨이라이프솔루션 하나카드 공식 상품 페이지 실적 제외 대상",
+          "evidence": "초.중.고 학교 납입금",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL web 열기 세 번 내부 오류. packet.json의 공식 수집 원문으로 대조"
+      }
+    },
+    {
+      "card_id": "hana-5865",
+      "name": "바디프랜드 하나카드",
+      "result": "불일치 있음",
+      "findings": [
+        {
+          "path": "annual_fees",
+          "file_value": "누락",
+          "official_value": "국내외겸용 12,000원",
+          "document": "바디프랜드 하나카드 공식 상품 페이지",
+          "evidence": "연회비",
+          "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5865",
+          "severity": "금액이 틀림"
+        }
+      ],
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5865"
+      ],
+      "checks": {
+        "rental_model": "렌탈 대상 카드는 100% 청구할인에 월 합산 한도를 둔 현재 모델이 원문에 맞음",
+        "tiers": "실적 구간 하한과 상한 키가 원문에 맞음",
+        "new_card": "렌탈 카드는 등록 다음달 말일까지 최저 구간. Wide는 첫 등록월 1%를 unmodeled에 보존",
+        "installment_cancellation": "할부 이용월 전액 합산과 취소 접수월 차감이 원문에 맞음",
+        "benefits": "대상·자동납부·비율·월 한도·횟수 대조. 렌탈·마트·커피는 서로 별도 월한도, Wide는 1%와 2% 공유 10만원 한도",
+        "limitations": "공식 URL 및 packet.json 공식 수집 원문 대조"
+      }
+    }
+  ]
+}

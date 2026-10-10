@@ -1,0 +1,151 @@
+card: shinhan-pobdhm
+cases:
+- name: 19999 건당 적립경계
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 19999
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      domestic-point-0-2: 39
+  calc: 19999×해당 비율, 원미만 내림. 일상생활 한도5000 이내.
+- name: 20000 건당 적립경계
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      domestic-point-0-4: 80
+  calc: 20000×해당 비율, 원미만 내림. 일상생활 한도5000 이내.
+- name: 100000 건당 적립경계
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      domestic-point-0-8: 800
+  calc: 100000×해당 비율, 원미만 내림. 일상생활 한도5000 이내.
+- name: 500000 건당 적립경계
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 500000
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      domestic-point-1-0: 5000
+  calc: 500000×해당 비율, 원미만 내림. 일상생활 한도5000 이내.
+- name: 20만원 미만 주말 배달만 1회
+  prev_month_spend: 199999
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+    merchant: baemin
+    channel: online
+  - at: 2026-10-11T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      weekend-delivery-1k: 1000
+  - payment: 1
+    benefits: {}
+  calc: 20만원 미만 주말 배달만 1회
+- name: SOL 추가와 배달 중복
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      domestic-point-0-4: 80
+      sol-extra-0-1: 20
+      weekend-delivery-1k: 1000
+  calc: SOL 추가와 배달 중복
+- name: 편의점은 기본·SOL제외
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+    merchant: cu
+  expect:
+  - payment: 0
+    benefits:
+      convenience-5pct: 1000
+  calc: 편의점은 기본·SOL제외
+- name: 해외 일상한도와 가족행사월 추가
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-12-01T12:00
+    amount: 1000000
+    payment_method: physical_card
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      overseas-point-1: 10000
+  calc: 12월 일상생활 한도5000+추가5000. 해외100만원×1%=10000.
+- name: 신규 배달 특례0 구간
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+    merchant: baemin
+    channel: online
+  - at: 2026-10-11T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      domestic-point-0-4: 80
+      sol-extra-0-1: 20
+      weekend-delivery-1k: 1000
+  - payment: 1
+    benefits:
+      domestic-point-0-4: 80
+      sol-extra-0-1: 20
+  calc: 신규 배달 특례0 구간
+  holder:
+    started_on: '2026-09-15'
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits:
+      domestic-point-0-2: 20
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.

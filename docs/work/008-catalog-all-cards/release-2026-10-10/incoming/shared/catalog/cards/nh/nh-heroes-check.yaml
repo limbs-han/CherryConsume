@@ -1,0 +1,137 @@
+schema_version: 2
+id: nh-heroes-check
+issuer: nh
+name: NH농협카드 히어로즈 체크카드
+short_name: 농협 히어로즈 체크
+search_names: [히어로즈 체크카드, 히어로즈카드]
+kind: check
+product_codes:
+  - '90010518'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010518', fetched_at: 2026-09-29, review_no: 2026-3845, review_valid_until: 2027-06-30}
+  - {id: notices, kind: notice, url: 'https://card.nonghyup.com/servlet/IpCi9010I.act?pageNum=1&pageSize=50', fetched_at: 2026-09-29}
+checked_at: 2026-09-29
+revisions:
+  - effective_from: 2024-07-16
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card:
+      until: next_month_end
+      tier: 200000
+      tier_by_benefit: {life-digital-20: 0, life-telecom-10: 0, life-transit-20: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge, taxi, transit.bus_city, transit.subway]
+      unmodeled: [NH농협카드의 다른 청구할인 혜택과 겹치면 큰 쪽 하나만 받음, 백화점·할인점·쇼핑몰 안 임대매장 결제 제외, 별도 가맹점번호로 승인되는 일부 간편결제 제외될 수 있음]
+    limits:
+      - {key: integrated, per: month, amount: 15000}
+    benefits:
+      - key: dev-lang-academy-10
+        title: 외국어학원 10% 할인
+        evidence: ['자기계발 할인 (어학원, 서점, 어학시험, 스포츠영역 10% 청구할인)', 외국어학원 | 외국어학원 | 10%, '전월실적 20만원 이상 시 제공, 월 통합 할인한도 15,000원', '최초 카드사용등록일로부터 다음달 말일까지는 전월실적 미달 시에도 서비스가 제공되며, 이후부터는 전월실적 조건 달성 시 해당 서비스 제공', '월 통합 할인한도(15,000원)는 ‘자기계발’ 영역과 ‘생활혜택’ 영역 통합하여 적용']
+        target:
+          categories: [education.academy]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [외국어학원 업종만 할인한다. 다른 학원은 빠진다]
+        notes: 자기계발 영역. 원문은 외국어학원 업종
+      - key: dev-books-10
+        title: 서점 10% 할인
+        evidence: ['자기계발 할인 (어학원, 서점, 어학시험, 스포츠영역 10% 청구할인)', '서점 | 교보문고, 영풍문고, 예스24, 알라딘, 인터파크도서', '전월실적 20만원 이상 시 제공, 월 통합 할인한도 15,000원', '최초 카드사용등록일로부터 다음달 말일까지는 전월실적 미달 시에도 서비스가 제공되며, 이후부터는 전월실적 조건 달성 시 해당 서비스 제공', '월 통합 할인한도(15,000원)는 ‘자기계발’ 영역과 ‘생활혜택’ 영역 통합하여 적용']
+        target:
+          merchants: [aladin, interpark_book, kyobo_book, yes24, youngpoong_book]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 자기계발 영역. 교보문고, 영풍문고, 예스24, 알라딘, 인터파크도서. 온라인과 오프라인 구분 문구 없음
+      - key: dev-lang-test-10
+        title: 어학시험 10% 할인
+        evidence: ['자기계발 할인 (어학원, 서점, 어학시험, 스포츠영역 10% 청구할인)', '어학시험 | 토익, TEPS, JPT, KPE', '전월실적 20만원 이상 시 제공, 월 통합 할인한도 15,000원', '최초 카드사용등록일로부터 다음달 말일까지는 전월실적 미달 시에도 서비스가 제공되며, 이후부터는 전월실적 조건 달성 시 해당 서비스 제공', '월 통합 할인한도(15,000원)는 ‘자기계발’ 영역과 ‘생활혜택’ 영역 통합하여 적용']
+        target:
+          merchants: [jpt, kpe, teps, toeic]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 자기계발 영역. 토익, TEPS, JPT, KPE
+      - key: dev-sports-10
+        title: 스포츠 10% 할인
+        evidence: ['자기계발 할인 (어학원, 서점, 어학시험, 스포츠영역 10% 청구할인)', '스포츠 | 종합스포츠센터, 수영장, 요가, 볼링장, 문화센터', '전월실적 20만원 이상 시 제공, 월 통합 할인한도 15,000원', '최초 카드사용등록일로부터 다음달 말일까지는 전월실적 미달 시에도 서비스가 제공되며, 이후부터는 전월실적 조건 달성 시 해당 서비스 제공', '월 통합 할인한도(15,000원)는 ‘자기계발’ 영역과 ‘생활혜택’ 영역 통합하여 적용']
+        target:
+          categories: [sports]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: ['종합스포츠센터, 수영장, 요가, 볼링장, 문화센터 업종만 할인한다. 골프, 스키 같은 다른 스포츠 업종은 빠진다']
+        notes: 자기계발 영역
+      - key: life-digital-20
+        title: 디지털 구독 20% 할인
+        evidence: ['생활혜택 할인 (디지털 구독, 교통 20%, 이동통신 10% 청구할인)', '디지털구독 | 넷플릭스, 유튜브 프리미엄, 웨이브, 티빙 * 월 자동납부 이용료에 해당 | 20% (월 2회, 5천원)', '전월실적 20만원 이상 시 제공, 월 통합 할인한도 1.5만원', '카드등록월에는 서비스가 제공되지 않으며, 그 다음 달부터 전월실적 충족 시 제공', '디지털 구독 영역은 대상 가맹점 공식 홈페이지/앱에서 본 카드로 이용권 정기결제 시 제공되며, 이외 결제방법(일부 페이결제 등)을 통한 이용 및 1회성 결제, 인앱결제(구글플레이, 앱스토어 등)는 서비스 제외', '월 통합 할인한도(15,000원)는 ‘자기계발’ 영역과 ‘생활혜택’ 영역 통합하여 적용']
+        target:
+          merchants: [netflix, tving, wavve, youtube_premium]
+        when:
+          - {channel: online}
+          - billing: [subscription]
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: month, count: 2}
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [일부 페이 결제 제외]
+        notes: 생활혜택 영역. 공식 홈페이지·앱에서 이 카드로 이용권 정기결제할 때만. 월 자동납부 이용료. 1회성 결제와 인앱결제 제외. 카드 등록 달에는 없음
+      - key: life-telecom-10
+        title: 이동통신 요금 10% 할인
+        evidence: ['생활혜택 할인 (디지털 구독, 교통 20%, 이동통신 10% 청구할인)', '이동통신 요금 | 통신 3사(SKT,KT,LGU+) 이동통신요금 자동납부 * 알뜰폰 통신사 및 TV/인터넷 요금 제외 | 10%', '전월실적 20만원 이상 시 제공, 월 통합 할인한도 1.5만원', '카드등록월에는 서비스가 제공되지 않으며, 그 다음 달부터 전월실적 충족 시 제공', 이동통신 요금은 카드 자동납부 건에 한하여 할인 제공, '월 통합 할인한도(15,000원)는 ‘자기계발’ 영역과 ‘생활혜택’ 영역 통합하여 적용']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        notes: 생활혜택 영역. 통신 3사 이동통신요금 카드 자동납부만. 알뜰폰과 TV·인터넷 요금 제외. 영역 한도 없이 통합 한도만. 카드 등록 달에는 없음
+      - key: life-transit-20
+        title: 철도·고속버스 20% 할인
+        evidence: ['생활혜택 할인 (디지털 구독, 교통 20%, 이동통신 10% 청구할인)', '교통 | 철도(SRT, KTX), 고속버스 | 20% (월 2회, 5천원)', '전월실적 20만원 이상 시 제공, 월 통합 할인한도 1.5만원', '카드등록월에는 서비스가 제공되지 않으며, 그 다음 달부터 전월실적 충족 시 제공', '월 통합 할인한도(15,000원)는 ‘자기계발’ 영역과 ‘생활혜택’ 영역 통합하여 적용']
+        target:
+          categories: [transit.bus_express]
+          merchants: [korail, srt]
+        when:
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: month, count: 2}
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [철도는 KTX와 SRT만 적혀 있다. 코레일 일반열차는 빠질 수 있다]
+        notes: 생활혜택 영역. 원문은 철도(SRT, KTX), 고속버스. 카드 등록 달에는 없음
+    unmodeled: ['실적에서 과태료·범칙금, 우체국 우편요금, 가상화폐 거래소, 현금서비스·카드론, 수수료·이자, 연체료, 포인트 결제분을 뺌. 할인에서도 포인트 결제분을 뺌', 해외 이용과 통신료 자동이체 같은 무승인 결제는 매출표 접수일 기준으로 실적에 넣음. 월말 이용이 다음 달 실적이 될 수 있음]
+open_questions:
+  - {path: 'revisions[0].benefits[life-digital-20].limits', question: '원문은 20% (월 2회, 5천원)이다. 5천원이 영역의 월 할인한도인지 1회 할인한도인지 문구가 없다. 교통도 같다', assumed: '영역마다 월 2회, 월 5천원'}
+  - {path: 'revisions[0].spend.exclude_applied', question: '원문은 할인을 제공받은 자기계발 영역과 생활혜택 영역 이용금액은 실적에서 제외다. 할인받은 결제만 빼는지, 할인을 한 번이라도 받은 영역의 이용금액 전부를 빼는지', assumed: 할인받은 결제만 뺌}
+  - {path: 'revisions[0].spend.installment', question: '원문은 국내외 일시불/할부 합산이다. 체크카드라 할부가 없다고 보았고, 할부가 있다면 실적에 넣는 방식 문구가 없다', assumed: full_at_purchase}
+  - {path: 'revisions[0].benefits[dev-lang-academy-10].reward', question: 원 미만 처리 문구가 없다. 모든 혜택이 같다, assumed: floor}
+notes: '첫 개정 시행일 근거: page. 2024년 7월 16일 출시. 부가서비스는 출시 뒤 3년 이상 줄이지 않는다고 적혀 있음. 새소식 514건 중 2024년 7월부터 2026년 9월 28일까지 제목을 끝까지 봤고 이 카드의 부가서비스 변경 공지는 없음. 여러 카드 약관 변경 공지 중 본문을 연 것(bbrd_sqno 5751, 5776, 5786, 5789, 5863)에도 이 카드는 없음. 발급중단 공지 2건(5770, 5930)도 본문에서 이 카드를 찾지 못했고 상품 페이지는 신청가능. zgm 할인카드와는 상품 코드, 체크카드 여부, 혜택, 실적이 모두 다른 별도 상품. 발급 대상은 만 34세 이하 또는 전역 3년 이내의 제대군인. 국내전용과 국내외겸용(Mastercard)이고 연회비 없음. 후불교통 신청 가능. 실적은 전월 승인일 기준 국내외 일시불·할부 합산이고 취소는 취소 매출표 접수월에서 뺌. 할인받은 자기계발·생활혜택 영역 이용금액은 실적에서 빠짐. 자기계발 4개 영역 10%, 디지털 구독과 교통 20%, 이동통신 10%이고 두 영역 합쳐 월 1만5천원 통합 한도. 월 한도는 매월 1일부터 말일까지 이용 순서대로 적용. 자기계발은 최초 카드사용등록일부터 다음 달 말일까지 실적 없이 제공. 생활혜택은 카드 등록 달에는 없고 그 다음 달부터 전월실적을 채우면 제공. 무이자할부는 할인 제외. 해외 이용 시 국제브랜드수수료 1%와 해외서비스수수료가 따로 붙음. 해외서비스수수료는 상품 페이지에 0.25%와 해외 물품구매 건당 $0.5 두 문구가 있어 서로 다름. 2026년 1월 19일 출시한 NH대한민국히어로카드(신용·체크)는 소방관용 별도 상품(새소식 5943).'

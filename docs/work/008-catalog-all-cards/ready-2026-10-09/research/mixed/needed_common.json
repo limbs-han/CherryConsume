@@ -1,0 +1,156 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "wellrix_rental",
+      "name": "웰릭스렌탈",
+      "category": "other",
+      "aliases": [
+        "웰릭스렌탈"
+      ]
+    },
+    "card_id": "hana-11808",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11808",
+    "evidence": "웰릭스렌탈 렌탈요금 자동이체 시 월 1만3천원 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "cuckoo_rental",
+      "name": "쿠쿠 렌탈",
+      "category": "other",
+      "aliases": [
+        "쿠쿠 렌탈"
+      ]
+    },
+    "card_id": "hana-5866",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5866",
+    "evidence": "쿠쿠 렌탈 렌탈요금 자동이체 시 월 1만3천원 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "chungho_rental",
+      "name": "청호나이스 렌탈",
+      "category": "other",
+      "aliases": [
+        "청호나이스 렌탈"
+      ]
+    },
+    "card_id": "hana-5863",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5863",
+    "evidence": "청호나이스 렌탈 렌탈요금 자동이체 시 월 1만3천원 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "bodyfriend_rental",
+      "name": "바디프랜드 렌탈",
+      "category": "other",
+      "aliases": [
+        "바디프랜드 렌탈"
+      ]
+    },
+    "card_id": "hana-5865",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=5865",
+    "evidence": "바디프랜드 렌탈 렌탈요금 자동이체 시 월 1만3천원 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_rental_service",
+      "name": "현대렌탈서비스",
+      "category": "other",
+      "aliases": [
+        "현대렌탈서비스"
+      ]
+    },
+    "card_id": "hana-12395",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395",
+    "evidence": "현대렌탈서비스 요금 자동납부 시 실적별 월 할인 한도 내 합산 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "daemyung_imready",
+      "name": "대명아임레디",
+      "category": "other",
+      "aliases": [
+        "대명아임레디"
+      ]
+    },
+    "card_id": "hana-15349",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349",
+    "evidence": "대명아임레디 요금 자동납부 시 실적별 월 할인 한도 내 합산 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "coway_rental",
+      "name": "코웨이 렌탈",
+      "category": "other",
+      "aliases": [
+        "코웨이 렌탈"
+      ]
+    },
+    "card_id": "hana-17403",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403",
+    "evidence": "코웨이 렌탈 요금 자동납부 시 실적별 월 할인 한도 내 합산 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "sk_intellix",
+      "name": "SK인텔릭스",
+      "category": "other",
+      "aliases": [
+        "SK인텔릭스"
+      ]
+    },
+    "card_id": "hana-17398",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398",
+    "evidence": "SK인텔릭스 요금 자동납부 시 실적별 월 할인 한도 내 합산 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "bs_rental",
+      "name": "BS렌탈",
+      "category": "other",
+      "aliases": [
+        "BS렌탈"
+      ]
+    },
+    "card_id": "hana-11810",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810",
+    "evidence": "BS렌탈 요금 자동납부 시 실적별 월 할인 한도 내 합산 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "samsung_subscription",
+      "name": "삼성전자 구독",
+      "category": "other",
+      "aliases": [
+        "삼성전자 구독"
+      ]
+    },
+    "card_id": "hana-18068",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068",
+    "evidence": "삼성전자 구독 요금 자동납부 시 실적별 월 할인 한도 내 합산 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "coway_life_solution",
+      "name": "코웨이라이프솔루션",
+      "category": "other",
+      "aliases": [
+        "코웨이라이프솔루션"
+      ]
+    },
+    "card_id": "hana-19410",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410",
+    "evidence": "코웨이라이프솔루션 요금 자동납부 시 실적별 월 할인 한도 내 합산 할인"
+  }
+]

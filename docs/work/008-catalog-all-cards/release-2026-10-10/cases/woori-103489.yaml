@@ -1,0 +1,179 @@
+card: woori-103489
+cases:
+- name: overseas-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    channel: offline
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      overseas-5: 1000
+  calc: overseas-5 양수
+- name: pay-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: woori_won_pay
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      pay-5: 1000
+  calc: pay-5 양수
+- name: shopping-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    channel: online
+    merchant: coupang
+  expect:
+  - payment: 0
+    benefits:
+      shopping-5: 1000
+  calc: shopping-5 양수
+- name: olive-young-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    channel: offline
+    merchant: olive_young
+  expect:
+  - payment: 0
+    benefits:
+      olive-young-5: 1000
+  calc: olive-young-5 양수
+- name: coffee-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    channel: online
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-5: 1000
+  calc: coffee-5 양수
+- name: delivery-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    channel: online
+    merchant: baemin
+  expect:
+  - payment: 0
+    benefits:
+      delivery-5: 1000
+  calc: delivery-5 양수
+- name: transit-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    channel: offline
+    category: transit.bus_city
+    billing: postpaid_transit
+  expect:
+  - payment: 0
+    benefits:
+      transit-5: 1000
+  calc: transit-5 양수
+- name: telecom-5 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    channel: offline
+    merchant: skt
+    billing: autopay
+    category: telecom.mobile
+  expect:
+  - payment: 0
+    benefits:
+      telecom-5: 1000
+  calc: telecom-5 양수
+- name: 실적20만원 미만
+  prev_month_spend: 199999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 실적20만원 미만
+- name: 간편결제와 쇼핑 영역 공유한도
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: naver_pay
+    merchant: coupang
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-08T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: olive_young
+  expect:
+  - payment: 0
+    benefits:
+      pay-5: 1000
+  - payment: 1
+    benefits:
+      shopping-5: 1000
+  - payment: 2
+    benefits: {}
+  calc: 간편결제와 쇼핑 영역 공유한도
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.
+- name: 통신사 인터넷·TV 할인 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: skt
+    category: telecom.internet_tv
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 휴대전화 전용 특별 혜택은 인터넷·TV에 적용하지 않는다. DAILY는 별도 기본1%만500원 적용.

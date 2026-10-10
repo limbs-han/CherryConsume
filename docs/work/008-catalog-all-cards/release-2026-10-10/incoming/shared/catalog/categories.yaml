@@ -1,0 +1,90 @@
+- {code: cafe, name: 카페, kakao: CE7}
+- {code: convenience, name: 편의점, kakao: CS2}
+- code: restaurant
+  name: 음식점
+  kakao: FD6
+  children:
+    - {code: general, name: 일반음식점}
+    - {code: fastfood, name: 패스트푸드}
+    - {code: bakery, name: 제과·제빵}
+- {code: delivery_app, name: 배달앱}
+- {code: grocery_mart, name: 마트, kakao: MT1}
+- {code: department_store, name: 백화점}
+- {code: online_shopping, name: 온라인 쇼핑}
+- {code: fuel, name: 주유, kakao: OL7}
+- code: transit
+  name: 대중교통
+  children:
+    - {code: bus_city, name: 시내버스}
+    - {code: subway, name: 지하철, kakao: SW8}
+    - {code: bus_intercity, name: 시외버스}
+    - {code: bus_express, name: 고속버스}
+    - {code: rail, name: 철도}
+- {code: taxi, name: 택시}
+- code: telecom
+  name: 통신요금
+  children:
+    - {code: mobile, name: 이동통신}
+    - {code: internet_tv, name: 인터넷·TV}
+- {code: streaming, name: 구독·스트리밍}
+- {code: movie, name: 영화, kakao: CT1}
+- {code: hospital, name: 병원, kakao: HP8}
+- {code: pharmacy, name: 약국, kakao: PM9}
+- code: education
+  name: 교육
+  children:
+    - {code: academy, name: 학원, kakao: AC5}
+    - {code: study_material, name: 학습지}
+    - {code: tuition, name: 대학 등록금}
+    - {code: school_fee, name: 유치원·초중고 납입금}
+    - {code: exam, name: 어학시험}
+    - {code: primary_secondary_fee, name: 초중고 학교납입금과 스쿨뱅킹}
+    - {code: kindergarten, name: 유치원}
+- code: travel
+  name: 여행
+  children:
+    - {code: airline, name: 항공}
+    - {code: agency, name: 여행사}
+    - {code: hotel, name: 숙박, kakao: AD5}
+    - {code: duty_free, name: 면세점}
+- code: utility
+  name: 공과금
+  children:
+    - {code: electricity, name: 전기요금}
+    - {code: gas, name: 도시가스}
+    - {code: water, name: 수도요금}
+- code: tax
+  name: 세금
+  children:
+    - {code: local, name: 지방세}
+    - {code: national, name: 국세}
+- code: insurance
+  name: 보험료
+  children:
+    - {code: private, name: 민간 보험}
+    - {code: social, name: 4대보험}
+- code: beauty
+  name: 뷰티
+  children:
+    - {code: salon, name: 미용실}
+    - {code: cosmetics, name: 화장품}
+- code: gift_card
+  name: 상품권
+  children:
+    - {code: prepaid_card, name: 기프트카드}
+    - {code: voucher, name: 일반 상품권}
+- {code: prepaid_charge, name: 선불 충전}
+- {code: apartment_fee, name: 아파트관리비}
+- {code: rent, name: 임대료}
+- {code: annual_fee, name: 연회비}
+- {code: laundry, name: 세탁}
+- {code: pc_room, name: PC방}
+- {code: sports, name: 스포츠·레저}
+- code: pet
+  name: 반려동물
+  children:
+    - {code: vet, name: 동물병원}
+- {code: other, name: 기타}
+- {code: pub, name: 주점·바}
+- {code: childcare, name: 어린이집}
+- {code: maternity_center, name: 산후조리원}

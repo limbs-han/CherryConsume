@@ -1,0 +1,52 @@
+schema_version: 2
+id: hana-11810
+issuer: hana
+name: BS렌탈 플러스 하나카드
+kind: credit
+product_codes:
+  - '11810'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: global, brand: jcb, amount: 15000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810', fetched_at: &id001 2026-10-04}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: rental-discount-13k
+        title: BS렌탈 요금 할인 (30만원 이상 120만원 미만)
+        source: page
+        target:
+          merchants: [bs_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 13000}
+        tiers: {from: 300000, to: 300000}
+      - key: rental-discount-23k
+        title: BS렌탈 요금 할인 (120만원 이상)
+        source: page
+        target:
+          merchants: [bs_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 23000}
+        tiers: {from: 1200000}
+    unmodeled: [무승인 매출은 매출 접수 월에 실적 반영한다]
+notes: 2026-10-09 공식 수집 원문 대조. 시행일을 소급하지 않고 수집일 이후 규칙으로 제안한다.

@@ -1,0 +1,17 @@
+{
+  "cards": 9,
+  "hand_cases": 120,
+  "engine_failures": [],
+  "catalog_errors": 0,
+  "catalog_warnings": 0,
+  "existing_card_hand_cases": 281,
+  "existing_card_engine_failures": [],
+  "local_approval_changed_files": 13,
+  "local_approval_errors": 0,
+  "status_counts": {
+    "ready": 9,
+    "blocked": 230,
+    "exclude": 20
+  },
+  "operational_writes": 0
+}

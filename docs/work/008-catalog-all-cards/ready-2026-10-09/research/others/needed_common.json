@@ -1,0 +1,319 @@
+[
+  {
+    "kind": "category",
+    "key": "tax.local",
+    "name": "지방세",
+    "card_ids": [
+      "kb-04558",
+      "kb-07957"
+    ],
+    "evidence": "지방세 업종, 상품권 업종, 대학등록금 업종, 아파트관리비 업종 이용금액은 적립 제외됩니다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04558",
+      "https://img2.kbcard.com/obj/card/download/04558__prdctOpmn_20240405.pdf"
+    ],
+    "parent": "tax",
+    "file": "categories.yaml",
+    "definition": {
+      "parent": "tax",
+      "code": "local",
+      "name": "지방세"
+    },
+    "card_id": "kb-04558",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04558"
+  },
+  {
+    "kind": "point_program",
+    "key": "eleven_pay_point",
+    "name": "11PAY 포인트",
+    "card_ids": [
+      "shinhan-bccbyf",
+      "shinhan-bcdbyg"
+    ],
+    "evidence": "11PAY 포인트로 적립해 드립니다.",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1188443_2207.html"
+    ],
+    "won_per_point": 1,
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "eleven_pay_point",
+      "name": "11PAY 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "shinhan-bccbyf",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188443_2207.html",
+    "value_source_url": "https://m.11st.co.kr/products/MW/benefit-popup/9412763006?appVCA=0",
+    "value_evidence": "11pay 포인트 1p = 1원"
+  },
+  {
+    "kind": "payment_method",
+    "key": "eleven_pay",
+    "name": "11PAY",
+    "card_ids": [
+      "shinhan-bccbyf",
+      "shinhan-bcdbyg"
+    ],
+    "evidence": "11번가에서 11PAY로 결제 한 금액",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1188443_2207.html"
+    ],
+    "file": "payment_methods.yaml",
+    "definition": {
+      "key": "eleven_pay",
+      "name": "11PAY"
+    },
+    "card_id": "shinhan-bccbyf",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188443_2207.html"
+  },
+  {
+    "kind": "point_program",
+    "key": "gs_all_point",
+    "name": "GS ALL 포인트",
+    "card_ids": [
+      "shinhan-boadrm",
+      "shinhan-boadx2"
+    ],
+    "evidence": "GS ALL 포인트 적립 서비스",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html"
+    ],
+    "won_per_point": 1,
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "gs_all_point",
+      "name": "GS ALL 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "shinhan-boadrm",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html",
+    "value_source_url": "https://www.gsall.com/gsallpoint.html",
+    "value_evidence": "GS ALL 포인트 1P = 1원이며, 10P 단위로 사용 가능합니다."
+  },
+  {
+    "kind": "merchant",
+    "key": "gs_shop",
+    "name": "GS SHOP",
+    "card_ids": [
+      "shinhan-boadrm",
+      "shinhan-boadx2"
+    ],
+    "evidence": "GS리테일 가맹점 : GS SHOP, GS THE FRESH, GS25",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html"
+    ],
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "gs_shop",
+      "name": "GS SHOP",
+      "category": "online_shopping",
+      "aliases": [
+        "GS SHOP"
+      ]
+    },
+    "card_id": "shinhan-boadrm",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html"
+  },
+  {
+    "kind": "merchant",
+    "key": "gs_the_fresh",
+    "name": "GS THE FRESH",
+    "card_ids": [
+      "shinhan-boadrm",
+      "shinhan-boadx2"
+    ],
+    "evidence": "GS리테일 가맹점 : GS SHOP, GS THE FRESH, GS25",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html"
+    ],
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "gs_the_fresh",
+      "name": "GS THE FRESH",
+      "category": "grocery_mart",
+      "aliases": [
+        "GS THE FRESH"
+      ]
+    },
+    "card_id": "shinhan-boadrm",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html"
+  },
+  {
+    "kind": "payment_method",
+    "key": "gs_pay",
+    "name": "GS Pay",
+    "card_ids": [
+      "shinhan-boadrm"
+    ],
+    "evidence": "GS ALL 신한카드를 GS Pay에 등록 후 등록된 카드로 결제 시 2% GS ALL 포인트 추가적립",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html"
+    ],
+    "file": "payment_methods.yaml",
+    "definition": {
+      "key": "gs_pay",
+      "name": "GS Pay"
+    },
+    "card_id": "shinhan-boadrm",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1233141_2207.html"
+  },
+  {
+    "kind": "merchant",
+    "key": "mammoth_coffee",
+    "name": "매머드커피",
+    "card_ids": [
+      "shinhan-cajdmr"
+    ],
+    "evidence": "커피전문점: 스타벅스, 메가MGC커피, 매머드커피",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1228481_2206.html"
+    ],
+    "category": "cafe",
+    "aliases": [
+      "매머드커피",
+      "매머드익스프레스"
+    ],
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "mammoth_coffee",
+      "name": "매머드커피",
+      "category": "cafe",
+      "aliases": [
+        "매머드커피",
+        "매머드익스프레스"
+      ]
+    },
+    "card_id": "shinhan-cajdmr",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1228481_2206.html"
+  },
+  {
+    "kind": "point_program",
+    "key": "toss_point",
+    "name": "토스포인트",
+    "card_ids": [
+      "kb-04350"
+    ],
+    "evidence": "'토스포인트'란 토스 가입 시 발급되는 송금 및 결제가 가능한 선불전자지급수단입니다.",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04350",
+      "https://img2.kbcard.com/obj/card/download/04350__prdctOpmn_20210923.pdf"
+    ],
+    "won_per_point": null,
+    "question": "공식 토스 포인트 운영규정에서 1포인트 가치 확인 필요",
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "toss_point",
+      "name": "토스포인트",
+      "won_per_point": null
+    },
+    "card_id": "kb-04350",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04350",
+    "value_source_url": null,
+    "value_evidence": "카드사 원문에서 1포인트 원화가치를 확인하지 못했다. 포인트 수를 원화와 같다고 추측하여 승인하지 않는다."
+  },
+  {
+    "kind": "point_program",
+    "key": "mega_point",
+    "name": "메가포인트",
+    "card_ids": [
+      "shinhan-be7bzg"
+    ],
+    "evidence": "메가 포인트의 적립/사용/소멸 포인트 관련 정책은 메가마트의 운영기준을 따릅니다.",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html"
+    ],
+    "won_per_point": null,
+    "question": "메가마트 공식 운영기준에서 포인트가치 확인 필요",
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "mega_point",
+      "name": "메가포인트",
+      "won_per_point": null
+    },
+    "card_id": "shinhan-be7bzg",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html",
+    "value_source_url": null,
+    "value_evidence": "카드사 원문에서 1포인트 원화가치를 확인하지 못했다. 포인트 수를 원화와 같다고 추측하여 승인하지 않는다."
+  },
+  {
+    "kind": "merchant",
+    "key": "megamart",
+    "name": "메가마트",
+    "card_ids": [
+      "shinhan-be7bzg"
+    ],
+    "evidence": "적립처: 메가마트, 메가마트 온라인, 메가마트 슈퍼, 판도라",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html"
+    ],
+    "category": "grocery_mart",
+    "aliases": [
+      "메가마트"
+    ],
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "megamart",
+      "name": "메가마트",
+      "category": "grocery_mart",
+      "aliases": [
+        "메가마트"
+      ]
+    },
+    "card_id": "shinhan-be7bzg",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html"
+  },
+  {
+    "kind": "merchant",
+    "key": "megamart_super",
+    "name": "메가마트 슈퍼",
+    "card_ids": [
+      "shinhan-be7bzg"
+    ],
+    "evidence": "적립처: 메가마트, 메가마트 온라인, 메가마트 슈퍼, 판도라",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html"
+    ],
+    "category": "grocery_mart",
+    "aliases": [
+      "메가마트 슈퍼"
+    ],
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "megamart_super",
+      "name": "메가마트 슈퍼",
+      "category": "grocery_mart",
+      "aliases": [
+        "메가마트 슈퍼"
+      ]
+    },
+    "card_id": "shinhan-be7bzg",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html"
+  },
+  {
+    "kind": "merchant",
+    "key": "pandora_store",
+    "name": "판도라",
+    "card_ids": [
+      "shinhan-be7bzg"
+    ],
+    "evidence": "적립처: 메가마트, 메가마트 온라인, 메가마트 슈퍼, 판도라",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html"
+    ],
+    "category": "beauty.cosmetics",
+    "aliases": [
+      "판도라"
+    ],
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "pandora_store",
+      "name": "판도라",
+      "category": "beauty.cosmetics",
+      "aliases": [
+        "판도라"
+      ]
+    },
+    "card_id": "shinhan-be7bzg",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1195474_2206.html"
+  }
+]

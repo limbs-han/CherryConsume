@@ -1,0 +1,119 @@
+schema_version: 2
+id: hana-19149
+issuer: hana
+name: MOVING카드 ALLDAY모드
+kind: credit
+product_codes:
+  - '19149'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19149', fetched_at: &id001 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend:
+      basis: none
+      exclude_categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - {key: allday, per: month, amount: 50000}
+    benefits:
+      - key: base-05
+        title: 국내외 기본 0.5% 적립
+        source: page
+        target: {all: true}
+        reward: {type: points, program: hana_money, rate: 0.5}
+      - key: online-pay-1
+        title: 온라인 지정 페이 기본 1% 적립
+        source: page
+        target: {all: true}
+        when:
+          - channel: online
+            payment: [hana_pay, kakao_pay, naver_pay, payco, samsung_pay]
+        reward: {type: points, program: hana_money, rate: 1}
+        limits:
+          - {per: month, amount: 20000}
+      - key: allday-delivery-2
+        title: 배달 2% 적립
+        source: page
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hana_money, rate: 2}
+        limits:
+          - {shared: allday}
+      - key: allday-transit-3
+        title: 버스 지하철 3% 적립
+        source: page
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: points, program: hana_money, rate: 3}
+        limits:
+          - {shared: allday}
+      - key: allday-taxi-3
+        title: 택시 3% 적립
+        source: page
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 3}
+        limits:
+          - {shared: allday}
+      - key: allday-taxi-app-3
+        title: 택시앱 3% 적립
+        source: page
+        target:
+          merchants: [kakao_t, ut]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hana_money, rate: 3}
+        limits:
+          - {shared: allday}
+      - key: allday-online-shopping-2
+        title: 온라인 쇼핑 식품 2% 적립
+        source: page
+        target:
+          merchants: [coupang, kurly, naver_plus_store, oasis_market, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hana_money, rate: 2}
+        limits:
+          - {shared: allday}
+      - key: allday-oasis-offline-2
+        title: 오아시스 오프라인 2% 적립
+        source: page
+        target:
+          merchants: [oasis_market]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 2}
+        limits:
+          - {shared: allday}
+      - key: allday-store-2
+        title: 지정 마트 슈퍼 백화점 2% 적립
+        source: page
+        target:
+          merchants: [emart, emart_everyday, gs_the_fresh, hyundai_department, lotte_department, lotte_mart, lotte_super, nh_hanaro_mart, no_brand, shinsegae_department, traders]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 2}
+        limits:
+          - {shared: allday}
+    unmodeled: [영역별 3일 연속 1원 이상 이용하면 기본 적립률이 2배가 된다. 결제 입력 이력으로 판단할 수 있으나 현 엔진에 연속 이용일 조건이 없다., ALLDAY를 포함한 모드는 앱에서 변경 가능하다. 다른 모드와 해외 외화 하나머니 결제는 별도 규칙이 필요하다. 입점 임대매장과 공식 앱 외 결제는 제외한다.]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits', question: 연속 3일 기본 1% 및 온라인 페이 2%를 정확히 계산하는 기능이 필요하다. 누락한 상태로 승인하지 않는다.}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정.

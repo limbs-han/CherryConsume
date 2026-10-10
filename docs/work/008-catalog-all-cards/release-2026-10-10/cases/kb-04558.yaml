@@ -1,0 +1,137 @@
+card: kb-04558
+cases:
+- name: 실적 없이 기본 적립
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+  expect:
+  - payment: 0
+    benefits:
+      pointri-0-2: 20
+  calc: 10,000원 × 0.2% = 20P. 전월실적과 적립한도 없음.
+- name: 최소 결제액 직전
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 999
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 999원은 1,000원 미만이므로 0P.
+- name: 최소 결제액 경계
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 1000
+  expect:
+  - payment: 0
+    benefits:
+      pointri-0-2: 2
+  calc: 1,000원 × 0.2% = 2P.
+- name: 최소 결제액 다음
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 1001
+  expect:
+  - payment: 0
+    benefits:
+      pointri-0-2: 2
+  calc: 1,001원 × 0.2% = 2.002P. 소수점 버림으로 2P.
+- name: 지방세 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: tax.local
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 제외업종인 지방세이므로 0P.
+- name: 국세까지 넓혀 제외하지 않음
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: tax.national
+  expect:
+  - payment: 0
+    benefits:
+      pointri-0-2: 20
+  calc: 적립 제외는 지방세뿐이다. 국세를 명시한 10,000원 × 0.2% = 20P.
+- name: 상품권 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: gift_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 상품권 업종은 적립 제외로 0P.
+- name: 대학등록금 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: education.tuition
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 대학등록금 업종은 적립 제외로 0P.
+- name: 아파트관리비 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: apartment_fee
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 아파트관리비 업종은 적립 제외로 0P.
+- name: 국내전용 해외 결제 입력 차단
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    region: overseas
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 국내전용 체크카드의 해외 결제는 대상이 아니므로 0P.
+- name: 할부 불가 입력 차단
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    installment_months: 2
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 일시불만 가능한 체크카드라 할부 입력은 0P.
+- name: 전월 고실적이어도 동일 적립
+  prev_month_spend: 1000000
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+  expect:
+  - payment: 0
+    benefits:
+      pointri-0-2: 20
+  calc: 전월 1,000,000원 실적이어도 0.2% = 20P.
+- name: 횟수와 적립한도 없음
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 1000000
+  - at: 2026-11-05T12:01
+    amount: 1000000
+  expect:
+  - payment: 0
+    benefits:
+      pointri-0-2: 2000
+  - payment: 1
+    benefits:
+      pointri-0-2: 2000
+  calc: 같은 날 두 건 각각 1,000,000원 × 0.2% = 2,000P. 합계 4,000P. 횟수·한도 조건 없음.

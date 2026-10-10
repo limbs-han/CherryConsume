@@ -1,0 +1,53 @@
+schema_version: 2
+id: nh-f10793
+issuer: nh
+name: 미미카드
+short_name: 미미카드
+kind: credit
+product_codes:
+  - '90010543'
+status: on_sale
+annual_fees:
+  - {scope: domestic, form: mobile, amount: 22000}
+  - {scope: domestic, form: physical, amount: 28000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 24000}
+  - {scope: global, brand: mastercard, form: physical, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010543', fetched_at: '2026-10-04', text_sha256: 7fa2a5c6ce44c81c880194be84c96be2ee8b09fc70e117b244b2866d8e751009}
+checked_at: '2026-10-09'
+revisions:
+  - effective_from: '2026-10-04'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: [별도 가맹점번호로 승인된 일부 간편결제·PG 결제와 입점 임대매장은 대상 업종으로 식별되지 않아 서비스 제외될 수 있다., 다른 NH농협카드 할인 행사와 겹치면 큰 금액의 혜택만 제공한다.]
+    benefits:
+      - key: breakfast-50
+        title: 오전 5시~9시 음식점 50% 청구할인
+        source: page
+        evidence: [오전 5시~9시 음식점 50% 청구할인]
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        when:
+          - time: {from: '05:00', to: '09:00'}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: day, amount: 5000, count: 1}
+          - {per: month, amount: 20000, count: 4}
+        tiers: {from: 400000}
+        unmodeled: [한식·중식·양식·일식·패스트푸드·휴게음식점·뷔페 업종만 대상이다. 제과점은 제외한다.]
+    unmodeled: ['실적과 혜택에서 과태료·범칙금, 우체국 우편요금, 가상화폐 거래소, 카드대출, 수수료·이자·연체료, 포인트 사용분은 제외한다.', 해외와 교통·통신료 등 무승인 결제는 매출표 접수일 기준으로 실적에 넣는다. 취소는 취소 매출표 접수월 실적에서 차감한다., 가족카드는 실적과 횟수·한도를 본인카드와 별도로 계산한다., 쌀 구독서비스는 간편즉석밥·건강우리쌀·든든아침밥 중 선택하고 본인수령 또는 선물하기를 선택하는 안내가 있으나 수집 원문 상단에 선물하기 기능은 추후 오픈 예정이라고 적혀 있다. 현재 제공 여부 추가 확인이 필요하다. 각 분기 말 최종 타입과 1~3월·4~6월·7~9월·10~12월 이용실적 기준으로 다음달 중순 연 4회 배송한다. 실적 100·200·300·400·500만원별 세트가 다르며 최초 등록분기는 실적 1원 이상이면 최소 세트 제공한다. 실적 제외는 전월실적과 동일하다. 실물 상품 혜택으로 금액에 합산하지 않는다., '공항라운지 더라운지 앱 월 1회·연 2회, 실적 40만원 이상, 등록월 제외. 국제브랜드 발레파킹 선택서비스도 40만원 이상·등록월 제외.']
+open_questions:
+  - {path: 'revisions[0].benefits[0].when[0].time.to', question: '오전 5시부터 오전 9시까지의 원문이 09:00 정각을 포함하는지 추가 확인해야 한다. 현 계산 틀은 끝 시각을 제외한다.', assumed: '09:00 미만'}
+notes: 수집된 공식 상품 페이지의 현재 조건을 대조했다. 과거 시행일을 확인하지 못해 수집일을 추정 적용일로 사용했다.

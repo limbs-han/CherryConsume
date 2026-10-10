@@ -1,0 +1,272 @@
+{
+  "reviewed_at": "2026-10-10",
+  "reviewed_count": 5,
+  "scope": "추천 혼합 ready5장. 본인 작성 하나8장 제외. 파일 수정 없음",
+  "cards": [
+    {
+      "card_id": "hana-12782",
+      "name": "모두의 일상 체크카드",
+      "result": "불일치 없음",
+      "findings": [],
+      "file": "tmp/release-card-expansion/recommended-mixed/catalog/cards/hana/hana-12782.yaml",
+      "sha256": "d7c9d0d6c1aa8ef5f2478355350611b7f715749d551598a14559113ce8401c20",
+      "issuer_file": "tmp/release-card-expansion/recommended-mixed/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12782"
+      ],
+      "source_text_hashes": [
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/hana-12782-0.txt",
+          "sha256": "272e081a64ede0c5cab58de7827acc2ec933ad59fd96131b5c5a99963733d0b4"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문과 일치",
+        "tiers_limits": "혜택 비율·실적 구간·월한도 대조. 발견된 별도 지적은 findings 참조",
+        "new_card": "원문에 있는 신규 조건과 현재 모델 대조",
+        "school_fee": "하나12782·KB09122는 초중고만 제외로 수정된 현재 파일 확인. 현대ZERO와 NEED Edu는 유치원 포함 공식 명시, school_fee 유지 필요"
+      },
+      "release_status": "ready"
+    },
+    {
+      "card_id": "hyundai-mzroe3",
+      "name": "현대카드ZERO Edition3(포인트형)",
+      "result": "불일치 없음",
+      "findings": [],
+      "file": "tmp/release-card-expansion/recommended-mixed/catalog/cards/hyundai/hyundai-mzroe3.yaml",
+      "sha256": "e8928998352d47f399e235ea789c905798f6c85bb0e4ca67d5bcb9c65df099c4",
+      "issuer_file": "tmp/release-card-expansion/recommended-mixed/catalog/issuers/hyundai.yaml",
+      "issuer_sha256": "adbf15550b35925e3581356ec8331b1d7ac592ad05c5ab979dafb46149e283a5",
+      "checked_sources": [
+        "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MZROE3",
+        "https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_ZERO%20Ed3_%ED%8F%AC%EC%9D%B8%ED%8A%B8_260330.pdf"
+      ],
+      "source_text_hashes": [
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/hyundai-mzroe3-0.txt",
+          "sha256": "8b60052090adb6e0808fe444ba251aaca50fdb310687f5882c5f87664e44ba86"
+        },
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/hyundai-mzroe3-1.txt",
+          "sha256": "7e2278491907d61d9abcd992ebcdf7d53457e356b14830126c599a88a564da16"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문과 일치",
+        "tiers_limits": "혜택 비율·실적 구간·월한도 대조. 발견된 별도 지적은 findings 참조",
+        "new_card": "원문에 있는 신규 조건과 현재 모델 대조",
+        "school_fee": "하나12782·KB09122는 초중고만 제외로 수정된 현재 파일 확인. 현대ZERO와 NEED Edu는 유치원 포함 공식 명시, school_fee 유지 필요",
+        "m_points": "공식 가이드북 1.2%와 매출건별 소수점이하 반올림 확인. 원문 예시4,959원→60 M포인트. 가족회원 별도 적립과 부분무이자 조건 문장으로 유지",
+        "source_access": "공식 PDF 웹 열기 내부 오류. packet.json의 공식 URL 원문과 source-text/hyundai-mzroe3-1.txt로 대조",
+        "issuer": "현대 공통 무이자/학교납입금/공과금 등 적립제외가 공식 가이드북과 일치. 통합 단계 새 초중고 업종 연결 필요"
+      },
+      "release_status": "ready"
+    },
+    {
+      "card_id": "kb-09122",
+      "name": "KB ALL 카드",
+      "result": "불일치 없음",
+      "findings": [],
+      "file": "tmp/release-card-expansion/recommended-mixed/catalog/cards/kb/kb-09122.yaml",
+      "sha256": "dec2dc0fa2cdf3b96f97b2c8a7eb5f87131da27223e3d9ed8475e1ecda11fd72",
+      "issuer_file": "tmp/release-card-expansion/recommended-mixed/catalog/issuers/kb.yaml",
+      "issuer_sha256": "f40fa4a08a6de76f1f537156771de079ce127c5a2bb1e55eeae2be5468dc4e04",
+      "checked_sources": [
+        "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09122"
+      ],
+      "source_text_hashes": [
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/kb-09122-0.txt",
+          "sha256": "f81d88bbabb7489eadb228c9046280c540ca488e18c2509b8d2adcf417807854"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문과 일치",
+        "tiers_limits": "혜택 비율·실적 구간·월한도 대조. 발견된 별도 지적은 findings 참조",
+        "new_card": "원문에 있는 신규 조건과 현재 모델 대조",
+        "school_fee": "하나12782·KB09122는 초중고만 제외로 수정된 현재 파일 확인. 현대ZERO와 NEED Edu는 유치원 포함 공식 명시, school_fee 유지 필요",
+        "status": "해당 웹페이지 재발급만 가능 문구와 KB Pay에서만 신규 신청 안내 공존. 페이지 경로 제한일 수 있으므로 단종 확정 지적 하지 않음"
+      },
+      "calculation_gaps": [
+        {
+          "path": "revisions[0].spend",
+          "source_condition": "후불교통 등 무승인 교통액은 실적 제외",
+          "current_model": "billing별 실적 제외 미지원. 전체 transit 제외를 삭제하고 unmodeled/open_questions에 기록",
+          "impact": "현재 엔진은 후불교통 결제도 실적에 포함할 수 있음. 원문 누락은 해소했지만 계산 지원은 별도 필요",
+          "reference_question": "무승인 후불교통 결제만 실적에서 빼는 billing 조건을 실적 규칙에 더해야 한다. 일반 승인 철도 승차권을 제외하지 않도록 광범위한 transit 제외를 제거했다."
+        }
+      ],
+      "release_status": "blocked"
+    },
+    {
+      "card_id": "kb-07964",
+      "name": "KB국민 노리2 체크카드 KB Pay",
+      "result": "불일치 없음",
+      "findings": [],
+      "file": "tmp/release-card-expansion/recommended-mixed/catalog/cards/kb/kb-07964.yaml",
+      "sha256": "3841b6bf9e34bdf9c1b8c1f9b8b0d515fb42fbcd24961234fcb822a53174dd9c",
+      "issuer_file": "tmp/release-card-expansion/recommended-mixed/catalog/issuers/kb.yaml",
+      "issuer_sha256": "f40fa4a08a6de76f1f537156771de079ce127c5a2bb1e55eeae2be5468dc4e04",
+      "checked_sources": [
+        "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07964"
+      ],
+      "source_text_hashes": [
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/kb-07964-0.txt",
+          "sha256": "99541bfae3382c1c52737eaff0a419c5de34b00f375fc25d235d0f87db512cc1"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문과 일치",
+        "tiers_limits": "혜택 비율·실적 구간·월한도 대조. 발견된 별도 지적은 findings 참조",
+        "new_card": "수집 원문과 공식 페이지에서 별도 신규 실적 면제 문구 없음. 신규 특례 미추가 적절",
+        "school_fee": "하나12782·KB09122는 초중고만 제외로 수정된 현재 파일 확인. 현대ZERO와 NEED Edu는 유치원 포함 공식 명시, school_fee 유지 필요",
+        "name": "원문 KB Pay 탭12혜택과 현재 KB국민 노리2 체크카드 KB Pay 명칭 일치. Global 별도 카드라는 원문 유지",
+        "stack": "일상과 KB Pay 추가할인 서로 다른 stacks 묶음. 통합 월한도 shared 사용 원문과 일치"
+      },
+      "calculation_gaps": [
+        {
+          "path": "revisions[0].spend",
+          "source_condition": "후불교통 등 무승인 교통액은 실적 제외",
+          "current_model": "billing별 실적 제외 미지원. 전체 transit 제외를 삭제하고 unmodeled/open_questions에 기록",
+          "impact": "현재 엔진은 후불교통 결제도 실적에 포함할 수 있음. 원문 누락은 해소했지만 계산 지원은 별도 필요",
+          "reference_question": "무승인 후불교통 결제만 실적에서 빼는 billing 조건을 실적 규칙에 더해야 한다. 일반 승인 철도 승차권을 제외하지 않도록 광범위한 transit 제외를 제거했다."
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].benefits[telecom-2500].target",
+          "file_value": {
+            "merchants": [
+              "kt",
+              "lg_uplus",
+              "liiv_m",
+              "skt"
+            ]
+          },
+          "official_value": "이동통신요금 자동이체 납부만 대상",
+          "document": "KB국민 노리2 체크카드 KB Pay 공식 상품 페이지",
+          "evidence": "이동통신요금 자동이체 납부금액 기준 제공",
+          "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07964",
+          "severity": "금액이 틀림",
+          "scenario": "KT 인터넷/IPTV 단독요금 50,000원 자동납부에도 이동통신 2,500원을 줄 수 있음"
+        },
+        {
+          "path": "revisions[0].benefits 고정금액 5개 .limits",
+          "file_value": "월 금액한도만 있고 count 없음",
+          "official_value": {
+            "subscription-1000": 2,
+            "delivery-1000": 1,
+            "telecom-2500": 1,
+            "movie-4000": 2,
+            "amusement-15000": 1
+          },
+          "document": "KB국민 노리2 체크카드 KB Pay 공식 상품 페이지",
+          "evidence": "월 할인횟수: 구독 2회, 배달 1회, 이동통신 1회, 영화 2회, 놀이공원 1회",
+          "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07964",
+          "severity": "조건이 빠짐",
+          "scenario": "보통은 금액한도로 같은 결과지만 원문 횟수 조건을 직접 보존하지 않음. shared 한도 일부 지급과 취소를 포함하는 경우도 횟수 제한 검증 필요"
+        }
+      ],
+      "resolution_check": "수정된 조건과 공식 원문을 다시 대조했고 기존 지적이 모두 해결됨",
+      "release_status": "blocked"
+    },
+    {
+      "card_id": "kb-09790",
+      "name": "KB NEED Edu 카드",
+      "result": "불일치 없음",
+      "findings": [],
+      "file": "tmp/release-card-expansion/recommended-mixed/catalog/cards/kb/kb-09790.yaml",
+      "sha256": "e087a7474310ea1723c79f799887570f9a7ab0b55cd3c07c24953255ef1d51a8",
+      "issuer_file": "tmp/release-card-expansion/recommended-mixed/catalog/issuers/kb.yaml",
+      "issuer_sha256": "f40fa4a08a6de76f1f537156771de079ce127c5a2bb1e55eeae2be5468dc4e04",
+      "checked_sources": [
+        "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09790"
+      ],
+      "source_text_hashes": [
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/kb-09790-0.txt",
+          "sha256": "229735c01ceb59bdc328102008dfc65fe18bf634386af39be919751195c1a131"
+        }
+      ],
+      "checks": {
+        "kind_annual_fees": "공식 원문과 일치",
+        "tiers_limits": "혜택 비율·실적 구간·월한도 대조. 발견된 별도 지적은 findings 참조",
+        "new_card": "원문에 있는 신규 조건과 현재 모델 대조",
+        "school_fee": "하나12782·KB09122는 초중고만 제외로 수정된 현재 파일 확인. 현대ZERO와 NEED Edu는 유치원 포함 공식 명시, school_fee 유지 필요",
+        "new_grace_amount": "실적 40만원 미만 신규 기간5천원, 실적40만원 이상 실제구간 월1만/2만/3만, KB Pay 추가와 생활 할인 유예 미적용을 모델에 반영한 것은 일치"
+      },
+      "calculation_gaps": [
+        {
+          "path": "revisions[0].spend",
+          "source_condition": "후불교통 등 무승인 교통액은 실적 제외",
+          "current_model": "billing별 실적 제외 미지원. 전체 transit 제외를 삭제하고 unmodeled/open_questions에 기록",
+          "impact": "현재 엔진은 후불교통 결제도 실적에 포함할 수 있음. 원문 누락은 해소했지만 계산 지원은 별도 필요",
+          "reference_question": "무승인 후불교통 결제만 실적에서 빼는 billing 조건을 실적 규칙에 더해야 한다. 일반 승인 철도 승차권을 제외하지 않도록 광범위한 transit 제외를 제거했다."
+        }
+      ],
+      "resolved_findings": [
+        {
+          "path": "revisions[0].benefits[edu-5pct-40k].tiers.waived_when 및 facts/unmodeled",
+          "file_value": "card_month.max=1만 확인",
+          "official_value": "생애 최초 해당 카드 발급에 한해 유예, 가족카드 단독 발급에는 적용 안 함",
+          "document": "KB NEED Edu 카드 공식 상품 페이지",
+          "evidence": "실적 유예기간은 본인회원이 해당카드를 생애 최초 발급받은 경우에 적용되며, 가족카드 단독 발급 시 적용되지 않습니다.",
+          "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09790",
+          "severity": "조건이 빠짐",
+          "scenario": "재발급을 새 시작일로 등록하거나 가족카드만 등록하면 전월실적0원에도 교육 할인5천원 가능"
+        },
+        {
+          "path": "revisions[0].spend.interest_free 및 unmodeled",
+          "file_value": "interest_free: exclude만 있으며 부분 무이자 별도 안내 없음",
+          "official_value": "부분 무이자도 이용금액 전체 실적 제외",
+          "document": "KB NEED Edu 카드 공식 상품 페이지",
+          "evidence": "(부분)무이자할부 이용금액",
+          "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09790",
+          "severity": "조건이 빠짐",
+          "scenario": "부분 무이자 결제를 일반 유이자할부로 입력하면 실적에 포함될 수 있음. 현재 결제 입력으로 구분 못하면 문장으로 조건 남김"
+        }
+      ],
+      "resolution_check": "수정된 조건과 공식 원문을 다시 대조했고 기존 지적이 모두 해결됨",
+      "release_status": "blocked"
+    }
+  ],
+  "finding_count": 0,
+  "common_scope_note": "통합 단계에서 현대 issuer와 NEED Edu의 기존 school_fee 제외 목록에 새 형제 primary_secondary_fee를 추가 연결해야 한다. 유치원을 함께 제외하는 원문 범위를 좁히지 않는다.",
+  "followup_required": "수정된 카드 또는 issuer의 SHA256이 이 보고서와 다르면 해당 지적 해결과 최종 파일을 다시 확인한다.",
+  "calculation_gap_card_count": 3,
+  "hash_checked_at_end": [
+    {
+      "card_id": "hana-12782",
+      "same_hash": true
+    },
+    {
+      "card_id": "hyundai-mzroe3",
+      "same_hash": true
+    },
+    {
+      "card_id": "kb-09122",
+      "same_hash": true
+    },
+    {
+      "card_id": "kb-07964",
+      "same_hash": true
+    },
+    {
+      "card_id": "kb-09790",
+      "same_hash": true
+    }
+  ],
+  "resolved_finding_count": 4,
+  "release_ready_count": 2,
+  "release_blocked_count": 3,
+  "engine_validation": {
+    "input": "tmp/release-card-expansion/recommended-mixed/test-catalog.json",
+    "sha256": "c3a5949939601abea5394f653f5c521b60c1b958a7d4aa250fef080999a1c6e6",
+    "cards": 10,
+    "cases": 102,
+    "failures": [],
+    "scope": "지원하는 거래 조건의 손계산만 확인. KB 3장의 후불교통 실적 제외 미지원이나 부가서비스 자동 계산 지원을 증명하지 않음"
+  }
+}

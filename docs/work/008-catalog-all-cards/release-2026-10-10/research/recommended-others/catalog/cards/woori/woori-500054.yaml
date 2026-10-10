@@ -1,0 +1,34 @@
+schema_version: 2
+id: woori-500054
+issuer: woori
+name: 카드의정석2 오하CHECK
+kind: check
+product_codes:
+  - '500054'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500054', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefits: []
+    unmodeled: ['아래 모든 캐시백은 전월 국내 실적20만원 이상, 매출건당5% 최대1000원. 공식 영역별·통합 월 한도 표를 확인하기 전 계산하지 않는다. 실제 지급액이0원이라는 뜻이 아니다.', '쇼핑은 쿠팡 일반·쿠페이, 무신사·지그재그 공식 온라인, 온라인 네이버페이·우리WON페이, 오프라인 안경점. 쿠팡 와우멤버십·다른간편결제 제외. 페이와 다른영역 중복이면 페이 우선.', '음식은 스타벅스 사이렌오더, 배달의민족·쿠팡이츠·B마트 공식앱 주문, 마켓컬리 컬리패스 멤버십 자동납부 월1회. 상품권·매장 직접결제·임대매장 제외.', 문화는 넷플릭스 Basic·Standard·Premium 공식 정기결제와 멜론 공식 정기결제. 넷플릭스 광고형·인앱·1회구매 제외. 공연은 NOL인터파크티켓·YES24티켓·티켓링크·멜론티켓 공식 온라인., '생활은 시내버스·지하철 후불교통. 모바일 삼성페이 등에 등록한 Tmoney·EZL 후불 포함. 시외·고속·공항버스·공항철도 직통 제외. SKT·KT·LGU+·헬로모바일·KTM모바일·U+유모바일 휴대전화 자동납부만, 결합 제외.', 해외 온·오프라인은 Mastercard만. TOEIC·OPIc·HSK·TEPS·TOEFL 어학시험과 해외가 중복이면 어학시험 우선. 페이 우선 서비스 외 각 생활서비스에서 네이버페이·우리WON페이 승인은 제외., 세금·공과금·4대보험·대학등록금·상품권·기프트·선불구매충전·교통카드구매충전·고속버스·정부지원금·관리비·임대료·취소 제외. 수수료·이자·해외는 전월실적에서 제외. 가족카드는 실적과 한도를 별도로 적용., '수령등록·사용개시 중 빠른 날부터 다음달말까지 최저구간. 매입순서로 한도 사용, 남은 한도 이월 없음. 국내 취소가 매월1~2일 접수되면 전월실적에서 차감. PG전용 가맹점명·다른 프로모션 중복 제외.', '해외결제 Mastercard1%·건당US$0.5, 해외ATM1%·건당US$3 수수료 발생. 수수료 면제 혜택이 아니다. 승인 후 카드사 접수·환율을 확인해야 한다.']
+open_questions:
+  - {path: 'revisions[0].unmodeled', question: 영역별·통합 월 캐시백한도 표와 전월 실적별 구간 금액이 공식 본문 추출에서 빠졌다. 상품안내장 PDF 또는 원본 표 이미지 확인이 필요하다.}
+  - {path: 'revisions[0].effective_from', question: 현재 공식 조건이 시작된 날이 본문에 없어 원문 수집일로 두었다. 출시일은 검증하지 못했다.}
+  - {path: 'revisions[0].effective_from', question: 현행 전체 조건의 시작일을 확인하지 못해 원문 수집일로 두었다., assumed: '2026-10-05'}
+notes: 공식 본문에 전월 국내 20만원·건당 1000원은 있으나 영역별·통합 월 한도 표의 금액이 수집되지 않았다. 무제한으로 계산하면 과다 지급하므로 계산 등록 보류. 확인된 핵심 혜택은 조건 안내로 전부 보존했다. 운영 반영 대상에서 제외한다.

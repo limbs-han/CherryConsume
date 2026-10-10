@@ -1,0 +1,16 @@
+card: kb-09790
+cases:
+- name: 후불교통 무승인 전표 실적 제외 기능 필요
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: transit.subway
+    billing: postpaid_transit
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 공식 원문의 무승인 후불교통 이용금액은 실적 제외. 현재 Spend는 billing별 실적 제외를 지원하지 않아 counted 10000원으로
+    틀린다.

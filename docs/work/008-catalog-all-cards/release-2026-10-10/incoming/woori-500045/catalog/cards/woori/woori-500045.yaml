@@ -1,0 +1,268 @@
+schema_version: 2
+id: woori-500045
+issuer: woori
+name: 카드의정석2 ROUTINE
+kind: credit
+product_codes:
+  - '500045'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 28000}
+  - {scope: global, brand: mastercard, amount: 28000}
+  - {scope: domestic, form: mobile, amount: 22000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 22000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility.water]
+      unmodeled: ['정부지원금, 신차구매, 환금성 업종, 의약품 전용몰·제약회사, 수수료·이자·대출, 우편요금·여권발급비·벌금·공공기관 이용금액은 제외한다', PG·간편결제 전용 가맹점명으로 접수되는 정기결제 서비스 제외, 다른 우리카드 프로모션과 중복 불가]
+    facts:
+      - {key: first-issuance-eligible, type: bool, scope: card, ask: '만기·해지 후 재발급이 아닌 이 상품 최초 발급 카드인가요? 시작일은 이번 카드 최초 등록·사용일입니다.'}
+    limits:
+      - key: life
+        per: month
+        amount: {0: 5000, 500000: 5000, 1000000: 10000}
+      - key: telecom
+        per: month
+        amount: {0: 5000, 500000: 5000, 1000000: 10000}
+      - key: education-book
+        per: month
+        amount: {0: 5000, 500000: 5000, 1000000: 10000}
+      - key: rental
+        per: month
+        amount: {0: 5000, 500000: 5000, 1000000: 10000}
+      - key: digital
+        per: month
+        amount: {0: 5000, 500000: 5000, 1000000: 10000}
+      - key: membership
+        per: month
+        amount: {0: 5000, 500000: 5000, 1000000: 10000}
+    benefits:
+      - key: regular-15
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          categories: [apartment_fee, utility.electricity, utility.gas]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: life}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [아파트관리비·전기·가스요금 자동납부만]
+      - key: telecom-15
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, kt_m_mobile, lg_uplus, media_log, sk_telink, skt, woori_won_mobile]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: telecom}
+          - {per: month, count: 1}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [대상 통신사 휴대전화 자동납부만. 인터넷·집전화 결합상품 제외]
+      - key: education-15
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          merchants: [payment_teacher]
+        when:
+          - payment: [woori_won_pay]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: education-book}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: ['결제선생 비대면 청구서의 외국어·자동차·기술컴퓨터·입시보습·예체능 학원 결제만. 우리WON페이 간편·자동결제만, 카드정보 입력 일반결제 제외']
+      - key: study-15
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          categories: [education.study_material]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: education-book}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [학습지 업종 오프라인 결제만]
+      - key: book-15
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          merchants: [kyobo_sam, millie, yes24_crema_club]
+        when:
+          - billing_not: [in_app]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: education-book}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [밀리의서재·교보문고sam·YES24크레마클럽 도서 결제만. 인앱결제 제외]
+      - key: rental-15
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          merchants: [coway, lg_appliance_subscription, sk_intellix]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: rental}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [매월 청구되는 렌탈 자동납부만. 1회성 일반결제·취소수수료 제외]
+      - key: digital-30
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+          - payment: [physical_card]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: digital}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 사이트·앱 직접 정기결제만. 간편결제·인앱·1회성·취소수수료 제외, 디지털 업그레이드 제외]
+      - key: chatgpt-30
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          merchants: [chatgpt]
+        when:
+          - billing: [subscription]
+          - payment: [physical_card]
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: digital}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 사이트·앱 직접 정기결제만. 간편결제·인앱·1회성·취소수수료 제외, USD 해외결제만]
+      - key: membership-30
+        title: 정기 생활·교육·렌탈15% 또는 디지털·멤버십30%
+        source: page
+        evidence: [정기 생활·교육·렌탈15% 또는 디지털·멤버십30%]
+        target:
+          merchants: [baemin_club, coupang_wow, kurly_members, naver_plus_membership, t_universe_pass]
+        when:
+          - billing: [subscription]
+          - payment: [physical_card]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: membership}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        unmodeled: [공식 사이트·앱 직접 정기결제만. 간편결제·인앱·1회성·취소수수료 제외]
+      - key: simple-payment-1k
+        title: 온라인 간편결제5만원 이상1000원
+        source: page
+        evidence: [온라인 간편결제5만원 이상1000원]
+        target: {all: true}
+        when:
+          - {channel: online}
+          - payment: [kakao_pay, naver_pay, woori_won_pay]
+          - amount: {min: 50000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 3}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+      - key: overseas-1-5
+        title: 해외1.5% 반기6만원 할인
+        source: page
+        evidence: [해외 온 / 오프라인 가맹점 | 1.5% | 반기별(1~6월 / 7~12월) 각 6만원]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - months: [1, 2, 3, 4, 5, 6]
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {per: year, amount: 60000}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+      - key: overseas-1-5-h2
+        title: 해외1.5% 반기6만원 할인
+        source: page
+        evidence: [해외 온 / 오프라인 가맹점 | 1.5% | 반기별(1~6월 / 7~12월) 각 6만원]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - months: [7, 8, 9, 10, 11, 12]
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {per: year, amount: 60000}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+    unmodeled: [해외·교통·통신은 접수월 기준. 국내 취소가1~2일 접수되면 전월실적 차감, 신규 특례 시작일은 수령등록일·사용개시일 중 빠른 날, 국내 가맹점5만원 이상2~3개월 무이자할부 제공. 사후전환·개월변경 제외. 금액 합계에 넣지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+notes: 2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2026-05-28이며 현행 조건 전체의 시행일 근거로 사용하지 않았다.

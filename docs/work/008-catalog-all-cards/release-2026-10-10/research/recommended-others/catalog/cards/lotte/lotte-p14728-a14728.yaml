@@ -1,0 +1,152 @@
+schema_version: 2
+id: lotte-p14728-a14728
+issuer: lotte
+name: 디지로카 Paris
+kind: credit
+product_codes: [P14728-A14728]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14728-A14728', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행료, 무승인전표, 공공기관 이용금액, 관세·벌금·과태료·수수료·이자·대출은 제외한다', 가족카드 이용금액과 한도는 본인회원에게 합산한다, '해외는 현지 매출일자, 이동통신 등은 카드사 매출표 접수일 기준이다', 롯데카드의 다른 결제일 할인 혜택과 중복이면 금액이 큰 혜택 하나를 적용한다]
+    facts:
+      - {key: membership-coupang, type: bool, scope: card, ask: '디지로카 Paris로 쿠팡 와우 월간 멤버십 정상 이용가를 결제해 현재 쇼핑 추가 할인 적용 기간인가요? 월간은 승인 다음달 한 달, 연간은 다음달부터 12개월이며 해지·결제취소 때 해제합니다.'}
+      - {key: membership-naver, type: bool, scope: card, ask: '디지로카 Paris로 네이버플러스 월간 멤버십 정상 이용가를 결제해 현재 쇼핑 추가 할인 적용 기간인가요? 월간은 승인 다음달 한 달, 연간은 다음달부터 12개월이며 해지·결제취소 때 해제합니다.'}
+      - {key: membership-eleven, type: bool, scope: card, ask: '디지로카 Paris로 우주패스 slim·mini·all 월간 멤버십 정상 이용가를 결제해 현재 쇼핑 추가 할인 적용 기간인가요? 월간은 승인 다음달 한 달, 연간은 다음달부터 12개월이며 해지·결제취소 때 해제합니다.'}
+      - {key: membership-lotte, type: bool, scope: card, ask: '디지로카 Paris로 롯데 오너스 월간 멤버십 정상 이용가를 결제해 현재 쇼핑 추가 할인 적용 기간인가요? 월간은 승인 다음달 한 달, 연간은 다음달부터 12개월이며 해지·결제취소 때 해제합니다.'}
+      - {key: membership-universe, type: bool, scope: card, ask: '디지로카 Paris로 신세계 유니버스 연간 멤버십 정상 이용가를 결제해 현재 쇼핑 추가 할인 적용 기간인가요? 월간은 승인 다음달 한 달, 연간은 다음달부터 12개월이며 해지·결제취소 때 해제합니다.'}
+      - {key: membership-lclub, type: bool, scope: card, ask: '디지로카 Paris로 롯데홈쇼핑 L.CLUB 연간 멤버십 정상 이용가를 결제해 현재 쇼핑 추가 할인 적용 기간인가요? 월간은 승인 다음달 한 달, 연간은 다음달부터 12개월이며 해지·결제취소 때 해제합니다.'}
+    limits:
+      - {key: online_shopping_cap, per: month, base: 2000000}
+    benefits:
+      - key: all-merchant-0-7
+        title: 국내외 모든 가맹점 0.7% 할인
+        source: manual
+        evidence: [실적 조건 및 한도 없이 혜택을 제공합니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.7}
+      - key: online-shop-2
+        title: 온라인 쇼핑 2% 할인
+        source: manual
+        evidence: ['쿠팡, 네이버페이(네이버파이낸셜), 11번가, G마켓, 옥션, SSG.COM, 롯데ON, 롯데홈쇼핑 2% 할인', 통합 월 이용금액 200만원]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_homeshopping, lotte_on, naver_pay, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: online_shopping_cap}
+        tiers: {from: 500000}
+        unmodeled: [멤버십 구독료·네이버 디지털콘텐츠·PG 인증형 결제·보험·렌탈·항공·여행·호텔 등 제외]
+      - key: online-shop-3
+        title: 쿠팡 와우 월간 가입 쇼핑 총 5% 할인
+        source: manual
+        evidence: ['멤버십 이용 시, 멤버십 별 대상 온라인 쇼핑몰 추가 3% 할인', '온라인 쇼핑 이용 시 2%, 멤버십 이용 시 추가 3%']
+        target:
+          merchants: [coupang]
+        when:
+          - {channel: online}
+          - {fact: membership-coupang}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online_shopping_cap}
+        tiers: {from: 500000}
+        unmodeled: [본 카드로 정상 이용가 결제한 멤버십에만 적용. 첫달 무료·할인·포인트·쿠폰·업그레이드·타 결제수단은 제외]
+      - key: online-shop-3-naver
+        title: 네이버플러스 월간 가입 쇼핑 총 5% 할인
+        source: manual
+        evidence: ['멤버십 이용 시, 멤버십 별 대상 온라인 쇼핑몰 추가 3% 할인', '온라인 쇼핑 이용 시 2%, 멤버십 이용 시 추가 3%']
+        target:
+          merchants: [naver_pay]
+        when:
+          - {channel: online}
+          - {fact: membership-naver}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online_shopping_cap}
+        tiers: {from: 500000}
+        unmodeled: [본 카드로 정상 이용가 결제한 멤버십에만 적용. 첫달 무료·할인·포인트·쿠폰·업그레이드·타 결제수단은 제외]
+      - key: online-shop-3-eleven
+        title: 우주패스 slim·mini·all 월간 가입 쇼핑 총 5% 할인
+        source: manual
+        evidence: ['멤버십 이용 시, 멤버십 별 대상 온라인 쇼핑몰 추가 3% 할인', '온라인 쇼핑 이용 시 2%, 멤버십 이용 시 추가 3%']
+        target:
+          merchants: [eleven_st]
+        when:
+          - {channel: online}
+          - {fact: membership-eleven}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online_shopping_cap}
+        tiers: {from: 500000}
+        unmodeled: [본 카드로 정상 이용가 결제한 멤버십에만 적용. 첫달 무료·할인·포인트·쿠폰·업그레이드·타 결제수단은 제외]
+      - key: online-shop-3-lotte
+        title: 롯데 오너스 월간 가입 쇼핑 총 5% 할인
+        source: manual
+        evidence: ['멤버십 이용 시, 멤버십 별 대상 온라인 쇼핑몰 추가 3% 할인', '온라인 쇼핑 이용 시 2%, 멤버십 이용 시 추가 3%']
+        target:
+          merchants: [lotte_on]
+        when:
+          - {channel: online}
+          - {fact: membership-lotte}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online_shopping_cap}
+        tiers: {from: 500000}
+        unmodeled: [본 카드로 정상 이용가 결제한 멤버십에만 적용. 첫달 무료·할인·포인트·쿠폰·업그레이드·타 결제수단은 제외]
+      - key: online-shop-3-universe
+        title: 신세계 유니버스 연간 가입 쇼핑 총 5% 할인
+        source: manual
+        evidence: ['멤버십 이용 시, 멤버십 별 대상 온라인 쇼핑몰 추가 3% 할인', '온라인 쇼핑 이용 시 2%, 멤버십 이용 시 추가 3%']
+        target:
+          merchants: [auction, gmarket, ssg_com]
+        when:
+          - {channel: online}
+          - {fact: membership-universe}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online_shopping_cap}
+        tiers: {from: 500000}
+        unmodeled: [본 카드로 정상 이용가 결제한 멤버십에만 적용. 첫달 무료·할인·포인트·쿠폰·업그레이드·타 결제수단은 제외]
+      - key: online-shop-3-lclub
+        title: 롯데홈쇼핑 L.CLUB 연간 가입 쇼핑 총 5% 할인
+        source: manual
+        evidence: ['멤버십 이용 시, 멤버십 별 대상 온라인 쇼핑몰 추가 3% 할인', '온라인 쇼핑 이용 시 2%, 멤버십 이용 시 추가 3%']
+        target:
+          merchants: [lotte_homeshopping]
+        when:
+          - {channel: online}
+          - {fact: membership-lclub}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: online_shopping_cap}
+        tiers: {from: 500000}
+        unmodeled: [본 카드로 정상 이용가 결제한 멤버십에만 적용. 첫달 무료·할인·포인트·쿠폰·업그레이드·타 결제수단은 제외]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend', question: 쿠팡·네이버페이·11번가·G마켓·옥션·SSG.COM·롯데ON·롯데홈쇼핑 실적제외 기능이 없다. 쇼핑 혜택 최초발급 특례와5%의 상품·구독료 제외도 후속 원문 대조 후 재검증 필요.}
+  - {path: 'revisions[0].spend', question: 쿠팡·네이버페이·11번가·G마켓·옥션·SSG.COM·롯데ON·롯데홈쇼핑 실적제외 기능이 없다. 쇼핑 혜택 최초발급 특례와5%의 상품·구독료 제외도 후속 원문 대조 후 재검증 필요.}
+notes: '2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2023-11-02이며 현행 조건 전체의 시행일 근거로 사용하지 않았다. 부모 독립 검토 결정: 지정 온라인쇼핑8개 가맹점 이용금액은 전월실적 제외이나 현재 Spend에 exclude_merchants가 없어 입력 가맹점으로 구별 가능한 제외를 계산하지 못한다. 해당 기능 지원 전 이번 승인 제외. 무이자실적 제외는 수정했다. 부모 독립 검토 결정: 지정 온라인쇼핑8개 가맹점 이용금액은 전월실적 제외이나 현재 Spend에 exclude_merchants가 없어 입력 가맹점으로 구별 가능한 제외를 계산하지 못한다. 해당 기능 지원 전 이번 승인 제외. 무이자실적 제외는 수정했다.'

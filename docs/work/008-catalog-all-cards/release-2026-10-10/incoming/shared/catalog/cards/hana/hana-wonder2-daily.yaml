@@ -1,0 +1,184 @@
+schema_version: 2
+id: hana-wonder2-daily
+issuer: hana
+name: 하나카드 원더카드 2.0 DAILY
+short_name: 하나 원더 DAILY
+search_names: [원더카드 2.0 DAILY, 원더카드 DAILY]
+kind: credit
+product_codes:
+  - '17333'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 19900}
+  - {scope: global, brand: amex, amount: 19900}
+  - {scope: global, brand: mastercard, amount: 19900}
+  - {scope: global, brand: visa, amount: 19900}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI42000000D.web?_frame=no&CD_PD_SEQ=17333', fetched_at: 2026-09-29, review_no: 제2026-C1h-10500호, review_valid_until: 2027-07-05}
+  - {id: notice-14490, kind: notice, url: 'https://www.hanacard.co.kr/OPP25350001D.web?schID=ncd&mID=OPP25350000D&AN_NO=14490', fetched_at: 2026-09-29}
+  - {id: notice-14253, kind: notice, url: 'https://www.hanacard.co.kr/OPP35150001D.web?schID=ncd&mID=OPP35150000D&AN_NO=14253', fetched_at: 2026-09-29}
+  - {id: leaflet, kind: manual_pdf, url: 'https://m.hanacard.co.kr/leaflet/14/14126_20250616.pdf', fetched_at: 2026-09-29}
+checked_at: 2026-09-29
+revisions:
+  - effective_from: 2025-07-01
+    source: notice-14253
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+    options:
+      - key: combo
+        title: 원더카드 맞춤 혜택 조합
+        choices:
+          - {key: daily, title: DAILY 조합 그대로}
+          - {key: custom, title: 하나Pay에서 바꾼 조합}
+        default: daily
+        change: immediate
+        unsupported: [custom]
+    limits:
+      - key: taxi
+        per: month
+        amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+    benefits:
+      - key: delivery-10
+        title: 배달앱 10% 할인
+        source: page
+        evidence: ['배달의민족, 요기요, 쿠팡이츠 10% 청구할인', '할인 대상 : 배달의민족, 요기요, 쿠팡이츠', 할인율 | 실적기준 | 할인한도, '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '10% | 지난달 실적 80만원 이상 120만원 미만 | 6,000', '10% | 지난달 실적 120만원 이상 | 10,000', '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 음식점 직접 결제 건은 서비스에서 제외됩니다.']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 6000, 1200000: 10000}
+        tiers: {from: 400000}
+        notes: 공식 홈페이지·앱 결제만. 음식점 직접 결제 제외
+      - key: cvs-10
+        title: 편의점 10% 할인
+        source: page
+        evidence: ['CU, GS25, 세븐일레븐, 이마트24 10% 청구할인', '할인 대상 : CU, GS25, 세븐일레븐, 이마트24', 할인율 | 실적기준 | 할인한도, '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '10% | 지난달 실적 80만원 이상 120만원 미만 | 8,000', '10% | 지난달 실적 120만원 이상 | 12,000', '오프라인 결제건에 한하여 서비스가 제공되며, 대형시설물 입점점포 및 임대 매장(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트)은 서비스에서 제외됩니다.']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        unmodeled: ['백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트 입점 점포와 임대 매장은 제외된다']
+        notes: 오프라인 결제만
+      - key: streaming-40
+        title: 영상 스트리밍 40% 할인
+        source: page
+        evidence: ['넷플릭스, 디즈니플러스, Wavve, 유튜브프리미엄 40% 청구할인', '할인 대상 : 넷플릭스, 디즈니플러스, Wavve, 유튜브프리미엄', 할인율 | 실적기준 | 할인한도, '40% | 지난달 실적 40만원 이상 80만원 미만 | 8,000', '40% | 지난달 실적 80만원 이상 120만원 미만 | 12,000', '40% | 지난달 실적 120만원 이상 | 15,000', '월 정기결제건만 서비스가 제공되며, 포인트, 캐시, 머니충전, 컨텐츠 개별 결제, 간편결제건 및 앱스토어를 통한 결제 건(인앱 결제)은 서비스가 제공되지 않습니다.']
+        target:
+          merchants: [disney_plus, netflix, wavve, youtube_premium]
+        when:
+          - {channel: online}
+          - billing: [subscription]
+          - payment_not: [apple_pay, coupay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 40}
+        limits:
+          - per: month
+            amount: {400000: 8000, 800000: 12000, 1200000: 15000}
+        tiers: {from: 400000}
+        notes: 월 정기결제만. 포인트·캐시·머니 충전, 콘텐츠 개별 결제, 간편결제, 앱스토어 인앱 결제 제외
+      - key: taxi-10
+        title: 택시 10% 할인
+        source: page
+        evidence: ['카카오T, UT, 택시업종 10% 청구할인', '할인 대상 : 카카오T, UT, 택시업종', 할인율 | 실적기준 | 할인한도, '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '10% | 지난달 실적 80만원 이상 120만원 미만 | 8,000', '10% | 지난달 실적 120만원 이상 | 12,000', 택시 업종은 오프라인 결제 건에 한하여 서비스가 제공됩니다.]
+        target:
+          categories: [taxi]
+          exclude_merchants: [kakao_t, ut]
+        when:
+          - {channel: offline}
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: taxi}
+        tiers: {from: 400000}
+        notes: 택시 업종 오프라인 결제만. 카카오T와 UT는 taxi-app-10
+      - key: taxi-app-10
+        title: 카카오T·UT 앱 선결제 10% 할인
+        source: page
+        evidence: ['카카오T, UT, 택시업종 10% 청구할인', '할인 대상 : 카카오T, UT, 택시업종', 할인율 | 실적기준 | 할인한도, '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '10% | 지난달 실적 80만원 이상 120만원 미만 | 8,000', '10% | 지난달 실적 120만원 이상 | 12,000', '카카오T, UT는 공식 앱에서 카드를 등록하고 미리 결제하는 방식에만 서비스가 제공되며, 현장결제 또는 나중에 결제하는 방식에는 서비스가 제외됩니다.']
+        target:
+          merchants: [kakao_t, ut]
+        when:
+          - billing: [app_prepay]
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: taxi}
+        tiers: {from: 400000}
+        notes: 공식 앱에 카드를 등록하고 미리 결제하는 방식만. 현장결제와 나중결제 제외. 택시 업종과 한도를 같이 쓴다
+      - key: transit-10
+        title: 대중교통 10% 할인
+        source: page
+        evidence: ['할인 대상 : 버스, 지하철', 할인율 | 실적기준 | 할인한도, '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '10% | 지난달 실적 80만원 이상 120만원 미만 | 8,000', '10% | 지난달 실적 120만원 이상 | 12,000', '시외버스, 고속버스, 철도(KTX/SRT)는 서비스에서 제외됩니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        notes: 버스·지하철. 시외버스, 고속버스, 철도(KTX/SRT) 제외
+      - key: matzip-10
+        title: 하나Pay 원더카드 맛집 10% 할인
+        source: page
+        evidence: [데이터기반 맛집 서비스 '원더카드' 맛집 가맹점 10% 청구할인, '할인 대상 : 하나페이 앱에서 제공하는 데이터 기반 맛집 서비스의 ‘원더카드 맛집’ 가맹점', 할인율 | 실적기준 | 할인한도, '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '10% | 지난달 실적 80만원 이상 120만원 미만 | 8,000', '10% | 지난달 실적 120만원 이상 | 12,000', 하나페이 맛집은 추후 변경될 수 있으며 관련 사항은 하나페이 앱에서 제공하는 ‘맛집 서비스’ 내 ‘원더카드 맛집’을 참고 하시기 바랍니다., '오프라인 결제건에 한하여 서비스가 제공되며, 배달 앱이나 식당 예약앱 등을 통한 주문 결제 및 미리 결제하는 방식은 서비스에서 제외됩니다.']
+        target:
+          categories: [restaurant]
+        when:
+          - {channel: offline}
+          - billing_not: [app_prepay]
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        unmodeled: [하나Pay 맛집 서비스의 원더카드 맛집 지정 가맹점만 할인된다. 지정 가맹점은 수시로 바뀐다, 식당 예약앱 등을 통한 주문 결제는 제외된다]
+        notes: 오프라인 결제만. 배달앱·예약앱 주문과 미리 결제하는 방식 제외
+      - key: online-food-10
+        title: 온라인식품·쇼핑 10% 할인
+        source: page
+        evidence: ['컬리, SSG.COM, 롯데ON, 더현대닷컴 10% 청구할인', '할인 대상 : 컬리, SSG.COM, 롯데ON, 더현대닷컴', 할인율 | 실적기준 | 할인한도, '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '10% | 지난달 실적 80만원 이상 120만원 미만 | 8,000', '10% | 지난달 실적 120만원 이상 | 12,000', '상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 서비스에서 제외됩니다.', '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건은 서비스에서 제외됩니다.', '롯데ON, 더현대닷컴은 공식 홈페이지(온라인/모바일 앱) 결제 건에 한하여 서비스가 제공되며, 몰 이동을 통해 다른 계열사 및 온라인 쇼핑으로 이동하여 결제하는 경우는 서비스에서 제외됩니다.']
+        target:
+          merchants: [kurly, lotte_on, ssg_com, the_hyundai_com]
+        when:
+          - {channel: online}
+          - option:
+              combo: [daily]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        unmodeled: ['상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 제외된다', '상품 선택 때 연결된 다른 사이트와 앱에서 결제한 건, 롯데ON과 더현대닷컴에서 몰 이동으로 다른 계열사 몰에서 결제한 건은 제외된다']
+        notes: 공식 홈페이지·앱 결제만
+    unmodeled: ['가족카드 이용금액과 월별 할인횟수, 할인한도는 본인카드와 합산된다', 트래블로그 스위치로 해외결제를 외화 하나머니로 설정해 해외 이용하면 원더 서비스가 없다. 그 결제는 실적에도 들지 않는다]
+open_questions:
+  - {path: 'revisions[0].spend', question: 취소가 실적에서 빠지는 달. 원문에는 혜택을 매입 취소가 접수된 달에 차감한다는 문구만 있다, assumed: cancel_month}
+  - {path: 'revisions[0].benefits[transit-10].reward.rate', question: '대중교통 할인율이 상세표는 10%, 같은 페이지 주요혜택 요약은 3% 청구할인이라 서로 다르다', assumed: 10}
+notes: '원더카드 2.0의 DAILY 맞춤 혜택 조합. 발급 후 하나Pay에서 서비스 영역을 월 1회 바꿀 수 있고 바꾸면 즉시 적용된다(notice-14253). 바꾼 조합은 options의 custom으로 두고 계산하지 않는다. 연회비는 국내전용·국내외겸용 19,900원(기본 12,000원, 제휴 7,900원). 제휴연회비는 혜택플러스 선택 시 부과되는데 DAILY 조합은 제휴연회비 7,900원으로 적혀 있어 19,900원으로 둔다. 실적은 지난달 1일~말일 승인 기준 국내외 일시불·할부 금액, 40만원 미만이면 혜택 없음. 최초 카드 사용등록일~다음 달 말일은 40만~80만원 구간 기준. 실적 제외: 국세, 지방세, 공과금, 4대보험, 상품권·기프트카드, 선불카드·선불전자지급수단 충전, 수도요금, 대학·대학원 등록금, 스쿨뱅킹, 부동산임대료, 초·중·고 납입금, 할인·적립 받은 매출. 할인 제외: 같은 항목과 무이자·부분무이자할부 전체. 무승인거래는 매입 확정 다음날 혜택. 해외 이용은 수수료 포함 최종 원화 청구액에 혜택 적용. 결제 건 혜택 아님: 온가족 플러스(가족카드당 월 1만원 캐시백, 차년도 연회비 1만원 캐시백), 트래블로그 스위치(외화 하나머니 결제 시 해외 수수료 면제). 첫 개정 시행일 근거: notice-14253. 카드 출시 시기는 2022-11-15이고 2025-07-01 원더카드 2.0으로 바뀌며 트래블로그 스위치 규칙이 처음 생겼다(notice-14253 변경일자 2025. 7. 1). notice-14490은 2026-08-01 위메프·인터파크 제공처 변경으로 오픈마켓 영역만 바꾼다. DAILY 영역과 관계없는 변경이다. 실적 산정 기준과 트래블로그 스위치 결제 실적 제외는 상품안내장(leaflet) 23쪽.'

@@ -1,0 +1,425 @@
+schema_version: 2
+id: kb-easy-all-titanium
+issuer: kb
+name: KB국민 Easy all 티타늄카드
+short_name: KB Easy all
+search_names: [Easy all 티타늄카드]
+kind: credit
+product_codes:
+  - '09256'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 30000}
+  - {scope: global, brand: k_world_upi, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+  - {scope: domestic, brand: local, form: mobile, amount: 24000}
+  - {scope: global, brand: k_world_upi, form: mobile, amount: 24000}
+  - {scope: global, brand: visa, form: mobile, amount: 24000}
+sources:
+  - {id: page, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/09256__prdctOpmn_20240403.pdf', fetched_at: 2026-09-29, review_no: 제2020-C1a-10877호}
+  - {id: product, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09256', fetched_at: 2026-09-29, review_no: 제2026-C1a-02335호, review_valid_until: 2027-02-22}
+  - {id: launch, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/09256__prdctOpmn_20200618.pdf', fetched_at: 2026-09-29, review_no: 제2020-C1a-04687호}
+checked_at: 2026-09-29
+revisions:
+  - effective_from: 2020-06-18
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.water]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax]
+      unmodeled: [호텔·백화점·대형마트·철도역사 등에 입점한 가맹점 결제 제외, 결제대행업체(PG) 가맹점이나 별도 전용 가맹점번호로 승인되는 일부 간편결제 결제 제외, 정부지원금(보육료·유치원보조비·바우처) 결제 제외]
+    options:
+      - key: mode
+        title: Easy all 선택서비스 모드
+        choices:
+          - {key: auto, title: Auto 모드}
+          - {key: diy, title: DIY 모드}
+        default: auto
+        change: next_month
+        unsupported: [diy]
+    ranked:
+      - key: easy-all-a
+        top: {500000: 1, 1000000: 2, 1500000: 3}
+      - key: easy-all-b
+        top: {500000: 1, 1000000: 2, 1500000: 3}
+      - key: easy-all-c
+        top: {500000: 1, 1000000: 2, 1500000: 3}
+      - key: easy-all-d
+        top: {500000: 1, 1000000: 2, 1500000: 3}
+    limits:
+      - key: integrated
+        per: month
+        amount: {500000: 16000, 1000000: 32000, 1500000: 48000}
+      - {key: a-overseas-dutyfree, per: month, amount: 4000}
+      - {key: d-sub-movie, per: month, amount: 4000}
+    benefits:
+      - key: a-food-3
+        title: '[A] 음식 3% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, A그룹 3%할인, '음식 | 한식,일식,중식,양식,뷔페,패밀리레스토랑,일반음식점 기타 업종 *건당 1만원 이상 이용시']
+        target:
+          categories: [restaurant.general]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-a}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 한식·일식·중식·양식·뷔페·패밀리레스토랑·일반음식점 기타 업종. 건당 1만원 이상
+      - key: a-education-3
+        title: '[A] 교육 3% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, A그룹 3%할인, '교육 | 기술/사무/가정계, 예체능계,문리계,외국어, 기타학원,독서실업종 *온라인결제 이용금액, 유아교육기관,학습자재 업종 제외']
+        target:
+          categories: [education.academy]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-a}
+          - {channel: offline}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 기술·사무·가정계, 예체능계, 문리계, 외국어, 기타학원, 독서실 업종. 온라인결제, 유아교육기관, 학습자재 업종 제외
+      - key: a-medical-3
+        title: '[A] 병원·약국 3% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, A그룹 3%할인, '병원/약국 | 종합병원, 병/의원,약국,동물병원 업종 *요양병원, 보건소, 산후조리원 제외']
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-a}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [요양병원·보건소·산후조리원 제외]
+        notes: 종합병원, 병·의원, 약국, 동물병원 업종
+      - key: a-overseas-3
+        title: '[A] 해외·면세점 3% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, A그룹 3%할인, '해외/면세점 | 해외이용금액(해외직구 포함),면세점 업종 인터넷면세점(롯데,신라,현대,신세계) *해외 결제시 별도의 해외 수수료가 발생할 수 있음']
+        target: {all: true}
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-a}
+          - {region: overseas}
+        area: overseas-dutyfree
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {shared: a-overseas-dutyfree}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 해외 이용금액(해외직구 포함), 면세점 업종, 롯데·신라·현대·신세계 인터넷면세점. 국내 면세점은 a-dutyfree-3으로 나눴고 두 혜택이 한 영역, 월 4천원 한도 하나를 같이 쓴다
+      - key: a-dutyfree-3
+        title: '[A] 면세점 3% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, A그룹 3%할인, '해외/면세점 | 해외이용금액(해외직구 포함),면세점 업종 인터넷면세점(롯데,신라,현대,신세계) *해외 결제시 별도의 해외 수수료가 발생할 수 있음']
+        target:
+          categories: [travel.duty_free]
+          merchants: [hyundai_dfs_online, lotte_dfs_online, shilla_dfs_online, shinsegae_dfs_online]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-a}
+          - {region: domestic}
+        area: overseas-dutyfree
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {shared: a-overseas-dutyfree}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 국내 면세점 업종, 롯데·신라·현대·신세계 인터넷면세점. 해외 이용 a-overseas-3과 한 영역이고 월 4천원 한도를 같이 쓴다
+      - key: a-bills-3
+        title: '[A] 관리비·공과금 3% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, A그룹 3%할인, '관리비/공과금 | 아파트 관리비, 전기·수도, 도시가스 업종']
+        target:
+          categories: [apartment_fee, utility]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-a}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 아파트관리비, 전기·수도, 도시가스 업종. 아파트관리비와 전기·수도는 실적에서 빠진다
+      - key: b-mart-5
+        title: '[B] 마트 5% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, B그룹 5%할인, '마트 | 이마트,롯데마트,홈플러스,농협하나로마트 *온라인결제, 상품권구매 및 임대매장, SSM(이마트에브리데이,롯데슈퍼,홈플러스익스프레스 등) 이용금액 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-b}
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [임대매장 이용 제외, SSM(이마트에브리데이·롯데슈퍼·홈플러스익스프레스 등) 이용 제외]
+        notes: 이마트, 롯데마트, 홈플러스, 농협하나로마트. 온라인결제와 상품권 구매 제외
+      - key: b-fuel-5
+        title: '[B] 주유 5% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, B그룹 5%할인, '주유 | SK주유소, GS주유소(충전소 포함)']
+        target:
+          merchants: [gs_caltex, sk_energy]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-b}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: SK주유소, GS주유소(충전소 포함). 정률 할인
+      - key: b-telecom-5
+        title: '[B] 이동통신 5% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, B그룹 5%할인, '이동통신 | SKT, KT, LG U+, KB Liiv M자동이체 *이동통신요금, 유선전화, 인터넷 결합상품 포함 *건당 3만원 이상 이용 시']
+        target:
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-b}
+          - amount: {min: 30000}
+          - billing: [autopay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: SKT, KT, LG U+, KB Liiv M 자동이체. 이동통신요금, 유선전화, 인터넷 결합상품 포함. 건당 3만원 이상
+      - key: b-online-5
+        title: '[B] 온라인쇼핑 5% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, B그룹 5%할인, '온라인 쇼핑 | G마켓,옥션,11번가,인터파크,롯데닷컴,SSG COM *상품권, 여행,항공권,티켓,도서, 별도 팝업사이트 제외']
+        target:
+          exclude_categories: [travel]
+          merchants: [auction, eleven_st, gmarket, interpark, lotte_on, ssg_com]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-b}
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [티켓·도서 구매 제외, 별도 팝업사이트 결제 제외]
+        notes: G마켓, 옥션, 11번가, 인터파크, 롯데ON, SSG.COM. 상품권, 여행·항공권 제외
+      - key: b-social-5
+        title: '[B] 소셜커머스 5% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, B그룹 5%할인, '쇼셜 커머스 | 쿠팡,티몬,위메프 *상품권, 여행,항공권,티켓,도서, 별도 팝업사이트 제외']
+        target:
+          exclude_categories: [travel]
+          merchants: [coupang, tmon, wemakeprice]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-b}
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [티켓·도서 구매 제외, 별도 팝업사이트 결제 제외]
+        notes: 쿠팡, 티몬, 위메프. 상품권, 여행·항공권 제외
+      - key: c-sports-7
+        title: '[C] 스포츠 7% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, C그룹 7%할인, '스포츠 | 스포츠/레저용품, 골프, 테니스, 볼링,스키, 수영, 헬스,당구,요가,필라테스 업종 *온라인결제 이용금액 제외']
+        target:
+          categories: [sports]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-c}
+          - {channel: offline}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 스포츠·레저용품, 골프, 테니스, 볼링, 스키, 수영, 헬스, 당구, 요가, 필라테스 업종. 온라인결제 제외
+      - key: c-transit-7
+        title: '[C] 대중교통 7% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, C그룹 7%할인, '대중교통 | 버스,지하철 *시외버스,고속버스,공항버스 제외 *이용대금명세서 상 기재된 이용일 기준 서비스 적용']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-c}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [공항버스 제외, 이용대금명세서에 적힌 이용일 기준으로 달을 나눔]
+        notes: 버스, 지하철. 시외·고속·공항버스 제외
+      - key: c-fashion-7
+        title: '[C] 패션·인테리어 7% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, C그룹 7%할인, '패션/인테리어 | 백화점(롯데,현대,신세계),ZARA,H&M,COS,IKEA, ZARA HOME *온라인결제,상품권 구매 이용금액 제외']
+        target:
+          merchants: [cos, hm, hyundai_department, ikea, lotte_department, shinsegae_department, zara, zara_home]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-c}
+          - {channel: offline}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 롯데·현대·신세계 백화점, ZARA, H&M, COS, IKEA, ZARA HOME. 온라인결제, 상품권 구매 제외
+      - key: c-beauty-7
+        title: '[C] 뷰티 7% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, C그룹 7%할인, '뷰티 | 화장품점,미용원, 피부미용원 업종, 올리브영 *온라인결제 이용금액 제외']
+        target:
+          categories: [beauty]
+          merchants: [olive_young]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-c}
+          - {channel: offline}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 화장품점, 미용원, 피부미용원 업종, 올리브영. 온라인결제 제외
+      - key: c-cvs-7
+        title: '[C] 편의점 7% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, C그룹 7%할인, '편의점 | CU, GS25 *백화점,마트 등 일부 입점 매장의 경우 제외']
+        target:
+          merchants: [cu, gs25]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-c}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [백화점·마트 등 일부 입점 매장 제외]
+        notes: CU, GS25
+      - key: d-taxi-10
+        title: '[D] 택시 10% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, D그룹 10%할인, 택시 | 택시업종]
+        target:
+          categories: [taxi]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-d}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 택시 업종
+      - key: d-coffee-10
+        title: '[D] 커피 10% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, D그룹 10%할인, '커피 | 커피(스타벅스,사이렌오더 포함)업종 *상품권(선물하기 등)및 선불카드 (선불전자지급수단 포함)충전 제외 *백화점, 마트 등 일부 입점 매장의 경우 제외']
+        target:
+          categories: [cafe]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-d}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [백화점·마트 등 일부 입점 매장 제외]
+        notes: 커피 업종, 스타벅스 사이렌오더 포함. 상품권(선물하기)과 선불카드 충전 제외
+      - key: d-bakery-fastfood-10
+        title: '[D] 제과·패스트푸드 10% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, D그룹 10%할인, '제과/패스트푸드 | 제과/아이스크림,패스트푸드 업종 *백화점, 마트 등 일부 입점 매장의 경우 제외']
+        target:
+          categories: [restaurant.bakery, restaurant.fastfood]
+          merchants: [baskin_robbins, burger_king, lotteria, mcdonalds, paris_baguette]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-d}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [백화점·마트 등 일부 입점 매장 제외]
+        notes: 제과·아이스크림, 패스트푸드 업종. 대표 가맹점은 merchants.yaml 업종이 음식점이라 따로 넣었다
+      - key: d-delivery-10
+        title: '[D] 배달앱 10% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, D그룹 10%할인, '배달앱 | 배달의 민족,요기요,마켓컬리']
+        target:
+          merchants: [baemin, kurly, yogiyo]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-d}
+          - {channel: online}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 배달의민족, 요기요, 마켓컬리
+      - key: d-sub-movie-10
+        title: '[D] 구독 10% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, D그룹 10%할인, '구독/영화 | 구독:넷플릭스, 티빙, 웨이브, 멜론, 지니 *공식홈페이지 및 모바일(앱)을 통한 정기결제 시 제공 영화:CGV,롯데시네마,메가박스 *현장결제,공식 홈페이지 및 모바일(앱) 결제 시 제공']
+        target:
+          merchants: [genie, melon, netflix, tving, wavve]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-d}
+          - billing: [subscription]
+        area: d-sub-movie
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: d-sub-movie}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 넷플릭스, 티빙, 웨이브, 멜론, 지니 공식 홈페이지·앱 정기결제. 영화 d-movie-10과 한 영역이고 월 4천원 한도를 같이 쓴다
+      - key: d-movie-10
+        title: '[D] 영화 10% 캐시백'
+        evidence: ['KB국민 Easy all 티타늄카드의 Easy all 선택서비스는 전월 이용실적 50만원 이상 시 제공되며, 전월 이용실적에 따라 월간 할인한도가 제공됩니다.', Auto 모드 많이 쓴 영역에서 자동 캐시백, 전월 이용실적 구간에 따라 그룹별 상위 이용금액 1~3개 (총 4~12개)영역에서 캐시백 제공, 1구간 (50만원 이상 100만원 미만) | 2구간 (100만원 이상 150만원 미만) | 3구간 (150만원 이상), 대상 영역 (4개 그룹 20개영역) | 그룹별 상위 1개 영역 (총4개 영역) | 그룹별 상위 2개 영역 (총8개 영역) | 그룹별 상위 3개 영역 (총12개 영역), 1만6천원 | 3만2천원 | 4만8천원, 1영역당 최대 4천원 한도, D그룹 10%할인, '구독/영화 | 구독:넷플릭스, 티빙, 웨이브, 멜론, 지니 *공식홈페이지 및 모바일(앱)을 통한 정기결제 시 제공 영화:CGV,롯데시네마,메가박스 *현장결제,공식 홈페이지 및 모바일(앱) 결제 시 제공']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - option:
+              mode: [auto]
+          - {ranked: easy-all-d}
+        area: d-sub-movie
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: d-sub-movie}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: CGV, 롯데시네마, 메가박스 현장·공식 홈페이지·앱 결제. 구독 d-sub-movie-10과 한 영역이고 월 4천원 한도를 같이 쓴다
+    unmodeled: [해외 이용금액은 승인일이 아니라 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금(보육료·유치원보조비·바우처) 결제는 실적에서 빠진다, 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 할인 한도는 이용 순서가 아니라 전표 매입 순서대로 채운다, 실적 유예기간은 본인회원이 이 카드를 생애 처음 발급받은 경우에만 적용한다. 가족카드만 발급하면 적용하지 않는다]
+open_questions:
+  - {path: 'revisions[0].ranked', question: 영역 easy-all-a~d의 이용금액에서 취소를 어느 달에 빼는지 원문에 없다. 상품설명서와 상품 페이지의 취소 문구는 전월 이용실적 기준 아래에만 있다}
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 원문 할인 제외에는 지방세만 있다. 국세도 할인에서 빠지는지, assumed: 세금 전체 제외}
+notes: '첫 개정 시행일 근거: launch. 출시 2020-06-18. 출시 상품설명서와 지금 상품설명서의 혜택이 같고, 새소식 게시판에 이 카드의 부가서비스 변경 공지가 없다. 2020-10-15 약관 문구 정비와 국제브랜드·티타늄 서비스 변경 공지는 계산하는 혜택과 관계없다. Easy all 선택서비스는 전월 50만원 이상, 최초 발급 때 Auto 모드. Auto 모드는 4개 그룹(A 3%, B 5%, C 7%, D 10%) 20개 영역 중 그룹별 이용금액 상위 1·2·3개 영역에 영역당 월 4천원까지 캐시백하고 다음 달 둘째 금요일에 결제계좌로 입금한다. DIY 모드는 영역과 한도 패턴을 직접 골라 통합한도를 나누는 청구할인이라 계산하지 않는다. 모드 변경은 신청 다음 달 1일부터. 실적 제외의 공과금은 원문이 전기·수도만 적어 도시가스는 실적에 넣었다. 할인 제외의 입점 가맹점, PG, 지방세, 대학 등록금, 연회비는 product 확인사항의 공통 제외에서 옮겼다. 한도는 이용 순서가 아니라 전표매입 순서대로 채운다. 2020년 상품설명서는 이용순서대로라고 적어 상품 페이지와 다르다. 월 한도는 이월하지 않는다. 티타늄 서비스(공항·호텔 발레파킹, 공항 라운지, 전월 30만원 이상)와 Visa 서비스는 결제 건 혜택이 아니다. KB Pay에서 신청한다.'

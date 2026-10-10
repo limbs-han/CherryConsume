@@ -1,0 +1,62 @@
+schema_version: 2
+id: ibk-12113400001
+issuer: ibk
+name: K-22(Point)
+kind: credit
+product_codes:
+  - '12113400001'
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=340&PDCD=0001&pageId=CA01010000', fetched_at: &id001 2026-10-05}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    limits:
+      - {key: coffee20, per: month, amount: 4000}
+      - {key: dept10, per: month, amount: 10000}
+    benefits:
+      - key: coffee-20
+        title: 커피점 20% 할인
+        evidence: [커피점 20% 할인, '할인 적용 가맹점 스타벅스, 커피빈, 아티제, 폴바셋, 투썸플레이스', '월 할인한도 : 4천원']
+        target:
+          merchants: [artisee, coffee_bean, paul_bassett, starbucks, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: coffee20}
+        tiers: {from: 500000}
+      - key: dept-10
+        title: 백화점·대형마트 10% 할인
+        evidence: [백화점·대형마트 10% 할인, '할인 적용 가맹점 (백화점) 롯데백화점, 현대백화점, 신세계백화점, 갤러리아백화점', '(대형마트) 이마트, 롯데마트, 홈플러스', '월 할인한도 : 1만원']
+        target:
+          merchants: [emart, emart_everyday, homeplus, homeplus_express, hyundai_department, lotte_department, lotte_mart, lotte_super, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: dept10}
+        tiers: {from: 500000}
+      - key: ktx-srt-10
+        title: KTX·SRT 10% 할인
+        evidence: [KTX·SRT 10% 할인, '할인 적용 가맹점 KORAIL, ㈜SR', '할인한도 : 1회당 최대 1만원, 연간 2회']
+        target:
+          merchants: [korail, srt]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 10000}
+          - {per: year, count: 2}
+        tiers: {from: 500000}
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 시행일을 찾지 못해 수집한 날로 두었다}
+  - {path: 'revisions[0]', question: 'benefits[?(@.key==''top-points'')].reward.program: TOP포인트 적립 프로그램에 해당하는 포인트 키가 제공된 포인트 목록에 없습니다.'}
+  - {path: 'revisions[0]', question: 'benefits[?(@.key==''ktx-srt-10'')].limits[?(@.per==''year'')].count: 연간 이용 횟수 제한이 ''year'' 단위로 표현 가능한지 확인 필요.'}
+  - {path: 'revisions[0]', question: 'benefits[?(@.key==''coffee-20'')].when[0].channel: 커피 할인 혜택이 오프라인 전용인지 확인 필요.'}
+  - {path: 'revisions[0]', question: 'benefits[?(@.key==''dept-10'')].when[0].channel: 백화점·대형마트 할인 혜택이 오프라인 전용인지 확인 필요.'}
+  - {path: kind, question: 'kind를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: 보 제공 동의서(기업회원) K-22(Point)(신용카드 개인설명서) K-22(Point)(신용카드 기업설명서) K-22카드(상품안내장) K-22카드(MASTER 선택'}
+notes: 새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다.

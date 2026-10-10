@@ -1,0 +1,343 @@
+card: woori-500045
+cases:
+- name: regular-15 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    category: apartment_fee
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      regular-15: 5000
+  calc: regular-15 양수
+- name: telecom-15 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    merchant: skt
+    billing: autopay
+    category: telecom.mobile
+  expect:
+  - payment: 0
+    benefits:
+      telecom-15: 5000
+  calc: telecom-15 양수
+- name: education-15 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: woori_won_pay
+    channel: offline
+    merchant: payment_teacher
+  expect:
+  - payment: 0
+    benefits:
+      education-15: 5000
+  calc: education-15 양수
+- name: study-15 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    category: education.study_material
+  expect:
+  - payment: 0
+    benefits:
+      study-15: 5000
+  calc: study-15 양수
+- name: book-15 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    merchant: millie
+    billing: subscription
+  expect:
+  - payment: 0
+    benefits:
+      book-15: 5000
+  calc: book-15 양수
+- name: rental-15 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    merchant: coway
+    billing: subscription
+  expect:
+  - payment: 0
+    benefits:
+      rental-15: 5000
+  calc: rental-15 양수
+- name: digital-30 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    merchant: youtube_premium
+    billing: subscription
+  expect:
+  - payment: 0
+    benefits:
+      digital-30: 5000
+  calc: digital-30 양수
+- name: chatgpt-30 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    merchant: chatgpt
+    billing: subscription
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      chatgpt-30: 5000
+  calc: chatgpt-30 양수
+- name: membership-30 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    merchant: coupang_wow
+    billing: subscription
+  expect:
+  - payment: 0
+    benefits:
+      membership-30: 5000
+  calc: membership-30 양수
+- name: simple-payment-1k 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: woori_won_pay
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      simple-payment-1k: 1000
+  calc: simple-payment-1k 양수
+- name: overseas-1-5 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2027-06-01T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      overseas-1-5: 750
+  calc: overseas-1-5 양수
+- name: overseas-1-5-h2 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    channel: offline
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      overseas-1-5-h2: 750
+  calc: overseas-1-5-h2 양수
+- name: 반기별 한도와7월초기화
+  prev_month_spend: 500000
+  payments:
+  - at: 2027-06-01T12:00
+    amount: 4000000
+    payment_method: physical_card
+    region: overseas
+  - at: 2027-06-02T12:00
+    amount: 100000
+    payment_method: physical_card
+    region: overseas
+  - at: 2027-07-01T12:00
+    amount: 4000000
+    payment_method: physical_card
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      overseas-1-5: 60000
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits:
+      overseas-1-5-h2: 60000
+  calc: 반기별 한도와7월초기화
+- name: 100만원구간 영역별1만원
+  prev_month_spend: 1000000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: apartment_fee
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      regular-15: 10000
+  calc: 100만원구간 영역별1만원
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.
+- name: 최초 발급 특례
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    category: apartment_fee
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      regular-15: 5000
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: true
+- name: 만기·해지 재발급 특례 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    category: apartment_fee
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: false
+- name: 아파트관리비 실적 전액포함
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    category: apartment_fee
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      regular-15: 5000
+    counted: 50000
+  calc: 공식 전월실적 제외에 아파트관리비가 없으므로 할인5000을 받아도 결제50000 전액 실적포함.
+- name: 렌탈 자동납부와 일반결제
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: naver_pay
+    merchant: coway
+    billing: autopay
+  - at: 2026-10-07T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: coway
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      rental-15: 5000
+  - payment: 1
+    benefits: {}
+  calc: 자동납부 월5000 한도. 원문은 렌탈에 결제수단 제한이 없다. 자동납부가 아닌 일반 결제는 제외.
+- name: 도서 일반 온라인 결제와 인앱 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: naver_pay
+    merchant: millie
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: millie
+    channel: online
+    billing: in_app
+  expect:
+  - payment: 0
+    benefits:
+      book-15: 1500
+  - payment: 1
+    benefits: {}
+  calc: 도서는 인앱만제외. 일반온라인·간편결제에 임의 구독·물리카드 제한을 붙이지 않는다.
+- name: 다음해1월 반기한도 초기화
+  prev_month_spend: 500000
+  payments:
+  - at: 2027-12-01T12:00
+    amount: 4000000
+    payment_method: physical_card
+    region: overseas
+  - at: 2028-01-01T12:00
+    amount: 4000000
+    payment_method: physical_card
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      overseas-1-5-h2: 60000
+  - payment: 1
+    benefits:
+      overseas-1-5: 60000
+  calc: 하반기12월6만원 사용과 별개로 다음해1월 상반기 한도6만원 적용.
+- name: 통신사 인터넷·TV 할인 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: skt
+    category: telecom.internet_tv
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 휴대전화 전용 특별 혜택은 인터넷·TV에 적용하지 않는다. DAILY는 별도 기본1%만500원 적용.

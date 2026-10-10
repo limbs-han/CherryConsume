@@ -1,0 +1,35 @@
+schema_version: 2
+id: kb-07957
+issuer: kb
+name: 패밀리포인트 체크카드 (주)뉴부자관광
+kind: check
+product_codes:
+  - '07957'
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07957', fetched_at: &id001 2026-10-04}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    benefits:
+      - key: pointri-0-2
+        title: 가맹점 이용금액 0.2% 포인트리 적립
+        source: page
+        evidence: [가맹점 이용금액의 0.2% 포인트리 적립, 직전월 이용금액과 상관없이 가맹점 이용금액의 0.2%를 적립하여 드립니다., 포인트리는 적립월로부터 5년간 유효합니다., '이용금액이 1,000원 미만인 경우 포인트리 미적립되며 지방세 업종, 상품권 업종, 대학등록금 업종, 아파트관리비 업종 이용금액은 적립 제외됩니다.', '본 상품은 할부결제, 포인트리 복합결제, 바우처 복합결제는 적용되지 않습니다.']
+        target:
+          exclude_categories: [apartment_fee, education.tuition, gift_card, tax]
+          all: true
+        when:
+          - amount: {min: 1000}
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        unmodeled: [포인트리 적립 프로그램의 key가 포인트 목록에 없음, 할부결제·포인트리 복합결제·바우처 복합결제 등 결제수단 제외 규정은 현재 모델에 반영되지 않음]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 시행일을 찾지 못해 수집한 날로 두었다}
+  - {path: 'revisions[0]', question: 'benefits[pointri-0-2]: 한도를 적지 않았다. 원문에 한도가 없는지 확인한다'}
+  - {path: 'revisions[0].benefits[0].reward.program', question: '포인트리 적립 프로그램의 key는 무엇인가?'}
+  - {path: 'revisions[0]', question: 'benefits[0].limits: 포인트리 적립에 월간 한도 등이 있는가?'}
+  - {path: 'revisions[0]', question: 'benefits[0].reward.program를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: 가맹점 이용금액의 0.2% 포인트리 적립'}
+notes: 새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다.

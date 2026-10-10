@@ -1,0 +1,42 @@
+schema_version: 2
+id: hana-travelog-check
+issuer: hana
+name: 하나카드 트래블로그 체크카드
+short_name: 하나 트래블로그 체크
+search_names: [트래블로그 체크카드]
+kind: check
+product_codes:
+  - '15414'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15414', fetched_at: 2026-09-29, review_no: A-26-0332}
+checked_at: 2026-09-29
+revisions:
+  - effective_from: 2022-07-18
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefits:
+      - key: overseas-fee-free
+        title: 해외 가맹점 이용수수료 면제
+        evidence: [해외 가맹점 이용수수료 면제, 구분 | 해외서비스수수료 | 국제브랜드수수료, 해외 가맹점 이용 시 | 면제(건당 US$0.5) | 면제(이용금액의 1%), 지난달 실적에 관계없이 서비스 제공, 해외 이용금액은 하나카드 전산상 해외 가맹점 매출로 분류된 경우에 한함]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [건당 US$0.5 해외서비스수수료 면제는 달러 정액이라 계산하지 않는다]
+        notes: 해외 가맹점 결제 시 국제브랜드수수료(이용금액의 1%)와 해외서비스수수료(건당 US$0.5) 면제. 1%만 정률로 넣었다. 하나카드 전산상 해외 가맹점 매출로 분류된 건만. 해외 결제는 외화 하나머니 잔액에서만 나가므로 따로 조건을 달지 않았다. 실적과 한도 없음
+      - key: domestic-0-3p
+        title: 국내 가맹점 0.3% 하나머니 적립
+        evidence: [국내 가맹점 하나머니 적립 서비스, 서비스 내용 | 적립률 | 월 한도, 국내 가맹점 이용 시 | 0.3% | 없음, 지난달 실적에 관계없이 서비스 제공, 매출 접수된 국내 일시불 이용금액에 따라 적립 혜택을 제공하며 취소가 접수된 월에서 적립된 하나머니를 차감 반영, '국세, 지방세, 공과금(인터넷/모바일앱을통한 공과금 납부금액 포함),국민연금/고용보험료/산재보험료/건강보험료 납부금액,상품권 및 기프트카드 구매, 선불카드 및 선불전자지급수단(하나머니 등) 충전금액,수도/전기요금, 아파트관리비, 부동산임대료, 스쿨뱅킹, 도시가스 요금,대학등록금, 대학원등록금, 초·중·고 학교납입금, 국내외ATM이용금액은 적립 제외', '적립기준: 하나머니 (1하나머니=1원)', 소수점 이하 금액은 반올림]
+        target:
+          exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+          all: true
+        when:
+          - {region: domestic}
+        reward: {type: points, program: hana_money, rate: 0.3, round: round}
+        notes: 국내 가맹점 이용 시 0.3%, 월 한도 없음, 실적 무관. 매출 접수된 국내 일시불 이용금액 기준, 소수점 이하 반올림, 매출 접수 다음날 적립, 취소 접수 월에 차감
+notes: '하나머니 잔액으로 결제하는 하나머니 전용 체크카드. 국내는 원화 하나머니, 해외는 외화 하나머니 잔액에서 출금. 연회비 없음. 모든 혜택이 지난달 실적과 무관해 spend.basis를 none으로 둔다. 적립 제외: 국세, 지방세, 공과금, 4대보험료, 상품권·기프트카드, 선불카드·선불전자지급수단 충전, 수도·전기요금, 아파트관리비, 부동산임대료, 스쿨뱅킹, 도시가스요금, 대학·대학원 등록금, 초·중·고 납입금, 국내외 ATM 이용금액. 결제 건 혜택 아님: 외화 하나머니 무료 환전, 해외 ATM 인출 수수료 면제(해외인출수수료 건당 US$3, 국제브랜드수수료 1%). 해외원화결제(DCC) 불가. 국내 ATM 현금인출 불가. 신용·체크카드로 충전한 하나머니는 결제에 못 씀. 첫 개정 시행일 근거: page. 카드 출시 시기 2022-07-18. 하나카드 서비스변경안내 193건 전부와 주요공지 2021-03 이후 500건을 봤다. 이 카드의 부가서비스 변경 공지는 없고 2023-08-10 외화 하나머니 추가 출금·환급 통화 변경만 있다.'

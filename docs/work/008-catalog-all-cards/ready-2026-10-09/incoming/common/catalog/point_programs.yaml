@@ -1,0 +1,18 @@
+- {key: mysinhan_point, name: 마이신한포인트, won_per_point: 1}
+- {key: samsung_bigpoint, name: 삼성카드 빅포인트, won_per_point: 1}
+- {key: hyundai_m_point, name: 현대카드 M포인트, won_per_point: 1}
+- {key: hana_money, name: 하나머니, won_per_point: 1}
+- {key: woori_moa_point, name: 우리카드 모아포인트, won_per_point: 1}
+- {key: npay_point, name: 네이버페이 포인트, won_per_point: 1}
+- {key: nol_point, name: NOL 포인트, won_per_point: 1}
+- {key: kb_pointree, name: KB국민카드 포인트리, won_per_point: 1}
+- {key: lotte_lpoint, name: 롯데 L.POINT, won_per_point: 1}
+- {key: nh_point, name: NH포인트, won_per_point: 1}
+- {key: eco_money, name: 에코머니, won_per_point: 1}
+- {key: happy_point, name: 해피포인트, won_per_point: 1}
+- {key: shinsegae_point, name: 신세계포인트, won_per_point: 1}
+- {key: bc_top_point, name: BC카드 TOP포인트, won_per_point: 1}
+- {key: ibk_point, name: IBK포인트, won_per_point: 1}
+- {key: ok_cashbag, name: OK캐쉬백, won_per_point: 1}
+- {key: baemin_point, name: 배민포인트, won_per_point: 1}
+- {key: eleven_pay_point, name: 11PAY 포인트, won_per_point: 1}

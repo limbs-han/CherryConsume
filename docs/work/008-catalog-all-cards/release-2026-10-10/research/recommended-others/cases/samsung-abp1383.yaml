@@ -1,0 +1,226 @@
+card: samsung-abp1383
+cases:
+- name: 연간 300만원 미달 기본률
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: other
+  - at: 2026-10-07T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      general-cashback-low: 200
+  - payment: 1
+    benefits:
+      food-gas-discount-cashback-low: 300
+  calc: 연간 300만원 미달 기본률
+  holder:
+    facts:
+      annual-spend-high: false
+      three-month-average-high: false
+- name: 연간 300만원 달성 다음날
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: other
+  - at: 2026-10-07T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      general-cashback-high: 400
+  - payment: 1
+    benefits:
+      food-gas-discount-cashback-high: 600
+  calc: 연간 300만원 달성 다음날
+  holder:
+    facts:
+      annual-spend-high: true
+      three-month-average-high: false
+- name: CGV online 연3회·최소금액
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 1999
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-08T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-09T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-10T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      general-cashback-low: 3
+  - payment: 1
+    benefits: &id001
+      cgv-online: 3000
+      general-cashback-low: 4
+  - payment: 2
+    benefits: *id001
+  - payment: 3
+    benefits: *id001
+  - payment: 4
+    benefits:
+      general-cashback-low: 4
+  calc: 할인전 5000원은 입력 2000원. 채널별 연3회 각각 3000. 캐시백은 실제 출금액 2000×0.2%=4를 함께 적용하며 POINT는
+    삼성 할인 이용금액 제외. 네번째는 기본 4원.
+  holder:
+    facts:
+      annual-spend-high: false
+      three-month-average-high: true
+- name: CGV offline 연3회·최소금액
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 1999
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  - at: 2026-10-07T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  - at: 2026-10-08T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  - at: 2026-10-09T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  - at: 2026-10-10T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      general-cashback-low: 3
+  - payment: 1
+    benefits: &id002
+      cgv-offline: 3000
+      general-cashback-low: 4
+  - payment: 2
+    benefits: *id002
+  - payment: 3
+    benefits: *id002
+  - payment: 4
+    benefits:
+      general-cashback-low: 4
+  calc: 할인전 5000원은 입력 2000원. 채널별 연3회 각각 3000. 캐시백은 실제 출금액 2000×0.2%=4를 함께 적용하며 POINT는
+    삼성 할인 이용금액 제외. 네번째는 기본 4원.
+  holder:
+    facts:
+      annual-spend-high: false
+      three-month-average-high: true
+- name: 온라인·현장 각각 일1회·연3회
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-06T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  - at: 2026-10-07T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  - at: 2026-10-10T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-10T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  - at: 2026-10-11T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: online
+  - at: 2026-10-11T12:00
+    amount: 2000
+    payment_method: physical_card
+    merchant: cgv
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      cgv-online: 3000
+      general-cashback-low: 4
+  - payment: 1
+    benefits:
+      cgv-offline: 3000
+      general-cashback-low: 4
+  - payment: 2
+    benefits:
+      cgv-online: 3000
+      general-cashback-low: 4
+  - payment: 3
+    benefits:
+      cgv-offline: 3000
+      general-cashback-low: 4
+  - payment: 4
+    benefits:
+      cgv-online: 3000
+      general-cashback-low: 4
+  - payment: 5
+    benefits:
+      cgv-offline: 3000
+      general-cashback-low: 4
+  - payment: 6
+    benefits:
+      general-cashback-low: 4
+  - payment: 7
+    benefits:
+      general-cashback-low: 4
+  calc: 공식 문구 각 일1회 연3회. 같은 날 온라인·현장 각1회, 세 날 각3회까지. POINT는 할인건 적립 제외, CASHBACK은 실결제액
+    2000의0.2%=4.
+  holder:
+    facts:
+      annual-spend-high: false
+      three-month-average-high: true

@@ -1,0 +1,252 @@
+card: shinhan-bggc7q
+cases:
+- name: transport-5pct 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    category: transit.bus_city
+    billing: postpaid_transit
+  expect:
+  - payment: 0
+    benefits:
+      transport-5pct: 1000
+  calc: transport-5pct 양수
+- name: telecom-2k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: skt
+    billing: autopay
+    category: telecom.mobile
+  expect:
+  - payment: 0
+    benefits:
+      telecom-2k: 2000
+  calc: telecom-2k 양수
+- name: cgv-5k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: cgv
+  expect:
+  - payment: 0
+    benefits:
+      cgv-5k: 5000
+  calc: cgv-5k 양수
+- name: convenience-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: gs25
+  expect:
+  - payment: 0
+    benefits:
+      convenience-1k: 1000
+  calc: convenience-1k 양수
+- name: cafe-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      cafe-1k: 1000
+  calc: cafe-1k 양수
+- name: cafe-offline-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: twosome
+  expect:
+  - payment: 0
+    benefits:
+      cafe-offline-1k: 1000
+  calc: cafe-offline-1k 양수
+- name: fastfood-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: kfc
+  expect:
+  - payment: 0
+    benefits:
+      fastfood-1k: 1000
+  calc: fastfood-1k 양수
+- name: delivery-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: ddangyo
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      delivery-1k: 1000
+  calc: delivery-1k 양수
+- name: living-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: olive_young
+  expect:
+  - payment: 0
+    benefits:
+      living-1k: 1000
+  calc: living-1k 양수
+- name: living-daiso-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: daiso
+  expect:
+  - payment: 0
+    benefits:
+      living-daiso-1k: 1000
+  calc: living-daiso-1k 양수
+- name: ott-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: netflix
+    channel: online
+    billing: subscription
+  expect:
+  - payment: 0
+    benefits:
+      ott-1k: 1000
+  calc: ott-1k 양수
+- name: online-1k 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      online-1k: 1000
+  calc: online-1k 양수
+- name: simplepay-1pct 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+  expect:
+  - payment: 0
+    benefits:
+      simplepay-1pct: 200
+  calc: simplepay-1pct 양수
+- name: overseas-1-2pct 양수
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      overseas-1-2pct: 240
+  calc: overseas-1-2pct 양수
+- name: 통합5000원과 간편결제 중복 없음
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+    merchant: cgv
+  - at: 2026-10-07T12:00
+    amount: 20000
+    payment_method: shinhan_sol_pay
+  expect:
+  - payment: 0
+    benefits:
+      cgv-5k: 5000
+  - payment: 1
+    benefits: {}
+  calc: 통합5000원과 간편결제 중복 없음
+- name: 20만원 미만 해외만
+  prev_month_spend: 199999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: cu
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    region: overseas
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits:
+      overseas-1-2pct: 120
+  calc: 20만원 미만 해외만
+- name: 세금 실적포함과 일반 결제 전액실적
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  - payment: 1
+    benefits: {}
+    counted: 10000
+  calc: 공식 지난달 이용금액 제외는 연회비·선불카드·상품권 등이며 세금은 혜택만 제외. 세금 10000과 일반 10000 모두 실적에 포함한다.
+- name: 통신사 인터넷·집전화 제외
+  prev_month_spend: 200000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: skt
+    category: telecom.internet_tv
+    billing: autopay
+  - at: 2026-10-07T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: skt
+    category: telecom.mobile
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits:
+      telecom-2k: 2000
+  calc: 통신사라도 인터넷·집전화는 제외. 휴대전화 자동납부50000원에만 월1회2000원 적용한다.

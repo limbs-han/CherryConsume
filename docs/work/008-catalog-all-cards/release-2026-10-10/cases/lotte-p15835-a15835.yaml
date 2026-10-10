@@ -1,0 +1,56 @@
+card: lotte-p15835-a15835
+cases:
+- name: 국내·해외 기본률과 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+  - at: 2026-10-07T12:00
+    amount: 100000
+    payment_method: physical_card
+    region: overseas
+  - at: 2026-10-08T12:00
+    amount: 100000
+    payment_method: physical_card
+    interest_free: true
+  - at: 2026-10-09T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-10T12:00
+    amount: 50000
+    payment_method: physical_card
+    category: transit.bus_city
+  expect:
+  - payment: 0
+    benefits:
+      domestic-1-2: 1200
+  - payment: 1
+    benefits:
+      overseas-2: 2000
+  - payment: 2
+    benefits: {}
+  - payment: 3
+    benefits: {}
+  - payment: 4
+    benefits: {}
+  calc: 국내 100000×1.2%=1200, 해외 ×2%=2000. 무이자·세금·대중교통은 제외.
+- name: 초중고만 제외하고 유치원 포함
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: education.primary_secondary_fee
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: education.kindergarten
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits:
+      domestic-1-2: 120
+  calc: 공식 제외는 초중고 납입금. 유치원10000×1.2%=120. 초중고는 제외.

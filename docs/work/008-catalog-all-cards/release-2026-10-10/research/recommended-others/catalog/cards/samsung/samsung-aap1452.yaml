@@ -1,0 +1,28 @@
+schema_version: 2
+id: samsung-aap1452
+issuer: samsung
+name: 삼성카드 & MILEAGE PLATINUM (스카이패스)
+kind: credit
+product_codes: [AAP1452]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 47000}
+  - {scope: global, brand: amex, amount: 49000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1452', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtiGRSppSl5zZDu8FkdbgiP8%3D&sn=2', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: cancel_month}
+    new_card: null
+    benefits: []
+    unmodeled: [전월실적·한도 없이 모든 가맹점1000원당 스카이패스1마일 기본 적립. 카드사 접수 결제금액을1000원으로 나눈 뒤 소수점 반올림하고 마일을 적용한다. 원화가치와 단위 반올림을 현재 계산 모델로 표현하지 못하므로 합계 미포함이며 실제 적립0이라는 뜻이 아니다., '특별 적립은1000원당2마일, 통합 월2000마일 한도이며 초과분 기본1마일. 국내형·해외형 중 택1. 홈페이지·앱에서 매월 변경하고 다음달1일 반영.', 해외형은 해외겸용카드의 해외 가맹점·해외 직접구매만. 국내PG 승인 해외온라인 제외. 현지 승인일을 삼성카드에 접수한 기준으로 적용., '국내형은 신세계·롯데·현대·갤러리아·동아·대구백화점·AK플라자·NC대전유성점, 모든 주유소·LPG충전소, 스타벅스·카페베네·커피빈·할리스 등 커피업종, CU·GS25·세븐일레븐 등 편의점업종, 택시. 백화점 임대·식품매장 제외.', 무이자·다이어트할부·삼성카드 할인이 적용된 매출·고용산재보험·고용부담금·세금공과금·대학등록금·대중교통·고속버스·통행료·선불충전·휴대폰알림·스마트오토·이마트이클럽·약품유류 구매한도 계약·페이백서비스 제외. 본 상품은 택시는 예외로 적립한다., 해외겸용 Amex PLATINUM 국제브랜드 서비스는 별도 서비스 안내장 제공조건을 확인한다. 금액 합계 미포함. 해외브랜드1.4%·해외이용0.2% 수수료 발생. 수수료 할인 서비스가 아니다.]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 결제금액÷1000을 먼저 반올림하고 선택 옵션별1·2마일을 적용하는 방식과 마일리지 단위를 보존할 계산 모델이 필요하다.}
+  - {path: 'revisions[0].unmodeled', question: 스카이패스 원화 환산 가치는 공식 약관에 고정되어 있지 않다. 사용자 가치 입력 또는 금액과 분리된 마일리지 결과 표시가 필요하다.}
+  - {path: 'revisions[0].effective_from', question: 현행 전체 조건의 시작일을 확인하지 못해 원문 수집일로 두었다., assumed: '2026-10-05'}
+notes: 1000원 단위로 먼저 반올림한 뒤 1·2마일을 적립하는 규칙과 스카이패스의 원화 가치를 현재 모델로 정확히 계산할 수 없다. 임의의 1마일 가치나 0원 혜택으로 등록하지 않는다. 확인된 핵심 혜택은 조건 안내로 전부 보존했다. 운영 반영 대상에서 제외한다.

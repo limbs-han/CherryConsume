@@ -1,0 +1,126 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "galleria_department",
+      "name": "갤러리아백화점",
+      "category": "department_store",
+      "aliases": [
+        "갤러리아백화점"
+      ]
+    },
+    "card_id": "nh-f10774",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010505",
+    "evidence": "- 백 화 점 : 신세계, 롯데, 현대, 갤러리아, AK플라자"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ak_plaza",
+      "name": "AK플라자",
+      "category": "department_store",
+      "aliases": [
+        "AK플라자"
+      ]
+    },
+    "card_id": "nh-f10774",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010505",
+    "evidence": "- 백 화 점 : 신세계, 롯데, 현대, 갤러리아, AK플라자"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "paris_croissant",
+      "name": "파리크라상",
+      "category": "restaurant.bakery",
+      "aliases": [
+        "파리크라상"
+      ]
+    },
+    "card_id": "nh-f10779",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010507",
+    "evidence": "베이커리/아이스크림 | 파리바게뜨, 파리크라상, 던킨도너츠, 베스킨라빈스 | 10%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lalavla",
+      "name": "랄라블라",
+      "category": "beauty.cosmetics",
+      "aliases": [
+        "랄라블라"
+      ]
+    },
+    "card_id": "nh-f20004",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010030",
+    "evidence": "올리브영, 랄라블라 4% 할인"
+  },
+  {
+    "file": "payment_methods.yaml",
+    "definition": {
+      "key": "sk_pay",
+      "name": "SK페이"
+    },
+    "card_id": "nh-f10085",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010178",
+    "evidence": "삼성페이, 네이버페이, 카카오페이, 쿠페이, 스마일페이, 배민페이, SSG페이, L페이, SK페이, 페이코"
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "pharmaceutical",
+      "name": "제약업종"
+    },
+    "card_id": "nh-f10085",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010178",
+    "evidence": "제약업종(의약품 전용몰 등 포함)의 온라인 간편결제건은 본 서비스가 적용되지 않으며, 국내/해외 전 가맹점 할인서비스가 제공됩니다."
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "golf",
+      "name": "골프장·골프연습장"
+    },
+    "card_id": "nh-f10067",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010118",
+    "evidence": "골프장 및 골프연습장(스크린 골프연습장 포함)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "nonghyup_mall",
+      "name": "농협몰",
+      "category": "online_shopping",
+      "aliases": [
+        "농협몰"
+      ]
+    },
+    "card_id": "nh-f10067",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010118",
+    "evidence": "온라인쇼핑 | 쿠팡, G마켓, 11번가, 티켓몬스터, SSG.COM, 농협몰"
+  },
+  {
+    "file": "categories.yaml",
+    "definition": {
+      "code": "golf",
+      "name": "골프장·골프연습장"
+    },
+    "card_id": "nh-f10068",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010119",
+    "evidence": "골프장 및 골프연습장(스크린 골프연습장 포함)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "nonghyup_mall",
+      "name": "농협몰",
+      "category": "online_shopping",
+      "aliases": [
+        "농협몰"
+      ]
+    },
+    "card_id": "nh-f10068",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010119",
+    "evidence": "온라인쇼핑 | 쿠팡, G마켓, 11번가, 티켓몬스터, SSG.COM, 농협몰"
+  }
+]

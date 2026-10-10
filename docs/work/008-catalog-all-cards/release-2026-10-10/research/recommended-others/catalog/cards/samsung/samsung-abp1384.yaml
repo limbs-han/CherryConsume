@@ -1,0 +1,104 @@
+schema_version: 2
+id: samsung-abp1384
+issuer: samsung
+name: 삼성체크카드 & POINT
+kind: check
+product_codes: [ABP1384]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1384', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtq8MFWUCS2fcFFhXMhoOsZc%3D&sn=1', fetched_at: 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: cancel_month, exclude_applied: 0}
+    new_card: null
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.tuition, prepaid_charge, tax, taxi, transit.bus_city, transit.subway, utility]
+      unmodeled: ['고용·산재보험 및 장애인 고용부담금, 휴대폰알림·스마트오토·이마트 이클럽 이용금액 제외', 일부 임대·식품매장 및 이마트 에브리데이 상품공급점 제외, 포인트 사용금액 제외, '삼성카드 할인이 적용된 거래 및 다이어트할부, 보너스클럽과 중복되면 높은 포인트 하나만 적용']
+    facts:
+      - {key: annual-spend-high, type: bool, scope: card, ask: '발급월부터 12개월 안 누적 이용금액 300만원을 달성한 다음 날 이후이고 해당 발급주년 기간이 아직 끝나지 않았나요?'}
+      - {key: three-month-average-high, type: bool, scope: card, ask: '직전 3개월 월평균 이용금액이 30만원 이상인가요?'}
+    benefits:
+      - key: general-point-low
+        title: 일반 가맹점 0.2% 빅포인트 적립
+        source: manual
+        evidence: [일반 가맹점 | 0.2% | 0.4%, 음식점/주유/할인점 | 0.4% | 0.8%, 누적 이용금액 300만원 도달 다음 날부터 상향된 적립률이 적용됩니다.]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 0.2}
+      - key: food-gas-discount-point-low
+        title: 음식점·주유·할인점 0.4% 빅포인트 적립
+        source: manual
+        evidence: [일반 가맹점 | 0.2% | 0.4%, 음식점/주유/할인점 | 0.4% | 0.8%, 누적 이용금액 300만원 도달 다음 날부터 상향된 적립률이 적용됩니다.]
+        target:
+          categories: [fuel, restaurant]
+          merchants: [emart, emart_everyday, homeplus, lotte_mart, traders, vic_market]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 0.4}
+      - key: general-point-high
+        title: 일반 가맹점 연간 300만원 달성 이후 0.4% 빅포인트 적립
+        source: manual
+        evidence: [일반 가맹점 | 0.2% | 0.4%, 음식점/주유/할인점 | 0.4% | 0.8%, 누적 이용금액 300만원 도달 다음 날부터 상향된 적립률이 적용됩니다.]
+        target: {all: true}
+        when:
+          - {fact: annual-spend-high}
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 0.4}
+      - key: food-gas-discount-point-high
+        title: 음식점·주유·할인점 연간 300만원 달성 이후 0.8% 빅포인트 적립
+        source: manual
+        evidence: [일반 가맹점 | 0.2% | 0.4%, 음식점/주유/할인점 | 0.4% | 0.8%, 누적 이용금액 300만원 도달 다음 날부터 상향된 적립률이 적용됩니다.]
+        target:
+          categories: [fuel, restaurant]
+          merchants: [emart, emart_everyday, homeplus, lotte_mart, traders, vic_market]
+        when:
+          - {fact: annual-spend-high}
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 0.8}
+      - key: cgv-online
+        title: CGV 3000원 즉시할인
+        source: manual
+        evidence: ['CGV 홈페이지 및 스마트폰 App을 통한 예매 시 3,000원 즉시할인 CGV 현장 결제 시 3,000원 현장할인', '5,000원 이상 결제 시 제공됩니다.', '직전 3개월 월평균 이용금액 30만원 이상 시 각 일 1회, 연 3회 제공됩니다.']
+        target:
+          merchants: [cgv]
+        when:
+          - {fact: three-month-average-high}
+          - {channel: online}
+          - amount: {min: 5000}
+        reward: {type: onsite_discount, fixed: 3000}
+        limits:
+          - {per: day, count: 1}
+          - {per: year, count: 3}
+        unmodeled: [할인 전 5000원 이상 영화 티켓만 해당한다, 온라인은 CGV 공식 홈페이지·스마트폰 앱 예매만 적용하며 다른 삼성카드 할인과 중복이면 큰 금액 하나만 적용]
+      - key: cgv-offline
+        title: CGV 3000원 현장할인
+        source: manual
+        evidence: ['CGV 홈페이지 및 스마트폰 App을 통한 예매 시 3,000원 즉시할인 CGV 현장 결제 시 3,000원 현장할인', '5,000원 이상 결제 시 제공됩니다.', '직전 3개월 월평균 이용금액 30만원 이상 시 각 일 1회, 연 3회 제공됩니다.']
+        target:
+          merchants: [cgv]
+        when:
+          - {fact: three-month-average-high}
+          - {channel: offline}
+          - amount: {min: 5000}
+        reward: {type: onsite_discount, fixed: 3000}
+        limits:
+          - {per: day, count: 1}
+          - {per: year, count: 3}
+        unmodeled: [할인 전 5000원 이상 영화 티켓만 해당한다, 온라인은 CGV 공식 홈페이지·스마트폰 앱 예매만 적용하며 다른 삼성카드 할인과 중복이면 큰 금액 하나만 적용]
+    unmodeled: [발급월부터 12개월 이용금액 300만원 도달 다음날부터 해당 발급주년 기간 종료까지 상향률. 사용자가 카드사 확인 후 사실 질문에 답하며 매 발급주년마다 갱신한다, 국내가맹점 기본 적립·캐시백 서비스다. 해외는 본 서비스 대상에 포함하지 않는다, '지정 놀이공원 자유이용권 50%, 워터파크 입장권 30% 현장할인. 직전 3개월 월평균 30만원 이상, 일 1회·연 5회. 적용 공원과 지정 입장권·개인 구매분을 확인해야 하므로 금액 합계에는 넣지 않는다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일과 다르다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].facts', question: Fact.scope는 user/card만 허용하며 app/lib/engine/cond.dart는 가장 최근 FactPick을 만료일 없이 재사용한다. txn scope와 payment facts를 현재 모델에 넣을 수 없다. 동적 조건의 자동 기간전환을 지원해야 한다.}
+  - {path: 'revisions[0].facts', question: Fact.scope는 user/card만 허용하며 app/lib/engine/cond.dart는 가장 최근 FactPick을 만료일 없이 재사용한다. txn scope와 payment facts를 현재 모델에 넣을 수 없다. 동적 조건의 자동 기간전환을 지원해야 한다.}
+notes: '2026-10-10 공식 원문 대조. 안내만 보존한 추가 서비스는 계산 합계에 포함하지 않는다. 상품출시일은 2014-03-10이며 현행 조건 전체의 시행일 근거로 사용하지 않았다. 부모 독립 검토 결정: 현재 모델은 fact scope user/card만 지원한다. 연간300만원 상향·직전3개월 평균 조건은 변하는데 카드 사실 답의 자동만료가 없어 과거 true를 다음 기간에도 재사용할 수 있다. 결제별 사실 또는 기간 만료 기능 지원 전 이번 승인 제외. 부모 독립 검토 결정: 현재 모델은 fact scope user/card만 지원한다. 연간300만원 상향·직전3개월 평균 조건은 변하는데 카드 사실 답의 자동만료가 없어 과거 true를 다음 기간에도 재사용할 수 있다. 결제별 사실 또는 기간 만료 기능 지원 전 이번 승인 제외.'

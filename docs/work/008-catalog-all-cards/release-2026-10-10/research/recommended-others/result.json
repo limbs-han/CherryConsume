@@ -1,0 +1,164 @@
+[
+  {
+    "card_id": "shinhan-bubdgr",
+    "status": "blocked",
+    "reason": "부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 계산 기능을 별도 작업으로 지원한 뒤 다시 확인해야 한다.",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html"
+    ],
+    "case_count": 9
+  },
+  {
+    "card_id": "shinhan-pobdhm",
+    "status": "blocked",
+    "reason": "부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 계산 기능을 별도 작업으로 지원한 뒤 다시 확인해야 한다.",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1226114_2206.html",
+      "https://www.shinhancard.com/pconts/html/benefit/event/1235354_2239.html"
+    ],
+    "case_count": 10
+  },
+  {
+    "card_id": "shinhan-bggc7q",
+    "status": "blocked",
+    "reason": "부모 독립 검토 결정: 모바일 후불교통과 실물카드의 실적 반영월 차이를 입력 payment_method로 구별할 수 있으나 현재 엔진은 업종별 month_offset만 지원한다. 금액·실적 오류 가능성이 있어 이번 승인 묶음에서 제외. 통신 인터넷·집전화 제외 수정과 나머지 조건·사례를 후속 자료로 보존.",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html"
+    ],
+    "case_count": 18
+  },
+  {
+    "card_id": "woori-500054",
+    "status": "blocked",
+    "reason": "공식 본문에 전월 국내 20만원·건당 1000원은 있으나 영역별·통합 월 한도 표의 금액이 수집되지 않았다. 무제한으로 계산하면 과다 지급하므로 계산 등록 보류.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500054"
+    ],
+    "case_count": 0
+  },
+  {
+    "card_id": "woori-500055",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500055"
+    ],
+    "case_count": 14
+  },
+  {
+    "card_id": "woori-103489",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103489"
+    ],
+    "case_count": 12
+  },
+  {
+    "card_id": "woori-500044",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500044"
+    ],
+    "case_count": 3
+  },
+  {
+    "card_id": "woori-500045",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500045"
+    ],
+    "case_count": 22
+  },
+  {
+    "card_id": "woori-500058",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500058"
+    ],
+    "case_count": 19
+  },
+  {
+    "card_id": "lotte-c12833-a12833",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12833-A12833",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00015_20260715_10006.pdf"
+    ],
+    "case_count": 8
+  },
+  {
+    "card_id": "lotte-p14718-a14718",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14718-A14718",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00032_20260928_10002.pdf"
+    ],
+    "case_count": 1
+  },
+  {
+    "card_id": "lotte-p14728-a14728",
+    "status": "blocked",
+    "reason": "부모 독립 검토 결정: 지정 온라인쇼핑8개 가맹점 이용금액은 전월실적 제외이나 현재 Spend에 exclude_merchants가 없어 입력 가맹점으로 구별 가능한 제외를 계산하지 못한다. 해당 기능 지원 전 이번 승인 제외. 무이자실적 제외는 수정했다.",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14728-A14728",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00035_20260928_10005.pdf"
+    ],
+    "case_count": 10
+  },
+  {
+    "card_id": "lotte-p15835-a15835",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15835-A15835",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00005_20260424_10001.pdf"
+    ],
+    "case_count": 2
+  },
+  {
+    "card_id": "samsung-abp1689",
+    "status": "ready",
+    "reason": "공식 혜택·실적·연회비·신규·한도·중복·제외 조건을 대조하고 모든 계산 혜택의 양수 및 주요 경계 손계산을 통과했다. 필요한 공통 정의 반영과 부모 독립 검토 후 운영 반영 가능.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1"
+    ],
+    "case_count": 21
+  },
+  {
+    "card_id": "samsung-abp1383",
+    "status": "blocked",
+    "reason": "부모 독립 검토 결정: 현재 모델은 fact scope user/card만 지원한다. 연간300만원 상향·직전3개월 평균 조건은 변하는데 카드 사실 답의 자동만료가 없어 과거 true를 다음 기간에도 재사용할 수 있다. 결제별 사실 또는 기간 만료 기능 지원 전 이번 승인 제외.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1383",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtt%2FCVin7XowUF9Aumz%2Fca70%3D&sn=1"
+    ],
+    "case_count": 5
+  },
+  {
+    "card_id": "samsung-abp1384",
+    "status": "blocked",
+    "reason": "부모 독립 검토 결정: 현재 모델은 fact scope user/card만 지원한다. 연간300만원 상향·직전3개월 평균 조건은 변하는데 카드 사실 답의 자동만료가 없어 과거 true를 다음 기간에도 재사용할 수 있다. 결제별 사실 또는 기간 만료 기능 지원 전 이번 승인 제외.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1384",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtq8MFWUCS2fcFFhXMhoOsZc%3D&sn=1"
+    ],
+    "case_count": 5
+  },
+  {
+    "card_id": "samsung-aap1452",
+    "status": "blocked",
+    "reason": "1000원 단위로 먼저 반올림한 뒤 1·2마일을 적립하는 규칙과 스카이패스의 원화 가치를 현재 모델로 정확히 계산할 수 없다. 임의의 1마일 가치나 0원 혜택으로 등록하지 않는다.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1452",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtiGRSppSl5zZDu8FkdbgiP8%3D&sn=2"
+    ],
+    "case_count": 0
+  }
+]

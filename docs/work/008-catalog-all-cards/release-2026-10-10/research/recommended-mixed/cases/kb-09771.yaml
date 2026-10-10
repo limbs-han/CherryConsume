@@ -1,0 +1,254 @@
+card: kb-09771
+cases:
+- name: daily-fuel 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: daily
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: electric_vehicle_charge
+  expect:
+  - payment: 0
+    benefits:
+      daily-fuel: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: daily-delivery 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: daily
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: kb_pay
+    category: other
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      daily-delivery: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: daily-telecom 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: daily
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: kt
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      daily-telecom: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: daily-insurance-app 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: daily
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: app_store
+  expect:
+  - payment: 0
+    benefits:
+      daily-insurance-app: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: daily-shopping 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: daily
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: kb_pay
+    category: other
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      daily-shopping: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: daily-convenience 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: daily
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: cu
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      daily-convenience: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: daily-hobby 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: daily
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: beauty.salon
+  expect:
+  - payment: 0
+    benefits:
+      daily-hobby: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: family-bills 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: family
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: apartment_fee
+  expect:
+  - payment: 0
+    benefits:
+      family-bills: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: family-grocery 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: family
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: kb_pay
+    category: other
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      family-grocery: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: family-care 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: family
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: beauty.salon
+  expect:
+  - payment: 0
+    benefits:
+      family-care: 1000
+  calc: 10000 곱하기 10% = 1000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: family-academy 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: family
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: education.academy
+  expect:
+  - payment: 0
+    benefits:
+      family-academy: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: family-mart 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: family
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 50000
+    payment_method: physical_card
+    category: other
+    merchant: emart
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      family-mart: 2500
+  calc: 50000 곱하기 5% = 2500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: family-cafe 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: family
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: cafe
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      family-cafe: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: family-kids-cafe 대상 거래 양수 검증
+  prev_month_spend: 1600000
+  holder:
+    options:
+    - option: pack
+      choice: family
+      effective_from: '2026-10-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: kids_cafe
+  expect:
+  - payment: 0
+    benefits:
+      family-kids-cafe: 500
+  calc: 10000 곱하기 5% = 500. 이 검증은 미지원 핵심조건을 검증하지 않는다.

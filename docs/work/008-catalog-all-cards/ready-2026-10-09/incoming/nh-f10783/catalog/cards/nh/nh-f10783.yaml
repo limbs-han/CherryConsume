@@ -1,0 +1,187 @@
+schema_version: 2
+id: nh-f10783
+issuer: nh
+name: zgm 할인카드
+short_name: zgm 할인카드
+kind: credit
+product_codes:
+  - '90010515'
+status: on_sale
+annual_fees:
+  - {scope: domestic, form: mobile, amount: 21000}
+  - {scope: domestic, form: physical, amount: 27000}
+  - {scope: global, brand: visa, form: mobile, amount: 24000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 24000}
+  - {scope: global, brand: visa, form: physical, amount: 30000}
+  - {scope: global, brand: mastercard, form: physical, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010515', fetched_at: '2026-10-04', text_sha256: dd270b27c14ac72f11bfb7e6631afbe2fb4c4ed9002789a9fff8f946a265b514}
+checked_at: '2026-10-09'
+revisions:
+  - effective_from: '2026-10-04'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 400000
+      tier_by_benefit: {living-delivery-10: 0, living-digital-30: 0, living-insurance-10: 0, living-mart-10: 0, living-pet-10: 0, living-telecom-10: 0, living-utility-10: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      unmodeled: [별도 가맹점번호로 승인된 일부 간편결제·PG 결제와 입점 임대매장은 대상 업종으로 식별되지 않아 서비스 제외될 수 있다., 다른 NH농협카드 할인 행사와 겹치면 큰 금액의 혜택만 제공한다.]
+    limits:
+      - {key: basic, per: month, amount: 40000}
+      - {key: basic-day, per: day, amount: 10000}
+      - {key: living, per: month, amount: 20000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: basic-domestic-1
+        title: 국내 전 가맹점 1% 청구할인
+        source: page
+        evidence: [국내 전 가맹점 1% 청구할인]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: basic}
+          - {shared: basic-day}
+        tiers: {from: 400000}
+      - key: basic-nhpay-2
+        title: NH페이 국내 온라인 2% 청구할인
+        source: page
+        evidence: [NH페이 국내 온라인 2% 청구할인]
+        target: {all: true}
+        when:
+          - region: domestic
+            channel: online
+            payment: [nh_pay]
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: basic}
+          - {shared: basic-day}
+        tiers: {from: 400000}
+      - key: basic-overseas-2
+        title: 해외 전 가맹점 2% 청구할인
+        source: page
+        evidence: [해외 전 가맹점 2% 청구할인]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: basic}
+          - {shared: basic-day}
+        tiers: {from: 400000}
+      - key: living-utility-10
+        title: 공과금 자동납부 10%
+        source: page
+        evidence: [공과금 자동납부 10%]
+        target:
+          categories: [apartment_fee, utility.electricity, utility.gas]
+        when:
+          - billing: [autopay]
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: living-telecom-10
+        title: 이동통신 자동납부 10%
+        source: page
+        evidence: [이동통신 자동납부 10%]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: living-delivery-10
+        title: 새벽배송 10%
+        source: page
+        evidence: [새벽배송 10%]
+        target:
+          merchants: [coupang, kurly, oasis_market]
+        when:
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: living-mart-10
+        title: 대형마트 오프라인 10%
+        source: page
+        evidence: [대형마트 오프라인 10%]
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {channel: offline}
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: living-insurance-10
+        title: 민간 생명·손해보험 10%
+        source: page
+        evidence: [민간 생명·손해보험 10%]
+        target:
+          categories: [insurance.private]
+        when:
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: living-pet-10
+        title: 반려동물·동물병원 10%
+        source: page
+        evidence: [반려동물·동물병원 10%]
+        target:
+          categories: [pet]
+        when:
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: living}
+        tiers: {from: 400000}
+      - key: living-digital-30
+        title: 디지털구독 정기결제 30%
+        source: page
+        evidence: [디지털구독 정기결제 30%]
+        target:
+          merchants: [netflix, tving, wavve, youtube_premium]
+        when:
+          - billing: [subscription]
+            billing_not: [in_app]
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: living}
+        tiers: {from: 400000}
+        unmodeled: [대상 가맹점 공식 홈페이지 또는 앱에서 이 카드로 월 이용권을 직접 정기결제한 건만 제공한다. 이외 결제방법과 일부 페이 결제는 제외되지만 원문에 제외할 페이 이름은 없다.]
+    unmodeled: ['실적과 혜택에서 과태료·범칙금, 우체국 우편요금, 가상화폐 거래소, 카드대출, 수수료·이자·연체료, 포인트 사용분은 제외한다.', 해외와 교통·통신료 등 무승인 결제는 매출표 접수일 기준으로 실적에 넣는다. 취소는 취소 매출표 접수월 실적에서 차감한다., 가족카드는 실적과 횟수·한도를 본인카드와 별도로 계산한다., '더라운지 앱 공항라운지 국내외 합산 월 1회·연 2회. 전월실적 40만원 이상, 등록월 제외. 본인·가족 각각 제공. 당일 탑승권·여권 필요. 발급한 이용권은 24시간 내 사용해야 한다.', '국제브랜드 발레파킹 선택서비스는 전월실적 30만원 이상, 등록월 제외.', 공과금 중 전기요금은 주택용만 해당한다.]
+open_questions:
+  - {path: 'revisions[0].benefits[living-digital-30].when', question: 디지털구독에서 제외하는 일부 페이 결제수단 이름을 추가 확인해야 한다. 원문에 특정 이름이 없다., assumed: 정기결제와 인앱 제외는 실행하며 공식 사이트 직접결제 여부와 미상 페이는 확인 필요 조건으로 표시한다.}
+notes: 수집된 공식 상품 페이지의 현재 조건을 대조했다. 과거 시행일을 확인하지 못해 수집일을 추정 적용일로 사용했다.

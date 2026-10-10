@@ -1,0 +1,96 @@
+schema_version: 2
+id: nh-f10779
+issuer: nh
+name: KT할부 Plus NH농협카드
+kind: credit
+product_codes: [F10779]
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010507', fetched_at: &id001 2026-10-04}
+checked_at: *id001
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    limits:
+      - {key: kt-integrated-monthly, per: month, amount: 10000}
+    benefits:
+      - key: kt-light-discount-10k
+        title: KT 라이트할부 10,000원 할인
+        evidence: [전월실적 40만원 이상 ~80만원 미만 | 할인금액 1만원]
+        target: {all: true}
+        reward: {type: billing_discount, fixed: 10000}
+        tiers: {from: 400000, to: 800000}
+      - key: kt-light-discount-12k
+        title: KT 라이트할부 12,000원 할인
+        evidence: [전월실적 80만원 이상 ~120만원 미만 | 할인금액 1만 2천원]
+        target: {all: true}
+        reward: {type: billing_discount, fixed: 12000}
+        tiers: {from: 800000, to: 1200000}
+      - key: kt-light-discount-15k
+        title: KT 라이트할부 15,000원 할인
+        evidence: [전월실적 120만원 이상 | 할인금액 1만 5천원]
+        target: {all: true}
+        reward: {type: billing_discount, fixed: 15000}
+        tiers: {from: 1200000}
+      - key: kt-telecom-auto-discount-5k
+        title: KT 통신요금 자동납부 5,000원 할인
+        evidence: [전월실적 40만원 이상 ~80만원 미만 | 할인금액 5천원]
+        target: {all: true}
+        reward: {type: billing_discount, fixed: 5000}
+        tiers: {from: 400000, to: 800000}
+      - key: kt-telecom-auto-discount-10k
+        title: KT 통신요금 자동납부 10,000원 할인
+        evidence: [전월실적 80만원 이상 | 할인금액 1만원]
+        target: {all: true}
+        reward: {type: billing_discount, fixed: 10000}
+        tiers: {from: 800000}
+      - key: kt-coffee-10
+        title: KT 라이트할부 커피 10% 할인
+        evidence: ['커피 | 스타벅스(사이렌오더 포함), 이디야 | 10%']
+        target:
+          merchants: [ediya, starbucks]
+        when:
+          - month_total: {min: 400000}
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: kt-integrated-monthly}
+        unmodeled: [오프라인 매장 결제만 적용]
+      - key: kt-bakery-10
+        title: KT 라이트할부 베이커리·아이스크림 10% 할인
+        evidence: ['베이커리/아이스크림 | 파리바게뜨, 던킨도너츠, 베스킨라빈스 | 10%']
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette]
+        when:
+          - month_total: {min: 400000}
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: kt-integrated-monthly}
+        unmodeled: [오프라인 매장 결제만 적용]
+      - key: kt-movie-1k
+        title: KT 라이트할부 영화 1,000원 할인
+        evidence: [영화 | CGV | 1천원]
+        target:
+          merchants: [cgv]
+        when:
+          - month_total: {min: 400000}
+            amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: kt-integrated-monthly}
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 시행일을 찾지 못해 수집한 날로 두었다}
+  - {path: 'revisions[0]', question: 'benefits[kt-light-discount-10k]: 한도를 적지 않았다. 원문에 한도가 없는지 확인한다'}
+  - {path: 'revisions[0]', question: 'benefits[kt-light-discount-12k]: 한도를 적지 않았다. 원문에 한도가 없는지 확인한다'}
+  - {path: 'revisions[0]', question: 'benefits[kt-light-discount-15k]: 한도를 적지 않았다. 원문에 한도가 없는지 확인한다'}
+  - {path: 'revisions[0]', question: 'benefits[kt-telecom-auto-discount-5k]: 한도를 적지 않았다. 원문에 한도가 없는지 확인한다'}
+  - {path: 'revisions[0]', question: 'benefits[kt-telecom-auto-discount-10k]: 한도를 적지 않았다. 원문에 한도가 없는지 확인한다'}
+  - {path: 'revisions[0]', question: 'kind: Is KT할부 Plus NH농협카드 a credit card or a check card?'}
+  - {path: 'revisions[0]', question: 'benefits[*].target.merchants: Confirm exact merchant keys for bakery/ice‑cream discounts (e.g., 파리크라상).'}
+  - {path: 'revisions[0]', question: 'benefits[*].unmodeled: Are the coffee and bakery discounts limited to offline (direct) payments only?'}
+  - {path: 'revisions[0]', question: 'benefits[*].reward: Is there any monthly cap for the KT 라이트할부 and 통신요금 자동납부 discounts?'}
+  - {path: kind, question: 'kind를 두 번째 검토에서 공식 원문의 문구를 따라 고쳤다: 발급 기준 안내표입니다. 발급대상 | 개인(신용) 교통구분 | 교통(후불), 비교통 ※ 가족카드 발급 불가 ※ 본 상품은 ''모바일카드''발급이 가능합'}
+notes: 새 카드 초안. 머리는 색인에서, 규칙은 모델이 원문에서 옮겼다. 연회비와 짧은 이름은 사람이 채운다.

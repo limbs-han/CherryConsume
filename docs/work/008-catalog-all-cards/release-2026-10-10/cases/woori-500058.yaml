@@ -1,0 +1,310 @@
+card: woori-500058
+cases:
+- name: fixed-consumption-5pct 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    category: restaurant
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      fixed-consumption-5pct: 1500
+  calc: fixed-consumption-5pct 양수
+- name: fixed-delivery 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      fixed-delivery: 1500
+  calc: fixed-delivery 양수
+- name: fixed-online-shopping 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      fixed-online-shopping: 1500
+  calc: fixed-online-shopping 양수
+- name: fixed-offline-shopping 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    merchant: emart
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      fixed-offline-shopping: 1500
+  calc: fixed-offline-shopping 양수
+- name: fixed-daiso 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    merchant: daiso
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      fixed-daiso: 1500
+  calc: fixed-daiso 양수
+- name: fixed-taxi 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    category: taxi
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      fixed-taxi: 1500
+  calc: fixed-taxi 양수
+- name: fixed-kakao-taxi 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    merchant: kakao_t
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      fixed-kakao-taxi: 1500
+  calc: fixed-kakao-taxi 양수
+- name: fixed-fuel 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: normal
+    merchant: sk_energy
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      fixed-fuel: 1500
+  calc: fixed-fuel 양수
+- name: fixed-telecom 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: autopay
+    merchant: skt
+    channel: offline
+    category: telecom.mobile
+  expect:
+  - payment: 0
+    benefits:
+      fixed-telecom: 1500
+  calc: fixed-telecom 양수
+- name: regular-subscription-50pct 양수
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    billing: subscription
+    merchant: netflix
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      regular-subscription-50pct: 5000
+  calc: regular-subscription-50pct 양수
+- name: 50만원 미만 기본과 금액 하한
+  prev_month_spend: 499999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 9999
+    payment_method: physical_card
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+  - at: 2026-10-08T12:00
+    amount: 29999
+    payment_method: physical_card
+    category: restaurant
+  - at: 2026-10-09T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits:
+      basic-1pct: 100
+  - payment: 2
+    benefits:
+      basic-1pct: 299
+  - payment: 3
+    benefits:
+      basic-1pct: 300
+  calc: 50만원 미만 기본과 금액 하한
+- name: 500000구간 공유한도 경계
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 60000
+    payment_method: physical_card
+    category: restaurant
+  - at: 2026-10-07T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      fixed-consumption-5pct: 3000
+  - payment: 1
+    benefits:
+      basic-1pct: 300
+  calc: 500000구간 공유한도 경계
+- name: 1000000구간 공유한도 경계
+  prev_month_spend: 1000000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 120000
+    payment_method: physical_card
+    category: restaurant
+  - at: 2026-10-07T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      fixed-consumption-5pct: 6000
+  - payment: 1
+    benefits:
+      basic-1pct: 300
+  calc: 1000000구간 공유한도 경계
+- name: 2000000구간 공유한도 경계
+  prev_month_spend: 2000000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 240000
+    payment_method: physical_card
+    category: restaurant
+  - at: 2026-10-07T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      fixed-consumption-5pct: 12000
+  - payment: 1
+    benefits:
+      basic-1pct: 300
+  calc: 2000000구간 공유한도 경계
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits:
+      basic-1pct: 100
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.
+- name: 최초 발급 특례
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      fixed-consumption-5pct: 1500
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: true
+- name: 만기·해지 재발급 특례 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 30000
+    payment_method: physical_card
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      basic-1pct: 300
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: false
+- name: 통신사 인터넷·TV 할인 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: skt
+    category: telecom.internet_tv
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      basic-1pct: 500
+  calc: 휴대전화 전용 특별 혜택은 인터넷·TV에 적용하지 않는다. DAILY는 별도 기본1%만500원 적용.
+- name: 카카오T 기차는 택시 혜택 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: kakao_t
+    category: transit.rail
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      basic-1pct: 500
+  calc: 카카오T라도 철도 결제는 택시 특별 혜택 제외. 별도 기본률만 적용.
