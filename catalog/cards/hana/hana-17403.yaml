@@ -1,0 +1,41 @@
+schema_version: 2
+id: hana-17403
+issuer: hana
+name: 마이 코웨이 하나카드
+kind: credit
+product_codes:
+  - '17403'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403', fetched_at: &id001 2026-10-04}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 800000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: coaway-rental-discount
+        title: 코웨이 렌탈요금 청구할인
+        source: page
+        target:
+          merchants: [coway_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 800000: 18000, 1500000: 25000}
+        tiers: {from: 300000}
+    unmodeled: [무승인 매출은 매출 접수 월에 실적 반영한다]
+notes: 2026-10-09 공식 수집 원문 대조. 시행일을 소급하지 않고 수집일 이후 규칙으로 제안한다.
