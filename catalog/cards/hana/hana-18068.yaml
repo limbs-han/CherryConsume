@@ -1,0 +1,62 @@
+schema_version: 2
+id: hana-18068
+issuer: hana
+name: 삼성 AI 구독 하나카드
+kind: credit
+product_codes:
+  - '18068'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: visa, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068', fetched_at: &id001 2026-10-04}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 800000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: samsung-subscription-13k
+        title: 삼성전자 구독요금 13,000원 할인
+        source: page
+        target:
+          merchants: [samsung_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 13000}
+        tiers: {from: 300000, to: 300000}
+      - key: samsung-subscription-18k
+        title: 삼성전자 구독요금 18,000원 할인
+        source: page
+        target:
+          merchants: [samsung_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 18000}
+        tiers: {from: 800000, to: 800000}
+      - key: samsung-subscription-25k
+        title: 삼성전자 구독요금 25,000원 할인
+        source: page
+        target:
+          merchants: [samsung_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 25000}
+        tiers: {from: 1500000}
+    unmodeled: [무승인 매출은 매출 접수 월에 실적 반영한다, 삼성전자 직접 구독만 대상이며 다른 구독 운영사 제외]
+notes: 2026-10-09 공식 수집 원문 대조. 시행일을 소급하지 않고 수집일 이후 규칙으로 제안한다.
