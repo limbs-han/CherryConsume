@@ -12,3 +12,6 @@ backend/tests/engine/local/
 # 파이프라인 번들 상태와 wheel 빌드 결과
 pipeline/.databricks/
 backend/dist/
+
+# 카드 확대 작업의 로컬 자료. Databricks 조회 응답과 공식 원문 전체가 들어 커밋하지 않는다. 작업 008 이어받기 문서
+/tmp/
