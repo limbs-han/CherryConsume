@@ -1,0 +1,64 @@
+schema_version: 2
+id: hana-18023
+issuer: hana
+name: 토스뱅크 하나카드 Wide
+kind: credit
+product_codes:
+  - '18023'
+status: discontinued
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023', fetched_at: &id001 2026-10-04}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - {key: wide-monthly, per: month, amount: 100000}
+    benefits:
+      - key: billing-discount-1pct
+        title: 국내외 일시불 1% 할인
+        source: page
+        target: {all: true}
+        when:
+          - {lump_sum: true}
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: wide-monthly}
+        tiers: {from: 0, to: 0}
+      - key: billing-discount-2pct
+        title: 40만원 이상 일시불 2% 할인
+        source: page
+        target: {all: true}
+        when:
+          - {lump_sum: true}
+          - card_month: {min: 1}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: wide-monthly}
+        tiers: {from: 400000}
+      - key: first-registration-1pct
+        title: 최초 사용등록월 일시불 1% 할인
+        source: page
+        target: {all: true}
+        when:
+          - {lump_sum: true}
+          - card_month: {max: 0}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: wide-monthly}
+    unmodeled: [무승인 매출은 매출 접수 월에 실적 반영한다, 대중교통과 해외 매출 할인은 다음달 제공한다]
+notes: 2026-10-09 공식 수집 원문 대조. 시행일을 소급하지 않고 수집일 이후 규칙으로 제안한다.
