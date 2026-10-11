@@ -1,0 +1,63 @@
+schema_version: 2
+id: hyundai-mcje2
+issuer: hyundai
+name: The CJ-현대카드M Edition2
+short_name: 현대 The CJ M Ed2
+search_names: [CJ M Edition2, The CJ-현대카드M Edition2, 더 CJ 현대카드M 에디션2]
+kind: credit
+product_codes: [MCJE2]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MCJE2', fetched_at: 2026-10-11}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260410-1723-20_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_CJ%20M%20Ed2_V3.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 100000]
+    spend:
+      exclude_categories: [annual_fee, tax]
+      interest_free: exclude
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 100000, from: issue}
+    benefits:
+      - key: cj-dining-20
+        title: VIPS 20% 현장 할인
+        source: manual
+        evidence: ['VIPS, 더플레이스, 더스테이크하우스, 빕스버거, 제일제면소, 푸드월드, 한쿡 20% 현장 할인', 일 1회/1회 이용금액 20만원 한도, CJ외식서비스는 매장 특별 할인 시 적용 불가, 일부 백화점 및 할인점 내 매장 혜택 제외]
+        target:
+          merchants: [vips]
+        reward: {type: onsite_discount, rate: 20}
+        limits:
+          - {per: day, count: 1}
+          - {per: txn, base: 200000}
+        tiers: {from: 100000}
+      - key: cj-store-10
+        title: CJ올리브영, 투썸플레이스, 뚜레쥬르 10% 현장 할인
+        source: manual
+        evidence: ['CJ올리브영, 투썸플레이스, 뚜레쥬르 10% 현장 할인', 백화점, 할인점 내 입점매장 제외]
+        target:
+          merchants: [olive_young, tous_les_jours, twosome]
+        reward: {type: onsite_discount, rate: 10}
+        tiers: {from: 100000}
+      - key: cj-onstyle-5
+        title: CJ ONSTYLE 5% 청구 할인
+        source: manual
+        evidence: [CJ ONSTYLE 5% 청구 할인, 월 3만원 한도]
+        target:
+          merchants: [cj_onstyle]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 30000}
+        tiers: {from: 100000}
+    unmodeled: [더플레이스, 더스테이크하우스, 빕스버거, 제일제면소, 푸드월드, 한쿡 20% 할인과 더방 20% 할인은 공통 가맹점이 없어 계산하지 않는다, CGV 영화티켓 3천원 청구할인(전월 10만원 이상 월 1회 연 8회)은 CGV 가맹점이 매점 결제까지 포함해 계산하지 않는다, CJ 외식은 매장 특별 할인 때와 일부 백화점·할인점 안 매장에서 빠진다, 올리브영·투썸플레이스·뚜레쥬르는 백화점·할인점 입점 매장에서 빠진다, CJ ONSTYLE은 일부 상품이 빠진다, The CJ적립금 1~2%는 포인트 프로그램이 없어 계산하지 않는다, 기본 M포인트 업종별 0.5~2%(당월 100만원 이상 1.5배)는 결제일에 청구된 당월 이용금액 50만원 이상일 때만 주는 방식이라 계산하지 않는다, GS칼텍스 리터당 60 M포인트와 신차 1.5% M포인트는 계산하지 않는다, 서비스 한도는 본인과 가족 카드 각각이다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 가이드북은 전월 이용금액 10만원 조건을 CGV 할인에만 적었지만 신규 회원은 발급월과 익월까지 전월 이용금액 무관하게 할인한다고 해 다른 CJ 할인에도 전월 조건이 있어 보인다. 덜 주는 쪽으로 모든 할인에 전월 10만원 이상을 두었다, assumed: tiers from 100000}
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.cancellation', question: 원문은 매출취소액을 실적에서 뺀다고만 하고 승인월과 취소월 중 어디서 빼는지 적지 않았다. 다른 현대카드처럼 승인월로 두었다, assumed: original_month}
+notes: 2026-10-11 공식 상품 페이지와 현대카드M·M2 Edition2 제휴통합 가이드북 대조. 연회비 국내전용 15,000원(기본 5,000+제휴 10,000), 국내외겸용(Visa) 20,000원(기본 5,000+제휴 15,000), 가족카드 없음. Mastercard는 2023-10-04 발급 중단. VIPS 20% 현장할인 일 1회 1회 20만원까지, 올리브영·투썸·뚜레쥬르 10% 현장할인, CJ ONSTYLE 5% 청구할인 월 3만원. 실적은 전월 1일~말일 일시불과 할부이고 할인 이용금액, 매출취소, 무이자할부, 세금을 뺀다.
