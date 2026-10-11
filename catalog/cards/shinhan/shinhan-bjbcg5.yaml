@@ -1,0 +1,205 @@
+schema_version: 2
+id: shinhan-bjbcg5
+issuer: shinhan
+name: 성남사랑 신한카드 Deep Dream 체크(chak)
+short_name: 신한 성남사랑 Deep Dream 체크
+kind: check
+product_codes: [BJBCG5]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1201121_2206.html', fetched_at: 2026-10-10, review_no: 제20210331-Dpp-001호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2021-03-31
+    source: page
+    tiers: [0, 200000, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.gas, utility.water]
+      unmodeled: [성남사랑상품권 적용 거래는 적립하지 않는다, 포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 적립하지 않는다, 슬림할부 거래는 적립하지 않는다]
+    ranked:
+      - {key: dream-top, top: 1, by: month_amount}
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000, 400000: 15000, 800000: 30000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [dream-discount-0-6, dream-retail-0-6, dream-enjoy-0-6, dream-abroad-0-6, dream-mobile-0-6, fuel-weekend-40-per-liter, all-point-0-2]
+        spill: split
+      - {key: top}
+    benefits:
+      - key: all-point-0-2
+        title: 모두드림 0.2% 적립
+        source: page
+        evidence: [전월 실적/적립한도 없이 국내/외 일시불+할부 이용 가맹점 0.2% 기본 포인트 적립]
+        target: {all: true}
+        reward: {type: points, program: mysinhan_point, rate: 0.2}
+      - key: dream-discount-0-6
+        title: 더해드림 할인점 0.6% 적립
+        source: page
+        evidence: [자주 가는 DREAM 영역은 기본의 3배(총 0.6%) 포인트 적립, '전국 이마트, 홈플러스, 롯데마트, 농협 하나로마트·클럽', '이마트 트레이더스, 롯데 VIC마켓', 비쇼핑 결제건은 적립 제외, '온라인 매장, SSM(홈플러스 익스프레스/이마트 에브이데이/롯데슈퍼 등) 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart, traders]
+          exclude_merchants: [emart_everyday, homeplus_express, lotte_super]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 0.6}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: dream-retail-0-6
+        title: 더해드림 편의점·잡화 0.6% 적립
+        source: page
+        evidence: [자주 가는 DREAM 영역은 기본의 3배(총 0.6%) 포인트 적립, 'CU, GS25, 세븐일레븐, 올리브영, 다이소', '온라인 매장, 백화점/할인점 등 입점 매장의 경우 적립 제외']
+        target:
+          merchants: [cu, daiso, gs25, olive_young, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 0.6}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: dream-enjoy-0-6
+        title: 더해드림 영화·커피 0.6% 적립
+        source: page
+        evidence: [자주 가는 DREAM 영역은 기본의 3배(총 0.6%) 포인트 적립, 'CGV, 롯데시네마', 커피(업종), 신한카드에 커피 업종으로 등록된 가맹점에 대하여 적용 가능]
+        target:
+          categories: [cafe]
+          merchants: [cgv, lotte_cinema]
+        reward: {type: points, program: mysinhan_point, rate: 0.6}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: dream-abroad-0-6
+        title: 더해드림 해외 0.6% 적립
+        source: page
+        evidence: [자주 가는 DREAM 영역은 기본의 3배(총 0.6%) 포인트 적립, 해외 일시불 이용금액]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: mysinhan_point, rate: 0.6}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: dream-mobile-0-6
+        title: 더해드림 이동통신요금 0.6% 적립
+        source: page
+        evidence: [자주 가는 DREAM 영역은 기본의 3배(총 0.6%) 포인트 적립, 'SKT, KT, LG U+ 이동통신요금 자동이체', '순수 통신요금 결제금액 자동이체만 대상(약정금액 대납, 지점을 통한 월납, 알뜰폰 적립 제외)']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: mysinhan_point, rate: 0.6}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: top-discount-0-4
+        title: 챙겨드림 할인점 0.4% 추가 적립
+        source: page
+        evidence: [DREAM 영역 중 가장 많이 이용한 1개 영역 이용금액에 대해 마이신한포인트 1.0% 자동적립 됩니다., 더해드림 0.6%+추가 0.4%=챙겨드림 1.0%, 가장 많이 이용한 1개 영역 선정 기준은 당월(1일~말일) 이용금액 기준입니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart, traders]
+          exclude_merchants: [emart_everyday, homeplus_express, lotte_super]
+        when:
+          - {ranked: dream-top}
+          - {channel: offline}
+        area: discount
+        reward: {type: points, program: mysinhan_point, rate: 0.4}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        stack: top
+      - key: top-retail-0-4
+        title: 챙겨드림 편의점·잡화 0.4% 추가 적립
+        source: page
+        evidence: [DREAM 영역 중 가장 많이 이용한 1개 영역 이용금액에 대해 마이신한포인트 1.0% 자동적립 됩니다., 더해드림 0.6%+추가 0.4%=챙겨드림 1.0%]
+        target:
+          merchants: [cu, daiso, gs25, olive_young, seven_eleven]
+        when:
+          - {ranked: dream-top}
+          - {channel: offline}
+        area: retail
+        reward: {type: points, program: mysinhan_point, rate: 0.4}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        stack: top
+      - key: top-enjoy-0-4
+        title: 챙겨드림 영화·커피 0.4% 추가 적립
+        source: page
+        evidence: [DREAM 영역 중 가장 많이 이용한 1개 영역 이용금액에 대해 마이신한포인트 1.0% 자동적립 됩니다., 더해드림 0.6%+추가 0.4%=챙겨드림 1.0%]
+        target:
+          categories: [cafe]
+          merchants: [cgv, lotte_cinema]
+        when:
+          - {ranked: dream-top}
+        area: enjoy
+        reward: {type: points, program: mysinhan_point, rate: 0.4}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        stack: top
+      - key: top-abroad-0-4
+        title: 챙겨드림 해외 0.4% 추가 적립
+        source: page
+        evidence: [DREAM 영역 중 가장 많이 이용한 1개 영역 이용금액에 대해 마이신한포인트 1.0% 자동적립 됩니다., 더해드림 0.6%+추가 0.4%=챙겨드림 1.0%]
+        target: {all: true}
+        when:
+          - {ranked: dream-top}
+          - {region: overseas}
+        area: abroad
+        reward: {type: points, program: mysinhan_point, rate: 0.4}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        stack: top
+      - key: top-mobile-0-4
+        title: 챙겨드림 이동통신요금 0.4% 추가 적립
+        source: page
+        evidence: [DREAM 영역 중 가장 많이 이용한 1개 영역 이용금액에 대해 마이신한포인트 1.0% 자동적립 됩니다., 더해드림 0.6%+추가 0.4%=챙겨드림 1.0%]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - {ranked: dream-top}
+          - billing: [autopay]
+        area: mobile
+        reward: {type: points, program: mysinhan_point, rate: 0.4}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        stack: top
+      - key: fuel-weekend-40-per-liter
+        title: 주말 주유 리터당 40원 적립
+        source: page
+        evidence: ['주말(토, 일) 전 주유소 리터당 40원 적립', '전월(1일~말일) 20만원 이상 이용 시 제공되며, 주말 주유소(업종)에서 당월 총 이용한 주유금액 20만원까지 리터당 40원 마이신한포인트 적립됩니다.', 모두드림 서비스와 중복 적립 불가 합니다., 경유와 등유는 휘발유가 기준으로 환산 적립됩니다.(LPG 충전거래 제외)]
+        target:
+          categories: [fuel]
+        when:
+          - day:
+              in: [sat, sun]
+        reward: {type: points, program: mysinhan_point, per_liter: 40}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 200000}
+        unmodeled: [LPG 충전 거래는 적립하지 않는다]
+    unmodeled: [롯데 VIC마켓은 공통 가맹점이 없어 할인점 영역에 넣지 않았다, 할인점 영역의 비쇼핑 결제와 편의점·잡화 영역의 백화점·할인점 입점 매장은 적립하지 않는다, '택시 이용 3, 6, 9번째 1천원 결제일 할인은 몇 번째 이용인지 셀 수 없어 계산하지 않는다', 카드 사용 등록일 포함 90일 안에 80만원 이상 쓰면 주는 3천 포인트는 계산하지 않는다, 성남사랑상품권 적용 거래는 전월 이용금액에서 빠진다, 월 통합 적립한도는 본인과 가족카드를 합산한다, 신한은행 이체·출금 수수료 면제와 신한투자증권 매매 수수료 우대는 결제 혜택이 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].limits[integrated]', question: '월 통합 적립한도가 더해드림·챙겨드림의 총 적립(0.6%, 1.0%)에 걸리는지 기본 0.2%를 뺀 추가분에만 걸리는지 원문에 없다. 적게 주는 쪽으로 총 적립에 걸고 한도를 넘은 금액은 기본 0.2%로 받게 했다', assumed: 총 적립에 적용}
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다, assumed: cancel_month}
+  - {path: 'revisions[0].benefits[dream-abroad-0-6]', question: 해외 영역은 해외 일시불만 대상인데 할부를 구별하지 않았다, assumed: 해외 결제 전체}
+notes: '신한카드 상품 페이지 기준. 연회비는 페이지 HTML의 Visa 기본 연회비 0원. 성남사랑 이름이 붙었지만 페이지에 성남시민만 발급한다는 문구는 없다. 모두드림 0.2%는 한도 없이 모든 결제에, 더해드림은 DREAM 다섯 영역에 총 0.6%, 챙겨드림은 그 달 이용금액이 가장 큰 영역 하나에 0.4%를 더해 총 1.0%다. 더해드림은 기본 0.2%를 대신하는 같은 묶음, 챙겨드림은 다른 묶음에 두었다. 주유 적립은 모두드림과 중복되지 않아 같은 묶음이다. 교통카드 이용금액은 전전월 금액이 반영되어 카드사 기본값 month_offset을 그대로 쓴다. 실적 제외: 현금서비스, 카드론, 연회비, 수수료, 이자, 취소, 기프트카드 구매, 선불카드 충전, 성남사랑상품권 적용 거래.'
