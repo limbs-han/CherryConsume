@@ -1,0 +1,146 @@
+schema_version: 2
+id: kb-09063
+issuer: kb
+name: KB국민 굿데이올림카드
+short_name: KB 굿데이올림
+kind: credit
+product_codes:
+  - '09063'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_upi, amount: 15000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+  - {scope: global, brand: k_world_upi, form: mobile, amount: 9000}
+  - {scope: global, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09063', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다', 부분 무이자할부 이용금액도 할인에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: fuel-60
+        title: 주유소·충전소 리터당 60원 청구할인
+        source: page
+        evidence: ['주유 | 리터당 60원 | 20만원(1구간) | 40만원(2구간, 3구간)', '일 할인제공 이용금액 한도 : 10만원', '기준유가 : GS칼텍스 본사 고시 휘발유가 (경유, 등유 LPG는 휘발유가에 비례하여 할인율 적용)', 최초 카드 사용등록일로부터 다음 달 말일까지 KB국민 굿데이올림카드 이용실적이 없는 경우에도 1구간(30만원 이상 ~ 60만원 미만) 서비스 제공]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: day, base: 100000}
+          - per: month
+            base: {0: 200000, 300000: 200000, 600000: 400000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [리터는 GS칼텍스 본사 고시 휘발유가로 환산한다. 앱은 공통 기름값 기준값으로 환산한다]
+      - key: mart-10
+        title: 이마트·롯데마트·홈플러스 10% 청구할인
+        source: page
+        evidence: [대형마트 | 10% | 3만원/(3천원) | 5만원/(5천원) | 10만원/(1만원), '온라인 쇼핑몰 이용금액, 상품권 구매 및 건물 내 임대매장, SSM(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼) 이용금액 할인 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            base: {0: 30000, 300000: 30000, 600000: 50000, 1200000: 100000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [대형마트 건물 안 임대매장은 할인에서 빠진다]
+      - key: telecom-10
+        title: 통신요금 10% 청구할인
+        source: page
+        evidence: ['통신 : 전화요금, 인터넷이용료, 케이블TV 업종 (휴대폰, 유선전화, 국제전화, 인터넷전화, IPTV)', 통신 | 10% | 3만원/(3천원)]
+        target:
+          categories: [telecom]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, base: 30000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: transit-10
+        title: 버스·지하철·택시 10% 청구할인
+        source: page
+        evidence: ['교통 : RF교통기관(버스, 지하철), 택시 업종', 교통 | 10% | 5만원/(5천원), 시외버스, 고속버스 할인 제외]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, base: 50000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [버스·지하철은 실제 사용일이 아니라 이용대금 명세서에 적힌 이용일 기준으로 할인한다]
+      - key: overseas-5
+        title: 해외이용 5% 캐시백
+        source: page
+        evidence: [해외이용(해외직구) | 5% | 20만원/(1만원), 할인금액은 다음 달 둘째 주에 결제계좌로 입금]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, base: 200000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [해외 이용금액은 매입 완료 기준으로 달을 나눈다]
+      - key: dining-10
+        title: 음식점·커피전문점·편의점·약국 10% 청구할인
+        source: page
+        evidence: ['외식/커피/편의점/약국 | 10% | 5만원/(5천원)(2구간, 3구간)', '음식점 : 일반음식점(한식, 중식, 일식, 양식, 뷔페), 휴게음식점, 패밀리레스토랑, 일반주점 업종', 커피전문점, 편의점, 약국 업종, '음식점 할인 제외대상 : 제과, 아이스크림, 패스트푸드점, 유흥주점 업종 제외']
+        target:
+          categories: [cafe, convenience, pharmacy, restaurant.general]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, base: 50000}
+        tiers: {from: 600000}
+        unmodeled: [일반주점 업종은 유흥주점과 나눌 수 없어 계산하지 않는다, 일반음식점 안의 아이스크림 업종은 할인에서 빠진다]
+      - key: academy-10
+        title: 학원 10% 청구할인
+        source: page
+        evidence: [학원/휘트니스센터 | 10% | 30만원/(3만원)(3구간), '학원 : 문리계/외국어/예체능/기술/자동차 학원 및 독서실 업종', 'PG(결제대행)이용금액, 유아교육기관, 학습자재 업종 제외']
+        target:
+          categories: [education.academy]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, base: 300000}
+        tiers: {from: 1200000}
+        unmodeled: [종합스포츠센터(휘트니스) 업종은 공통 업종 sports가 수영장·골프연습장·요가처럼 제외 업종까지 넓어 계산하지 않는다. 학원과 같은 월 30만원 이용금액 한도를 함께 쓴다]
+    unmodeled: [기본 포인트리는 적립되지 않는다, '무승인전표(대중교통, 항공기내 이용)와 정부지원금은 실적에서 빠진다', 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 할인 한도는 전표 매입 순서대로 채운다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits[0]', question: 주유 할인의 실적 유예기간 1구간 이용금액 한도는 20만원으로 두었다. 일 10만원 한도는 이용금액 기준이다, assumed: per day base 100000}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 한도표의 금액은 할인 금액이 아니라 할인을 주는 월 이용금액 한도라 base로 옮겼다. 1구간 빈 칸은 그 구간에 혜택이 없다는 뜻으로 보았다. 연회비는 K-WORLD(UPI) 1만5천원, VISA·Master·AMEX 2만원, 모바일 단독 9천원과 1만4천원이다.
