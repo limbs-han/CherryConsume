@@ -1,0 +1,43 @@
+schema_version: 2
+id: lotte-p11714-a11714
+issuer: lotte
+name: 롯데백화점 롯데카드
+kind: credit
+product_codes: [P11714-A11714]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P11714-A11714', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2016-A00111_20260908_10009.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2016-11-30'
+    source: manual
+    tiers: [0, 300000, 500000, 1000000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, department_store]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+    benefits:
+      - key: dept-15pct
+        title: 롯데백화점 15% 청구할인
+        source: manual
+        evidence: [롯데백화점 이용시 지난달 실적에 따른 할인한도 내에서 15% 청구할인, 지난달 실적 30만원 이상 50만원 이상 100만원 이상 200만원 이상 할인한도 2만원 3만원 5만원 10만원, 롯데백화점 오프라인 매장 이용 시 청구할인 서비스가 제공됩니다., '엘롯데, 롯데아울렛, 롯데역사, 롯데몰은 서비스 대상가맹점에 포함되지 않습니다.']
+        target:
+          merchants: [lotte_department]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - per: month
+            amount: {300000: 20000, 500000: 30000, 1000000: 50000, 2000000: 100000}
+        tiers: {from: 300000}
+        unmodeled: [롯데백화점 안 임대매장 이용은 할인에서 빠질 수 있다]
+    unmodeled: ['실적은 롯데백화점 이용금액, 연회비, 수수료를 뺀다. 롯데백화점만 뺄 칸이 없어 백화점 업종 전체를 실적에서 뺐다', 최초 발급 회원은 카드 사용 등록 달 포함 2개월 동안 실적과 상관없이 할인한도 1만원을 받는다. 계산하지 않는다, 롯데백화점 5% 현장할인 e-쿠폰은 직전 6개월 롯데백화점 누적 30만원 이상 회원에게 매월 2매 발행된다. 쿠폰 사용이라 계산하지 않는다, 롯데백화점 12개월 할부 수수료를 지난달 30만원 이상이면 그달 면제한다. 계산하지 않는다, 롯데카드의 다른 청구할인 행사와 겹치면 할인 금액이 큰 서비스 하나만 준다, 실적과 할인한도는 가족카드와 합산한다, 할인은 승인 순서대로 남은 한도 안에서 준다, 이 카드로 결제하면 롯데카드가 주는 L.POINT 적립은 없다]
+notes: 2026-10-11 상품 페이지와 상품설명서(2026년 8월 기준) 대조. 출시일 2016-11-30. 상품설명서 실적 예시에서 무이자와 유이자 할부를 모두 실적 대상으로 적어 무이자할부를 실적에 넣었다. 할인 제외 목록은 원문에 없다.
