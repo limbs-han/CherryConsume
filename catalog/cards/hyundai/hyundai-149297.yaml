@@ -1,0 +1,63 @@
+schema_version: 2
+id: hyundai-149297
+issuer: hyundai
+name: GOLD FOR LOTTE DEPARTMENT STORE
+short_name: 현대 롯데백화점 GOLD
+search_names: [GOLD FOR LOTTE, 골드 포 롯데백화점, 롯데백화점 골드]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 150000}
+  - {scope: global, brand: visa, amount: 150000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260818-1343-97_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%A1%AF%EB%8D%B0%EB%B0%B1%ED%99%94%EC%A0%90_GOLD_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-10, review_no: 제2026-C1a-12666호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, department_store, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립에서 뺀다, 현대카드의 할인이 적용된 결제는 적립에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 적립에서 뺀다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다]
+    limits:
+      - {key: lotte-10, per: month, amount: 40000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [lotte-10, base-1]
+        spill: split
+    benefits:
+      - key: lotte-10
+        title: 롯데백화점·롯데아울렛 10% M포인트 적립
+        source: manual
+        evidence: ['전월 이용 금액 50만원 이상 시 롯데백화점, 롯데아울렛, 롯데몰, 롯데백화점몰(온라인) 10% M포인트 적립', '대상점 통합해 월 4만 M포인트 적립 한도 (본인+가족 카드 합산 기준, 적립 한도 초과 시 기본 혜택 적립률 적용)', 추가 혜택 적용 시 기본 혜택은 중복 제공되지 않음, 매출 건별로 소수점 이하 반올림 후 적립]
+        target:
+          merchants: [lotte_department, lotte_premium_outlet]
+        reward: {type: points, program: hyundai_m_point, rate: 10, round: round}
+        limits:
+          - {shared: lotte-10}
+        tiers: {from: 500000}
+        unmodeled: [롯데백화점 임대 매장과 일부 브랜드 입점 매장은 기본 혜택 1%만 적립한다]
+        notes: 롯데몰과 롯데백화점몰(온라인)은 공통 가맹점이 없어 대상에 넣지 않았다. 롯데아울렛은 공통 가맹점 롯데프리미엄아울렛만 넣었다
+      - key: base-1
+        title: 국내외 가맹점 1% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1% M포인트 적립, 1회 및 연간 적립 한도 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립]
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1, round: round}
+        tiers: {from: 500000}
+    unmodeled: [실적에서 빼는 롯데백화점·롯데아울렛·롯데몰·롯데백화점몰 이용 금액을 가맹점으로 가릴 수 없어 백화점 업종 전체를 실적에서 뺀다. 다른 백화점 결제는 실제보다 실적이 적게 잡힌다, 롯데몰과 롯데ON의 롯데백화점몰 결제는 실적에서 빠지지만 가려내지 못한다, 연간 보너스 10만 M포인트는 발급 첫해 누적과 전년 1200만원 기준이라 계산하지 않는다, 롯데백화점 7%·10% 에누리 쿠폰은 쿠폰 사용이라 계산하지 않는다, 롯데백화점 6개월 무이자 할부와 공항 라운지·발레파킹은 결제 혜택이 아니라 계산하지 않는다, 실적과 한도는 본인과 가족 카드를 합산한다, 고속도로 통행료와 후불하이패스는 실적에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2024-06-12이고 이 가이드북은 2026년 7월 기준이다. 그 사이 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa Signature) 150,000원(기본 50,000+제휴 100,000), 가족카드 50,000원. 50만 이상 국내외 1%, 롯데 대상점 10%이고 대상점 월 4만 포인트를 넘으면 1%로 적립한다. 매출 건별 소수점 이하 반올림. 실적은 전월 1일~말일 일시불과 할부이고 롯데 대상점 이용 금액과 공과금 등을 뺀다. 무이자 할부는 실적 제외 목록에 없어 실적에 넣는다. 취소는 승인월 실적에서 빼고 해외는 취소 달에서 뺀다. 신규 발급 시 카드 수령 등록월 다음 달 이용 건까지 50만 미만도 혜택을 준다. 적립 제외는 카드사 기본값에 부동산 임대료와 유치원·초중고 납입금을 더했다.
