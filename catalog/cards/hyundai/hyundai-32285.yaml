@@ -1,0 +1,144 @@
+schema_version: 2
+id: hyundai-32285
+issuer: hyundai
+name: NOL 카드
+short_name: 현대 NOL
+search_names: [NOL카드, 놀 카드, 현대카드 NOL]
+kind: credit
+product_codes: [NOLHC]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AZG-20260323-1455-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_NOL_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-05, review_no: 제2025-C1a-18425호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+    limits:
+      - key: nol-platform
+        per: month
+        amount: {400000: 10000, 800000: 12000}
+      - key: daily-life
+        per: month
+        amount: {400000: 5000, 800000: 8000}
+      - key: leisure
+        per: month
+        amount: {400000: 5000, 800000: 8000}
+      - key: overseas
+        per: month
+        amount: {400000: 5000, 800000: 8000}
+    benefits:
+      - key: nol-platform-10
+        title: NOL 10% NOL 포인트 적립
+        source: manual
+        evidence: [NOL · NOL 인터파크(NOL 인터파크투어/NOL 티켓) · 트리플 3개의 플랫폼에서 이용 금액의 10% 적립, '전월 이용 금액 40만원 이상 시 월 1만, 80만원 이상 시 월 1만 2천 포인트 한도 내 적립', 매출 건별로 소수점 이하 반올림 후 적립, NOL · NOL 인터파크 · 트리플에서 이용한 금액은 적립 여부에 상관없이 전월 이용 금액에 포함]
+        target:
+          merchants: [yanolja]
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: nol-platform}
+        tiers: {from: 400000}
+        unmodeled: [가맹점명이 네이버파이낸셜 같은 간편결제명이나 별도 전용 가맹점번호로 승인되면 적립하지 않는다]
+        notes: NOL 인터파크와 트리플은 공통 가맹점에 없어 대상에 넣지 않았다. 공통 가맹점이 생기면 더한다
+      - key: coffee-10
+        title: 커피전문점 10% NOL 포인트 적립
+        source: manual
+        evidence: ['커피전문점 : 스타벅스, 투썸플레이스, 폴 바셋, 이디야, 커피빈', '전월 이용 금액 40만원 이상 시 월 5천, 80만원 이상 시 월 8천 포인트 한도 내 적립', 커피전문점·편의점·디지털 콘텐츠 서비스의 적립 혜택이 적용된 결제 건의 전체 이용 금액은 전월 이용 금액 합산 제외]
+        target:
+          merchants: [coffee_bean, ediya, paul_bassett, starbucks, twosome]
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: ['백화점·할인점·쇼핑몰 입점 매장과 공동가맹점, 온라인 기프트 카드와 선물하기는 적립하지 않는다']
+      - key: convenience-10
+        title: 편의점 10% NOL 포인트 적립
+        source: manual
+        evidence: ['편의점 : GS25, CU, 이마트24, 세븐일레븐', '편의점은 현장 결제 시에 한하며, 온라인(제휴사 홈페이지 또는 앱) 결제 시 적립 제외']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: digital-10
+        title: 디지털 콘텐츠 10% NOL 포인트 적립
+        source: manual
+        evidence: ['디지털 콘텐츠 서비스 : 넷플릭스, 유튜브 프리미엄, 디즈니+, 왓챠, 멜론, 지니, 리디', 통신 요금 내 합산 청구 또는 애플 앱스토어·구글 플레이 스토어 결제(인앱결제) 등 가맹점 구분이 불가한 경우 적립 제외]
+        target:
+          merchants: [disney_plus, genie, melon, netflix, watcha, youtube_premium]
+        when:
+          - billing_not: [in_app]
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: daily-life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [통신 요금에 합산 청구되면 적립하지 않는다]
+        notes: 리디는 공통 가맹점에 없어 대상에 넣지 않았다
+      - key: outlet-10
+        title: 프리미엄아울렛 10% NOL 포인트 적립
+        source: manual
+        evidence: ['프리미엄아울렛 : 현대프리미엄아울렛, 롯데프리미엄아울렛, 신세계프리미엄아울렛, 스타필드', '쇼핑·영화·골프·대중교통 전월 이용 금액 40만원 이상 시 월 5천, 80만원 이상 시 월 8천 포인트 한도 내 적립']
+        target:
+          merchants: [hyundai_premium_outlet, lotte_premium_outlet, shinsegae_premium_outlet]
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        notes: 스타필드는 공통 가맹점에 없어 대상에 넣지 않았다
+      - key: movie-10
+        title: 영화 10% NOL 포인트 적립
+        source: manual
+        evidence: ['영화 : CGV, 롯데시네마, 메가박스', '영화 업종은 현장 또는 공식 홈페이지 및 앱에서 티켓 결제 시에만 적립되며, 예매 대행 사이트 결제 건, 매점 이용 금액은 적립 제외']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [매점 이용 금액과 예매 대행 사이트 결제는 적립하지 않는다]
+      - key: transit-10
+        title: 대중교통 10% NOL 포인트 적립
+        source: manual
+        evidence: ['대중교통 : 시내버스, 지하철']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: overseas-10
+        title: 해외 가맹점 10% NOL 포인트 적립
+        source: manual
+        evidence: [해외 온·오프라인 이용 금액의 10% 적립, '전월 이용 금액 40만원 이상 시 월 5천, 80만원 이상 시 월 8천 포인트 한도 내 적립', 해외 온·오프라인 가맹점에서 원화로 결제 시 적립 제외]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: nol_point, rate: 10, round: round}
+        limits:
+          - {shared: overseas}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [해외 가맹점에서 원화로 결제하면 적립하지 않는다, 국제브랜드 수수료와 해외서비스 수수료는 적립에서 뺀다]
+    unmodeled: [골프장·골프연습장 10% 적립은 공통 업종에 골프가 없어 계산하지 않는다, 최초 신규 발급 시 발급월 다음 달 이용 건까지 40만원 미만도 40만 구간 한도로 적립하는 특례는 실제 실적이 80만원 이상이어도 40만 구간 한도라 지금 모델로 맞출 수 없어 계산하지 않는다, 적립은 결제 순서가 아니라 매출전표 접수 순서로 한도를 쓴다, 실적과 한도는 본인과 가족 카드를 합산한다, 대중교통처럼 사후 승인되는 가맹점은 매출전표 접수일 달의 실적으로 센다, 고속도로 통행료는 실적에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2023-01-10이고 이 가이드북은 2026년 4월 기준이다. 현재 혜택이 시작된 날을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: 'revisions[0]', question: 최초 신규 발급 특례를 계산하지 않는다. 담을 칸이 생기면 tier 400000 고정 한도로 더한다, assumed: 'null'}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 20,000원(기본 10,000+제휴 10,000), 가족카드 5,000원. 네 영역은 각자 월 한도를 영역 안 업종이 같이 쓴다. NOL 플랫폼 1만/1만2천, 커피·편의점·디지털 5천/8천, 쇼핑·영화·골프·대중교통 5천/8천, 해외 5천/8천 포인트. NOL 플랫폼 결제는 적립 여부와 상관없이 실적에 들고, 나머지 영역은 적립받은 결제 전체를 실적에서 뺀다. 실적 제외는 공과금, 전기·도시가스 요금, 아파트 관리비, 초중고 학교 납입금, 등록금, 상품권·선불카드, 4대 보험, 고속도로 통행료, 고속버스, 다른 할인과 무이자 할부. 적립 제외는 상품권·선불, 다른 할인, 무이자 할부. 매출 건별 소수점 이하 반올림.
