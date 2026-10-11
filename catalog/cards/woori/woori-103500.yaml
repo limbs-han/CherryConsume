@@ -1,0 +1,115 @@
+schema_version: 2
+id: woori-103500
+issuer: woori
+name: the OPUS silver
+kind: credit
+product_codes:
+  - '103500'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 150000}
+  - {scope: global, brand: mastercard, amount: 150000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103500', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2025-09-30'
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 교통카드 구매·충전, 신차구매, 의약품 전용몰·제약회사 업종, 우편요금, 과태료·범칙금·벌금, 여권발급비용, 국가·공공기관 가맹점, 우리카드 이벤트 혜택을 받은 매출은 적립에서 빠진다', '가맹점명이 PG사나 간편결제명(네이버페이, 카카오페이 등)으로 승인된 결제는 적립에서 빠진다']
+    limits:
+      - {key: special-1, per: month, amount: 50000}
+      - {key: special-2, per: month, amount: 50000}
+      - {key: lifestyle, per: month, amount: 5000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: base-1
+        title: 국내 가맹점 1% 포인트 적립
+        source: page
+        evidence: [기본 적립, 국내 | 국내 가맹점 | 1% | 없음, 전월 국내외 가맹점 이용실적 관계없이 적립 제공, '기본 적립, 특별 적립Ⅰ/Ⅱ는 중복 적립이 불가 하며, 적립 혜택이 큰 서비스가 우선 적용됩니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: woori_moa_point, rate: 1}
+      - key: special-1-department
+        title: 백화점 2% 포인트 적립
+        source: page
+        evidence: [특별 적립Ⅰ, '백화점 | 롯데백화점, 신세계백화점, 현대백화점 | 2% | 통합 5만점', '[백화점] 오프라인 일반 결제 건에 한하여 적립 제공', 특별 적립Ⅰ/Ⅱ 전월 국내외 가맹점 이용실적 50만원 이상 시 적립 제공됩니다.]
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: woori_moa_point, rate: 2}
+        limits:
+          - {shared: special-1}
+        tiers: {from: 500000}
+      - key: special-1-online
+        title: 온라인 쇼핑 2% 포인트 적립
+        source: page
+        evidence: ['온라인 쇼핑 | 쿠팡, SSG.COM, 롯데ON, Hmall', '[온라인 쇼핑] 공식 홈페이지/앱을 통한 온라인 결제 건에 한하여 적립 제공']
+        target:
+          merchants: [coupang, hyundai_homeshopping, lotte_on, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: points, program: woori_moa_point, rate: 2}
+        limits:
+          - {shared: special-1}
+        tiers: {from: 500000}
+        unmodeled: [공식 홈페이지·앱 안 링크로 연결된 다른 사이트 결제는 제외]
+      - key: special-2-travel
+        title: 항공·면세점 3% 포인트 적립
+        source: page
+        evidence: [특별 적립Ⅱ, '국내 항공권 | 대한항공, 제주항공, 진에어, 티웨이항공, 이스타항공, 에어부산, 에어서울 | 3% | 통합 5만점', '면세점 | 롯데면세점, 신라면세점', '[면세점] 국내공항 출국장 면세구역 내 입점한 면세점에서 국내 원화 결제 시에 한하여 적립 제공']
+        target:
+          merchants: [air_busan, air_seoul, eastar_jet, jeju_air, jin_air, korean_air, lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, tway_air]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: woori_moa_point, rate: 3}
+        limits:
+          - {shared: special-2}
+        tiers: {from: 500000}
+        unmodeled: ['항공권 포함 패키지, 여행사·구매대행·오픈마켓을 통한 결제는 제외', 면세점은 국내공항 출국장 면세구역 입점 면세점의 원화 결제와 공식 온라인 결제만]
+      - key: special-2-overseas
+        title: 해외 일시불 3% 포인트 적립
+        source: page
+        evidence: [해외 | 해외 가맹점, '[해외] 해외 가맹점 일시불 결제 시 적립 제공', '특별 적립Ⅰ/Ⅱ 적립한도 초과 시 다음 결제 건부터 기본적립 제공됩니다. (단, 해외 이용금액은 기본적립 제외)']
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: woori_moa_point, rate: 3}
+        limits:
+          - {shared: special-2}
+        tiers: {from: 500000}
+        unmodeled: ['해외 사이트에서 국내 PG로 결제된 건, 해외 가상화폐·사행성 가맹점은 제외']
+      - key: lifestyle-10
+        title: 유튜브·올리브영·스타벅스·CGV 10% 청구할인
+        source: page
+        evidence: [OTT/뷰티/여가 10% 할인, 해당 가맹점에서 1만원 이상 결제 시 10% 청구할인, 50만원 이상 | 유튜브(YouTube) 올리브영 스타벅스 카카오T주차 CGV | 통합 5천원, 간편결제 및 인앱결제 시 할인 제외]
+        target:
+          merchants: [cgv, olive_young, starbucks, youtube_premium]
+        when:
+          - amount: {min: 10000}
+          - billing_not: [in_app]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: lifestyle}
+        tiers: {from: 500000}
+        unmodeled: ['유튜브는 공식 홈페이지 결제만, 간편결제 제외', 스타벅스 온라인스토어·단체주문·멤버십 결제 제외, CGV 음료·푸드·특별상영과 예매대행 결제 제외, 올리브영 링크 연결 결제 제외]
+    unmodeled: [10% 할인과 포인트 적립을 함께 받는지 문구가 없어 같은 묶음에 두고 큰 쪽만 계산한다, 국내 특급호텔과 골프장 3% 적립은 맞는 업종이 없어 계산하지 않는다. 기본 1%만 계산한다, 카카오T주차 10% 할인은 카카오T 가맹점이 택시까지 넓어 계산하지 않는다, 인천공항 주차장 3만원 이상 1만원 할인(월 1회 연 6회)은 주차장 가맹점이 없어 계산하지 않는다, 바우처(연 12만~13만원)와 공항라운지는 결제 혜택으로 계산하지 않는다, '해외 이용, 교통카드 이용, 통신료 자동납부는 매출표 접수일 기준으로 실적에 들어간다', 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 월 한도는 매입 순서대로 적용한다]
+open_questions:
+  - {path: 'revisions[0].benefits[lifestyle-10]', question: 10% 청구할인과 포인트 적립을 함께 받는지 문구가 없다, assumed: 큰 쪽 하나만}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 확인했다. 상품 출시일 2025-09-30. 연회비 150,000원(기본 7천, 제휴 14만3천), 가족 3만원. 기본 국내 1% 한도 없음. 전월 국내외 50만원 이상이면 특별Ⅰ 백화점(오프라인)·온라인쇼핑 4곳 2% 통합 월 5만점, 특별Ⅱ 국내 항공 7사·면세점 2곳·해외 일시불 3% 통합 월 5만점. 기본과 특별은 겹치지 않고 큰 쪽. 해외는 기본 적립 없음. 유튜브·올리브영·스타벅스·CGV 1만원 이상 10% 통합 월 5천원. 실적 제외에 무이자할부가 있어 실적에서 뺀다. 최초 발급은 카드 수령(사용)등록일과 사용개시일 중 빠른 날부터 다음 달 말일까지 실적 미충족이어도 서비스 제공.
