@@ -1,0 +1,113 @@
+schema_version: 2
+id: lotte-p15841-a15841
+issuer: lotte
+name: 다이소엔로카
+kind: credit
+product_codes: [P15841-A15841]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15841-A15841', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00008_20260910_10001.pdf', fetched_at: 2026-10-10, review_no: 제2026-C1a-13328호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-04-24
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      unmodeled: ['백화점, 대형마트, 할인점, 쇼핑몰, 지하철 역사, 휴게소 등에 입점한 매장은 할인하지 않는다', 가맹점명이 결제대행업체나 간편결제로 잡힌 결제는 할인하지 않는다. 음식점에서 네이버페이로 결제해 가맹점명이 네이버페이로 잡히는 경우다, 롯데카드의 다른 결제일 할인과 겹치면 할인금액이 큰 혜택 하나만 받는다]
+    limits:
+      - key: food_delivery
+        per: month
+        amount: {300000: 3000, 600000: 5000}
+    benefits:
+      - key: daiso-30
+        title: 다이소 30% 결제일 할인
+        source: page
+        evidence: ['다이소(온/오프) | 30% | 15,000원 | 25,000원', '다이소몰(www.daisomall.co.kr)과 오프라인 매장에서 5,000원 이상 결제 건별 월 5회에 한하여 혜택이 제공됩니다.']
+        target:
+          merchants: [daiso]
+        when:
+          - amount: {min: 5000}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - per: month
+            amount: {300000: 15000, 600000: 25000}
+          - {per: month, count: 5}
+        tiers: {from: 300000}
+        unmodeled: ['대형마트 할인점, 지하철 역사, 휴게소 등에 입점한 다이소는 할인하지 않는다']
+      - key: restaurant-10
+        title: 음식점 10% 결제일 할인
+        source: page
+        evidence: ['특별업종 | 음식점, 배달앱 | 10% | 3,000원 | 5,000원', '음식점 | 한식, 일식, 중식, 양식, 부페, 패스트푸드,패밀리레스토랑, 기타일반음식점', '주점, 유흥업소, 커피전문점, 베이커리, 제과점 및 백화점·마트 등에 입점한 음식점 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: food_delivery}
+        tiers: {from: 300000}
+      - key: delivery-10
+        title: 배달앱 10% 결제일 할인
+        source: page
+        evidence: ['특별업종 | 음식점, 배달앱 | 10% | 3,000원 | 5,000원', '배달앱 | 배달의민족, 요기요, 쿠팡이츠', 배달앱 서비스 대상 가맹점 공식 홈페이지 또는 앱을 통한 결제 시 혜택이 제공되며 가맹점 직접 결제 건은 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: food_delivery}
+        tiers: {from: 300000}
+      - key: movie-travel-10
+        title: 영화·여행 10% 결제일 할인
+        source: page
+        evidence: ['특별업종 | 영화, 여행 | 10% | 3,000원 | 5,000원', '영화·여행 | 롯데시네마, CGV, 메가박스, 여기어때, NOL(야놀자), 트립닷컴', '현장 결제, 공식 홈페이지 및 앱을 통한 예매시 할인 혜택이 제공되며 기프티콘, 상품권 구매 등 영화 예매 이외의 건은 할인 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [cgv, lotte_cinema, megabox, trip_com, yanolja, yeogi_eottae]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {300000: 3000, 600000: 5000}
+        tiers: {from: 300000}
+        unmodeled: [영화관의 기프티콘과 상품권 구매처럼 영화 예매가 아닌 결제는 할인하지 않는다]
+      - key: medical-10
+        title: 병원·약국 10% 결제일 할인
+        source: page
+        evidence: ['특별업종 | 병원, 약국 | 10% | 3,000원 | 5,000원', '병원, 동물병원, 약국으로 등록된 가맹점 업종 기준으로 혜택이 제공되며 한의원, 한방병원, 산후조리원, 요양병원, 재활원, 의료재단, 보건소, 보건복지협회, 한약방 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {300000: 3000, 600000: 5000}
+        tiers: {from: 300000}
+        unmodeled: ['한의원, 한방병원, 요양병원, 재활원, 의료재단, 보건소, 보건복지협회, 한약방은 할인하지 않는다']
+      - key: ott-30
+        title: OTT 30% 결제일 할인
+        source: page
+        evidence: ['특별업종 | OTT | 30% | 3,000원 | 5,000원', 'OTT | 유튜브, 넷플릭스, 왓챠, 디즈니플러스, 멜론, 지니뮤직', 'OTT 서비스 대상 가맹점 공식 홈페이지 또는 앱을 통해 직접 신청한 정기결제(자동이체) 이용 건만 혜택이 제공되며, 1회성 일반구매 결제 및 통신요금 내 합산 청구, 앱마켓(구글플레이, 앱스토어 등) 결제와 같이 가맹점 구분이 불가한 경우와 유튜브 채널 내 구독서비스 정기결제 건은 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [disney_plus, genie, melon, netflix, watcha, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - per: month
+            amount: {300000: 3000, 600000: 5000}
+        tiers: {from: 300000}
+        unmodeled: ['통신요금 합산 청구, 앱마켓 결제, 유튜브 채널 내 구독은 할인하지 않는다']
+    unmodeled: [신규 발급 특례는 다이소엔로카를 처음 발급한 경우에만 받는다, '해외 이용금액은 현지 매출일자, 이동통신처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 실적과 할인에 반영한다', '오토·스마트 캐시백 신청 금액, 장애인 고용부담금, TV 수신료, 고속도로 통행요금, 무승인전표, 관세·벌금·과태료·민원 수수료·인지세·송달료, 기후동행카드 충전과 결제는 실적에서 빠진다', 국내 가맹점 5만원 이상 2~3개월 할부는 무이자다. 금액으로 계산하지 않는다, 롯데카드가 주는 L.POINT 적립은 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 카드출시일 2026-04-24 뒤 혜택이 바뀌었는지 확인하지 못했다. 출시일을 시행일로 두었다, assumed: '2026-04-24'}
+  - {path: 'revisions[0].benefits[restaurant-10].target', question: '원문 음식점 대상은 한식, 일식, 중식, 양식, 부페, 패스트푸드, 패밀리레스토랑, 기타일반음식점이다. 일반음식점과 패스트푸드 업종으로 옮겼다'}
+notes: 2026-10-10 상품 페이지와 상품설명서(2026년 8월 기준)를 대조했다. 두 원문 숫자가 같다. 신용카드, 가족카드 발급 불가. 실적은 본인카드 합산이고 할인 받은 결제 전체를 실적에서 뺀다. 음식점과 배달앱은 한 줄로 묶인 월 한도를 같이 쓴다. 표의 한도가 업종 줄마다 있어 영화·여행, 병원·약국, OTT는 각자 한도로 두었다. 초안의 OTT 대상 티빙, 웨이브는 원문에 없어 뺐다.
