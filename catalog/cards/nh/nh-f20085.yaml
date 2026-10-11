@@ -1,0 +1,119 @@
+schema_version: 2
+id: nh-f20085
+issuer: nh
+name: NH1961체크카드
+short_name: NH1961 체크
+kind: check
+product_codes:
+  - '90010117'
+  - F20085
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010117', fetched_at: 2026-10-10, review_no: 2026-3845, review_valid_until: 2027-06-30}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: ['과태료(범칙금), 우체국 우편요금, 가상화폐 거래소, 현금서비스·카드론, 수수료·이자, 연체료, 포인트로 결제한 금액은 실적과 적립에서 빠진다', 백화점·할인점·쇼핑몰 안 임대매장과 별도 가맹점번호로 승인되는 일부 간편결제는 적립에서 빠질 수 있다, NH농협카드의 다른 청구할인 혜택과 겹치면 큰 쪽 하나만 받는다]
+    limits:
+      - {key: life, per: month, amount: 3000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: nhpay}
+      - {key: life}
+    benefits:
+      - key: base-point-0-2
+        title: 국내외 전가맹점 0.2% NH포인트 적립
+        source: page
+        evidence: [국내/해외 전가맹점 | 0.2% | 0.3%, 전월실적 조건 및 적립한도는 없습니다.]
+        target: {all: true}
+        reward: {type: points, program: nh_point, rate: 0.2}
+      - key: agri-point-0-3
+        title: 농협 판매장 0.3% NH포인트 적립
+        source: page
+        evidence: [농협 판매장* | 0.3% | 0.4%, '하나로마트/클럽, 한삼인, 목우촌, 농협몰, 농협주유소 등 NH농협카드 가맹점 분류업종에 따른 농협판매장 업종', 전월실적 조건 및 적립한도는 없습니다.]
+        target:
+          merchants: [nh_hanaro_mart, nh_mall]
+        reward: {type: points, program: nh_point, rate: 0.3}
+        unmodeled: ['한삼인, 목우촌, 농협주유소 등 다른 농협 판매장은 가맹점 키가 없어 0.2%로 계산한다']
+      - key: nhpay-point-0-1
+        title: NH Pay 결제 0.1% 추가 적립
+        source: page
+        evidence: [구분 | 일반 결제 | NH Pay(올원페이) 결제, 국내/해외 전가맹점 | 0.2% | 0.3%, 농협 판매장* | 0.3% | 0.4%, 'NH Pay(올원페이) 이용 시 적립은 국내 결제에 한하며, 해외결제는 제공되지 않습니다.']
+        target: {all: true}
+        when:
+          - payment: [nh_pay]
+          - {region: domestic}
+        reward: {type: points, program: nh_point, rate: 0.1}
+        stack: nhpay
+      - key: membership-coupang-20
+        title: 쿠팡 와우 멤버십 이용료 20% 적립
+        source: page
+        evidence: [온라인쇼핑 유료멤버십 20% 적립 | 쿠팡 ‘와우 멤버십’ / 네이버 ‘멤버십플러스’ 월 멤버십 이용료 | ※ 가맹점별 월 1회, '라이프 적립(추가 적립)은 전월실적 20만원이상 시 제공되며, 월 통합 한도는 3천 포인트입니다.']
+        target:
+          merchants: [coupang_wow]
+        reward: {type: points, program: nh_point, rate: 20}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life}
+        tiers: {from: 200000}
+        stack: life
+      - key: membership-naver-20
+        title: 네이버 멤버십플러스 이용료 20% 적립
+        source: page
+        evidence: [온라인쇼핑 유료멤버십 20% 적립 | 쿠팡 ‘와우 멤버십’ / 네이버 ‘멤버십플러스’ 월 멤버십 이용료 | ※ 가맹점별 월 1회, '라이프 적립(추가 적립)은 전월실적 20만원이상 시 제공되며, 월 통합 한도는 3천 포인트입니다.']
+        target:
+          merchants: [naver_plus_membership]
+        reward: {type: points, program: nh_point, rate: 20}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life}
+        tiers: {from: 200000}
+        stack: life
+      - key: video-10
+        title: 디지털 영상컨텐츠 10% 적립
+        source: page
+        evidence: [디지털 영상컨텐츠 10% 적립 | 유튜브프리미엄 / 넷플릭스 / 웨이브 / 티빙 월 정기결제 이용료, '디지털 영상컨텐츠는 대상 가맹점 공식 홈페이지/앱에서 본 카드로 이용권 정기결제 시 제공되며, 이 외 결제방법(일부 페이결제 등)을 통한 이용 및 1회성 결제, 인앱결제(구글플레이, 앱스토어 등)는 적립서비스가 제외됩니다.', '라이프 적립(추가 적립)은 전월실적 20만원이상 시 제공되며, 월 통합 한도는 3천 포인트입니다.']
+        target:
+          merchants: [netflix, tving, wavve, youtube_premium]
+        when:
+          - {channel: online}
+          - billing: [subscription]
+        reward: {type: points, program: nh_point, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 200000}
+        stack: life
+        unmodeled: [일부 페이 결제는 빠진다]
+      - key: delivery-5
+        title: 배달앱 5% 적립
+        source: page
+        evidence: [배달앱 5% 적립 | 배달의민족 / 요기요 / 쿠팡이츠 | ※ 통합 일 1회, '라이프 적립(추가 적립)은 전월실적 20만원이상 시 제공되며, 월 통합 한도는 3천 포인트입니다.']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        reward: {type: points, program: nh_point, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {shared: life}
+        tiers: {from: 200000}
+        stack: life
+    unmodeled: ['해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다. 월말 이용이 다음 달 실적이 될 수 있다', 국제공항 라운지 연 1회 무료이용은 전월실적 50만원 이상이고 카드 사용등록월 다음 달부터다. 결제 혜택이 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].benefits[delivery-5].tiers', question: 원문은 특정한 제한조건이 없는 경우(기본 적립) 카드사용등록일부터 다음 달 말일까지 실적 미달이어도 제공한다고 쓴다. 기본 적립은 원래 실적 조건이 없어 라이프 적립에도 이 특례가 붙는지 분명하지 않다, assumed: 라이프 적립에는 특례 없음}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다. 상품출시일은 2019-11-20이다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[base-point-0-2].reward', question: 원 미만 포인트 처리 문구가 없다, assumed: floor}
+notes: 2026-10-10 상품 페이지(준법감시인 심의필 2026-3845)를 대조했다. 상품출시일 2019-11-20. 기본 0.2%, 농협 판매장 0.3%는 실적과 한도 없이 주고, NH Pay(올원페이) 국내 결제는 각각 0.1%를 더한다. 라이프 적립 넷은 전월 20만원 이상, 월 통합 3천 포인트다. 초안의 농협 판매장 전가맹점 대상, 라운지 0원 혜택을 고쳤다. 국내전용, Mastercard, VISA 모두 연회비 없음.
