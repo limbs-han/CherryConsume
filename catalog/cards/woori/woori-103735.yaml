@@ -1,0 +1,54 @@
+schema_version: 2
+id: woori-103735
+issuer: woori
+name: 경희사랑카드
+kind: credit
+product_codes:
+  - '103735'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103735', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2024-08-28'
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: ['정부지원금(보육료, 유치원보조비, 바우처), 신차 구매, 우편요금, 과태료·범칙금·벌금, 여권발급비용, 국가·공공기관 가맹점은 할인에서 빠진다']
+    stacks:
+      - {key: extra}
+    benefits:
+      - key: all-0-5
+        title: 국내외 가맹점 0.5% 기본 청구할인
+        source: page
+        evidence: [기본 Discount - 0.5% 기본 청구할인, '전월실적 조건 없이, 할인한도 제한 없이', 국내외 가맹점에서 결제 시 청구할인]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+      - key: life-0-3
+        title: 생활업종 0.3% 추가 청구할인
+        source: page
+        evidence: [추가 Discount - 0.3% 추가 청구할인, (기본 0.5% + 추가 0.3% =0.8% 청구할인), '전월실적 조건 없이, 할인한도 제한 없이', 음식점 (제과점 포함), '편의점 및 수퍼마켓 (이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스, GS THE FRESH 포함)', '병의원, 한의원, 동물병원, 약국', '시내버스/지하철 (후불교통기능 선택 시 제공), 택시', 미용실 및 화장품, '항공사, 면세점, 해외 이용금액']
+        target:
+          categories: [beauty.cosmetics, beauty.salon, convenience, hospital, pet.vet, pharmacy, restaurant, taxi, transit.bus_city, transit.subway, travel.airline, travel.duty_free]
+          merchants: [emart_everyday, gs_the_fresh, homeplus_express, lotte_super]
+        reward: {type: billing_discount, rate: 0.3}
+        stack: extra
+        unmodeled: ['백화점, 대형마트, 미군부대, 리조트 등 일부 입점 매장은 추가 할인 제외', 가맹점명이 다른 간편결제와 배달앱 결제는 추가 할인 제외, 위 네 곳 외 일반 수퍼마켓은 업종이 없어 계산하지 않는다]
+      - key: life-0-3-overseas
+        title: 해외 이용 0.3% 추가 청구할인
+        source: page
+        evidence: [추가 Discount - 0.3% 추가 청구할인, '항공사, 면세점, 해외 이용금액']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 0.3}
+        stack: extra
+    unmodeled: [해외가맹점 이용금액은 매출표 접수일 기준으로 할인한다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 확인했다. 상품 출시일 2024-08-28. 연회비 12,000원(기본 7천, 제휴 5천), 가족카드 없음. 페이지에 발급 대상 제한 문구가 없어 일반 카드로 담았다. 전월 실적과 한도 없이 국내외 0.5%, 생활업종과 해외에 0.3% 추가. 추가 할인의 해외 이용분은 해외 결제 전체를 대상으로 따로 두고 같은 묶음에 넣어 생활업종과 겹쳐 받지 않게 했다. 할인 제외의 아파트 관리비(임대료)는 임대료 업종까지 뺐다.
