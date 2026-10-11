@@ -1,0 +1,96 @@
+schema_version: 2
+id: nh-m21017
+issuer: nh
+name: 올바른GLOBAL체크카드
+short_name: 올바른GLOBAL 체크
+kind: check
+product_codes:
+  - '90000390'
+  - M21017
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90000390', fetched_at: 2026-10-10, review_no: 2026-3845, review_valid_until: 2027-06-30}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [편의점·커피·베이커리·올리브영은 가두매장만이고 백화점·할인점·쇼핑몰 입점매장은 빠질 수 있다, 영화는 예매와 결제만이고 상품권 구매는 빠진다, NH농협카드 전산에 등록된 해당 가맹점·업종 이용액만 받는다]
+    limits:
+      - {key: life, per: month, amount: 30000}
+    benefits:
+      - key: overseas-cashback-2
+        title: 해외 이용 2% 캐시백
+        source: page
+        evidence: [해외 물품 구매시 2% 캐시백, '캐시백 한도 : 월 10만원(회원별 결제일에 일괄 입금)', 전월 이용실적 20만원 이상 & 결제 건당 1만원 이상 이용시 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: month, amount: 100000}
+        tiers: {from: 200000}
+      - key: life-cashback-0-5
+        title: 10대 업종 0.5% 캐시백
+        source: page
+        evidence: [10대 업종 0.5~1.0% 캐시백, '캐시백 한도 : 월 3만원', 전월 이용실적 20만원 이상 이용시 제공, 전월 실적 20만원 이상 50만원 미만 구간 0.5%]
+        target:
+          categories: [transit.bus_city, transit.subway, travel.duty_free]
+          merchants: [aladin, auction, baskin_robbins, cgv, cu, ediya, eleven_st, gmarket, gs25, interpark_book, kt, lg_uplus, lotte_cinema, megabox, nh_mall, olive_young, paris_baguette, seven_eleven, skt, starbucks, tous_les_jours, twosome]
+        reward: {type: cashback, rate: 0.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 200000, to: 200000}
+      - key: life-cashback-1
+        title: 10대 업종 1% 캐시백
+        source: page
+        evidence: [10대 업종 0.5~1.0% 캐시백, '캐시백 한도 : 월 3만원', 전월 실적 50만원 이상 1.0%]
+        target:
+          categories: [transit.bus_city, transit.subway, travel.duty_free]
+          merchants: [aladin, auction, baskin_robbins, cgv, cu, ediya, eleven_st, gmarket, gs25, interpark_book, kt, lg_uplus, lotte_cinema, megabox, nh_mall, olive_young, paris_baguette, seven_eleven, skt, starbucks, tous_les_jours, twosome]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+      - key: life-kyobo-online-0-5
+        title: 교보문고 온라인 0.5% 캐시백
+        source: page
+        evidence: ['온라인 도서: 인터파크도서, 알라딘, 교보문고(온라인)', 전월 실적 20만원 이상 50만원 미만 구간 0.5%]
+        target:
+          merchants: [kyobo_book]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 0.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 200000, to: 200000}
+      - key: life-kyobo-online-1
+        title: 교보문고 온라인 1% 캐시백
+        source: page
+        evidence: ['온라인 도서: 인터파크도서, 알라딘, 교보문고(온라인)', 전월 실적 50만원 이상 1.0%]
+        target:
+          merchants: [kyobo_book]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+    unmodeled: [해외 ATM 인출 수수료 US$3 면제(월 2회)는 결제가 아니라 계산하지 않는다, 국제공항 라운지 연 1회 무료는 담을 가맹점이 없어 계산하지 않는다, 10대 업종의 공항리무진은 업종 키가 없어 계산하지 않는다, 버스·지하철과 공항리무진은 후불교통 이용분이 대상이다, '해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다', '가상화폐 거래금액, 우체국 우편요금, 현금서비스·카드론, 수수료·이자·연체료, 포인트 사용분은 실적에서 빠진다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[overseas-cashback-2].target', question: '"해외 물품 구매"의 범위를 원문이 따로 정하지 않았다', assumed: 해외 가맹점 이용 전체}
+  - {path: 'revisions[0].benefits[life-cashback-0-5].target', question: 면세점이 국내 면세점까지인지 원문이 적지 않았다, assumed: 면세점 업종 전체}
+notes: 2026-10-10 상품 페이지(준법감시인 심의필 2026-3845)를 대조했다. 마스터카드 연회비 0원. 신규 특례는 사용등록 후 다음 달 말일까지 20만~50만원 구간이다. 초안이 10대 업종을 넓은 업종으로 잡은 것을 원문 가맹점으로 좁혔고 해외 2%에 지역 조건을 더했다. 라운지와 ATM 수수료 면제는 뺐다.
