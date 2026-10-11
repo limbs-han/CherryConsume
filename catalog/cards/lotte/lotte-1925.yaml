@@ -1,0 +1,111 @@
+schema_version: 2
+id: lotte-1925
+issuer: lotte
+name: 아파트아이 X 디지로카
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00004_20250414_10001.pdf', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-02-14'
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    benefits:
+      - key: apartment-fee
+        title: 아파트관리비 자동납부 10% 결제일 할인
+        source: manual
+        evidence: ['아파트관리비 10% 6,000원 10,000원', 아파트 관리비 자동납부 건만 혜택이 제공됩니다., 건당 2만원 이상 결제 건에 대해서 혜택이 제공됩니다.]
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+            amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 6000, 1000000: 10000}
+        tiers: {from: 500000}
+      - key: online-shopping
+        title: 쿠팡·마켓컬리·SSG.COM 5% 결제일 할인
+        source: manual
+        evidence: ['온라인쇼핑 쿠팡, 마켓컬리, SSG.COM 5% 6,000원', 건당 2만원 이상 결제 건에 대해서 혜택이 제공됩니다.]
+        target:
+          merchants: [coupang, kurly, ssg_com]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 6000}
+        tiers: {from: 500000}
+      - key: delivery
+        title: 배달앱 5% 결제일 할인
+        source: manual
+        evidence: ['배달앱 배달의민족, 쿠팡이츠, 요기요 5% 6,000원', '공식 앱 또는 홈페이지를 통한 결제 시 혜택이 제공되며, 가맹점 직접 결제 건은 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - channel: online
+            amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 6000}
+        tiers: {from: 500000}
+      - key: telecom
+        title: 이동통신 자동납부 5% 결제일 할인
+        source: manual
+        evidence: ['이동통신 SKT, KT, LG U+ 5% 6,000원', '이동통신요금 자동납부 건만 혜택이 제공되며, 인터넷, TV 등과 결합상품 및 알뜰폰 이용금액은 혜택이 제공되지 않습니다.', 이동통신과 스트리밍은 각 월 1회만 적용됩니다.]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 6000, count: 1}
+        tiers: {from: 500000}
+      - key: transit
+        title: 시내버스·지하철 5% 결제일 할인
+        source: manual
+        evidence: ['대중교통 버스, 지하철 5% 6,000원', '지하철, 시내버스 이용 건만 혜택이 제공되며 택시, 고속버스, 시외버스 이용 금액은 혜택이 제공되지 않습니다.', 지하철과 시내버스 이용 금액은 합산되지 않습니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 6000}
+        tiers: {from: 500000}
+      - key: streaming
+        title: 스트리밍 정기결제 1,500원 결제일 할인
+        source: manual
+        evidence: ['스트리밍 넷플릭스, 유튜브, 왓챠, 멜론, 지니뮤직, 디즈니+ - 1,500원', 스트리밍 할인은 건당 결제금액에 상관없이 혜택이 제공됩니다., 이동통신과 스트리밍은 각 월 1회만 적용됩니다., 서비스 대상 가맹점 공식 홈페이지 또는 앱을 통해 직접 신청한 정기결제(자동납부) 이용건만 혜택이 제공됩니다.]
+        target:
+          merchants: [disney_plus, genie, melon, netflix, watcha, youtube_premium]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 1500, count: 1}
+        tiers: {from: 500000}
+    unmodeled: [대중교통 할인은 시내버스와 지하철 이용금액을 합산하지 않고 모바일 등록 카드와 실물카드 태그도 따로 접수된다. 접수 한 건이 2만원 이상일 때만 할인한다, 가맹점 구분이 어려운 PG 결제는 온라인쇼핑 할인에서 빠진다, '스트리밍은 통신요금 합산청구, 앱마켓 결제, 해외 경로 가입은 할인하지 않는다', 이동통신 할인에서 인터넷·TV 결합상품과 알뜰폰 요금은 빠진다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '정부지원금, TV 수신료, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 관세·벌금·과태료·민원 발급 수수료·인지세·송달료, 현금서비스·카드론·이자·수수료, 기후동행카드는 실적에서 빠진다', 아파트아이 X 디지로카가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 온라인 판매 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다. 아파트아이 앱 제휴 채널 전용 판매로 보인다, assumed: '[]'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 목록에 대중교통이 따로 없고 무승인전표만 있다. 롯데는 후불교통을 무승인 결제로 부른다. 실적이 적게 잡히는 쪽으로 시내버스와 지하철을 뺐다, assumed: 'transit.bus_city, transit.subway 제외'}
+notes: 2026-10-10 상품설명서(2025년 2월 기준, 출시일 2025-02-14) 대조. 신규 발급 특례는 발급일부터 다음 달 말일까지 50만 구간이다. 생활업종 월 최대 35,500원은 100만 구간 한도 합계와 같아 따로 한도를 두지 않았다. 실적 제외 목록에 아파트관리비가 없어 실적에 넣었다. 스트리밍은 할인율 없이 한도 1,500원이라 100% 할인에 월 1회 1,500원 한도로 적었다.
