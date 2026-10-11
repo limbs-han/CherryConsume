@@ -1,0 +1,48 @@
+schema_version: 2
+id: lotte-p11280-a11280
+issuer: lotte
+name: 프리미엄 렌탈DC 넥센타이어 롯데카드
+kind: credit
+product_codes: [P11280-A11280]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P11280-A11280', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P11280-A11280_220112_231221.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: nexen-rental-discount
+        title: 넥센타이어 렌탈료 자동이체 청구할인
+        source: manual
+        evidence: ['30만원 이상 월 11,000원', '60만원 이상 월 15,000원', '100만원 이상 월 20,000원', 프리미엄 렌탈DC 넥센타이어 롯데카드로 넥센타이어 렌탈료 자동이체시에만 할인혜택을 받으실 수 있습니다., 할인금액이 렌탈요금보다 큰 경우 렌탈요금 청구금액까지만 할인 받으실 수 있으며, 렌탈료 할인금액이 월 1회 적용됩니다.]
+        target:
+          merchants: [nexen_tire_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 11000, 600000: 15000, 1000000: 20000}
+            count: 1
+        tiers: {from: 300000}
+    unmodeled: [본인과 가족카드의 실적과 할인 한도를 합산한다, 대상 가맹점에 적용되는 롯데카드의 다른 청구할인과 겹쳐 받지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2016-07-01이고 설명서는 2023년 11월 기준이다, assumed: '2026-10-11'}
+  - {path: 'revisions[0].benefits[nexen-rental-discount].target', question: 공통 가맹점 nexen_tire_rental(넥센타이어 렌탈)가 필요하다. needed/lotte-p11280-a11280.json에 제안했다}
+notes: 2026-10-11 상품 페이지와 상품설명서(2023년 11월 기준) 대조. 출시일 2016-07-01. 실적 제외는 렌탈료 할인받은 이용건 전액, 현금서비스, 카드론, 수수료와 이자, 연회비, 해외 이용금액뿐이다. 신규 회원은 카드 사용등록월 포함 다음 달 말일까지 11,000원이라 30만 구간으로 넣었다.
