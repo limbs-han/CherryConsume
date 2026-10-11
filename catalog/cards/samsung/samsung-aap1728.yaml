@@ -1,0 +1,141 @@
+schema_version: 2
+id: samsung-aap1728
+issuer: samsung
+name: 삼성 SFC iD ALL 카드
+short_name: 삼성 SFC iD ALL
+search_names: [SFC iD ALL, 삼성 iD ALL, 아이디 올]
+kind: credit
+product_codes: [AAP1728]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1728', fetched_at: 2026-10-11}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvQAT%2FFSRF9G6NX0%2FM10WDA%3D&sn=1', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2021-09-01
+    source: manual
+    tiers: [0, 400000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다', '고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 할인하지 않는다']
+    ranked:
+      - {key: top-area, cancellation: cancel_month, top: 1, by: month_amount}
+    limits:
+      - key: top-area
+        per: month
+        amount: {400000: 5000, 700000: 10000}
+      - key: life
+        per: month
+        amount: {400000: 5000, 700000: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [life-2-5, telecom-2-5, apartment-2-5, base-0-5]
+        spill: none
+      - {key: area}
+    benefits:
+      - key: department-5
+        title: 백화점 5% 할인(많이 쓰는 영역)
+        source: manual
+        evidence: [백화점·할인점·슈퍼마켓 영역 중 월 이용금액이 가장 큰 1개 영역에 대해 5% 결제일할인, '백화점 신세계/롯데/현대/갤러리아 백화점, AK플라자', '전월 이용금액대별 월 할인한도 40만원 이상 5,000원, 70만원 이상 10,000원', 국내외 가맹점 0.5% 할인 혜택과 중복 적용]
+        target:
+          merchants: [ak_plaza, galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {ranked: top-area}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: top-area}
+        tiers: {from: 400000}
+        stack: area
+        unmodeled: [상품권·주차장 같은 쇼핑 외 결제와 임대매장은 할인하지 않는다, 가족카드는 할인하지 않는다]
+      - key: mart-5
+        title: 할인점 5% 할인(많이 쓰는 영역)
+        source: manual
+        evidence: ['할인점 이마트, 이마트 트레이더스, 롯데마트, 홈플러스, 농협 하나로마트']
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart, traders]
+        when:
+          - {ranked: top-area}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: top-area}
+        tiers: {from: 400000}
+        stack: area
+        unmodeled: [상품권·주차장 같은 쇼핑 외 결제와 임대매장은 할인하지 않는다, 가족카드는 할인하지 않는다]
+      - key: super-5
+        title: 슈퍼마켓 5% 할인(많이 쓰는 영역)
+        source: manual
+        evidence: ['슈퍼마켓 이마트 에브리데이, GS THE FRESH(구. GS수퍼마켓), 롯데슈퍼, 홈플러스 익스프레스']
+        target:
+          merchants: [emart_everyday, gs_the_fresh, homeplus_express, lotte_super]
+        when:
+          - {ranked: top-area}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: top-area}
+        tiers: {from: 400000}
+        stack: area
+        unmodeled: [상품권·주차장 같은 쇼핑 외 결제와 임대매장은 할인하지 않는다, 가족카드는 할인하지 않는다]
+      - key: life-2-5
+        title: 주유 2.5% 할인
+        source: manual
+        evidence: [주유·이동통신·아파트 관리비 2.5% 결제일할인, '주유 주유소, LPG충전소, 전기차충전소', '이동통신 SKT, KT, LG U+, 알뜰폰 이동통신요금 정기결제건', 아파트 관리비 아파트 관리비 정기결제건, '전월 이용금액대별 통합 월 할인한도 40만원 이상 5,000원, 70만원 이상 10,000원', 월 할인한도 초과 시 다음 결제건부터 0.5% 할인 적용]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, rate: 2.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+      - key: telecom-2-5
+        title: 이동통신 정기결제 2.5% 할인
+        source: manual
+        evidence: ['이동통신 SKT, KT, LG U+, 알뜰폰 이동통신요금 정기결제건', '알뜰폰은 SK텔링크, KT스카이라이프, KT M모바일, 헬로모바일, 미디어로그에 한함']
+        target:
+          merchants: [hello_mobile, kt, kt_m_mobile, kt_skylife, lg_uplus, media_log, sk_telink, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 2.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        unmodeled: ['결합상품요금, 단말기 구매금액, 대리점 결제는 할인하지 않는다']
+      - key: apartment-2-5
+        title: 아파트 관리비 정기결제 2.5% 할인
+        source: manual
+        evidence: [아파트 관리비 아파트 관리비 정기결제건]
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 2.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+      - key: base-0-5
+        title: 국내외 가맹점 0.5% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 국내외 가맹점 0.5% 결제일할인', 해외는 해외겸용카드에 한해 제공]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+    unmodeled: [전기차충전소 2.5%는 지정 충전 사업자와 멤버십 등록이 조건이고 담을 업종이 없어 넣지 않았다, 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일 2021-09-01을 시행일로 두었다. 대조한 상품안내장은 2026.6판(심의필 2026-C1a-08537호)이다, assumed: '2021-09-01'}
+  - {path: 'revisions[0].benefits', question: 할인의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 상품안내장(2026.6판) 확인. 출시 2021-09-01. 연회비 실물 해외겸용 Mastercard·VISA와 국내전용 모두 20,000원(기본 7,000+제휴 13,000). 모바일카드는 15,000원(해외겸용)과 13,000원(국내전용)이다. 많이 쓰는 영역 5%는 백화점·할인점·슈퍼마켓 중 이번 달 이용액이 가장 큰 한 영역에만 주고 0.5%와 더해 받는다. 주유·이동통신·아파트 관리비 2.5%는 한도를 넘으면 다음 결제부터 0.5%다. 실적 제외는 4대보험, 국세·지방세·공과금, 임대료, 초중고 납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권이다. 아파트 관리비와 무이자할부는 실적에 넣는다.
