@@ -20,9 +20,9 @@ def cat():
     return load_catalog(ROOT)
 
 
-def test_twenty_cards_pass_check(cat):
+def test_every_card_passes_check(cat):
     assert [str(p) for p in check_catalog(cat) if p.level == "error"] == []
-    assert len(cat.cards) == 20
+    assert len(cat.cards) == len(list(ROOT.glob("cards/*/*.yaml")))
 
 
 def test_no_benefit_is_copied_per_tier(cat):

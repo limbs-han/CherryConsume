@@ -114,7 +114,15 @@ def test_issuer_default_change_renews_cards_that_follow_it():
     def cancel_by_original_month(issuer):
         issuer["defaults"][-1]["spend"]["cancellation"] = "original_month"
 
-    shinhan = {cid for cid, *_ in OLD if cid.startswith("shinhan-")}
+    # 취소 반영 달을 카드 파일에 직접 적은 카드는 카드사 기본값을 따르지 않는다
+    shinhan = {
+        cid
+        for cid, *_ in OLD
+        if cid.startswith("shinhan-")
+        and not any(
+            "cancellation" in r.get("spend", {}) for r in yaml.safe_load(GOLD[f"cards/shinhan/{cid}.yaml"])["revisions"]
+        )
+    }
     assert renewed(edited("issuers/shinhan.yaml", cancel_by_original_month)) == shinhan
 
 
@@ -210,7 +218,9 @@ def test_draft_subject_names_the_card_and_the_changed_revision():
     assert draft_subject(text) == "feat: 삼성 iD ON 카드 2026-07-30 개정 반영"
     assert SUBJECT.fullmatch(draft_subject(text))
     # 2026-10-02 위험 검토. 바뀐 개정의 시행일을 쓰고, 판매 중이던 카드가 멈췄을 때만 발급 중단이다
-    first = canonical_text({**card, "revisions": [{**card["revisions"][0], "source": "disclosure"}, *card["revisions"][1:]]})
+    first = canonical_text(
+        {**card, "revisions": [{**card["revisions"][0], "source": "disclosure"}, *card["revisions"][1:]]}
+    )
     assert draft_subject(first, text) == "feat: 삼성 iD ON 카드 2021-09-01 개정 반영"
     gone = canonical_text({**card, "status": "discontinued"})
     assert draft_subject(gone, text) == "feat: 삼성 iD ON 카드 발급 중단 반영"
@@ -254,7 +264,14 @@ def test_draft_plan_never_leaves_approval_and_rejection_together(decision, recor
 
 def test_resume_message_sends_an_app_approval_back_to_the_app():
     # 다시 검토. 끊긴 앱 승인을 손 승인으로 이으면 저장 형식 맞추기와 대기 건 닫기가 빠진다
-    unfinished = [{"review_id": "r-20261002T090000Z-draft", "source": "app-1", "subject": "feat: 카드 개정 반영", "draft_id": "d-1"}]
+    unfinished = [
+        {
+            "review_id": "r-20261002T090000Z-draft",
+            "source": "app-1",
+            "subject": "feat: 카드 개정 반영",
+            "draft_id": "d-1",
+        }
+    ]
     with pytest.raises(ValueError, match="검수 앱에서 초안 d-1을 다시 승인"):
         resume_or_start(None, unfinished, "x", "x")
 

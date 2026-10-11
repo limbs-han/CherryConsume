@@ -106,15 +106,15 @@ def test_billing_bound_collects_billing_conditions(make_catalog, real):
 
 
 def test_sizes_at_1500_cards(real):
-    # 저장소 카드 20장을 id를 바꿔 75번 복사한다. 설계 6절, 의도 성공 기준 1과 4
+    # 저장소 카드를 id를 바꿔 1,500장이 넘게 복사한다. 설계 6절, 의도 성공 기준 1과 4
     _, _, index, cards = real
     heads, files = [], {}
-    for i in range(75):
+    for i in range(-(-1500 // len(index["cards"]))):
         for c in index["cards"]:
             cid = f"{c['id']}-{i}"
             files[cid] = card_text({**json.loads(cards[c["id"]]), "id": cid})
             heads.append({**c, "id": cid, "file_sha256": hashlib.sha256(files[cid].encode()).hexdigest()})
-    assert len(files) == 1500
+    assert 1500 <= len(files) < 1500 + len(index["cards"])
     assert len(index_text({**index, "cards": heads}).encode()) < 1_500_000
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:

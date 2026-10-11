@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[3] / "catalog"
 
 def test_file_rows_are_every_v2_file_as_is():
     rows = file_rows(ROOT)
-    assert len(rows) == 35
+    assert len(rows) == len(list(ROOT.rglob("*.yaml")))
     path, text = next(r for r in rows if r[0] == "cards/shinhan/shinhan-cheoeum.yaml")
     assert text == (ROOT / path).read_text(encoding="utf-8")
     assert all(not p.startswith("cards/") or p.count("/") == 2 for p, _ in rows)  # 1판 cards/*.yaml은 넣지 않는다
@@ -33,7 +33,7 @@ def test_file_rows_are_every_v2_file_as_is():
 def test_revision_rows_are_clean_rules_of_each_revision():
     cat = load_catalog(ROOT)
     rows = revision_rows(cat)
-    assert len(rows) == 22  # 카드 20장, 개정 22개
+    assert len(rows) == sum(len(c.revisions) for c in cat.cards.values())
     _, issuer, day, estimated, source, rules = next(r for r in rows if r[0] == "shinhan-cheoeum")
     rev = cat.cards["shinhan-cheoeum"].revisions[-1][0]
     assert (issuer, day, estimated, source) == ("shinhan", rev.effective_from, rev.effective_from_estimated, rev.source)
@@ -44,7 +44,7 @@ def test_golden_rows_split_and_first_sources():
     cat = load_catalog(ROOT)
     first = {("shinhan-cheoeum", "page"): "2026-10-01/shinhan/shinhan-cheoeum/page-abc.html"}
     rows = {r[0]: r for r in golden_rows(cat, first)}
-    assert len(rows) == 20
+    assert len(rows) == len(cat.cards)
     assert TEST_CARDS <= rows.keys()
     assert sorted(r[2] for r in rows.values()).count("test") == 5
     assert rows["shinhan-cheoeum"][2] == "test"
@@ -81,6 +81,7 @@ def test_catalog_with_errors_is_refused(tmp_path):
 def test_cli_prints_counts_and_digests(capsys):
     assert main([str(ROOT)]) == 0
     out = capsys.readouterr().out
-    assert "카탈로그 파일 35개" in out
-    assert "카드 개정 22개" in out
+    cat = load_catalog(ROOT)
+    assert f"카탈로그 파일 {len(list(ROOT.rglob('*.yaml')))}개" in out
+    assert f"카드 개정 {sum(len(c.revisions) for c in cat.cards.values())}개" in out
     assert out.count("해시 ") == 2
