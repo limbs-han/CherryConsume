@@ -1,0 +1,113 @@
+schema_version: 2
+id: kb-01656
+issuer: kb
+name: KB국민 내고장사랑 체크카드
+short_name: KB 내고장사랑 체크
+kind: check
+product_codes:
+  - '01656'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01656', fetched_at: '2026-10-11', review_no: 제241119-05864-TRM}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠진다']
+    benefits:
+      - key: cgv-20
+        title: CGV 20% 환급할인
+        source: page
+        evidence: [CGV 20% 환급할인 이용금액 기준으로 건당 1만원 이상 2만원까지/월간 2만원까지 할인, '제공조건 : 현장구매 및 CGV홈페이지(www.cgv.co.kr) · CGV 앱 결제', '할인제외 : 상품권 구매 / 매점 이용금액', '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: month, base: 20000}
+        tiers: {from: 200000}
+        unmodeled: [CGV 매점 이용금액은 할인에서 빠진다]
+      - key: amusement-20
+        title: 놀이공원 업종 20% 환급할인
+        source: page
+        evidence: [놀이공원 업종 20% 이용금액 기준으로 건당 3만원 이상 5만원까지/월간 5만원까지 할인, '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [e_world, everland, gyeongju_world, lotte_world, seoul_land]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, base: 50000}
+        tiers: {from: 200000}
+        unmodeled: [놀이공원 업종 공통 키가 없어 이름이 있는 놀이공원 다섯 곳만 계산한다]
+      - key: outback-10
+        title: 아웃백 10% 환급할인
+        source: page
+        evidence: [아웃백 10% 이용금액 기준으로 건당 3만원 이상 10만원까지/월간 30만원까지 할인, '할인제외 : 상품권 구매 및 백화점 , 대형할인점에 입점한 점포인 경우', '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [outback]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, base: 300000}
+        tiers: {from: 200000}
+        unmodeled: [백화점과 대형할인점 안의 아웃백은 할인에서 빠진다]
+      - key: gs25-3
+        title: GS25 3% 환급할인
+        source: page
+        evidence: [GS25 3% 이용금액 기준으로 건당 1만원 이상 2만원까지/월간 5만원까지 할인, '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [gs25]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: month, base: 50000}
+        tiers: {from: 200000}
+      - key: kyobo-3
+        title: 교보문고 3% 환급할인
+        source: page
+        evidence: [교보문고 3% 이용금액 기준으로 건당 1만원 이상 2만원까지/월간 5만원까지 할인, '제공조건 : 현장 구매 및 교보문고 홈페이지(www.kyobobook.co.kr)·교보문고 앱 결제', '할인제외 : 핫트랙스 이용금액']
+        target:
+          merchants: [kyobo_book]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: month, base: 50000}
+        tiers: {from: 200000}
+        unmodeled: [핫트랙스 이용금액은 할인에서 빠진다]
+      - key: transit-5
+        title: 버스·지하철 5% 청구·환급할인
+        source: page
+        evidence: [버스 · 지하철 5% 청구/환급할인 이용금액 기준으로 월간 2만원까지 할인 적용, '청구 할인 대상: 후불교통(시내버스, 지하철)', '환급 할인 대상: 고속/시외버스', '할인 제외 : 공항버스', '실적조건 : 전월 이용실적 30만원 이상']
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, base: 20000}
+        tiers: {from: 300000}
+        unmodeled: [공항버스는 할인에서 빠진다, 후불교통은 실제 이용일이 아니라 이용내역서에 적힌 이용일 기준으로 할인한다]
+    unmodeled: [최초 발급 후 사용등록일로부터 60일까지 실적 없이 할인하는 특례는 60일 기간을 담을 칸이 없어 계산하지 않는다. 대중교통은 이 특례가 없다, 금융수수료 면제(최근 1개월 이용 70만원 이상)는 결제 혜택이 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '이 카드 페이지는 실적 제외를 체크카드 공통 실적 제외 대상으로만 적었다. 다른 KB국민 체크카드가 적은 공통 목록(후불교통요금, 무승인, 정부지원금, 포인트리 충전, 대학등록금, 상품권·선불카드, 지방세·상하수도)을 따랐다. 후불교통은 시내버스와 지하철 업종 제외로 옮겨 실적이 적게 잡힐 수 있다', assumed: 'education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 원문에 발급 대상 제한이 없어 일반 상품으로 담았다. 할인 한도는 모두 할인 금액이 아니라 이용금액 기준이라 base로 옮겼다.
