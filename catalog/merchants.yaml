@@ -724,6 +724,10 @@
   name: T우주패스
   category: streaming
   aliases: [T우주패스]
+- key: kream
+  name: 크림
+  category: online_shopping
+  aliases: [크림]
 - key: galleria
   name: 갤러리아
   category: department_store
@@ -824,3 +828,223 @@
   name: 미니스톱
   category: convenience
   aliases: [미니스톱, MINISTOP]
+- key: lotte_mart_max
+  name: 롯데마트맥스
+  category: grocery_mart
+  aliases: [롯데마트맥스, 롯데마트 맥스, LOTTE MART MAXX]
+- key: vips
+  name: 빕스
+  category: restaurant.general
+  aliases: [빕스, VIPS, CJ푸드빌 빕스]
+- key: blacksmith
+  name: 블랙스미스
+  category: restaurant.general
+  aliases: [블랙스미스, BLACKSMITH]
+- key: todai
+  name: 토다이
+  category: restaurant.general
+  aliases: [토다이, TODAI]
+- key: on_the_border
+  name: 온더보더
+  category: restaurant.general
+  aliases: [온더보더, ON THE BORDER]
+- key: ashley
+  name: 애슐리
+  category: restaurant.general
+  aliases: [애슐리, 애슐리퀸즈, ASHLEY]
+- key: bulgogi_brothers
+  name: 불고기브라더스
+  category: restaurant.general
+  aliases: [불고기브라더스, BULGOGI BROTHERS]
+- key: dalkomm
+  name: 달콤커피
+  category: cafe
+  aliases: [달콤커피, 달.콤 커피, DAL.KOMM]
+- key: home_and_shopping
+  name: 홈앤쇼핑
+  category: online_shopping
+  aliases: [홈앤쇼핑, 홈&쇼핑, HNSMALL]
+- key: gs_shop
+  name: GS SHOP
+  category: online_shopping
+  aliases: [GS SHOP, GS샵, 지에스샵, GS홈쇼핑]
+- key: cj_onstyle
+  name: CJ온스타일
+  category: online_shopping
+  aliases: [CJ온스타일, CJ ONSTYLE, CJ오쇼핑]
+- key: hyundai_homeshopping
+  name: 현대홈쇼핑
+  category: online_shopping
+  aliases: [현대홈쇼핑, Hmall, 현대H몰]
+- key: ns_homeshopping
+  name: NS홈쇼핑
+  category: online_shopping
+  aliases: [NS홈쇼핑, NS몰]
+- key: yeogi_eottae
+  name: 여기어때
+  category: travel.hotel
+  aliases: [여기어때, 여기어때컴퍼니, GCCOMPANY]
+- key: trip_com
+  name: 트립닷컴
+  category: travel.agency
+  aliases: [트립닷컴, Trip.com, TRIP.COM]
+- key: paris_croissant
+  name: 파리크라상
+  category: restaurant.bakery
+  aliases: [파리크라상, PARIS CROISSANT]
+- key: tway_air
+  name: 티웨이항공
+  category: travel.airline
+  aliases: [티웨이항공, 티웨이, T'way]
+- key: nike_com
+  name: 나이키닷컴
+  category: online_shopping
+  aliases: [나이키닷컴, nike.com, NIKE.COM]
+- key: ssf_shop
+  name: SSF SHOP
+  category: online_shopping
+  aliases: [SSF SHOP, SSF샵, 에스에스에프샵]
+- key: toss_shopping
+  name: 토스쇼핑
+  category: online_shopping
+  aliases: [토스쇼핑, 토스 쇼핑]
+- key: toss_prime
+  name: 토스프라임
+  billing: subscription
+  category: streaming
+  aliases: [토스프라임, 토스 프라임]
+- key: hanwha_eagles_ticket
+  name: 한화이글스 홈경기 입장권
+  category: sports
+  aliases: [한화이글스 입장권, 한화이글스 티켓, 이글스 티켓]
+- key: hanwha_eagles_store
+  name: 한화이글스 팀스토어
+  category: other
+  aliases: [이글스 레플리카 형지엘리트 샵, 한화이글스 MD샵, 이글스샵]
+- key: sungsimdang
+  name: 성심당
+  category: restaurant.bakery
+  aliases: [성심당]
+- key: daeguro
+  name: 대구로
+  category: delivery_app
+  aliases: [대구로, 대구로 배달, DAEGURO]
+- key: daeguro_taxi
+  name: 대구로 택시
+  category: taxi
+  aliases: [대구로 택시, 대구로택시]
+- key: hyundai_marine
+  name: 현대해상
+  category: insurance.private
+  aliases: [현대해상, 현대해상화재보험, 현대해상 다이렉트]
+- key: tenbyten
+  name: 텐바이텐
+  category: online_shopping
+  aliases: [텐바이텐, 10X10]
+- key: interpark_ticket
+  name: 인터파크티켓
+  category: other
+  aliases: [인터파크티켓, NOL 티켓, INTERPARK TICKET]
+- key: lomad
+  name: 로마드
+  category: other
+  aliases: [로마드, LOMAD]
+- key: sk_broadband
+  name: SK브로드밴드
+  billing: autopay
+  category: telecom.internet_tv
+  aliases: [SK브로드밴드, SKB, 에스케이브로드밴드]
+- key: wells
+  name: 교원웰스
+  category: other
+  aliases: [웰스, 교원웰스, WELLS]
+- key: lg_hellovision
+  name: LG헬로비전
+  category: telecom.internet_tv
+  aliases: [헬로비전]
+- key: hcn
+  name: HCN
+  category: telecom.internet_tv
+  aliases: [HCN, 에이치씨엔]
+- key: dlive
+  name: 딜라이브
+  category: telecom.internet_tv
+  aliases: [딜라이브, D LIVE]
+- key: shopping_ntv
+  name: 쇼핑엔티
+  category: online_shopping
+  aliases: [쇼핑엔티, SHOPPING NT]
+- key: public_homeshopping
+  name: 공영쇼핑
+  category: online_shopping
+  aliases: [공영쇼핑, 공영홈쇼핑]
+- key: air_busan
+  name: 에어부산
+  category: travel.airline
+  aliases: [에어부산, AIR BUSAN]
+- key: air_seoul
+  name: 에어서울
+  category: travel.airline
+  aliases: [에어서울, AIR SEOUL]
+- key: eastar_jet
+  name: 이스타항공
+  category: travel.airline
+  aliases: [이스타, 이스타항공, EASTAR JET]
+- key: hyundai_dfs
+  name: 현대백화점면세점
+  category: travel.duty_free
+  aliases: [현대백화점면세점, 현대면세점, HYUNDAI DUTY FREE]
+- key: perplexity
+  name: Perplexity
+  billing: subscription
+  category: streaming
+  aliases: [Perplexity, Perplexity AI, 퍼플렉시티]
+- key: google_one
+  name: Google One
+  billing: subscription
+  category: streaming
+  aliases: [Google One, 구글 원]
+- key: runable
+  name: 러너블
+  category: sports
+  aliases: [러너블, RUNABLE]
+- key: lotte_rental
+  name: 롯데렌탈
+  category: other
+  aliases: [롯데렌탈, 롯데렌터카, 롯데렌탈 장기렌터카, LOTTE RENTAL]
+- key: steam
+  name: 스팀
+  category: other
+  aliases: [스팀, STEAM, Steam, STEAMGAMES, Valve]
+- key: amore_mall
+  name: 아모레몰
+  category: online_shopping
+  aliases: [아모레몰, 아모레퍼시픽몰, AMOREMALL]
+- key: chorokmaeul
+  name: 초록마을
+  category: grocery_mart
+  aliases: [초록마을]
+- key: lotte_mart_zetta
+  name: 롯데마트 제타
+  category: online_shopping
+  aliases: [롯데마트 제타, 제타, ZETTA]
+- key: cashnote
+  name: 캐시노트
+  category: other
+  aliases: [캐시노트, Cashnote, 한국신용데이터]
+- key: mega_mart
+  name: 메가마트
+  category: grocery_mart
+  aliases: [메가마트, MEGAMART]
+- key: ymart
+  name: Y-MART(영암마트)
+  category: grocery_mart
+  aliases: [영암마트, Y-MART, 와이마트]
+- key: lohbs_plus
+  name: 롭스플러스
+  category: other
+  aliases: [롭스플러스, 롭스, LOHB'S]
+- key: chicor
+  name: 시코르
+  category: beauty.cosmetics
+  aliases: [시코르, CHICOR]
