@@ -1,0 +1,73 @@
+schema_version: 2
+id: ibk-12113380012
+issuer: ibk
+name: I-ALL 체크
+kind: check
+product_codes:
+  - '12113380012'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+  - {scope: global, brand: master, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0012&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2025-7126호, review_valid_until: 2028-10-23}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-10-27
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, tax, utility]
+      unmodeled: [국가·공공기관 가맹점 결제는 할인 제외다]
+    benefits:
+      - key: basic-0-2
+        title: 국내·외 가맹점 0.2% 청구할인
+        source: page
+        evidence: [(기본) 국내·외 가맹점 0.2% 청구할인, 전월 이용실적 및 한도 제한 없음]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.2}
+      - key: special-online-0-6
+        title: 온라인쇼핑 0.6% 청구할인
+        source: page
+        evidence: [(특별) 특정 생활영역 가맹점 0.6% 청구할인, '온라인 쇼핑 | 쿠팡, G마켓, 옥션, 11번가', 특별 할인은 기본 할인과 중복 적용되지 않음]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket]
+        reward: {type: billing_discount, rate: 0.6}
+      - key: special-coffee-0-6
+        title: 커피전문점 0.6% 청구할인
+        source: page
+        evidence: ['커피 | 스타벅스, 투썸플레이스, 폴바셋, 이디야, 메가MGC커피, 컴포즈커피', 공식앱을 통한 온라인 결제와 현장 결제에 한함]
+        target:
+          merchants: [compose_coffee, ediya, mega_coffee, paul_bassett, starbucks, twosome]
+        reward: {type: billing_discount, rate: 0.6}
+        unmodeled: [백화점·대형할인점·아울렛 등 입점 매장은 제외다]
+      - key: special-transit-0-6
+        title: 버스·지하철 후불교통 0.6% 청구할인
+        source: page
+        evidence: ['교통 | 대중교통(버스/지하철), 택시', 후불교통카드 이용 건에 한함, 시외·고속버스 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 0.6}
+      - key: special-taxi-0-6
+        title: 택시 0.6% 청구할인
+        source: page
+        evidence: ['택시 : 오프라인 결제 건에 한함. 단, 카카오T(택시)는 온라인 결제도 할인대상에 포함']
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 0.6}
+      - key: special-kakaot-0-6
+        title: 카카오T 택시 0.6% 청구할인
+        source: page
+        evidence: ['택시 : 오프라인 결제 건에 한함. 단, 카카오T(택시)는 온라인 결제도 할인대상에 포함']
+        target:
+          merchants: [kakao_t]
+        reward: {type: billing_discount, rate: 0.6}
+        unmodeled: [카카오T의 택시 결제만 대상이고 대리운전 등은 제외]
+    unmodeled: [각종 간편결제로 결제하면 할인되지 않을 수 있다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+notes: 2026-10-10 expand5 조사. 공식 상품 페이지에서 옮겼다. 특별 할인은 기본 0.2%를 대신하므로 같은 묶음에서 큰 쪽 하나만 받는다
