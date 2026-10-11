@@ -1,0 +1,90 @@
+schema_version: 2
+id: kb-09283
+issuer: kb
+name: KB국민 스마트 지킴이카드
+short_name: KB 스마트 지킴이
+kind: credit
+product_codes:
+  - '09283'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: k_world_upi, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: domestic, form: mobile, amount: 9000}
+  - {scope: global, brand: k_world_upi, form: mobile, amount: 9000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 9000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09283', fetched_at: '2026-10-11', review_no: 제2021-C1a-08778호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-10-27'
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility]
+      cancellation: cancel_month
+      month_offset: {}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: [호텔·백화점·대형마트·철도역사 입점 가맹점과 결제대행업체(PG) 전용 가맹점 결제는 할인에서 빠진다. 정부지원금도 빠진다]
+    limits:
+      - key: care
+        per: month
+        amount: {500000: 5000, 1000000: 10000}
+    benefits:
+      - key: telecom-10
+        title: SKT·리브엠 통신요금 자동납부 10% 청구할인
+        source: page
+        evidence: ['SKT, KB Liiv M 통신요금 자동납부 10% 청구할인', '월 한도 50만원 이상 3천원, 100만원 이상 5천원', '이동통신, 유선전화, 인터넷 결합상품 포함']
+        target:
+          merchants: [liiv_m, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 3000, 1000000: 5000}
+        tiers: {from: 500000}
+      - key: taxi-5
+        title: 택시·UT 5% 청구할인
+        source: page
+        evidence: ['택시 업종, UT 자동결제 5% 청구할인', '월 한도 50만원 이상 3천원, 100만원 이상 5천원', UT 자동결제 할인은 모바일 앱 결제에서만 제공]
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {500000: 3000, 1000000: 5000}
+        tiers: {from: 500000}
+      - key: care-5
+        title: 약국·배달앱·대형마트 5% 청구할인
+        source: page
+        evidence: ['병원, 약국, 배달앱, 대형마트 5% 청구할인', '월 한도 50만원 이상 5천원, 100만원 이상 1만원', '배달앱: 배달의 민족, 요기요, 쿠팡이츠', '대형마트: 이마트, 롯데마트, 홈플러스. 온라인 결제, 상품권 구매, 임대매장, SSM 제외']
+        target:
+          categories: [pharmacy]
+          merchants: [baemin, coupang_eats, yogiyo]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: care}
+        tiers: {from: 500000}
+        unmodeled: [병원 할인은 공통 병원 업종이 원문 대상보다 넓어(보건소 포함 가능) 담지 않았다]
+      - key: care-mart-5
+        title: 대형마트 오프라인 5% 청구할인
+        source: page
+        evidence: ['대형마트: 이마트, 롯데마트, 홈플러스. 온라인 결제, 상품권 구매, 임대매장, SSM 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: care}
+        tiers: {from: 500000}
+        unmodeled: [대형마트 안 임대매장은 빠진다]
+    unmodeled: ['SKT Smart 지킴이2 단말기 24개월 할부 약정 월 최대 1만원 환급 할인(50만원 이상 5천원, 100만원 이상 1만원)은 단말기 할부 잔액 조건이라 담지 않았다', 생애 최초 발급 본인회원은 사용등록 다음 달 말일까지 50만원 구간 서비스를 받는데 이 유예는 담지 않았다, 정부지원금과 무승인전표는 실적에서 빠진다. 원문의 교통요금 실적 제외를 대중교통 업종 전체 제외로 옮겼다, 할인은 전표 매입 순서대로 한도 안에서 적용한다, 다른 할인 카드와 중복 적용되지 않는다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문 실적 제외의 교통요금이 후불교통만인지 철도·고속버스까지인지 불분명해 대중교통 전체를 실적에서 뺐다, assumed: transit}
+notes: 2026-10-11 KB국민카드 상품 페이지와 대조. 출시일 2021.10.27을 적용 시작일로 둔다.
