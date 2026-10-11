@@ -79,17 +79,27 @@ void main() {
   });
 
   testWidgets('설문 주소가 없으면 카드 요청 줄을 두지 않는다', (tester) async {
-    // 목록 맨 아래까지 그려지게 높게 띄운다
-    tester.view.physicalSize = const Size(1080, 8000);
-    addTearDown(tester.view.reset);
     final (:api, s: _) = app();
     Widget screen(String? url) => MaterialApp(
       home: AddCardScreen(api: api, requestUrl: url),
     );
+    final down = find
+        .byWidgetPredicate(
+          (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+        )
+        .first;
     await tester.pumpWidget(screen('https://forms.gle/example'));
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('찾는 카드가 없나요?'),
+      300,
+      scrollable: down,
+    );
     expect(find.text('찾는 카드가 없나요?'), findsOneWidget);
     await tester.pumpWidget(screen(null));
+    await tester.pumpAndSettle();
+    // 맨 아래까지 내려도 없다
+    await tester.drag(down, const Offset(0, -1000000));
     await tester.pumpAndSettle();
     expect(find.text('찾는 카드가 없나요?'), findsNothing);
     await tester.enterText(find.byType(TextField).first, '없는카드이름');

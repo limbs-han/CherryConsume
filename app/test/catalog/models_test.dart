@@ -12,7 +12,7 @@ Json readJson(String path) => jsonDecode(File(path).readAsStringSync()) as Json;
 void main() {
   test('커밋된 카탈로그 전체가 읽힌다', () {
     final cat = Catalog.fromJson(realJson);
-    expect(cat.cards.length, 20);
+    expect(cat.cards.length, (realJson['cards'] as List).length);
     final mrlife = cat.cards['shinhan-mrlife']!;
     expect(mrlife.revisions.first.rules.tiers, [0, 300000, 500000, 1000000]);
     expect(cat.categories, contains('restaurant.general'));

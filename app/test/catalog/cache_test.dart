@@ -65,7 +65,10 @@ void main() {
       final again = openDb(path);
       expect(again.userVersion, migrations.length);
       expect(again.select('pragma foreign_keys').first.values.first, 1);
-      expect(chooseIndex(again, bundled, nothing).cards, hasLength(20));
+      expect(
+        chooseIndex(again, bundled, nothing).cards,
+        hasLength((realIndex['cards'] as List).length),
+      );
       expect(cachedCatalog(again)?.etag, '"e1"');
       again.close();
     } finally {

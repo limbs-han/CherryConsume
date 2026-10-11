@@ -21,6 +21,9 @@ import 'split_helpers.dart';
 final _split = splitOf(realJson);
 final _index = _split.$1, _files = _split.$2;
 final bundled = jsonEncode(_index);
+final n = _files.length;
+// 1,500장이 넘게 복사한다
+final copies = (1500 / n).ceil();
 
 /// 한 카드의 혜택 제목을 바꾼 판. 그 카드의 규칙 파일과 목록 줄만 바뀐다
 (String, Map<String, String>) changed(String cardId) {
@@ -62,9 +65,9 @@ void main() {
     }
 
     await copyBundled(db, bundled, counting);
-    expect((reads, rows(db)), (20, 20));
+    expect((reads, rows(db)), (n, n));
     await copyBundled(db, bundled, counting);
-    expect(reads, 20);
+    expect(reads, n);
     // 새 판에 담긴 목록은 바뀐 카드 파일만 새로 옮긴다
     final (index2, files2) = changed('shinhan-mrlife');
     reads = 0;
@@ -72,7 +75,7 @@ void main() {
       reads++;
       return files2[id]!;
     });
-    expect((reads, rows(db)), (1, 21));
+    expect((reads, rows(db)), (1, n + 1));
   });
 
   test('지문이 목록과 다른 담긴 파일은 옮기지 않는다', () async {
@@ -80,7 +83,7 @@ void main() {
       ..._files,
       'shinhan-mrlife': '${_files['shinhan-mrlife']!} ',
     });
-    expect(rows(db), 19);
+    expect(rows(db), n - 1);
     expect(
       db.select(
         "select 1 from catalog_card_files where card_id = 'shinhan-mrlife'",
@@ -91,7 +94,7 @@ void main() {
 
   test('받아 둔 것이 없으면 담긴 목록을 쓴다', () async {
     final db = await ready();
-    expect(chooseIndex(db, bundled, nothing).cards, hasLength(20));
+    expect(chooseIndex(db, bundled, nothing).cards, hasLength(n));
   });
 
   test('보유 카드의 규칙 파일이 표에 없는 목록은 쓰지 않는다', () async {
@@ -115,16 +118,16 @@ void main() {
 
   test('1,500장에서 보유 카드 3장이면 켤 때 규칙 파일 3개만 읽는다', () async {
     // 의도 성공 기준 2
-    final (bigIndex, bigFiles) = copiesOf(_index, _files, 75);
+    final (bigIndex, bigFiles) = copiesOf(_index, _files, copies);
     final big = jsonEncode(bigIndex);
-    expect(bigFiles, hasLength(1500));
+    expect(bigFiles, hasLength(n * copies));
     final db = await ready(big, bigFiles);
-    expect(rows(db), 1500);
+    expect(rows(db), n * copies);
     final first = storeOf(db, chooseIndex(db, big, nothing));
     for (final id in [
       'shinhan-mrlife-3',
-      'ibk-narasarang-40',
-      'hana-wonder2-daily-74',
+      'ibk-narasarang-${copies ~/ 2}',
+      'hana-wonder2-daily-${copies - 1}',
     ]) {
       addCard(first, id, assumedPrevMonthSpend: 300000);
     }
@@ -136,7 +139,11 @@ void main() {
         for (final c in cat.cards.values)
           if (c.rulesRead) c.id,
       ]..sort(),
-      ['hana-wonder2-daily-74', 'ibk-narasarang-40', 'shinhan-mrlife-3'],
+      [
+        'hana-wonder2-daily-${copies - 1}',
+        'ibk-narasarang-${copies ~/ 2}',
+        'shinhan-mrlife-3',
+      ],
     );
   });
 
@@ -172,7 +179,7 @@ void main() {
     expect(firstTitle(cat, 'shinhan-mrlife'), isNot('바뀐 혜택'));
     expect(firstTitle(cat, 'ibk-narasarang'), '바뀐 혜택');
     // 받아 둔 mrlife 파일과 옛 판의 ibk 파일은 어느 목록도 가리키지 않는다
-    expect(rows(db), 20);
+    expect(rows(db), n);
     expect(home(storeOf(db, cat))['cards'], hasLength(1));
   });
 
@@ -222,7 +229,7 @@ void main() {
     expect(rows(db), 0);
     expect(db.select('select * from app_state'), isEmpty);
     await copyBundled(db, bundled, (id) async => _files[id]!);
-    expect(rows(db), 20);
+    expect(rows(db), n);
   });
 
   test('받는 중인 목록이 가리키는 파일은 켤 때 지우지 않는다', () async {
@@ -239,10 +246,10 @@ void main() {
       index2,
     ]);
     chooseIndex(db, bundled, nothing);
-    expect(rows(db), 21);
+    expect(rows(db), n + 1);
     db.execute('delete from app_state where key = ?', [pendingKey]);
     chooseIndex(db, bundled, nothing);
-    expect(rows(db), 20);
+    expect(rows(db), n);
   });
 
   test('지문이 맞지 않는 규칙 파일은 표에 넣지 않는다', () {
@@ -258,11 +265,14 @@ void main() {
 
   test('같은 판의 받아 둔 목록으로 켜도 보유 카드 규칙 파일만 읽는다', () async {
     // 단계 3 위험 검토 낮음 7. 자주 타는 길이다
-    final (bigIndex, bigFiles) = copiesOf(_index, _files, 75);
+    final (bigIndex, bigFiles) = copiesOf(_index, _files, copies);
     final big = jsonEncode(bigIndex);
     final db = await ready(big, bigFiles);
     saveCatalog(db, big, '"e1"', big);
-    addCard(storeOf(db, chooseIndex(db, big, nothing)), 'kb-toktok-9');
+    addCard(
+      storeOf(db, chooseIndex(db, big, nothing)),
+      'kb-toktok-${copies - 1}',
+    );
     final cat = chooseIndex(db, big, inUse(db));
     expect(cachedCatalog(db)?.etag, '"e1"');
     home(storeOf(db, cat));
@@ -271,7 +281,7 @@ void main() {
         for (final c in cat.cards.values)
           if (c.rulesRead) c.id,
       ],
-      ['kb-toktok-9'],
+      ['kb-toktok-${copies - 1}'],
     );
   });
 }

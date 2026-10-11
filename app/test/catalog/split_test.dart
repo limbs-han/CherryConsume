@@ -42,7 +42,7 @@ void main() {
   test('규칙 파일은 그 카드의 규칙을 처음 쓸 때 한 번만 읽는다', () {
     final (:cat, :loads) = indexCatalog();
     final s = storeOf(cat);
-    expect(cat.cards.length, 20);
+    expect(cat.cards.length, (realJson['cards'] as List).length);
     // 카드 추가 검색, 카드사 칩, 추천 업종 거르기, 카탈로그 날짜는 규칙 파일을 열지 않는다. 설계 4절
     expect(catalog_routes.cards(s), hasLength(greaterThan(10)));
     catalog_routes.issuers(s);
@@ -216,7 +216,7 @@ void main() {
       );
       return CardRules.fromFile(jsonDecode(realCardFile(id)) as Json, id);
     });
-    expect(cat.cards, hasLength(20));
+    expect(cat.cards, hasLength((realJson['cards'] as List).length));
     for (final c in cat.cards.values) {
       expect(c.revisions, isNotEmpty);
     }
