@@ -1,0 +1,50 @@
+schema_version: 2
+id: woori-104147
+issuer: woori
+name: 세라젬 구독 우리카드
+kind: credit
+product_codes:
+  - '104147'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104147', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2025-09-05'
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: null
+    facts:
+      - {key: first-issuance-eligible, type: bool, scope: card, ask: '만기·해지 후 재발급이 아닌 이 상품 최초 발급 카드인가요? 시작일은 카드 수령 등록일과 사용개시일 중 빠른 날입니다.'}
+    benefits:
+      - key: ceragem-subscription-autopay
+        title: 세라젬 구독 자동납부 청구할인
+        source: page
+        evidence: ['30만원 이상 ~ 70만원 미만 | 10,000원 | 세라젬 구독 자동납부 필수', '70만원 이상 ~ 120만원 미만 | 15,000원', '120만원 이상 | 20,000원', 세라젬 구독 자동납부 건이 여러 건인 경우 월 할인한도 내에서 통합할인 적용됩니다., 세라젬 구독 우리카드로 할인받은 이용금액(해당 이용금액 전체)... 전월실적에 포함되지 않습니다.]
+        target:
+          merchants: [ceragem_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {0: 10000, 300000: 10000, 700000: 15000, 1200000: 20000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first-issuance-eligible
+            card_month: {max: 1}
+        exclude_applied: 1
+        unmodeled: [가족카드는 청구할인을 받지 못한다, 세라젬 구독이 아닌 세라젬 일반 결제는 자동납부가 아니면 할인 제외]
+    unmodeled: [가족카드 전월 이용실적은 본인카드와 합산한다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '정부지원금, 공공임대료, 국가·공공기관 가맹점, 수수료·이자·대출은 실적에서 빠진다', 할인은 거래 매입 순서대로 적용된다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2025-09-05. 연회비 20,000원. 전월 국내외 30만/70만/120만 이상 월 할인한도 10,000/15,000/20,000원. 승인금액이 한도보다 적으면 승인금액만큼 할인한다. 최초 발급 카드는 등록 다음 달 말까지 최저 구간. 원문에 신규 특례 문장이 두 개다. 하나는 모든 신규, 하나는 최초 발급만이라 덜 주는 최초 발급 쪽을 따랐다.
