@@ -1,0 +1,53 @@
+schema_version: 2
+id: hyundai-20883
+issuer: hyundai
+name: kt-현대카드M Edition3(청구할인형)
+short_name: 현대 kt M Ed3 청구할인
+search_names: [kt M Edition3, kt 현대카드M 에디션3 청구할인형, kt-현대카드M Edition3]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260403-1734-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_KT_M%20Ed3_%EC%B2%AD%EA%B5%AC_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    facts:
+      - {key: kt_m3_first_issue, type: bool, scope: card, ask: 'kt-현대카드M Edition3(청구할인형)을 처음 발급받았나요? 교체, 재발급, 해지 후 재가입이면 아니요입니다'}
+    benefits:
+      - key: kt-autopay
+        title: kt 통신요금 자동이체 청구할인 (1~24개월 차 월 1만3천원·1만8천원, 25개월 차부터 월 6천원)
+        source: manual
+        evidence: [통신요금 자동이체 1~24개월 차, 전월 이용금액 30만원 이상 70만원 미만 시 13, 000원 할인, 전월 이용금액 70만원 이상 시 18, 000원 할인, 통신요금 자동이체 25개월 차부터, 전월 이용금액 30만원 이상 시 6, 000원 할인, kt 통신요금 자동이체 금액이 청구 할인금액보다 적을 경우 자동이체 청구금액만큼 할인 적용, 1~24개월 차에 적용되는 kt 통신요금 할인은 kt-현대카드M Edition3 (청구할인형) 최초 신규 발급 시에 한해 제공, '신규 발급 시 발급월 포함 2개월간 전월 이용금액 무관하게 13,000원 할인 혜택 제공, 전월 이용금액 70만원 이상 시 18,000원 할인 혜택 제공 (교체/재발급/해지 후 재가입 시 할인 제외)', 청구 할인이 적용된 kt 통신요금 전월 이용금액 제외]
+        target:
+          merchants: [kt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: 6000
+            adjust:
+              - when:
+                  fact: kt_m3_first_issue
+                  card_month: {max: 23}
+                amount: {300000: 13000, 700000: 18000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        notes: 원문은 통신요금 자동이체 개월 수로 센다. 카드 등록 달부터 센 card_month 0~23을 쓰면 자동이체를 늦게 시작한 사람은 6천원으로 일찍 넘어가 덜 받는다. 최초 신규 발급이 아니거나 답하지 않으면 6천원이다
+    unmodeled: [기본 M포인트 업종별 0.5~3%(당월 100만원 이상 1.5배)는 결제일에 청구된 당월 이용금액 50만원 이상일 때만 주는 방식이라 계산하지 않는다, GS칼텍스 리터당 60 M포인트와 현대자동차·기아 신차 1.5% M포인트 특별 적립은 계산하지 않는다, 제휴 온라인쇼핑몰 추가 M포인트는 현대카드 홈페이지 경유 결제라 계산하지 않는다, 자동이체일이 지난 뒤 결제된 kt 요금은 할인하지 않는다, kt 라이트할부 이용금액은 실적에서 빠지지만 가려내지 못한다, 고속도로 통행요금과 후불하이패스 이용금액은 실적에서 뺀다, 현대카드의 다른 할인 서비스가 적용된 결제는 실적에서 뺀다, 실적과 할인 한도는 본인과 가족 카드를 합산한다, 사후 승인 가맹점 이용금액은 매출전표 접수일 달의 실적으로 센다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북 파일은 2026년 4월 판이다. 그 전부터 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.cancellation', question: 원문은 결제 취소금액을 실적에서 뺀다고만 하고 승인월과 취소월 중 어디서 빼는지 적지 않았다. 다른 현대카드 가이드북처럼 승인월로 두었다, assumed: original_month}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(VISA) 30,000원(기본 10,000+제휴 20,000), 가족카드 10,000원. kt 통신요금 자동이체 청구할인 1~24개월 차 전월 30만 이상 13,000원, 70만 이상 18,000원, 25개월 차부터 30만 이상 6,000원. 자동이체 금액이 할인액보다 적으면 그 금액만큼이라 rate 100에 월 한도로 담았다. 1~24개월 차 할인은 최초 신규 발급만이라 사실로 묻고, 아니면 6천원 혜택으로 넘어간다. 신규 발급 시 발급월 포함 2개월은 전월 무관 13,000원이고 70만 이상이면 18,000원이다. 실적은 전월 1일~말일 일시불과 할부이고 청구할인이 적용된 kt 통신요금, 공과금 등, 무이자할부를 뺀다. M포인트 기본 적립은 결제일 기준 당월 이용금액으로 정해져 담지 않았다.
