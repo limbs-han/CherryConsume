@@ -1,0 +1,115 @@
+schema_version: 2
+id: hyundai-mxbe2
+issuer: hyundai
+name: 현대카드 MX Black Edition2
+short_name: 현대 MX Black
+search_names: [MX Black Edition2, MX 블랙, 현대카드 MX Black]
+kind: credit
+product_codes: [MXBE2]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 200000}
+  - {scope: global, brand: visa, amount: 200000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MXBE2', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/260330_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_MX%20Black%20Edition2.pdf', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000, 2000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 1000000, from: receipt}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+    stacks:
+      - {key: main}
+      - {key: area}
+    benefits:
+      - key: base-all-1
+        title: 국내외 가맹점 1% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1% M포인트 적립, 1회 및 연간 적립 한도 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립, '단, 추가 혜택(5개 영역 10% 할인)이 적용된 이용 금액은 적립 가능']
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1, round: round}
+        tiers: {from: 500000}
+      - key: online-shopping-10
+        title: 온라인 쇼핑 10% 청구 할인
+        source: manual
+        evidence: ['온라인 쇼핑 영역 : 네이버쇼핑, 쿠팡, G마켓, 옥션, SSG.COM', 전월 이용 금액 100만원 이상 시 영역별 월 1만원 한도, 전월 이용 금액 200만원 이상 시 영역별 월 2만원 할인 한도, 쿠팡의 경우 쿠팡이츠 결제 건은 혜택 제외]
+        target:
+          merchants: [auction, coupang, gmarket, naver_plus_store, ssg_com]
+          exclude_merchants: [coupang_eats]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {1000000: 10000, 2000000: 20000}
+        tiers: {from: 1000000}
+        stack: area
+        exclude_applied: 1
+        unmodeled: [네이버쇼핑은 naver.com 도메인으로 확인되는 가맹점만 할인한다, 공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱에서 결제하면 제외한다]
+      - key: department-store-10
+        title: 백화점 10% 청구 할인
+        source: manual
+        evidence: ['백화점 영역 : 현대백화점, 신세계백화점, 롯데백화점, 갤러리아백화점', '백화점 영역의 경우 온라인몰, 주차장, 문화센터, 임대매장 이용 금액은 혜택 제외']
+        target:
+          merchants: [galleria, hyundai_department, lotte_department, shinsegae_department]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {1000000: 10000, 2000000: 20000}
+        tiers: {from: 1000000}
+        stack: area
+        exclude_applied: 1
+        unmodeled: [백화점 온라인몰·주차장·문화센터·임대매장 이용은 할인하지 않는다]
+      - key: coffee-bakery-10
+        title: 커피·베이커리 10% 청구 할인
+        source: manual
+        evidence: ['커피전문점 : 스타벅스, 투썸플레이스, 커피빈, 폴바셋', '베이커리 : 파리바게뜨, 파리크라상, 뚜레쥬르', '커피전문점의 경우 백화점, 할인점, 쇼핑몰 내 입점매장 및 공동가맹점은 혜택 제외']
+        target:
+          merchants: [coffee_bean, paris_baguette, paul_bassett, starbucks, tous_les_jours, twosome]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {1000000: 10000, 2000000: 20000}
+        tiers: {from: 1000000}
+        stack: area
+        exclude_applied: 1
+        unmodeled: [커피전문점은 백화점·할인점·쇼핑몰 안의 입점 매장과 공동가맹점을 할인하지 않는다, 파리크라상은 공통 가맹점이 없어 대상에서 뺐다]
+      - key: convenience-10
+        title: 편의점 10% 청구 할인
+        source: manual
+        evidence: ['편의점 영역 : GS25, CU, 세븐일레븐, 이마트24']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {1000000: 10000, 2000000: 20000}
+        tiers: {from: 1000000}
+        stack: area
+        exclude_applied: 1
+      - key: fuel-transport-10
+        title: 주유·대중교통 10% 청구 할인
+        source: manual
+        evidence: ['주유·대중교통 영역 : 모든 주유소, 시내버스, 지하철', 주유 영역 중 LPG 충전소는 혜택 제외]
+        target:
+          categories: [fuel, transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {1000000: 10000, 2000000: 20000}
+        tiers: {from: 1000000}
+        stack: area
+        exclude_applied: 1
+        unmodeled: [LPG 충전소는 할인하지 않는다]
+    unmodeled: ['간편결제, PG, 키오스크처럼 별도 가맹점번호로 승인된 결제는 영역 할인을 하지 않는다', 영역별 월 한도와 실적은 본인과 가족 카드를 합산한다, 대중교통 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 고속도로 통행료와 후불하이패스는 실적과 적립에서 뺀다, 현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다, 월 한도를 넘긴 뒤 혜택 받은 결제를 취소하면 이전 결제에 다음 달 15일경 할인한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북은 2026년 3월 판이다. 그 전부터 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-10 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa Signature) 200,000원(기본 50,000+제휴 150,000), 가족카드 50,000원. 전월 50만 이상 국내외 1% M포인트(한도 없음, 건별 반올림). 전월 100만 이상 온라인 쇼핑·백화점·커피베이커리·편의점·주유대중교통 10% 청구 할인, 영역별 월 1만원(100만 이상)·2만원(200만 이상). 10% 할인은 기본 1%와 함께 받는다. 실적은 전월 1일~말일 일시불과 할부이고 10% 할인 받은 결제 전체와 무이자 할부를 뺀다. 취소는 승인월 실적에서 뺀다. 신규 발급 시 카드 수령 등록월 다음 달 이용 건까지 50만·100만 미만도 혜택을 준다. 결제 건 혜택 아님 M 긴급적립, 공항 라운지 연 5회, 발레파킹 월 5회, 메탈 플레이트.
