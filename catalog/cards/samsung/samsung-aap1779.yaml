@@ -1,0 +1,137 @@
+schema_version: 2
+id: samsung-aap1779
+issuer: samsung
+name: THE iD. PLATINUM (포인트)
+short_name: THE iD. PLATINUM 포인트
+search_names: [THE iD. PLATINUM, 더 아이디 플래티넘 포인트, 디 아이디 플래티늄]
+kind: credit
+product_codes: [AAP1779]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 215000}
+  - {scope: global, brand: mastercard, amount: 220000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1779', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmWUU5wW%2FsCw2ieWq4HYOf4%3D&sn=2', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2022-12-21'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 적립·할인하지 않는다, '고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 적립·할인하지 않는다', '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    benefits:
+      - key: domestic-1
+        title: 국내 가맹점 1% 빅포인트 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 국내 가맹점 이용금액의 1% 빅포인트를 적립해 드립니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+      - key: life-1-2
+        title: 생활 편의 영역 1.2% 빅포인트 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 온라인쇼핑몰/할인점/백화점/배달앱 이용금액의 1.2% 빅포인트', '온라인쇼핑몰 SSG.COM, 쿠팡, 컬리', '할인점 이마트, 트레이더스 홀세일 클럽, 롯데마트, 홈플러스', '백화점 신세계백화점, 롯데백화점, 현대백화점, 갤러리아백화점', '배달앱 배달의민족, 쿠팡이츠', '국내 가맹점 1% 빅포인트 적립, 특별 가맹점 1.5% 빅포인트 적립 혜택과 중복 적용되지 않습니다.']
+        target:
+          merchants: [coupang, emart, homeplus, kurly, lotte_mart, ssg_com, traders]
+        reward: {type: points, program: samsung_bigpoint, rate: 1.2}
+        unmodeled: ['할인점의 기업형 슈퍼마켓, 쇼핑 외 결제(상품권, 주차장 등), 임대매장은 적립하지 않는다']
+      - key: dept-1-2
+        title: 백화점 1.2% 빅포인트 적립
+        source: manual
+        evidence: ['백화점은 오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외됩니다.']
+        target:
+          merchants: [galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: samsung_bigpoint, rate: 1.2}
+        unmodeled: ['쇼핑 외 결제(상품권, 주차장 등)와 임대매장은 적립하지 않는다']
+      - key: delivery-1-2
+        title: 배달앱 1.2% 빅포인트 적립
+        source: manual
+        evidence: ['배달앱은 공식 앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외됩니다.']
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 1.2}
+      - key: overseas-1-5
+        title: 해외 1.5% 빅포인트 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 해외/면세점/항공/여행/공연 이용금액의 1.5% 빅포인트', 해외 가맹점 및 해외 직접구매 이용건, 해외는 해외겸용카드에 한해 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 1.5}
+      - key: dfs-1-5
+        title: 면세점 1.5% 빅포인트 적립
+        source: manual
+        evidence: [면세점 신라/롯데/신세계/동화/HDC신라/JDC(제주)/JTO(제주)면세점, 면세점의 경우 임대매장은 제외됩니다.]
+        target:
+          merchants: [lotte_dfs, shilla_dfs, shinsegae_dfs]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 1.5}
+        unmodeled: [면세점 임대매장은 1.5%를 적립하지 않는다]
+      - key: airline-1-5
+        title: 항공 1.5% 빅포인트 적립
+        source: manual
+        evidence: ['항공 대한항공, 아시아나항공, 제주항공, 진에어, 티웨이항공', '항공은 항공사 공식 홈페이지/앱을 통한 결제건에 한하며, 다른 여행사, 항공권 구매 대행 사이트를 통한 결제건은 제외됩니다.']
+        target:
+          merchants: [asiana_airlines, jeju_air, jin_air, korean_air, tway_air]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 1.5}
+      - key: ticket-1-5
+        title: 인터파크 티켓 1.5% 빅포인트 적립
+        source: manual
+        evidence: [공연 인터파크 티켓, 공연은 공식 홈페이지/앱을 통한 결제건에 한합니다.]
+        target:
+          merchants: [interpark_ticket]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 1.5}
+      - key: digital-50
+        title: 디지털콘텐츠 정기결제 50% 할인
+        source: manual
+        evidence: [디지털콘텐츠 정기결제 시 50% 결제일할인, '넷플릭스, 유튜브 프리미엄, 디즈니+, 웨이브, 티빙, 왓챠, 멜론, FLO', '통합 월 할인한도는 10,000원입니다.', 전월 이용금액 50만원 이상 시 제공됩니다., 'Play 스토어, 앱스토어 등을 통한 인앱 결제건은 제외됩니다.']
+        target:
+          merchants: [disney_plus, flo, melon, netflix, tving, watcha, wavve, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: starbucks-3000
+        title: 스타벅스 3,000원 할인
+        source: manual
+        evidence: ['스타벅스에서 건별 10,000원 이상 결제 시 3,000원 결제일할인', 월 1회 제공됩니다., 전월 이용금액 50만원 이상 시 제공됩니다.]
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 500000}
+    unmodeled: ['연 1회 고르는 기프트(호텔·골프 15만원 현장할인, 삼성물산 패션 15만원, 신라면세점 16만원 결제일할인, 신세계상품권 15만원)와 공항 라운지는 계산하지 않는다', '1.5% 영역의 동화·HDC신라·JDC·JTO 면세점, 인터넷면세점, 여행(호텔·콘도·리조트)은 가맹점이 없거나 업종이 더 넓어 담지 않았다. 이 결제는 국내 1%로 계산한다', 할인점 1.2%는 온라인몰도 포함한다, 본인카드와 가족카드의 이용실적은 합산한다, 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2022-12-21이고 상품설명서는 2026.9 심의판(제2026-C1a-13506호)이다. 출시일을 시행일로 두었다, assumed: '2022-12-21'}
+  - {path: 'revisions[0].benefits', question: 할인 받은 결제에 1% 적립도 주는지 원문이 분명하지 않아 할인과 적립을 같은 묶음에 두고 큰 쪽 하나만 준다, assumed: 'stack main, pick best'}
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 고속버스는 차내 단말기와 고속버스 앱 결제만 제외지만 업종을 나눌 수 없어 고속버스 전체를 혜택에서 뺐다, assumed: transit.bus_express}
+  - {path: status, question: 상품 페이지에서 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-10 상품설명서(여신금융협회 심의필 제2026-C1a-13506호, 2026.09.04) 확인. 연회비 해외겸용 Mastercard 220,000원, 국내전용 215,000원(기본 30,000+제휴). 기본 1%와 생활 1.2%, 특별 1.5%는 서로 중복되지 않는다. 디지털콘텐츠와 스타벅스는 전월 50만원 이상, 발급월+1개월 유예. 실적 제외는 4대보험, 국세·지방세·공과금, 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권이다. 후불교통기능이 탑재되어 발급된다.
