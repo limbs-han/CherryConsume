@@ -1,0 +1,90 @@
+schema_version: 2
+id: woori-500095
+issuer: woori
+name: 바디프랜드 Platinum 우리카드
+kind: credit
+product_codes:
+  - '500095'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 45000}
+  - {scope: global, brand: visa, amount: 45000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500095', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-09-01'
+    source: page
+    tiers: [0, 1000000, 1500000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 1000000, from: registration}
+    limits:
+      - {key: life, per: month, amount: 5000}
+    benefits:
+      - key: bodyfriend-rental
+        title: 바디프랜드 렌탈요금 자동납부 청구할인 (전월 100만 2만7천원, 150만 3만2천원, 200만 3만7천원)
+        source: page
+        evidence: ['100만원 이상 ~ 150만원 미만 | 27,000원 | 바디프랜드 렌탈 요금 자동납부 필수', '150만원 이상 ~ 200만원 미만 | 32,000원', '200만원 이상 | 37,000원', 바디프랜드 렌탈요금 자동납부 건이 여러 건인 경우 월 할인한도 내에서 통합할인 적용됩니다., '월 할인한도보다 바디프랜드 렌탈요금 자동납부 승인금액이 적을 경우, 승인금액 만큼만 할인이 적용됩니다.']
+        target:
+          merchants: [bodyfriend_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {1000000: 27000, 1500000: 32000, 2000000: 37000}
+        tiers: {from: 1000000}
+        unmodeled: [가족카드는 청구할인을 받지 못한다]
+      - key: life-kakao-t
+        title: LIFE 카카오T 주차·택시 10% 청구할인
+        source: page
+        evidence: [교통 | 카카오T(주차/택시), 100만원 이상 | 10% | 5천원, 건당 1만원 이상 결제 시 청구할인 적용됩니다., 교통 영역은 공식 홈페이지 및 앱을 통한 온라인 결제 건에 한하여 할인 제공됩니다.]
+        target:
+          merchants: [kakao_t]
+        when:
+          - {channel: online}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 1000000}
+        exclude_applied: 1
+        unmodeled: [카카오T 안의 대리 등 주차·택시 외 결제는 할인 제외]
+      - key: life-delivery
+        title: LIFE 배달의민족·쿠팡이츠 10% 청구할인
+        source: page
+        evidence: ['배달앱 | 배달의민족, 쿠팡이츠', 100만원 이상 | 10% | 5천원, 건당 1만원 이상 결제 시 청구할인 적용됩니다., 배달앱 영역은 공식 배달앱에서 '앱 내 카드결제' 통한 온라인 결제 건에 한하여 할인 제공됩니다.]
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - {channel: online}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 1000000}
+        exclude_applied: 1
+        unmodeled: ['멤버십, 테이블 오더, 커머스·마트 물품 구매는 할인 제외']
+      - key: life-ott
+        title: LIFE 넷플릭스·티빙·유튜브 프리미엄 10% 청구할인
+        source: page
+        evidence: ['OTT | 넷플릭스, 티빙, 유튜브 프리미엄', 100만원 이상 | 10% | 5천원, 건당 1만원 이상 결제 시 청구할인 적용됩니다., OTT 영역은 공식 홈페이지를 통한 스트리밍 구독 서비스 정기결제 건에 한하여 할인 제공됩니다.]
+        target:
+          merchants: [netflix, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 1000000}
+        exclude_applied: 1
+        unmodeled: [통신요금 포함 결제는 할인 제외]
+    unmodeled: [가족카드 전월 이용실적은 본인카드와 합산한다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 신규 특례는 처음 발급받은 경우만이다. 만기나 해지 뒤 같은 상품을 다시 받으면 해당하지 않는다, 'THE LOUNGE 공항라운지 무료 이용 월 1회, 연 4회는 계산하지 않는다', 결제대행·간편결제 가맹점명으로 접수되면 LIFE 할인을 받지 못한다, '환금성 업종과 공공임대료, 관세, 국가·공공기관 가맹점 이용금액은 실적에서 빠진다']
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-09-01. 연회비 국내전용·VISA 45,000원. 전월 국내외 100만/150만/200만 이상 바디프랜드 렌탈 자동납부 월 2만7천/3만2천/3만7천원, LIFE 카카오T·배달앱·OTT 10% 건당 1만원 이상 월 5천원. LIFE 할인 받은 이용금액 전체는 실적 제외. 신규 발급 다음 달 말까지 100만 구간.
