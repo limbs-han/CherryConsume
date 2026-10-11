@@ -1,0 +1,83 @@
+schema_version: 2
+id: samsung-abp1333
+issuer: samsung
+name: 신세계KB국민은행 삼성체크카드
+short_name: 신세계KB 삼성체크
+search_names: [신세계 KB국민은행 삼성체크, 신세계KB 체크]
+kind: check
+product_codes: [ABP1333]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1333', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoLC7meYT8ud9C6G4FWWP1o%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {basis: none}
+    new_card: null
+    benefit_exclusions:
+      categories: [education.tuition, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: ['S.InfoCare, 스마트오토서비스, 이마트 이클럽, 포인트 사용, 일부 가맹점 의약품 결제건은 캐시백하지 않는다']
+    stacks:
+      - key: main
+        pick: priority
+        order: [cashback-1, cashback-food-online, cashback-general]
+        spill: none
+      - {key: shinsegae}
+    benefits:
+      - key: cashback-1
+        title: 대중교통·이동통신요금 1% 캐시백
+        source: manual
+        evidence: ['이용실적, 이용조건 제한 없이 0.2%~1% 캐시백', '대중교통·이동통신요금, 삼성스토어(삼성모바일샵), 삼성카드 여행, 휘닉스파크(일부 입점매장 제외) 1%']
+        target:
+          categories: [telecom.mobile, transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 1}
+        unmodeled: ['삼성스토어(삼성모바일샵), 삼성카드 여행, 휘닉스파크도 1%지만 공통 가맹점이 없어 일반 가맹점 0.2%로 계산한다']
+      - key: cashback-food-online
+        title: 음식점·온라인 쇼핑몰 0.4% 캐시백
+        source: manual
+        evidence: ['음식점, 온라인 쇼핑몰 0.4%']
+        target:
+          categories: [online_shopping, restaurant]
+        reward: {type: cashback, rate: 0.4}
+      - key: cashback-general
+        title: 일반 가맹점 0.2% 캐시백
+        source: manual
+        evidence: [일반 가맹점 0.2%]
+        target: {all: true}
+        reward: {type: cashback, rate: 0.2}
+      - key: shinsegae-dept-point
+        title: 신세계백화점 1,000원당 5 신세계포인트
+        source: manual
+        evidence: ['신세계백화점, 신세계몰, 이마트, 이마트몰 이용 시 신세계포인트 적립', '신세계백화점(1,000원당 2 포인트, 신세계KB국민은행 삼성체크카드는 5 포인트)', 신세계 멤버십회원에게 지급되는 1, 000원당 1 포인트 포함입니다., 이용금액별로 1, 000원 단위로 적립됩니다.]
+        target:
+          merchants: [shinsegae_department]
+        reward:
+          type: points
+          program: shinsegae_point
+          per_unit: {unit: 1000, amount: 5}
+        stack: shinsegae
+        unmodeled: [신세계백화점 안 일부 임대매장은 적립하지 않는다]
+      - key: emart-point
+        title: 이마트 1,000원당 1 신세계포인트
+        source: manual
+        evidence: ['이마트(1,000원당 1 포인트)', 신세계 멤버십회원에게 지급되는 1, 000원당 1 포인트 포함입니다.]
+        target:
+          merchants: [emart]
+        reward:
+          type: points
+          program: shinsegae_point
+          per_unit: {unit: 1000, amount: 1}
+        stack: shinsegae
+        unmodeled: [이마트 안 일부 임대매장은 적립하지 않는다]
+    unmodeled: [신세계백화점 5% 할인은 백화점 실적에 따라 주는 전자할인쿠폰(월 2~5매)이라 계산하지 않는다, '놀이공원 50%·워터파크 30% 현장할인, S-OIL 리터당 40 보너스포인트, 롯데시네마 동반 1인 50% 캐시백은 직전 3개월 월평균 이용금액 30만원 이상 조건이라 계산하지 않는다', '신세계몰과 이마트몰 1,000원당 7 신세계포인트는 공통 가맹점이 없어 계산하지 않는다', 캐시백은 월 1회 출금계좌로 입금된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 상품 출시일은 2013-05-02이고 상품안내장은 2023.3판이다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[cashback-1].target', question: 대중교통 범위가 적혀 있지 않아 시내버스와 지하철만 넣었다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: annual_fees, question: 상품 페이지는 연회비 없음이라고만 적고 해외겸용 브랜드를 적지 않았다, assumed: domestic 0}
+notes: 2026-10-10 상품안내장(신세계KB국민은행·애니패스포인트·지엔미포인트 체크카드 공용, 2023.3판)과 상품 페이지 대조. 초안의 이마트 6,000원, 아웃백 10%, CGV 1,500원, 스타벅스 1,000원은 애니패스·지엔미 포인트체크카드 혜택이라 뺐다. 캐시백은 이용실적과 조건 없이 준다. 신세계포인트는 캐시백과 따로 받는다고 보았다. 상품 페이지에 신세계백화점 무료 주차권이 있으나 결제 혜택이 아니다. 소액신용 30만원과 후불교통은 KB국민은행에서 신청한다.
