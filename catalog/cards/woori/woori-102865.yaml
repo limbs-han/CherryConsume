@@ -1,0 +1,79 @@
+schema_version: 2
+id: woori-102865
+issuer: woori
+name: K-패스 우리카드(체크)
+kind: check
+product_codes:
+  - '102865'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102865', fetched_at: '2026-10-10', review_no: 2024-C03120}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2024-12-30'
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_city, transit.bus_express, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG·간편결제 전용 가맹점번호로 승인된 건은 캐시백 제외, 백화점·대형할인점·면세점·공항·미군부대·리조트 등 입점 매장은 캐시백 제외]
+    limits:
+      - key: life
+        per: month
+        amount: {300000: 2000, 600000: 5000}
+      - key: transit
+        per: month
+        amount: {300000: 3000, 600000: 5000}
+    benefits:
+      - key: coffee-10
+        title: 스타벅스·폴바셋 10% 캐시백
+        source: page
+        evidence: ['스타벅스, 폴바셋 10% 캐시백', ※ 건당 이용금액 1만원 이상 시 제공, ※ 공식 앱을 통한 사이렌오더/크라운오더 결제 건 포함, '30만원 이상 60만원 미만 | 생활 혜택 | 2,000원', 60만원 이상 | 생활 혜택 | 5, 000원]
+        target:
+          merchants: [paul_bassett, starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: convenience-10
+        title: CU·GS25 10% 캐시백
+        source: page
+        evidence: ['CU, GS25 10% 캐시백', ※ 건당 이용금액 1만원 이상 시 제공, ※ 오프라인 매장 결제 건에 한하여 캐시백 제공]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: transit-10
+        title: 버스·지하철 10% 캐시백
+        source: page
+        evidence: ['버스, 지하철 10% 캐시백', '후불교통기능을 이용한 대중교통(버스, 지하철) 매출', '※ 버스, 지하철 합산 이용금액 5만원 이상 시 제공', '※ 고속버스, 시외버스, 공항버스, 공항철도(직통열차 포함) 이용금액 캐시백 제외', '30만원 이상 60만원 미만 | 대중교통 혜택 | 3,000원', 60만원 이상 | 대중교통 혜택 | 5, 000원]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+          - month_total: {min: 50000}
+        reward: {type: cashback, basis: month_total, rate: 10}
+        limits:
+          - {shared: transit}
+        tiers: {from: 300000}
+        unmodeled: [공항버스와 공항철도 직통열차는 캐시백 제외, 모바일 교통카드(티머니·이즐)에 등록한 후불 이용도 대상]
+    unmodeled: [후불교통 이용금액 전체가 실적에서 빠지는데 시내버스·지하철 업종만 뺐다. 승인된 버스·지하철 결제도 빠질 수 있다, 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '실적 제외에 정부지원금, 수수료·이자, 공공기관 가맹점·과태료·여권발급비용이 들어간다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일을 따로 찾지 못해 상품 출시일로 두었다, assumed: '2024-12-30'}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-12-30. 국내전용, 연회비 없음, 만 18세 이상, 가족카드 없음, 후불교통 발급 필수. 생활 혜택(커피·편의점)과 대중교통 혜택은 영역별 통합 월 한도. 실적에서 후불교통 이용금액 전체와 생활 혜택 적용 금액 전체가 빠진다. K-패스 대중교통 환급은 정부 사업이라 카드 혜택으로 옮기지 않았다. 캐시백은 매출표 접수일에 결제계좌로 입금.
