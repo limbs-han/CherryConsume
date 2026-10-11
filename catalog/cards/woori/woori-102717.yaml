@@ -1,0 +1,123 @@
+schema_version: 2
+id: woori-102717
+issuer: woori
+name: 카드의정석 I&U+
+kind: credit
+product_codes:
+  - '102717'
+  - '103727'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102717', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2024-02-26'
+    source: page
+    tiers: [0, 300000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - {region: overseas}
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, rent, tax]
+    limits:
+      - {key: fuel, per: month, amount: 7000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: simple-discount-0-7
+        title: 국내 가맹점 0.7% 청구할인
+        source: page
+        evidence: [국내 가맹점 1.0~0.7% 청구할인, 국내 가맹점 | 없음 | 0.7%, '※ 전월실적 조건 없음, 할인 한도 없음', '※ 0.7%, 1.0% 할인 중복 제공 불가']
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.7}
+      - key: simple-discount-1-0
+        title: 매출건당 100만원 이상 1.0% 청구할인
+        source: page
+        evidence: [매출건당 100만원 이상 이용 시 | 1.0%, '※ 전월실적 조건 없음, 할인 한도 없음']
+        target: {all: true}
+        when:
+          - amount: {min: 1000000}
+        reward: {type: billing_discount, rate: 1}
+      - key: fuel-discount-60
+        title: S-OIL·HD현대오일뱅크 리터당 60원 청구할인
+        source: page
+        evidence: [주유 리터당 60~100원 청구할인, 30만원 이상 ~ 50만원 미만 | 60원/ℓ, 'S-OIL, HD현대오일뱅크(※LPG는 할인 제외)', 주유 매출 건당 할인 대상 금액 최대 10만원, 통합 월 7천원까지 할인]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 300000, to: 300000}
+        exclude_applied: 1
+        unmodeled: [LPG 충전 제외]
+      - key: fuel-discount-80
+        title: S-OIL·HD현대오일뱅크 리터당 80원 청구할인
+        source: page
+        evidence: [50만원 이상 ~ 100만원 미만 | 80원/ℓ, 'S-OIL, HD현대오일뱅크(※LPG는 할인 제외)', 주유 매출 건당 할인 대상 금액 최대 10만원, 통합 월 7천원까지 할인]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 80}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 500000, to: 500000}
+        exclude_applied: 1
+        unmodeled: [LPG 충전 제외]
+      - key: fuel-discount-100
+        title: S-OIL·HD현대오일뱅크 리터당 100원 청구할인
+        source: page
+        evidence: [100만원 이상 ~ | 100원/ℓ, 'S-OIL, HD현대오일뱅크(※LPG는 할인 제외)', 주유 매출 건당 할인 대상 금액 최대 10만원, 통합 월 7천원까지 할인]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 100}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 1000000}
+        exclude_applied: 1
+        unmodeled: [LPG 충전 제외]
+      - key: transit-discount-10
+        title: 대중교통 10% 청구할인
+        source: page
+        evidence: [대중교통 10% 청구할인, 통합 월 3천원까지 할인, '대중교통 : 명세서에 교통-버스, 교통-지하철로 표시되는 매출', ※ 전월 국내 가맹점 이용금액 30만원 이상 시 할인]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: coffee-discount-10
+        title: 스타벅스·폴바셋 10% 청구할인
+        source: page
+        evidence: [커피 10% 청구할인, '커피 : 스타벅스, 폴바셋', '매출 건당 1천원, 통합 월 5천원까지 할인', ※ 전월 국내 가맹점 이용금액 30만원 이상 시 할인, ※ 스타벅스 공식 앱을 통한 사이렌오더 결제 건 포함]
+        target:
+          merchants: [paul_bassett, starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [커피 상품권·선불카드 구입과 충전 제외, 백화점·대형할인점·면세점·공항·미군부대 등 입점 매장 제외]
+    unmodeled: [Two-in-One 결제서비스 체크매출은 할인 대신 0.3% 캐시백. 결제 입력으로 체크매출을 가릴 수 없어 계산하지 않는다, 교통카드 이용금액과 통신료 자동이체 금액은 매출표 접수일 기준으로 그 달 실적에 넣는다, 국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다, 신규 특례 시작일은 사용등록일과 사용개시일 중 빠른 날이다]
+open_questions:
+  - {path: 'revisions[0].stacks', question: 'Simple 할인과 Daily 할인은 중복 제공하지 않는다고만 적혀 있고 어느 쪽을 주는지, Daily 한도를 다 쓴 뒤 Simple로 넘어가는지 문구가 없다', assumed: 결제마다 큰 쪽 하나}
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 할인 제외 원문은 아파트관리비(임대료)다. 월세 카드납부도 빠지는지, assumed: 빠진다}
+  - {path: 'revisions[0].benefits', question: 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-02-26. 연회비는 해외겸용(Mastercard)·국내전용 모두 1만2천원(기본 7천원, 제휴 5천원). 가족카드 실적과 한도는 본인카드와 따로다. Daily 할인 적용 이용금액 전체는 전월실적에서 빠진다. 실적 제외에 공과금과 아파트관리비가 없어 실적 제외에 넣지 않았다. 우리금융저축은행 I&U+(103727)는 혜택이 같은 상품이라 이 카드로 등록한다.
