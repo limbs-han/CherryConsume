@@ -1,0 +1,47 @@
+schema_version: 2
+id: ibk-12113210001
+issuer: ibk
+name: 코웨이 IBK 카드
+kind: credit
+product_codes:
+  - '12113210001'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 12000}
+  - {scope: global, brand: unionpay, amount: 15000}
+  - {scope: global, brand: master, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=321&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2025-3380호, review_valid_until: 2028-05-11}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-05-19
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: receipt}
+    benefits:
+      - key: coway-rental
+        title: 코웨이 렌탈료 자동이체 청구할인
+        source: page
+        evidence: [코웨이 렌탈료 자동이체 결제시  최대 23, 000원 청구할인, 전월이용실적 | 30만원 이상 | 70만원 이상 | 120만원 이상 | 월간할인한도 | 13, 000원 | 17, 000원 | 23, 000원, 렌탈료 자동이체 필수, 자동이체 건이 여러 건인 경우에도 합산하여 할인한도 내에서 할인 적용, 렌탈료가 렌탈료 할인금액보다 적을 경우 렌탈료 납부금액 내에서 할인 적용]
+        target:
+          merchants: [coway_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 700000: 17000, 1200000: 23000}
+        tiers: {from: 300000}
+    unmodeled: [카드 수령월 이용실적이 구간을 채우면 다음 달 그 구간 한도를 주는 특례는 계산하지 않는다, 간편결제로 렌탈료를 결제하면 할인 여부를 코웨이에서 확인해야 한다, 할인은 비씨카드에 등록된 가맹점 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 교통카드 이용금액을 시내버스와 지하철 업종 제외로 옮겼다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다, assumed: '2025-05-19'}
+  - {path: 'revisions[0].benefits[0]', question: 상품 페이지에 웅진 렌탈료 자동이체 결제 시 청구할인이라는 제목이 함께 나오지만 할인 대상 문구는 코웨이 렌탈료뿐이다. 코웨이만 담았다, assumed: coway_rental}
+notes: 2026-10-10 expand4 조사. 상품 페이지에서 옮겼다. 혜택은 코웨이 렌탈료 자동이체 할인 하나이고 구간별 월 할인한도까지 렌탈료 전액을 깎는다
