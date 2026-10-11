@@ -1,0 +1,54 @@
+schema_version: 2
+id: lotte-1787
+issuer: lotte
+name: SK 롯데체크카드
+kind: check
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2011-A00008_20251015_10004.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2011-01-27'
+    source: manual
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [fuel, gift_card, prepaid_charge, tax]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    benefits:
+      - key: sk-fuel
+        title: SK주유소 리터당 40원 할인
+        source: manual
+        evidence: ['SK주유소에서 주유시 리터당 40원 할인 (주유할인액은 SK주유소가 고시한 휘발유가 기준 / 휘발유, 등유, 경유의 주유 시에만 할인되며, LPG충전의 경우에는 제외)', 지난달 청구서상 SK롯데체크카드 이용 금액 20만원 이상시 제공(이용금액에서 주유업종 제외), '일 2회, 주유금액 기준 일 15만원 월 30만원 한도 (한도 초과시 미할인)']
+        target:
+          merchants: [sk_energy]
+        when:
+          - amount: {below: 150001}
+        reward: {type: billing_discount, per_liter: 40}
+        limits:
+          - {per: day, count: 2}
+          - {per: day, base: 150000}
+          - {per: month, base: 300000}
+        tiers: {from: 200000}
+      - key: lotte-cinema
+        title: 롯데시네마 1,500원 할인
+        source: manual
+        evidence: ['롯데시네마 1,500원 할인 (일 1회, 월 5회, 연 12회)', 지난달(승인일 기준 1일~말일) 카드이용금액 20만원 이상인 회원님께 제공, 롯데시네마 현장 구매 또는 롯데시네마 홈페이지 예매시에만 적용]
+        target:
+          merchants: [lotte_cinema]
+        reward: {type: billing_discount, fixed: 1500}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {per: year, count: 12}
+        tiers: {from: 200000}
+    unmodeled: ['주유 할인은 일 15만원, 월 30만원 주유금액 한도를 넘는 결제는 할인하지 않는다. 한도를 일부 남긴 결제는 남은 금액만큼 계산해 실제보다 조금 많게 나올 수 있다', 주유 할인은 휘발유·등유·경유만 받고 LPG 충전은 빠진다. SK주유소 고시 휘발유가로 리터를 환산하지만 계산은 전국 평균 휘발유가를 쓴다, 롯데시네마 할인은 현장 구매와 롯데시네마 홈페이지 예매만 받는다, 나뚜루도 1, 000원당 50원 할인 대상이지만 가맹점이 없어 계산하지 않는다, '생어거스틴 10% 결제일 할인(일 1회, 이용금액 20만원까지, 할인한도 2만원)은 가맹점이 없어 계산하지 않는다. 백화점·대형마트·호텔 입점 매장은 빠진다', 롯데백화점 5% 할인 e-쿠폰과 무료주차권은 직전 6개월 롯데백화점 30만원 이상 이용 회원에게 매월 주는 쿠폰이라 계산하지 않는다, 롯데ON 1~5% 할인은 품목마다 달라 계산하지 않는다, '롯데리아·엔제리너스 1,000원당 50원 할인은 한도와 실적 조건이 원문에서 분명하지 않아 계산하지 않는다']
+open_questions:
+  - {path: product_codes, question: 롯데카드 체크카드 판매 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다, assumed: '[]'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 상품설명서에 실적 제외 목록이 없다. 주유 할인 실적에서 주유업종을 빼는 문구만 있어 주유와 세금·상품권·선불 충전을 뺐다, assumed: 'fuel, gift_card, prepaid_charge, tax'}
+notes: 2026-10-11 상품설명서(2025년 9월 기준) 대조. 출시일 2011-01-27, 연회비 없음. 실적 조건은 모두 지난달 20만원 이상이고 주유업종은 실적에서 뺐다. 주유 할인은 매출 확정 시 할인이라 결제일 할인으로 적었다.
