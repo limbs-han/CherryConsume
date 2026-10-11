@@ -1,0 +1,119 @@
+schema_version: 2
+id: woori-834221
+issuer: woori
+name: 카드의정석 SHOPPING
+kind: credit
+product_codes:
+  - '834221'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: unionpay, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 12000}
+  - {scope: global, brand: visa, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834221', fetched_at: '2026-10-10', review_no: 2026-C1a-12684}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2018-06-25'
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0.5
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax]
+      unmodeled: [Two-in-One 결제서비스(체크매출)는 청구할인 대신 0.3% 캐시백]
+    limits:
+      - key: online
+        per: month
+        amount: {300000: 4000, 700000: 8000, 1200000: 16000}
+      - key: offline
+        per: month
+        amount: {300000: 6000, 700000: 12000, 1200000: 24000}
+      - {key: coffee, per: month, amount: 5000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+      - {key: pay, pick: best, spill: none}
+    benefits:
+      - key: online-shopping-10
+        title: 온라인 쇼핑 10% 청구할인
+        source: page
+        evidence: [온라인 쇼핑 10% 청구할인, '인터넷 P/G, 인터넷 상거래 등 온라인 업종', 매출 건당 5만원까지 할인, 온라인 | 4천원 | 8천원 | 16천원]
+        target:
+          categories: [online_shopping]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: online}
+        tiers: {from: 300000}
+        unmodeled: [원문 대상은 인터넷 PG·인터넷 상거래 등 온라인 업종 전체로 온라인 쇼핑 업종보다 넓을 수 있다]
+      - key: offline-shopping-10
+        title: 오프라인 쇼핑 10% 청구할인
+        source: page
+        evidence: ['백화점 | 롯데, 현대, 신세계', '대형마트 | 이마트, 홈플러스, 롯데마트, 메가마트, Y-MART(영암마트)', '창고형 할인매장 | 트레이더스 홀세일 클럽, 이케아, 롯데마트맥스', '슈퍼마켓 | 이마트 에브리데이, 롯데슈퍼, GS 더프레시, 홈플러스 익스프레스', '프리미엄 아울렛 | 롯데, 현대, 신세계사이먼', '편의점 | CU, GS25, 이마트24', '잡화 | 올리브영, 롭스플러스(LOHB''S+), 시코르, 다이소', 매출 건당 5만원까지 할인, 오프라인 | 6천원 | 12천원 | 24천원]
+        target:
+          merchants: [chicor, cu, daiso, emart, emart24, emart_everyday, gs25, gs_the_fresh, homeplus, homeplus_express, hyundai_department, hyundai_premium_outlet, ikea, lohbs_plus, lotte_department, lotte_mart, lotte_mart_max, lotte_premium_outlet, lotte_super, mega_mart, olive_young, shinsegae_department, shinsegae_premium_outlet, traders, ymart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: offline}
+        tiers: {from: 300000}
+      - key: online-pay-5
+        title: 온라인 4대 PAY 5% 추가 청구할인
+        source: page
+        evidence: [온라인 업종 4대 PAY 결제 시 5% 추가할인, '4대 간편결제 : 삼성페이, 네이버페이, 카카오페이, PAYCO', 추가 청구할인은 4대 간편결제에 본 카드를 등록하여 온라인에서 사용한 경우에 제공, 온라인 업종 통합 할인한도 내에서 할인 적용, '예시) SSG.COM에서 카카오페이로 10만원 결제 시 5만원에 대해서만 (10%+5%) 할인 적용 (7,500원 할인)']
+        target:
+          categories: [online_shopping]
+        when:
+          - {channel: online}
+          - payment: [kakao_pay, naver_pay, payco, samsung_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: online}
+        tiers: {from: 300000}
+        stack: pay
+      - key: weekend-fuel-60
+        title: 주말 주유 리터당 60원 청구할인
+        source: page
+        evidence: [4대 주유소 주말 주유시 리터당 60원 청구할인, 'SK주유소, GS칼텍스, S-OIL, HD현대오일뱅크 대상', '주유 매출건당 10만원, 통합 월 30만원 한도', LPG는 할인 제외]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        when:
+          - day:
+              in: [sat, sun]
+              holidays: ignore
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, base: 300000}
+        tiers: {from: 300000}
+        unmodeled: [LPG는 할인 제외]
+      - key: coffee-10
+        title: 스타벅스·폴바셋 10% 청구할인
+        source: page
+        evidence: ['스타벅스, 폴바셋 10% 청구할인', '매출 건당 1천원까지, 통합 월 5천원까지 할인']
+        target:
+          merchants: [paul_bassett, starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: coffee}
+        tiers: {from: 300000}
+        unmodeled: [백화점·대형할인점 내 매장과 미군부대 매장은 할인 제외]
+    unmodeled: [교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 가족카드 실적과 한도는 본인카드와 별도]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일을 찾지 못해 상품 출시일로 두었다. 2026-08-24 심의 문구라 그 사이 개정이 있었을 수 있다, assumed: '2018-06-25'}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2018-06-25. 연회비 국내전용(UnionPay) 10,000원, Mastercard·VISA 12,000원. 전월 국내 30만/70만/120만 이상 온라인 쇼핑 10%, 지정 오프라인 쇼핑 10% 각 건당 5만원까지, 온라인 4대 PAY 5% 추가는 온라인 한도 안에서. 월 한도 온라인 4천/8천/1만6천원, 오프라인 6천/1만2천/2만4천원. 주말 4대 주유소 리터당 60원(건당 10만원, 월 30만원), 스타벅스·폴바셋 10% 건당 1천원 월 5천원. 할인 받은 매출의 50%는 실적 제외. 신규 발급 다음 달 말까지 30만 구간.
