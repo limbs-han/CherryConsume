@@ -1,0 +1,58 @@
+schema_version: 2
+id: hyundai-178250
+issuer: hyundai
+name: 암웨이 현대카드
+short_name: 현대 암웨이
+search_names: [Amway 현대카드, 암웨이 현대카드, 암웨이카드]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260727-1140-35_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%95%94%EC%9B%A8%EC%9D%B4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V2.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립에서 뺀다, 암웨이 현대카드 혜택 외 현대카드의 다른 할인이 적용된 결제는 적립에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 적립에서 뺀다]
+    stacks:
+      - key: main
+        pick: priority
+        order: [amway-15, base-1]
+    benefits:
+      - key: amway-15
+        title: 한국암웨이 1.5% M포인트 적립
+        source: manual
+        evidence: [한국암웨이 이용 금액 2% A포인트 + 1.5% M포인트 동시 적립, 전월 실적 및 적립 한도 제한 없음, 추가 혜택 적용 시 기본 혜택은 중복 제공되지 않음, 암웨이 간편결제(A페이)로 결제 시에는 추가 혜택 적용, 매출 건별로 소수점 이하 반올림 후 적립]
+        target:
+          merchants: [korea_amway]
+        reward: {type: points, program: hyundai_m_point, rate: 1.5, round: round}
+        unmodeled: [한국암웨이 2% A포인트는 암웨이 정상 회원에게 암웨이가 주는 포인트라 계산하지 않는다, 암웨이를 네이버페이 같은 PG나 간편결제로 결제해 가맹점명이 다르게 승인되면 추가 혜택에서 빠진다]
+      - key: base-1
+        title: 국내외 가맹점 1% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 이용금액 1% M포인트 적립, 1회 및 연간 적립 한도 제한 없음, 신규 발급 시 카드 수령 등록월 다음 달 이용 건까지는 전월 이용 금액 50만원 미만도 기본 혜택 제공, '4,673원 결제 시 47 M포인트 적립']
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1, round: round}
+        tiers: {from: 500000}
+    unmodeled: [M 긴급적립 선지급 포인트는 갚아야 하는 빚이라 계산하지 않는다, 암웨이 20만원 이상 3개월 무이자 할부는 결제 혜택이 아니라 계산하지 않는다, 실적은 본인과 가족 카드를 합산한다, 고속도로 통행 요금과 후불하이패스 이용 금액은 실적에서 뺀다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다]
+open_questions:
+  - {path: product_codes, question: 카드 상세 주소의 상품 코드를 확인하지 못했다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-11 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa) 30,000원(기본 10,000+제휴 20,000), 가족카드 10,000원. 전월 50만 이상 국내외 1%, 한국암웨이는 실적 조건 없이 1.5% M포인트이고 기본 1%와 겹치지 않는다. 매출 건별 소수점 이하 반올림. 실적은 전월 1일~말일 일시불과 할부이고 공과금 등과 무이자 할부 이용 금액을 뺀다. 취소는 승인월에서 빼고 해외는 취소 달에서 뺀다.
