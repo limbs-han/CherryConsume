@@ -1,0 +1,131 @@
+schema_version: 2
+id: kb-09310
+issuer: kb
+name: BeV Ⅲ 카드
+short_name: KB BeV Ⅲ
+kind: credit
+product_codes:
+  - '09310'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 200000}
+  - {scope: global, brand: mastercard, amount: 210000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09310', fetched_at: '2026-10-11', review_no: 제2026-C1a-04967호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    stacks:
+      - {key: main, pick: best}
+      - {key: fuel, pick: best}
+    benefits:
+      - key: fuel-100
+        title: 전 주유소·충전소 리터당 100원 할인
+        source: page
+        evidence: [전 주유소/충전소 리터당 100원 할인, '할인한도 - 전월 이용실적 50만원 이상 : 이용금액 20만원 한도, 전월 이용실적 100만원 이상 : 이용금액 40만원 한도', '기준 유가 : GS 칼텍스 본사 고시 휘발유가(경유, 등유, LPG는 휘발유가에 비례하여 할인율 적용)', 전월 1일~말일(승인시점 기준) BeV Ⅲ카드 일시불 및 할부 승인(이용)금액 기준 50만원 이상일 경우에만 할인 및 적립 서비스를 제공합니다., '단, 최초 카드 사용 등록일로부터 다음 달 말일까지는 전월 이용실적이 50만원 미만인 경우에도 서비스를 제공합니다.']
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 100}
+        limits:
+          - per: month
+            base: {0: 200000, 500000: 200000, 1000000: 400000}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: fuel
+        notes: 주유는 포인트리 적립에서 빠져 따로 묶는다
+      - key: weekday-base-1-1
+        title: 주중(월~목) 전 가맹점 1.1% 포인트리
+        source: page
+        evidence: ['주중(월요일~목요일) 전 가맹점 기본 1.1% 포인트리 적립(주유소, 충전소 제외) / 일상 쇼핑(백화점/대형마트) 이용 시 1.3% 포인트리 적립', '포인트리 적립 제외대상 - 주유소, 충전소 , 무이자할부 이용금액']
+        target:
+          exclude_categories: [fuel]
+          all: true
+        when:
+          - {interest_free: false}
+          - day:
+              in: [mon, tue, wed, thu]
+              holidays: ignore
+        reward: {type: points, program: kb_pointree, rate: 1.1}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: weekday-shopping-1-3
+        title: 주중(월~목) 백화점·대형마트 1.3% 포인트리
+        source: page
+        evidence: [일상 쇼핑(백화점/대형마트) 이용 시 1.3% 포인트리 적립, '일상 쇼핑(백화점/대형마트) 및 프리미엄 쇼핑(면세점/프리미엄 아울렛)의 온라인 쇼핑몰, 건물 내 임대매장 이용금액은 기본 적립 대상입니다.', 특별 적립 서비스는 국내 가맹점 이용시에 한하여 제공됩니다.]
+        target:
+          categories: [department_store, grocery_mart]
+          exclude_merchants: [hyundai_premium_outlet, lotte_premium_outlet, shinsegae_premium_outlet, shinsegae_simon]
+        when:
+          - {interest_free: false}
+          - day:
+              in: [mon, tue, wed, thu]
+              holidays: ignore
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 1.3}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [백화점과 대형마트 건물 안 임대매장은 기본 1.1%만 받는다]
+      - key: weekend-base-1-3
+        title: 주말(금~일) 전 가맹점 1.3% 포인트리
+        source: page
+        evidence: ['주말(금요일~일요일) 전 가맹점 기본 1.3% 포인트리 적립(주유소, 충전소 제외) / 프리미엄 쇼핑(면세점/롯데, 신세계 프리미엄 아울렛) 이용 시 1.5% 포인트리 적립']
+        target:
+          exclude_categories: [fuel]
+          all: true
+        when:
+          - {interest_free: false}
+          - day:
+              in: [fri, sat, sun]
+              holidays: ignore
+        reward: {type: points, program: kb_pointree, rate: 1.3}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: weekend-dutyfree-1-5
+        title: 주말(금~일) 면세점 1.5% 포인트리
+        source: page
+        evidence: ['프리미엄 쇼핑(면세점/롯데, 신세계 프리미엄 아울렛) 이용 시 1.5% 포인트리 적립', '일상 쇼핑(백화점/대형마트) 및 프리미엄 쇼핑(면세점/프리미엄 아울렛)의 온라인 쇼핑몰, 건물 내 임대매장 이용금액은 기본 적립 대상입니다.', 특별 적립 서비스는 국내 가맹점 이용시에 한하여 제공됩니다.]
+        target:
+          categories: [travel.duty_free]
+        when:
+          - {interest_free: false}
+          - day:
+              in: [fri, sat, sun]
+              holidays: ignore
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 1.5}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [롯데프리미엄아울렛(파주·이천·김해·광명·동부산점)과 신세계사이먼 프리미엄 아울렛(파주·여주·시흥·부산점)도 1.5% 대상이지만 지점 목록을 담을 가맹점이 없어 기본 1.3%로 계산한다]
+    unmodeled: [무승인전표(자판기·터널 통행료·항공기 내 이용)는 실적에서 빠진다, '연 1회 쿠폰(신세계·롯데 상품권 15만원, 포인트리 15만점, 호텔 뷔페 16만원 중 택1)은 첫해 50만원, 다음 해부터 전년 600만원 이용 시 준다. 결제 혜택이 아니라 담지 않는다', '해외여행상품 3~5% 현장할인, 제주 렌터카, 골프, 공항 서비스 같은 BeV Ⅲ 전용 서비스는 담지 않는다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙의 시작일을 원문에서 찾지 못했다. 수집일을 잠정 시작일로 둔다., assumed: '2026-10-11'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 옮겼다. 할인과 적립은 모두 전월 50만원 이상일 때만 준다. 무승인 교통요금 실적 제외는 시내버스와 지하철 업종 제외로 둔다. 포인트리 적립 한도는 원문에 없다.
