@@ -1,0 +1,181 @@
+schema_version: 2
+id: woori-835097
+issuer: woori
+name: 카드의정석 가득한 할인 카드
+kind: credit
+product_codes:
+  - '835097'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: visa, amount: 10000}
+  - {scope: global, brand: unionpay, amount: 5000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835097', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2014-03-31'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - {region: overseas}
+      categories: [education.tuition, gift_card, prepaid_charge, tax, utility]
+    limits:
+      - key: total
+        per: month
+        amount: {300000: 10000, 600000: 20000, 1200000: 40000}
+      - key: shopping
+        per: month
+        amount: {300000: 4000, 600000: 8000, 1200000: 16000}
+      - key: family
+        per: month
+        amount: {300000: 3000, 600000: 6000, 1200000: 12000}
+      - key: life
+        per: month
+        amount: {300000: 3000, 600000: 6000, 1200000: 12000}
+      - {key: coffee-day, per: day, count: 1}
+      - {key: coffee-month, per: month, count: 2}
+    benefits:
+      - key: shopping-offline-5
+        title: 쇼핑 대형마트·백화점 5% 청구할인
+        source: page
+        evidence: ['오프라인 : 대형마트, 백화점', 각 영역별 할인한도 내에서 5% 청구할인, '건당 매출금액 최대 5만원까지 할인 적용되며, 할인 횟수제한 없음', 쇼핑 | 4천원 | 8천원 | 16천원, TOTAL | 1만원 | 2만원 | 4만원]
+        target:
+          categories: [department_store]
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: total}
+        tiers: {from: 300000}
+        exclude_applied: 0.5
+        unmodeled: [오프라인 대형마트는 이마트·홈플러스·롯데마트·농협하나로마트만 담았다. 원문 대상 목록은 우리카드 홈페이지에 있다]
+      - key: shopping-online-5
+        title: 쇼핑 온라인·홈쇼핑 5% 청구할인
+        source: page
+        evidence: [11번가 / G마켓 / 옥션 / 쿠팡 / 티몬 / SSG.COM / GS SHOP / CJ 온스타일 / 롯데ON / 롯데홈쇼핑 / 네이버파이낸셜(네이버플러스 스토어), 건당 매출금액 최대 5만원까지 할인 적용]
+        target:
+          merchants: [auction, cj_onstyle, coupang, eleven_st, gmarket, gs_shop, lotte_homeshopping, lotte_on, naver_plus_store, ssg_com, tmon]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: total}
+        tiers: {from: 300000}
+        exclude_applied: 0.5
+        unmodeled: [온라인 대형마트(이마트·홈플러스·롯데마트·농협하나로마트)와 온라인 백화점(롯데·신세계·현대·AK플라자)은 담지 않았다]
+      - key: family-5
+        title: 가족 학원·병원·보험 5% 청구할인
+        source: page
+        evidence: [가족영역 | 학원 | 병원 | 보험, 병원업종 중 동물병원 결제금액은 제외, 건당 매출금액 최대 5만원까지 할인 적용, 가족 | 3천원 | 6천원 | 12천원]
+        target:
+          categories: [education.academy, hospital, insurance.private]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: family}
+          - {shared: total}
+        tiers: {from: 300000}
+        exclude_applied: 0.5
+      - key: life-fuel-60
+        title: 생활 HD현대오일뱅크·S-OIL 리터당 60원 청구할인
+        source: page
+        evidence: ['주유는 현대오일뱅크, S-OIL 주유시 리터당 60원 할인', '(정유사별 통합 1일 1회, 주유매출건당 10만원 한도)', 생활 | 3천원 | 6천원 | 12천원, 전월 실적 산정시 5% 할인(주유 리터당 60원 할인 포함) 적용된 매출은 50% 인정]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {shared: life}
+          - {shared: total}
+        tiers: {from: 300000}
+        exclude_applied: 0.5
+        unmodeled: [경유와 LPG도 휘발유 공시가로 환산한다]
+      - key: life-transit-5
+        title: 생활 대중교통 5% 청구할인
+        source: page
+        evidence: [생활영역 | 주유 | 대중교통 | 통신, 건당 매출금액 최대 5만원까지 할인 적용, 생활 | 3천원 | 6천원 | 12천원]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: life}
+          - {shared: total}
+        tiers: {from: 300000}
+        exclude_applied: 0.5
+      - key: life-telecom-5
+        title: 생활 통신3사 휴대전화 자동납부 5% 청구할인
+        source: page
+        evidence: ['통신은 휴대전화요금에 한하여 할인이 제공되며, 본 카드로 통신3사(SKT, KT, LGU+)에 자동납부 신청 후 결제한 건에 대해서만 할인 적용', '※ 인터넷, 유선전화 등 결합상품 신청 시에는 할인 제외', 건당 매출금액 최대 5만원까지 할인 적용]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: life}
+          - {shared: total}
+        tiers: {from: 300000}
+        exclude_applied: 0.5
+        unmodeled: [인터넷·유선전화 결합상품을 신청하면 할인 제외]
+      - key: movie-3000
+        title: 전국 영화관 3천원 청구할인
+        source: page
+        evidence: ['12,000원 이상 결제시 3,000원 청구할인 (통합 월 1회, 연 10회 제공)', ※ 예매 대행사이트를 통해서 예매 시 할인 제외, 전월 국내가맹점 이용실적 30만원 이상시 제공]
+        target:
+          categories: [movie]
+        when:
+          - amount: {min: 12000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 10}
+        tiers: {from: 300000}
+        unmodeled: [예매 대행사이트 결제는 제외]
+      - key: family-restaurant-20
+        title: 아웃백·닥터로빈·생어거스틴 20% 청구할인
+        source: page
+        evidence: ['아웃백스테이크하우스, 닥터로빈, 생어거스틴 (통합 일 1회, 건당 최대 2만원까지 할인)']
+        target:
+          merchants: [dr_robin, outback, saint_augustin]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, amount: 20000}
+          - {per: day, count: 1}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 대형마트 내 매장 등 일부 입점 매장 제외']
+      - key: coffee-20
+        title: 스타벅스·투썸플레이스 20% 청구할인
+        source: page
+        evidence: ['스타벅스, 투썸플레이스 (통합 일 1회, 월 2회, 건당 최대 5천원까지 할인)']
+        target:
+          merchants: [starbucks, twosome]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: coffee-day}
+          - {shared: coffee-month}
+        tiers: {from: 300000}
+        unmodeled: [커피브랜드 상품권·선불카드 구매와 충전은 제외]
+    unmodeled: [교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 할인 횟수와 한도는 매출전표 접수 순으로 적용된다, 가족카드 실적과 한도는 본인카드와 별도, 놀이공원 자유이용권·아쿠아리움 입장권 본인 50% 현장할인은 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일을 찾지 못해 상품 출시일로 두었다, assumed: '2014-03-31'}
+  - {path: annual_fees, question: 국내전용 연회비가 원문 표에 없다, assumed: 해외겸용만 적음}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2014-03-31. 연회비 Mastercard·VISA 10,000원, UnionPay 5,000원. 전월 국내 30만/60만/120만 이상 9대 업종 5% 건당 5만원까지, 영역 월 한도 쇼핑 4천/8천/1만6천, 가족·생활 3천/6천/1만2천, 합계 1만/2만/4만원. 할인 매출은 실적 50% 인정. 영화 3천원 월1회 연10회, 패밀리레스토랑 20% 건당 2만원, 커피 20% 월 2회 건당 5천원. 신규 수령 등록 다음 달 말까지 30만 구간.
