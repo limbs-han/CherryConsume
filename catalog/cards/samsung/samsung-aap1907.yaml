@@ -1,0 +1,112 @@
+schema_version: 2
+id: samsung-aap1907
+issuer: samsung
+name: 넥센타이어 삼성카드
+short_name: 넥센타이어 삼성
+search_names: [넥센타이어 렌탈 카드, 넥센타이어 삼성카드]
+kind: credit
+product_codes: [AAP1907]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1907', fetched_at: 2026-10-11}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmFI%2FqOsfvTGsw%2BNpjypPg0%3D&sn=1', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-01-28
+    source: manual
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, PG나 간편결제 가맹점으로 분류되는 결제는 할인하지 않는다, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다]
+    options:
+      - key: rental
+        title: 넥센타이어 렌탈 이용 여부
+        choices:
+          - {key: none, title: 지난달 이 카드로 넥센타이어 렌탈료를 내지 않았다. 주유와 편의점·커피 10% 할인을 받는다}
+          - {key: using, title: 지난달 이 카드로 넥센타이어 렌탈료를 냈다. 렌탈료 할인을 받는다}
+        default: none
+        change: next_month
+    limits:
+      - key: fuel
+        per: month
+        amount: {300000: 5000, 700000: 7000, 1200000: 10000}
+      - key: conv-coffee
+        per: month
+        amount: {300000: 5000, 700000: 7000, 1200000: 10000}
+    benefits:
+      - key: rental
+        title: 넥센타이어 렌탈료 10,000~16,000원 할인
+        source: manual
+        evidence: ['넥센타이어 렌탈 이용 시 월 렌탈료 10,000~16,000원 결제일할인', '전월 이용금액대별 통합 월 할인금액 30만원 이상 10,000원, 70만원 이상 13,000원, 120만원 이상 16,000원', 통합 월 1회 제공, '넥센타이어 월 렌탈료가 월 할인금액보다 적은 경우, 잔여 할인금액은 해당월의 카드 결제대금에서 자동 차감']
+        target:
+          merchants: [nexen_tire_rental]
+        when:
+          - option:
+              rental: [using]
+        reward:
+          type: billing_discount
+          fixed: {300000: 10000, 700000: 13000, 1200000: 16000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [렌탈료 할인은 매월 3일에 전월 렌탈료 결제 여부로 정하지만 이번 달 렌탈료 결제에 붙여 계산한다, 일반 제품·서비스 구매는 할인하지 않는다]
+      - key: fuel-10
+        title: 주유 10% 할인(렌탈 미이용)
+        source: manual
+        evidence: [넥센타이어 렌탈 미이용 시 주유 10% 결제일할인, '주유 주유소, LPG 충전소', '전월 이용금액대별 통합 월 할인한도 30만원 이상 5,000원, 70만원 이상 7,000원, 120만원 이상 10,000원']
+        target:
+          categories: [fuel]
+        when:
+          - option:
+              rental: [none]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: fuel}
+        tiers: {from: 300000}
+      - key: conv-coffee-10
+        title: 편의점·커피전문점 10% 할인(렌탈 미이용)
+        source: manual
+        evidence: [넥센타이어 렌탈 미이용 시 편의점/커피전문점 10% 결제일할인, '편의점 CU, GS25, 세븐일레븐, 이마트24', '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀, 메가MGC커피', '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외(단, 스타벅스는 사이렌오더 결제건도 혜택 제공)']
+        target:
+          merchants: [blue_bottle, coffee_bean, cu, ediya, emart24, gs25, mega_coffee, seven_eleven, twosome]
+        when:
+          - option:
+              rental: [none]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: conv-coffee}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: starbucks-10
+        title: 스타벅스 10% 할인(렌탈 미이용)
+        source: manual
+        evidence: ['단, 스타벅스는 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        when:
+          - option:
+              rental: [none]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: conv-coffee}
+        tiers: {from: 300000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+    unmodeled: [삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].benefits', question: 할인의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].benefits[rental].target', question: 넥센타이어 렌탈 가맹점이 공통 파일에 없어 nexen_tire_rental을 새로 제안했다, assumed: nexen_tire_rental}
+notes: 2026-10-11 상품안내장(2026.2판, 심의필 2026-C1a-01604호) 확인. 출시 2026-01-28. 연회비 해외겸용 VISA·국내전용 모두 15,000원(기본 7,000+제휴 8,000). 전월에 이 카드로 넥센타이어 렌탈료를 냈으면 렌탈료 할인, 내지 않았으면 주유와 편의점·커피 10% 할인을 받는다. 이 구분을 옵션으로 두었다. 발급월+1개월까지는 30만 구간 혜택을 준다. 실적 제외는 무이자할부, 4대보험, 국세·지방세·공과금, 아파트 관리비, 임대료, 유치원·초중고 납입금, 대학 등록금, 기프트·선불카드, 상품권이다. 대중교통과 택시는 실적에 넣는다.
