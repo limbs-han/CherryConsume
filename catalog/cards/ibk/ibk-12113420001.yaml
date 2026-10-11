@@ -1,0 +1,105 @@
+schema_version: 2
+id: ibk-12113420001
+issuer: ibk
+name: I-PET
+kind: credit
+product_codes:
+  - '12113420001'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 18000}
+  - {scope: global, brand: master, amount: 19000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=342&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2026-4426호, review_valid_until: 2029-05-21}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-06-01
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: integrated
+        per: month
+        amount: {400000: 15000, 800000: 25000, 1300000: 50000}
+    benefits:
+      - key: pet-vet-30
+        title: 동물병원·반려동물업종 30% 청구할인
+        source: page
+        evidence: [동물병원/ 반려동물업종 30% 할인, '동물병원, 반려동물 관련 업종', '(애견샵, 반려동물용품점, 반려동물약국, 반려동물 장례업체 등)', ※ 월 최대 1만원 할인(오프라인 결제건에 한함), '※ 백화점, 대형할인점, 아울렛 입점매장 제외']
+        target:
+          categories: [pet]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: ['백화점, 대형할인점, 아울렛 입점매장은 할인하지 않는다']
+      - key: online-shopping-10
+        title: 온라인쇼핑 10% 청구할인
+        source: page
+        evidence: [온라인쇼핑 10% 할인, '쿠팡, G마켓, 11번가, 옥션, 인터파크', ※ 월 최대 1만원 할인, ※ 상품권 구매는 할인 제외]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, interpark]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: [온라인쇼핑몰에서 산 상품권은 할인하지 않는다]
+      - key: coffee-10
+        title: 커피 10% 청구할인
+        source: page
+        evidence: [커피 10% 할인, '스타벅스, 커피빈, 투썸플레이스, 폴바셋, 이디야', ※ 월 최대 5천원 할인, ※ 현장결제와 각 커피 브랜드의 공식앱을 통한 온라인 결제 건에 한함, '※ 커피 브랜드의 상품권, 선불카드 구입/충전 제외', '※ 백화점, 대형할인점, 아울렛 입점 매장 제외']
+        target:
+          merchants: [coffee_bean, ediya, paul_bassett, starbucks, twosome]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: ['백화점, 대형할인점, 아울렛 입점 매장은 할인하지 않는다', 공식앱이 아닌 온라인 결제는 할인하지 않는다]
+      - key: mart-5
+        title: 대형마트 5% 청구할인
+        source: page
+        evidence: [대형마트 5% 할인, '이마트, 롯데마트, 홈플러스', ※ 월 최대 1만원 할인(오프라인 결제건에 한함), '※ 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스 등), 백화점 및 아울렛 입점 매장, 창고형 할인매장(트레이더스 홀세일 클럽, 롯데마트 맥스 등)은 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: [백화점·아울렛 입점 매장과 롯데마트 맥스는 할인하지 않는다]
+      - key: convenience-5
+        title: 편의점 5% 청구할인
+        source: page
+        evidence: [편의점 5% 할인, 'GS25, CU, 세븐일레븐', ※ 월 최대 5천원 할인(오프라인 결제건에 한함), ※ 온라인(간편결제 등) 결제 건은 할인 제외]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+    unmodeled: ['반려동물사진관(일반 사진관 포함) 30% 할인, 월 최대 1만원은 사진관 업종이 없어 계산하지 않는다', 해외 이용금액은 매출표 접수일 달 실적에 넣는다, 월 할인한도는 할인되는 매출이 정상 처리되는 순서대로 차감한다, 결제대행업체나 간편결제 가맹점으로 분류되면 할인되지 않을 수 있다, 가족카드 이용금액은 본인과 합산하지 않고 카드별로 본다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 후불교통을 시내버스와 지하철 업종 제외로 옮겼다. 후불교통 유료도로 이용분은 담을 업종이 없다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다, assumed: '2026-06-01'}
+notes: 2026-10-10 expand4 조사. 상품 페이지에서 옮겼다. 모든 할인은 전월 40만원 이상이고 통합할인한도를 함께 쓴다
