@@ -1,0 +1,174 @@
+schema_version: 2
+id: woori-102482
+issuer: woori
+name: 카드의정석2 칼퇴 CHECK
+kind: check
+product_codes:
+  - '102482'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102482', fetched_at: '2026-10-11', review_no: 2026-C00675}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2024-09-23'
+    source: page
+    tiers: [0, 300000, 600000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {region: overseas}
+      categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['간편결제 가맹점명(네이버페이, 카카오페이 등)으로 접수된 매출은 캐시백 제외', 다른 쿠폰·할인 프로모션과 중복되지 않는다]
+    limits:
+      - key: kaltoe
+        per: month
+        amount: {300000: 4000, 600000: 8000, 1200000: 15000}
+      - key: life
+        per: month
+        amount: {300000: 6000, 600000: 12000, 1200000: 25000}
+      - {key: kaltoe-day, per: day, count: 1}
+      - {key: kaltoe-month, per: month, count: 3}
+      - {key: taxi-day, per: day, count: 1}
+      - {key: taxi-month, per: month, count: 3}
+    benefits:
+      - key: kaltoe-dining
+        title: 칼퇴 음식점·주점 저녁 5% 캐시백
+        source: page
+        evidence: [음식점·주 점 / 카페 / 편의점 (저녁 6~11시 결제 건), '음식점 업종 : 한식, 일식, 중식, 양식, 뷔페, 패스트푸드, 스넥, 기타 요식업', '주점 업종 : 주점/바', ※ 건당 3만원 이상 결제 시 제공, '※ 통합 일 1회, 월 3회, 건당 최대 3천원까지 캐시백', '30만원 이상 | 4,000원 | 6,000원 | 10,000원', '60만원 이상 | 8,000원 | 12,000원 | 20,000원', '120만원 이상 | 15,000원 | 25,000원 | 40,000원']
+        target:
+          categories: [pub, restaurant]
+        when:
+          - time: {from: '18:00', to: '23:00'}
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 3000}
+          - {shared: kaltoe-day}
+          - {shared: kaltoe-month}
+          - {shared: kaltoe}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 대형마트, 리조트 등 대형시설물 입점 점포와 임대매장은 제외']
+      - key: kaltoe-cafe
+        title: 칼퇴 커피전문점 저녁 5% 캐시백
+        source: page
+        evidence: ['스타벅스, 투썸플레이스, 폴바셋, 메가MGC커피, 컴포즈커피', ※ 건당 1만원 이상 결제 시 제공, '※ 통합 일 1회, 월 3회, 건당 최대 2천원까지 캐시백', ※ 공식 앱을 통한 결제 건 포함]
+        target:
+          merchants: [compose_coffee, mega_coffee, paul_bassett, starbucks, twosome]
+        when:
+          - time: {from: '18:00', to: '23:00'}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 2000}
+          - {shared: kaltoe-day}
+          - {shared: kaltoe-month}
+          - {shared: kaltoe}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 대형마트, 리조트 등 대형시설물 입점 점포와 임대매장은 제외']
+      - key: kaltoe-cu
+        title: 칼퇴 CU 저녁 5% 캐시백
+        source: page
+        evidence: [CU, ※ 건당 1만원 이상 결제 시 제공, '※ 일 1회, 월 2회, 건당 최대 2천원까지 캐시백', ※ 오프라인 결제 건에 한하여 캐시백 제공]
+        target:
+          merchants: [cu]
+        when:
+          - time: {from: '18:00', to: '23:00'}
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 2000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: kaltoe}
+        tiers: {from: 300000}
+        unmodeled: [대형시설물 입점 점포와 임대매장은 제외]
+      - key: life-gym
+        title: 갓생 헬스클럽·스포츠센터 5% 캐시백
+        source: page
+        evidence: ['헬스클럽 업종 : 헬스클럽, 스포츠센터, 레저스포츠', ※ 10만원 이상 결제 시 제공, '※ 통합 월 1회, 월 최대 5천원까지 캐시백']
+        target:
+          categories: [sports]
+        when:
+          - amount: {min: 100000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, count: 1}
+          - {per: month, amount: 5000}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: life-olive-young
+        title: 갓생 올리브영 5% 캐시백
+        source: page
+        evidence: [올리브영, ※ 건당 1만원 이상 결제 시 제공, '※ 일 1회, 월 3회, 건당 최대 2천원까지 캐시백']
+        target:
+          merchants: [olive_young]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 2000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: [대형시설물 입점 점포와 임대매장은 제외]
+      - key: life-millie
+        title: 갓생 밀리의 서재 정기결제 5% 캐시백
+        source: page
+        evidence: [밀리의 서재, ※ 건당 최저 결제금액 조건 없음, '※ 횟수 제한 없음, 건당 최대 2천원까지 캐시백', ※ 공식 홈페이지/앱을 통한 정기결제 건에 한하여 캐시백 제공]
+        target:
+          merchants: [millie]
+        when:
+          - billing: [subscription]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 2000}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: mobility-taxi
+        title: 교통 택시 5% 캐시백
+        source: page
+        evidence: [택시 업종 및 카카오T(택시), ※ 건당 1만원 이상 결제 시 제공, '※ 통합 일 1회, 월 3회, 건당 최대 2천원까지 캐시백', ※ 오프라인 결제 및 카카오T 공식 앱에 해당 카드를 등록하여 결제하는 택시 건에 한하여 캐시백 제공]
+        target:
+          categories: [taxi]
+          merchants: [kakao_t]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 2000}
+          - {shared: taxi-day}
+          - {shared: taxi-month}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: [카카오T는 택시 결제만이다. 대리운전 등 다른 서비스는 빠진다]
+      - key: mobility-socar
+        title: 교통 쏘카 5% 캐시백
+        source: page
+        evidence: [쏘카(SOCAR), ※ 건당 최저 결제금액 조건 없음, '※ 일 1회, 월 3회, 건당 최대 2천원까지 캐시백', ※ 공식 홈페이지/앱을 통한 결제 건에 한하여 캐시백 제공]
+        target:
+          merchants: [socar]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 2000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: life}
+        tiers: {from: 300000}
+    unmodeled: ['해외 이용금액, 교통카드 이용금액, 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다', 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 정부지원금과 국가·공공기관 가맹점 이용금액은 실적과 캐시백에서 빠진다, 갓생과 교통 영역은 월 한도 하나를 같이 쓴다, '교통 대중교통 5% 캐시백(후불교통 버스·지하철, 건당 5만원 이상, 월 1회 3천원)은 조건 문구가 분명하지 않아 계산하지 않는다']
+open_questions:
+  - {path: 'revisions[0].limits', question: 음식점·주점과 카페의 통합 일 1회 월 3회가 함께 세는지 따로 세는지 원문이 분명하지 않아 함께 세는 쪽으로 두었다, assumed: 함께 센다}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-09-23. 연회비 없음. 체크카드. 전월 국내외 30만/60만/120만 이상 칼퇴(저녁 6~11시 음식점·주점, 5개 커피, CU) 5% 월 4천/8천/1만5천원, 갓생·교통(헬스, 올리브영, 밀리의 서재, 택시·카카오T 택시, 쏘카) 5% 월 6천/1만2천/2만5천원. 해외 이용은 캐시백 제외. woori-103748 모임WON CHECK와 혜택 구조가 같고 교통에 택시가 있는 다른 상품이다.
