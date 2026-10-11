@@ -7,6 +7,7 @@ search_names: [VIVA+, 비바+, 비바플러스]
 kind: check
 product_codes:
   - '11321'
+  - '11442'
 status: on_sale
 annual_fees:
   - {scope: global, brand: visa, amount: 0}
@@ -65,4 +66,4 @@ open_questions:
   - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 공과금, 도시가스, 아파트 관리비 자동이체다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체와 아파트관리비 전체를 뺐다.', assumed: utility와 apartment_fee 전체}
   - {path: 'revisions[0].benefits[lunch-cashback].when', question: '"오전 11시~오후 2시 사이"에서 14:00 정각 결제가 포함되는지 원문이 불명확하다.', assumed: '11:00 이상 14:00 미만'}
   - {path: 'revisions[0].benefits[lunch-cashback].when', question: 원문은 평일이 임시공휴일이면 제외한다고만 적었다. 평일에 걸린 일반 공휴일도 제외로 계산한다., assumed: holidays exclude}
-notes: 2026-10-10 공식 상품 페이지(상세 번호 CD_PD_SEQ=9047, 목록 상품 번호 11321, 준법심의 L-21-2166)에서 옮겼다. 연회비 면제, 발급수수료 2,000원은 다음 달 말일까지 1만원 이상 쓰면 돌려준다. 해외 ATM 인출 건당 US$3 면제는 결제가 아니라 계산하지 않는다. 캐쉬백 적용 금액은 실적에서 빠진다.
+notes: 2026-10-10 공식 상품 페이지(상세 번호 CD_PD_SEQ=9047, 목록 상품 번호 11321, 준법심의 L-21-2166)에서 옮겼다. 연회비 면제, 발급수수료 2,000원은 다음 달 말일까지 1만원 이상 쓰면 돌려준다. 해외 ATM 인출 건당 US$3 면제는 결제가 아니라 계산하지 않는다. 캐쉬백 적용 금액은 실적에서 빠진다. 상품 코드 11442 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.
