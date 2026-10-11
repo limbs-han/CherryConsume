@@ -1,0 +1,152 @@
+schema_version: 2
+id: ibk-12113000001
+issuer: ibk
+name: 용인시민카드(신용)
+kind: credit
+product_codes:
+  - '12113000001'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 5000}
+  - {scope: global, brand: visa, amount: 7000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=300&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2026-6484호, review_valid_until: 2029-07-29}
+  - {id: manual, kind: manual_pdf, url: 'https://www.ibk.co.kr/fup/customer/form/202502281446444113315556630109.pdf', fetched_at: 2026-10-10, review_no: 제2025-1276호, review_valid_until: 2027-02-25}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-08-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.tuition, fuel, gift_card, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {fuel-60: 0, mart-5: 0}
+      from: receipt
+    benefit_exclusions:
+      categories: [gift_card]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 700000: 20000, 1500000: 40000}
+    benefits:
+      - key: transit-3
+        title: 버스·지하철 3% 청구할인
+        source: page
+        evidence: ['[Life in Yong-In] 버스, 지하철(용인시 경전철 포함) 3% 할인', '통합 1일 1회, 월 1,500원 한도', '후불교통 이용 시, 월 1,500원 한도']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, amount: 1500}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: fuel-60
+        title: 주유 리터당 60원 청구할인
+        source: page
+        evidence: ['[부가서비스] 전 주유소 리터당 60원 할인', '1일 1회, 월2회, 1회 주유금액 10만원 한도 (유류,LPG포함)', 전월(1일~말일) 국내가맹점(일시불/할부) 이용실적이 30만원 이상시 제공]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+        tiers: {from: 300000}
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: mart-5
+        title: 대형마트 5% 청구할인
+        source: page
+        evidence: ['[부가서비스] 이마트, 홈플러스, 롯데마트, 농협하나로클럽 5% 할인', '통합 월 1회, 1회 이용금액 10만원 한도', 마트할인은 도시형 슈퍼마켓(홈플러스 익스프레스 등) 및 인터넷(PG업체)을 통해 결제하는 경우 할인 제공하지 않습니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [농협은 하나로클럽만 대상이고 일반 하나로마트는 원문에 없다]
+      - key: online-20
+        title: 쿠팡·티몬·위메프 20% 청구할인
+        source: page
+        evidence: ['[Life in Yong-In] 쿠팡, 티몬, 위메프 20% 할인', '통합 1일 1회, 월 2회, 1회 이용금액 2만원 한도', 상품권 구매금액은 할인 제외됩니다.]
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: movie-4000
+        title: CGV·롯데시네마 4천원 청구할인
+        source: page
+        evidence: ['[Life in Yong-In] CGV, 롯데시네마 4천원 할인', '통합 월 1회, 연 6회, 건당 1만원 이상 결제 시 제공(현장/온라인 예매 포함)']
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['온라인 예매는 영화관 홈페이지나 앱 예매만 할인하고 인터파크, 네이버영화 같은 제휴사이트 링크 결제는 제외']
+      - key: dining-20
+        title: 패밀리레스토랑 20% 청구할인
+        source: page
+        evidence: ['[Life in Yong-In] 아웃백, 빕스, 블랙스미스, 토다이, 온더보더, 애슐리 20% 할인', '통합 월 1회, 1회 이용금액 10만원 한도', 전월 이용실적 150만원 이상인 경우에는 통합 월 2회 제공]
+        target:
+          merchants: [ashley, blacksmith, on_the_border, outback, todai, vips]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - per: month
+            count: {300000: 1, 1500000: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 할인점·아울렛 입점 매장은 제외될 수 있음]
+      - key: bulgogi-20
+        title: 불고기브라더스 20% 현장할인
+        source: page
+        evidence: ['[Life in Yong-In] 불고기브라더스 20% 현장할인', '각 월 1회, 1회 이용금액 10만원 한도', 월간 통합할인한도와 관계없이 최대 2만원 추가할인 제공]
+        target:
+          merchants: [bulgogi_brothers]
+        reward: {type: onsite_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 할인점·아울렛 입점 매장은 제외될 수 있고 가맹점 사정에 따라 다른 할인과 중복되지 않을 수 있음]
+      - key: coffee-20
+        title: 주요 커피전문점 20% 청구할인
+        source: page
+        evidence: ['[Life in Yong-In] 주요 커피전문점 20% 할인 (스타벅스, 커피빈, 카페베네, 탐앤탐스, 할리스, 엔제리너스, 달.콤 커피 20% 할인)', '통합 1일 1회, 월 2회, 1회 이용금액 2만원 한도']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, dalkomm, hollys, starbucks, tom_n_toms]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 할인점·아울렛 입점 매장은 제외될 수 있음]
+    unmodeled: ['용인시 주요 놀이공원 할인은 에버랜드 50% 현장할인과 10% 청구할인, 캐리비안베이 50%, 한국민속촌 60%이고 통합 월 1회, 연 8회다. 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다', Enjoy in Yong-In 용인시 공연·문화·생활시설 할인은 용인시청 안내를 따르며 계산하지 않는다, 가족카드 이용실적은 본인 실적과 합산하지 않고 카드별로 본다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 교통카드 이용금액 제외를 시내버스와 지하철 업종 제외로 옮겼다. 후불교통 유료도로 이용분은 담을 업종이 없다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].new_card.tier_by_benefit', question: 주유와 마트 부가서비스도 Life in Yong-In과 같이 전월 30만원 조건을 받는다고 설명서 서비스 제공조건이 함께 적는다. 신규 기간에 이 둘도 실적과 관계없이 주는지 원문이 분명하지 않아 신규 기간에는 주지 않는다, assumed: 0}
+notes: 2026-10-10 expand2 조사. 발급대상은 개인회원(본인 및 가족)이고 용인시 거주 조건은 상품 페이지와 설명서에 없다. Life in Yong-In 다섯 영역만 통합할인한도를 쓰고 주유, 마트, 불고기브라더스는 통합한도 밖이다
