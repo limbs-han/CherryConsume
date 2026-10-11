@@ -1,0 +1,150 @@
+schema_version: 2
+id: samsung-aap1882
+issuer: samsung
+name: 토스 삼성카드
+short_name: 토스 삼성
+search_names: [토스 삼성, 토스 삼성카드, 토스삼성카드]
+kind: credit
+product_codes: [AAP1882]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1882', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtkSzT8YKgRyqoOyS5bcuom4%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-07-07
+    source: manual
+    tiers: [0, 300000, 600000, 1000000]
+    spend:
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불과 할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다', '고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다']
+    limits:
+      - key: toss-online
+        per: month
+        amount: {300000: 10000, 600000: 20000, 1000000: 30000}
+      - key: digital
+        per: month
+        amount: {300000: 5000, 600000: 7000, 1000000: 10000}
+    benefits:
+      - key: toss-pay-15
+        title: 토스페이 15% 할인
+        source: manual
+        evidence: ['토스페이/토스쇼핑 15%, 온라인 영역 10% 결제일할인', 15% 토스페이 국내 온/오프라인 가맹점, '전월 이용금액대별 통합 월 할인한도 30만원 이상 10,000원, 60만원 이상 20,000원, 100만원 이상 30,000원']
+        target: {all: true}
+        when:
+          - payment: [toss_pay]
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: toss-online}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: toss-shopping-15
+        title: 토스쇼핑 15% 할인
+        source: manual
+        evidence: [15% 토스쇼핑 토스쇼핑, '전월 이용금액대별 통합 월 할인한도 30만원 이상 10,000원, 60만원 이상 20,000원, 100만원 이상 30,000원']
+        target:
+          merchants: [toss_shopping]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: toss-online}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: easypay-10
+        title: 온라인 간편결제 10% 할인
+        source: manual
+        evidence: ['10% 온라인 간편결제 삼성페이, 네이버페이, 카카오페이, PAYCO, 스마일페이, coupay, SSGPAY, L.PAY', '온라인 간편결제는 국내 온라인 가맹점에 한하며, 오프라인 매장 결제건(바코드, QR코드, 스마트폰 NFC/MST등)은 제외']
+        target: {all: true}
+        when:
+          - payment: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay]
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: toss-online}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: mall-10
+        title: 온라인쇼핑몰 10% 할인
+        source: manual
+        evidence: ['10% 온라인쇼핑몰 쿠팡, 네이버플러스 스토어, SSG.COM, 롯데 ON, G마켓, 옥션, 11번가, 삼성카드쇼핑']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_on, naver_plus_store, samsung_card_shopping, ssg_com]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: toss-online}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: toss-prime-50
+        title: 토스프라임 50% 할인
+        source: manual
+        evidence: [토스프라임/인앱 결제/디지털콘텐츠 50% 결제일할인, 토스프라임 정기결제건, '전월 이용금액대별 통합 월 할인한도 30만원 이상 5,000원, 60만원 이상 7,000원, 100만원 이상 10,000원', '결제 수단에 해당 카드 등록 후 결제 시 혜택 제공(단, 간편결제건은 제외)']
+        target:
+          merchants: [toss_prime]
+        when:
+          - billing: [subscription]
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: inapp-50
+        title: 인앱 결제 50% 할인
+        source: manual
+        evidence: ['인앱 결제 구글플레이, 앱스토어', '결제 수단에 해당 카드 등록 후 결제 시 혜택 제공(단, 간편결제건은 제외)']
+        target:
+          merchants: [app_store, google_play]
+        when:
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: digital-50
+        title: 디지털콘텐츠 50% 할인
+        source: manual
+        evidence: [디지털콘텐츠 넷플릭스/디즈니+/유튜브/티빙 정기결제건, 디지털콘텐츠의 유튜브는 유튜브 프리미엄 결제건에 한함]
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: starbucks-50
+        title: 스타벅스 50% 할인
+        source: manual
+        evidence: [스타벅스 50% 결제일할인, '월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외(단, 사이렌오더 결제건은 혜택 제공)']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 백화점·할인점·쇼핑몰 임대매장은 제외한다]
+      - key: overseas-2
+        title: 해외 2% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 2% 결제일할인', 해외 가맹점 및 해외 직접구매 이용건, 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+        unmodeled: [해외 온라인 거래 중 국내 가맹점으로 승인되는 결제는 할인하지 않는다]
+    unmodeled: ['할인은 승인일 기준이고 실적은 승인일 기준이되 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-10 상품설명서(2025.7판, 심의필 2025-C1a-09823호) 대조. 카드 출시 2025-07-07. 연회비 해외겸용 Mastercard·국내전용 모두 15,000원(기본 7,000+제휴 8,000). 토스·온라인 15%/10% 네 혜택은 통합 한도 하나를 쓰고, 한 결제에 둘이 맞으면 큰 쪽 하나만 준다. 토스·온라인, 토스프라임·인앱·디지털, 스타벅스 할인 건은 실적에서 빠지고 해외 2% 건은 실적에 들어간다. 발급월+1개월까지는 30만원 미만이어도 30만 구간 혜택. 토스 앱으로 신청한다.
