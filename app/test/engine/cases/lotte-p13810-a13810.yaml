@@ -1,0 +1,34 @@
+card: lotte-p13810-a13810
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: installment, choice: none, effective_from: '2026-01-01'}
+cases:
+- name: 30만 이상 1% 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55555, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {npay-1: 555}
+    counted: 55555
+  calc: 55555 x 1% = 555.55, 내림 555
+- name: 실적 1원 모자라면 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만
+- name: 장기할부 이용 회원은 계산하지 않음
+  prev_month_spend: 700000
+  holder:
+    options:
+    - {option: installment, choice: using, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: using 선택지는 계산하지 않음

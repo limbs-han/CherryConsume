@@ -1,0 +1,59 @@
+card: lotte-p13727-a13727
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 75만 미만 0.5%
+  prev_month_spend: 749999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {all-0-5: 500}
+    counted: 100000
+  calc: 100000 x 0.5% = 500
+- name: 75만 이상 1%
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {all-1-0: 1000}
+  calc: 100000 x 1% = 1000
+- name: 이지웰 복지몰 4% 한도 1만원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: ezwel_mall, channel: online}
+  - {at: 2026-11-06T10:00, amount: 200000, merchant: ezwel_mall, channel: online}
+  expect:
+  - payment: 0
+    benefits: {ezwel-4: 4000}
+  - payment: 1
+    benefits: {ezwel-4: 6000}
+  calc: 100000 x 4% = 4000, 200000 x 4% = 8000은 남은 한도 6000
+- name: 교통 5% 하루 5천
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {transit-5: 5000}
+  calc: 150000 x 5% = 7500, 일 5000
+- name: 교통 19만9999원이면 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만 미만이고 국내외 할인 제외 업종
+- name: 이동통신 자동납부 1천원 월 1회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 60000, merchant: skt, billing: autopay}
+  - {at: 2026-11-20T10:00, amount: 60000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-1000: 1000}
+  - payment: 1
+    benefits: {}
+  calc: 건당 1000, 월 한도 1000

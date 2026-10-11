@@ -1,0 +1,27 @@
+card: hyundai-178250
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 이상 기본 1% 반올림
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4673, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-1: 47}, counted: 4673}
+  calc: 가이드북 예시 4,673 x 1% = 46.73 반올림 47
+- name: 50만 직전은 기본 없음, 암웨이는 실적 없이 1.5%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: korea_amway}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  - {payment: 1, benefits: {amway-15: 1500}, counted: 100000}
+  calc: 기본은 50만 미만 제외. 암웨이 100,000 x 1.5% = 1,500
+- name: 50만 이상 암웨이는 1.5%만, 기본과 겹치지 않음
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: korea_amway}
+  expect:
+  - {payment: 0, benefits: {amway-15: 1500}, counted: 100000}
+  calc: 추가 혜택 적용 시 기본 1%는 주지 않는다

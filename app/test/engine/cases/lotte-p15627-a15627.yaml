@@ -1,0 +1,28 @@
+card: lotte-p15627-a15627
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 상조 납입 13,000원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: daemyung_imready, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {sangjo-cashback: 13000}
+  calc: 33000 x 100% = 33000, 30만 구간 월 13000
+- name: 150만 구간 25,000원
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: daemyung_imready, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {sangjo-cashback: 25000}
+  calc: 150만 구간 월 25000
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 33000, merchant: daemyung_imready, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만 미만

@@ -1,0 +1,48 @@
+card: woori-102495
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 직전은 기본 0.2%만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T19:00, amount: 20000, merchant: cgv, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 40}, counted: 20000}
+  calc: 2만원의 0.2% 40원
+- name: 30만 구간 영화 1만원 특별 적립과 추가 적립 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 20000, merchant: cgv, channel: offline}
+  - {at: 2026-11-06T19:00, amount: 20000, merchant: megabox, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-movie: 10000, monthly-bonus: 1000}, counted: 20000}
+  - {payment: 1, benefits: {base-0-2: 40}, counted: 20000}
+  calc: 특별 적립은 기본 대신 1만원, 월 1회라 둘째 건은 기본 40원
+- name: 공연티켓 특별 적립과 90만 추가 3천원
+  prev_month_spend: 900000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 50000, merchant: interpark_ticket, channel: online}
+  expect:
+  - {payment: 0, benefits: {special-ticket: 10000, monthly-bonus: 3000}, counted: 50000}
+  calc: 1만원과 추가 3천원
+- name: 놀이공원 특별 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 50000, merchant: everland, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-park: 10000, monthly-bonus: 1000}, counted: 50000}
+  calc: 1만원과 추가 1천원
+- name: 여행 특별 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 50000, merchant: yanolja, channel: online}
+  expect:
+  - {payment: 0, benefits: {special-travel: 10000, monthly-bonus: 1000}, counted: 50000}
+  calc: 1만원과 추가 1천원
+- name: 60만 구간 추가 2천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20, monthly-bonus: 2000}, counted: 10000}
+  calc: 기본 20원과 추가 2,000원

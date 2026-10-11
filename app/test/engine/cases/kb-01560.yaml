@@ -1,0 +1,55 @@
+card: kb-01560
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 이마트 오프라인 5% 월 10만원까지
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 120000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}, counted: 120000}
+  calc: 월 10만원까지만 계산해 5,000원
+- name: 30만 구간 직전 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 50000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만원 미만이라 할인 없음
+- name: 이마트 3만원 미만 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 29999, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 29999}
+  calc: 건당 3만원 미만
+- name: SK에너지 리터당 60원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 92900, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {sk-energy-60: 3000}, counted: 92900}
+  calc: 92,900 ÷ 1,858 = 50리터 × 60원 = 3,000원
+- name: 패스트푸드 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 20000, category: restaurant.fastfood}
+  expect:
+  - {payment: 0, benefits: {fastfood-10: 2000}, counted: 20000}
+  calc: 20,000 × 10% = 2,000원
+- name: 통신 자동이체 2,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 60000, merchant: kt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-2500: 2500}, counted: 60000}
+  calc: 자동이체 5만원 이상 2,500원
+- name: 시외버스 5% 월 3만원까지와 30만 구간 통합한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 40000, category: transit.bus_intercity}
+  - {at: 2026-11-03T10:00, amount: 200000, category: restaurant.fastfood}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1500}, counted: 40000}
+  - {payment: 1, benefits: {fastfood-10: 8500}, counted: 200000}
+  calc: 3만원까지 5% = 1,500원. 패스트푸드는 월 10만원까지 10% = 10,000원이지만 통합한도 1만원의 남은 8,500원

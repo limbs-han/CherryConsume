@@ -38,7 +38,7 @@ void main() {
     final ask = find.text('카드 요청하기');
     await tester.scrollUntilVisible(
       ask,
-      300,
+      2000,
       scrollable: find
           .byWidgetPredicate(
             (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
@@ -92,7 +92,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.text('찾는 카드가 없나요?'),
-      300,
+      2000,
       scrollable: down,
     );
     expect(find.text('찾는 카드가 없나요?'), findsOneWidget);
