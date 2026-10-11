@@ -1,0 +1,88 @@
+schema_version: 2
+id: woori-103305
+issuer: woori
+name: D4카드의정석II
+kind: credit
+product_codes:
+  - '103305'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103305', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2024-02-29'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      unmodeled: [간편결제 명칭으로 승인되면 할인 불가]
+    benefits:
+      - key: coffee-55
+        title: 커피 4대 브랜드 55% 청구할인
+        source: page
+        evidence: ['커피 4대 브랜드통합 스타벅스, 투썸플레이스, 커피빈, 폴바셋 55% 청구할인', '매년 01 ~ 10월 | 11,000원 | 3,300원 | 제한 없음', '매년 11 ~ 12월 | 22,000원 | 3,300원 | 제한 없음', 국내 매장에 한하여 적용 (스타벅스 공식 앱을 통한 사이렌 오더 결제 건 포함), 전월 국내 가맹점 이용금액 30만원 이상 시 제공]
+        target:
+          merchants: [coffee_bean, paul_bassett, starbucks, twosome]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 55}
+        limits:
+          - {per: txn, amount: 3300}
+          - per: month
+            amount: 11000
+            adjust:
+              - when:
+                  months: [11, 12]
+                amount: 22000
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [백화점·대형할인점·면세점·공항·미군부대 등 일부 입점 매장 제외, 선불카드와 앱 충전은 제외]
+      - key: transit-33
+        title: 대중교통·택시 33% 청구할인
+        source: page
+        evidence: ['대중교통 시내버스/지하철 (후불 교통기능 선택 시 제공), 택시 33% 청구할인', 통합 월 할인한도 5, 500원 / 건당 할인한도 2, 200원 / 할인 횟수 제한 없음]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 33}
+        limits:
+          - {per: txn, amount: 2200}
+          - {per: month, amount: 5500}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: cvs-11
+        title: 편의점 11% 청구할인
+        source: page
+        evidence: [편의점 11% 청구할인, 통합 월 할인한도 3, 300원 / 건당 할인한도 1, 100원 / 할인 횟수 제한 없음]
+        target:
+          categories: [convenience]
+        reward: {type: billing_discount, rate: 11}
+        limits:
+          - {per: txn, amount: 1100}
+          - {per: month, amount: 3300}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: movie-5500
+        title: 영화관 5,500원 청구할인
+        source: page
+        evidence: ['건당 할인금액 5,500원 (현장결제 및 영화관 사이트 통합 월 할인한도 5,500원 (연 12회)', '건당 이용금액 9,900원 이상 시 제공', 예매대행 사이트는 할인 대상에서 제외됩니다.]
+        target:
+          categories: [movie]
+        when:
+          - amount: {min: 9900}
+        reward: {type: billing_discount, fixed: 5500}
+        limits:
+          - {per: month, amount: 5500}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [예매대행 사이트 결제는 제외]
+    unmodeled: [교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 가족카드 실적과 한도는 본인카드와 별도, 정부지원금은 실적에서 빠진다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-02-29. 연회비 12,000원. 전월 국내 30만 이상 커피 4개 브랜드 55% 건당 3,300원 월 1만1천원(11~12월 2만2천원), 시내버스·지하철·택시 33% 건당 2,200원 월 5,500원, 편의점 11% 건당 1,100원 월 3,300원, 영화 9,900원 이상 5,500원 월 1회. 할인 받은 매출 전액 실적 제외. 공과금에 4대보험이 들어간다고 보고 실적에서 뺐다.
