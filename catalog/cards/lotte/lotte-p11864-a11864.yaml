@@ -1,0 +1,60 @@
+schema_version: 2
+id: lotte-p11864-a11864
+issuer: lotte
+name: 웅진씽크빅 롯데카드
+kind: credit
+product_codes: [P11864-A11864]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P11864-A11864', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00031_20261002_10011.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2017-07-03'
+    source: page
+    tiers: [0, 300000, 600000, 1200000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, tax.national]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {lotte-mart: 600000}
+      from: registration
+    benefits:
+      - key: thinkbig-autopay
+        title: 웅진씽크빅 자동이체 청구할인
+        source: page
+        evidence: [30만원 이상~60만원 미만 월 12, 000원, 60만원 이상~120만원 미만 월 16, 000원, 120만원 이상~200만원 미만 월 20, 000원, 200만원 이상 월 30, 000원, 웅진씽크빅 롯데카드로 "웅진씽크빅"의 상품 자동이체 결제를 한 회원에 한하여 월 1회 청구할인이 적용됩니다., 웅진씽크빅 상품 자동이체 결제금액이 자동이체 할인액보다 적을 경우 결제금액만큼만 할인이 적용됩니다.]
+        target:
+          merchants: [woongjin_thinkbig]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 12000, 600000: 16000, 1200000: 20000, 2000000: 30000}
+            count: 1
+        tiers: {from: 300000}
+      - key: lotte-mart
+        title: 롯데마트 5% 결제일 할인
+        source: page
+        evidence: [60만원 이상 5% 5만원 이상 결제시 월 2회 1회당 5천원내 할인적용, 롯데마트(온ㆍ오프라인)에서 웅진씽크빅 롯데카드로 이용한 이용금액에 대해서 할인이 적용됩니다., 5만원 미만 결제건은 청구할인혜택이 적용되지 않습니다.(매출금액 합산불가), 웅진씽크빅 롯데카드를 최초 발급한 고객의 경우 카드사용등록일로부터 다음달 말일까지(실적조건 유예기간)는 지난달 이용실적에 관계없이 할인 서비스가 제공 됩니다.]
+        target:
+          merchants: [lotte_mart]
+        when:
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, amount: 5000}
+          - {per: month, count: 2}
+        tiers: {from: 600000}
+    unmodeled: [웅진씽크빅 자동이체 할인 대상은 북클럽과 씽크빅 학습지다, 롯데마트 온라인몰 이용도 할인 대상이지만 롯데마트 가맹점으로 기록한 결제만 계산한다, '단기카드대출, 장기카드대출, 이자, 수수료, 관세는 실적에서 빠진다', 무승인 매입 건은 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 본인과 가족카드의 실적과 할인은 합산된다, 롯데마트에 적용되는 다른 롯데카드 청구할인 행사와 겹치면 할인이 큰 쪽 하나만 준다]
+notes: 2026-10-11 상품 페이지 대조. 출시일 2017-07-03. 자동이체 할인은 결제금액이 할인액보다 적으면 결제금액만큼이라 100% 할인에 구간별 월 한도와 월 1회로 적었다. 실적 제외 목록에 무이자할부가 없어 실적에 넣었다. 할인받은 이용금액 전체가 실적에서 빠진다. 신규 발급 특례는 사용등록일부터 다음 달 말일까지 자동이체 30만 구간, 롯데마트 할인 제공이다.
