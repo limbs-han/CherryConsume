@@ -1,0 +1,120 @@
+schema_version: 2
+id: woori-103740
+issuer: woori
+name: 카드의정석 EVERY DIRECT
+kind: credit
+product_codes:
+  - '103740'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: visa, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103740', fetched_at: '2026-10-10', review_no: 2024-C1a-11927}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2024-09-30'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 각종 수수료·이자, 우편요금·여권발급비·과태료·공공기관 가맹점은 할인 제외', 우리카드 이벤트 혜택을 받은 매출은 할인 제외]
+    limits:
+      - {key: extra, per: month, amount: 6000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [membership-20, ott-20, coffee-20, delivery-20, coupang-20, base-0-5]
+        spill: split
+    benefits:
+      - key: base-0-5
+        title: 국내외 가맹점 0.5% 청구할인
+        source: page
+        evidence: [국내외 가맹점 0.5% 청구할인, ※ 전월실적 조건 없음, ※ 할인한도 제한 없음]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+      - key: membership-20
+        title: 멤버십 자동납부 20% 할인
+        source: page
+        evidence: ['멤버십 | 쿠팡(와우멤버십), 네이버(네이버플러스 멤버십), 컬리(컬리멤버스) | 20%', '· 멤버십 : 멤버십 자동납부 결제 건에 한하여 할인 제공', 30만원 이상 | 6천원]
+        target:
+          merchants: [coupang_wow, kurly_members, naver_plus_membership]
+        when:
+          - billing: [autopay, subscription]
+          - payment_not: [apple_pay, baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: extra}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: ['1회성 결제, 앱마켓 인앱결제, 통신요금 합산 결제는 할인 제외']
+      - key: ott-20
+        title: OTT 정기결제 20% 할인
+        source: page
+        evidence: ['OTT | 넷플릭스, 티빙, 디즈니플러스, 유튜브 프리미엄', '· OTT : 공식 홈페이지를 통해 직접 신청한 정기결제 건에 한하여 할인 제공', '※ 1회성(일반구매) 결제, 구글플레이/앱스토어 등 앱마켓을 통한 인앱결제, 통신요금 포함(합산) 및 간편결제(PAY) 통한 결제인 경우 할인 제외']
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+          - payment_not: [apple_pay, baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: extra}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [통신요금 합산 결제는 할인 제외]
+      - key: coffee-20
+        title: 스타벅스 사이렌오더 20% 할인
+        source: page
+        evidence: [커피 | 스타벅스 사이렌오더, '· 커피 : 스타벅스 공식 앱을 통한 사이렌오더 결제 건에 한하여 할인 제공', '※ 매장 결제, 스타벅스카드(e-gift 포함) 구매 및 충전, 선물하기 등은 할인 제외']
+        target:
+          merchants: [starbucks]
+        when:
+          - billing: [app_prepay]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: extra}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [선물하기는 할인 제외]
+      - key: delivery-20
+        title: 배달의민족 앱 20% 할인
+        source: page
+        evidence: [배달 | 배달의민족, '· 배달 : 공식 배달앱을 통한 결제 건에 한하여 할인 제공', ※ 가맹점 직접 결제(만나서/현장 카드 결제 등) 및 간편결제(PAY) 등 다른 결제 방식은 할인 제외]
+        target:
+          merchants: [baemin]
+        when:
+          - {channel: online}
+          - payment_not: [apple_pay, baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: extra}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: coupang-20
+        title: 쿠팡 온라인 20% 할인
+        source: page
+        evidence: [온라인쇼핑 | 쿠팡, '· 온라인쇼핑 : 쿠팡 공식 앱 및 홈페이지를 통한 온라인 결제 건에 한하여 할인 제공', ※ 멤버십 자동납부 결제 건은 멤버십 영역으로 할인 제공(중복 할인 불가)]
+        target:
+          merchants: [coupang]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: extra}
+        tiers: {from: 300000}
+        exclude_applied: 1
+    unmodeled: [해외 이용금액·교통카드 이용금액·통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, '실적 제외에 정부지원금, 수수료·이자, 공공기관 가맹점·과태료·여권발급비가 들어간다', 가족카드 실적과 한도는 본인카드와 별도]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일을 따로 찾지 못해 상품 출시일로 두었다, assumed: '2024-09-30'}
+  - {path: 'revisions[0].stacks', question: 추가 20% 할인이 기본 0.5%에 더해지는지(20.5%) 대신하는지 원문이 분명하지 않다. 한도 초과분은 기본 할인만 준다는 문구만 있어 덜 주는 쪽인 대신하기로 두었다, assumed: 추가 20%가 기본 0.5%를 대신하고 한도를 넘는 금액은 0.5%}
+notes: 2026-10-10 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-09-30. 연회비 국내전용·VISA 12,000원. 국내외 0.5% 실적·한도 없음. 전월 국내외 30만 이상 멤버십·OTT·스타벅스 사이렌오더·배민 앱·쿠팡 온라인 20% 통합 월 6천원. 추가 할인 적용 금액 전체는 실적 제외. 추가 할인은 카드 수령 등록일이나 사용 개시일 중 빠른 날부터 다음 달 말까지 실적 조건 없이 준다.
