@@ -1,0 +1,116 @@
+schema_version: 2
+id: samsung-aap1891
+issuer: samsung
+name: 오아시스 삼성카드
+short_name: 오아시스 삼성
+search_names: [오아시스 삼성카드, 오아시스마켓 삼성카드, 오아시스카드]
+kind: credit
+product_codes: [AAP1891]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1891', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnMZGKuYJc%2BNnZoKvn9T0iE%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-09-12'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - {key: coffee-deli, per: month, amount: 5000}
+    benefits:
+      - key: oasis-5000
+        title: 오아시스마켓 5,000원 할인
+        source: manual
+        evidence: ['오아시스마켓 건별 30,000원 이상 결제 시 5,000원 결제일할인', '40만원 이상 할인횟수 2회 할인한도 10,000원, 70만원 이상 4회 20,000원', '오아시스마켓 오프라인 매장은 오아시스마켓 공식 홈페이지/앱을 통해 안내된 매장에 한하며 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외', 오아시스마켓 온라인은 오아시스마켓 공식 홈페이지/앱을 통한 결제건에 한함]
+        target:
+          merchants: [oasis_market]
+        when:
+          - amount: {min: 30000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - per: month
+            amount: {400000: 10000, 700000: 20000}
+            count: {400000: 2, 700000: 4}
+        tiers: {from: 400000}
+        unmodeled: [오프라인은 공식 홈페이지·앱에 안내된 매장만 할인하고 임대매장은 제외한다]
+      - key: coffee-deli-50
+        title: 커피전문점·델리 50% 할인
+        source: manual
+        evidence: [커피전문점/델리 50% 결제일할인, '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '델리 파리바게뜨, 뚜레쥬르, 던킨, 배스킨라빈스, 써브웨이', '통합 월 할인한도 : 5,000원', 전월 이용금액 40만원 이상 시 제공, '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [baskin_robbins, blue_bottle, coffee_bean, dunkin, ediya, paris_baguette, subway, tous_les_jours, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: coffee-deli}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: starbucks-50
+        title: 스타벅스 50% 할인
+        source: manual
+        evidence: ['단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: coffee-deli}
+        tiers: {from: 400000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+      - key: medical-10
+        title: 병원·약국 10% 할인
+        source: manual
+        evidence: [의료 10% 결제일할인, '의료 병/의원, 약국', '40만원 이상 5,000원, 70만원 이상 10,000원', '오프라인 결제건에 한하며, 요양병원, 보건소, 동물병원은 제외']
+        target:
+          categories: [hospital, pharmacy]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 5000, 700000: 10000}
+        tiers: {from: 400000}
+        unmodeled: [요양병원과 보건소는 할인하지 않는다]
+      - key: oliveyoung-daiso-10
+        title: 올리브영·다이소 10% 할인
+        source: manual
+        evidence: [헬스&뷰티/생활잡화 10% 결제일할인, 헬스&뷰티 올리브영, 생활잡화 다이소, '40만원 이상 5,000원, 70만원 이상 10,000원', '오프라인 및 공식 홈페이지/앱을 통한 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [daiso, olive_young]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 5000, 700000: 10000}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: overseas-1-5
+        title: 해외 가맹점 1.5% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 가맹점 1.5% 결제일할인', 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.5}
+        unmodeled: [해외 온라인 거래라도 국내 가맹점으로 승인되는 결제(국내 PG 등)는 할인하지 않는다]
+    unmodeled: [삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2025-09-12이고 상품설명서는 2025.10판이다. 출시일을 시행일로 두었다, assumed: '2025-09-12'}
+  - {path: status, question: 상품 페이지에서 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-10 상품설명서(2025.10판, 여신금융협회 심의필 제2025-C1a-13651호) 확인. 연회비 국내전용과 해외겸용 VISA 모두 15,000원(기본 7,000+제휴 8,000). 발급월+1개월까지 40만 구간 혜택을 준다. 영역마다 월 할인한도가 따로다. 실적 제외는 4대보험, 국세·지방세·공과금, 아파트관리비, 임대료, 유치원·초중고 납입금, 대학 등록금, 기프트·선불카드, 상품권이다. 대중교통과 택시, 할인 받은 결제는 실적에 넣는다. 후불교통기능이 탑재되어 발급된다.
