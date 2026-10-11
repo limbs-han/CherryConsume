@@ -1,0 +1,62 @@
+schema_version: 2
+id: hana-11284
+issuer: hana
+name: 신세계 하나 체크카드
+short_name: 하나 신세계 체크
+kind: check
+product_codes:
+  - '11284'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=9656', fetched_at: 2026-10-10, review_no: A-26-0973}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    stacks:
+      - {key: main, pick: best}
+      - {key: point, pick: best}
+    benefits:
+      - key: shinsegae-dept-cashback-5
+        title: 신세계백화점 5% 캐쉬백 (월 3만원)
+        source: page
+        evidence: [신세계 백화점 | 5% 캐쉬백 | 월 3만원, 지난 달 1일부터 말일까지(승인시점 기준)의 이용금액 30만원 이상 시 서비스 제공]
+        target:
+          merchants: [shinsegae_department]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 30000}
+        tiers: {from: 300000}
+      - key: shinsegae-dept-points-0-2
+        title: 신세계백화점 신세계포인트 0.2% 적립
+        source: page
+        evidence: [신세계 포인트 | 0.2% 적립 | 없음, 신세계 포인트 적립은 지난달 카드 사용금액 및 이용 횟수에 관계 없이 제공, 본 상품은 신세계 포인트 회원 가입이 필수입니다.]
+        target:
+          merchants: [shinsegae_department]
+        reward: {type: points, program: shinsegae_point, rate: 0.2}
+        stack: point
+      - key: transit-cashback-7
+        title: 버스·지하철 후불교통 월 3만원 이상 7% 캐쉬백 (월 5천원)
+        source: page
+        evidence: [버스/지하철 | 7% 캐쉬백 | 월 5천원, 월간 후불교통 사용금액이 3만원 이상일 경우 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+          - month_total: {min: 30000}
+        reward: {type: cashback, basis: month_total, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+    unmodeled: [신세계포인트는 신세계백화점 밖의 신세계포인트 적립 가맹점에서도 쌓이지만 가맹점 목록이 따로 있어 신세계백화점만 넣었다, 신세계포인트는 신세계백화점과 관계사가 주는 포인트와 겹쳐 쌓이지 않는다, 무승인 교통 매출은 매출전표가 접수된 달의 이용금액에 들어간다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 규칙이 시작된 날을 찾지 못해 수집한 날로 두었다. 카드 출시는 2018-10-19다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[transit-cashback-7]', question: 원문은 모바일 간편결제에 등록한 후불교통 캐쉬백을 시스템 개선 뒤 제공할 예정이라고 적었다. 모바일 후불교통이 지금 대상인지 알 수 없다., assumed: 후불교통 결제는 모두 대상}
+notes: 2026-10-10 공식 상품 페이지에서 옮겼다. 초안의 상품 번호 11284는 카드 목록 번호이고 상세 페이지 번호는 9656이다. 연회비 면제, 발급수수료 2천원은 수령 다음달 말일까지 1만원 이상 쓰면 돌려준다. 신세계포인트 0.2%는 실적과 관계없이 캐쉬백과 함께 받는다.
