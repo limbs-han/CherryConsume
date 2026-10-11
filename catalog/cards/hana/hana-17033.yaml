@@ -1,0 +1,90 @@
+schema_version: 2
+id: hana-17033
+issuer: hana
+name: K-패스 하나 체크카드
+short_name: 하나 K-패스 체크
+kind: check
+product_codes:
+  - '17033'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17033', fetched_at: 2026-10-10, review_no: A-26-0404}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    limits:
+      - {key: drugstore, per: month, amount: 10000}
+    benefits:
+      - key: transit-10-30
+        title: 버스·지하철 후불교통 10% 캐쉬백 (월 3천원)
+        source: page
+        evidence: ['버스,지하철 | 10% | 월 3천원 | 월 6천원', 대중교통으로 이용한 후불교통카드 매출 건에 한해 할인 제공, '대중교통 : 시외버스, 고속버스, 티머니/캐시비 등 교통카드 충전금액은 서비스 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000, to: 300000}
+      - key: transit-10-60
+        title: 버스·지하철 후불교통 10% 캐쉬백 (월 6천원)
+        source: page
+        evidence: ['버스,지하철 | 10% | 월 3천원 | 월 6천원', 대중교통으로 이용한 후불교통카드 매출 건에 한해 할인 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 6000}
+        tiers: {from: 600000}
+      - key: drugstore-1
+        title: 올리브영 1% 캐쉬백 (다이소와 합쳐 월 1만원)
+        source: page
+        evidence: ['올리브영, 다이소 | 1% | 월 1만원', 국내 가맹점 이용 건에 한해 캐쉬백 서비스 제공]
+        target:
+          merchants: [olive_young]
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: drugstore}
+        tiers: {from: 300000}
+      - key: daiso-1
+        title: 다이소 오프라인 1% 캐쉬백 (올리브영과 합쳐 월 1만원)
+        source: page
+        evidence: ['올리브영, 다이소 | 1% | 월 1만원', 다이소는 오프라인 결제건에 한하여 서비스 제공]
+        target:
+          merchants: [daiso]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: drugstore}
+        tiers: {from: 300000}
+      - key: coffee-1
+        title: 스타벅스·커피빈 1% 캐쉬백 (월 5천원)
+        source: page
+        evidence: ['스타벅스,커피빈 | 1% | 월 5천원', 국내 가맹점 이용 건에 한해 캐쉬백 서비스 제공]
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+    unmodeled: ['드럭스토어와 커피 캐쉬백은 대형시설물 입점점포와 임대매장, 배달앱 주문, 상품권 구입, 선불카드 충전에서 제외된다', 무승인 후불교통 매출은 매출이 접수된 달의 실적에 들어간다, K-패스 마일리지 환급은 카드 혜택이 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 규칙이 시작된 날을 찾지 못해 수집한 날로 두었다. 카드 출시는 2023-07-04다., assumed: '2026-10-10'}
+notes: 2026-10-10 공식 상품 페이지(준법심의 A-26-0404)에서 옮겼다. 연회비 없음. 실적 제외에 후불교통이 없어 교통 이용액은 실적에 넣는다. 다이소는 오프라인만 대상이라 올리브영과 혜택을 나누고 월 1만원 한도를 함께 쓰게 했다.
