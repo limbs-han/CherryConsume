@@ -1,0 +1,59 @@
+schema_version: 2
+id: kb-04368
+issuer: kb
+name: KB국민 kt M mobile Ⅱ 카드
+short_name: KB kt M mobile Ⅱ
+kind: credit
+product_codes:
+  - '04368'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: domestic, form: mobile, amount: 14000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04368', fetched_at: '2026-10-10', review_no: 제260406-01115-PIF}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [결제대행업체(PG)나 간편결제 전용 가맹점으로 승인된 결제는 할인에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: kt-m-mobile-automatic-discount
+        title: kt M mobile 알뜰폰 통신료 자동납부 청구할인
+        source: page
+        evidence: [kt M mobile 알뜰폰 통신료 자동이체 | 7천원 | 1만1천원, 구분 | 전월 승인실적에 따른 월간 할인금액 | 1구간(30만원 이상) | 2구간(70만원 이상), 타 통신사 자동이체 건은 할인대상에서 제외, '최초 카드 사용 등록일(KB Pay 등 간편결제 등록 포함)로 부터 다음달 말일(실적 유예기간)까지 KB국민 kt M moblieⅡ 카드 전월 이용실적 30만원 미만 시, 월 3천5백원 할인금액이 제공됩니다.', '(단, 최초 카드 사용등록월의 실적이 30만원 이상일 경우에는 다음달에 해당 실적 구간의 할인금액 적용)', 할인금액보다 자동납부 승인금액이 작을 경우 승인금액까지만 할인이 적용됩니다., kt M moblie 자동납부 승인 건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인됩니다., '할인(적립) 서비스 제공 관련 카드별 실적 유예기간은 본인회원이 해당카드를 생애 최초 발급받은 경우에 적용되며, 가족카드 단독 발급 시 적용되지 않습니다.']
+        target:
+          merchants: [kt_m_mobile]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {0: 3500, 300000: 7000, 700000: 11000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 자동납부 승인금액 전액을 월 할인금액까지 할인한다. 여러 건이면 합산해 월 할인금액 안에서 할인한다. 0 구간 3,500원은 생애 최초 발급의 실적 유예기간에만 준다
+    unmodeled: [월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 할인 한도는 전표 매입 순서대로 채운다, 해외 이용금액은 승인일이 아니라 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금(보육료·유치원보조비·바우처) 결제는 실적에서 빠진다, 자판기·터널통행료·항공기내 같은 무승인 전표는 실적에서 빠진다, 무승인 공항버스 요금은 실적에서 빠지지만 담을 업종이 없어 실적에 남는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 원문은 2025.04.01 출시라고만 적었다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 상품설명서 PDF(img2.kbcard.com)는 robots.txt가 막아 받지 않았다. 실적 유예는 생애 최초 본인 발급만 facts로 확인한다.
