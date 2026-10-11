@@ -1,0 +1,59 @@
+schema_version: 2
+id: shinhan-boaduf
+issuer: shinhan
+name: 배민 신한카드 밥친구
+short_name: 배민 신한 밥친구
+kind: credit
+product_codes: [BOADUF]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1234575_2207.html', fetched_at: 2026-10-10}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202506240001', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-05-12
+    source: page
+    tiers: [0, 200000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {tier: 200000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 할인하지 않는다, PG사 이름으로 찍히는 간편결제는 할인하지 않는다]
+    benefits:
+      - key: baemin-5
+        title: 배달의민족 5% 결제일 할인
+        source: page
+        evidence: [배달의민족 이용금액 5% 결제일 할인, '배달의민족 공식 앱에서 ‘앱 내 카드결제’가 아닌, ‘현장결제’(물품 수령 시 결제) 이용금액은 할인되지 않습니다.', 전월 이용금액 20만원 이상 배민 할인한도 3만원, 할인 횟수 및 최저 이용금액 제한이 없으며]
+        target:
+          merchants: [baemin]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 30000}
+        tiers: {from: 200000}
+        unmodeled: ['배민상회 같은 다른 앱, 배민페이머니 충전, 배민상품권, 배민클럽 구독료는 할인하지 않는다']
+      - key: other-1
+        title: 배민 외 가맹점 1% 결제일 할인
+        source: page
+        evidence: [국내/외 가맹점 이용금액 1% 결제일 할인, 배달의민족 공식 앱에서 ‘앱 내 카드결제’로 이용한 금액은 할인되지 않습니다., 전월 이용금액 20만원 이상 배민 외 가맹점 할인한도 1만원]
+        target:
+          all: true
+          exclude_merchants: [baemin]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 200000}
+    unmodeled: [일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 할인은 영역별로 이용한 거래 순서대로 적용한다, 할인 받은 거래를 같은 달에 취소하면 한도가 복원된다]
+notes: 신한카드 상품 페이지와 상품 상세 API 기준. 연회비는 API의 afeInfoList로 국내전용 1만 2천원(기본 7천 + 제휴 5천), Mastercard 1만 5천원(기본 7천 + 제휴 8천). 배민 사이트로만 신청하고 후불교통 기능이 있는 카드로만 발급한다. 전월 20만원 이상이면 배민 5% 월 3만원, 배민 외 1% 월 1만원. 무이자할부는 할인하지 않는다. 국내 취소는 처음 승인한 달, 해외 취소는 취소 전표가 매입된 달 실적에서 뺀다. 신규 발급 회원은 등록월 다음 달까지 20만원 구간을 적용한다. 2026-10-10 새 방식대로 후불교통 반영월 구분 대신 시내버스와 지하철을 실적에서 뺐다.
