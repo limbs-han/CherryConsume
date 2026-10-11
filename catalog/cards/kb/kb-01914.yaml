@@ -1,0 +1,229 @@
+schema_version: 2
+id: kb-01914
+issuer: kb
+name: KB국민 첵첵 체크카드
+short_name: KB 첵첵 체크
+kind: check
+product_codes:
+  - '01914'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01914', fetched_at: '2026-10-10', review_no: 260522-01722-HPP}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제, 할인을 주지 않는 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - key: integrated
+        per: month
+        amount: {0: 10000, 300000: 10000, 600000: 20000}
+    benefits:
+      - key: cvs-cu
+        title: CU 편의점 건당 1천~2천원 환급할인
+        source: page
+        evidence: [CU편의점 | 1천원 | 2천원, 이용금액 1만원 이상 시 할인 적용, 영역별 할인한도 | 2천원 | 4천원, '실적유예기간 적용: 최초 카드 사용등록일로부터 다음달 말일까지 1구간 내에서 서비스 제공']
+        target:
+          merchants: [cu]
+        when:
+          - amount: {min: 10000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: coffee-starbucks
+        title: 스타벅스 건당 1천~2천원 환급할인
+        source: page
+        evidence: [스타벅스 (사이렌오더 포함) | 1천원 | 2천원, 이용금액 1만원 이상 시 할인 적용, '백화점, 대형마트 등 일부 입점 매장 할인 제외', 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [백화점과 대형마트 입점 매장은 할인에서 빠진다]
+      - key: movie-cgv
+        title: CGV 건당 1천~2천원 환급할인
+        source: page
+        evidence: [CGV | 1천원 | 2천원, 이용금액 1만원 이상 시 할인 적용, '인터넷 예매 시 직영 홈페이지, App 이용분만 할인 제공', 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [인터넷 예매는 CGV 직영 홈페이지와 앱만 할인한다]
+      - key: shopping-tenbyten
+        title: 텐바이텐 건당 1천~2천원 환급할인
+        source: page
+        evidence: [텐바이텐 | 1천원 | 2천원, 이용금액 1만원 이상 시 할인 적용, 직영 홈페이지( www.10x10.co.kr ) 및 직영 매장(대학로점) 이용분만 할인 제공, 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          merchants: [tenbyten]
+        when:
+          - amount: {min: 10000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: easypay-online
+        title: 네이버·카카오·SSG페이 온라인 건당 1천~2천원 환급할인
+        source: page
+        evidence: [네이버/카카오/SSG페이 (온라인만) | 1천원 | 2천원, 이용금액 2만원 이상 시 할인 적용, '대상 간편결제 서비스로 온라인 가맹점 이용분만 할인 제공(QR 결제, 바코드 결제, 카카오T, 택시 등 제외)', 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          exclude_categories: [taxi]
+          all: true
+          exclude_merchants: [kakao_t]
+        when:
+          - channel: online
+            payment: [kakao_pay, naver_pay, ssg_pay]
+            amount: {min: 20000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: beauty-oliveyoung
+        title: 올리브영 건당 1천~2천원 환급할인
+        source: page
+        evidence: ['올리브영, 안경(렌즈)점 | 1천원 | 2천원', 이용금액 2만원 이상 시 할인 적용, '백화점, 대형마트 등 일부 입점 매장 할인 제외', 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          merchants: [olive_young]
+        when:
+          - amount: {min: 20000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [안경(렌즈)점 업종은 담을 업종이 없어 계산하지 않는다, 백화점과 대형마트 입점 매장은 할인에서 빠진다]
+      - key: books-online
+        title: YES24·교보문고 온라인 건당 1천~2천원 환급할인
+        source: page
+        evidence: ['YES24, 교보문고 (온라인만) | 1천원 | 2천원', 이용금액 2만원 이상 시 할인 적용, 오프라인 매장 이용분은 할인 제외, 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          merchants: [kyobo_book, yes24]
+        when:
+          - channel: online
+            amount: {min: 20000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: culture-interpark
+        title: 인터파크티켓 건당 1천~2천원 환급할인
+        source: page
+        evidence: [인터파크티켓 | 1천원 | 2천원, 이용금액 2만원 이상 시 할인 적용, 공연 예매 이용분만 할인 제공, 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          merchants: [interpark_ticket]
+        when:
+          - amount: {min: 20000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [공연 예매 이용분만 할인한다]
+      - key: transit-bus-express
+        title: 고속·시외버스 건당 1천~2천원 환급할인
+        source: page
+        evidence: ['버스, 지하철 | 1천원 | 2천원', 이용금액 3만원 이상 시 할인 적용, '환급 할인 대상: 고속/시외 버스', 영역별 할인한도 | 2천원 | 4천원]
+        target:
+          categories: [transit.bus_express, transit.bus_intercity]
+        when:
+          - amount: {min: 30000}
+        reward:
+          type: cashback
+          fixed: {0: 1000, 300000: 1000, 600000: 2000}
+        limits:
+          - per: month
+            amount: {0: 2000, 300000: 2000, 600000: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 대중교통 영역 한도는 후불교통 청구할인과 함께 쓴다. 후불교통 부분은 계산하지 않아 덜 줄 수 있다
+    unmodeled: [대중교통 영역의 후불교통 시내버스·지하철 청구할인은 이메일 이용내역서의 이용일과 건당 3만원 기준을 결제 입력으로 맞출 수 없어 계산하지 않는다, '전월 실적은 동일계열 카드(첵첵, 위글위글 첵첵) 실적을 합산한다. 앱은 이 카드 실적만 센다', '정부지원금, 포인트리 충전금액, 자판기·터널통행료·유료도로·기차/고속버스 취소 반환수수료 같은 무승인 금액은 실적에서 빠진다', 해외 이용금액은 매입 완료 기준으로 실적에 넣는다, 통합할인한도는 전표 매입 순서대로 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2020년 6월 8일 출시와 2026.05.22 심의필만 적었다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 지방세는 상하수도를 포함해 tax.local과 utility.water로 뺐다. 실적 유예는 생애 최초 발급만 facts로 확인한다.
