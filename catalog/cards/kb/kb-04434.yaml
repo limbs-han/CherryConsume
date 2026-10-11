@@ -1,0 +1,95 @@
+schema_version: 2
+id: kb-04434
+issuer: kb
+name: 삼성 페이 KB국민카드
+short_name: KB 삼성페이
+search_names: [삼성 PAY카드, 삼성페이 KB국민카드]
+kind: credit
+product_codes:
+  - '04434'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04434', fetched_at: '2026-10-11', review_no: 제2018-C1a-08233호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+      unmodeled: [PG(결제대행) 업체를 통한 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다, 정부지원금 결제는 할인에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - {key: life_monthly, per: month, amount: 5000}
+    benefits:
+      - key: samsung-pay-10
+        title: 삼성 페이 결제 10% 청구할인
+        source: page
+        evidence: [삼성 페이 할인 | 10% | 15, 000원 | 삼성 페이로 건당 3만원 이상 결제 시 청구 할인, 삼성 PAY카드 할인서비스는 전월 이용실적 40만원 이상 시 혜택이 제공됩니다., 최초 카드 사용등록일로부터 다음 달 말일까지는 전월 이용실적이 없는 경우에도 할인서비스가 제공됩니다., 전월 실적 제외대상 삼성 PAY카드 로 ‘삼성 페이 할인서비스’ 받은 이용건(해당 이용금액 전체)]
+        target: {all: true}
+        when:
+          - payment: [samsung_pay]
+          - amount: {min: 30000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 15000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        exclude_applied: 1
+        notes: 삼성 페이 할인받은 결제는 금액 전체가 실적에서 빠진다
+      - key: samsung-pay-5
+        title: 커피·약국·편의점·영화·패스트푸드 5% 청구할인
+        source: page
+        evidence: [주요 생활 할인 | 5% | 5, 000원, '- 할인대상 가맹점에서 건당 1만원 이상 결제 시 청구 할인', '- 할인대상 가맹점 : 이동통신(SKT, KT, LGU+)*, 커피전문점 업종, 약국업종, 편의점업종, 영화(CGV, 롯데시네마), 패스트푸드업종']
+        target:
+          categories: [cafe, convenience, pharmacy, restaurant.fastfood]
+          merchants: [cgv, lotte_cinema]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life_monthly}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 이동통신 자동납부는 samsung-pay-5-telecom으로 나눴고 월 5천원 한도를 함께 쓴다
+      - key: samsung-pay-5-telecom
+        title: SKT·KT·LG U+ 이동통신요금 자동납부 5% 청구할인
+        source: page
+        evidence: [주요 생활 할인 | 5% | 5, 000원, '- 할인대상 가맹점에서 건당 1만원 이상 결제 시 청구 할인', '- 할인대상 가맹점 : 이동통신(SKT, KT, LGU+)*', '* 이동통신요금 자동납부 시 할인']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life_monthly}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: [기본 포인트리는 적립되지 않는다, 정부지원금과 무승인전표(자판기·터널이용료·항공기내 이용)는 실적에서 빠진다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나눈다, 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2018.07.20 출시만 적었다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 원문이 삼성 페이 10%와 주요 생활 5%를 한 결제에 함께 주는지 적지 않아 덜 주는 쪽으로 같은 묶음에 두고 큰 쪽 하나만 준다. 실적 유예는 생애 최초 본인 발급만 facts로 확인한다.
