@@ -1153,3 +1153,114 @@
   name: 생어거스틴
   category: restaurant.general
   aliases: [생어거스틴, SAINT AUGUSTIN]
+- key: kfc
+  name: KFC
+  category: restaurant.fastfood
+  aliases: [KFC]
+- key: lotte_world_aquarium
+  name: 롯데월드 아쿠아리움
+  category: other
+  aliases: [롯데월드 아쿠아리움, 롯데아쿠아리움, LOTTE WORLD AQUARIUM]
+- key: tongdo_fantasia
+  name: 통도환타지아
+  category: other
+  aliases: [통도환타지아, 통도 판타지아]
+- key: woori_won_market
+  name: 우리WON마켓
+  category: online_shopping
+  aliases: [우리WON마켓, 우리원마켓]
+- key: me_ev_charger
+  name: 환경부 전기차 충전(한국자동차환경협회)
+  category: other
+  aliases: [환경부, 한국자동차환경협회, 무공해차 통합누리집, ev.or.kr]
+- key: happy_charger
+  name: 한국전기차충전
+  category: other
+  aliases: [한국전기차충전, 해피차저, happecharger.com]
+- key: kepco_ev
+  name: 한국전력공사 전기차 충전
+  category: other
+  aliases: [한국전력공사 전기차충전, KEPCO EV, evc.kepco.co.kr]
+- key: gs_chargev
+  name: GS차지비
+  category: other
+  aliases: [GS차지비, 차지비, gschargev.co.kr]
+- key: kb_insurance
+  name: KB손해보험
+  category: insurance.private
+  aliases: [KB손해보험, KB손보, KB다이렉트]
+- key: tmap
+  name: 티맵
+  category: other
+  aliases: [티맵, TMAP, 티맵모빌리티]
+- key: ypaymore
+  name: 와이페이모어
+  category: travel.agency
+  aliases: [와이페이모어, ypaymore, YPAYMORE]
+- key: sono_season
+  name: 소노시즌
+  category: other
+  aliases: [소노시즌, SONOSEASON]
+- key: greenwich
+  name: 그린위치
+  category: other
+  aliases: [그린위치]
+- key: carrot_insurance
+  name: 캐롯손해보험
+  category: insurance.private
+  aliases: [캐롯손해보험, 캐롯, 한화손해보험 캐롯, CARROT]
+- key: toss_mobile
+  name: 토스모바일
+  billing: autopay
+  category: telecom.mobile
+  aliases: [토스모바일, 토스 모바일, TOSS MOBILE]
+- key: daesang_wellife
+  name: 대상웰라이프
+  billing: subscription
+  category: other
+  aliases: [대상웰라이프, 웰라이프, WELLIFE]
+- key: starfield
+  name: 스타필드
+  category: other
+  aliases: [스타필드, STARFIELD]
+- key: legoland_korea
+  name: 레고랜드 코리아
+  category: other
+  aliases: [레고랜드, 레고랜드 코리아, LEGOLAND]
+- key: costco
+  name: 코스트코
+  category: grocery_mart
+  aliases: [코스트코, Costco, 코스트코 홀세일]
+- key: boram_sangjo
+  name: 보람상조
+  billing: autopay
+  category: other
+  aliases: [보람상조]
+- key: megastudy
+  name: 메가스터디교육
+  category: education.academy
+  aliases: [메가스터디, 엘리하이, 엠베스트]
+- key: doosan_bears_ticket
+  name: 두산베어스 홈경기 입장권
+  category: sports
+  aliases: [두산베어스 입장권, 두산베어스 티켓]
+- key: doosan_bears_wefan
+  name: 두산베어스 위팬샵
+  category: other
+  aliases: [위팬샵, 두산베어스 위팬, 베어스하우스]
+- key: lina_life
+  name: 라이나생명
+  category: insurance.private
+  aliases: [라이나생명, 라이나생명보험, LINA]
+- key: dominos_pizza
+  name: 도미노피자
+  category: restaurant.general
+  aliases: [도미노피자, 도미노, DOMINO'S PIZZA]
+- key: hyundai_rental_care
+  name: 현대렌탈케어
+  category: other
+  aliases: [현대렌탈케어]
+- key: kd_navien_subscription
+  name: 경동나비엔 구독
+  category: other
+  aliases: [경동나비엔 구독, 나비엔 구독, 경동나비엔]

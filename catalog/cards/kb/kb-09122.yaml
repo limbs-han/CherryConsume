@@ -6,6 +6,8 @@ short_name: KB ALL
 kind: credit
 product_codes:
   - '09122'
+  - '09567'
+  - '09922'
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 20000}
@@ -106,4 +108,4 @@ revisions:
 open_questions:
   - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
   - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
-notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정. 초중고 납입금만 적힌 제외 문구는 유치원이 포함된 school_fee 대신 primary_secondary_fee로 좁혔다. 공식 페이지에서 기존 보유 고객 재발급만 가능함을 확인했다. 재발급 전용 웹 페이지와 KB Pay 전용 신규 신청 안내를 함께 확인했다. 이 페이지의 재발급 제한만으로 단종으로 보지 않는다. 2026-10-10 새 방식으로 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다.
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정. 초중고 납입금만 적힌 제외 문구는 유치원이 포함된 school_fee 대신 primary_secondary_fee로 좁혔다. 공식 페이지에서 기존 보유 고객 재발급만 가능함을 확인했다. 재발급 전용 웹 페이지와 KB Pay 전용 신규 신청 안내를 함께 확인했다. 이 페이지의 재발급 제한만으로 단종으로 보지 않는다. 2026-10-10 새 방식으로 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 상품 코드 09567 페이지는 혜택이 같은 상품이라 이 카드로 등록한다. 상품 코드 09922 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.
