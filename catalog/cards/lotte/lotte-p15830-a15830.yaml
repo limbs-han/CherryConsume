@@ -1,0 +1,44 @@
+schema_version: 2
+id: lotte-p15830-a15830
+issuer: lotte
+name: LOCA LIKIT 1.5
+kind: credit
+product_codes: [P15830-A15830]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: amex, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15830-A15830', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00004_20260424_10001.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-04-07'
+    source: page
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: cancel_month, exclude_applied: 0}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['오토·스마트 캐시백 신청 이용금액, 오토 할부서비스 이용금액, 장애인 고용부담금, TV 수신료, 티머니 인증, 고속도로 통행요금, 무승인전표, 공공기관·공공단체 개설 가맹점 이용금액, 관세·벌금·과태료·민원 발급 수수료·인지세·송달료, 현금서비스·카드론·이자·수수료는 할인에서 빠진다']
+    benefits:
+      - key: domestic-0-8
+        title: 국내 가맹점 0.8% 결제일 할인
+        source: page
+        evidence: [국내 가맹점 0.8% 결제일 할인, 실적조건 및 할인한도 없이 혜택을 제공합니다.]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.8}
+      - key: overseas-1-5
+        title: 해외 가맹점 1.5% 결제일 할인
+        source: page
+        evidence: [해외 가맹점 1.5% 결제일 할인, 실적조건 및 할인한도 없이 혜택을 제공합니다., 해외 가맹점 할인은 국내외 겸용 카드에 한해 적용됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.5}
+    unmodeled: [국내 가맹점 5만원 이상 2~3개월 할부는 실적 조건 없이 무이자이고 그 결제는 할인에서 빠진다. 결제에 무이자 표시가 있어야 계산에서 뺀다, 해외 온라인 가맹점이라도 간편결제나 PG처럼 국내 가맹점 번호로 승인되면 국내 0.8%를 받는다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, 이 카드로 결제하면 롯데카드가 주는 L.POINT 적립은 없다]
+notes: 2026-10-11 상품 페이지와 상품설명서(2026년 4월 기준) 대조. 출시일 2026-04-07. 실적 조건과 할인한도가 없다.
