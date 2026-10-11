@@ -1,0 +1,264 @@
+schema_version: 2
+id: kb-09169
+issuer: kb
+name: KB국민 다담카드
+short_name: KB 다담
+kind: credit
+product_codes:
+  - '09169'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_upi, amount: 15000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: k_world_upi, form: mobile, amount: 9000}
+  - {scope: global, brand: visa, form: mobile, amount: 14000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09169', fetched_at: '2026-10-11', review_no: 제2024-C1a-03584호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: ['PG 전용 가맹점 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인과 적립에서 빠진다', 부분 무이자 할부 이용금액도 할인과 적립에서 빠진다, 정부지원금 결제는 할인과 적립에서 빠진다]
+    options:
+      - key: pack
+        title: 선택 적립 서비스팩
+        choices:
+          - {key: life, title: 생활팩}
+          - {key: education, title: 교육팩}
+          - {key: shopping, title: 쇼핑팩}
+          - {key: worker, title: 직장인팩}
+          - {key: leisure, title: 레저팩}
+        default: null
+        change: next_month
+        unsupported: [leisure]
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: transit-10
+        title: 버스·지하철 10% 청구할인
+        source: page
+        evidence: [대중교통 | 10% | 5천원 | 30만원 이상, '버스, 지하철 요금 할인은 RF(비접촉)방식의 후불교통카드 서비스 지역에 한하여 제공되며, 실제 카드 사용일이 아닌 이용대금 명세서상 기재된 이용일을 기준으로 제공됩니다.', '시외버스, 고속버스는 대중교통 할인 대상에서 제외됩니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        unmodeled: [후불교통 할인은 이용대금명세서에 적힌 이용일 달로 계산된다]
+      - key: telecom-10
+        title: 이동통신요금 자동이체 10% 청구할인
+        source: page
+        evidence: [이동통신요금 | 10% | 5천원 | 30만원 이상, '「KB국민 다담카드」로 SKT, KT Olleh, LG U+ 자동이체 등록분에 한하여 서비스가 제공됩니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+      - key: fuel-sk-60
+        title: SK주유소 리터당 60원 청구할인
+        source: page
+        evidence: [SK주유소 | 리터당 60원 | 월 20만원 이용금액까지, '주유 : SK주유소(충전소 포함)', '기준유가 : SK에너지 본사 고시 휘발유가가 적용됩니다.']
+        target:
+          merchants: [sk_energy]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+      - key: movie-3500
+        title: CGV·메가박스 온라인 예매 3,500원 청구할인
+        source: page
+        evidence: [CGV/메가박스 온라인 예매 시 승인 건당 3, 500원 청구할인, '할인한도 : 1일 2회, 월 4회, 연간 10회 제공(승인일 기준)', CGV/메가박스 홈페이지 및 App을 통한 예매 시 제공됩니다.]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 3500}
+        limits:
+          - {per: day, count: 2}
+          - {per: month, count: 4}
+          - {per: year, count: 10}
+        tiers: {from: 300000}
+      - key: overseas-5
+        title: 해외 가맹점 5% 할인 캐시백
+        source: page
+        evidence: [해외할인 캐시백 | 5% | 5천원 | 30만원 이상, 당월 해외이용금액을 합산하여 다음달 둘째주에 결제계좌로 입금됩니다., 해외이용금액은 일시불 매입 완료된 금액 기준]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        exclude_applied: 0
+      - key: life-mart-7
+        title: '[생활팩] 대형마트 7% 포인트리 적립'
+        source: page
+        evidence: [대형마트 | 7% | 7천원 | 1만4천원, '대형마트 : 이마트, 롯데마트, 홈플러스', '온라인 쇼핑몰 이용금액, 상품권 구매 및 건물 내 임대매장 이용금액 적립 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - option:
+              pack: [life]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 7}
+        limits:
+          - per: month
+            amount: {300000: 7000, 600000: 14000}
+        tiers: {from: 300000}
+        unmodeled: [대형마트 건물 안 임대매장 결제는 적립에서 빠진다]
+      - key: life-department-5
+        title: '[생활팩] 백화점 5% 포인트리 적립'
+        source: page
+        evidence: [백화점 | 5% | 5천원 | 1만원, '백화점 : 롯데, 신세계, 현대', '온라인 쇼핑몰 이용금액, 상품권 구매 및 건물 내 임대매장 이용금액 적립 제외']
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - option:
+              pack: [life]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+      - key: life-cafe-5
+        title: '[생활팩] 커피·제과·아이스크림 5% 포인트리 적립'
+        source: page
+        evidence: [커피/제과/아이스크림 | 5% | 5천원 | 1만원, 커피/제과/아이스크림 업종 5% 포인트리 적립]
+        target:
+          categories: [cafe, restaurant.bakery]
+          merchants: [baskin_robbins]
+        when:
+          - option:
+              pack: [life]
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+      - key: edu-academy-5
+        title: '[교육팩] 학원 5% 포인트리 적립'
+        source: page
+        evidence: [학원 | 5% | 5천원 | 1만원, '- 이용건당 10만원 이상 시 적립서비스 제공', '- PG(인터넷 결제),자동차 학원 이용금액은 제외']
+        target:
+          categories: [education.academy]
+        when:
+          - option:
+              pack: [education]
+          - {channel: offline}
+          - amount: {min: 100000}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+        unmodeled: [자동차학원 결제는 적립에서 빠진다]
+      - key: edu-book-5
+        title: '[교육팩] 서점 5% 포인트리 적립'
+        source: page
+        evidence: [서점 | 5% | 5천원 | 1만원, '- PG(인터넷결제) 이용금액 제외']
+        target:
+          merchants: [kyobo_book, youngpoong_book]
+        when:
+          - option:
+              pack: [education]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+        unmodeled: [서점 업종 전체가 대상이지만 서점 업종이 없어 교보문고와 영풍문고 매장만 계산한다]
+      - key: shop-online-7
+        title: '[쇼핑팩] 온라인 쇼핑몰·홈쇼핑 7% 포인트리 적립'
+        source: page
+        evidence: [온라인 쇼핑몰/홈쇼핑 | 7% | 7천원 | 1만4천원, '- 온라인 쇼핑몰 : G마켓, 옥션, 11번가', '- 홈쇼핑 : CJ, GS, 현대', '- 온라인 쇼핑몰 내 상품권, 여행, 항공권, 티켓, 도서 이용금액 적립 제외']
+        target:
+          merchants: [auction, cj_onstyle, eleven_st, gmarket, gs_shop, hyundai_homeshopping]
+        when:
+          - option:
+              pack: [shopping]
+        reward: {type: points, program: kb_pointree, rate: 7}
+        limits:
+          - per: month
+            amount: {300000: 7000, 600000: 14000}
+        tiers: {from: 300000}
+        unmodeled: [온라인 쇼핑몰의 상품권·여행·항공권·티켓·도서 결제는 적립에서 빠진다]
+      - key: shop-social-5
+        title: '[쇼핑팩] 쿠팡·티몬·위메프 5% 포인트리 적립'
+        source: page
+        evidence: [소셜커머스 | 5% | 5천원 | 1만원, '- 소셜커머스 : 쿠팡, 티몬, 위메프']
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        when:
+          - option:
+              pack: [shopping]
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+      - key: shop-spa-5
+        title: '[쇼핑팩] ZARA·H&M 5% 포인트리 적립'
+        source: page
+        evidence: [ZARA/H&M | 5% | 5천원 | 1만원, '- 온라인 쇼핑몰 이용금액, 상품권 구매 및 건물 내 임대매장 이용금액 적립 제외']
+        target:
+          merchants: [hm, zara]
+        when:
+          - option:
+              pack: [shopping]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+      - key: worker-cafe-7
+        title: '[직장인팩] 커피전문점 7% 포인트리 적립'
+        source: page
+        evidence: [커피 | 7% | 7천원 | 1만4천원, '- 커피전문점 업종(스타벅스, 커피빈, 파스쿠치 등)']
+        target:
+          categories: [cafe]
+        when:
+          - option:
+              pack: [worker]
+        reward: {type: points, program: kb_pointree, rate: 7}
+        limits:
+          - per: month
+            amount: {300000: 7000, 600000: 14000}
+        tiers: {from: 300000}
+      - key: worker-food-5
+        title: '[직장인팩] 음식점·편의점 5% 포인트리 적립'
+        source: page
+        evidence: [음식/편의점 | 5% | 5천원 | 1만원, '- 일반 음식점, 한식, 중식, 일식, 양식, 뷔페, 패밀리 레스토랑 업종', '- 편의점 업종(GS25, CU, 세븐 일레븐 등)']
+        target:
+          categories: [convenience, restaurant.general]
+        when:
+          - option:
+              pack: [worker]
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+    unmodeled: ['레저팩(골프연습장 7%, 숙박·렌터카 5%, 인터파크·티켓링크 공연 5%, 스피드메이트 정비 할인)은 담을 업종이 없어 계산하지 않는다', '쇼핑팩 프리미엄 아울렛 5%는 롯데 프리미엄 아울렛 파주·이천, 신세계 사이먼 파주·여주·부산 지점만 대상이라 계산하지 않는다', 롯데월드·에버랜드·캐리비안베이 30~50% 현장할인과 해외여행 상품 3% 현장할인은 계산하지 않는다, 다담리워드(연간 결제 실적 800만원 이상 1만점 등)는 연간 실적이라 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 실적 없이 30만원 구간 혜택을 주는 신규 특례는 계산하지 않는다, 정부지원금과 대중교통 요금 등 무승인전표는 실적에서 빠진다, 서비스팩은 등록 다음 날부터 적용하고 변경은 월 1회 연 4회까지 다음 달 1일부터 적용한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 대중교통 요금 무승인전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 할인과 적립을 받은 결제는 금액 전체가 실적에서 빠지고 해외 캐시백만 예외다. 레저팩은 계산하지 않는 선택지로 둔다.

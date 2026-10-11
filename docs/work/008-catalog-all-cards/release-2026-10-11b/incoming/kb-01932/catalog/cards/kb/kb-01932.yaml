@@ -1,0 +1,87 @@
+schema_version: 2
+id: kb-01932
+issuer: kb
+name: KB국민 음 체크카드
+short_name: KB 음 체크
+kind: check
+product_codes:
+  - '01932'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01932', fetched_at: '2026-10-11', review_no: 200428-01318-HPP}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: coffee-5
+        title: 커피전문점 평일 5% 환급할인
+        source: page
+        evidence: [커피 | 5% | 5천원 | 1만원 | 건당 1만원~ 5만원까지, 이용금액 건당 1만원~5만원까지 할인 적용, '1일 1회, 최대 2,500원까지 월 할인한도 내에서 할인 적용 (주말, 공휴일 제외)', 최초 카드발급 후 사용등록일로부터 다음 달 말일까지 이용실적이 없는 경우에도 1구간 서비스 제공됩니다.]
+        target:
+          categories: [cafe]
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+              holidays: exclude
+          - amount: {min: 10000, below: 50001}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - per: month
+            amount: {0: 5000, 300000: 5000, 500000: 10000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: dessert-5
+        title: 제과점·아이스크림전문점 평일 5% 환급할인
+        source: page
+        evidence: [제과·아이스크림 전문점 | 5% | - | 1만원, 이용금액 건당 1만원~5만원까지 할인 적용, '1일 1회, 최대 2,500원까지 월 할인한도 내에서 할인 적용 (주말, 공휴일 제외)', '제과·아이스크림전문 업종 (파리바게뜨, 뚜레쥬르, 배스킨라빈스 등)']
+        target:
+          categories: [restaurant.bakery]
+          merchants: [baskin_robbins]
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+              holidays: exclude
+          - amount: {min: 10000, below: 50001}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        unmodeled: [배스킨라빈스 외 아이스크림전문점은 담을 업종이 없어 계산하지 않는다]
+      - key: transit-5
+        title: 버스·지하철·고속·시외버스 5% 할인
+        source: page
+        evidence: [전국 버스·지하철 | 5% | 1천5백원, '후불교통(시내버스, 지하철) 5% 청구할인', 고속/시외버스 5% 환급할인]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 1500}
+        tiers: {from: 300000}
+        unmodeled: [버스·지하철은 실제 사용일이 아니라 이용내역서에 적힌 이용일 기준으로 할인한다]
+    unmodeled: ['한식 평일 5% 환급할인(건당 2만~5만원, 1일 1회, 월 5천·1만원)은 대상이 한식·휴게음식점뿐인데 공통 업종 restaurant.general이 중식·일식·양식까지 넓어 계산하지 않는다', '후불교통, 해외이용, 무승인금액, 정부지원금은 실적에서 빠진다', 월 할인한도는 본인회원 기준이다, 할인 한도는 전표 매입 순서대로 채운다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].benefits', question: '"건당 1만원~5만원까지 할인 적용"을 1만원 이상 5만원 이하 결제만 할인으로 읽었다. 5만원 넘는 결제의 5만원분 할인일 수도 있다', assumed: amount below 50001}
+  - {path: 'revisions[0].benefits[transit-5].limits', question: 대중교통 월 한도 1천5백원을 두 구간 모두에 적용했다. 2구간 값이 합쳐진 칸으로 보인다, assumed: 1500}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 커피·제과 월 한도는 서비스별 표를 따라 따로 두었다. 실적 유예는 한식·커피에만 적혀 있어 커피에만 넣었다.

@@ -1,0 +1,25 @@
+card: hyundai-28392
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 직전은 0.5%
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4639, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-05: 23}, counted: 4639}
+  calc: 4,639 x 0.5% = 23.19 반올림 23
+- name: 100만 이상 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4650, category: cafe}
+  expect:
+  - {payment: 0, benefits: {high-1: 47}, counted: 4650}
+  calc: 4,650 x 1% = 46.5 반올림 47
+- name: 아파트관리비는 적립 없음
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: apartment_fee}
+  expect:
+  - {payment: 0, benefits: {}, counted: 200000}
+  calc: 관리비는 적립 제외지만 실적에는 든다

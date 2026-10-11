@@ -1,0 +1,66 @@
+schema_version: 2
+id: woori-103729
+issuer: woori
+name: 카드의정석2 EVERY DISCOUNT
+kind: credit
+product_codes:
+  - '103729'
+status: on_sale
+annual_fees:
+  - {scope: domestic, form: physical, amount: 12000}
+  - {scope: global, brand: mastercard, form: physical, amount: 12000}
+  - {scope: domestic, form: mobile, amount: 6000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 6000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103729', fetched_at: '2026-10-11', review_no: 제2026-C1h-07988호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2024-07-08'
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 우편요금, 과태료·벌금, 여권발급비, 국가·공공기관 가맹점 이용금액은 실적과 할인에서 빠진다', 다른 쿠폰·할인 프로모션과 중복되지 않는다]
+    limits:
+      - key: extra
+        per: month
+        amount: {400000: 10000, 800000: 20000}
+    stacks:
+      - {key: extra}
+    benefits:
+      - key: all-0-8
+        title: 국내외 가맹점 0.8% 청구할인
+        source: page
+        evidence: [국내외 가맹점 0.8% 청구할인, ※ 전월실적 조건 없음, ※ 할인한도 제한 없음, ※ Two-in-One 결제서비스(체크매출) 이용 시 0.3% 청구할인]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.8}
+        unmodeled: [Two-in-One 결제서비스로 체크 매출이 된 건은 0.3%만 할인한다]
+      - key: easypay-online-2
+        title: 국내 온라인 간편결제 2% 추가 청구할인
+        source: page
+        evidence: ['우리WON페이, 네이버페이, 카카오페이 | + 2%', ※ 전월실적 40만원 이상 시 혜택 제공, ※ 추가 할인은 해당 간편결제에 본 카드를 등록하여 온라인에서 결제 시 제공, 추가 할인 | 40만원 이상 | 1만원, 80만원 이상 | 2만원, ※ 추가 할인한도 초과 이용금액은 기본 할인혜택만 제공]
+        target: {all: true}
+        when:
+          - payment: [kakao_pay, naver_pay, woori_won_pay]
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: extra}
+        tiers: {from: 400000}
+        stack: extra
+        unmodeled: [의약품 전용몰과 제약회사 업종 결제는 추가 할인에서 빠진다, Two-in-One 결제서비스로 체크 매출이 된 건은 추가 할인이 없다]
+    unmodeled: ['해외 이용, 교통카드 이용, 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다', 국내 가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 할인은 거래 매입 순서대로 한도를 쓴다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 원문은 아파트 관리비(임대료)뿐이고 부동산 임대료를 따로 적지 않았다, assumed: 월세 카드납부도 빠진다}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-07-08. 페이지 표시는 신청가능. 연회비 실물 12,000원, 모바일 6,000원. 국내외 0.8% 청구할인 실적·한도 없음, 국내 온라인 간편결제(우리WON페이·네이버페이·카카오페이) 2% 추가 전월 40만/80만 이상 월 1만/2만원. woori-every-point와 같은 구조의 할인형이다.

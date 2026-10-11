@@ -1,0 +1,59 @@
+card: samsung-aap1777
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 1.2%와 특별 가맹점 1.5%는 실적 무관
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-03T12:00
+    amount: 100000
+    category: restaurant
+  - at: 2026-11-04T12:00
+    amount: 100000
+    category: restaurant
+    region: overseas
+  - at: 2026-11-05T12:00
+    amount: 100000
+    merchant: shilla_dfs
+  - at: 2026-11-06T12:00
+    amount: 300000
+    merchant: korean_air
+    channel: online
+  - at: 2026-11-07T08:00
+    amount: 80000
+    category: fuel
+  expect:
+  - payment: 0
+    benefits:
+      domestic-1-2: 1200
+    counted: 100000
+  - payment: 1
+    benefits:
+      overseas-1-5: 1500
+    counted: 100000
+  - payment: 2
+    benefits:
+      dfs-1-5: 1500
+    counted: 100000
+  - payment: 3
+    benefits:
+      airline-1-5: 4500
+    counted: 300000
+  - payment: 4
+    benefits:
+      fuel-1-5: 1200
+    counted: 80000
+  calc: 1.2% 1,200, 1.5% 1,500, 1,500, 4,500, 80,000 × 1.5% = 1,200
+- name: 실적 50만 직전이면 라이프스타일 없음
+  prev_month_spend: 499999
+  payments:
+  - at: 2026-11-03T20:00
+    amount: 120000
+    merchant: kurly
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      domestic-1-2: 1440
+    counted: 120000
+  calc: 120,000 × 1.2% = 1,440

@@ -1,0 +1,25 @@
+card: lotte-p13937-a13937
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 오프라인 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {all-1-2: 600}}
+  calc: 50,000 × 1.2% = 600
+- name: 온라인 1.5%만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-1-5: 1500}}
+  calc: 중복 없이 큰 쪽. 100,000 × 1.5% = 1,500
+- name: 해외 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, category: other, region: overseas, channel: offline}
+  expect:
+  - {payment: 0, benefits: {all-1-2: 1200}}
+  calc: 100,000 × 1.2% = 1,200

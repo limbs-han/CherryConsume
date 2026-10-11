@@ -1,0 +1,89 @@
+{
+  "reviewed_at": "2026-10-10",
+  "reviewed_count": 2,
+  "scope": "JADE Classic와현대X의일반거래전체규칙및부가서비스관계독립대조.카드파일수정없음",
+  "finding_count": 0,
+  "cards": [
+    {
+      "card_id": "hana-17504",
+      "result": "불일치 없음",
+      "findings": [],
+      "file": "tmp/release-card-expansion/recommended-mixed/catalog/cards/hana/hana-17504.yaml",
+      "sha256": "26cc254122567bce9146214f2f670ce21e2c04e7adf8274ce9b8327361530ed0",
+      "issuer_file": "tmp/release-card-expansion/recommended-mixed/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ],
+      "source_text_hashes": [
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/hana-17504-0.txt",
+          "sha256": "60598ef2882997ca4b554382aa18cfaf8936a61167d694bd11c487ae65b39964"
+        }
+      ],
+      "checks": {
+        "kind_annual_fee": "신용 및 국내115,000원 UPI115,000원 VISA/Master/Amex120,000원 일치",
+        "rounding": "공식 소수점 이하 반올림과 모든 reward.round=round 일치",
+        "tiers_new": "특별/50%적립 전월50만원, 사용등록다음달까지실적유예 일치",
+        "stack_shared": "매출건당한서비스/최고적립/한도소진뒤기본1% 원문과 같은 기본best중복묶음. 특별1.5/1.2% 공유월10만P, 디지털1만 커피5천 택시5천 개별월한도 일치",
+        "spend_installment_cancel": "무이자할부는적립제외지만실적제외미명시라실적count유지맞음. 할부이용월전액/취소접수월차감은issuer기본값과맞음"
+      },
+      "extra_service_relationship": {
+        "voucher": "연1회 본인 택1의 독립 서비스. 기본/특별 하나머니율이나 월 한도를 변경한다는 문구 없음. 호텔 현장10만원 할인은 실제 카드로 승인된 잔액을 결제액으로 기록해야 일반 적립을 부풀리지 않음. 상품권/주유권/배민권 사용은 별도결제수단이며 카드승인액과 합치지 않음",
+        "lounge": "발급연도 기준 별도 횟수와 연간실적. 거래당 적립/특별10만P월한도와 공유된다는 문구 없음",
+        "scope": "자동 미지원 안내가 있더라도 일반거래상 불일치는 해결되어야 함. 이 보고서는 추가서비스를 자동합계에 넣는 것으로 보지 않음"
+      },
+      "release_status": "ready",
+      "hash_checked_at_end": true
+    },
+    {
+      "card_id": "hyundai-xpe4",
+      "result": "불일치 없음",
+      "findings": [],
+      "file": "tmp/release-card-expansion/recommended-mixed/catalog/cards/hyundai/hyundai-xpe4.yaml",
+      "sha256": "f783c98bd0c0f107a02bac1bd892561c5e72ed4b759fcd9546ba70dd9564dd49",
+      "issuer_file": "tmp/release-card-expansion/recommended-mixed/catalog/issuers/hyundai.yaml",
+      "issuer_sha256": "adbf15550b35925e3581356ec8331b1d7ac592ad05c5ab979dafb46149e283a5",
+      "checked_sources": [
+        "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=XPE4",
+        "https://www.hyundaicard.com/upload/card/20260330_X.pdf"
+      ],
+      "source_text_hashes": [
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/hyundai-xpe4-0.txt",
+          "sha256": "bc11ec2f3dd2bc5d933bdbad11ab5aa1ef36c9f7b1be848636fdf06ffee69d3f"
+        },
+        {
+          "file": "tmp/release-card-expansion/recommended-mixed/source-text/hyundai-xpe4-1.txt",
+          "sha256": "92bd6b75b6db3b5cc03743af441a1512db3d8dc3101818e6c969f6aa34017fd4"
+        }
+      ],
+      "checks": {
+        "kind_annual_fee": "신용, 국내/VISA/Amex50,000원 일치",
+        "basic": "전월50만원이상1%, 한도제한없음 일치",
+        "new": "발급월다음달까지50만원미만도혜택제공. from=issue 일치",
+        "monthly_spend": "할부 승인월 전액, 취소 승인월 실적 차감, 본인 가족 합산. 연회비와 수도요금 제외 수정 확인. 관리비, 학교납입금, 사회보험은 월실적에 포함하는 공식 조건 유지",
+        "benefit_exclusion": "현대issuer의무이자/학교납입금/사회보험/공과금/관리비/상품권/고속버스제외가가이드북할인제외와맞음. 관리비·학교·보험은월실적엔포함되는원문이라spend에추가제외하면안됨",
+        "source_access": "공식웹/PDF열기내부오류. packet.json에서공식URL로모은가이드북전체와source-text/hyundai-xpe4-1.txt로대조"
+      },
+      "extra_service_relationship": {
+        "annual_cashback": "연간누적500만원당2만원, 최대10만원 별도추가. 기본1%의금액/월실적구간/한도를줄이거나대신하는서비스가아님. 발급월12개월기준과재발급시최초발급월유지, 취소에따른연간산정변경은추가서비스계산에만영향",
+        "emergency_advance": "긴급할인은기본할인및추가캐시백을상환에충당함. 기본1% 발생액은변하지않으나수령방식변경을안내해야함",
+        "lounge_valet": "발급월12개월기준일1회연2회별도횟수서비스. 기본1%와공유한도없음",
+        "scope": "연간캐시백자동미지원정책은별도명시되어있으며이보고서는자동지원으로취급하지않음"
+      },
+      "release_status": "ready",
+      "hash_checked_at_end": true
+    }
+  ],
+  "followup_required": "카드또는issuer수정후최종해시와지적해결을다시검토해야함",
+  "source_mismatch_resolved": "JADE 초중고 범위, 오프라인 면세점, 철도 제외와 영역별 제외 안내, 현대 X 연회비·수도요금 제외 및 긴급할인 상환 안내를 수정 후 재검토했다.",
+  "engine_validation": {
+    "input": "tmp/release-card-expansion/recommended-mixed/test-catalog.json",
+    "sha256": "c3a5949939601abea5394f653f5c521b60c1b958a7d4aa250fef080999a1c6e6",
+    "cards": 10,
+    "cases": 102,
+    "failures": [],
+    "scope": "지원하는 거래 조건의 손계산만 확인. KB 3장의 후불교통 실적 제외 미지원이나 부가서비스 자동 계산 지원을 증명하지 않음"
+  }
+}

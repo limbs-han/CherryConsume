@@ -1,0 +1,66 @@
+schema_version: 2
+id: kb-04128
+issuer: kb
+name: 국민연금증 KB국민체크카드
+short_name: KB 국민연금증 체크
+kind: check
+product_codes:
+  - '04128'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04128', fetched_at: '2026-10-11', review_no: 230418-01298-MLG}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제, 할인을 주지 않는 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다', 정부지원금(보육료·유치원보조비·바우처)과 무승인 결제는 할인과 적립에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 처음 발급받았나요? 재발급이나 다시 가입한 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: hospital-3-cashback
+        title: 병원 업종 3% 환급할인
+        source: page
+        evidence: ['병원업종 3% 환급할인: 건당 1만원 이상 이용 시 월 10만원 이용분까지', '병원 업종(종합병원, 일반·치과·한방병원 등 병·의원 업종)', '전월이용실적이 30만원 이상인 경우 서비스가 제공되며, 최초 발급받은 국민연금증 KB국민체크카드 사용등록일(KB Pay 등 간편결제 포함)로부터 다음달 말일까지 전월 이용실적이 없는 경우에도 서비스 제공']
+        target:
+          categories: [hospital]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, base: 100000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: sk-energy-40points
+        title: SK에너지 주유 리터당 40점 포인트리 적립
+        source: page
+        evidence: ['SK에너지 주유 리터당 40점 포인트리 적립: 일 10만원, 월 30만원 이용 분까지 적립', 'SK에너지 본사 고시 휘발유가 기준 적용,경유 및 등유는 휘발유가 기준으로 환산되어 적립 (단, SK에너지 비제휴 주유소, LPG 적립 제외)']
+        target:
+          merchants: [sk_energy]
+        reward: {type: points, program: kb_pointree, per_liter: 40}
+        limits:
+          - {per: day, base: 100000}
+          - {per: month, base: 300000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [SK에너지 비제휴 주유소와 LPG 충전은 적립에서 빠진다. 리터는 SK에너지 본사 고시 휘발유가로 환산하지만 앱은 기준 기름값을 쓴다]
+    unmodeled: [정부지원금(보육료·유치원보조비·바우처)과 무승인 전표(자판기·터널통행료·유료도로·취소반환수수료)는 실적에서 빠진다, 할인과 적립 한도는 전표 매입 순서대로 채운다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2023.02.22 출시라고만 적었다. 현재 규칙의 시작일을 확인해야 한다. 수집일을 잠정 시작일로 둔다., assumed: '2026-10-11'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 옮겼다. 후불교통요금 실적 제외는 시내버스와 지하철 업종 제외로 둔다. 철도와 고속·시외버스 승인 결제는 실적에 남긴다.

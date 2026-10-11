@@ -1,0 +1,65 @@
+card: lotte-p13686-a13686
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.5% 실적 없이
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, category: other}
+  expect:
+  - {payment: 0, benefits: {basic-0-5: 150}, counted: 0}
+  calc: 30,000 × 0.5% = 150. 캐시백 받은 결제는 실적 제외
+- name: 첫 달은 캐시백 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-01-15T12:00, amount: 30000, category: other}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 카드를 쓰기 시작한 달은 캐시백 없음
+- name: 편의점 5% 그룹 한도 5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 80000, merchant: gs25, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 50000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {sp-convenience: 4000}}
+  - {payment: 1, benefits: {sp-convenience: 1000}}
+  calc: 80,000 × 5% = 4,000. 다음은 2,500이지만 그룹 남은 한도 1,000
+- name: 1만원 미만은 기본만
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 9999, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {basic-0-5: 49}}
+  calc: 1만원 미만은 특별 제외. 9,999 × 0.5% = 49.995, 버림 49
+- name: 40만 직전이면 특별 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {basic-0-5: 100}}
+  calc: 399,999원은 0 구간. 20,000 × 0.5% = 100
+- name: 카카오페이 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 40000, category: other, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {sp-kakaopay: 2000}}
+  calc: 40,000 × 5% = 2,000
+- name: 그룹별 5% 각 1건
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 17000, merchant: netflix, billing: subscription}
+  - {at: 2026-11-05T13:00, amount: 20000, merchant: baemin, channel: online}
+  - {at: 2026-11-05T14:00, amount: 30000, merchant: socar, channel: online}
+  - {at: 2026-11-05T15:00, amount: 20000, merchant: starbucks, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 50000, merchant: kurly, channel: online}
+  - {at: 2026-11-07T12:00, amount: 60000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {sp-streaming: 850}}
+  - {payment: 1, benefits: {sp-delivery: 1000}}
+  - {payment: 2, benefits: {sp-mobility: 1500}}
+  - {payment: 3, benefits: {sp-food: 1000}}
+  - {payment: 4, benefits: {sp-shop-online: 2500}}
+  - {payment: 5, benefits: {sp-shop-offline: 2500}}
+  calc: 17,000 × 5% = 850. 20,000 × 5% = 1,000. 30,000 × 5% = 1,500. 20,000 × 5% = 1,000. 50,000 × 5% = 2,500. 쇼핑·숙박 그룹 한도 5,000에서 남은 2,500

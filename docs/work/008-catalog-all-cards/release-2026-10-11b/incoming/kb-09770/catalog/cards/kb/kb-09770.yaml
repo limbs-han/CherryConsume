@@ -1,0 +1,89 @@
+schema_version: 2
+id: kb-09770
+issuer: kb
+name: KB ALL ez 카드
+short_name: KB ALL ez
+kind: credit
+product_codes:
+  - '09770'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 7000}
+  - {scope: global, brand: k_world_upi, amount: 7000}
+  - {scope: global, brand: mastercard, amount: 7000}
+  - {scope: domestic, form: mobile, amount: 1000}
+  - {scope: global, brand: k_world_upi, form: mobile, amount: 1000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 1000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09770', fetched_at: '2026-10-11', review_no: 제260406-01115-PIF}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-01-08'
+    source: page
+    tiers: [0, 400000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: cancel_month
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      unmodeled: [대행사이트 결제, 호텔·백화점·대형마트·철도역사·약국 입점 가맹점, PG와 간편결제 전용 가맹점 결제는 할인에서 빠진다. 정부지원금과 신차구매 청구할인 전표도 빠진다]
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+      - {key: area, pick: best}
+    benefits:
+      - key: base-0-7
+        title: 국내외 가맹점 0.7% 청구할인
+        source: page
+        evidence: [국내외 가맹점 0.7%, 전월 이용실적 조건 없음, 월 할인한도 없음, 타 서비스와 중복 적용 가능]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.7}
+      - key: kbpay-0-3
+        title: KB Pay 결제 0.3% 추가 청구할인
+        source: page
+        evidence: [KB Pay 추가 0.3%, 전월 이용실적 조건 없음, 월 3천원 (월 100만원 이용금액까지), 타 서비스와 중복 적용 가능]
+        target: {all: true}
+        when:
+          - payment: [kb_pay]
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.3}
+        limits:
+          - {per: month, amount: 3000, base: 1000000}
+        stack: kbpay
+      - key: coffee-5
+        title: 커피 5% 청구할인
+        source: page
+        evidence: ['커피 (커피음료전문점 업종, 오프라인) 5%', 전월 이용실적 40만원 이상, 월 할인한도 2천원 (월 4만원 이용금액까지)]
+        target:
+          categories: [cafe]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 2000, base: 40000}
+        tiers: {from: 400000}
+        stack: area
+        exclude_applied: 1
+      - key: ticket-20
+        title: NOL 티켓 20% 청구할인
+        source: page
+        evidence: ['티켓 (NOL 티켓, 온라인) 20%', 전월 이용실적 40만원 이상, 월 할인한도 5천원 (월 2만5천원 이용금액까지), NOL 티켓으로 등록된 온라인 티켓 결제 건에 한함]
+        target:
+          merchants: [interpark_ticket]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: month, amount: 5000, base: 25000}
+        tiers: {from: 400000}
+        stack: area
+        exclude_applied: 1
+    unmodeled: [최초 사용등록 다음 달 말일까지 실적 미달이어도 커피와 티켓 월 한도의 50%를 주는 유예는 담지 않았다, 무이자할부는 할인에서만 빠지고 실적에는 들어간다, 정부지원금·현금서비스·카드론·수수료와 무승인전표(자판기·터널통행료 등)는 실적에서 빠진다, 가족카드는 발급하지 않는다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 RF후불교통요금 실적·할인 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적과 할인에서 빠질 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지와 대조. 출시일 2026.01.08을 적용 시작일로 둔다. 티켓 할인은 앞 묶음이 제안한 공통 가맹점 interpark_ticket(별칭 NOL 티켓)을 쓴다.

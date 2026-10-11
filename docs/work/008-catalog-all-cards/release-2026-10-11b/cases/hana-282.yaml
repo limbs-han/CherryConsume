@@ -1,0 +1,169 @@
+card: hana-282
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 시작 편의점 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 500}
+    counted: 10000
+  calc: 10,000원 x 5% = 500하나머니. 실적 제외가 아니라 10,000원이 실적에 들어감
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: gs25}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만원보다 1원 적어 0원
+- name: 1만원 경계
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9999, merchant: seven_eleven}
+  - {at: 2026-11-04T11:00, amount: 10001, merchant: seven_eleven}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {convenience-5: 500}
+  calc: 9,999원은 1만원 미만 0원. 10,001원 x 5% = 500.05에서 원 미만 버림 500
+- name: 베이커리와 커피
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: tous_les_jours}
+  - {at: 2026-11-04T11:00, amount: 12000, merchant: paris_baguette}
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-04T13:00, amount: 10000, merchant: coffee_bean}
+  expect:
+  - payment: 0
+    benefits: {bakery-5: 1000}
+  - payment: 1
+    benefits: {bakery-5: 600}
+  - payment: 2
+    benefits: {coffee-5: 500}
+  - payment: 3
+    benefits: {coffee-5: 500}
+  calc: 20,000원 1,000, 12,000원 600, 10,000원 500씩. 합계 2,600하나머니로 월 한도 안
+- name: 업종별 월 5회 직전과 직후
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 10000, merchant: gs25}
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: gs25}
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: gs25}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: cu}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: cu}
+  - {at: 2026-11-08T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 500}
+  - payment: 1
+    benefits: {convenience-5: 500}
+  - payment: 2
+    benefits: {convenience-5: 500}
+  - payment: 3
+    benefits: {convenience-5: 500}
+  - payment: 4
+    benefits: {convenience-5: 500}
+  - payment: 5
+    benefits: {}
+  - payment: 6
+    benefits: {coffee-5: 500}
+  calc: 편의점은 5회 2,500까지 받고 6번째 0원. 커피는 횟수가 따로라 500
+- name: 월 통합 5천 한도 직전과 직후
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 99980, merchant: starbucks}
+  - {at: 2026-11-04T11:00, amount: 10000, merchant: cu}
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: paris_baguette}
+  expect:
+  - payment: 0
+    benefits: {coffee-5: 4999}
+  - payment: 1
+    benefits: {convenience-5: 1}
+  - payment: 2
+    benefits: {}
+  calc: 99,980원 x 5% = 4,999. 남은 1만 받고 그다음 0원
+- name: 대중교통 월 5만원 문턱
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 30000, category: transit.bus_city}
+  - {at: 2026-11-10T08:00, amount: 19999, category: transit.subway}
+  - {at: 2026-11-15T08:00, amount: 1, category: transit.rail}
+  - {at: 2026-11-20T08:00, amount: 10000, category: transit.bus_city}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits: {transit-5: 2500}
+  - payment: 3
+    benefits: {transit-5: 500}
+  calc: 합계 49,999원까지 0. 50,000원이 되면 50,000 x 5% = 2,500. 60,000원이면 3,000에서 받은 2,500을 빼 500. 대중교통은 실적 제외
+- name: 시외버스는 대중교통 적립 제외
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 60000, category: transit.bus_intercity}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 시외버스는 적립 제외라 0원이고 대중교통 전체가 실적 제외
+- name: 실적 제외 상품권과 국세
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: gift_card}
+  - {at: 2026-11-04T11:00, amount: 50000, category: tax}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 0
+  calc: 상품권과 국세는 실적에서 빠지고 적립 대상도 아님
+- name: 외화 하나머니 결제 해외 수수료 1% 면제
+  prev_month_spend: 0
+  holder:
+    options:
+    - {option: overseas_pay, choice: hana_money, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: cafe, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-fee-free: 500}
+  calc: 외화 하나머니 설정이면 실적과 관계없이 50,000원 x 1% = 500원
+- name: 체크 결제 설정 해외는 면제 없음
+  prev_month_spend: 200000
+  holder:
+    options:
+    - {option: overseas_pay, choice: check, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: cafe, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 체크 결제로 해외 이용하면 수수료가 부과되어 0원
+- name: 신규 특례 기간 안
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 500}
+  calc: 10월 사용 등록이면 11월 말까지 20만 구간으로 보아 500
+- name: 신규 특례 기간 뒤
+  prev_month_spend: 0
+  holder: {started_on: '2026-09-15'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 9월 등록 특례는 10월 말에 끝나 전월 0원이면 0원

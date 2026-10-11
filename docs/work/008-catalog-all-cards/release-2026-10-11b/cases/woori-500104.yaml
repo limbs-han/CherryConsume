@@ -1,0 +1,50 @@
+card: woori-500104
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 시즌 입장권 30% 일 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: kovo_ticket, channel: online}
+  expect:
+  - {payment: 0, benefits: {spike-30: 5000}, counted: 30000}
+  calc: 9,000원이 일 5,000원으로
+- name: 비시즌 입장권은 캐시백 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2027-06-05T10:00, amount: 30000, merchant: kovo_ticket, channel: online}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 5~9월 제외
+- name: KOVO STORE 20% 일 3천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: kovo_store, channel: online}
+  expect:
+  - {payment: 0, benefits: {serve-store-20: 2000}, counted: 10000}
+  calc: 2,000원
+- name: 20만 직전은 캐시백 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 20만 미만
+- name: 외식 3% 건당 1천원, 편의점
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, category: restaurant, channel: offline}
+  - {at: 2026-11-05T13:00, amount: 10000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {blocking-dining: 1000}, counted: 50000}
+  - {payment: 1, benefits: {blocking-cvs: 300}, counted: 10000}
+  calc: 1,500원이 건당 1,000원, 편의점 300원
+- name: 교통과 티켓
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 1500, category: transit.subway}
+  - {at: 2026-11-06T10:00, amount: 40000, merchant: ticketlink, channel: online}
+  expect:
+  - {payment: 0, benefits: {blocking-transit: 45}, counted: 1500}
+  - {payment: 1, benefits: {blocking-ticket: 1000}, counted: 40000}
+  calc: 1,500원의 3% 45원, 티켓 1,200원이 건당 1,000원

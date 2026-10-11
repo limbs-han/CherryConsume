@@ -1,0 +1,58 @@
+card: samsung-aap1711
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 30만 구간 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-60: 3000}, counted: 0}
+  calc: 92,900 ÷ 1,858 = 50리터 × 60원 = 3,000원. 할인 건은 실적 제외
+- name: 주유 60만 구간 리터당 80원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-80: 4000}, counted: 0}
+  calc: 92,900 ÷ 1,858 = 50리터 × 80원 = 4,000원
+- name: 주유 90만 구간 리터당 100원과 월 2만원 한도
+  prev_month_spend: 900000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  - {at: 2026-11-08T08:00, amount: 92900, category: fuel}
+  - {at: 2026-11-12T08:00, amount: 92900, category: fuel}
+  - {at: 2026-11-16T08:00, amount: 92900, category: fuel}
+  - {at: 2026-11-20T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-100: 5000}, counted: 0}
+  - {payment: 3, benefits: {fuel-100: 5000}, counted: 0}
+  - {payment: 4, benefits: {}, counted: 92900}
+  calc: 50리터 × 100원 = 5,000원씩 네 번이면 월 2만원 한도를 다 쓴다. 다섯 번째는 할인 없고 실적 인정
+- name: 실적 30만 직전이면 주유와 편의점 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 92900}
+  - {payment: 1, benefits: {}, counted: 10000}
+  calc: 0 구간은 주유와 배달앱·편의점 할인이 없다
+- name: 배달앱 편의점 10% 통합 월 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 30000, merchant: baemin, channel: online}
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {delivery-10: 3000}, counted: 0}
+  - {payment: 1, benefits: {convenience-10: 2000}, counted: 0}
+  calc: 30,000 × 10% = 3,000. 남은 한도 2,000
+- name: 온라인쇼핑몰 1%와 해외 1%는 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T20:00, amount: 50000, merchant: coupang, channel: online}
+  - {at: 2026-11-05T20:00, amount: 100000, category: restaurant, region: overseas}
+  expect:
+  - {payment: 0, benefits: {online-mall-1: 500}, counted: 50000}
+  - {payment: 1, benefits: {overseas-1: 1000}, counted: 100000}
+  calc: 50,000 × 1% = 500, 100,000 × 1% = 1,000. 둘 다 실적 인정

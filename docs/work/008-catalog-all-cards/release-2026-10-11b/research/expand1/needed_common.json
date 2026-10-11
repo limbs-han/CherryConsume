@@ -1,0 +1,192 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "tous_les_jours",
+      "name": "뚜레쥬르",
+      "category": "restaurant.bakery",
+      "aliases": [
+        "뚜레쥬르",
+        "TOUS les JOURS"
+      ]
+    },
+    "card_id": "hana-282",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4094",
+    "evidence": "베이커리 적립 대상 가맹점 파리바게뜨, 뚜레쥬르"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lfmall",
+      "name": "LFmall",
+      "category": "online_shopping",
+      "aliases": [
+        "LFmall",
+        "LF몰",
+        "엘에프몰",
+        "lfmall.co.kr"
+      ]
+    },
+    "card_id": "kb-09314",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09314",
+    "evidence": "LFmall (lfmall.co.kr) 이용 시 5% 청구할인. LF오프라인 매장 이용금액은 할인 제외"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "nh_mall",
+      "name": "농협몰",
+      "category": "online_shopping",
+      "aliases": [
+        "농협몰",
+        "NH농협몰",
+        "nonghyupmall.com"
+      ]
+    },
+    "card_id": "nh-f20016",
+    "source_url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010042",
+    "evidence": "스마트적립 ① 온라인쇼핑 / 배달앱: 11번가, G마켓, 옥션, 쿠팡, 농협몰 / 배달의민족, 요기요"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ministop",
+      "name": "미니스톱",
+      "category": "convenience",
+      "aliases": [
+        "미니스톱",
+        "MINISTOP"
+      ]
+    },
+    "card_id": "samsung-aap1544",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtjCAe6v7rl2u3NQeOXgEta4%3D&sn=1",
+    "evidence": "편의점(오프라인) CU, 세븐일레븐, GS25, 미니스톱"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lotte_world_aquarium",
+      "name": "롯데월드 아쿠아리움",
+      "category": "other",
+      "aliases": [
+        "롯데월드 아쿠아리움",
+        "롯데아쿠아리움",
+        "LOTTE WORLD AQUARIUM"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "롯데월드 아쿠아리움, 롯데월드, 에버랜드, 이월드(대구), 경주월드, 통도환타지아 50% 현장할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "tongdo_fantasia",
+      "name": "통도환타지아",
+      "category": "other",
+      "aliases": [
+        "통도환타지아",
+        "통도 판타지아"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "롯데월드 아쿠아리움, 롯데월드, 에버랜드, 이월드(대구), 경주월드, 통도환타지아 50% 현장할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lotte_mart_max",
+      "name": "롯데마트맥스",
+      "category": "grocery_mart",
+      "aliases": [
+        "롯데마트맥스",
+        "롯데마트 맥스",
+        "LOTTE MART MAXX"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "대형마트 | 이마트, 홈플러스, 롯데마트, 트레이더스 홀세일 클럽, 롯데마트맥스 0.5% 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "woori_won_market",
+      "name": "우리WON마켓",
+      "category": "online_shopping",
+      "aliases": [
+        "우리WON마켓",
+        "우리원마켓"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "온라인쇼핑 | 11번가, G마켓, 옥션, 롯데ON, 쿠팡, 티몬, 롯데홈쇼핑, 우리WON마켓 0.5% 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "me_ev_charger",
+      "name": "환경부 전기차 충전(한국자동차환경협회)",
+      "category": "other",
+      "aliases": [
+        "환경부",
+        "한국자동차환경협회",
+        "무공해차 통합누리집",
+        "ev.or.kr"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "전기차 충전 | 환경부(한국자동차환경협회), 한국전기차충전, 한국전력공사, GS차지비 1.5% 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "happy_charger",
+      "name": "한국전기차충전",
+      "category": "other",
+      "aliases": [
+        "한국전기차충전",
+        "해피차저",
+        "happecharger.com"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "전기차 충전 | 환경부(한국자동차환경협회), 한국전기차충전, 한국전력공사, GS차지비 1.5% 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kepco_ev",
+      "name": "한국전력공사 전기차 충전",
+      "category": "other",
+      "aliases": [
+        "한국전력공사 전기차충전",
+        "KEPCO EV",
+        "evc.kepco.co.kr"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "전기차 충전 | 환경부(한국자동차환경협회), 한국전기차충전, 한국전력공사, GS차지비 1.5% 적립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "gs_chargev",
+      "name": "GS차지비",
+      "category": "other",
+      "aliases": [
+        "GS차지비",
+        "차지비",
+        "gschargev.co.kr"
+      ]
+    },
+    "card_id": "woori-834632",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834632",
+    "evidence": "전기차 충전 | 환경부(한국자동차환경협회), 한국전기차충전, 한국전력공사, GS차지비 1.5% 적립"
+  }
+]

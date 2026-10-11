@@ -1,0 +1,100 @@
+card: hana-17769
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 기본 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {base-1: 100}
+  calc: 10,000원 x 1% = 100
+- name: 200만 직전 1%와 200만 1.5%
+  prev_month_spend: 1999999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {base-1: 100}
+  calc: 200만원 미만이라 1%
+- name: 200만 구간 1.5%
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {base-1-5: 150}
+  calc: 10,000원 x 1.5% = 150
+- name: 50만 구간 넷플릭스 자동납부 50%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 17000, merchant: netflix, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {digital-50: 8500}
+  calc: 17,000원 x 50% = 8,500
+- name: 50만 직전 택시는 기본 1%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {base-1: 100}
+  calc: 50만원 미만이라 택시 50%는 없고 기본 1%
+- name: 택시 50% 한도 5천 넘친 금액 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {taxi-50: 5000, base-1: 100}
+  calc: 50% 한도 5,000은 10,000원까지. 남은 10,000원 x 1% = 100
+- name: 해외 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {special-overseas: 3000}
+  calc: 100,000원 x 3% = 3,000
+- name: 대한항공 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: korean_air}
+  expect:
+  - payment: 0
+    benefits: {special-airline: 3000}
+  calc: 100,000원 x 3% = 3,000
+- name: 롯데면세점 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: lotte_dfs, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {special-dutyfree: 3000}
+  calc: 100,000원 x 3% = 3,000
+- name: 아고다 온라인 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: agoda, channel: online}
+  expect:
+  - payment: 0
+    benefits: {special-travel: 3000}
+  calc: 100,000원 x 3% = 3,000
+- name: 하나투어 오프라인 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: hana_tour, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {special-hana-tour-offline: 3000}
+  calc: 100,000원 x 3% = 3,000
+- name: 주유 리터당 150
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 18580, merchant: sk_energy}
+  expect:
+  - payment: 0
+    benefits: {fuel-150: 1500}
+  calc: 18,580원 / 1,858원 = 10리터 x 150 = 1,500

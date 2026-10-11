@@ -1,0 +1,73 @@
+schema_version: 2
+id: kb-09608
+issuer: kb
+name: KB 스타틴즈카드
+short_name: KB 스타틴즈
+kind: check
+product_codes:
+  - '09608'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09608', fetched_at: '2026-10-11', review_no: 제260406-01115-PIF}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 간편결제 전용 가맹점으로 승인된 결제, 타사 간편결제는 할인에서 빠진다', 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다]
+    limits:
+      - {key: integrated, per: month, amount: 1000}
+    benefits:
+      - key: yummy-cvs-5
+        title: GS25·CU 5% 환급할인
+        source: page
+        evidence: ['KB 스타틴즈카드로 편의점(GS25/CU), 커피/음료 전문점에서 5천원 이상 결제 시 할인 제공', 월 통합 할인한도 1천원, KB 스타틴즈카드는 별도의 전월실적 없음]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+      - key: yummy-cafe-5
+        title: 커피·음료 전문점 5% 환급할인
+        source: page
+        evidence: ['KB 스타틴즈카드로 편의점(GS25/CU), 커피/음료 전문점에서 5천원 이상 결제 시 할인 제공', 월 통합 할인한도 1천원]
+        target:
+          categories: [cafe]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+      - key: enjoy-5
+        title: 올리브영·다이소 5% 환급할인
+        source: page
+        evidence: ['KB 스타틴즈카드로 올리브영, 다이소에서 5천원 이상 결제 시 할인 제공', 월 통합 할인한도 1천원]
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+      - key: play-5
+        title: 구글 플레이스토어·앱스토어 5% 환급할인
+        source: page
+        evidence: ['KB 스타틴즈카드로 구글 플레이스토어, 앱스토어에서 5천원 이상 결제 시 할인 제공', 월 통합 할인한도 1천원]
+        target:
+          merchants: [app_store, google_play]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+    unmodeled: [할인 한도는 전표 매입 순서대로 채운다, 포켓 충전 잔액 안에서만 결제되고 할부는 안 된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙의 시작일을 원문에서 찾지 못했다. 수집일을 잠정 시작일로 둔다., assumed: '2026-10-11'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 옮겼다. 청소년용 선불 충전형 체크카드다. 전월실적 조건이 없고 네 혜택이 월 1천원 통합 한도를 함께 쓴다.

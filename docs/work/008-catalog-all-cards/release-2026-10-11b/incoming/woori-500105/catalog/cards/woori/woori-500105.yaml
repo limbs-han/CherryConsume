@@ -1,0 +1,133 @@
+schema_version: 2
+id: woori-500105
+issuer: woori
+name: ROYAL BLUE POINT+
+kind: credit
+product_codes:
+  - '500105'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 300000}
+  - {scope: global, brand: mastercard, amount: 300000}
+  - {scope: global, brand: visa, amount: 300000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500105', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-02'
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    limits:
+      - {key: special, per: month, amount: 500000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [special-overseas-2, special-dutyfree-2, special-hospital-15, special-coffee-15, special-movie-15, special-telecom-15, basic-1]
+        spill: none
+      - {key: fuel}
+    benefits:
+      - key: special-overseas-2
+        title: 해외 2% 특별 적립
+        source: page
+        evidence: ['특별 | 해외, 면세점 | 2%', 해외 | 온라인 결제 포함, '월 적립한도 : 특별적립 50만점 (기본적립 한도 제한 없음)', ※ 전월 국내 가맹점 이용금액 50만원 이상 시 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: woori_moa_point, rate: 2}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+      - key: special-dutyfree-2
+        title: 면세점 2% 특별 적립
+        source: page
+        evidence: ['특별 | 해외, 면세점 | 2%', '면세점 | 롯데면세점, 신라면세점 | 온라인 결제 포함', '월 적립한도 : 특별적립 50만점 (기본적립 한도 제한 없음)']
+        target:
+          merchants: [lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online]
+        reward: {type: points, program: woori_moa_point, rate: 2}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+      - key: special-hospital-15
+        title: 병의원 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 병의원(동물병원 포함), 커피, 영화, 이동통신 | 1.5%', '월 적립한도 : 특별적립 50만점 (기본적립 한도 제한 없음)']
+        target:
+          categories: [hospital, pet.vet]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+      - key: special-coffee-15
+        title: 커피 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 병의원(동물병원 포함), 커피, 영화, 이동통신 | 1.5%', '커피 | 스타벅스, 투썸플레이스, 폴바셋', '커피브랜드의 상품권, 선불카드 구매/충전(앱 결제 포함) 등의 이용금액은 적립 제외', '백화점/대형마트 내 매장, 미군부대 매장 제외']
+        target:
+          merchants: [paul_bassett, starbucks, twosome]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: [백화점·대형마트 안 매장과 미군부대 매장은 특별 적립 제외다, 커피 브랜드 상품권과 선불카드 구매·충전은 적립 제외다]
+      - key: special-movie-15
+        title: 영화 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 병의원(동물병원 포함), 커피, 영화, 이동통신 | 1.5%', '영화 | CGV, 롯데시네마', 예매 대행사이트를 통해 결제 시 제외]
+        target:
+          merchants: [cgv, lotte_cinema]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: [예매 대행사이트로 결제하면 특별 적립 제외다]
+      - key: special-telecom-15
+        title: 이동통신 자동이체 1.5% 특별 적립
+        source: page
+        evidence: ['특별 | 병의원(동물병원 포함), 커피, 영화, 이동통신 | 1.5%', '이동통신 | SKT, KT, LGU+, 헬로모바일, KTM모바일, U+유모바일', '휴대전화 요금에 한하며, 본 카드로 대상 통신사에 자동이체 신청 후 결제한 건에 대해서만 적립', '인터넷, 유선전화 등 결합상품 신청 시에는 적립 제외']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [hello_mobile, kt, kt_m_mobile, lg_uplus, media_log, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: special}
+        tiers: {from: 500000}
+        unmodeled: [인터넷이나 유선전화와 결합상품으로 신청한 휴대전화 요금은 적립 제외다]
+      - key: basic-1
+        title: 국내 기본 1% 적립
+        source: page
+        evidence: [기본 | 특별가맹점 외 국내 적립 대상 가맹점 | 1%, '월 적립한도 : 특별적립 50만점 (기본적립 한도 제한 없음)']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: woori_moa_point, rate: 1}
+        tiers: {from: 500000}
+      - key: fuel-60-per-liter
+        title: 주유 리터당 60원 청구할인
+        source: page
+        evidence: ['HD현대오일뱅크, S-OIL 주유 및 충전 시 리터당 60원 청구할인', '통합 1일 1회, 1회 결제금액 최대 10만원 / 월 결제 금액 20만원에 한함', 전월 국내 가맹점 이용실적 50만원 이상 시 제공]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: day, count: 1}
+          - {per: txn, base: 100000}
+          - {per: month, base: 200000}
+        tiers: {from: 500000}
+        stack: fuel
+    unmodeled: [Two-in-One 결제서비스로 체크 결제된 매출은 0.3%만 적립한다. 이 서비스를 쓰는지 알 수 없어 신용 결제로 계산한다, 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다, 취소 매출표가 매월 1~2일에 접수되면 전월 실적에서 뺀다, 가족카드 포인트는 본인회원에게 합산 적립되지만 전월실적과 한도는 카드별로 따로 본다, 프리미엄 기프트·여행 기프트·공항라운지·렌터카·KTX 할인 같은 서비스는 결제 혜택이 아니라 계산하지 않는다, 모아포인트와 우리WON꿀머니는 1점에 1원이다]
+open_questions:
+  - path: revisions[0].benefits[basic-1].tiers
+    question: 요약에는 모아포인트 1~2% 적립이 전월 국내 가맹점 이용금액 50만원 이상 시 제공이라 적혀 있고, 적립표 아래에는 전월 이용 실적 조건 없음이라 적혀 있다. 덜 주는 쪽으로 50만원 이상만 적립한다
+    assumed: '500000'
+  - {path: 'revisions[0].benefits', question: '특별적립 대상 가맹점 목록에 여행사(하나투어 등)와 대형마트(이마트, 홈플러스, 롯데마트)가 있으나 적립률 표에는 없다. 기본 1%로 두었다', assumed: 기본 1%}
+  - {path: 'revisions[0].stacks', question: 특별적립 월 50만점을 다 쓴 뒤 같은 가맹점 결제에 기본 1%를 주는지 문구가 없다, assumed: 주지 않음}
+  - {path: 'revisions[0].benefits[basic-1].reward', question: 원 미만 포인트 처리 문구가 없다, assumed: floor}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품출시일 2026-10-02. 연회비 30만원(기본 3만원과 제휴 27만원), 국내전용과 Mastercard·VISA 해외겸용. 해외·면세점 2%, 병의원·커피·영화·이동통신 1.5%, 그 밖의 국내 1%. 특별적립만 월 50만점 한도. 주유는 HD현대오일뱅크·S-OIL 리터당 60원, 일 1회 건당 10만원 월 20만원까지. 실적 제외는 해외, 현금서비스, 카드론, 수수료, 이자, 연회비다.

@@ -1,0 +1,100 @@
+card: hana-16947
+holder:
+  started_on: '2026-01-01'
+  options:
+    - {option: combo, choice: free_plus, effective_from: 2025-07-01}
+cases:
+- name: 실적 없이 전가맹점 0.8%와 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {general-0-8: 80}
+    counted: 10000
+  calc: 10,000 x 0.8% = 80. 전가맹점 1.0% 이하 할인은 실적에 들어감
+- name: 네이버페이 온라인 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {simple-pay-1-2: 120}
+    counted: 10000
+  calc: 10,000 x 1.2% = 120. 실적 포함
+- name: 하나페이 오프라인도 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: restaurant.general, channel: offline, payment_method: hana_pay}
+  expect:
+  - payment: 0
+    benefits: {simple-pay-1-2: 120}
+  calc: 하나페이는 모든 결제 1.2%
+- name: 쿠팡 온라인 2%는 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coupang-2: 1000}
+    counted: 0
+  calc: 50,000 x 2% = 1,000. 할인 받은 매출은 실적 제외
+- name: 배달앱 40만 구간 4% 한도 4천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 120000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-4: 4000}
+  calc: 120,000 x 4% = 4,800이 한도 4,000에 걸림
+- name: 배달앱 40만 구간 직전은 0.8%
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T19:00, amount: 10000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {general-0-8: 80}
+  calc: 40만원 미만이라 배달 4%는 없고 전가맹점 0.8%만
+- name: 오픈마켓 120만 구간 4%
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {open-market-4: 4000}
+  calc: 100,000 x 4% = 4,000. 한도 12,000 안
+- name: 온라인식품 80만 구간 4%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: kurly, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {online-food-4: 2000}
+  calc: 50,000 x 4% = 2,000
+- name: 슈퍼마켓 오프라인 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: lotte_super, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {supermarket-2: 600}
+  calc: 30,000 x 2% = 600
+- name: 택시 업종 4%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: taxi, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {taxi-4: 800}
+  calc: 20,000 x 4% = 800
+- name: 카카오T 앱 선결제 4%와 택시 한도 공유
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, category: taxi, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: kakao_t, billing: app_prepay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {taxi-4: 3200}
+  - payment: 1
+    benefits: {taxi-app-4: 800}
+  calc: 80,000 x 4% = 3,200. 카카오T 50,000 x 4% = 2,000인데 공유 한도 4,000에서 800 남음

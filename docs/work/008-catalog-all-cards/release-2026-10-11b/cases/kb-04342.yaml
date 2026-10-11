@@ -1,0 +1,32 @@
+card: kb-04342
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 소노아임레디 자동납부 9천원 전액
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: daemyung_imready, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {sono-autopay: 9000}, counted: 0}
+  calc: 승인금액이 한도보다 작아 9,000원 전액. 할인받은 건은 실적 제외
+- name: 70만 구간 한도 1만7천원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: daemyung_imready, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {sono-autopay: 17000}}
+  calc: 30,000원 중 월 한도 17,000원
+- name: 경계 직전 699999는 1만2천원
+  prev_month_spend: 699999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: daemyung_imready, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {sono-autopay: 12000}}
+  calc: 30만 구간 한도 12,000원
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: daemyung_imready, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 30만 미만

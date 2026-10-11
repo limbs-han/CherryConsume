@@ -1,0 +1,43 @@
+schema_version: 2
+id: woori-103739
+issuer: woori
+name: 카드의정석 신통방통
+kind: credit
+product_codes:
+  - '103739'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: visa, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103739', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2024-09-06'
+    source: page
+    tiers: [0, 200000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefits:
+      - key: telecom-autopay
+        title: 통신요금 자동납부 청구할인
+        source: page
+        evidence: ['휴대전화 요금 | KT, LG U+, SKT, kt M모바일, 스카이라이프, U+유모바일, LG헬로비전, SK세븐모바일', '홈상품 요금 (인터넷, 집전화, IPTV) | KT, LG U+, SKT, SK브로드밴드, 스카이라이프, LG헬로비전', '20만원 이상 ~ 50만원 미만 | 5,000원 | 통신요금 자동납부 필수', '50만원 이상 ~ 100만원 미만 | 10,000원', '100만원 이상 | 13,000원', 카드의정석 신통방통 카드로 할인받은 이용금액(해당 이용금액 전체) ... 전월실적에 포함되지 않습니다.]
+        target:
+          merchants: [hello_mobile, kt, kt_m_mobile, kt_skylife, lg_hellovision, lg_uplus, media_log, sk_broadband, sk_telink, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {200000: 5000, 500000: 10000, 1000000: 13000}
+        tiers: {from: 200000}
+        exclude_applied: 1
+    unmodeled: [가족카드는 발급하지 않는다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 공공임대료와 국가·공공기관 가맹점 이용금액은 실적에서 빠진다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-09-06. 연회비 12,000원. 전월 국내외 20만/50만/100만 이상 월 할인한도 5,000/10,000/13,000원. 할인받을 금액보다 승인금액이 적으면 승인금액만큼 할인한다. 신규 발급 다음 달 말까지 최저 구간.

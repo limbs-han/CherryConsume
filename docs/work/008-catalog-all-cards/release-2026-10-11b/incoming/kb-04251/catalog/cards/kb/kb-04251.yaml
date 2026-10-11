@@ -1,0 +1,93 @@
+schema_version: 2
+id: kb-04251
+issuer: kb
+name: KB매직카 KB국민카드
+short_name: KB매직카
+kind: credit
+product_codes:
+  - '04251'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_upi, amount: 8000}
+  - {scope: global, brand: visa, amount: 13000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04251', fetched_at: '2026-10-11', review_no: 제260406-01115-PIF}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      cancellation: cancel_month
+      month_offset: {}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any: []
+      categories: [gift_card]
+      unmodeled: [호텔·백화점·대형마트·철도역사 입점 가맹점과 결제대행업체(PG) 전용 가맹점 결제는 할인에서 빠진다]
+    benefits:
+      - key: kb-insurance-10
+        title: KB손해보험 보험료 10% 청구할인
+        source: page
+        evidence: [KB손해보험 보험료 10% 청구할인, 건당 10만원 이상, 연간 3만원 한도, 카드 사용등록일부터 1년간은 실적 조건 없이 제공, 보험료 승인일 직전 3개월 합계 90만원 이상]
+        target:
+          merchants: [kb_insurance]
+        when:
+          - amount: {min: 100000}
+          - card_month: {min: 0, max: 11}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: year, amount: 30000}
+        exclude_applied: 1
+        unmodeled: [사용등록 1년 뒤에는 직전 3개월 이용금액 합계 90만원 이상이 조건인데 담을 수 없어 첫 1년만 계산한다]
+      - key: fuel-60
+        title: 주유 리터당 60원 청구할인
+        source: page
+        evidence: [전 주유소 리터당 60원 청구할인, '휘발유, 경유, 등유. LPG 제외', '1일 20만원, 월 30만원 이용금액까지']
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: day, base: 200000}
+          - {per: month, base: 300000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [LPG 충전은 빠진다]
+      - key: telecom-3000
+        title: 이동통신요금 자동납부 월 3천원 청구할인
+        source: page
+        evidence: ['SKT, KT, LG U+ 이동통신요금 자동납부 월 3천원 청구할인', '월 1회, 건당 1만원 이상 자동납부 건', 유무선 통합청구 제외]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [여러 건이면 매입완료 순으로 월 첫 1건에 할인한다. 유무선 통합청구는 빠진다]
+      - key: family-restaurant-20
+        title: 패밀리레스토랑 20% 청구할인
+        source: page
+        evidence: ['패밀리레스토랑(VIPS, 아웃백스테이크하우스, 생어거스틴) 20% 청구할인', '1일 1회, 월 2회, 월 20만원 이용금액까지']
+        target:
+          merchants: [outback, saint_augustin, vips]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+    unmodeled: [정부지원금, 현금서비스, 카드론, 수수료, 항공기내 무승인전표는 실적에서 빠진다. 부분 무이자할부도 실적에서 빠진다, 월 할인한도는 본인회원 기준으로 가족카드와 합산한다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인 대중교통 전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠질 수 있다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙의 시작일을 찾지 못해 수집일로 둔다, assumed: '2026-10-11'}
+notes: 2026-10-11 KB국민카드 상품 페이지와 대조. 공통 가맹점 kb_insurance(KB손해보험)가 필요하다. 주유 대상 유종의 원문 표기 '경우'는 경유로 읽었다.

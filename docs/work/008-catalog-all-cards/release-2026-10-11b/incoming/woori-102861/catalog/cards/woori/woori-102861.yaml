@@ -1,0 +1,113 @@
+schema_version: 2
+id: woori-102861
+issuer: woori
+name: U&I우리카드(체크)+
+kind: check
+product_codes:
+  - '102861'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102861', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-12-20'
+    source: page
+    tiers: [0, 300000, 500000, 800000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: []
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - amount: {below: 10000}
+      categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 우편요금·여권발급비·벌금, 국가·공공기관 가맹점 이용금액은 적립에서 빠진다']
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 500000: 20000, 800000: 30000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: points-basic-0-3
+        title: 국내 기본 0.3% 적립
+        source: page
+        evidence: [기본 | 상기 가맹점 외 국내 적립 대상 가맹점 | 0.3%, 기본적립과 특별적립은 중복 적용되지 않음, 전월 국내가맹점 이용실적 30만원 이상 시 적립, 기본/특별 통합 월 적립한도 | 1만점 | 2만점 | 3만점]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: woori_moa_point, rate: 0.3}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: main
+      - key: points-telecom-1-5
+        title: 이동통신 자동납부 1.5% 적립
+        source: page
+        evidence: ['특별 | 이동통신, 대중교통, 커피, 영화 | 1.5%', '이동통신 | SKT, KT, LG U+, 헬로모바일, KTM모바일, U+유모바일', '※ 휴대전화 요금에 한하며, 본 카드로 대상 통신사에 자동납부 신청 후 결제한 건에 대해서만 적립', '※ 인터넷, 유선전화 등 결합상품 신청 시에는 적립 제외']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [hello_mobile, kt, kt_m_mobile, lg_uplus, media_log, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: [인터넷·유선전화 결합상품을 신청하면 적립 제외]
+      - key: points-transit-1-5
+        title: 버스·지하철 1.5% 적립
+        source: page
+        evidence: ['대중교통 | 명세서에 교통-버스, 교통-지하철로 표시되는 매출']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: main
+      - key: points-coffee-movie-1-5
+        title: 커피·영화 1.5% 적립
+        source: page
+        evidence: ['커피 | 스타벅스, 엔제리너스, 이디야', '영화 | CGV, 롯데시네마', ※ 예매 대행사이트를 통해 결제 시 적립 제외]
+        target:
+          merchants: [angel_in_us, cgv, ediya, lotte_cinema, starbucks]
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: ['커피 상품권·선불카드 구입과 충전, 백화점·대형마트·미군부대 내 매장은 적립 제외', 영화 예매 대행사이트 결제는 적립 제외]
+      - key: points-shopping-offline-0-5
+        title: 백화점·대형마트 0.5% 적립
+        source: page
+        evidence: ['백화점, 대형마트, 온라인쇼핑 | 0.5%', '백화점 | 신세계백화점, 현대백화점, 롯데백화점 ※ 온라인결제 적립 제외', '대형마트 | 이마트, 홈플러스, 롯데마트, 트레이더스 홀세일 클럽, 롯데마트맥스 ※ 온라인결제 적립 제외']
+        target:
+          merchants: [emart, homeplus, hyundai_department, lotte_department, lotte_mart, lotte_mart_max, shinsegae_department, traders]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: woori_moa_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: main
+      - key: points-online-0-5
+        title: 온라인쇼핑 0.5% 적립
+        source: page
+        evidence: ['온라인쇼핑 | 11번가, G마켓, 옥션, 롯데ON, 쿠팡, 티몬, 롯데홈쇼핑, 우리WON마켓']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_homeshopping, lotte_on, tmon]
+        reward: {type: points, program: woori_moa_point, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: [우리WON마켓은 공통 가맹점이 없어 기본 0.3%로 계산한다]
+    unmodeled: [교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 가족카드는 발급하지 않는다, 한국장애인고용공단 제휴카드다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2023-12-20. 연회비 없음. 실적 제외는 수수료와 이자뿐이다. 전월 국내 30만/50만/80만 이상 기본·특별 통합 월 1만/2만/3만점. 특별 이동통신 자동납부·대중교통·커피·영화 1.5%, 백화점·대형마트·온라인쇼핑 0.5%, 기본 0.3%. 기본과 특별은 겹치지 않는다. 결제 건당 1만원 미만은 적립 제외. 1모아포인트 = 1원.

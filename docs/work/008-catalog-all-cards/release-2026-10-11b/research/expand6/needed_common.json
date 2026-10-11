@@ -1,0 +1,50 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ceragem_rental",
+      "name": "세라젬 렌탈",
+      "category": "other",
+      "aliases": [
+        "세라젬 렌탈",
+        "세라젬",
+        "CERAGEM"
+      ]
+    },
+    "card_id": "hyundai-crmhc",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AOB-20260512-1100-12_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%84%B8%EB%9D%BC%EC%A0%AC%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "전월 이용 금액 40만원 이상 시 세라젬 렌탈/구독료 정기결제 최대 1만 6천원 청구 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ezwel_mall",
+      "name": "이지웰 복지몰",
+      "category": "online_shopping",
+      "aliases": [
+        "이지웰",
+        "이지웰복지몰",
+        "현대이지웰",
+        "EZWEL"
+      ]
+    },
+    "card_id": "lotte-p13727-a13727",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13727-A13727",
+    "evidence": "이지웰 복지몰 결제일 할인 40만원 이상 4.0% 월 할인한도 1만원"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "eduwill",
+      "name": "에듀윌",
+      "category": "education.academy",
+      "aliases": [
+        "에듀윌",
+        "EDUWILL"
+      ]
+    },
+    "card_id": "lotte-p15754-a15754",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15754-A15754",
+    "evidence": "교육업종 에듀윌, 독서실, 서점, 문구점 10% 월 할인한도 10,000원 15,000원"
+  }
+]

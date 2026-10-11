@@ -1,0 +1,13 @@
+card: hyundai-154999
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 0.8% 청구 할인
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  - {at: 2026-11-06T10:00, amount: 50000, category: tax}
+  expect:
+  - {payment: 0, benefits: {basic-0-8: 80}, counted: 10000}
+  - {payment: 1, benefits: {}, counted: 50000}
+  calc: 10,000 x 0.8% = 80. 공과금은 할인 제외. 실적 기준이 없어 결제액이 그대로 집계된다

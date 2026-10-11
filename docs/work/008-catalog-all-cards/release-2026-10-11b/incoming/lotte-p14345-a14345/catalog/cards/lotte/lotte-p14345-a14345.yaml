@@ -1,0 +1,43 @@
+schema_version: 2
+id: lotte-p14345-a14345
+issuer: lotte
+name: LOCA CLASSIC 롯데마트
+kind: credit
+product_codes: [P14345-A14345]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14345-A14345', fetched_at: '2026-10-05'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00007_20260930_10002.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-04-07'
+    source: manual
+    tiers: [0, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+    new_card: {until: next_month_end, tier: 1000000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: ['장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 고속도로 통행요금, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원 발급 수수료, 관세납부, 인지세, 송달료, 이자와 각종 수수료는 할인에서 빠진다']
+    benefits:
+      - key: basic-discount-0-5
+        title: 국내외 가맹점 0.5% 결제일 할인
+        source: manual
+        evidence: [국내외 가맹점 결제일 할인, 기본할인 | 100만원 미만 | 0.5%, 기본할인과 특별할인은 중복 제공되지 않습니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+        tiers: {to: 0}
+      - key: special-discount-1
+        title: 국내외 가맹점 1.0% 결제일 할인
+        source: manual
+        evidence: [국내외 가맹점 결제일 할인, 특별할인 | 100만원 이상 | 1.0%, 'LOCA CLASSIC 롯데마트 카드를 최초 발급 받은 경우, 카드 발급일 ~ 다음달 말일까지 지난달 이용실적에 상관없이 특별할인이 제공 됩니다.']
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 1000000}
+    unmodeled: [이 카드가 아닌 롯데카드 이용금액은 실적에서 빠진다. 이 카드 결제만 센다, '장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 고속도로 통행요금, 무승인전표, 벌금·과태료 같은 공공 수납은 실적에서 빠진다', 가족카드 이용금액이 본인카드 실적에 합산된다, 해외 이용과 이동통신·대중교통처럼 다음 달 접수되는 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다, 롯데카드가 주는 L.POINT 적립은 없다]
+notes: 2026-10-11 상품설명서(2026년 8월 기준, 여신금융협회 심의필 제2026-C1a-13596호) 대조. 출시일 2023-04-07. 국내외 가맹점 결제일 할인, 지난달 100만원 미만 0.5%, 100만원 이상 1.0%, 한도 없음, 중복 없음. LOCA CLASSIC(lotte-loca-classic)과 달리 구간이 100만원이고 대중교통·택시·고속버스가 실적과 할인에서 빠진다. 최초 발급 시 발급일부터 다음 달 말일까지 특별할인. 가족카드 연회비 13,000원.

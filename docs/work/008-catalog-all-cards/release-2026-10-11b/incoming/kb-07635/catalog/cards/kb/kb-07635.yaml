@@ -1,0 +1,34 @@
+schema_version: 2
+id: kb-07635
+issuer: kb
+name: KB Members Plus 체크카드
+short_name: KB Members Plus 체크
+kind: check
+product_codes:
+  - '07635'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07635', fetched_at: '2026-10-11', review_no: 260522-01722-PIF}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-05-14'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax.local, tax.national, transit.bus_city, transit.subway]
+      unmodeled: ['정부지원금 결제와 자판기·터널통행료 같은 무승인 거래, 연체료와 수수료는 적립에서 빠진다']
+    benefits:
+      - key: base-0-1
+        title: 국내외 가맹점 0.1% 포인트리 적립
+        source: page
+        evidence: [국내외 가맹점 이용 시 0.1% 포인트리 적립, 적립 한도 없음, 전월 이용실적 조건 없음, '적립 제외: 후불교통 이용금액, 연체료, 대학(원) 등록금, 무승인 거래, 각종 수수료와 이자, 정부지원금, 포인트리 충전금액, 지방세, 취소금액, 상품권과 선불카드, 아파트관리비, 국세, 4대 사회보험료']
+        target: {all: true}
+        reward: {type: points, program: kb_pointree, rate: 0.1}
+    unmodeled: []
+open_questions:
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 원문의 후불교통 이용금액 적립 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 적립에서 빠져 덜 주는 쪽이다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지로 대조했다. 2026.05.14 출시일을 시작일로 둔다. 신용카드 kb-07634와 다른 상품이다.

@@ -1,0 +1,47 @@
+schema_version: 2
+id: kb-09637
+issuer: kb
+name: 해피포인트 해피리워드 KB국민 체크카드
+short_name: KB 해피리워드 체크
+kind: check
+product_codes:
+  - '09637'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09637', fetched_at: '2026-10-11', review_no: 210910-03168-HPP}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+    benefits:
+      - key: happy-merchant-1000
+        title: 파리바게뜨·던킨·배스킨라빈스·파스쿠찌 1,000원 환급할인
+        source: page
+        evidence: ['Reward OFF | 파리바게뜨, 던킨도너츠, 배스킨라빈스, 파스쿠찌 | 1,000원 | 1만원 이상 결제 시', '월 할인한도: 5천원', '오프라인 파리바게뜨, 던킨도너츠, 배스킨라빈스, 파스쿠찌 가맹점에서 1만원 이상 결제 시 할인 제공', '상품권(선불전자지급수단 포함) 충전/구매, 입점(마트, 백화점, 역사 등) 매장 이용 시 할인 제외', 실적유예기간 미적용]
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette, pascucci]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 100000}
+        unmodeled: [마트·백화점·역사 입점 매장은 빠진다]
+    unmodeled: ['해피오더 결제창, 해피포인트 앱의 해피마켓 결제창, 두 앱에서 해피페이로 1만원 이상 결제할 때 주는 각 1,000원 환급할인(각 월 5천원)은 앱 결제창을 가릴 공통 가맹점과 결제수단이 없어 계산하지 않는다', 해피포인트 멤버십 현장적립은 해피포인트가 주는 혜택이라 계산하지 않는다, '후불교통요금, 무승인금액, 정부지원금, 포인트리 충전금액은 실적에서 빠진다', 월 할인한도는 본인회원 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: name, question: 색인 이름은 쿠팡 와우 KB체크카드였지만 제휴코드 09637 상품 페이지는 해피포인트 해피리워드 KB국민 체크카드다. 페이지 이름을 따랐다, assumed: 해피포인트 해피리워드 KB국민 체크카드}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 해피가맹점 할인만 담았다. 원문 지방세 제외는 지방세, 상하수도, 세외수입이라 tax.local과 utility.water로 옮겼다.

@@ -1,0 +1,37 @@
+card: woori-500105
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 특별과 기본 적립 각 1건
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, region: overseas}
+  - {at: 2026-11-05T11:00, amount: 100000, merchant: shilla_dfs}
+  - {at: 2026-11-05T12:00, amount: 20000, category: hospital}
+  - {at: 2026-11-05T13:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-05T14:00, amount: 20000, merchant: cgv}
+  - {at: 2026-11-05T15:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-05T16:00, amount: 30000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {special-overseas-2: 2000}, counted: 0}
+  - {payment: 1, benefits: {special-dutyfree-2: 2000}}
+  - {payment: 2, benefits: {special-hospital-15: 300}}
+  - {payment: 3, benefits: {special-coffee-15: 300}}
+  - {payment: 4, benefits: {special-movie-15: 300}}
+  - {payment: 5, benefits: {special-telecom-15: 750}}
+  - {payment: 6, benefits: {basic-1: 300}}
+  calc: 2%는 2,000점씩, 1.5%는 300, 300, 300, 750점, 기본 1%는 300점. 해외는 실적 제외
+- name: 실적 직전 499999 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T16:00, amount: 30000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 덜 주는 해석으로 50만원 미만은 적립 없음
+- name: 주유 리터당 60원 건당 10만원까지
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: s_oil, amount: 120000}
+  expect:
+  - {payment: 0, benefits: {fuel-60-per-liter: 3229, basic-1: 1200}}
+  calc: 10만원 / 1858원 x 60원 = 3229.27, 원 미만 버림. 기본 1% 1,200점

@@ -1,0 +1,54 @@
+schema_version: 2
+id: hyundai-158097
+issuer: hyundai
+name: 현대카드 Teens
+short_name: 현대 Teens
+search_names: [틴즈카드, 현대카드 Teens, 현대카드 틴즈]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 2000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/%28%EC%83%81%ED%92%88%EC%84%A4%EB%AA%85%EC%84%9C%29%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20Teens_260801.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-08-01
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 100000]
+    spend:
+      exclude_categories: [annual_fee, tax]
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    limits:
+      - {key: teens-basic-monthly, per: month, amount: 5000}
+    benefits:
+      - key: teens-basic-2
+        title: 커피·패스트푸드·대중교통 2% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 10만원 이상 시 청소년이 자주 이용하는 4개 영역 2% 청구 할인, '커피전문점 : 스타벅스, 투썸플레이스, 이디야커피, 빽다방', '패스트푸드 : 맥도날드, 롯데리아, KFC, 버거킹, 맘스터치', '대중교통 : 시내버스(시외/고속버스 제외), 지하철, 택시', 대상점 통합해 최대 월 5천원 할인 한도, 신규 발급 시 카드 수령 등록월 다음 달 이용 건까지는 전월 이용 금액 10만원 미만도 혜택 제공]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+          merchants: [burger_king, ediya, kfc, lotteria, mcdonalds, moms_touch, paik_coffee, starbucks, twosome]
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: teens-basic-monthly}
+        tiers: {from: 100000}
+      - key: teens-convenience-2
+        title: 편의점 현장 결제 2% 청구 할인
+        source: manual
+        evidence: ['편의점 : CU, GS25, 이마트24, 세븐일레븐', 편의점은 현장 결제 시만 혜택 적용, 대상점 통합해 최대 월 5천원 할인 한도]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: teens-basic-monthly}
+        tiers: {from: 100000}
+    unmodeled: ['별도 가맹점번호로 승인되는 간편결제, PG결제, 키오스크 등 일부 결제는 할인하지 않는다', '백화점, 할인점, 쇼핑몰 내 입점 매장과 공동가맹점, 온라인 선물하기는 할인하지 않는다', 택시 앱 결제는 현대카드 가맹점 업종 분류에 따라 할인 여부가 정해진다, 현대카드 프로모션 할인이 적용된 결제는 할인하지 않는다, 사후 승인 가맹점 이용 금액은 매출일자 달의 실적으로 센다, 만 12~18세 자녀에게 발급하는 가족 신용카드이고 일시불만 쓸 수 있다]
+open_questions:
+  - {path: product_codes, question: 카드 상세 주소의 상품 코드를 확인하지 못했다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 상품설명서 파일 이름의 260801을 시행일로 보았다. 출시일은 2024-11-27이다, assumed: '2026-08-01'}
+notes: 2026-10-11 공식 상품설명서 대조. 부모 회원이 신청해 만 12~18세 자녀에게 주는 가족 신용카드다. 연회비 국내전용 2,000원(제휴 2,000). 전월 일시불 10만원 이상이면 편의점 4곳, 커피 4곳, 패스트푸드 5곳, 시내버스·지하철·택시 2% 청구할인, 통합 월 5천원. 편의점은 현장 결제만이라 혜택을 둘로 나눠 한도를 함께 쓴다. 실적은 전월 1일~말일 일시불이고 연회비, 이자, 공과금만 뺀다. 취소는 승인월에서 뺀다.

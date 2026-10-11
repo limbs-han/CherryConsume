@@ -1,0 +1,105 @@
+card: kb-09169
+holder:
+  started_on: '2026-01-01'
+  options: [{option: pack, choice: worker, effective_from: '2026-01-01'}]
+cases:
+- name: 버스 10% 30만 구간
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.bus_city}
+  expect:
+  - {payment: 0, benefits: {transit-10: 3000}, counted: 0}
+  calc: 30,000 × 10% = 3,000. 버스는 실적 제외
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.bus_city}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 미만 혜택 없음
+- name: 통신 자동이체 10% 한도 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: lg_uplus, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-10: 5000}, counted: 0}
+  calc: 6,000 중 한도 5,000. 할인받은 건 실적 제외
+- name: SK주유 리터당 60원 월 20만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: sk_energy, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 200000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-sk-60: 1614}}
+  - {payment: 1, benefits: {fuel-sk-60: 4843}}
+  calc: 50,000/1,858 × 60 = 1,614. 남은 15만원 150,000/1,858 × 60 = 4,843
+- name: 영화 3500
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: megabox, channel: online}
+  expect:
+  - {payment: 0, benefits: {movie-3500: 3500}, counted: 0}
+  calc: 승인건당 3,500
+- name: 해외 5% 캐시백은 실적 포함
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-5: 3000}, counted: 60000}
+  calc: 60,000 × 5% = 3,000. 해외 캐시백은 실적 제외 예외
+- name: 직장인팩 커피 7% 60만 구간
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {worker-cafe-7: 14000}}
+  calc: 21,000 중 60만 구간 한도 14,000
+- name: 직장인팩 편의점 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: convenience}
+  expect:
+  - {payment: 0, benefits: {worker-food-5: 500}}
+  calc: 10,000 × 5% = 500
+- name: 생활팩 마트·백화점·제과
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: life, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-07T10:00, amount: 10000, category: restaurant.bakery}
+  expect:
+  - {payment: 0, benefits: {life-mart-7: 3500}}
+  - {payment: 1, benefits: {life-department-5: 2500}}
+  - {payment: 2, benefits: {life-cafe-5: 500}}
+  calc: 3,500, 2,500, 500
+- name: 교육팩 학원 10만원 이상과 서점
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: education, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: education.academy, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 99999, category: education.academy, channel: offline}
+  - {at: 2026-11-07T10:00, amount: 20000, merchant: kyobo_book, channel: offline}
+  expect:
+  - {payment: 0, benefits: {edu-academy-5: 5000}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {edu-book-5: 1000}}
+  calc: 학원 5,000. 10만원 미만 제외. 서점 1,000
+- name: 쇼핑팩 G마켓·쿠팡·ZARA
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: shopping, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gmarket, channel: online}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: coupang, channel: online}
+  - {at: 2026-11-07T10:00, amount: 50000, merchant: zara, channel: offline}
+  expect:
+  - {payment: 0, benefits: {shop-online-7: 3500}}
+  - {payment: 1, benefits: {shop-social-5: 2500}}
+  - {payment: 2, benefits: {shop-spa-5: 2500}}
+  calc: 3,500, 2,500, 2,500

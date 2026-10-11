@@ -1,0 +1,142 @@
+schema_version: 2
+id: kb-02229
+issuer: kb
+name: KB국민 레고랜드카드
+short_name: KB 레고랜드
+kind: credit
+product_codes:
+  - '02229'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02229', fetched_at: '2026-10-11', review_no: 제2022-C1a-00741호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility.electricity, utility.water]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 전용 가맹점 결제와 할인하지 않는 다른 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    limits:
+      - key: snack
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - key: shopping
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: legoland-10
+        title: 레고랜드 코리아 10% 청구할인
+        source: page
+        evidence: ['레고랜드 코리아 1일이용권, 연간이용권, 호텔 숙박, 리조트 내 이용금액(식음료/기프트샵 등) | 10% | 3만원 | 5만원 | 1만원 이상 이용 시', 연간 최대 30만원 까지 할인 제공(연간 할인한도 30만원), 레고랜드 코리아 홈페이지 外 판매대행업체 등에서 구매 시 할인 제외, 레고랜드 코리아가 제공하는 KB국민카드 회원 할인과 중복 적용 (당일 예매 및 현장 매표소 구매건은 할인 제외)]
+        target:
+          merchants: [legoland_korea]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 30000, 800000: 50000}
+          - {per: year, amount: 300000}
+        tiers: {from: 400000}
+        unmodeled: [당일 예매와 현장 매표소 구매 이용권은 할인에서 빠진다, 레고랜드 코리아 홈페이지가 아닌 판매대행업체 구매는 할인에서 빠진다]
+      - key: snack-10
+        title: 배달앱·커피·제과·패스트푸드 10% 청구할인
+        source: page
+        evidence: ['배달의민족, 요기요, 마켓컬리 ,커피전문점, 제과/아이스크림점, 패스트푸드 업종 | 10% | 5천원 | 1만원 | 1만원 이상 이용 시', '커피전문점, 제과/아이스크림점, 패스트푸드 업종은 당사 가맹점 업종 분류 기준에 따름']
+        target:
+          categories: [cafe, restaurant.bakery, restaurant.fastfood]
+          merchants: [baemin, baskin_robbins, kurly, yogiyo]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: snack}
+        tiers: {from: 400000}
+      - key: shopping-online-5
+        title: G마켓·옥션·11번가·쿠팡·위메프·티몬 5% 청구할인
+        source: page
+        evidence: ['온라인쇼핑 : G마켓, 옥션, 11번가', '소셜커머스 : 쿠팡, 위메프, 티몬', 5% | 5천원 | 1만원 | 1만원 이상 이용 시, '온라인쇼핑몰, 소셜커머스는 상품권, 여행, 항공권, 티켓, 도서, 별도 팝업사이트 이용금액은 제외']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, tmon, wemakeprice]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 400000}
+        unmodeled: [상품권·여행·항공권·티켓·도서와 별도 팝업사이트 결제는 할인에서 빠진다]
+      - key: shopping-mart-5
+        title: 이마트·롯데마트·홈플러스 5% 청구할인
+        source: page
+        evidence: ['대형마트 : 이마트, 롯데마트, 홈플러스', '대형마트 온라인 결제, 상품권 구매 및 임대매장, SSM(이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스 등) 이용금액 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 400000}
+        unmodeled: [대형마트 임대매장 결제는 할인에서 빠진다]
+      - key: education-5
+        title: 학습지 5% 청구할인
+        source: page
+        evidence: ['교육 : 학습지, 문방구점 업종', 학습지, 문방구점 업종은 당사 가맹점 업종 분류 기준에 따름]
+        target:
+          categories: [education.study_material]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 400000}
+        unmodeled: [문방구점 업종도 대상이지만 담을 업종이 없어 계산하지 않는다]
+      - key: kbpay-5
+        title: G마켓·옥션·11번가 KB Pay 5% 청구할인
+        source: page
+        evidence: ['G마켓, 옥션, 11번가, KB Pay 이용 | 5% | 5천원 | 1만원 이상 이용 시', '상품권, 여행, 항공권, 티켓, 도서, 별도 팝업사이트 및 일반결제(ISP) 제외', '대형마트/온라인쇼핑/교육 청구할인과 서비스 중복적용 가능하며, 서비스별 할인한도는 각각 차감']
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - payment: [kb_pay]
+          - {channel: online}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        stack: kbpay
+      - key: overseas-5
+        title: 해외 가맹점 5% 캐시백
+        source: page
+        evidence: [해외 가맹점 | 5% | 1만원 | 1만원 이상 이용 시, 당월 해외이용금액을 합산하여 할인 캐시백 금액 산정 후 익월 둘째 주에 결제계좌로 입금, 해외 이용금액은 일시불 매입 완료된 금액 기준]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 400000}
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 없이 40만원 구간 혜택을 주는 신규 특례는 계산하지 않는다, 정부지원금(보육료·유치원보조비·바우처)과 무승인전표(자판기·터널통행료·항공기내 이용)는 실적에서 빠진다, 할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 실적 제외 '교통요금'이 후불교통만인지 교통 전체인지 분명하지 않다. 덜 주는 쪽으로 교통 업종 전체를 실적에서 뺐다. 택시는 남겼다., assumed: transit}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 공통 가맹점 legoland_korea가 필요하다. expand7 kb-02230 레고랜드 체크카드가 제안한 정의와 같다. 서비스받은 결제는 금액 전체가 실적에서 빠진다.

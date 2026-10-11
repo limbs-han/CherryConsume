@@ -1,0 +1,60 @@
+card: kb-02088
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 10만 구간 지하철 5%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 1500, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-eco: 75}, counted: 0}
+  calc: 1,500원 5% 75점. 후불교통 실적 제외
+- name: 10만 경계 직전
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-05T08:00, amount: 20000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 10만원 미만 적립 없음. 고속버스는 실적 포함
+- name: 10만 구간 인터넷쇼핑 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 쇼핑은 30만원 이상부터
+- name: 50만 구간 인터넷쇼핑 2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket}
+  expect:
+  - {payment: 0, benefits: {online-shopping-eco: 2000}}
+  calc: 100,000원 2% 2,000점
+- name: 100만 구간 마트 2% 고속버스 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart}
+  - {at: 2026-11-06T10:00, amount: 30000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {mart-eco: 2000}}
+  - {payment: 1, benefits: {transit-eco: 3000}}
+  calc: 마트 2% 2,000점, 고속버스 10% 3,000점
+- name: 30만 구간 쇼핑 5천점 한도 함께
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 400000, merchant: gmarket}
+  - {at: 2026-11-06T10:00, amount: 400000, merchant: emart}
+  expect:
+  - {payment: 0, benefits: {online-shopping-eco: 4000}}
+  - {payment: 1, benefits: {mart-eco: 1000}}
+  calc: 1% 4,000점 뒤 남은 1,000점
+- name: 신규 등록월 유예
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-11-01'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket}
+  expect:
+  - {payment: 0, benefits: {online-shopping-eco: 1000}}
+  calc: 사용등록월 말까지 쇼핑 30만 구간 1%

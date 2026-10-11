@@ -1,0 +1,47 @@
+schema_version: 2
+id: woori-500056
+issuer: woori
+name: U+ X 36 우리카드
+kind: credit
+product_codes:
+  - '500056'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500056', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-05-01'
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefits:
+      - key: uplus-autopay
+        title: LG U+ 통신요금 자동납부 청구할인 (전월 40만 8천원, 80만 1만3천원, 120만 1만8천원)
+        source: page
+        evidence: ['40만원 이상 ~ 80만원 미만 | 8,000원 | 5,000원 | LG U+ 통신요금 자동납부 필수', '80만원 이상~ 120만원미만 | 13,000원', '120만원 이상 | 18,000원', 'LG U+ 통신요금 자동납부 금액이 카드사에 청구되는 첫 서비스 적용월부터 36개월간 전월 이용실적별 8천원/1.3만원/1.8만원의 월 할인한도가 적용되며, 37개월 이후 전월 이용실적 40만원 이상 시 5천원 월 할인한도가 적용됩니다.', LG U+ 통신요금 자동납부 건이 여러 건인 경우 합산하여 월 할인한도 내에서 통합 할인 적용됩니다.]
+        target:
+          merchants: [lg_uplus]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {400000: 8000, 800000: 13000, 1200000: 18000}
+            adjust:
+              - when:
+                  card_month: {min: 36}
+                amount: 5000
+        tiers: {from: 400000}
+        unmodeled: [가족카드는 청구할인을 받지 못한다, 36개월은 자동납부가 처음 청구된 달부터 센다. 계산은 카드 사용 시작 달부터 세어 37번째 달부터 5천원으로 둔다, 1~36개월 한도는 처음 발급한 경우만이다. 교체나 재발급해도 첫 적용 달 기준으로 소진된다, 실적 미충족이나 자동납부 미등록으로 할인을 못 받아도 그 달 서비스는 소진된다]
+    unmodeled: [가족카드 전월 이용실적은 본인카드와 합산한다, 해외 결제와 대중교통·통신요금 자동납부 같은 무승인 결제는 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, LG U+ 단말기 36개월 장기할부 서비스는 할인 혜택이 아니라 계산하지 않는다, '공공임대료, 관세, 정부지원금, 환금성 업종, 국가·공공기관 가맹점 이용금액은 실적에서 빠진다']
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-05-01. 연회비 25,000원. 전월 국내외 40만/80만/120만 이상 LG U+ 통신요금 자동납부 월 8천/1만3천/1만8천원, 37개월째부터 40만 이상 5천원. 신규 다음 달 말까지 40만 구간. woori-103751 U+ X 우리카드와 비슷하나 한도와 기간이 다른 상품이다.

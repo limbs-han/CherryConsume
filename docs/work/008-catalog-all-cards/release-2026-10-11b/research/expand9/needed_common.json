@@ -1,0 +1,128 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "doosan_bears_ticket",
+      "name": "두산베어스 홈경기 입장권",
+      "category": "sports",
+      "aliases": [
+        "두산베어스 입장권",
+        "두산베어스 티켓"
+      ]
+    },
+    "card_id": "kb-02212",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02212",
+    "evidence": "홈경기 티켓/굿즈&용품 10% 환급할인. 홈경기 티켓 온라인 두산베어스 공식 홈페이지(www.doosanbears.com), NOL 티켓 / 오프라인 잠실야구장 내 매표소 4개소"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "doosan_bears_wefan",
+      "name": "두산베어스 위팬샵",
+      "category": "other",
+      "aliases": [
+        "위팬샵",
+        "두산베어스 위팬",
+        "베어스하우스"
+      ]
+    },
+    "card_id": "kb-02212",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02212",
+    "evidence": "굿즈&용품 온라인 위팬 공식 온라인샵(www.doosanbearswefan.shop) / 오프라인 잠실야구장 내야·외야 위팬샵, 내야 NOL 상품샵, 외야 베어스하우스"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "legoland_korea",
+      "name": "레고랜드 코리아",
+      "category": "other",
+      "aliases": [
+        "레고랜드",
+        "레고랜드 코리아",
+        "LEGOLAND"
+      ]
+    },
+    "card_id": "kb-02229",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02229",
+    "evidence": "레고랜드 코리아 1일이용권, 연간이용권, 호텔 숙박, 리조트 내 이용금액(식음료/기프트샵 등) 10% 청구할인. expand7 kb-02230이 제안한 key와 정의를 그대로 쓴다"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "carrot_insurance",
+      "name": "캐롯손해보험",
+      "category": "insurance.private",
+      "aliases": [
+        "캐롯손해보험",
+        "캐롯",
+        "한화손해보험 캐롯",
+        "CARROT"
+      ]
+    },
+    "card_id": "lotte-p14251-a14251",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14251-A14251",
+    "evidence": "한화손해보험 캐롯 롯데카드로 한화손해보험 캐롯료 자동납부 연결 시에만 결제일 할인 혜택을 받으실 수 있습니다."
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lina_life",
+      "name": "라이나생명",
+      "category": "insurance.private",
+      "aliases": [
+        "라이나생명",
+        "라이나생명보험",
+        "LINA"
+      ]
+    },
+    "card_id": "lotte-p15497-a15497",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15497-A15497",
+    "evidence": "라이나생명 보험엔로카로 라이나생명 보험료 자동이체 연결 시에만 결제일 할인 혜택을 받으실 수 있습니다."
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "dominos_pizza",
+      "name": "도미노피자",
+      "category": "restaurant.general",
+      "aliases": [
+        "도미노피자",
+        "도미노",
+        "DOMINO'S PIZZA"
+      ]
+    },
+    "card_id": "samsung-aap1692",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlHI0XkZCVUUvHd%2Bo4ptDBQ%3D&sn=1",
+    "evidence": "라이프스타일 30% 할인 Food 배달의민족, 써브웨이, 쉐이크쉑, 도미노피자"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_rental_care",
+      "name": "현대렌탈케어",
+      "category": "other",
+      "aliases": [
+        "현대렌탈케어"
+      ]
+    },
+    "card_id": "woori-103738",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103738",
+    "evidence": "현대렌탈케어 우리카드Ⅱ 렌탈요금 자동납부 할인. 현대큐밍과 같은 회사인지 원문으로 확인하지 못해 따로 둔다"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kd_navien_subscription",
+      "name": "경동나비엔 구독",
+      "category": "other",
+      "aliases": [
+        "경동나비엔 구독",
+        "나비엔 구독",
+        "경동나비엔"
+      ]
+    },
+    "card_id": "woori-104176",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104176",
+    "evidence": "경동나비엔 구독료 자동납부 청구할인 서비스. 30만원 이상 ~ 70만원 미만 10,000원, 70만원 이상 ~ 150만원 미만 15,000원, 150만원 이상 25,000원"
+  }
+]

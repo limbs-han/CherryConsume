@@ -1,0 +1,22 @@
+card: hyundai-trste2
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: reward, choice: m_point, effective_from: 2026-01-01}
+cases:
+- name: 50만 이상 1.5% 반올림
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4639, category: cafe}
+  - {at: 2026-11-06T10:00, amount: 10000, category: cafe, region: overseas}
+  expect:
+  - {payment: 0, benefits: {base-m-1-5: 70}, counted: 4639}
+  - {payment: 1, benefits: {base-m-1-5: 150}, counted: 10000}
+  calc: 4,639 x 1.5% = 69.58 반올림 70. 가이드북 예시
+- name: 50만 직전은 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 50만 미만 혜택 제외

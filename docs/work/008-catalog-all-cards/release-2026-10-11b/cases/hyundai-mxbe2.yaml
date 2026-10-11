@@ -1,0 +1,56 @@
+card: hyundai-mxbe2
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 쿠팡 10% 할인과 1% 적립을 함께
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-shopping-10: 5000, base-all-1: 500}, counted: 0}
+  calc: 50,000 × 10% = 5,000원 할인, 50,000 × 1% = 500P. 할인 받은 결제는 실적 제외
+- name: 100만 직전은 1%만
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-all-1: 500}, counted: 50000}
+  calc: 50만 구간이라 영역 할인 없음. 500P
+- name: 200만 구간 편의점 월 2만원 한도
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-06T10:00, amount: 300000, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {convenience-10: 20000, base-all-1: 3000}, counted: 0}
+  calc: 30,000원 할인 중 월 20,000원. 1% 3,000P
+- name: 100만 구간 주유 월 1만원 한도와 백화점은 따로
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 150000, category: fuel}
+  - {at: 2026-11-08T10:00, amount: 50000, merchant: hyundai_department}
+  expect:
+  - {payment: 0, benefits: {fuel-transport-10: 10000, base-all-1: 1500}, counted: 0}
+  - {payment: 1, benefits: {department-store-10: 5000, base-all-1: 500}, counted: 0}
+  calc: 주유 15,000원 중 월 10,000원. 백화점은 영역 한도가 따로라 5,000원
+- name: 50만 직전은 혜택 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 50만 미만
+- name: 1% 적립은 건별 반올림
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4959, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-all-1: 50}, counted: 4959}
+  calc: 4,959 × 1% = 49.59, 반올림 50P
+- name: 신규 수령 다음 달까지 100만 구간
+  holder: {started_on: 2026-11-02}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-10T10:00, amount: 20000, merchant: paris_baguette}
+  expect:
+  - {payment: 0, benefits: {coffee-bakery-10: 2000, base-all-1: 200}, counted: 0}
+  calc: 수령월이라 전월 0원도 100만 구간. 2,000원 할인, 200P

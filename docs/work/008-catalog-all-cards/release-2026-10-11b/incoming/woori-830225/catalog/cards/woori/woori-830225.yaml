@@ -1,0 +1,164 @@
+schema_version: 2
+id: woori-830225
+issuer: woori
+name: 우리WON멤버스카드(구. 위비멤버스카드)
+kind: credit
+product_codes:
+  - '830225'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=830225', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2016-07-18'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_express, utility]
+      unmodeled: [정부지원금은 적립 제외]
+    limits:
+      - {key: points, per: month, amount: 50000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [points-mart-1-5, points-academy-1-5, points-telecom-1-5, points-hospital-1-5, points-duty-free-1-5, points-overseas-1-5, points-base-0-7]
+        spill: none
+      - {key: discount, pick: best, spill: none}
+    benefits:
+      - key: points-mart-1-5
+        title: 대형할인점 우리WON꿀머니 1.5% 적립
+        source: page
+        evidence: ['대형할인점(롯데마트, 이마트, 홈플러스) | 1.5%', 적립 한도 | 월 5만꿀, '학원, 대형할인점 업종은 온라인 결제 제외', 우리WON꿀머니 적립(결제건당 1만원 이상 시 적립), 전월 국내 가맹점 이용금액 30만원 (무이자할부 제외) 이상 시 적립 제공]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 300000}
+      - key: points-academy-1-5
+        title: 학원 우리WON꿀머니 1.5% 적립
+        source: page
+        evidence: [학원 | 1.5%, '학원, 대형할인점 업종은 온라인 결제 제외']
+        target:
+          categories: [education.academy]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 300000}
+      - key: points-telecom-1-5
+        title: 이동통신 자동이체 우리WON꿀머니 1.5% 적립
+        source: page
+        evidence: [이동통신(자동 이체건에 한함) | 1.5%, '이동통신은 휴대전화 요금에 한하여 적립되며, 본 카드로 통신3사(SKT, KT, LGU+)에 자동이체 신청 후 결제한 건에 대해서만 적립 적용', '(인터넷, 유선전화 등 결합상품 신청 시에는 적립 제외)']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 300000}
+        unmodeled: [인터넷·유선전화 결합상품을 신청하면 적립 제외]
+      - key: points-hospital-1-5
+        title: 병의원 우리WON꿀머니 1.5% 적립
+        source: page
+        evidence: [병의원(동물병원 포함) | 1.5%]
+        target:
+          categories: [hospital, pet.vet]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 300000}
+      - key: points-duty-free-1-5
+        title: 면세점 우리WON꿀머니 1.5% 적립
+        source: page
+        evidence: [면세점 | 1.5%]
+        target:
+          categories: [travel.duty_free]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 300000}
+      - key: points-overseas-1-5
+        title: 해외 우리WON꿀머니 1.5% 적립
+        source: page
+        evidence: [해외 | 1.5%]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 300000}
+      - key: points-base-0-7
+        title: 국내 가맹점 우리WON꿀머니 0.7% 적립
+        source: page
+        evidence: [상기 가맹점 외 국내 적립대상 가맹점 | 0.7%, 우리WON꿀머니 적립(결제건당 1만원 이상 시 적립), '적립/사용 단위 : 꿀 (1꿀 = 1원)']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 0.7}
+        limits:
+          - {shared: points}
+        tiers: {from: 300000}
+        unmodeled: [우리WON마켓 2% 적립은 담을 가맹점이 없어 0.7%로 계산한다]
+      - key: movie-3000
+        title: 전국 영화관 3천원 청구할인
+        source: page
+        evidence: [전국 영화관 청구할인, '12,000원 이상 결제 시 3,000원 할인', '통합 월 1회, 연 6회 제공', 예매대행사이트를 통한 예매 시 할인 제외]
+        target:
+          categories: [movie]
+        when:
+          - amount: {min: 12000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+        tiers: {from: 300000}
+        stack: discount
+        unmodeled: [예매대행사이트 결제는 할인 제외]
+      - key: coffee-10
+        title: 스타벅스·이디야·폴바셋 10% 청구할인
+        source: page
+        evidence: ['스타벅스, 이디야, 폴바셋 10% 할인', '통합 월 1회, 연 10회 제공 (건당 1천원까지 할인)', '커피브랜드의 상품권, 선불카드 구입 / 충전 등의 이용금액은 할인 제외', '백화점 / 대형할인점 내 매장, 미군부대 매장 제외']
+        target:
+          merchants: [ediya, paul_bassett, starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, count: 1}
+          - {per: year, count: 10}
+        tiers: {from: 300000}
+        stack: discount
+        unmodeled: [백화점·대형할인점 내 매장과 미군부대 매장은 할인 제외]
+    unmodeled: [가족카드는 별도 카드로 보고 실적을 따로 센다. 가족카드 꿀머니는 본인에게 합산 적립, 교통카드 이용금액과 통신료 자동이체 금액은 매출표 접수일 기준으로 실적에 들어간다, 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '치킨·피자 10% 청구할인(통합 월 1회, 연 6회, 건당 5천원)은 대상 브랜드 가맹점이 공통 파일에 없어 계산하지 않는다', '보너스 적립 6개월마다 국내 4백만원 이상 이용 시 15,000꿀은 기간 누적이라 계산하지 않는다', Two-in-One 체크 결제는 0.3% 적립이라 계산하지 않는다, 프리미엄 투어 서비스는 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택 구성의 시행일을 찾지 못해 상품 출시일로 두었다. 페이지는 2023년 10월 기준이다, assumed: '2016-07-18'}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2016-07-18, 페이지 2023년 10월 기준. 연회비 Mastercard 12,000원, BC 국내전용 10,000원. 전월 국내 30만 이상 시 결제건당 1만원 이상 우리WON꿀머니 대형할인점·학원·이동통신 자동이체·병의원·면세점·해외 1.5%, 그 외 국내 0.7%, 월 5만꿀. 꿀머니는 모아포인트처럼 1꿀 1원으로 계산했다. 영화 3천원 월1회 연6회, 커피 10% 월1회 연10회 건당 1천원. 신규 등록 다음 달 말까지 실적 조건 없음.

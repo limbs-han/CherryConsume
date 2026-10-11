@@ -1,0 +1,29 @@
+card: kb-09608
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: CU 5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu}
+  expect:
+  - {payment: 0, benefits: {yummy-cvs-5: 500}}
+  calc: 10,000원 × 5% = 500원
+- name: 카페 5% 뒤 통합 한도 1천원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: olive_young}
+  expect:
+  - {payment: 0, benefits: {yummy-cafe-5: 500}}
+  - {payment: 1, benefits: {enjoy-5: 500}}
+  calc: 첫 결제 500원, 둘째 1,000원 중 통합 한도 남은 500원
+- name: 앱스토어 5천원 미만 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4999, merchant: app_store}
+  - {at: 2026-11-05T11:00, amount: 5000, merchant: google_play}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {play-5: 250}}
+  calc: 5천원 이상만. 5,000원 × 5% = 250원

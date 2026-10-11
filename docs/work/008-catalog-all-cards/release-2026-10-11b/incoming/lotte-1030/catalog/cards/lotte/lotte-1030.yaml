@@ -1,0 +1,37 @@
+schema_version: 2
+id: lotte-1030
+issuer: lotte
+name: 롯데 플래티넘 카드
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 100000}
+  - {scope: global, brand: mastercard, amount: 100000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2006-A00016_20260922_10011.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2006-10-16'
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: original_month, exclude_applied: 0}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, insurance.social, tax]
+      unmodeled: ['지방세·세금납부, 고용보험, 산재보험과 같은 일부 가맹점의 매출은 적립에서 빠진다. 일부 가맹점의 전체 목록이 없어 세금, 4대보험, 아파트 관리비, 연회비만 뺐다', 스마트 캐시백과 오토캐시백 매출은 적립에서 빠진다]
+    benefits:
+      - key: lotte-lpoint-0-2
+        title: 국내외 가맹점 0.2% L.POINT 적립
+        source: manual
+        evidence: [롯데 플래티넘 카드 | 이용금액의 0.2% L.POINT 적립, 국내 및 해외 가맹점에서 롯데 플래티넘 카드로 결제 시 롯데카드 제공 L.POINT 0.2% 적립, L.POINT 적립기준에 따라 결제금액 1천원 당 해당 적립률로 포인트가 적립됩니다.]
+        target: {all: true}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 2}
+    unmodeled: [국내선 동반자 무료항공권 연 1회, 공항 라운지 무료입장 연 3회, VISA·MASTER Platinum 국제브랜드 서비스는 결제 혜택이 아니라 계산하지 않는다, 가족카드 이용금액의 포인트는 본인 회원에게 합산 적립된다]
+open_questions:
+  - {path: product_codes, question: '롯데카드 판매 카드 목록(일반, 제휴, 프리미엄)과 공시 목록에 상품 코드가 없어 id를 공시 색인 번호로 두었다. 지금도 신규 발급하는지 확인한다', assumed: '[]'}
+notes: 2026-10-11 상품 안내장(2026년 8월 기준, 여신금융협회 심의필 제2026-C1a-13110호) 대조. 출시일 2006-10-16. 해외겸용(VISA, MASTER) 연회비 10만원, 가족카드 5만원. 국내외 가맹점 0.2% L.POINT 적립, 1천원당 2포인트로 옮겼다. 실적 조건과 한도 문구 없음. 같은 안내장의 SKYPASS와 아시아나클럽 플래티넘은 다른 카드라 담지 않았다.

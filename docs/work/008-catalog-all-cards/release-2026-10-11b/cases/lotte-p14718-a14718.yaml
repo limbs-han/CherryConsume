@@ -1,0 +1,26 @@
+card: lotte-p14718-a14718
+cases:
+- name: 국내외 기본 캐시백과 무이자 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+  - at: 2026-10-07T12:00
+    amount: 100000
+    payment_method: physical_card
+    region: overseas
+  - at: 2026-10-08T12:00
+    amount: 100000
+    payment_method: physical_card
+    interest_free: true
+  expect:
+  - payment: 0
+    benefits:
+      base-cashback-0-7: 700
+  - payment: 1
+    benefits:
+      base-cashback-0-7: 700
+  - payment: 2
+    benefits: {}
+  calc: 국내외 기본 캐시백과 무이자 제외

@@ -1,0 +1,239 @@
+schema_version: 2
+id: hyundai-zwk
+issuer: hyundai
+name: 현대카드Z everyday
+short_name: 현대 Z everyday
+search_names: [Z everyday, 제트 에브리데이, 현대카드Z everyday]
+kind: credit
+product_codes: [ZWK]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZWK', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/261001_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9CZ%20everyday.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-01
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [현대카드의 다른 할인이 적용된 결제는 할인에서 뺀다]
+    limits:
+      - key: total
+        per: month
+        amount: {500000: 25000, 1000000: 50000}
+      - {key: restaurant-month, per: month, count: 2}
+      - {key: restaurant-day, per: day, count: 1}
+      - {key: fuel-month, per: month, count: 2}
+      - {key: fuel-day, per: day, count: 1}
+      - {key: mart-month, per: month, count: 2}
+      - {key: mart-day, per: day, count: 1}
+    benefits:
+      - key: mobile-5
+        title: 이동통신 요금 정기결제 5% 청구 할인
+        source: manual
+        evidence: ['이동통신 요금 : SKT, KT, LG U+', '이동통신 요금 5%, 월 할인 한도 5천원', 이동통신 요금은 현대카드로 정기결제 신청 후 매달 발생한 결제 건에 대해 기본 혜택 적용]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - region: domestic
+            billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: transit-5
+        title: 시내버스·지하철 5% 청구 할인
+        source: manual
+        evidence: ['대중교통 : 시내버스, 지하철', '대중교통 5%, 월 할인 한도 5천원', 시외버스 및 고속버스 결제 건은 기본 혜택 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: online-5
+        title: 온라인몰 5% 청구 할인
+        source: manual
+        evidence: ['온라인몰 : 네이버플러스 스토어, 쿠팡, SSG.COM, G마켓, 옥션', '월 4회, 결제 건당 1천원, 영역별 일 1회']
+        target:
+          merchants: [auction, coupang, gmarket, naver_plus_store, ssg_com]
+        when:
+          - {region: domestic, channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, count: 4}
+          - {per: day, count: 1}
+          - {per: txn, amount: 1000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: cafe-5
+        title: 커피전문점 5% 청구 할인
+        source: manual
+        evidence: ['커피전문점 : 스타벅스, 투썸플레이스, 폴바셋, 이디야커피, 메가MGC커피', '월 4회, 결제 건당 1천원, 영역별 일 1회']
+        target:
+          merchants: [ediya, mega_coffee, paul_bassett, starbucks, twosome]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, count: 4}
+          - {per: day, count: 1}
+          - {per: txn, amount: 1000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: convenience-5
+        title: 편의점 5% 청구 할인
+        source: manual
+        evidence: ['편의점 : GS25, CU, 세븐일레븐, 이마트24', '월 4회, 결제 건당 1천원, 영역별 일 1회', 편의점은 현장 결제 건에 한해 기본 혜택 적용]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic, channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, count: 4}
+          - {per: day, count: 1}
+          - {per: txn, amount: 1000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: delivery-5
+        title: 배달 앱 5% 청구 할인
+        source: manual
+        evidence: ['배달 앱 : 배달의민족, 쿠팡이츠, 요기요', '월 4회, 결제 건당 1천원, 영역별 일 1회']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, count: 4}
+          - {per: day, count: 1}
+          - {per: txn, amount: 1000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: restaurant-5
+        title: 일반음식점 평일 5% 청구 할인
+        source: manual
+        evidence: ['일반음식점 평일 5%, 주말(토·일요일) 10%, 월 2회, 결제 건당 1,000원(주말 2,000원), 영역별 일 1회', 추가 혜택은 대상 영역 주말(토·일요일) 결제 건에 한해 적용되며 평일(월~금요일) 및 주말 외 공휴일 결제 건은 기본 혜택 적용]
+        target:
+          categories: [restaurant.general]
+        when:
+          - {region: domestic}
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: restaurant-month}
+          - {shared: restaurant-day}
+          - {per: txn, amount: 1000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: restaurant-weekend-10
+        title: 일반음식점 주말 10% 청구 할인
+        source: manual
+        evidence: ['일반음식점 평일 5%, 주말(토·일요일) 10%, 월 2회, 결제 건당 1,000원(주말 2,000원), 영역별 일 1회', 추가 혜택은 대상 영역 주말(토·일요일) 결제 건에 한해 적용되며 평일(월~금요일) 및 주말 외 공휴일 결제 건은 기본 혜택 적용]
+        target:
+          categories: [restaurant.general]
+        when:
+          - {region: domestic}
+          - day:
+              in: [sat, sun]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: restaurant-month}
+          - {shared: restaurant-day}
+          - {per: txn, amount: 2000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: fuel-5
+        title: 주유소 평일 5% 청구 할인
+        source: manual
+        evidence: ['주유소 평일 5%, 주말(토·일요일) 10%, 월 2회, 결제 건당 2,500원(주말 5,000원), 영역별 일 1회', 추가 혜택은 대상 영역 주말(토·일요일) 결제 건에 한해 적용되며 평일(월~금요일) 및 주말 외 공휴일 결제 건은 기본 혜택 적용]
+        target:
+          categories: [fuel]
+        when:
+          - {region: domestic}
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: fuel-month}
+          - {shared: fuel-day}
+          - {per: txn, amount: 2500}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: fuel-weekend-10
+        title: 주유소 주말 10% 청구 할인
+        source: manual
+        evidence: ['주유소 평일 5%, 주말(토·일요일) 10%, 월 2회, 결제 건당 2,500원(주말 5,000원), 영역별 일 1회', 추가 혜택은 대상 영역 주말(토·일요일) 결제 건에 한해 적용되며 평일(월~금요일) 및 주말 외 공휴일 결제 건은 기본 혜택 적용]
+        target:
+          categories: [fuel]
+        when:
+          - {region: domestic}
+          - day:
+              in: [sat, sun]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: fuel-month}
+          - {shared: fuel-day}
+          - {per: txn, amount: 5000}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: mart-5
+        title: 대형마트 평일 5% 청구 할인
+        source: manual
+        evidence: ['대형마트 평일 5%, 주말(토·일요일) 10%, 월 2회, 결제 건당 2,500원(주말 5,000원), 영역별 일 1회', 추가 혜택은 대상 영역 주말(토·일요일) 결제 건에 한해 적용되며 평일(월~금요일) 및 주말 외 공휴일 결제 건은 기본 혜택 적용]
+        target:
+          merchants: [emart, lotte_mart, nh_hanaro_mart]
+        when:
+          - {region: domestic, channel: offline}
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: mart-month}
+          - {shared: mart-day}
+          - {per: txn, amount: 2500}
+          - {shared: total}
+        tiers: {from: 500000}
+      - key: mart-weekend-10
+        title: 대형마트 주말 10% 청구 할인
+        source: manual
+        evidence: ['대형마트 평일 5%, 주말(토·일요일) 10%, 월 2회, 결제 건당 2,500원(주말 5,000원), 영역별 일 1회', 추가 혜택은 대상 영역 주말(토·일요일) 결제 건에 한해 적용되며 평일(월~금요일) 및 주말 외 공휴일 결제 건은 기본 혜택 적용]
+        target:
+          merchants: [emart, lotte_mart, nh_hanaro_mart]
+        when:
+          - {region: domestic, channel: offline}
+          - day:
+              in: [sat, sun]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: mart-month}
+          - {shared: mart-day}
+          - {per: txn, amount: 5000}
+          - {shared: total}
+        tiers: {from: 500000}
+    unmodeled: [간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되는 결제는 할인하지 않는다, 온라인몰과 배달 앱은 공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱 결제와 배달원·가맹점 직접 결제는 제외한다, 네이버플러스 스토어는 naver.com 도메인으로 확인되는 가맹점만 할인한다, 커피전문점은 백화점·할인점·쇼핑몰 안 매장과 공동가맹점을 할인하지 않는다, 대형마트의 주차장·문화센터·임대 매장과 농협하나로마트의 구매사업장·도매형 매장은 할인하지 않는다, '이동통신 요금의 알뜰폰·선불폰·결합상품(인터넷, TV, 유선전화 등) 요금은 할인하지 않는다', 할인은 매출전표 접수 순서로 한도를 적용한다, 실적과 할인 한도와 횟수는 본인과 가족 카드를 합산한다, TV 수신료·고속도로 통행료·후불하이패스는 실적에서 뺀다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2025-07-17이고 가이드북은 2026년 10월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다, assumed: '2026-10-01'}
+notes: 2026-10-11 공식 가이드북(2026년 10월 기준) 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 20,000원(기본 10,000+제휴 10,000), 가족카드 5,000원. 전월 50만 이상 9개 영역 5%, 일반음식점·주유소·대형마트는 토·일요일 10%. 기본과 추가를 합쳐 월 2만5천원(50만 이상), 5만원(100만 이상). 영역별 한도는 가이드북 표를 따랐다. 이동통신·대중교통 월 5천원, 온라인몰·커피·편의점·배달 앱 월 4회 건당 1천원, 음식점 월 2회 건당 1천원(주말 2천원), 주유·대형마트 월 2회 건당 2천5백원(주말 5천원). 표시 영역은 일 1회. 평일 공휴일은 5%. 실적에서 무이자 할부를 빼지만 할인 받은 결제는 뺀다는 문구가 없어 실적에 넣는다. 신규 발급 시 수령 등록월 다음 달 이용 건까지 50만 구간 한도. 원문에 끝수 처리가 없어 원 미만 버림.

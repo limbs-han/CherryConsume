@@ -1,0 +1,101 @@
+schema_version: 2
+id: hyundai-alp
+issuer: hyundai
+name: 알파벳카드P
+short_name: 현대 알파벳P
+search_names: [Alphabet P, 알파벳 카드 P, 알파벳카드P]
+kind: credit
+product_codes: [ALP]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ALP', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CP%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-04-08
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [현대카드의 다른 할인이 적용된 결제는 할인에서 뺀다]
+    limits:
+      - key: extra-5
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 15000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [easypay-online-10, cafe-5, convenience-5, transit-5]
+        spill: none
+    benefits:
+      - key: easypay-online-10
+        title: 온라인 간편결제 10% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 40만원 이상 시 온라인 간편결제 10% 청구 할인, '대상 간편결제 서비스 - 네이버페이, 카카오페이, 토스페이, Apple Pay, 삼성페이', '40만원 이상 80만원 미만 : 대상 영역 통합해 월 1만원 - 80만원 이상 120만원 미만 : 월 2만원 - 120만원 이상 : 월 3만 5천원', 대상 간편결제 서비스에 알파벳카드P 등록 후 국내 온라인 가맹점 이용 시 기본 혜택 적용(해외 및 오프라인 가맹점 이용 시 제외)]
+        target: {all: true}
+        when:
+          - region: domestic
+            channel: online
+            payment: [apple_pay, kakao_pay, naver_pay, samsung_pay, toss_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 10000, 800000: 20000, 1200000: 35000}
+        tiers: {from: 400000}
+      - key: cafe-5
+        title: 커피전문점 5% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 40만원 이상 시 커피전문점, 편의점, 대중교통 5% 청구 할인, '커피전문점 : 스타벅스, 투썸플레이스, 폴바셋, 이디야커피, 메가MGC커피', '40만원 이상 80만원 미만 : 영역별 월 5천원, 대상 영역 통합해 월 5천원 - 80만원 이상 120만원 미만 : 영역별 월 5천원, 통합 월 1만원 - 120만원 이상 : 영역별 월 5천원, 통합 월 1만 5천원', 추가 혜택 영역에서 온라인 간편결제 서비스 이용 시 기본 혜택 적용되며 기본 혜택 한도 초과 시 추가 혜택 적용]
+        target:
+          merchants: [ediya, mega_coffee, paul_bassett, starbucks, twosome]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 안 매장과 공동가맹점 결제는 할인하지 않는다]
+      - key: convenience-5
+        title: 편의점 5% 청구 할인
+        source: manual
+        evidence: ['편의점 : GS25, CU, 세븐일레븐, 이마트24', 편의점은 현장 결제 건에 한해 추가 혜택 적용되며 앱에서 결제한 경우 제외]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic, channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+      - key: transit-5
+        title: 시내버스·지하철·택시 5% 청구 할인
+        source: manual
+        evidence: ['대중교통 : 시내버스, 지하철, 택시', 시외버스 및 고속버스 결제 건은 추가 혜택 제외]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+        unmodeled: [택시 앱 결제는 현대카드 업종 분류에 따라 할인 여부가 달라진다]
+    unmodeled: [PG결제 가맹점명으로 찍힌 결제는 추가 혜택에서 빠진다, 추가 혜택 영역의 온라인 간편결제가 기본 혜택 한도를 넘으면 다음 결제부터 추가 혜택으로 계산하고 같은 결제 안에서 나누지 않는다, 할인은 매출전표 접수 순서로 한도를 적용한다, 실적과 할인 한도는 본인과 가족 카드를 합산한다, TV 수신료·고속도로 통행료·후불하이패스는 실적에서 뺀다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다]
+notes: 2026-10-11 공식 가이드북(2026년 4월 기준, 출시일 2026-04-08) 대조. 연회비 국내전용과 국내외겸용(Amex Platinum) 15,000원(기본 10,000+제휴 5,000), 가족카드 5,000원. 전월 40만 이상 국내 온라인 간편결제(네이버페이·카카오페이·토스페이·Apple Pay·삼성페이) 10%를 월 1만·2만·3만5천원 한도로, 커피·편의점·대중교통 5%는 영역별 5천원, 통합 5천·1만·1만5천원. 기본과 추가는 중복되지 않아 한 묶음에 기본을 먼저 둔다. 신규 발급 시 수령 등록월 다음 달 이용 건까지 40만 구간 한도. 원문에 끝수 처리가 없어 원 미만 버림.

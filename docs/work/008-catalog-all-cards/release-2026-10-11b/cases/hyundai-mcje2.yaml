@@ -1,0 +1,41 @@
+card: hyundai-mcje2
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: VIPS 20% 현장 할인과 하루 1회
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 40000, merchant: vips}
+  - {at: 2026-11-05T19:00, amount: 40000, merchant: vips}
+  expect:
+  - {payment: 0, benefits: {cj-dining-20: 10000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 40000}
+  calc: 현장 할인이라 결제액 4만원은 할인 전 5만원의 80%다. 5만원의 20%. 같은 날 두 번째는 일 1회 한도로 없음
+- name: VIPS 1회 20만원까지만
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 300000, merchant: vips}
+  expect:
+  - {payment: 0, benefits: {cj-dining-20: 40000}, counted: 0}
+  calc: 20만원의 20%
+- name: 올리브영 10%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 18000, merchant: olive_young}
+  expect:
+  - {payment: 0, benefits: {cj-store-10: 2000}, counted: 0}
+  calc: 결제액 18,000원은 할인 전 2만원의 90%. 2만원의 10%
+- name: CJ ONSTYLE 5% 월 3만원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 700000, merchant: cj_onstyle}
+  expect:
+  - {payment: 0, benefits: {cj-onstyle-5: 30000}, counted: 0}
+  calc: 70만원의 5% 35,000원을 월 3만원으로 자른다
+- name: 10만 직전은 할인 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: olive_young}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 전월 10만원 미만

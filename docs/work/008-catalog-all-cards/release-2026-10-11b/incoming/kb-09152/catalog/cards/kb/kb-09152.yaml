@@ -1,0 +1,126 @@
+schema_version: 2
+id: kb-09152
+issuer: kb
+name: KB국민 가온플래티늄카드
+short_name: KB 가온플래티늄
+kind: credit
+product_codes:
+  - '09152'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 95000}
+  - {scope: global, brand: visa, amount: 100000}
+  - {scope: global, brand: mastercard, amount: 100000}
+  - {scope: global, brand: amex, amount: 100000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09152', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다', 부분 무이자할부 이용금액도 적립에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    stacks:
+      - {key: main}
+      - {key: weekend}
+      - {key: extra}
+    benefits:
+      - key: base-07
+        title: 국내 가맹점 0.7% 포인트리 적립
+        source: page
+        evidence: [국내 가맹점 0.7% 기본 적립]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 0.7}
+      - key: weekend-05
+        title: 주말·공휴일 0.5% 추가 적립
+        source: page
+        evidence: [주말 / 공휴일 국내 가맹점 0.5% 추가 적립, '대중교통(버스,지하철), 이동통신요금 자동납부는 추가 적립 제외 (단, 택시는 추가적립 가능)']
+        target:
+          exclude_categories: [telecom.mobile, transit.bus_city, transit.subway]
+          all: true
+        when:
+          - region: domestic
+            day:
+              in: [sat, sun]
+              holidays: include
+        reward: {type: points, program: kb_pointree, rate: 0.5}
+        stack: weekend
+        unmodeled: [이동통신요금은 자동납부만 빠지지만 이동통신 업종 전체를 뺐다]
+      - key: dining-08
+        title: 음식점·커피전문점 0.8% 추가 적립
+        source: page
+        evidence: [음식 / 커피 0.8% 추가 적립, '음식 : 일반음식점, 한식, 중식, 일식, 양식, 뷔페, 패밀리레스토랑 업종', '커피 : 커피전문점 업종 (스타벅스, 커피빈 등)']
+        target:
+          categories: [cafe, restaurant.general]
+        reward: {type: points, program: kb_pointree, rate: 0.8}
+        stack: extra
+      - key: transit-08
+        title: 버스·지하철·택시 0.8% 추가 적립
+        source: page
+        evidence: [대중교통 / 택시 0.8% 추가 적립, '대중교통 : 버스, 지하철 시외버스, 고속버스 제외']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: points, program: kb_pointree, rate: 0.8}
+        stack: extra
+      - key: telecom-08
+        title: 이동통신요금 자동납부 0.8% 추가 적립
+        source: page
+        evidence: [이동통신요금 0.8% 추가 적립, '이동통신요금: SKT, KT Olleh, LG U+ KB국민 가온플래티늄카드로 자동납부 등록 시 서비스 제공']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 0.8}
+        stack: extra
+      - key: overseas-2
+        title: 해외이용 2% 캐시백
+        source: page
+        evidence: [해외이용금액 2.0% 할인 캐시백 (월 100만원 이용금액까지), 해외이용금액은 일시불 매입완료된 금액 기준]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: month, base: 1000000}
+        unmodeled: [해외 이용금액은 일시불 매입 완료 기준으로 달을 나눈다]
+      - key: movie-3500
+        title: CGV·메가박스 온라인 예매 3,500원 청구할인
+        source: page
+        evidence: ['CGV/메가박스 온라인 영화 예매 시 승인건당 3,500원 청구할인', '할인한도: 1일 2회, 월 4회, 연간 10회', 전월 이용실적 30만원 이상 시 제공, CGV/메가박스 홈페이지 및 App을 통한 예매 시 제공됩니다.]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 3500}
+        limits:
+          - {per: day, count: 2}
+          - {per: month, count: 4}
+          - {per: year, count: 10}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: extra
+    unmodeled: [롯데월드·에버랜드·캐리비안베이 30~50% 현장할인은 이용권 종류마다 비율이 달라 계산하지 않는다, '웰컴 포인트리 5만점은 최초 발급 1회, 연회비 납부와 이용실적 20만원 이상일 때 준다. 계산하지 않는다', '플래티늄 리워드: 발급월 다음 달부터 1년 결제납부실적 500만원 이상 3만점, 1,000만원 이상 8만점, 2,000만원 이상 18만점. 연간 결제납부금액 기준이라 계산하지 않는다', 카드등급별 기본 포인트리는 적립되지 않는다, 공항 음료와 리조트 등 플래티늄 서비스는 계산하지 않는다, 실적과 한도는 가족카드 이용분과 합산한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 대중교통 무승인전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits', question: 포인트리 적립과 해외 캐시백에는 원문에 전월 실적 조건과 월 적립한도가 적혀 있지 않아 조건 없이 두었다, assumed: 조건과 한도 없음}
+notes: 2026-10-11 KB국민카드 상품 페이지(여신금융협회 심의필 제2026-C1a-10535호)를 직접 받아 대조했다. 연회비는 국내전용 9만5천원, 국내외겸용 VISA·Master·AMEX 10만원이다. 기본 0.7%에 주말·공휴일 0.5%와 업종 0.8%를 더해 받는다.

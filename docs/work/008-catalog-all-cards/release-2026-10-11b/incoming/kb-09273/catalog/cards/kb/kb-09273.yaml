@@ -1,0 +1,100 @@
+schema_version: 2
+id: kb-09273
+issuer: kb
+name: KB국민 톡톡 with 토스 카드
+short_name: KB 톡톡 with 토스
+kind: credit
+product_codes:
+  - '09273'
+  - '09483'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 12000}
+  - {scope: global, brand: visa, amount: 12000}
+  - {scope: domestic, brand: local, form: mobile, amount: 6000}
+  - {scope: global, brand: visa, form: mobile, amount: 6000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09273', fetched_at: '2026-10-11', review_no: 제2020-C1a-11259호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility.electricity, utility.water]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 전용 가맹점 결제와 할인하지 않는 다른 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다']
+    stacks:
+      - {key: main, pick: best}
+      - {key: pay, pick: best}
+    benefits:
+      - key: starbucks-50
+        title: 스타벅스 50% 청구할인
+        source: page
+        evidence: ['스타벅스 : 스타벅스(사이렌오더 포함) 50% 청구할인', 40만원 이상 | 스타벅스 | 50% | 1만원, 상품권(선물하기 등) 및 선불카드(선불전자지급수단 포함) 충전 제외]
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 400000}
+      - key: subscription-20
+        title: 유튜브 프리미엄·넷플릭스·웨이브·티빙 20% 청구할인
+        source: page
+        evidence: [구독 | 20% | 3천원, '구독 : YouTube Premium, 넷플릭스, 웨이브, 티빙', 공식 홈페이지 및 모바일(앱)을 통한 정기결제 시 제공(간편결제건 또는 앱스토어를 통한 인앱 결제건 등은 제외)]
+        target:
+          merchants: [netflix, tving, wavve, youtube_premium]
+        when:
+          - billing: [subscription]
+          - payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, mobile_tmoney, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 400000}
+      - key: online-pay-10
+        title: 온라인 간편결제 10% 청구할인
+        source: page
+        evidence: [온라인 간편결제 | 10% | 3천원, '온라인 간편결제 : KB Pay, 삼성 페이, LG 페이, 카카오페이, PAYCO, 네이버페이, 쿠페이, 스마일페이, SSGPAY, L.pay', '국내 온라인 가맹점 결제건에 한하며, 오프라인 매장 결제건(QR/바코드 결제, 스마트폰 NFC, 카카오T, 택시 등)은 제외', '스타벅스, 배달 청구할인 서비스와 중복 적용 가능하며 할인한도는 각각 차감']
+        target: {all: true}
+        when:
+          - payment: [coupay, kakao_pay, kb_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay]
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 400000}
+        stack: pay
+        unmodeled: [LG 페이 결제도 대상이지만 결제수단 목록에 없어 계산하지 않는다]
+      - key: delivery-5
+        title: 배달의민족·요기요 5% 청구할인
+        source: page
+        evidence: [배달 | 5% | 5천원, '배달 : 배달의민족, 요기요']
+        target:
+          merchants: [baemin, yogiyo]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+      - key: transit-5
+        title: 버스·지하철 5% 청구할인
+        source: page
+        evidence: [대중교통 | 5% | 3천원, '대중교통 : 버스, 지하철', '시외버스, 고속버스, 공항버스 제외', 이용대금명세서 상 기재된 이용일 기준 서비스 적용]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 400000}
+        unmodeled: [후불교통은 이용대금명세서에 적힌 이용일 기준으로 할인한다, 공항버스는 할인에서 빠진다]
+    unmodeled: [상품명에 톡톡 with가 들어간 카드는 전월 이용실적과 서비스별 월 할인한도를 함께 쓴다. 두 장 이상 가지면 앱이 실적과 할인을 카드마다 따로 계산해 더 크게 보일 수 있다, 최초 사용등록일부터 다음 달 말일까지 실적 없이도 혜택을 주는 신규 특례는 계산하지 않는다, '정부지원금(보육료·유치원보조비·바우처), 무승인전표(자판기·터널통행료·항공기내 이용)는 실적에서 빠진다', 할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2020.12.30 출시만 적었다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 실적 제외 '교통요금'이 후불교통만인지 교통 전체인지 분명하지 않다. 덜 주는 쪽으로 교통 업종 전체를 실적에서 뺐다. 택시는 남겼다., assumed: transit}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 톡톡 with Kbank 카드(09483)는 혜택과 연회비가 같아 같은 상품으로 본다. 톡톡 with Kbank(09483)는 혜택이 같은 상품이라 이 카드로 등록한다.

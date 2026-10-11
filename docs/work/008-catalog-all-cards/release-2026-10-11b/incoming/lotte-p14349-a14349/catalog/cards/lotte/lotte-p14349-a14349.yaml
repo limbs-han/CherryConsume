@@ -1,0 +1,47 @@
+schema_version: 2
+id: lotte-p14349-a14349
+issuer: lotte
+name: LOCA for 롯데마트
+kind: credit
+product_codes: [P14349-A14349]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14349-A14349', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-04-07'
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefits:
+      - key: lotte-mart-discount
+        title: 롯데마트·MAXX 5~10% 결제일 할인
+        source: page
+        evidence: ['100만원 이상 | 10% | 일 10,000원 월 30,000원 |', '50만원 이상 100만원 미만 | 5% | 일 5,000원 월 15,000원 |', 전국 롯데마트/MAXX 오프라인 매장 및 온라인 롯데마트 제타( www.lottemartzetta.com ) 이용 건에 한해 할인 혜택이 제공됩니다., 온라인 롯데마트 제타( www.lottemartzetta.com )에서 간편결제 및 PG(결제대행) 업체를 통해 결제 시 할인이 제공되지 않을 수 있습니다., 건당 5천원 이상 결제 건에 대하여 혜택이 제공됩니다., 무이자 할부가 적용된 매출은 할인 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [lotte_mart, lotte_mart_max, lotte_mart_zetta]
+        when:
+          - amount: {min: 5000}
+          - {interest_free: false}
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward:
+          type: billing_discount
+          rate: {500000: 5, 1000000: 10}
+        limits:
+          - per: day
+            amount: {500000: 5000, 1000000: 10000}
+          - per: month
+            amount: {500000: 15000, 1000000: 30000}
+        tiers: {from: 500000}
+    unmodeled: [실적 50만원 미만이면 롯데마트·MAXX 결제의 1천원 미만 금액을 일 1회 월 5회 할인하지만 계산하지 않는다, 롯데마트 제타에서 간편결제나 PG로 낸 결제는 할인이 안 될 수 있어 간편결제는 모두 빼고 계산한다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '오토·스마트 캐시백 신청 이용금액, 포인트 충전, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', LOCA for 롯데마트가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 본인과 가족카드의 할인한도는 합산한다]
+notes: 2026-10-11 상품 페이지 대조. 출시일 2023-04-07. 상품 페이지에 LOCA CLASSIC 롯데마트 카드 소지 시 신청 가능이라 적혀 있다. 신규 발급 특례는 발급일부터 다음 달 말일까지 5% 할인이라 50만 구간으로 넣었다.

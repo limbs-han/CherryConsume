@@ -1,0 +1,132 @@
+schema_version: 2
+id: lotte-p15657-a15657
+issuer: lotte
+name: 밀리패스 X 디지로카
+kind: credit
+product_codes: [P15657-A15657]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P15657-A15657_1.pdf', fetched_at: 2026-10-11, review_no: 제2025-C1a-01404호}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2025-01-08
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express, transit.bus_intercity, utility]
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      unmodeled: [롯데카드의 다른 결제일 할인과 겹치면 할인금액이 큰 혜택 하나만 받는다]
+    limits:
+      - {key: life_total, per: month, amount: 30000}
+    benefits:
+      - key: apartment-fee
+        title: 아파트관리비 자동납부 10% 결제일 할인
+        source: manual
+        evidence: ['아파트관리비 | 10% | 월 30,000원 (각 5,000원)', 아파트 관리비 자동납부 건만 혜택이 제공됩니다., 건당 2만원 이상 결제 건에 대해서 혜택이 제공됩니다.]
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: life_total}
+        tiers: {from: 500000}
+      - key: mobile
+        title: 이동통신 자동납부 10% 결제일 할인
+        source: manual
+        evidence: ['이동통신 | SKT, KT, LG U+', '*이동통신은 월 1회', 이동통신요금 자동납부 건만 혜택이 제공되며 인터넷, TV 등과 결합상품 및 알뜰폰 이용금액은 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000, count: 1}
+          - {shared: life_total}
+        tiers: {from: 500000}
+        unmodeled: [인터넷·TV 결합상품 요금은 할인하지 않는다]
+      - key: transit
+        title: 버스·지하철 10% 결제일 할인
+        source: manual
+        evidence: ['대중교통 | 버스, 지하철', 지하철 시내버스 이용 건만 혜택이 제공되며 택시 고속버스 시외버스 이용금액은 혜택이 제공되지 않습니다., 지하철과 시내버스 이용 금액은 합산되지 않습니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: life_total}
+        tiers: {from: 500000}
+        unmodeled: ['후불교통은 한 달 지하철, 시내버스 이용액이 따로 한 건씩 접수되어 건당 2만원 조건을 그 접수 건으로 본다. 탈 때마다 기록하면 할인이 실제보다 적게 잡힌다', 모바일 등록 이용과 실물카드 태그 이용은 따로 접수되어 합산하지 않는다]
+      - key: insurance
+        title: 보험료 자동납부 10% 결제일 할인
+        source: manual
+        evidence: ['보험료 | 생명보험, 손해보험', '보험료 자동납부 건만 혜택이 제공되며, 모든 간편결제(카카오페이, 네이버페이, 페이코 등) 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [insurance.private]
+        when:
+          - billing: [autopay]
+          - amount: {min: 20000}
+          - payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: life_total}
+        tiers: {from: 500000}
+      - key: delivery
+        title: 배달앱 10% 결제일 할인
+        source: manual
+        evidence: ['배달앱 | 배달의민족, 요기요, 쿠팡이츠', 공식 앱을 통한 결제 시 혜택이 제공되며 가맹점 직접 결제 건은 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: life_total}
+        tiers: {from: 500000}
+      - key: convenience
+        title: 편의점 10% 결제일 할인
+        source: manual
+        evidence: ['편의점 | 군마트(PX), 편의점', '군마트(PX), 편의점 결제 건만 혜택이 제공되며, 모든 간편결제(카카오페이, 네이버페이, 페이코 등) 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [convenience]
+        when:
+          - amount: {min: 20000}
+          - payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: life_total}
+        tiers: {from: 500000}
+        unmodeled: [군마트(PX)도 대상이나 담을 업종이 없어 계산하지 않는다]
+      - key: streaming
+        title: 스트리밍 정기결제 결제일 할인
+        source: manual
+        evidence: ['스트리밍 | 넷플릭스, 유튜브, 왓챠, 멜론, 지니뮤직, 디즈니+ | 1,500원 월 1회', 스트리밍 할인은 건당 결제금액에 상관없이 혜택이 제공됩니다., 서비스 대상 가맹점 공식 홈페이지 또는 앱을 통해 직접 신청한 정기결제(자동이체) 이용 건만 혜택이 제공됩니다.]
+        target:
+          merchants: [disney_plus, genie, melon, netflix, watcha, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 1500, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [통신요금 합산 청구와 앱마켓 결제는 할인하지 않는다]
+    unmodeled: [가족카드는 발급하지 않는다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 정부지원금(보육료, 육아학비), TV 수신료, 고속도로 통행요금, 무승인전표, 관세·벌금·과태료·민원 발급 수수료·인지세·송달료, 현금서비스·카드론·이자·수수료, 기후동행카드 충전과 결제는 실적에서 빠진다', 밀리패스 X 디지로카가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, '해외 이용금액은 현지 매출일자, 이동통신과 대중교통처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 실적과 할인에 반영한다']
+open_questions:
+  - {path: 'revisions[0].benefits[streaming].reward', question: '스트리밍 줄은 할인한도 칸에 1,500원 월 1회만 있고 할인율 칸이 10%와 합쳐져 있다. 정액 1,500원인지 10%에 한도 1,500원인지 원문만으로 가리지 못해 덜 주는 10%로 두었다', assumed: 10}
+  - {path: annual_fees, question: 해외겸용 카드 브랜드를 원문에서 찾지 못했다}
+notes: 2026-10-11 상품설명서(2025년 1월 기준, 출시일 2025-01-08)를 봤다. 신용카드. 발급 대상 제한은 없다. 생활업종 6개는 각 월 5천원, 합계 월 3만원. 스트리밍 1,500원은 별도라 월 최대 31,500원이다. 버스와 지하철, 아파트관리비는 실적에서 빠지지 않는다. 초안 id lotte-1918은 색인 번호라 상품 코드로 바꿨다.

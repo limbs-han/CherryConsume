@@ -1,0 +1,38 @@
+card: samsung-aap1767
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 10만원 미만 0.7%와 10만원 이상 1%는 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 99999, category: restaurant}
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {domestic-overseas-0-7: 699}, counted: 99999}
+  - {payment: 1, benefits: {domestic-overseas-1: 1000}, counted: 100000}
+  calc: 99,999 × 0.7% = 699.99, 버림 699. 100,000 × 1% = 1,000. 할인 건도 실적 인정
+- name: 멤버십 50% 월 5천원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 7890, merchant: coupang_wow}
+  - {at: 2026-11-04T09:00, amount: 4900, merchant: naver_plus_membership}
+  expect:
+  - {payment: 0, benefits: {online-membership-50: 3945}, counted: 7890}
+  - {payment: 1, benefits: {online-membership-50: 1055}, counted: 4900}
+  calc: 7,890 × 50% = 3,945. 남은 한도 1,055. 1,055가 0.7% 34보다 크다
+- name: 실적 30만 직전이면 멤버십도 0.7%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T09:00, amount: 7890, merchant: coupang_wow}
+  expect:
+  - {payment: 0, benefits: {domestic-overseas-0-7: 55}, counted: 7890}
+  calc: 7,890 × 0.7% = 55.23, 버림 55
+- name: 영화 1만원 이상 3천원 월 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T19:00, amount: 15000, merchant: cgv}
+  - {at: 2026-11-14T19:00, amount: 15000, merchant: megabox}
+  expect:
+  - {payment: 0, benefits: {movie-3000: 3000}, counted: 15000}
+  - {payment: 1, benefits: {domestic-overseas-0-7: 105}, counted: 15000}
+  calc: 첫 번째 3,000. 두 번째는 월 1회를 써서 15,000 × 0.7% = 105

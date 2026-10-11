@@ -1,0 +1,33 @@
+card: hyundai-37684
+holder:
+  started_on: '2026-10-01'
+  facts: {skt_m3t2_first_issue: true}
+cases:
+- name: 50만 구간 SKT 자동이체 1만5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 60000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {skt-autopay: 15000}, counted: 0}
+  calc: 50만 이상 100만 미만 월 15,000원. 할인 적용 건은 실적 제외
+- name: 100만 구간 2만5천원, 요금이 적으면 그 금액만
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 20000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {skt-autopay: 20000}, counted: 0}
+  calc: 한도 25,000원보다 요금 20,000원이 적어 20,000원
+- name: 50만 직전은 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 60000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 60000}
+  calc: 50만 미만 청구 할인 제외
+- name: 25개월째는 할인 없음
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2028-10-20T10:00, amount: 60000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 60000}
+  calc: 2026-10 등록 달을 0으로 세면 2028-10은 24번째 달이라 24개월이 지났다

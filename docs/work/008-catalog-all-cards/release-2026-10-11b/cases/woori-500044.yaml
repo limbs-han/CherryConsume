@@ -1,0 +1,66 @@
+card: woori-500044
+cases:
+- name: 국내외 통합 월 10만원 한도
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 4999999
+    payment_method: physical_card
+  - at: 2026-10-07T12:00
+    amount: 100
+    payment_method: physical_card
+    region: overseas
+  - at: 2026-10-08T12:00
+    amount: 10000
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      general-2pct: 99999
+  - payment: 1
+    benefits:
+      general-2pct: 1
+  - payment: 2
+    benefits: {}
+  calc: 4999999×2% 내림 99999. 남은 1원. 해외 100×2%=2 중 1. 다음 건 0.
+- name: 세금·관리비·무이자 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 100000
+    payment_method: physical_card
+    category: apartment_fee
+  - at: 2026-10-08T12:00
+    amount: 100000
+    payment_method: physical_card
+    interest_free: true
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits: {}
+  calc: 세금·관리비·무이자 제외
+- name: 초중고만 제외하고 유치원 포함
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: education.primary_secondary_fee
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: education.kindergarten
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits:
+      general-2pct: 200
+  calc: 공식 제외는 초중고 납입금. 유치원10000×2%=200. 초중고는 제외.

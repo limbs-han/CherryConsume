@@ -1,0 +1,36 @@
+card: lotte-p11714-a11714
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 롯데백화점 15% 한도 3만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 200000, merchant: lotte_department, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dept-15pct: 15000}, counted: 0}
+  - {payment: 1, benefits: {dept-15pct: 15000}}
+  calc: 100,000 × 15% = 15,000. 두 번째는 30,000이지만 50만 구간 한도 3만원에서 남은 15,000. 백화점 이용은 실적 제외
+- name: 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: lotte_department, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 299,999원은 0 구간
+- name: 200만 구간 한도 10만원과 다른 백화점 제외
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 1000000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 100000, category: department_store, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dept-15pct: 100000}}
+  - {payment: 1, benefits: {}}
+  calc: 1,000,000 × 15% = 150,000이지만 한도 100,000. 롯데백화점이 아닌 백화점은 대상 아님
+- name: 일반 가맹점 무이자할부는 실적에 넣는다
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 300000, category: other, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 300000}
+  calc: 무이자와 유이자 할부 모두 실적 대상

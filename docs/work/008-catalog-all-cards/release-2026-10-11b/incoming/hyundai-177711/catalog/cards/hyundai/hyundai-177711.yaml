@@ -1,0 +1,100 @@
+schema_version: 2
+id: hyundai-177711
+issuer: hyundai
+name: 현대카드 하이브리드(포인트형)
+short_name: 현대 하이브리드 포인트형
+search_names: [하이브리드 포인트형, 현대 하이브리드 체크 포인트형, 현대카드 하이브리드 포인트]
+kind: check
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 5000}
+  - {scope: global, brand: visa, amount: 5000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/20260428_%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C%20%ED%8F%AC%EC%9D%B8%ED%8A%B8%ED%98%95.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립에서 뺀다, 현대카드의 다른 할인이 적용된 결제는 적립에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 적립에서 뺀다]
+    limits:
+      - {key: plus, per: month, amount: 5000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [plus-5-dining, plus-5-delivery, plus-5-convenience, plus-5-transit, base-05]
+        spill: split
+    benefits:
+      - key: plus-5-dining
+        title: 일반음식점 5% 적립
+        source: manual
+        evidence: [전월 이용 금액 30만원 이상 시 일반음식점, 배달 앱, 편의점, 대중교통 5% 적립, 대상점 통합해 월 5천 M포인트 적립 한도(적립 한도 초과 시 기본 혜택 적립률 적용), 추가 혜택은 대상점 국내 가맹점에 한해 제공, 추가 혜택 적용 시 기본 혜택은 중복 제공되지 않음]
+        target:
+          categories: [restaurant.general]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus}
+        tiers: {from: 300000}
+      - key: plus-5-delivery
+        title: 배달 앱 5% 적립
+        source: manual
+        evidence: ['배달 앱 : 배달의민족, 쿠팡이츠, 요기요', 배달 앱은 대상점 공식 홈페이지 및 앱 내 결제 건에 한해 추가 혜택 적용되며 배달원 또는 가맹점을 통해 직접 결제한 경우 국내외 가맹점으로 구분되어 기본 혜택 적용]
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {region: domestic, channel: online}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus}
+        tiers: {from: 300000}
+      - key: plus-5-convenience
+        title: 편의점 현장 결제 5% 적립
+        source: manual
+        evidence: ['편의점 : GS25, CU, 세븐일레븐, 이마트24', 편의점은 현장 결제 건에 한해 추가 혜택 적용되며 앱에서 결제한 경우 국내외 가맹점으로 구분되어 기본 혜택 적용]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic, channel: offline}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus}
+        tiers: {from: 300000}
+      - key: plus-5-transit
+        title: 시내버스·지하철 5% 적립
+        source: manual
+        evidence: ['대중교통 : 시내버스, 지하철', 시외버스 및 고속버스 결제 건은 국내외 가맹점으로 구분되어 기본 혜택 적용]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus}
+        tiers: {from: 300000}
+      - key: base-05
+        title: 국내외 가맹점 0.5% 적립
+        source: manual
+        evidence: [실적·한도 제한 없이 국내외 가맹점 0.5% 적립, 매출 건별로 소수점 이하 반올림, '4,639원 결제 시 23 M포인트 적립(4,639x0.5% = 23.195의 소수점 이하 반올림)']
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 0.5, round: round}
+    unmodeled: [PG·키오스크·간편결제 가맹점명으로 찍힌 결제는 추가 혜택에서 빼고 기본 혜택만 준다, 적립은 매출전표 접수 순서로 한도를 적용한다, 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 계좌 잔액이 모자랄 때 신용으로 결제하는 하이브리드 기능은 결제 혜택과 관계없다]
+open_questions:
+  - {path: product_codes, question: 카드 상세 주소의 상품 코드를 확인하지 못했다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: kind, question: 체크카드에 잔액이 모자라면 신용으로 결제하는 하이브리드 카드다. 결제 계좌 즉시 출금이 기본이라 체크로 두었다, assumed: check}
+notes: 2026-10-11 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa Platinum) 5,000원. 체크카드에 신용결제 기능이 붙은 하이브리드 카드이고 할부는 안 된다. 실적과 한도 없이 국내외 0.5%, 전월 30만 이상 국내 일반음식점·배달 앱 3곳·편의점 4곳 현장 결제·시내버스·지하철 5%이고 합쳐 월 5천을 넘으면 0.5%다. 매출 건별 소수점 이하 반올림. 실적 제외는 카드론 등, 수수료, 공과금, 상품권·선불카드뿐이라 상하수도만 utility.water로 뺀다. 취소는 승인월에서 빼고 해외는 취소 달에서 뺀다. 신규 발급 시 수령 등록월 다음 달 이용 건까지 30만 미만도 추가 혜택을 준다.

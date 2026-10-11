@@ -1,0 +1,114 @@
+schema_version: 2
+id: kb-09321
+issuer: kb
+name: KB국민 K-패스카드
+short_name: KB K-패스
+kind: credit
+product_codes:
+  - '09321'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 8000}
+  - {scope: global, brand: visa, amount: 8000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09321', fetched_at: '2026-10-11', review_no: 제2023-C1a-03862호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [결제대행업체(PG)나 일부 간편결제 전용 가맹점으로 승인된 결제는 할인에서 빠질 수 있다]
+    limits:
+      - {key: total, per: month, amount: 15000}
+      - {key: living, per: month, amount: 5000}
+    stacks:
+      - {key: main}
+      - {key: kbpay}
+    benefits:
+      - key: transit-10
+        title: 버스·지하철 10% 청구할인
+        source: page
+        evidence: [대중교통 할인 | 버스, 지하철 | 10% | 5천원 | 30만원, '택시, 시외버스, 고속버스, 공항버스 제외', 최초 카드 사용 등록 후 다음 달 말일까지 전월 실적 조건 미달 시에도 서비스 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: total}
+        tiers:
+          from: 300000
+          waived_when:
+            card_month: {min: 0, max: 1}
+        unmodeled: [버스·지하철 할인은 실제 이용일이 아니라 이용대금명세서의 이용일 달로 계산된다]
+      - key: living-5
+        title: 커피·약국·편의점·영화·패스트푸드 5% 청구할인
+        source: page
+        evidence: [생활서비스 할인 | 커피 업종 약국 업종 편의점 업종 영화(CGV, 롯데시네마) 패스트푸드 업종 | 5% | 5천원, 대상 가맹점이 KB국민카드의 업종분류기준 상 해당 업종에 한하여 제공합니다.]
+        target:
+          categories: [cafe, convenience, pharmacy, restaurant.fastfood]
+          merchants: [cgv, lotte_cinema]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: living}
+          - {shared: total}
+        tiers:
+          from: 300000
+          waived_when:
+            card_month: {min: 0, max: 1}
+      - key: living-telecom-5
+        title: 이동통신요금 자동납부 5% 청구할인
+        source: page
+        evidence: ['이동통신요금 자동납부 (SK, KT, LG, LiivM) 건당 1만원 이상 이용 시 | 5% | 5천원']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: living}
+          - {shared: total}
+        tiers:
+          from: 300000
+          waived_when:
+            card_month: {min: 0, max: 1}
+        notes: 생활서비스 월 5천원 한도를 커피·편의점 등과 함께 쓴다
+      - key: kbpay-living-5
+        title: KB Pay로 생활서비스 결제 시 5% 추가 청구할인
+        source: page
+        evidence: [KB Pay 추가할인 | '생활서비스 할인' 영역에서 KB Pay 이용 시 추가할인 | 5% | 5천원, 합 계 1만5천원]
+        target:
+          categories: [cafe, convenience, pharmacy, restaurant.fastfood]
+          merchants: [cgv, lotte_cinema]
+        when:
+          - payment: [kb_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: total}
+        tiers:
+          from: 300000
+          waived_when:
+            card_month: {min: 0, max: 1}
+        stack: kbpay
+        notes: 이동통신요금 자동납부는 KB Pay로 결제할 수 없어 추가할인 대상에서 뺐다
+    unmodeled: [할인 한도는 전표 매입 순서대로 채운다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금 결제는 실적에서 빠진다, 자판기·터널통행료·기내 같은 무승인 전표는 실적에서 빠진다, 정부 K-패스 환급은 카드 혜택이 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2023.04.26 출시와 심의번호만 적었다. 현재 규칙 시작일을 몰라 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+  - path: revisions[0].benefits[living-5].tiers
+    question: 원문 표의 전월 실적 30만원 칸이 대중교통 행에만 보인다. 생활서비스와 KB Pay 추가할인에도 붙는지 분명하지 않아 덜 주는 쪽으로 모든 혜택에 30만원을 둔다
+    assumed: '300000'
+notes: 2026-10-11 KB국민카드 상품 페이지로 대조했다. 실적 유예 문구에 생애 최초 발급 조건이 없어 사실을 묻지 않는다.

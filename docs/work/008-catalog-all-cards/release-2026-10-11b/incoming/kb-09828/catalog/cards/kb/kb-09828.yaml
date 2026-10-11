@@ -1,0 +1,67 @@
+schema_version: 2
+id: kb-09828
+issuer: kb
+name: KB Less Go 카드
+short_name: KB Less Go
+kind: credit
+product_codes:
+  - '09828'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: visa, amount: 25000}
+  - {scope: domestic, form: mobile, amount: 19000}
+  - {scope: global, brand: visa, form: mobile, amount: 19000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09828', fetched_at: '2026-10-11', review_no: 제2026-C1a-10975호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-07-31'
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      cancellation: cancel_month
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [정부지원금 결제와 신차구매 청구할인 전표, 무승인전표(후불교통 등)는 할인에서 빠진다]
+    benefits:
+      - key: ypaymore-air-10
+        title: 와이페이모어 항공권 10% 청구할인
+        source: page
+        evidence: [와이페이모어 판매 항공권 10% 청구할인, 전월 이용실적 40만원 이상 시 제공, '월 할인한도: 40만원 구간 20,000원, 80만원 구간 30,000원']
+        target:
+          merchants: [ypaymore]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 20000, 800000: 30000}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [최초 카드 사용등록 후 다음 달 말일까지 실적 40만원 미만이어도 월 10, 000원 한도로 주는 유예는 담지 않았다]
+      - key: domestic-1
+        title: 국내 가맹점 1% 청구할인
+        source: page
+        evidence: [국내 가맹점 1.0% 청구할인, 실적 조건과 할인한도 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1}
+      - key: overseas-1-4
+        title: 해외 가맹점 1.4% 청구할인
+        source: page
+        evidence: [해외 가맹점 1.4% 청구할인, 실적 조건과 할인한도 없음, 국내외겸용 카드에만 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.4}
+        unmodeled: [국내외겸용 카드에만 제공한다]
+    unmodeled: [해외 이용금액은 매입 완료 기준으로 실적에 반영한다, 정부지원금과 무승인전표(후불교통 등)는 실적에서 빠진다, 월 할인한도는 본인회원 기준으로 가족카드와 합산한다, 와이페이모어 항공권 할인과 국내 1% 할인을 겹쳐 받는지 원문에 없어 큰 쪽 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지와 대조. 출시일 2026.07.31을 적용 시작일로 둔다. 공통 가맹점 ypaymore(와이페이모어)가 필요하다.

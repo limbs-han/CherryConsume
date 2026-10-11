@@ -1,0 +1,57 @@
+schema_version: 2
+id: hyundai-zrup
+issuer: hyundai
+name: 현대카드 ZERO Up(할인형)
+short_name: 현대 ZERO Up 할인형
+search_names: [ZERO Up, 제로 업, 현대카드 제로업 할인형]
+kind: credit
+product_codes: [ZRUP]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+  - {scope: global, brand: amex, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/%28%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81%29%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20ZERO%20Up%28%ED%95%A0%EC%9D%B8%ED%98%95%29_260616.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {cancellation: original_month}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 할인에서 뺀다, 현대카드의 다른 할인이 적용된 결제는 할인에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 할인에서 뺀다]
+    stacks:
+      - key: main
+        pick: priority
+        order: [plus-16, base-08]
+        spill: none
+    benefits:
+      - key: plus-16
+        title: 온라인몰·대형마트·교육·주유·이동통신 10만원 이상 결제 1.6% 청구 할인
+        source: manual
+        evidence: [온라인몰, 대형마트, 교육, 주유, 이동통신 요금 10만원 이상 결제 시 1.6% 청구 할인, '대상점 - 온라인몰 : 네이버플러스 스토어, 쿠팡, SSG.COM, G마켓, 옥션 - 대형마트 : 이마트, 농협하나로마트, 롯데마트 - 교육 : 학원/유치원 업종 - 주유 : 주유 업종 - 이동통신 요금 : SKT, KT, LG U+', 추가 혜택 적용을 위한 최소 결제 금액은 10만원 이상 단일 결제 건 기준(결제 금액 합산 불가), 추가 혜택은 대상점별 국내 가맹점에 한해 제공, 실적 조건 및 할인 한도 없음]
+        target:
+          categories: [education.academy, education.kindergarten, fuel]
+          merchants: [auction, coupang, emart, gmarket, kt, lg_uplus, lotte_mart, naver_plus_store, nh_hanaro_mart, skt, ssg_com]
+          exclude_merchants: [coupang_eats]
+        when:
+          - amount: {min: 100000}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1.6}
+        unmodeled: [네이버플러스 스토어는 naver.com 도메인 가맹점만 할인하고 연결된 다른 사이트 결제는 0.8%만 준다, 대형마트의 온라인몰·주차장·문화센터·임대 매장과 농협하나로마트 구매사업장·도매형 매장·농협몰은 0.8%만 준다, LPG·수소·전기차 충전소는 0.8%만 준다, 이동통신 비정기 결제와 알뜰폰·선불폰·인터넷·TV 결합상품은 0.8%만 준다, 10만원 이상 결제를 부분 취소해 10만원 미만이 되면 0.8%로 바뀐다]
+      - key: base-08
+        title: 국내외 가맹점 0.8% 청구 할인
+        source: manual
+        evidence: [실적·한도 제한 없이 국내외 가맹점 0.8% 청구 할인, 해외 이용 금액 할인은 국내외겸용 카드에 한해 적용]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.8}
+        unmodeled: [해외 이용 할인은 국내외겸용 카드만 준다]
+    unmodeled: [긴급할인 선지급 약정을 쓰면 할인 금액이 상환에 쓰인다, 간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되는 결제는 추가 혜택에서 빼고 0.8%만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북은 2026년 6월 기준이고 출시일은 2025-04-11이다. 그 사이 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-11 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 30,000원(기본 10,000+제휴 20,000), 가족카드 10,000원. 실적 조건과 한도 없이 국내외 0.8% 청구 할인, 국내 대상점에서 한 번에 10만원 이상 결제하면 그 결제 전체에 1.6%이고 0.8%와 겹치지 않는다. 원문에 끝수 처리가 없어 원 미만 버림. 할인 제외 목록에 사립유치원 납입금이 없어 유치원은 혜택 제외에서 빼고 대상에 넣었다. 실적 구간이 없어 실적 제외는 담지 않는다.

@@ -1,0 +1,70 @@
+schema_version: 2
+id: woori-102098
+issuer: woori
+name: KREAM 우리카드
+kind: credit
+product_codes:
+  - '102098'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102098', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2024-01-02'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금, 수수료·이자·대출, 우편요금·여권발급비·벌금·공공기관 가맹점 이용금액은 할인과 실적에서 빠진다', 우리카드 이벤트 혜택을 받은 매출은 할인 제외]
+    stacks:
+      - key: main
+        pick: priority
+        order: [kream-2, kream-base-0-5, base-0-5]
+        spill: none
+    benefits:
+      - key: kream-2
+        title: KREAM 이용금액 2% 청구할인
+        source: page
+        evidence: [KREAM 이용금액 2% 청구할인, 전월 국내외 가맹점 이용실적 30만원 이상 시 혜택 제공, 할인한도 월 최대 3만원 (본인+가족카드 합산 기준), KREAM 이용금액 ... 전월실적에 포함되지 않습니다.]
+        target:
+          merchants: [kream]
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {per: month, amount: 30000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [월 한도 3만원은 본인과 가족카드 합산]
+      - key: kream-base-0-5
+        title: KREAM 0.5% 청구할인
+        source: page
+        evidence: [국내외 가맹점 이용금액 0.5% 청구할인, KREAM 이용금액 ... 전월실적에 포함되지 않습니다.]
+        target:
+          merchants: [kream]
+        reward: {type: billing_discount, rate: 0.5}
+        exclude_applied: 1
+        notes: KREAM 2%를 못 받는 결제. 실적 제외를 지키려고 따로 둔다
+      - key: base-0-5
+        title: 국내외 가맹점 0.5% 청구할인
+        source: page
+        evidence: [국내외 가맹점 이용금액 0.5% 청구할인, 전월 실적 조건 및 할인한도 제한 없음]
+        target:
+          all: true
+          exclude_merchants: [kream]
+        reward: {type: billing_discount, rate: 0.5}
+    unmodeled: [가족카드 전월 이용실적과 월 할인한도는 본인카드와 별도다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 할인은 거래 매입 순서대로 적용된다, 메탈 플레이트 발급 수수료 10만원은 신청자에게만 부과된다]
+open_questions:
+  - {path: 'revisions[0].benefits[kream-base-0-5]', question: KREAM 결제가 2%를 못 받을 때 기본 0.5%를 받는지 원문이 분명하지 않다, assumed: 받는다. 기본 0.5%는 모든 가맹점 대상이다}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-01-02. 연회비 20,000원. KREAM 2% 전월 국내외 30만 이상 월 3만원, 국내외 가맹점 0.5% 실적 조건과 한도 없음. KREAM 이용금액은 실적에서 빠진다. 신규 등록 다음 달 말까지 KREAM 할인 30만 구간.

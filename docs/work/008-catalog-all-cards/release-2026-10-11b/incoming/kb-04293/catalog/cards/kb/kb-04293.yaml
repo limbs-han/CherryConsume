@@ -1,0 +1,58 @@
+schema_version: 2
+id: kb-04293
+issuer: kb
+name: KT DC Plus KB국민카드
+short_name: KB KT DC Plus
+kind: credit
+product_codes:
+  - '04293'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: domestic, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04293', fetched_at: '2026-10-11', review_no: 제2024-C1a-08617호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [결제대행업체(PG)나 일부 간편결제 전용 가맹점으로 승인된 결제는 할인에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: kt-automatic-discount
+        title: KT 통신요금 자동납부 청구할인
+        source: page
+        evidence: [KT 통신요금 자동납부 시 7천원~1만1천원 청구 할인, 전월 승인실적에 따른 월 할인한도 1구간(30만원 이상) 7천원 2구간(70만원 이상) 1만1천원, KT 통신료 자동납부 승인 건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인됩니다., 최초 발급받은 「KT DC Plus KB국민카드」사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일까지는 전월 국내실적 30만원 미만 시에도 월 3천 5백원 한도까지만 할인 제공됩니다., 본인회원이 해당카드를 생애 최초 발급받은 경우에 적용되며 가족카드 단독 발급 시 적용되지 않습니다.]
+        target:
+          merchants: [kt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {0: 3500, 300000: 7000, 700000: 11000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 자동납부 승인금액 전액을 월 할인금액까지 할인한다. 0 구간 3,500원은 생애 최초 발급의 실적 유예기간에만 준다
+    unmodeled: [월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금 결제는 실적에서 빠진다, 자판기·통행료·기내 같은 무승인 전표는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2024.08.13 출시와 심의일만 적었다. 현재 규칙 시작일을 몰라 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지로 대조했다. KT 통신요금은 원문이 "KT 모든 통신요금"이라 kt 가맹점 전체로 둔다.

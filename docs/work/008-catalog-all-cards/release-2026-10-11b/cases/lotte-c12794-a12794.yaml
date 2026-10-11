@@ -1,0 +1,59 @@
+card: lotte-c12794-a12794
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 커피 30만 구간 3회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 6000, merchant: starbucks}
+  - {at: 2026-11-03T10:00, amount: 6000, merchant: starbucks}
+  - {at: 2026-11-04T10:00, amount: 6000, merchant: starbucks}
+  - {at: 2026-11-05T10:00, amount: 6000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {coffee-cashback: 1000}
+  - payment: 2
+    benefits: {coffee-cashback: 1000}
+  - payment: 3
+    benefits: {}
+  calc: 30만 구간 월 3회, 넷째 건 없음
+- name: 커피 5천원 미만은 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 4900, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 건당 5천원 미만
+- name: 영화 2천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 14000, merchant: cgv}
+  expect:
+  - payment: 0
+    benefits: {movie-cashback: 2000}
+  calc: 정액 2000
+- name: 편의점 1천원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 5000, merchant: gs25}
+  expect:
+  - payment: 0
+    benefits: {convenience-cashback: 1000}
+  calc: 정액 1000
+- name: 통신 자동이체 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 55000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-cashback: 2000}
+  calc: 정액 2000
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 6000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만 미만

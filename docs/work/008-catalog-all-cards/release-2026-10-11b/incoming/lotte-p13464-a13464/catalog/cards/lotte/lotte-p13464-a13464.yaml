@@ -1,0 +1,81 @@
+schema_version: 2
+id: lotte-p13464-a13464
+issuer: lotte
+name: L.pay 롯데카드Ⅱ
+kind: credit
+product_codes: [P13464-A13464]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: visa, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13464-A13464', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2020-07-21'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - {key: lpoint-month, per: month, amount: 200000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [plus-lpay-1-5, base-1, base-0-1]
+        spill: split
+    benefits:
+      - key: plus-lpay-1-5
+        title: 플러스 가맹점 L.pay 결제 1.5% L.POINT 적립
+        source: page
+        evidence: [30만원 이상 | 플러스 가맹점 | 1.5% | 1.0% | 20만 포인트, L.pay 결제는 L.pay앱에 L.pay 롯데카드Ⅱ를 등록하고 L.pay로 결제한 건입니다., 결제금액 1천원당 L.POINT가 적립됩니다.]
+        target:
+          merchants: [aladin, lotte_cinema, lotte_department, lotte_homeshopping, lotte_mart, lotte_on, lotte_premium_outlet, lotte_super, lotteria, seven_eleven, tgif]
+        when:
+          - payment: [l_pay]
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 15}
+        limits:
+          - {shared: lpoint-month}
+        tiers: {from: 300000}
+        unmodeled: ['롯데멤버스와 가맹점 계약에 따라 담배 결제액, 임대매장, 위탁 영화관은 1%만 적립한다', 이니시스 같은 결제 대행사로 접수되는 온라인·모바일 결제는 플러스 가맹점 적립을 하지 않는다, '하이마트, 롯데몰, 크리스피 크림 도넛, 엔제리너스, 롯데손해보험, 롯데호텔, 롯데리조트, 빅마켓도 플러스 가맹점이지만 공통 가맹점이 없어 1%로 계산한다']
+      - key: base-1
+        title: 모든 가맹점 1% L.POINT 적립
+        source: page
+        evidence: [그외 가맹점 | 1.0% | 1.0% |, 지난달 실적 30만원 이상 시 1.0%~1.5% L.POINT 적립률]
+        target: {all: true}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 10}
+        limits:
+          - {shared: lpoint-month}
+        tiers: {from: 300000}
+      - key: base-0-1
+        title: 실적 30만원 미만 0.1% L.POINT 적립
+        source: page
+        evidence: [30만원 미만 | 모든 가맹점 | 0.1% | 0.1% |]
+        target: {all: true}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 1}
+        limits:
+          - {shared: lpoint-month}
+    unmodeled: ['장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 현금서비스·카드론·수수료는 적립과 실적에서 빠진다', 월 적립한도 20만 포인트는 본인과 가족카드 적립을 합산한다]
+open_questions:
+  - {path: 'revisions[0].benefits[base-1].reward', question: 1천원당 적립이라는 문장은 플러스 가맹점 안내에만 있다. 모든 적립을 1천원 단위로 계산했다, assumed: 1천원 미만 버림}
+notes: 2026-10-11 상품 페이지 대조. 출시일 2020-07-21. 실적 30만원 미만이면 모든 가맹점 0.1%, 30만원 이상이면 플러스 가맹점 L.pay 결제 1.5%, 나머지 1%다. 0.1%는 모든 구간에 두고 우선순위를 가장 뒤에 두어 30만원 이상이면 1%가 먼저 맞는다. 최초 발급은 발급월과 다음 달까지 실적과 관계없이 적립이라 30만 구간으로 넣었다.

@@ -1,0 +1,75 @@
+schema_version: 2
+id: kb-02212
+issuer: kb
+name: 두산베어스 KB체크카드
+short_name: KB 두산베어스 체크
+kind: check
+product_codes:
+  - '02212'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02212', fetched_at: '2026-10-11', review_no: 260806-02624-PIF}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG나 간편결제 전용 가맹점 결제, 구매·예약 대행사이트 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다']
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: bears-ticket-goods-10
+        title: 두산베어스 홈경기 티켓·굿즈 10% 환급할인
+        source: page
+        evidence: [홈경기 티켓/굿즈&용품 | 10% | 3, 000원 | 30만원, '홈경기 티켓 온라인 두산베어스 공식 홈페이지(www.doosanbears.com), NOL 티켓(nol.interpark.com/ticket) / 오프라인 잠실야구장 내 매표소 4개소', '굿즈&용품 온라인 위팬 공식 온라인샵(www.doosanbearswefan.shop) / 오프라인 잠실야구장 내야 위팬샵, 외야 위팬샵, 내야 NOL 상품샵, 외야 베어스하우스', '주) KBO 정규시즌 두산베어스 홈경기에 한하며, 시범경기 및 포스트시즌 제외']
+        target:
+          merchants: [doosan_bears_ticket, doosan_bears_wefan]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        unmodeled: [홈경기 티켓은 KBO 정규시즌 두산베어스 홈경기만 대상이고 시범경기와 포스트시즌은 빠진다, NOL 티켓에서 산 두산베어스 홈경기 티켓과 잠실야구장 NOL 상품샵 결제도 대상이지만 가맹점을 나눌 수 없어 계산하지 않는다]
+      - key: ott-10
+        title: 티빙·넷플릭스·유튜브 프리미엄·디즈니플러스 10% 환급할인
+        source: page
+        evidence: ['티빙, 넷플릭스, 유튜브 프리미엄, 디즈니플러스 | 10% | 1,000원 | 30만원']
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 1000}
+        tiers: {from: 300000}
+      - key: convenience-5
+        title: CU·GS25 5% 환급할인
+        source: page
+        evidence: ['CU, GS25 | 5% | 1,000원 | 30만원']
+        target:
+          merchants: [cu, gs25]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 1000}
+        tiers: {from: 300000}
+      - key: delivery-5
+        title: 배달의민족·요기요·쿠팡이츠·마켓컬리 5% 환급할인
+        source: page
+        evidence: ['배달의민족, 요기요, 쿠팡이츠, 마켓컬리 | 5% | 1,000원 | 30만원']
+        target:
+          merchants: [baemin, coupang_eats, kurly, yogiyo]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 1000}
+        tiers: {from: 300000}
+    unmodeled: [홈구장 F&B 10% 환급할인(월 2천원)은 잠실야구장 안 식음료 매장과 배달타자 앱 주문이 대상인데 담을 가맹점이 없어 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 실적 30만원 미만이어도 한도의 50%를 주는 신규 특례는 계산하지 않는다, '포인트리 충전금액, 정부지원금, 무승인전표(RF후불교통요금·자판기·터널이용료·고속버스 취소 반환 수수료)는 실적에서 빠진다', 동일계열 카드는 전월 이용실적과 할인한도를 합산한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 RF후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 공통 가맹점 doosan_bears_ticket, doosan_bears_wefan이 필요하다. 환급할인이라 cashback으로 둔다.

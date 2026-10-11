@@ -1,0 +1,104 @@
+schema_version: 2
+id: hyundai-hch
+issuer: hyundai
+name: 알파벳카드H
+short_name: 현대 알파벳H
+search_names: [Alphabet H, 알파벳 카드 H, 알파벳카드H]
+kind: credit
+product_codes: [HCH]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=HCH', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CH%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_261001.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-01
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [현대카드의 다른 할인이 적용된 결제는 할인에서 뺀다]
+    limits:
+      - key: extra-5
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 15000}
+    benefits:
+      - key: edu-medical-10
+        title: 학원·유치원, 병원·약국 10% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 40만원 이상 시 교육, 병원 10% 청구 할인, '교육 : 학원/유치원 업종', '병원 : 병원/약국 업종', '40만원 이상 80만원 미만 : 대상 영역 통합해 월 1만원 - 80만원 이상 120만원 미만 : 월 2만원 - 120만원 이상 : 월 3만 5천원', 병원의 경우 동물병원 및 의료기기 업종은 기본 혜택 제외]
+        target:
+          categories: [education.academy, education.kindergarten, hospital, pharmacy]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 10000, 800000: 20000, 1200000: 35000}
+        tiers: {from: 400000}
+        unmodeled: [의료기기 업종은 할인하지 않는다]
+      - key: mobile-5
+        title: 이동통신 요금 정기결제 5% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 40만원 이상 시 이동통신 요금, 아파트 관리비, 도시가스 요금 정기결제 5% 청구 할인, '이동통신 요금 : SKT, KT, LG U+', '40만원 이상 80만원 미만 : 영역별 월 5천원, 대상 영역 통합해 월 5천원 - 80만원 이상 120만원 미만 : 영역별 월 5천원, 통합 월 1만원 - 120만원 이상 : 영역별 월 5천원, 통합 월 1만 5천원', '이동통신 요금은 비정기 결제 건 및 알뜰폰·선불폰·결합상품(인터넷, TV, 유선전화 등) 요금 추가 혜택 제외']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - region: domestic
+            billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+        unmodeled: ['결합상품(인터넷, TV, 유선전화 등) 요금은 할인하지 않는다']
+      - key: apartment-5
+        title: 아파트 관리비 정기결제 5% 청구 할인
+        source: manual
+        evidence: [아파트 관리비는 현대카드로 정기결제 신청이 가능한 아파트 단지에 한하며 납부대행사와 계약하지 않은 일부 아파트 단지는 추가 혜택 제외]
+        target:
+          categories: [apartment_fee]
+        when:
+          - region: domestic
+            billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+        unmodeled: [현대카드 정기결제가 되는 아파트 단지만 할인한다]
+      - key: gas-5
+        title: 도시가스 요금 정기결제 5% 청구 할인
+        source: manual
+        evidence: [도시가스 요금은 가정용(주택용)·일부 영업용 대상이며 관리사무소 일괄 납부 건은 추가 혜택 제외]
+        target:
+          categories: [utility.gas]
+        when:
+          - region: domestic
+            billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+        unmodeled: [관리사무소 일괄 납부 도시가스 요금은 할인하지 않는다]
+    unmodeled: [간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되거나 PG·간편결제 가맹점명으로 찍힌 결제는 할인하지 않는다, 할인은 매출전표 접수 순서로 한도를 적용한다, 실적과 할인 한도는 본인과 가족 카드를 합산한다, TV 수신료·고속도로 통행료·후불하이패스는 실적에서 뺀다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2025-07-17이고 가이드북은 2026년 10월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다, assumed: '2026-10-01'}
+notes: 2026-10-11 공식 가이드북(2026년 10월 기준) 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 15,000원(기본 10,000+제휴 5,000), 가족카드 5,000원. 전월 40만 이상 학원·유치원 업종과 병원·약국 업종 10%를 월 1만·2만·3만5천원 한도로, 이동통신·아파트 관리비·도시가스 정기결제 5%는 영역별 5천원, 통합 5천·1만·1만5천원. 할인 제외에 유치원 납입금이 없어 유치원 업종을 대상에 넣었다. 신규 발급 시 수령 등록월 다음 달 이용 건까지 40만 구간 한도. 원문에 끝수 처리가 없어 원 미만 버림.

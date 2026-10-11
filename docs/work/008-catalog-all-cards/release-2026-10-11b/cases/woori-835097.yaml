@@ -1,0 +1,61 @@
+card: woori-835097
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 백화점 5% 건당 5만원까지, 실적 50%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 200000, category: department_store, channel: offline}
+  expect:
+  - {payment: 0, benefits: {shopping-offline-5: 2500}, counted: 100000}
+  calc: 5만원의 5% 2,500원, 실적 절반
+- name: 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, category: department_store, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만
+- name: 쇼핑 월 4천원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T12:00, amount: 50000, merchant: gmarket, channel: online}
+  expect:
+  - {payment: 0, benefits: {shopping-online-5: 2500}, counted: 25000}
+  - {payment: 1, benefits: {shopping-online-5: 1500}, counted: 25000}
+  calc: 2,500원 뒤 남은 1,500원
+- name: 병원과 대중교통
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 40000, category: hospital, channel: offline}
+  - {at: 2026-11-06T08:00, amount: 2000, category: transit.bus_city}
+  expect:
+  - {payment: 0, benefits: {family-5: 2000}, counted: 20000}
+  - {payment: 1, benefits: {life-transit-5: 100}, counted: 1000}
+  calc: 2,000원과 100원, 실적 절반
+- name: 영화 3천원, 아웃백 20%, 스타벅스 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 14000, category: movie, channel: offline}
+  - {at: 2026-11-06T19:00, amount: 150000, merchant: outback, channel: offline}
+  - {at: 2026-11-07T09:00, amount: 30000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {movie-3000: 3000}, counted: 14000}
+  - {payment: 1, benefits: {family-restaurant-20: 20000}, counted: 150000}
+  - {payment: 2, benefits: {coffee-20: 5000}, counted: 30000}
+  calc: 영화 3,000원, 30,000원이 건당 20,000원, 6,000원이 건당 5,000원
+- name: S-OIL 리터당 60원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: s_oil, channel: offline}
+  expect:
+  - {payment: 0, benefits: {life-fuel-60: 1614}, counted: 25000}
+  calc: 5만원 / 1,858원 = 26.9L, 60원이면 1,614원. 실적 절반
+- name: 휴대전화 자동납부 5% 5만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, merchant: kt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {life-telecom-5: 2500}, counted: 40000}
+  calc: 5만원의 5% 2,500원, 생활 한도 3천원 안. 실적 절반

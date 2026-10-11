@@ -1,0 +1,36 @@
+card: lotte-p15851-a15851
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 구독료 15,000원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: samsung_subscription, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {samsung-subscription: 15000}
+  calc: 40000 x 100% = 40000, 50만 구간 월 15000
+- name: 200만 구간 27,000원
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: samsung_subscription, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {samsung-subscription: 27000}
+  calc: 200만 구간 월 27000
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: samsung_subscription, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만 미만
+- name: 해외 2% 실적 없이
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: restaurant.general, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-2: 1000}
+  calc: 50000 x 2% = 1000

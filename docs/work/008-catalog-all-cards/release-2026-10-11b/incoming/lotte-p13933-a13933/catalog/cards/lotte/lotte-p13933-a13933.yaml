@@ -1,0 +1,38 @@
+schema_version: 2
+id: lotte-p13933-a13933
+issuer: lotte
+name: 롯데 햇살론카드
+kind: credit
+product_codes: [P13933-A13933]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 2000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13933-A13933', fetched_at: '2026-10-05'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13933-A13933_2201.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-10-27'
+    source: manual
+    tiers: [0]
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: ['장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 고속도로 통행요금, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원 발급 수수료, 관세 납부, 인지세, 송달료, 이자와 각종 수수료는 할인에서 빠진다']
+    benefits:
+      - key: online-discount
+        title: 온라인 업종 1% 결제일 할인
+        source: manual
+        evidence: [국내 가맹점 결제일 할인 | 온라인 업종 | 1.0 % | 제한 없음, 지난달 실적 조건 없이 할인 제공, 롯데카드 가맹점 업종 분류 기준으로 혜택을 제공합니다.]
+        target:
+          categories: [online_shopping]
+        reward: {type: billing_discount, rate: 1}
+      - key: general-discount
+        title: 그 외 국내 가맹점 0.5% 결제일 할인
+        source: manual
+        evidence: [그외 업종 | 0.5 % | 제한 없음, 월 할인한도 제한 없음/지난달 실적 조건없이 할인 제공]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+    unmodeled: [온라인 업종은 롯데카드 가맹점 업종 분류를 따른다. 앱은 온라인 쇼핑 업종만 1%로 본다, 롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다, 국내전용 카드라 해외 이용이 안 된다, 롯데카드가 주는 L.POINT 적립은 없다]
+notes: 2026-10-11 상품설명서(여신금융협회 심의필 제2021-C1a-09250호) 대조. 출시일 2021-10-27. 서민금융진흥원 햇살론카드 자격 고객용 신용카드. 국내 가맹점 결제일 할인 온라인 업종 1.0%, 그 외 업종 0.5%, 실적 조건과 한도 없음. 두 혜택은 같은 결제에 하나만 받는다. 할부는 이용일 기준 전체 금액에 할인. 가족카드 발급 불가.

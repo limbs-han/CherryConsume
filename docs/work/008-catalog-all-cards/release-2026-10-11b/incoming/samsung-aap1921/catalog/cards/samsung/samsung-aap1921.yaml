@@ -1,0 +1,47 @@
+schema_version: 2
+id: samsung-aap1921
+issuer: samsung
+name: 삼성 iD 해외 3.5 카드
+short_name: iD 해외 3.5
+search_names: [iD 해외 3.5, 삼성 iD 해외 3.5 카드, 아이디 해외 3.5]
+kind: credit
+product_codes: [AAP1921]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1921', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qth0n%2BKT2um9h%2Fi6qYyogljk%3D&sn=1', fetched_at: 2026-10-11}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-08-04'
+    source: manual
+    tiers: [0]
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, '고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다']
+    benefits:
+      - key: domestic-0-7
+        title: 국내 가맹점 0.7% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 국내 가맹점 0.7% 결제일할인']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.7}
+      - key: overseas-3-5
+        title: 해외 가맹점 3.5% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 가맹점 3.5% 결제일할인', 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 3.5}
+        unmodeled: [해외 온라인 거래라도 국내 전자지급 결제대행업체(PG)를 거쳐 국내 가맹점으로 분류되면 해외 할인 대신 국내 0.7%다, 국내전용카드는 해외 할인을 받지 않는다]
+    unmodeled: [삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, 고속버스는 차내 단말기와 고속버스 앱 결제만 할인에서 빠지지만 구분할 수 없어 고속버스 전체를 뺐다]
+open_questions:
+  - {path: 'revisions[0].benefit_exclusions.categories', question: 할인 제외의 대중교통은 후불교통·모바일교통 결제건이다. 시내버스와 지하철을 모두 뺐다. 삼성카드는 사회보험료를 공과금으로 분류해 insurance.social도 뺐다, assumed: 'transit.bus_city, transit.subway, transit.bus_express, insurance.social'}
+notes: 2026-10-11 상품안내장(2026.8판, 여신금융협회 심의필 제2026-C1a-11848호)과 대조. 2026-08-04 출시. 연회비 국내전용과 해외겸용 Mastercard 모두 15,000원(기본 7,000+제휴 8,000). 전월 실적 조건과 할인한도가 없다.

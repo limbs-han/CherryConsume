@@ -1,0 +1,377 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "korea_amway",
+      "name": "한국암웨이",
+      "category": "other",
+      "aliases": [
+        "한국암웨이",
+        "암웨이",
+        "Amway",
+        "A페이"
+      ]
+    },
+    "card_id": "hyundai-178250",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AOB-20260727-1140-35_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%95%94%EC%9B%A8%EC%9D%B4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V2.pdf",
+    "evidence": "한국암웨이 이용 금액 2% A포인트 + 1.5% M포인트 동시 적립. 암웨이 간편결제(A페이)로 결제 시에는 추가 혜택 적용"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hyundai_cuming",
+      "name": "현대큐밍 렌탈",
+      "category": "other",
+      "aliases": [
+        "현대큐밍",
+        "현대큐밍 렌탈"
+      ]
+    },
+    "card_id": "hyundai-hdqhc",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AOB-20260512-1104-10_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80%ED%81%90%EB%B0%8D%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "전월 이용 금액 40만원 이상 시 현대큐밍 렌탈/구독료 정기결제 최대 1만 6천원 청구 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "legoland_korea",
+      "name": "레고랜드 코리아",
+      "category": "other",
+      "aliases": [
+        "레고랜드",
+        "레고랜드 코리아",
+        "LEGOLAND"
+      ]
+    },
+    "card_id": "kb-02230",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02230",
+    "evidence": "레고랜드 코리아 1일이용권, 연간이용권, 호텔 숙박, 리조트 내 이용금액(식음료/기프트샵 등) 5% 환급할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "nexen_tire_rental",
+      "name": "넥센타이어 렌탈",
+      "category": "other",
+      "billing": "autopay",
+      "aliases": [
+        "넥센타이어 렌탈",
+        "넥센타이어",
+        "NEXEN TIRE"
+      ]
+    },
+    "card_id": "kb-04426",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04426",
+    "evidence": "넥센타이어 렌탈료 자동이체 시 1만 1천원 ~ 2만원 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "meritz_fire",
+      "name": "메리츠화재",
+      "category": "insurance.private",
+      "aliases": [
+        "메리츠화재",
+        "메리츠화재해상보험",
+        "MERITZ"
+      ]
+    },
+    "card_id": "lotte-p15500-a15500",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15500-A15500",
+    "evidence": "메리츠화재 보험료 결제일 할인. 메리츠화재 보험엔로카로 보험료 자동이체 연결 시에만"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "yedaham",
+      "name": "예다함",
+      "category": "other",
+      "aliases": [
+        "예다함",
+        "예다함상조",
+        "예다함 상조"
+      ]
+    },
+    "card_id": "lotte-p15623-a15623",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15623-A15623",
+    "evidence": "예다함 상조 캐시백. 예다함 상조엔로카로 상조 월납입금 자동납부 연결 시에만 캐시백"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kyowon_life",
+      "name": "교원라이프",
+      "category": "other",
+      "aliases": [
+        "교원라이프",
+        "교원라이프 상조",
+        "KYOWON LIFE"
+      ]
+    },
+    "card_id": "lotte-p15633-a15633",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15633-A15633",
+    "evidence": "교원라이프 상조 캐시백. 교원라이프 상조엔로카로 상조 월납입금 자동납부 연결 시에만 캐시백"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "sk_magic",
+      "name": "SK매직",
+      "category": "other",
+      "aliases": [
+        "SK매직",
+        "SK magic",
+        "에스케이매직"
+      ]
+    },
+    "card_id": "samsung-aap1694",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtgocxAjQ2lWIvCRgQUYcbIU%3D&sn=1",
+    "evidence": "생활요금 자동납부 5% 결제일할인 렌탈 코웨이, SK매직"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "sk_rentcar",
+      "name": "SK렌터카",
+      "category": "other",
+      "aliases": [
+        "SK렌터카",
+        "SK rent a car",
+        "에스케이렌터카"
+      ]
+    },
+    "card_id": "samsung-aap1740",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtgD0acIpcH0wL97yGCv%2B1a4%3D&sn=1",
+    "evidence": "SK렌터카 장기렌터카 월 렌탈료 정기결제 시 5,000원~30,000원 결제일할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "naver_series",
+      "name": "네이버 시리즈",
+      "category": "streaming",
+      "aliases": [
+        "네이버 시리즈",
+        "네이버시리즈",
+        "시리즈온"
+      ]
+    },
+    "card_id": "samsung-aap1785",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnkQ6u4qfU3KVldCRLwFg4g%3D&sn=1",
+    "evidence": "네이버 디지털콘텐츠 네이버웹툰, 네이버 시리즈, 치지직 채널 정기구독"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "chzzk",
+      "name": "치지직",
+      "category": "streaming",
+      "aliases": [
+        "치지직",
+        "CHZZK"
+      ]
+    },
+    "card_id": "samsung-aap1785",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnkQ6u4qfU3KVldCRLwFg4g%3D&sn=1",
+    "evidence": "네이버 디지털콘텐츠 네이버웹툰, 네이버 시리즈, 치지직 채널 정기구독"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "danbi_education",
+      "name": "단비교육",
+      "category": "education.study_material",
+      "aliases": [
+        "단비교육",
+        "윙크",
+        "WINK",
+        "캐츠홈",
+        "wink.co.kr"
+      ]
+    },
+    "card_id": "samsung-aap1843",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmr82jlimUW0apTjYBYQm%2F0%3D&sn=1",
+    "evidence": "단비교육(윙크, 캐츠홈) 온라인 결제금액 7,000~12,000원 결제일할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "yes24_ticket",
+      "name": "YES24 티켓",
+      "category": "other",
+      "aliases": [
+        "YES24 티켓",
+        "예스24티켓"
+      ]
+    },
+    "card_id": "woori-102495",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102495",
+    "evidence": "공연티켓 | 인터파크 티켓, yes24 티켓, 멜론 티켓, 티켓링크"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "melon_ticket",
+      "name": "멜론티켓",
+      "category": "other",
+      "aliases": [
+        "멜론티켓",
+        "MELON TICKET"
+      ]
+    },
+    "card_id": "woori-102495",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102495",
+    "evidence": "공연티켓 | 인터파크 티켓, yes24 티켓, 멜론 티켓, 티켓링크"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ticketlink",
+      "name": "티켓링크",
+      "category": "other",
+      "aliases": [
+        "티켓링크",
+        "TICKETLINK"
+      ]
+    },
+    "card_id": "woori-102495",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102495",
+    "evidence": "공연티켓 | 인터파크 티켓, yes24 티켓, 멜론 티켓, 티켓링크"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ocean_world",
+      "name": "오션월드",
+      "category": "other",
+      "aliases": [
+        "오션월드",
+        "비발디파크 오션월드"
+      ]
+    },
+    "card_id": "woori-102495",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102495",
+    "evidence": "놀이공원/워터파크 | 에버랜드, 롯데월드, 캐리비안베이, 오션월드"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "myrealtrip",
+      "name": "마이리얼트립",
+      "category": "travel.agency",
+      "aliases": [
+        "마이리얼트립",
+        "MYREALTRIP"
+      ]
+    },
+    "card_id": "woori-102495",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102495",
+    "evidence": "여행 | 야놀자, 여기어때, 마이리얼트립"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kovo_ticket",
+      "name": "한국배구연맹 프로배구 입장권",
+      "category": "other",
+      "aliases": [
+        "KOVO",
+        "한국배구연맹"
+      ]
+    },
+    "card_id": "woori-500104",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500104",
+    "evidence": "공식 판매처인 한국배구연맹(KOVO) 홈페이지 및 앱에서 온라인 결제 시, '우리카드 카드의정석2 SPIKE' 권종을 선택하여 결제한 경우에 한해 캐시백 제공"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kovo_store",
+      "name": "KOVO STORE",
+      "category": "online_shopping",
+      "aliases": [
+        "KOVO STORE",
+        "KOVO 스토어"
+      ]
+    },
+    "card_id": "woori-500104",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500104",
+    "evidence": "한국배구연맹 공식 온라인 스토어(KOVO STORE) | 20%"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "tgif",
+      "name": "TGI 프라이데이스",
+      "category": "restaurant.general",
+      "aliases": [
+        "TGIF",
+        "TGI FRIDAYS",
+        "티지아이프라이데이"
+      ]
+    },
+    "card_id": "woori-835068",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835068",
+    "evidence": "아웃백, 애슐리, TGIF, 매드포갈릭, 피자헛(매장방문 결제), 토다이 | 25% 청구할인 건당 최대 2만 5천원"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "mad_for_garlic",
+      "name": "매드포갈릭",
+      "category": "restaurant.general",
+      "aliases": [
+        "매드포갈릭",
+        "MAD FOR GARLIC"
+      ]
+    },
+    "card_id": "woori-835068",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835068",
+    "evidence": "아웃백, 애슐리, TGIF, 매드포갈릭, 피자헛(매장방문 결제), 토다이 | 25% 청구할인 건당 최대 2만 5천원"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "pizza_hut",
+      "name": "피자헛",
+      "category": "restaurant.general",
+      "aliases": [
+        "피자헛",
+        "PIZZA HUT"
+      ]
+    },
+    "card_id": "woori-835068",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835068",
+    "evidence": "아웃백, 애슐리, TGIF, 매드포갈릭, 피자헛(매장방문 결제), 토다이 | 25% 청구할인 건당 최대 2만 5천원"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "dr_robin",
+      "name": "닥터로빈",
+      "category": "restaurant.general",
+      "aliases": [
+        "닥터로빈",
+        "DR.ROBIN"
+      ]
+    },
+    "card_id": "woori-835097",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835097",
+    "evidence": "패밀리레스토랑 20% 청구할인 아웃백스테이크하우스, 닥터로빈, 생어거스틴"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "saint_augustin",
+      "name": "생어거스틴",
+      "category": "restaurant.general",
+      "aliases": [
+        "생어거스틴",
+        "SAINT AUGUSTIN"
+      ]
+    },
+    "card_id": "woori-835097",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835097",
+    "evidence": "패밀리레스토랑 20% 청구할인 아웃백스테이크하우스, 닥터로빈, 생어거스틴"
+  }
+]

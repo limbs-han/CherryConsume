@@ -1,0 +1,32 @@
+{
+  "new-tests": {
+    "cards": 405,
+    "cases": 2687,
+    "failures": []
+  },
+  "existing-tests": {
+    "cards": 260,
+    "cases": 2141,
+    "failures": []
+  },
+  "school-tests": {
+    "cards": 66,
+    "cases": 132,
+    "failures": []
+  },
+  "new_cards": 166,
+  "total_catalog_cards": 426,
+  "catalog_errors": 0,
+  "catalog_warnings": 39,
+  "local_approval_errors": 0,
+  "changed_files": 169,
+  "shared_files": 3,
+  "duplicate_products": 0,
+  "all_status_counts": {
+    "source_review_pending": 1541,
+    "ready": 405,
+    "blocked": 365,
+    "exclude": 110
+  },
+  "operational_writes": 0
+}

@@ -1,0 +1,51 @@
+card: woori-104176
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 최저 구간 한도
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-20T10:00
+    merchant: kd_navien_subscription
+    amount: 50000
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      navien-subscription-autopay: 10000
+    counted: 0
+  calc: 최저 구간 한도 10000원
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-11-20T10:00
+    merchant: kd_navien_subscription
+    amount: 50000
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 최저 구간보다 1원 적다
+- name: 최고 구간 한도
+  prev_month_spend: 1500000
+  payments:
+  - at: 2026-11-20T10:00
+    merchant: kd_navien_subscription
+    amount: 50000
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      navien-subscription-autopay: 25000
+  calc: 최고 구간 한도 25000원, 승인금액이 적으면 승인금액
+- name: 자동납부가 아니면 할인 없음
+  prev_month_spend: 1500000
+  payments:
+  - at: 2026-11-20T10:00
+    merchant: kd_navien_subscription
+    amount: 50000
+    billing: normal
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부만 할인

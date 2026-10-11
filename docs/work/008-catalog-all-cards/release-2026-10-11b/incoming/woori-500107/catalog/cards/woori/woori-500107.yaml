@@ -1,0 +1,34 @@
+schema_version: 2
+id: woori-500107
+issuer: woori
+name: 카드의정석2 SOLID
+kind: credit
+product_codes:
+  - '500107'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500107', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-09-30'
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      unmodeled: ['정부지원금(보육료, 유치원보조비, 바우처), 관세, 우편요금, 과태료·범칙금·벌금, 여권발급비용, 국가·공공기관 가맹점, 환금성 업종, 교통카드 구매·충전, 신차구매, 의약품 전용몰·제약회사 업종은 할인에서 빠진다']
+    benefits:
+      - key: all-1-2
+        title: 국내외 가맹점 1.2% 청구할인
+        source: page
+        evidence: [국내/해외 가맹점 1.2% 청구할인, 전월 실적 조건 없음(할인한도 제한 없음), ※ Two-in-One 결제서비스(국내 체크 매출) 이용 시 0.3% 청구할인]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1.2}
+        unmodeled: [Two-in-One 결제서비스로 체크 매출이 된 건은 0.3%만 할인한다]
+    unmodeled: ['기타 쿠폰, 할인 등 우리카드의 다른 프로모션과 중복되지 않는다', 해외 가맹점 결제는 매출 접수일 기준으로 할인한다, 국내 가맹점 2~3개월 무이자 할부(건당 5만원 이상)는 혜택 금액으로 계산하지 않는다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 확인했다. 상품 출시일 2026-09-30. 연회비 15,000원(기본 7천, 제휴 8천), 가족카드 없음. 전월 실적 조건과 할인 한도 없이 국내외 1.2% 청구할인. 실적 조건이 없어 실적 규칙은 두지 않았다. 할인 제외 목록에 초·중·고 학교 납부금이 있어 초중고 학교납입금을 뺐다. 시외·고속버스 요금은 차내단말기와 앱 결제를 포함한다고 적혀 있어 업종 전체를 뺐다.

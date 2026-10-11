@@ -1,0 +1,80 @@
+card: woori-103490
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 간편결제 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {pay-5: 500}}
+  calc: 10,000 × 5% = 500
+- name: 20만 직전은 캐시백 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 전월 20만원 미만
+- name: 쿠팡 온라인 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-5: 500}}
+  calc: 10,000 × 5% = 500
+- name: 올리브영 오프라인 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {olive-young-5: 500}}
+  calc: 10,000 × 5% = 500
+- name: 스타벅스 사이렌오더 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-5: 500}}
+  calc: 10,000 × 5% = 500
+- name: 배달 건당 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 1000}}
+  calc: 30,000 × 5% = 1,500 중 건당 1,000
+- name: 후불 시내버스 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-5: 75}}
+  calc: 1,500 × 5% = 75
+- name: 휴대전화 자동납부 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 1000}}
+  calc: 60,000 × 5% = 3,000 중 건당 1,000
+- name: 최초 발급 다음 달 실적 유예
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first-issuance-eligible: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-5: 500}}
+  calc: 10월 등록, 11월은 다음 달 말일 안이라 20만 구간 서비스
+- name: 재발급은 유예 없음
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first-issuance-eligible: false}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 최초 발급이 아니면 전월 0원 구간

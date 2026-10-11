@@ -1,0 +1,49 @@
+card: samsung-aap1692
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 쿠팡 1%와 추가 4%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-02T09:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 200000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 1000, online-4: 4000}, counted: 100000}
+  - {payment: 1, benefits: {base-1: 2000, online-4: 6000}}
+  calc: 1% + 4%. 두 번째 4%는 8,000이나 통합 한도 10,000에서 남은 6,000
+- name: 200만 구간 해외 추가 4% 영역별 15,000
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-02T09:00, amount: 500000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 5000, overseas-4: 15000}}
+  calc: 500,000 × 4% = 20,000이나 영역별 한도 15,000
+- name: 100만 구간 스타벅스 30%와 한도 뒤 기본 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-02T09:00, amount: 40000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 20000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 20000, merchant: megabox, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-30: 12000}}
+  - {payment: 1, benefits: {movie-30: 3000}}
+  - {payment: 2, benefits: {base-1: 200}}
+  calc: 12,000 다음 통합 한도 15,000에서 남은 3,000. 한도를 다 쓴 다음 결제는 1%
+- name: 100만 직전이면 기본 1%만
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-02T09:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 20000, merchant: dominos_pizza, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 1000}}
+  - {payment: 1, benefits: {base-1: 200}}
+  calc: 0 구간
+- name: 200만 구간 Food 영역별 15,000과 커피빈 오프라인
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-02T19:00, amount: 60000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 20000, merchant: coffee_bean, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {food-30: 15000}}
+  - {payment: 1, benefits: {coffee-30: 6000}}
+  calc: 60,000 × 30% = 18,000이나 영역별 15,000. 20,000 × 30% = 6,000

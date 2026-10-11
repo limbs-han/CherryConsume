@@ -1,0 +1,89 @@
+schema_version: 2
+id: kb-04283
+issuer: kb
+name: 요기패스 신용카드
+short_name: KB 요기패스
+kind: credit
+product_codes:
+  - '04283'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04283', fetched_at: '2026-10-11', review_no: 211028-03699-HPP}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: ['PG 전용 가맹점과 별도 가맹점번호로 승인되는 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: yogipass-membership
+        title: 요기패스 멤버십 구독료 월 9,900원 청구할인
+        source: page
+        evidence: ['요기패스 멤버십 자동납부 9,900원 청구할인', '30만원 이상 | 9,900원 | 요기패스 멤버십 구독료 자동납부 시', '요기패스 구독료 결제금액 9,900원 미만 시 결제금액 해당분에 한해 청구할인 적용', '실적 유예기간 - 본인 회원 기준 최초 사용등록 후 다음 달 말일까지 요기패스 신용카드 전월 실적 30만원 미만 시에도 할인서비스 제공 (단, 전월 이용실적 30만원이상 구간 적용)']
+        target:
+          merchants: [yogiyo]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 9900}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 요기요 결제 중 요기패스 멤버십 구독료 자동납부만 대상이다. 앱에서는 요기요 정기결제나 자동납부로 기록한 결제로 계산한다
+      - key: life-5
+        title: 커피·편의점·패스트푸드·미용실 5% 청구할인
+        source: page
+        evidence: ['생활업종 5% | 커피, 편의점, 패스트푸드, 패밀리레스토랑, 미용실 | 건당 1만원 이상 결제 시', '30만원 이상 1만원, 60만원 이상 2만원', 생활업종 및 구독서비스 할인 받은 이용금액(해당 매출 전체)]
+        target:
+          categories: [beauty.salon, cafe, convenience, restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 10000, 300000: 10000, 600000: 20000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        exclude_applied: 1
+        unmodeled: [패밀리레스토랑도 대상이지만 담을 업종이 없어 뺐다]
+      - key: subscription-10
+        title: 넷플릭스·웨이브 10% 청구할인
+        source: page
+        evidence: ['구독서비스 | 30만원 이상 | 5천원 | 10% | 넷플릭스, 웨이브', 생활업종 및 구독서비스 할인 받은 이용금액(해당 매출 전체)]
+        target:
+          merchants: [netflix, wavve]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        exclude_applied: 1
+    unmodeled: [정부지원금과 무승인전표(자판기·터널통행료·항공기내 이용)는 실적에서 빠진다, 가족카드 이용분은 본인 카드와 실적과 한도를 합산한다, 할인 한도는 전표 매입 순서대로 채운다, 기본 포인트리 적립은 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙의 시작일을 원문에서 찾지 못했다. 수집일을 잠정 시작일로 둔다., assumed: '2026-10-11'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 옮겼다. 연회비는 국내전용과 국내외겸용(K-World UPI, Master) 모두 1만5천원이다. 패밀리레스토랑은 공통 업종이 없어 생활업종 할인에서 뺐다.

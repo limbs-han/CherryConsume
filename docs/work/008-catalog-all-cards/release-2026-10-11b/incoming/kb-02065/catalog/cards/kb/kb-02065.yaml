@@ -1,0 +1,128 @@
+schema_version: 2
+id: kb-02065
+issuer: kb
+name: KB국민행복카드
+short_name: KB국민행복카드
+kind: credit
+product_codes:
+  - '02065'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02065', fetched_at: '2026-10-11', review_no: 220414-01031-PIF}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-02-01'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, taxi, transit, utility]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - key: shop-edu
+        per: month
+        amount: {0: 5000, 400000: 5000, 800000: 10000, 1200000: 20000}
+      - key: autopay
+        per: month
+        amount: {0: 3000, 400000: 3000, 800000: 5000, 1200000: 7000}
+    benefits:
+      - key: mart-5
+        title: 대형마트 5% 청구할인
+        source: page
+        evidence: [구분 | 할인율 | 전월실적별 통합할인한도 | 40만원 이상 | 80만원 이상 | 120만원 이상 | 쇼핑 | 대형마트 | 5% | 5천원 | 1만원 | 2만원 | 온라인쇼핑몰 | 홈쇼핑 |, '대형마트 : 이마트, 롯데마트, 홈플러스', '※ 온라인쇼핑몰, 상품권 구매 및 건물 내 입점매장, SSM(롯데슈퍼, 이마트 에브리데이, 홈플러스 익스프레스) 이용금액은 서비스 제외', '최초 카드 사용등록일로부터 다음달 말일까지 ''KB국민행복카드'' 이용실적이 40만원 미만 시에도 할인서비스가 제공됩니다. (단, 40만원 이상 구간 적용)']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+          - payment_not: [baemin_pay, coupay, eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shop-edu}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [대형마트 건물 안 입점매장은 할인에서 빠진다]
+      - key: online-homeshopping-5
+        title: 온라인쇼핑몰·홈쇼핑 5% 청구할인
+        source: page
+        evidence: ['온라인쇼핑몰 : 옥션, G마켓, 11번가', '※ 온라인 쇼핑몰 내 상품권, 여행, 항공권, 티켓, 도서 이용금액은 서비스 제외', '홈쇼핑 : CJ홈쇼핑, GS홈쇼핑, 현대홈쇼핑', '※ 쇼핑 관련 할인서비스는 공식 홈페이지가 아닌 배너, 이벤트페이지, 각종 페이(네이버페이, 카카오페이 등) 관련 이용금액은 제외']
+        target:
+          merchants: [auction, cj_onstyle, eleven_st, gmarket, gs_shop, hyundai_homeshopping]
+        when:
+          - payment_not: [baemin_pay, coupay, eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shop-edu}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [온라인쇼핑몰 안의 상품권·여행·항공권·티켓·도서 결제와 공식 홈페이지가 아닌 배너·이벤트 페이지 결제는 할인에서 빠진다]
+      - key: study-material-5
+        title: 학습지 5% 청구할인
+        source: page
+        evidence: [교육 | 키즈카페 | 5% | 5천원 | 1만원 | 2만원 | 문화센터 | 학습지 |, '학습지 : 학습지 업종']
+        target:
+          categories: [education.study_material]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shop-edu}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: telecom-autopay-5
+        title: 통신요금 자동납부 5% 청구할인
+        source: page
+        evidence: [자동납부 | 통신료 | 5% | 3천원 | 5천원 | 7천원 | 아파트관리비 |, '통신료 : 3대 통신사(SKT, KT, LG U+) 자동납부 통신요금', '※ 알뜰폰 및 이동통신요금,유선전화,인터넷 결합상품 제외']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: autopay}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [이동통신요금과 유선전화·인터넷을 묶은 결합상품 요금은 할인에서 빠진다]
+      - key: apartment-autopay-5
+        title: 아파트관리비 자동납부 5% 청구할인
+        source: page
+        evidence: ['아파트관리비 : 당사를 통해 조회 가능한 아파트에 한해 자동납부 등록 후 이용건']
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: autopay}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [KB국민카드로 조회되는 아파트만 할인된다]
+    unmodeled: [키즈카페(유아전문 교육기관·놀이기관 업종)와 문화센터 5% 할인은 공통 업종이 없어 계산하지 않는다. 같은 쇼핑·교육 통합 한도를 쓴다, 국가바우처 결제와 단체보험은 카드 혜택 금액이 아니라 계산하지 않는다, 정부지원금(보육료·유치원보조비·바우처) 결제와 자판기·터널통행료·항공기내 같은 무승인 전표는 실적에서 빠진다, 당월 승인 뒤 당월 취소한 전표는 그 달 실적에서 빠진다, 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 결제대행업체(PG)나 간편결제 전용 가맹점으로 승인된 결제는 할인에서 빠질 수 있다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2021년 2월 1일 신규 출시만 적었다. 출시 뒤 부가서비스 변경 공지를 확인하지 못해 출시일을 잠정 시작일로 둔다., assumed: '2021-02-01'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 실적 제외 교통요금이 어디까지인지 적혀 있지 않다. 덜 주는 쪽으로 대중교통 전체와 택시를 실적에서 뺐다, assumed: 'transit, taxi'}
+  - {path: 'revisions[0].limits[shop-edu]', question: 원문 표는 쇼핑과 교육에 같은 전월실적별 통합할인한도를 따로 적었다. 따로인지 함께인지 분명하지 않아 함께 쓰는 쪽으로 둔다, assumed: shared}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 국가바우처 카드라 KB Pay에서만 신청한다. 실적 유예는 생애 최초 본인 발급만 facts로 확인한다. 할인 한도는 이용 순서대로 채운다.

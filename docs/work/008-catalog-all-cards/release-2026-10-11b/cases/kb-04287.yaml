@@ -1,0 +1,39 @@
+card: kb-04287
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 Wavve 자동결제 전액 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 7900, merchant: wavve, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {wavve-7900: 7900}, counted: 0}
+  calc: 7,900원 전액 할인. 할인 건은 실적 제외
+- name: 30만 직전 Wavve 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 7900, merchant: wavve, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 7900}
+  calc: 0 구간
+- name: 커피 10% 건당 1만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {food-10: 1000}, counted: 0}
+  calc: 1만원까지만 10% = 1,000원
+- name: 쿠팡 와우 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 7890, merchant: coupang_wow, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {membership-20: 1578}, counted: 0}
+  calc: 7,890원 × 20% = 1,578원
+- name: 미용실 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: beauty.salon, channel: offline}
+  expect:
+  - {payment: 0, benefits: {selfcare-5: 2000}, counted: 0}
+  calc: 40,000원 × 5% = 2,000원

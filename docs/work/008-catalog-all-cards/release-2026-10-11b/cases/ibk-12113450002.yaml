@@ -1,0 +1,78 @@
+card: ibk-12113450002
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 코레일 10% 월 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: korail, channel: online}
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: korail, channel: online}
+  expect:
+  - {payment: 0, benefits: {transit-10: 1500}}
+  - {payment: 1, benefits: {transit-10: 500}}
+  calc: 15,000원 × 10% = 1,500원. 둘째는 월 2,000원에 남은 500원
+- name: 경계 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: korail, channel: online}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 고속버스 1만원 미만
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 1만원 이상만 할인
+- name: 통신 자동납부 5% 월 3천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: skt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 3000}}
+  calc: 80,000원 × 5% = 4,000원이지만 월 3,000원 한도
+- name: 학원 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: education.academy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {academy-5: 2500}}
+  calc: 50,000원 × 5% = 2,500원
+- name: 서점 월 1회 함께
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: yes24, channel: online}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: kyobo_book, channel: offline}
+  expect:
+  - {payment: 0, benefits: {bookstore-yes24-5: 1500}}
+  - {payment: 1, benefits: {}}
+  calc: 30,000원 × 5% = 1,500원. 서점은 함께 월 1회
+- name: YES24 오프라인 제외
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: yes24, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: YES24는 온라인만
+- name: 토익 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 52500, merchant: toeic, channel: online}
+  expect:
+  - {payment: 0, benefits: {exam-10: 4000}}
+  calc: 52,500원 × 10% = 5,250원이지만 월 4,000원 한도
+- name: 넷플릭스 10% 월 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 17000, merchant: netflix, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {ott-10: 1000}}
+  calc: 17,000원 × 10% = 1,700원이지만 월 1,000원 한도
+- name: 교보문고 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: kyobo_book, channel: offline}
+  expect:
+  - {payment: 0, benefits: {bookstore-5: 1500}}
+  calc: 30,000원 × 5% = 1,500원

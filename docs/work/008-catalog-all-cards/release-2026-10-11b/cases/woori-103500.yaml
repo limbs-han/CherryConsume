@@ -1,0 +1,70 @@
+card: woori-103500
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 국내 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-04T13:00, amount: 10000, category: restaurant.general, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {base-1: 100}
+  - payment: 1
+    benefits: {}
+  calc: 50만원 미만이라 백화점도 기본 1% 100원. 해외는 기본 적립이 없어 0원
+- name: 50만 직전 백화점 1%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: shinsegae_department, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {base-1: 1000}
+  calc: 50만원에 1원 모자라 기본 1% 1,000원
+- name: 50만 백화점과 온라인 2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: hyundai_department, channel: offline}
+  - {at: 2026-11-04T13:00, amount: 50000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {special-1-department: 2000}
+  - payment: 1
+    benefits: {special-1-online: 1000}
+  calc: 100,000원 x 2% = 2,000P. 50,000원 x 2% = 1,000P
+- name: 특별 한도 5만점 다음은 기본
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 2500000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: lotte_department, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {special-1-department: 50000}
+  - payment: 1
+    benefits: {base-1: 1000}
+  calc: 2,500,000원 x 2% = 50,000P로 한도를 채움. 다음 결제는 기본 1% 1,000P
+- name: 항공과 해외 일시불 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, merchant: korean_air}
+  - {at: 2026-11-04T13:00, amount: 100000, category: restaurant.general, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {special-2-travel: 9000}
+  - payment: 1
+    benefits: {special-2-overseas: 3000}
+  calc: 300,000원 x 3% = 9,000P. 해외 100,000원 x 3% = 3,000P
+- name: 스타벅스 1만원 이상 10%와 통합 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 9999, merchant: starbucks}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: starbucks}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: olive_young}
+  expect:
+  - payment: 0
+    benefits: {base-1: 99}
+  - payment: 1
+    benefits: {lifestyle-10: 3000}
+  - payment: 2
+    benefits: {lifestyle-10: 2000}
+  calc: 9,999원은 1만원 미만이라 기본 1% 99원. 30,000원 x 10% = 3,000원. 다음 3,000원은 남은 한도 2,000원

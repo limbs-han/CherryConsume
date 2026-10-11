@@ -1,0 +1,99 @@
+schema_version: 2
+id: kb-09701
+issuer: kb
+name: KB On the Go 체크카드
+short_name: KB On the Go 체크
+kind: check
+product_codes:
+  - '09701'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09701', fetched_at: '2026-10-11', review_no: 260622-02072-PIF}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-06-29'
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG·간편결제 전용 가맹점 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 600000: 20000}
+    benefits:
+      - key: fuel-3
+        title: 주유소 3% 환급할인
+        source: page
+        evidence: ['주유소 업종 | 3% | 3,000원 | 6,000원', 건당 10만원 이용금액까지 할인 제공, 월간 통합할인한도 내에서 혜택 제공]
+        target:
+          categories: [fuel]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, base: 100000}
+          - per: month
+            amount: {300000: 3000, 600000: 6000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: cafe-3
+        title: 커피·음료전문점 3% 환급할인
+        source: page
+        evidence: ['커피/음료전문점 업종 | 3% | 3,000원 | 6,000원', 월간 통합할인한도 내에서 혜택 제공]
+        target:
+          categories: [cafe]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - per: month
+            amount: {300000: 3000, 600000: 6000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: fastfood-3
+        title: 패스트푸드 3% 환급할인
+        source: page
+        evidence: ['패스트푸드 업종 | 3% | 3,000원 | 6,000원', 월간 통합할인한도 내에서 혜택 제공]
+        target:
+          categories: [restaurant.fastfood]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - per: month
+            amount: {300000: 3000, 600000: 6000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: liiv-m-3000
+        title: Liiv M 3천원 환급할인
+        source: page
+        evidence: ['Liiv M(리브엠) 이동통신 | 30만원 이상 | 3,000원', 건당 3만원 이상 이용 시 월 1회 할인 제공]
+        target:
+          merchants: [liiv_m]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: telecom-2000
+        title: SKT·KT·LG U+ 2천원 환급할인
+        source: page
+        evidence: ['SKT, KT, LG U＋ 이동통신 | 30만원 이상 | 2,000원', 건당 5만원 이상 이용 시 월 1회 할인 제공]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: [KB손해보험 건당 10만원 이상 연 1회 1만원 환급할인은 KB손해보험 가맹점이 공통 파일에 없어 계산하지 않는다. 통합할인한도와 별도다, 최초 사용등록일부터 다음 달 말일까지 실적 30만원 미만이어도 영역별 한도의 50%와 통합한도 5천원을 주는 실적 유예는 계산하지 않는다, 동일 계열 카드는 전월 실적과 할인한도를 합산한다, 할인은 전표 매입 순서대로 적용한다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지(준법감시인 심의필 260622-02072-PIF)를 직접 받아 대조했다. 2026-06-29 출시 체크카드로 연회비가 없다. 초안의 kind credit은 원문의 체크로 고쳤다. 해외 이용금액은 매입 완료 기준으로 실적에 넣는다.

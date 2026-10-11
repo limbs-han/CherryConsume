@@ -1,0 +1,104 @@
+schema_version: 2
+id: lotte-1837
+issuer: lotte
+name: LOCA 더하기 카드(Smart)
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: visa, amount: 10000}
+  - {scope: global, brand: amex, amount: 10000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00013_20260331_10004.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-05-09'
+    source: manual
+    tiers: [0, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 800000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express]
+    limits:
+      - {key: special, per: month, amount: 15000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [hospital-1-5pct, education-1-5, online-1-5, shopping-mart-4000, basic-1pct]
+        spill: split
+    benefits:
+      - key: basic-1pct
+        title: 국내외 모든 가맹점 1% 결제일 할인
+        source: manual
+        evidence: [기본할인 | 국내외 모든 가맹점 | 1.0% | 없음, ㆍ국내외 모든 가맹점에서 혜택이 제공됩니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 800000}
+      - key: hospital-1-5pct
+        title: 병원 1.5% 결제일 할인
+        source: manual
+        evidence: [특별할인 | 병원 | 1.5% | 15, 000원, ㆍ특별할인은 건당 2만원 이상 결제 건에 대해서 혜택이 제공됩니다., ' - 병원 업종으로 등록된 가맹점에서 혜택이 제공됩니다.']
+        target:
+          categories: [hospital]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: special}
+        tiers: {from: 800000}
+        unmodeled: ['산후조리원, 요양병원, 재활원, 의료재단, 보건복지협회 이용금액은 혜택이 제공되지 않는다']
+      - key: education-1-5
+        title: 학원·학습지·유치원·어린이집 1.5% 결제일 할인
+        source: manual
+        evidence: [교육 (학원·학습지·유치원/어린이집), ' - 오프라인 결제 건만 혜택이 제공됩니다.', ' - 학원, 학습지, 유치원/어린이집 업종으로 등록된 가맹점에서 혜택이 제공됩니다.']
+        target:
+          categories: [childcare, education.academy, education.kindergarten, education.study_material]
+        when:
+          - amount: {min: 20000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: special}
+        tiers: {from: 800000}
+        unmodeled: [자동차 학원과 컴퓨터 학원은 혜택이 제공되지 않는다, 국가 운영 또는 지자체 단체 운영 유치원과 어린이집은 혜택이 제공되지 않는다]
+      - key: online-1-5
+        title: 온라인 쇼핑 1.5% 결제일 할인
+        source: manual
+        evidence: [' - 온라인 업종으로 등록된 가맹점에서 혜택이 제공됩니다.', '예1) 온라인 쇼핑 이용 건(ex. 쿠팡, SSG.COM, 11번가 등)', ' - 단, 해외 온라인 가맹점 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [online_shopping]
+        when:
+          - amount: {min: 20000}
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: special}
+        tiers: {from: 800000}
+        unmodeled: [스타벅스 사이렌오더처럼 PG 업종으로 접수되는 앱 결제도 대상이지만 온라인 쇼핑 업종이 아닌 가맹점은 계산하지 않는다]
+      - key: shopping-mart-4000
+        title: 마트·슈퍼 4,000원 결제일 할인
+        source: manual
+        evidence: ['쇼핑할인 | 마트 (이마트·롯데마트·홈플러스) | 4,000원 | 총 16,000원 (월 4회)', 슈퍼 (이마트에브리데이·롯데슈퍼·홈플러스익스프레스), ㆍ쇼핑할인은 건당 5만원 이상 결제 건에 대해서 혜택이 제공됩니다., ㆍ오프라인 결제 건만 혜택이 제공됩니다.]
+        target:
+          merchants: [emart, emart_everyday, homeplus, homeplus_express, lotte_mart, lotte_super]
+        when:
+          - amount: {min: 50000}
+          - {channel: offline}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 4}
+          - {per: month, amount: 16000}
+        tiers: {from: 800000}
+    unmodeled: [실적은 지난달 모든 롯데 개인 신용카드 이용금액 80만원 이상이고 그중 이 카드 이용금액이 30만원 이상이어야 한다. 다른 롯데카드 이용금액을 알 수 없어 이 카드만으로 80만원을 채워야 혜택을 계산한다, 기본할인과 특별할인·쇼핑할인은 중복되지 않고 특별할인·쇼핑할인 한도를 넘는 금액은 기본할인을 받는다. 쇼핑할인 4천원이 기본할인 1%보다 작은 큰 결제도 쇼핑할인으로 계산한다, 국내 가맹점 5만원 이상 2~3개월 할부는 무이자 할부이고 그 결제는 다른 할인과 실적에서 빠진다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, '고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 현금서비스·카드론·이자·수수료는 실적과 할인에서 빠진다', 가족카드 이용금액도 실적에 합산한다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+notes: 2026-10-11 상품설명서 대조. 출시일 2023-05-09. 상품 코드를 공개 목록에서 찾지 못해 공시 색인 id를 그대로 둔다. 특별할인 세 영역은 표에서 한도 15,000원 한 칸을 같이 써 함께 쓰는 한도로 두었다. 신규 발급 특례는 발급일부터 다음 달 말일까지 실적과 관계없이 할인이라 80만 구간으로 넣었다. 공과금과 아파트관리비는 원문 제외 목록에 없어 실적과 할인에 넣었다.

@@ -1,0 +1,44 @@
+schema_version: 2
+id: hyundai-160298
+issuer: hyundai
+name: SC제일은행-the Red Stripe Edition2
+short_name: SC Red Stripe
+search_names: [SC제일은행 the Red Stripe, SC제일은행 레드 스트라이프]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 500000}
+  - {scope: global, brand: visa, amount: 500000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260427-1344-68_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SC_the%20Red%20St%20Ed2_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-05-01
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립하지 않는다, 현대카드의 다른 할인이 적용된 결제는 적립하지 않는다, 국제브랜드 수수료와 해외서비스 수수료는 적립하지 않는다]
+    benefits:
+      - key: base-m-1-5
+        title: 국내외 가맹점 1.5% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1.5% M포인트 적립, 1회 및 연간 적립 한도 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립]
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1.5, round: round}
+        tiers: {from: 500000}
+    unmodeled: [연간 보너스 바우처(10만원권 3매)와 누적 1천만원당 10만원권 바우처는 연간·누적 이용 금액 조건이라 계산하지 않는다, 공항 라운지와 발레파킹은 결제 혜택이 아니다, 적립은 매출전표 접수 순서로 한다, 실적은 본인과 가족 카드를 합산한다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, M 긴급적립을 쓰면 적립 포인트가 상환에 쓰인다, SC제일은행 외화 현찰 환전 90% 우대 환율은 결제 혜택이 아니다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2024-11-06이고 가이드북은 2026년 5월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다, assumed: '2026-05-01'}
+notes: 2026-10-11 공식 가이드북(2026년 5월 기준) 대조. 연회비 국내전용과 국내외겸용(VISA Infinite) 500,000원(기본 150,000+제휴 350,000), 가족카드 150,000원. 전월 50만 이상 국내외 1.5% M포인트 무제한, 건별 소수점 이하 반올림. 실적 제외는 카드론·연회비·공과금·상품권·선불카드뿐이고 무이자 할부와 할인 받은 결제도 실적에 든다. 적립 제외는 카드사 기본에 월세를 더했다. 신규 발급 시 수령 등록월 다음 달 이용 건까지 50만 구간.

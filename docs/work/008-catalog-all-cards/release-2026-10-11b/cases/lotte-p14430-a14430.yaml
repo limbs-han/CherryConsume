@@ -1,0 +1,32 @@
+card: lotte-p14430-a14430
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 1.2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 12345, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {domestic-1-2: 148}}
+  calc: 12,345 × 1.2% = 148.14, 원 미만 버림 148
+- name: 해외 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  calc: 100,000 × 2% = 2,000
+- name: 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, category: other}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 299,999원은 0 구간
+- name: 지하철은 실적과 할인 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 1500, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 대중교통은 실적과 할인 제외

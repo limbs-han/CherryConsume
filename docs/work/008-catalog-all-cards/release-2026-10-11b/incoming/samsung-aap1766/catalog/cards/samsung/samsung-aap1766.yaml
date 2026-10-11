@@ -1,0 +1,164 @@
+schema_version: 2
+id: samsung-aap1766
+issuer: samsung
+name: 삼성 iD AUTO 카드
+short_name: 삼성 iD AUTO
+search_names: [iD AUTO, 삼성 아이디 오토, 아이디 오토]
+kind: credit
+product_codes: [AAP1766]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 49000}
+  - {scope: global, brand: visa, amount: 49000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1766', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoBM6Mor17qmZs6OKDLUDf8%3D&sn=1', fetched_at: 2026-10-11, review_no: 제2022-C1a-04459호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2022-08-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다', '이 카드로 낸 고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다']
+    limits:
+      - {key: fuel, per: month, base: 300000}
+      - {key: life, per: month, base: 1000000}
+    benefits:
+      - key: fuel-70
+        title: 주유 리터당 70원 할인
+        source: manual
+        evidence: [모든 주유소 리터당 70원·90원 결제일할인, '전월 이용금액대별 리터당 할인금액 50만원 이상 70원, 100만원 이상 90원', '일 1회, 1회당 주유금액 10만원까지, 월 주유금액 30만원까지 제공', LPG충전소 제외]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 70}
+        limits:
+          - {per: day, count: 1}
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 500000, to: 500000}
+        unmodeled: [LPG충전소는 할인하지 않는다]
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산하고 소수점 이하 리터를 버린다. 경유와 등유도 휘발유가 기준이다. 앱은 reference.yaml 기름값을 쓴다
+      - key: fuel-90
+        title: 주유 리터당 90원 할인
+        source: manual
+        evidence: [모든 주유소 리터당 70원·90원 결제일할인, '전월 이용금액대별 리터당 할인금액 50만원 이상 70원, 100만원 이상 90원', '일 1회, 1회당 주유금액 10만원까지, 월 주유금액 30만원까지 제공', LPG충전소 제외]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 90}
+        limits:
+          - {per: day, count: 1}
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 1000000}
+        unmodeled: [LPG충전소는 할인하지 않는다]
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산하고 소수점 이하 리터를 버린다. 경유와 등유도 휘발유가 기준이다. 앱은 reference.yaml 기름값을 쓴다
+      - key: mart-1-5
+        title: 할인점 1.5% 할인
+        source: manual
+        evidence: [할인점·온라인쇼핑몰·편의점·배달앱·커피전문점 1.5% 결제일할인, '할인점 이마트, 이마트 트레이더스, 롯데마트, 홈플러스', '통합 월 할인한도 : 100만원', 전월 이용금액 50만원 이상 시 제공, '할인점은 온라인몰도 포함되며, 기업형 슈퍼마켓, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart, traders]
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        unmodeled: [할인점의 상품권·주차장 같은 쇼핑 외 결제와 임대매장은 할인하지 않는다]
+      - key: online-1-5
+        title: 온라인쇼핑몰 1.5% 할인
+        source: manual
+        evidence: ['온라인쇼핑몰 쿠팡, 티몬, 위메프, SSG.COM, G마켓, 옥션, 11번가, 인터파크, 삼성카드 쇼핑', '통합 월 할인한도 : 100만원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, interpark, samsung_card_shopping, ssg_com, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+      - key: convenience-1-5
+        title: 편의점 1.5% 할인
+        source: manual
+        evidence: ['편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', '편의점, 커피전문점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [cu, emart24, gs25, ministop, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: delivery-1-5
+        title: 배달앱 1.5% 할인
+        source: manual
+        evidence: ['배달앱 배달의민족, 요기요', '배달앱은 공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+      - key: coffee-1-5
+        title: 커피전문점 1.5% 할인
+        source: manual
+        evidence: ['커피전문점 스타벅스, 이디야커피, 투썸플레이스, 카페베네, 탐앤탐스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋, 블루보틀', '편의점, 커피전문점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [angel_in_us, artisee, blue_bottle, cafe_bene, coffee_bean, ediya, hollys, pascucci, paul_bassett, tom_n_toms, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: starbucks-1-5
+        title: 스타벅스 1.5% 할인
+        source: manual
+        evidence: [커피전문점 스타벅스, '단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 백화점·할인점·쇼핑몰 임대매장은 제외한다]
+      - key: movie-5000
+        title: 영화 5,000원 할인
+        source: manual
+        evidence: ['영화 티켓 12,000원 이상 결제 시 5,000원 결제일할인', 'CGV, 롯데시네마, 메가박스', 통합 월 1회 제공, 전월 이용금액 50만원 이상 시 제공, 오프라인 결제 및 공식 홈페이지·앱을 통한 결제건에 한함]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 12000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [영화는 현장 결제와 공식 홈페이지·앱 결제만 할인한다]
+      - key: base-0-5
+        title: 국내외 가맹점 0.5% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 국내외 가맹점 0.5% 결제일할인', 해외는 해외겸용카드에 한해 제공]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+    unmodeled: ['주차장(케이엠파크)·하이패스(삼성후불하이패스카드 고속도로 통행료)·대리운전(카카오 T 대리 앱) 10% 할인(통합 월 5,000원, 전월 50만원 이상)은 담을 가맹점이 없어 넣지 않았다', '스피드메이트 엔진오일 20,000원 현장할인(월 1회, 연 2회), 차량 안전점검·타이어 펑크 수리·위치 교환 무료(각 연 1회)는 계산하지 않는다', 하이패스 고속도로 통행요금은 실적에서 빠지지만 담을 업종이 없다, 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '할인은 승인일 기준이고 실적은 승인일 기준이며 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품설명서 판(2022.8)의 첫날로 두었다. 부가서비스 변경 제한 기준일은 2022-06-30이다, assumed: '2022-08-01'}
+  - path: revisions[0].limits[life]
+    question: 상품설명서가 생활 필수 영역 1.5%의 통합 월 할인한도를 100만원으로 적었다. 상품 페이지에서 다시 확인하지 못했다
+    assumed: '1000000'
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 상품설명서(2022.8판, 심의필 2022-C1a-04459호) 대조. 연회비 해외겸용 VISA와 국내전용 모두 49,000원(기본 7,000+제휴 42,000). 0.5%는 실적과 한도 없이 주고 나머지는 전월 50만원 이상이다. 발급월+1개월까지는 50만 구간 혜택. 주유는 일 1회, 1회 10만원, 월 30만원까지 리터당 할인이다. 실적 제외는 4대보험, 국세·지방세·공과금, 임대료, 학교납입금, 등록금, 대중교통, 택시, 하이패스 통행요금, 기프트·선불카드, 상품권이다. 아파트 관리비, 무이자할부, 할인 받은 이용금액은 실적에 들어간다.

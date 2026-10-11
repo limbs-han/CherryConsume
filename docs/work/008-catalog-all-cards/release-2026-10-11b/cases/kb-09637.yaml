@@ -1,0 +1,25 @@
+card: kb-09637
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 10만 구간 파리바게뜨 1천원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12000, merchant: paris_baguette, channel: offline}
+  expect:
+  - {payment: 0, benefits: {happy-merchant-1000: 1000}, counted: 12000}
+  calc: 1만원 이상 1,000원. 실적 제외 아님
+- name: 10만 직전 할인 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12000, merchant: paris_baguette, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 12000}
+  calc: 0 구간
+- name: 1만원 미만 할인 없음
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: dunkin, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9999}
+  calc: 최소 결제금액 미달
