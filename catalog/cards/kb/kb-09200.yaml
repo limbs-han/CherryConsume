@@ -1,0 +1,85 @@
+schema_version: 2
+id: kb-09200
+issuer: kb
+name: KB국민 가온 플래티늄바우처카드
+short_name: KB 가온 플래티늄바우처
+kind: credit
+product_codes:
+  - '09200'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 100000}
+  - {scope: global, brand: mastercard, amount: 100000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09200', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    stacks:
+      - {key: main, pick: best}
+      - {key: overseas}
+    benefits:
+      - key: domestic-1
+        title: 국내 전 가맹점 1.0% 포인트리 적립
+        source: page
+        evidence: [국내 전 가맹점 1.0% 적립, 국내 전 가맹점과 프리미엄 쇼핑은 중복 적립 불가, 전월 1일~말일까지 가온 플래티늄바우처카드로 이용한 일시불 및 할부 승인금액 기준 50만원 이상일 경우에만 캐시백 및 적립 서비스를 제공합니다., '단, 최초 카드 사용 등록일로부터 다음 달 말일까지는 전월 이용실적이 50만원 미만인 경우에도 서비스를 제공합니다.', 적립 서비스 제공 관련 카드별 실적 유예기간은 본인회원이 해당카드를 생애 최초 발급받은 경우에 적용됩니다., '포인트리 적립 제외대상: 무이자 할부 이용금액']
+        target: {all: true}
+        when:
+          - {interest_free: false, region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 1}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: premium-shopping-1-3
+        title: 신세계사이먼 프리미엄 아울렛·면세점 1.3% 포인트리 적립
+        source: page
+        evidence: ['프리미엄 쇼핑(롯데/신세계 프리미엄 아울렛, 면세점) 1.3% 적립', '신세계사이먼 프리미엄 아울렛: 파주점, 여주점, 부산점, 시흥점', '오프라인 면세점: 시내점, 공항점(기내 제외)', '온라인 면세점: 롯데, 신라']
+        target:
+          merchants: [lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_premium_outlet]
+        when:
+          - {interest_free: false, region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 1.3}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 롯데 프리미엄 아울렛은 대상이 파주·이천·김해·광명·동부산점뿐인데 공통 가맹점이 모든 지점을 담아 뺐다. 다른 면세점의 시내점·공항점도 대상이지만 공통 가맹점이 온라인과 오프라인을 가르지 않아 롯데와 신라만 넣었다
+      - key: overseas-5
+        title: 해외 가맹점 일시불 5% 캐시백
+        source: page
+        evidence: [해외가맹점 일시불 이용금액의 5% 캐시백(원화기준 월 20만원 이용금액까지), '이용금액 기준 : 해당월 1일 ~ 말일까지 매입완료된 해외이용금액 기준']
+        target: {all: true}
+        when:
+          - {lump_sum: true, region: overseas}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, base: 200000}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: overseas
+        unmodeled: [해외 이용은 승인일이 아니라 매입 완료일 달로 캐시백 한도를 센다]
+    unmodeled: [연 1회 8만원 바우처는 연회비 납부와 연간 이용금액 조건이 있어 결제 혜택으로 계산하지 않는다, 공항 라운지·발레파킹 같은 플래티늄 서비스는 계산하지 않는다, 정부지원금 결제와 무승인 전표는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2017.09.29 출시만 적었다. 현재 규칙 시작일을 몰라 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].benefits[domestic-1]', question: 원문은 적립한도 적용기간만 적고 금액을 적지 않았다. 한도 없이 둔다, assumed: 한도 없음}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지로 대조했다. 실적 유예는 생애 최초 발급 조건이 적혀 있어 사실로 묻는다. 가온플래티늄카드 kb-09152와 혜택이 다른 상품이다.
