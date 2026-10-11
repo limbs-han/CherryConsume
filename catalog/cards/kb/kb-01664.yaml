@@ -1,0 +1,147 @@
+schema_version: 2
+id: kb-01664
+issuer: kb
+name: KB국민 노리 체크카드
+short_name: KB 노리 체크
+kind: check
+product_codes:
+  - '01664'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01664', fetched_at: '2026-10-10', review_no: 260522-01722-HPP}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000, 500000, 1000000]
+    spend:
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행, 할인을 주지 않는 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 10000, 300000: 20000, 500000: 30000, 1000000: 50000}
+    benefits:
+      - key: transit-10
+        title: 버스·지하철 10% 할인
+        source: page
+        evidence: [대중교통(버스·지하철) | 10% | 월 이용금액 2만원까지 할인 적용 | 30만원 이상 시, '후불교통(시내버스, 지하철) 10% 청구할인', 고속/시외버스 환급할인, '교통이용금액 월 2만원까지 할인 적용 (최대 할인액 2,000원)', 전월이용실적에 따른 통합할인한도 적용]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [후불교통 할인은 실제 이용일이 아니라 이용내역서에 적힌 이용일 기준이다]
+      - key: telecom-2500
+        title: 이동통신요금 자동이체 2,500원 할인
+        source: page
+        evidence: ['이동통신요금 자동이체 | 2,500원 | 이용금액 건당 5만원 이상 시 할인(월 1회)', 해당카드로 자동이체 등록 시 할인 적용, 유무선 통신요금 통합청구금액 자동이체는 할인 제외, 'SKT, KT Olleh, LGU+에 한하여 할인 적용']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 50000}
+        reward: {type: cashback, fixed: 2500}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [유무선 통합청구 요금 자동이체는 빠진다]
+      - key: cgv-35
+        title: CGV 35% 할인
+        source: page
+        evidence: [CGV | 35% | 이용금액 건당 1만원~2만원까지 할인 적용 | 20만원 이상 시, '제공조건 : 현장구매 및 CGV 홈페이지·CGV 앱 결제', '할인제외 : 상품권 구매 / 매점 이용금액']
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 35}
+        limits:
+          - {per: txn, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [CGV 매점 이용은 빠진다]
+      - key: restaurant-20
+        title: 아웃백·VIPS 20% 할인
+        source: page
+        evidence: ['아웃백, VIPS | 20% | 이용금액 건당 3만원~5만원까지 할인 적용', '할인제외 : 상품권 구매 / 백화점·대형할인점 입점 점포']
+        target:
+          merchants: [outback, vips]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [백화점·대형할인점 입점 점포는 빠진다]
+      - key: starbucks-20
+        title: 스타벅스 20% 할인
+        source: page
+        evidence: [스타벅스 | 20% | 이용금액 건당 1만원~2만원까지 할인 적용, '할인제외 : 상품권 구매 및 선불카드 구입·충전금액']
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: theme-park-50
+        title: 에버랜드·롯데월드 50% 할인
+        source: page
+        evidence: ['에버랜드, 롯데월드 | 50% | 이용금액 건당 3만원~5만원까지 할인 적용', '제공조건 : 현장 티켓 구매']
+        target:
+          merchants: [everland, lotte_world]
+        when:
+          - channel: offline
+            amount: {min: 30000}
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [현장 티켓 구매만 할인한다]
+      - key: gs25-5
+        title: GS25 5% 할인
+        source: page
+        evidence: [GS25 | 5% | 이용금액 건당 1만원~2만원까지 할인 적용]
+        target:
+          merchants: [gs25]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: kyobo-5
+        title: 교보문고 5% 할인
+        source: page
+        evidence: [교보문고 | 5% | 이용금액 건당 2만원~5만원까지 할인 적용, '제공조건 : 현장구매 및 교보문고 홈페이지·교보문고 앱 결제', '할인 제외 : 핫트랙스 이용금액']
+        target:
+          merchants: [kyobo_book]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [핫트랙스 이용은 빠진다]
+    unmodeled: [전월 실적은 노리·락스타·해피노리·해피락스타 체크카드 같은 동일계열 카드 이용을 합산한다, 최초 발급 후 사용등록일로부터 60일까지는 전월 실적이 없어도 통합한도 1만원 안에서 할인한다. 교통과 통신은 빠진다. 60일 기간을 담을 수 없어 계산하지 않는다, '무승인 금액(자판기, 터널통행료, 기차·고속버스 취소 반환 수수료)과 정부지원금은 실적에서 빠진다', 금융수수료 면제는 최근 1개월 매입 70만원 이상 조건이라 계산하지 않는다, 통합할인한도는 전표 매입 순서대로 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2010년 12월 23일 출시만 적었다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통 이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 건당 1만원~2만원까지 할인은 1만원 이상 결제에서 2만원까지만 할인 계산에 넣는다는 뜻으로 옮겼다. 대중교통과 통신은 30만원 이상, 나머지는 20만원 이상이다.
