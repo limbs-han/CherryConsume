@@ -1,0 +1,129 @@
+schema_version: 2
+id: nh-112202
+issuer: nh
+name: 부자되세요 아파트카드(비씨)
+short_name: 부자되세요 아파트
+kind: credit
+product_codes:
+  - '112202'
+  - '90000371'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 12000}
+  - {scope: global, brand: unionpay, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90000371', fetched_at: 2026-10-10, review_no: 2023-C1a-08509}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.academy, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['백화점, 역사, 할인점(아울렛) 입점매장은 할인에서 빠진다', 비씨카드 등록 가맹점 업종과 다른 업종으로 판단되면 할인에서 빠진다]
+    limits:
+      - key: apartment
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+        count: 1
+      - key: shopping
+        per: month
+        amount: {400000: 3000, 800000: 6000, 1500000: 10000}
+        count: 2
+      - key: academy
+        per: month
+        amount: {400000: 3000, 800000: 6000, 1500000: 10000}
+      - key: cafe
+        per: month
+        amount: {400000: 2000, 800000: 3000, 1500000: 5000}
+    benefits:
+      - key: apartment-fee-5000
+        title: 아파트관리비 자동이체 5천원 청구할인
+        source: page
+        evidence: [아파트관리비 자동이체 시 5천원 / 1만원 청구할인, '전월 실적 40만원 이상 시 : 5천원', '월 1회, 건당 10만원 이상 자동납부 시 제공(건당 10만원 미만 시 청구할인 미제공)']
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+          - amount: {min: 100000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {shared: apartment}
+        tiers: {from: 400000, to: 400000}
+      - key: apartment-fee-10000
+        title: 아파트관리비 자동이체 1만원 청구할인
+        source: page
+        evidence: [아파트관리비 자동이체 시 5천원 / 1만원 청구할인, '전월 실적 80만원 이상 시 : 1만원', '월 1회, 건당 10만원 이상 자동납부 시 제공(건당 10만원 미만 시 청구할인 미제공)']
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+          - amount: {min: 100000}
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {shared: apartment}
+        tiers: {from: 800000}
+      - key: mart-5
+        title: 하나로마트·이마트·홈플러스·롯데마트 5% 청구할인
+        source: page
+        evidence: ['하나로마트·클럽, 이마트, 홈플러스, 롯데마트 5% 청구할인', 통합 월 2회, 건당 3만원 이상 결제 시 제공, 전월 실적 40만원 이상 시 제공, '기업형 슈퍼마켓(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼 등) 및 인터넷·모바일 몰을 통해 결제되는 경우 할인 미제공']
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {channel: offline}
+          - amount: {min: 30000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 400000}
+      - key: daiso-5
+        title: 다이소 5% 청구할인
+        source: page
+        evidence: [다이소 5% 할인, 다이소 몰 포함, 전월 실적 40만원 이상 시 제공, '역사, 백화점 및 할인(아울렛)점 입점매장은 할인 미제공']
+        target:
+          merchants: [daiso]
+        when:
+          - amount: {min: 30000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 400000}
+      - key: academy-5
+        title: 학원 5% 청구할인
+        source: page
+        evidence: [학원업종 5% 청구할인, 건당 5만원 이상 결제 시 제공, 전월 실적 40만원 이상 시 제공, '학원 온라인 결제(인터넷, 모바일, PG)는 할인 미제공']
+        target:
+          categories: [education.academy]
+        when:
+          - {channel: offline}
+          - amount: {min: 50000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: academy}
+        tiers: {from: 400000}
+      - key: cafe-bakery-5
+        title: 스타벅스·이디야·뚜레쥬르·던킨 5% 청구할인
+        source: page
+        evidence: ['스타벅스, 이디야, 공차, 뚜레쥬르, 던킨도너츠 5% 청구할인', 전월 실적 40만원 이상 시 제공, 스타벅스 사이렌 오더 결제건 할인 포함]
+        target:
+          merchants: [dunkin, ediya, starbucks, tous_les_jours]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: cafe}
+        tiers: {from: 400000}
+    unmodeled: [공차는 가맹점 키가 없어 계산하지 않는다, 아파트관리비 신용카드 납부수수료 면제는 계산하지 않는다, 교통카드 이용금액은 매출표 접수일 기준으로 실적에 넣는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[daiso-5].when', question: 다이소에도 쇼핑의 건당 3만원 이상과 통합 월 2회가 붙는지 원문 배치가 분명하지 않다, assumed: 붙는다}
+  - {path: 'revisions[0].limits[apartment]', question: 한도표 150만원 이상 칸의 아파트관리비 값이 글로 뽑히지 않았다. 총한도 3만5천원에서 거꾸로 계산하면 1만원이다, assumed: 1만원}
+notes: 2026-10-10 상품 페이지(여신금융협회 심의필 2023-C1a-08509)를 대조했다. 연회비 마스터 12,000원, 유니온페이 10,000원. 영역별 한도 합이 총한도(40만 1.3만, 80만 2.5만, 150만 3.5만)와 같아 총한도는 따로 두지 않았다. 실적은 국내 일시불·할부이고 아파트관리비와 학원업종은 실적에서 빠진다. 신규 특례는 사용등록일부터 다음 달 말일까지 최저 구간이다.
