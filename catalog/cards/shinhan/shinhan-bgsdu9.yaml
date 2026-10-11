@@ -1,0 +1,114 @@
+schema_version: 2
+id: shinhan-bgsdu9
+issuer: shinhan
+name: 신한카드 처음 체크
+short_name: 신한 처음 체크
+kind: check
+product_codes: [BGSDU9]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1234710_2206.html', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-07-07
+    source: page
+    tiers: [0, 100000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {tier: 100000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 적립하지 않는다]
+    limits:
+      - {key: monthly_point, per: month, amount: 5000}
+      - {key: after_school, per: month, amount: 1000}
+    stacks:
+      - {key: main}
+      - {key: after}
+    benefits:
+      - key: today-convenience-5
+        title: 편의점 5% 적립
+        source: page
+        evidence: [편의점·푸드·카페 기본 5% / 방과 후(오후 4~8시) 2% 추가 적립, '편의점: GS25, CU, 세븐일레븐', '‘기본 5% 적립’은 편의점, 푸드, 카페 각 영역별 월 최대 1천 포인트까지만 적립됩니다.', 결제 시점 이용금액 3천원 이상인 경우에만 포인트가 적립됩니다., '오프라인 매장 이용금액만 할인되며, 인터넷이나 모바일 앱을 통한 이용금액은 할인되지 않습니다.']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+          - amount: {min: 3000}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: month, amount: 1000}
+          - {shared: monthly_point}
+        tiers: {from: 100000}
+      - key: today-food-5
+        title: 패스트푸드 5% 적립
+        source: page
+        evidence: ['푸드: 패스트푸드 업종', '‘기본 5% 적립’은 편의점, 푸드, 카페 각 영역별 월 최대 1천 포인트까지만 적립됩니다.', 결제 시점 이용금액 3천원 이상인 경우에만 포인트가 적립됩니다., 배달앱을 통해 이용한 거래는 포인트가 적립되지 않습니다.]
+        target:
+          categories: [restaurant.fastfood]
+        when:
+          - {channel: offline}
+          - amount: {min: 3000}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: month, amount: 1000}
+          - {shared: monthly_point}
+        tiers: {from: 100000}
+      - key: today-cafe-5
+        title: 카페 5% 적립
+        source: page
+        evidence: ['카페: 투썸플레이스, 이디야, 메가MGC커피, 파리바게뜨, 배스킨라빈스', '‘기본 5% 적립’은 편의점, 푸드, 카페 각 영역별 월 최대 1천 포인트까지만 적립됩니다.', 결제 시점 이용금액 3천원 이상인 경우에만 포인트가 적립됩니다.]
+        target:
+          merchants: [baskin_robbins, ediya, mega_coffee, paris_baguette, twosome]
+        when:
+          - {channel: offline}
+          - amount: {min: 3000}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {per: month, amount: 1000}
+          - {shared: monthly_point}
+        tiers: {from: 100000}
+      - key: today-after-2
+        title: 편의점·푸드·카페 방과 후 2% 추가 적립
+        source: page
+        evidence: ['‘방과 후 2% 추가 적립’은 승인시간 기준으로 오후 4시~오후 8시 이용금액에 적용되며, 영역 통합 월 최대 1천 포인트까지 적립됩니다.']
+        target:
+          categories: [restaurant.fastfood]
+          merchants: [baskin_robbins, cu, ediya, gs25, mega_coffee, paris_baguette, seven_eleven, twosome]
+        when:
+          - {channel: offline}
+          - amount: {min: 3000}
+          - time: {from: '16:00', to: '20:00'}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {shared: after_school}
+          - {shared: monthly_point}
+        tiers: {from: 100000}
+        stack: after
+      - key: shopping-3000
+        title: 쇼핑 3,000 포인트 적립
+        source: page
+        evidence: ['지그재그, 에이블리, 무신사/29CM(온라인), 올리브영(온/오프라인)', '월 1회, 연 3회까지 적립됩니다.', 결제 시점 이용금액 1만원 이상인 경우에만 포인트 적립됩니다., '최초 신규 발급 회원의 경우 카드 사용 등록한 다음 달부터 이용 가능하며,전월 이용 금액 10만원을 달성해야 서비스가 적용됩니다.']
+        target:
+          merchants: [ably, musinsa, olive_young, twentynine_cm, zigzag]
+        when:
+          - amount: {min: 10000}
+          - card_month: {min: 2}
+        reward: {type: points, program: mysinhan_point, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 3}
+          - {shared: monthly_point}
+        tiers: {from: 100000}
+        unmodeled: ['신규 회원은 등록 다음 달부터 전월 10만원을 채우면 받지만, 신규 구간 특례와 나눌 수 없어 등록 두 달 뒤부터만 계산한다', 무신사와 29CM는 온라인 결제만 대상이다]
+    unmodeled: ['독서실·도서·문구 5% 적립(월 2천 포인트, 3천원 이상)은 공통 업종이 없어 계산하지 않는다', '사진관 1,000 포인트 적립(월 1회, 연 2회, 5천원 이상)은 공통 업종이 없어 계산하지 않는다', '백화점, 할인점, 면세점, 공항 입점 매장으로 찍히는 결제는 적립하지 않는다', 일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 포인트·캐시·예치금 같은 전자지급수단 충전과 의약품 전용몰 이용은 실적과 적립에서 빠진다, 서비스는 이용한 거래 순서대로 적용한다]
+notes: 신한카드 상품 페이지 기준. 만 12세 이상 발급하는 체크카드다. 저장소의 신한카드 처음(shinhan-cheoeum)은 신용카드라 다른 상품이다. 연회비는 페이지 HTML 기준 0원이고 캐릭터 디자인은 처음 발급할 때 1천원을 받는다. 전월 10만원 이상이면 월 통합 5천 포인트 한도 안에서 적립한다. 기본 5%는 편의점, 푸드, 카페 영역마다 월 1천 포인트, 방과 후 2%는 세 영역 합산 월 1천 포인트이고 기본 5%와 더해 받는다. 국내 취소는 처음 승인한 달, 해외 취소는 취소 전표가 매입된 달 실적에서 뺀다. 신규 발급 회원은 등록월 다음 달까지 전월 이용금액과 관계없이 적용한다. 2026-10-10 새 방식대로 후불교통 반영월 구분 대신 시내버스와 지하철을 실적에서 뺐다.
