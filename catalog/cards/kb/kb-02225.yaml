@@ -1,0 +1,62 @@
+schema_version: 2
+id: kb-02225
+issuer: kb
+name: 커피빈 신용카드
+short_name: KB 커피빈
+kind: credit
+product_codes:
+  - '02225'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: k_world_upi, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02225', fetched_at: '2026-10-11', review_no: 제2020-C1a-10912호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2020-12-30'
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      cancellation: cancel_month
+      month_offset: {}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [호텔·백화점·대형마트·철도역사 입점 가맹점과 결제대행업체(PG) 전용 가맹점 결제는 할인에서 빠진다]
+    benefits:
+      - key: coffeebean-3000
+        title: 커피빈 건당 3천원 청구할인
+        source: page
+        evidence: [커피빈 이용 청구할인, '월 할인한도 50만원 이상 9천원, 100만원 이상 1만8천원', 건당 할인금액 3천원, 건당 5천원 이상 결제 시 / 일 1회]
+        target:
+          merchants: [coffee_bean]
+        when:
+          - amount: {min: 5000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {per: day, count: 1}
+          - per: month
+            amount: {500000: 9000, 1000000: 18000}
+        tiers: {from: 500000}
+      - key: life-5
+        title: 생활 영역 5% 청구할인
+        source: page
+        evidence: [생활 영역 5% 청구할인, '월 할인한도 50만원 이상 1만원, 100만원 이상 2만원', 건당 1만원 이상 결제 시, '편의점, 약국, 패밀리레스토랑, 패스트푸드, 주유소, 충전소, 학원, 골프, 골프연습장, 미용실']
+        target:
+          categories: [beauty.salon, convenience, education.academy, fuel, pharmacy, restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {500000: 10000, 1000000: 20000}
+        tiers: {from: 500000}
+        unmodeled: [패밀리레스토랑과 골프·골프연습장은 맞는 공통 업종이 없어 담지 않았다. 주유 업종은 충전소를 포함한 것으로 본다]
+    unmodeled: [커피빈 카드 충전 건당 5천원 할인(건당 3만원 이상 일 1회 월 1만원)은 충전과 일반 구매를 결제 입력으로 가를 수 없어 담지 않았다. 커피빈 카드 충전금액은 실적에서 빠진다, 전년도 이용금액 700만원 이상이면 다음 해 1월 커피빈 1만원 쿠폰을 주는 혜택은 담지 않았다, 생애 최초 발급 본인회원은 사용등록 후 다음 달 말일까지 실적 50만원 미만이어도 50만원 구간 할인을 받는데 이 유예는 담지 않았다, 정부지원금은 실적에서 빠진다, 월 할인한도는 본인회원 기준으로 가족카드와 합산한다]
+open_questions:
+  - {path: 'revisions[0].spend', question: 실적 제외 목록에 무이자할부가 없어 KB 기본값대로 실적에 넣었다, assumed: count}
+notes: 2026-10-11 KB국민카드 상품 페이지와 대조. 출시일 2020.12.30을 적용 시작일로 둔다.
