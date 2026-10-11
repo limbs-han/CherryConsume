@@ -1,0 +1,90 @@
+card: kb-01690
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국세 10만원 이상 7천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 100000, category: tax.national}
+  expect:
+  - {payment: 0, benefits: {tax-7000: 7000}, counted: 100000}
+  calc: 30만 구간 통합한도 1만원 안에서 7,000원
+- name: 30만 구간 직전 국세 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 100000, category: tax.national}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 20만 구간이라 국세 할인 없음
+- name: 보험료 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 100000, category: insurance.private}
+  expect:
+  - {payment: 0, benefits: {insurance-2000: 2000}, counted: 100000}
+  calc: 건당 10만원 이상이라 2,000원
+- name: 통신 자동이체 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-1000: 1000}, counted: 50000}
+  calc: 자동이체 5만원 이상 1,000원
+- name: 고속버스 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1000}, counted: 30000}
+  calc: 월 2만원까지만 계산해 20,000 × 5% = 1,000원
+- name: 후불 지하철은 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-5: 500}, counted: 0}
+  calc: 10,000 × 5% = 500원. 후불교통은 실적에서 빠진다
+- name: GS칼텍스 주중과 주말
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 92900, merchant: gs_caltex}
+  - {at: 2026-11-07T10:00, amount: 92900, merchant: gs_caltex}
+  expect:
+  - {payment: 0, benefits: {gs-weekday-50: 2500}, counted: 92900}
+  - {payment: 1, benefits: {gs-weekend-60: 3000}, counted: 92900}
+  calc: 92,900 ÷ 1,858 = 50리터. 월요일 50원 × 50 = 2,500원, 토요일 60원 × 50 = 3,000원
+- name: 에버랜드 50% 건당 5만원까지
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 60000, merchant: everland, channel: offline}
+  expect:
+  - {payment: 0, benefits: {everland-50: 25000}, counted: 60000}
+  calc: 5만원까지만 계산해 25,000원. 100만 구간 통합한도 5만원 안
+- name: 20만 구간 통합한도 5천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 50000, merchant: everland, channel: offline}
+  expect:
+  - {payment: 0, benefits: {everland-50: 5000}, counted: 50000}
+  calc: 25,000원 중 20만 구간 통합한도 5,000원
+- name: 아웃백 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 120000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {outback-10: 10000}, counted: 120000}
+  calc: 10만원까지만 계산해 10,000원
+- name: 백화점 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 100000, merchant: lotte_department}
+  expect:
+  - {payment: 0, benefits: {department-5: 5000}, counted: 100000}
+  calc: 100,000 × 5% = 5,000원
+- name: 해피포인트 5% 실적 조건 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T10:00, amount: 10000, merchant: paris_baguette}
+  expect:
+  - {payment: 0, benefits: {happypoint-5: 500}, counted: 10000}
+  calc: 10,000 × 5% = 500포인트

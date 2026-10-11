@@ -1,0 +1,41 @@
+card: kb-01990
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 LG U+ 자동납부 4천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: lg_uplus, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 55000, merchant: lg_uplus, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {lgu-telecom: 4000}, counted: 55000}
+  - {payment: 1, benefits: {}}
+  calc: 1구간 월 한도 4천원, 월 1회
+- name: 50만 구간 통신 6천원 스타벅스 CGV
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: lg_uplus, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: starbucks}
+  - {at: 2026-11-07T10:00, amount: 20000, merchant: cgv, channel: online}
+  expect:
+  - {payment: 0, benefits: {lgu-telecom: 6000}}
+  - {payment: 1, benefits: {starbucks-10: 3000}}
+  - {payment: 2, benefits: {cgv-10: 2000}}
+  calc: 2구간 6천원. 30,000 x 10% = 3,000. 20,000 x 10% = 2,000
+- name: 30만 경계 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 할인 없음
+- name: 신규 유예 스타벅스 2천원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {starbucks-10: 2000}}
+  calc: 등록 다음 달 말일까지 2천원 한도

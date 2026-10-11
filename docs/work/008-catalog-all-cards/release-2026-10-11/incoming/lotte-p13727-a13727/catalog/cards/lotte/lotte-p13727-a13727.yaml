@@ -1,0 +1,84 @@
+schema_version: 2
+id: lotte-p13727-a13727
+issuer: lotte
+name: 이지웰 X LOCA 카드
+kind: credit
+product_codes: [P13727-A13727]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13727-A13727', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13727-A13727_210930.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-03-23'
+    source: page
+    tiers: [0, 200000, 400000, 750000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 750000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax.local, utility]
+      unmodeled: [오토·스마트 캐시백 신청 이용금액과 장애인 고용부담금은 할인에서 빠진다]
+    benefits:
+      - key: all-0-5
+        title: 국내외 가맹점 0.5% 결제일 할인
+        source: page
+        evidence: [기본할인 75만원 미만 0.5% 없음, 기본할인과 특별할인은 중복제공되지 않습니다., '할인 적용 제외 대상 ... 대중교통(버스·지하철·택시) 이용금액, 통신요금 자동납부 금액 ...']
+        target:
+          exclude_categories: [taxi, telecom, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+          all: true
+        reward: {type: billing_discount, rate: 0.5}
+        tiers: {to: 400000}
+      - key: all-1-0
+        title: 국내외 가맹점 1.0% 결제일 할인
+        source: page
+        evidence: [특별할인 75만원 이상 1.0%, '이지웰 X LOCA 카드를 최초 발급 받은 경우, 카드발급일 ~ 다음 달 말일까지 지난달 이용실적에 상관없이 혜택이 제공됩니다. (국내외 가맹점 결제일 할인의 경우 특별할인 혜택 제공)']
+        target:
+          exclude_categories: [taxi, telecom, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+          all: true
+        reward: {type: billing_discount, rate: 1.0}
+        tiers: {from: 750000}
+      - key: ezwel-4
+        title: 이지웰 복지몰 4% 결제일 할인
+        source: page
+        evidence: [40만원 이상 4.0% 1만원, '국내외 가맹점 결제일 할인 혜택과 이지웰 복지몰 결제일 할인 혜택은 중복 제공되지 않으며, 할인 금액이 큰 혜택으로 적용됩니다.']
+        target:
+          merchants: [ezwel_mall]
+        reward: {type: billing_discount, rate: 4}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 400000}
+      - key: transit-5
+        title: 버스·지하철·택시 5% 결제일 할인
+        source: page
+        evidence: [20만원 이상 교통(버스·지하철·택시) 5% 1만원(일 5천원), '교통할인은 지하철, 시내버스, 공항버스, 공항철도, 택시 이용 시 혜택이 제공되며 고속버스, 시외버스, 이용 금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: day, amount: 5000}
+          - {per: month, amount: 10000}
+        tiers: {from: 200000}
+      - key: telecom-1000
+        title: 이동통신 자동납부 건당 1천원 결제일 할인
+        source: page
+        evidence: [통신(자동이체) 건당 1천원 1천원, '통신할인은 이동통신요금 자동납부 건에 대해서 혜택이 제공되며, 결합상품(인터넷 및 TV 등) 이용 금액은 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, amount: 1000}
+        tiers: {from: 200000}
+    unmodeled: [공항버스와 공항철도도 교통 할인 대상이지만 업종이 없어 계산하지 않는다, 이동통신 할인에서 인터넷·TV 결합상품 요금은 빠진다, 이지웰 X LOCA 카드가 아닌 롯데카드 이용금액은 실적에서 빠진다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금은 실적에서 빠진다', 해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 롯데카드의 다른 결제일 할인 혜택과 겹치면 할인이 큰 혜택 하나만 준다]
+notes: 2026-10-11 상품 페이지 대조. 출시일 2021-03-23. 국내외 가맹점 할인은 75만원 미만 0.5%, 이상 1.0%로 한도 없음. 할인 제외에 국세가 없고 지방세만 있어 tax.local만 넣었다. 대중교통(버스·지하철·택시)과 통신요금 자동납부는 국내외 가맹점 할인에서만 빠진다. 이지웰 복지몰 가맹점 키는 공통 파일에 더해야 한다. 신규 발급 특례는 발급일부터 다음 달 말일까지 모든 혜택, 국내외 가맹점은 특별할인이라 75만 구간으로 넣었다.

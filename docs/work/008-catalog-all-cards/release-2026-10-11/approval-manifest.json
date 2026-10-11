@@ -1,0 +1,1072 @@
+{
+  "approved": false,
+  "approval_required": true,
+  "job_id": 665396523935248,
+  "base_files_digest": "ebfce670287b8ef93ea9b4731ac10c1ac164b4a47a8d5deab1d7ff4b9333660c",
+  "cards": [
+    {
+      "card_id": "hyundai-20884",
+      "name": "kt-현대카드M Edition3(청구할인형2.0)",
+      "path": "cards/hyundai/hyundai-20884.yaml",
+      "draft_id": "d54c769a-0e93-40c8-a334-2e708bbd9bc1",
+      "sha256": "234c3d91e7b8185cdc5c3651e4ea5414adceb009caf35443f207faf329e664d5",
+      "sources": [
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/T_AOB-20260403-1734-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_KT_M%20Ed3_%EC%B2%AD%EA%B5%AC2.0_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 30000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "가이드북은 2026년 6월 기준이다. 그 전부터 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다",
+          "assumed": "2026-10-05"
+        },
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "원문은 결제 취소금액을 실적에서 뺀다고만 하고 승인월과 취소월 중 어디서 빼는지 적지 않았다. hyundai-20883처럼 승인월로 두었다",
+          "assumed": "original_month"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-hyundai-20884"
+    },
+    {
+      "card_id": "hyundai-alt",
+      "name": "알파벳카드T BOLD",
+      "path": "cards/hyundai/hyundai-alt.yaml",
+      "draft_id": "906639fc-724b-4abb-99b3-f6b8f55a19f4",
+      "sha256": "f8e157c03b158c71934ad153df8f0fccc54b30a724471382cd48ef94a016a07a",
+      "sources": [
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CT%20BOLD%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 50000
+        },
+        {
+          "scope": "global",
+          "brand": "amex",
+          "amount": 50000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits[domestic-discount-07].reward",
+          "question": "할인 금액의 원 미만을 어떻게 처리하는지 공식 문구에 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-hyundai-alt"
+    },
+    {
+      "card_id": "hyundai-cckhc",
+      "name": "쿠쿠 현대카드",
+      "path": "cards/hyundai/hyundai-cckhc.yaml",
+      "draft_id": "1acade5a-8923-464e-ac8d-624bd2bba667",
+      "sha256": "6e7b5c25a1c7a92d40fda49cc77bec6f0093ba46730e6f63fe7cbcf458af2dbc",
+      "sources": [
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/260416_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%BF%A0%EC%BF%A0%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-hyundai-cckhc"
+    },
+    {
+      "card_id": "hyundai-crmhc",
+      "name": "세라젬 현대카드",
+      "path": "cards/hyundai/hyundai-crmhc.yaml",
+      "draft_id": "15033bd7-506c-4c76-8433-060b4f409423",
+      "sha256": "87529f0bf523f605c8d0bdad3d848f8eafb5eacc95e4e0f5da60b0330c5f811b",
+      "sources": [
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/T_AOB-20260512-1100-12_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%84%B8%EB%9D%BC%EC%A0%AC%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다",
+          "assumed": "2026-10-05"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-hyundai-crmhc"
+    },
+    {
+      "card_id": "hyundai-hct",
+      "name": "알파벳카드T",
+      "path": "cards/hyundai/hyundai-hct.yaml",
+      "draft_id": "cb7b52c9-e6d1-4342-9052-83493a6b415f",
+      "sha256": "3fecd61f256da437b66c4d5acf9beb69ce3bdb39bbd426f4db8f6ba7ee060202",
+      "sources": [
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CT%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits[domestic-0-7].reward",
+          "question": "할인 금액의 원 미만을 어떻게 처리하는지 공식 문구에 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-hyundai-hct"
+    },
+    {
+      "card_id": "hyundai-mcje2",
+      "name": "The CJ-현대카드M Edition2",
+      "path": "cards/hyundai/hyundai-mcje2.yaml",
+      "draft_id": "aa6106cb-83c8-4881-b658-940b792ce634",
+      "sha256": "069bcf6fcac3ae736f775acd55c7a4a73fbbae50302dbb11b2014b61f1a9831c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MCJE2",
+          "fetched_at": "2026-10-11"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.hyundaicard.com/upload/card/T_AOB-20260410-1723-20_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_CJ%20M%20Ed2_V3.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits",
+          "question": "가이드북은 전월 이용금액 10만원 조건을 CGV 할인에만 적었지만 신규 회원은 발급월과 익월까지 전월 이용금액 무관하게 할인한다고 해 다른 CJ 할인에도 전월 조건이 있어 보인다. 덜 주는 쪽으로 모든 할인에 전월 10만원 이상을 두었다",
+          "assumed": "tiers from 100000"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다",
+          "assumed": "2026-10-05"
+        },
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "원문은 매출취소액을 실적에서 뺀다고만 하고 승인월과 취소월 중 어디서 빼는지 적지 않았다. 다른 현대카드처럼 승인월로 두었다",
+          "assumed": "original_month"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-hyundai-mcje2"
+    },
+    {
+      "card_id": "ibk-12113230006",
+      "name": "이지캐시백 기본교통 체크카드",
+      "path": "cards/ibk/ibk-12113230006.yaml",
+      "draft_id": "cb6b09df-37da-434f-a8ed-6013b0cf4bdb",
+      "sha256": "0d790b0bbdb3e3472e41b06103f5ad1f2a92897538c7d5695a76b7849935ee50",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=323&PDCD=0006&pageId=CA01010000",
+          "fetched_at": "2026-10-11",
+          "review_no": "제2026-1899호",
+          "review_valid_until": "2029-03-08"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "bc",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "master",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다",
+          "assumed": "2026-03-13"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-ibk-12113230006"
+    },
+    {
+      "card_id": "ibk-12113310001",
+      "name": "IBK 웰릭스 카드",
+      "path": "cards/ibk/ibk-12113310001.yaml",
+      "draft_id": "2145520c-e7e1-48fa-9a08-43f984e0dba4",
+      "sha256": "8c80ffe0276c1d933efd241f503919c1267fdd831fb7bd0ac7b23198a688823a",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=331&PDCD=0001&pageId=CA01010000",
+          "fetched_at": "2026-10-11",
+          "review_no": "제2024-1391호",
+          "review_valid_until": "2027-03-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "bc",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "실적 제외 교통카드요금을 시내버스와 지하철 업종 제외로 옮겼다",
+          "assumed": "transit.bus_city, transit.subway"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다",
+          "assumed": "2024-03-14"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-ibk-12113310001"
+    },
+    {
+      "card_id": "kb-01560",
+      "name": "KB국민 민 체크카드",
+      "path": "cards/kb/kb-01560.yaml",
+      "draft_id": "04fb2da7-3116-4574-bf67-99aa0aad5074",
+      "sha256": "61548a2d3c8f0aaf006a17fe71aa4ae460675a5e8ff20811315070c181adddc4",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01560",
+          "fetched_at": "2026-10-11",
+          "review_no": "201230-04342-HMS"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2013년 12월 17일 출시만 적었다.",
+          "assumed": "2026-10-11"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "원문의 후불교통 이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+          "assumed": "transit.bus_city, transit.subway"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-kb-01560"
+    },
+    {
+      "card_id": "kb-01690",
+      "name": "KB국민 직장인보너스 체크카드",
+      "path": "cards/kb/kb-01690.yaml",
+      "draft_id": "c7a76ab7-1bf9-4313-b50f-9b307ffcc5bf",
+      "sha256": "01c00387bcf54e7d314611c1eb9ef315482801f8d999de1f4b9618886a79b19d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01690",
+          "fetched_at": "2026-10-11",
+          "review_no": "201230-04342-HMS"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2012년 8월 6일 출시만 적었다.",
+          "assumed": "2026-10-11"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "원문의 후불교통 이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+          "assumed": "transit.bus_city, transit.subway"
+        },
+        {
+          "path": "revisions[0].benefits[insurance-2000].target",
+          "question": "원문 '보험료'에 4대 사회보험료가 드는지 문구가 없다",
+          "assumed": "민간 보험료만"
+        },
+        {
+          "path": "revisions[0].benefits[gs-weekend-60].when",
+          "question": "주말에 공휴일이 드는지 문구가 없다",
+          "assumed": "토요일과 일요일만. 평일 공휴일은 주중 50원"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-kb-01690"
+    },
+    {
+      "card_id": "kb-04361",
+      "name": "이마트II KB국민카드(옐로우)",
+      "path": "cards/kb/kb-04361.yaml",
+      "draft_id": "29db0712-e9fb-4635-b96a-e375d2c63f76",
+      "sha256": "42675d4301c649b1fd7b95b21a9e05d2edce0327289fd65935505ababa0706a5",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04361",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "local",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 원문 규칙이 시작된 날짜를 찾지 못했다",
+          "assumed": "2026-10-11"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+          "assumed": "transit.bus_city, transit.subway"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "원문은 무이자할부(부분)서비스를 실적에서 뺀다. 부분 무이자도 무이자할부로 본다",
+          "assumed": "interest_free exclude"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-kb-04361"
+    },
+    {
+      "card_id": "lotte-1652",
+      "name": "LOCA PLATINUM 할인형",
+      "path": "cards/lotte/lotte-1652.yaml",
+      "draft_id": "6d3977b8-7ab8-414b-8ffd-7042a486287c",
+      "sha256": "417387276152435070687a8a00751ecceedc801aae778e855418f074fa0e5e4f",
+      "sources": [
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00022_20260929_10005.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 100000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 100000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "product_codes",
+          "question": "롯데카드 온라인 판매 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다",
+          "assumed": "[]"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-lotte-1652"
+    },
+    {
+      "card_id": "lotte-1787",
+      "name": "SK 롯데체크카드",
+      "path": "cards/lotte/lotte-1787.yaml",
+      "draft_id": "00bd22d5-c8ca-4f86-886d-71af25d4b30f",
+      "sha256": "c833f62077ca56a936b970e08233ac08f942443b04defdfdad312b515bc7b66e",
+      "sources": [
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2011-A00008_20251015_10004.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "product_codes",
+          "question": "롯데카드 체크카드 판매 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다",
+          "assumed": "[]"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "상품설명서에 실적 제외 목록이 없다. 주유 할인 실적에서 주유업종을 빼는 문구만 있어 주유와 세금·상품권·선불 충전을 뺐다",
+          "assumed": "fuel, gift_card, prepaid_charge, tax"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-lotte-1787"
+    },
+    {
+      "card_id": "lotte-p11864-a11864",
+      "name": "웅진씽크빅 롯데카드",
+      "path": "cards/lotte/lotte-p11864-a11864.yaml",
+      "draft_id": "04c2de31-fad9-42fa-8c69-215ab5e3e2ed",
+      "sha256": "44466204943d94b0ba0b145891724d6af05c45b0a2dcdc7084f061470edc9aff",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P11864-A11864",
+          "fetched_at": "2026-10-11"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00031_20261002_10011.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand6",
+      "incoming": "release-20261011-lotte-p11864-a11864"
+    },
+    {
+      "card_id": "lotte-p13391-a13391",
+      "name": "LOCA for Coffee",
+      "path": "cards/lotte/lotte-p13391-a13391.yaml",
+      "draft_id": "860d0d83-475d-4423-831b-ab7bc21da25a",
+      "sha256": "2b358c9e14afe6a27a26be28f437dc355c4eb935adc51899adefd3c0918cf15b",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13391-A13391",
+          "fetched_at": "2026-10-11"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00016_20260930_10005.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand6",
+      "incoming": "release-20261011-lotte-p13391-a13391"
+    },
+    {
+      "card_id": "lotte-p13727-a13727",
+      "name": "이지웰 X LOCA 카드",
+      "path": "cards/lotte/lotte-p13727-a13727.yaml",
+      "draft_id": "c03c0a33-46c1-4690-b12e-362a58eebd93",
+      "sha256": "0c3f0a939ef98a7593477c337f794f97a1973c2c69f094ad445bae670f866e3d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13727-A13727",
+          "fetched_at": "2026-10-11"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13727-A13727_210930.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand6",
+      "incoming": "release-20261011-lotte-p13727-a13727"
+    },
+    {
+      "card_id": "lotte-p13810-a13810",
+      "name": "네이버페이 쇼핑엔로카",
+      "path": "cards/lotte/lotte-p13810-a13810.yaml",
+      "draft_id": "c119ea4c-15a6-4268-893e-e54551402c89",
+      "sha256": "5117b715c2d3d307f73873ee0d99d46355d7d37c1ae616dffde0ebb521e5f88e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13810-A13810",
+          "fetched_at": "2026-10-11"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13810-A13810.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 10000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 10000
+        },
+        {
+          "scope": "global",
+          "brand": "amex",
+          "amount": 10000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand6",
+      "incoming": "release-20261011-lotte-p13810-a13810"
+    },
+    {
+      "card_id": "lotte-p15754-a15754",
+      "name": "에듀윌X디지로카",
+      "path": "cards/lotte/lotte-p15754-a15754.yaml",
+      "draft_id": "867c8d23-c38b-4ed1-8d34-4cc3ff46a71c",
+      "sha256": "df46db0c64f0ff022a8caa0103973955b85f9f8d8004a9c0f894a1c72eefe25e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15754-A15754",
+          "fetched_at": "2026-10-11"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00012_20250825_10001.pdf",
+          "fetched_at": "2026-10-11"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand6",
+      "incoming": "release-20261011-lotte-p15754-a15754"
+    },
+    {
+      "card_id": "nh-f20587",
+      "name": "춘식이달달체크카드",
+      "path": "cards/nh/nh-f20587.yaml",
+      "draft_id": "28be0997-698b-46d3-b66d-be67323c81db",
+      "sha256": "ea86656564f32f3ba45c868db7697f3e26e074e490187aae8cef1840c97defe7",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010521",
+          "fetched_at": "2026-10-11",
+          "review_no": "2026-3845",
+          "review_valid_until": "2027-06-30"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "지금 규칙이 시작된 날을 찾지 못해 카드 신규출시일로 두었다.",
+          "assumed": "2024-08-19"
+        },
+        {
+          "path": "revisions[0].new_card",
+          "question": "Single·Double은 등록 다음 달 말까지 실적 미달에도 준다. Triple·Bonus는 등록 달에 주지 않고 다음 달부터 실적 조건을 채워야 준다고 보아 특례를 0으로 두었다.",
+          "assumed": "Triple·Bonus 특례 없음"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-nh-f20587"
+    },
+    {
+      "card_id": "samsung-aap1653",
+      "name": "다이소 삼성카드",
+      "path": "cards/samsung/samsung-aap1653.yaml",
+      "draft_id": "182d893f-950d-4ae0-929a-7b31bc0d8bba",
+      "sha256": "55d10f36924850e7ab2b113029fba0da651e2d9aad4d599bee79507c54174862",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1653",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtjupZY7B%2FhwyJAUGVXAndak%3D&sn=1",
+          "fetched_at": "2026-10-11",
+          "review_no": "제2020-C1a-02055호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 8000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 8000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시행일을 확인하지 못해 상품설명서 판(2023.6)의 첫날로 두었다. 상품 출시일은 2020-04-01이다",
+          "assumed": "2023-06-01"
+        },
+        {
+          "path": "revisions[0].limits",
+          "question": "커피전문점과 배달앱이 각각 통합 일 1회·월 5회라고 적혀 있어 둘이 같은 횟수를 쓰는지 따로인지 불분명하다. 덜 주는 쪽으로 함께 쓴다고 두었다",
+          "assumed": "shared"
+        },
+        {
+          "path": "revisions[0].benefits[daiso-mall-1]",
+          "question": "다이소몰 결제를 다이소 가맹점의 온라인 결제로 보았다",
+          "assumed": "daiso + online"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-samsung-aap1653"
+    },
+    {
+      "card_id": "samsung-aap1711",
+      "name": "SC제일은행 드라이브 삼성카드",
+      "path": "cards/samsung/samsung-aap1711.yaml",
+      "draft_id": "770f5537-9e1f-4675-9cf2-cea12a267264",
+      "sha256": "908e8121e739a5a6e96dad0c1bf1a23221454a6a4cb1238b366ae99413f96ef5",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1711",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtr6Azu1ROn6%2FN48R7Xd1r5E%3D&sn=1",
+          "fetched_at": "2026-10-11",
+          "review_no": "제2021-C1a-02785호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 9900
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 9900
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시행일을 확인하지 못해 상품설명서 판(2022.8)의 첫날로 두었다. 상품 출시일은 2021-04-19다",
+          "assumed": "2022-08-01"
+        },
+        {
+          "path": "revisions[0].benefits[fuel-60].reward.per_liter",
+          "question": "전월 생활요금 자동납부 건수는 결제 입력으로 판단하지 않아 0건 기준 리터당 금액으로 두었다. 자동납부가 있으면 실제 할인이 리터당 20원 더 크다",
+          "assumed": "60, 80, 100"
+        },
+        {
+          "path": "revisions[0].benefits",
+          "question": "할인 금액의 원 미만 처리가 공식 문구에 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-samsung-aap1711"
+    },
+    {
+      "card_id": "samsung-aap1737",
+      "name": "삼성 햇살론카드",
+      "path": "cards/samsung/samsung-aap1737.yaml",
+      "draft_id": "28cbd759-1053-4fe2-ac9f-ba7c14730323",
+      "sha256": "c8f228c94bc37239f4faed71a8feda19d1fc8adea43b91f2fb4eec1274cedf3b",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1737",
+          "fetched_at": "2026-10-11"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlApeiruG3KmfLVqS2l0zuA%3D&sn=1",
+          "fetched_at": "2026-10-11",
+          "review_no": "제2021-C1a-09228호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 5000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시행일을 확인하지 못해 상품설명서 판(2022.8)의 첫날로 두었다. 상품 출시일은 2021-10-21이다",
+          "assumed": "2022-08-01"
+        },
+        {
+          "path": "revisions[0].limits",
+          "question": "쇼핑, 생활 편의, 의료 영역마다 할인율과 통합 월 할인한도 표가 따로 있어 영역별 한도로 두었다. 세 영역 전체가 한 한도인지는 원문에 적혀 있지 않다",
+          "assumed": "영역별"
+        },
+        {
+          "path": "revisions[0].benefits",
+          "question": "할인 금액의 원 미만 처리가 공식 문구에 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-samsung-aap1737"
+    },
+    {
+      "card_id": "samsung-aap1753",
+      "name": "삼성 iD ENERGY 카드",
+      "path": "cards/samsung/samsung-aap1753.yaml",
+      "draft_id": "2e67600a-fe03-4fe9-b083-84f1d3da9e09",
+      "sha256": "164746f404854b6883e6cfc873d0c914f839c55a3e0b746f6faad2a75ee50b4c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1753",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtqNZWamwea5CrcSizMQXx2Y%3D&sn=1",
+          "fetched_at": "2026-10-11",
+          "review_no": "제2025-C1a-12816호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택의 시행일을 확인하지 못해 상품설명서 심의일(2025-09-02)로 두었다. 상품 출시일은 2021-12-02다",
+          "assumed": "2025-09-02"
+        },
+        {
+          "path": "annual_fees",
+          "question": "상품설명서 연회비 표에 해외겸용 VISA 2만원 행만 있고 국내전용이 같은 칸으로 묶여 있어 국내전용도 2만원으로 두었다",
+          "assumed": 20000
+        },
+        {
+          "path": "revisions[0].benefits",
+          "question": "할인 금액의 원 미만 처리가 공식 문구에 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-samsung-aap1753"
+    },
+    {
+      "card_id": "samsung-aap1876",
+      "name": "삼성 SFC iD SELECT ALL 카드",
+      "path": "cards/samsung/samsung-aap1876.yaml",
+      "draft_id": "c8a9b068-c488-48e6-b368-e276581b649c",
+      "sha256": "4124d2c80d02c6129d49367efba19ee457c07959eb89ffdb081d956cf15406fb",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1876",
+          "fetched_at": "2026-10-05"
+        },
+        {
+          "id": "manual",
+          "kind": "manual_pdf",
+          "url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpcB%2BzFi3OWFsF1q9dKR1r4%3D&sn=1",
+          "fetched_at": "2026-10-11",
+          "review_no": "제2025-C1a-09520호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits",
+          "question": "할인 금액의 원 미만 처리가 공식 문구에 없다",
+          "assumed": "floor"
+        },
+        {
+          "path": "revisions[0].benefits[home-10].when",
+          "question": "원문은 정기결제라고만 적어 자동납부와 정기결제를 모두 대상으로 두었다",
+          "assumed": "autopay, subscription"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-samsung-aap1876"
+    },
+    {
+      "card_id": "woori-103483",
+      "name": "갤러리아 Platinum 우리카드",
+      "path": "cards/woori/woori-103483.yaml",
+      "draft_id": "c6205f4d-d838-4398-8f4f-0ce11f429e5e",
+      "sha256": "2a5835f0ba260995de29a059d0fc78f428dd3100fdfcb52a84b11ca2d8235827",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103483",
+          "fetched_at": "2026-10-05"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 30000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].new_card",
+          "question": "카드 수령(사용)등록일과 사용개시일 중 빠른 날이 기준인데 한 날짜만 받는다",
+          "assumed": "registration"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "갤러리아 이용금액만 실적에서 빠지는데 가맹점 단위 실적 제외가 없어 백화점 업종 전체를 뺐다. 다른 백화점 이용도 실적에서 빠져 실적이 적게 잡힌다",
+          "assumed": "백화점 업종 전체 제외"
+        },
+        {
+          "path": "revisions[0].benefit_exclusions",
+          "question": "1% 할인 제외 목록이 실적 제외 목록과 같아 생활 영역과 갤러리아 할인에도 같은 제외를 썼다",
+          "assumed": "모든 혜택에 같은 제외"
+        },
+        {
+          "path": "revisions[0].benefits",
+          "question": "원 미만 처리 문구가 없다",
+          "assumed": "floor"
+        }
+      ],
+      "group": "expand6",
+      "incoming": "release-20261011-woori-103483"
+    }
+  ],
+  "shared_files": [
+    {
+      "path": "cards/hana/hana-11321.yaml",
+      "sha256": "283034b6f518a8bf02f8fd5cbc547799dab10167e651b46b97337b8a18ddc7b6"
+    },
+    {
+      "path": "cards/kb/kb-01664.yaml",
+      "sha256": "3f37f663aa5cedf80fce19afd0696b7ab785e608530198bca6f4e230132869ea"
+    },
+    {
+      "path": "cards/kb/kb-my-wesh.yaml",
+      "sha256": "67e4073e79069a694219a178653f2177efd6d1f7a8922803f9a582a2c7b95afe"
+    },
+    {
+      "path": "cards/woori/woori-102717.yaml",
+      "sha256": "ad9629e1a7fce4ad74c8f497ec74c6aed89bc6aa6f602afbaabf33238da8ff27"
+    },
+    {
+      "path": "cards/woori/woori-500055.yaml",
+      "sha256": "10fa23393dfd6c343785b2d4f074796b7d5b8b8345e815a759222cbca27d5d39"
+    },
+    {
+      "path": "merchants.yaml",
+      "sha256": "17d8980d1d128ac64622d7fd5e29372aa9c9888642a4de417bf155f64446905d"
+    }
+  ],
+  "operation_order": [
+    "운영 현재 값과 끊긴 승인 확인",
+    "공통 항목과 기존 카드 분류 연결 승인 후 봇 내보내기 확인",
+    "새 카드별 초안 번호로 승인하고 검수 대기 닫기",
+    "앱 배포용 카탈로그 내보내기 확인"
+  ]
+}

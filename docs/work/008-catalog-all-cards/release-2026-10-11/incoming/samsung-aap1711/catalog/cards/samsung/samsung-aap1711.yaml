@@ -1,0 +1,128 @@
+schema_version: 2
+id: samsung-aap1711
+issuer: samsung
+name: SC제일은행 드라이브 삼성카드
+short_name: SC제일 드라이브 삼성
+search_names: [SC제일 드라이브, SC제일은행 드라이브 삼성카드, 드라이브 삼성카드]
+kind: credit
+product_codes: [AAP1711]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 9900}
+  - {scope: global, brand: mastercard, amount: 9900}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1711', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtr6Azu1ROn6%2FN48R7Xd1r5E%3D&sn=1', fetched_at: 2026-10-11, review_no: 제2021-C1a-02785호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2022-08-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다', '고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 할인하지 않는다']
+    limits:
+      - {key: fuel, per: month, amount: 20000}
+      - {key: delivery-convenience, per: month, amount: 5000}
+    benefits:
+      - key: fuel-60
+        title: 주유 리터당 60원 할인
+        source: manual
+        evidence: ['모든 주유소 이용 시, 전월 생활요금 자동납부 결제건수에 따라 리터당 60원~120원 결제일할인', '전월 생활요금 자동납부 결제건수 0건 30만원 이상 60원, 60만원 이상 80원, 90만원 이상 100원', '1건 이상 80원, 100원, 120원', '월 할인한도 : 20,000원', 1회당 주유금액 10만원까지 혜택 제공, LPG충전소 제외]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 300000, to: 300000}
+        exclude_applied: 1
+        unmodeled: [전월 생활요금 자동납부(아파트 관리비·이동통신·인터넷·코웨이·SK매직 렌탈)가 1건 이상이면 리터당 20원을 더 주지만 이 계산은 0건 기준 금액만 쓴다, LPG충전소는 할인하지 않는다]
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산하고 소수점 이하 리터를 버린다. 앱은 reference.yaml 기름값을 쓴다
+      - key: fuel-80
+        title: 주유 리터당 80원 할인
+        source: manual
+        evidence: ['모든 주유소 이용 시, 전월 생활요금 자동납부 결제건수에 따라 리터당 60원~120원 결제일할인', '전월 생활요금 자동납부 결제건수 0건 30만원 이상 60원, 60만원 이상 80원, 90만원 이상 100원', '1건 이상 80원, 100원, 120원', '월 할인한도 : 20,000원', 1회당 주유금액 10만원까지 혜택 제공, LPG충전소 제외]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 80}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 600000, to: 600000}
+        exclude_applied: 1
+        unmodeled: [전월 생활요금 자동납부(아파트 관리비·이동통신·인터넷·코웨이·SK매직 렌탈)가 1건 이상이면 리터당 20원을 더 주지만 이 계산은 0건 기준 금액만 쓴다, LPG충전소는 할인하지 않는다]
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산하고 소수점 이하 리터를 버린다. 앱은 reference.yaml 기름값을 쓴다
+      - key: fuel-100
+        title: 주유 리터당 100원 할인
+        source: manual
+        evidence: ['모든 주유소 이용 시, 전월 생활요금 자동납부 결제건수에 따라 리터당 60원~120원 결제일할인', '전월 생활요금 자동납부 결제건수 0건 30만원 이상 60원, 60만원 이상 80원, 90만원 이상 100원', '1건 이상 80원, 100원, 120원', '월 할인한도 : 20,000원', 1회당 주유금액 10만원까지 혜택 제공, LPG충전소 제외]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 100}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 900000}
+        exclude_applied: 1
+        unmodeled: [전월 생활요금 자동납부(아파트 관리비·이동통신·인터넷·코웨이·SK매직 렌탈)가 1건 이상이면 리터당 20원을 더 주지만 이 계산은 0건 기준 금액만 쓴다, LPG충전소는 할인하지 않는다]
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산하고 소수점 이하 리터를 버린다. 앱은 reference.yaml 기름값을 쓴다
+      - key: delivery-10
+        title: 배달앱 10% 할인
+        source: manual
+        evidence: ['배달앱 배달의민족, 요기요', '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, '배달앱은 공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: delivery-convenience}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: convenience-10
+        title: 편의점 10% 할인
+        source: manual
+        evidence: ['편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, '편의점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [cu, emart24, gs25, ministop, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: delivery-convenience}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: online-mall-1
+        title: 온라인쇼핑몰 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 온라인쇼핑몰 1% 결제일할인', '온라인쇼핑몰 삼성카드 쇼핑, G마켓, 옥션, 11번가, 인터파크, 쿠팡, 티몬, 위메프, SSG.COM, 롯데ON']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, interpark, lotte_on, samsung_card_shopping, ssg_com, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 1}
+      - key: overseas-1
+        title: 해외 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 1% 결제일할인', 해외 가맹점 및 해외 직접구매 이용건, 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+    unmodeled: ['할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품설명서 판(2022.8)의 첫날로 두었다. 상품 출시일은 2021-04-19다, assumed: '2022-08-01'}
+  - {path: 'revisions[0].benefits[fuel-60].reward.per_liter', question: 전월 생활요금 자동납부 건수는 결제 입력으로 판단하지 않아 0건 기준 리터당 금액으로 두었다. 자동납부가 있으면 실제 할인이 리터당 20원 더 크다, assumed: '60, 80, 100'}
+  - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 상품설명서(2022.8판, 심의필 2021-C1a-02785호) 대조. 출시 2021-04-19. 연회비 해외겸용 Mastercard와 국내전용 모두 9,900원(기본 7,000+제휴 2,900). 실적 제외는 주유와 배달앱·편의점 할인이 적용된 이용금액, 4대보험, 국세·지방세·공과금, 학교납입금, 등록금, 대중교통, 택시, 아파트 관리비, 임대료, 상품권·선불 충전이다. 온라인쇼핑몰 1%와 해외 1%는 실적에 들어간다. 발급월+1개월까지는 30만 구간 혜택. 다른 결제일할인과 겹치면 큰 것 하나만.

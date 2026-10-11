@@ -1,0 +1,66 @@
+card: hana-94316
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 넷플릭스 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 17000, merchant: netflix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {hero-subscription-10: 1700}
+  calc: 17,000원 x 10% = 1,700원
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 17000, merchant: netflix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만이라 적립 없음
+- name: 이마트 5% 영역 한도 4천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {mart-5: 4000}
+  calc: 100,000원 x 5% = 5,000원이 영역 한도 4,000원에 걸림
+- name: SKT 자동납부 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {living-5: 1500}
+  calc: 30,000원 x 5% = 1,500원
+- name: 일반 0.2% 반올림
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10250, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {base-0-2: 21}
+  calc: 10,250원 x 0.2% = 20.5원 반올림 21원
+- name: 30만 구간 통합 한도 1만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: emart, channel: offline}
+  - {at: 2026-11-04T13:00, amount: 100000, merchant: lotte_super, channel: offline}
+  - {at: 2026-11-04T14:00, amount: 100000, merchant: lotte_department, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {mart-5: 4000}
+  - payment: 1
+    benefits: {supermarket-5: 4000}
+  - payment: 2
+    benefits: {department-5: 2000}
+  calc: 4,000 + 4,000 뒤 남은 통합 한도 2,000원
+- name: 병원 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: hospital, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {hospital-2: 1000}
+  calc: 50,000원 x 2% = 1,000원

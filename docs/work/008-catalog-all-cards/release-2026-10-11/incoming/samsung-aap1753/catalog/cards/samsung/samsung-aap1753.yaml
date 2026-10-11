@@ -1,0 +1,83 @@
+schema_version: 2
+id: samsung-aap1753
+issuer: samsung
+name: 삼성 iD ENERGY 카드
+short_name: 삼성 iD ENERGY
+search_names: [iD ENERGY, 삼성 iD ENERGY 카드, 아이디 에너지]
+kind: credit
+product_codes: [AAP1753]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1753', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtqNZWamwea5CrcSizMQXx2Y%3D&sn=1', fetched_at: 2026-10-11, review_no: 제2025-C1a-12816호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2025-09-02'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, fuel, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다', 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다]
+    limits:
+      - {key: transit-taxi, per: month, amount: 5000}
+    benefits:
+      - key: fuel-10000
+        title: 주유 1만원 이상 10,000원 할인
+        source: manual
+        evidence: ['주유 건별 10,000원 이상 결제 시 10,000원 결제일할인 (월 합산 30,000원까지 할인)', '주유 SK에너지, GS칼텍스, S-OIL, 현대오일뱅크', 전월 이용금액대별 통합 월 할인횟수 50만원 이상 1회 100만원 이상 2회 150만원 이상 3회, 통합 일 1회 제공, LPG충전소 제외]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {per: day, count: 1}
+          - per: month
+            count: {500000: 1, 1000000: 2, 1500000: 3}
+          - {per: month, amount: 30000}
+        tiers: {from: 500000}
+        unmodeled: [LPG충전소는 할인하지 않는다]
+      - key: transit-10
+        title: 대중교통 10% 할인
+        source: manual
+        evidence: [대중교통·택시·전기차 충전요금 10% 결제일할인, '대중교통 버스, 지하철', '통합 월 할인한도 : 5,000원', 전월 이용금액 50만원 이상 시 제공, '대중교통은 오프라인 결제건에 한하며, 시외·고속버스는 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: transit-taxi}
+        tiers: {from: 500000}
+      - key: taxi-10
+        title: 택시 10% 할인
+        source: manual
+        evidence: [택시 택시, '통합 월 할인한도 : 5,000원', 택시는 오프라인 결제건에 한함]
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: transit-taxi}
+        tiers: {from: 500000}
+    unmodeled: ['할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다, '전기차 충전요금 10%는 대중교통·택시와 월 5,000원 한도를 함께 쓰지만 전기차 충전 업종이 없어 계산하지 않는다', '주차장(케이엠파크)·대리운전(카카오 T 대리) 10%, 고속도로 통행료 10%(후불교통 결제), 스타벅스 드라이브 스루 My DT Pass 30%는 공통 가맹점이나 업종이 없거나 입력으로 구별할 수 없어 계산하지 않는다. 각 월 5,000원 한도', 스피드메이트 엔진오일 20, 000원 현장할인과 차량 점검 무료 서비스는 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품설명서 심의일(2025-09-02)로 두었다. 상품 출시일은 2021-12-02다, assumed: '2025-09-02'}
+  - {path: annual_fees, question: 상품설명서 연회비 표에 해외겸용 VISA 2만원 행만 있고 국내전용이 같은 칸으로 묶여 있어 국내전용도 2만원으로 두었다, assumed: 20000}
+  - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 상품설명서(2025.9판, 심의필 2025-C1a-12816호) 대조. 출시 2021-12-02. 실적 제외는 주유 업종 이용금액 전체, 4대보험, 국세·지방세·공과금, 학교납입금, 등록금, 대중교통, 택시, 임대료, 상품권·선불 충전이다. 아파트 관리비는 실적에 들어간다. 할인받은 금액은 주유 말고는 실적에 들어간다. 발급월+1개월까지는 50만 구간 혜택.

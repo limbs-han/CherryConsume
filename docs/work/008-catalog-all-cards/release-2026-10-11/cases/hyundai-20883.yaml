@@ -1,0 +1,66 @@
+card: hyundai-20883
+holder:
+  started_on: '2026-01-01'
+  facts: {kt_m3_first_issue: true}
+cases:
+- name: 최초 발급 30만 구간 kt 자동이체 1만3천원 할인과 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-autopay: 13000}, counted: 0}
+  calc: 30만 이상 70만 미만이고 10개월 차라 월 13,000원. 할인 적용 건은 실적에서 뺀다
+- name: 70만 구간은 1만8천원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-autopay: 18000}, counted: 0}
+  calc: 70만 이상 18,000원
+- name: 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 55000}
+  calc: 30만 미만 할인 제외
+- name: 자동이체 금액이 할인액보다 적으면 그 금액만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: kt, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-autopay: 9000}, counted: 0}
+  - {payment: 1, benefits: {kt-autopay: 4000}, counted: 0}
+  calc: 첫 건 9,000원 전액, 둘째 건은 월 13,000원 중 남은 4,000원
+- name: 25개월 차부터 6천원
+  holder: {started_on: '2024-10-01', facts: {kt_m3_first_issue: true}}
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-autopay: 6000}, counted: 0}
+  calc: 2024년 10월이 0번째 달이면 2026년 11월은 25번째 달이라 6,000원
+- name: 재발급은 처음부터 6천원
+  holder: {started_on: '2026-01-01', facts: {kt_m3_first_issue: false}}
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-autopay: 6000}, counted: 0}
+  calc: 1~24개월 차 할인은 최초 신규 발급만
+- name: 자동이체가 아닌 kt 결제는 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55000, merchant: kt, billing: normal}
+  expect:
+  - {payment: 0, benefits: {}, counted: 55000}
+  calc: 자동이체만 할인
+- name: 신규 발급월은 전월 0원도 1만3천원
+  holder: {started_on: '2026-11-02', facts: {kt_m3_first_issue: true}}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-autopay: 13000}, counted: 0}
+  calc: 발급월 포함 2개월은 30만 구간

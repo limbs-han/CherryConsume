@@ -1,0 +1,31 @@
+card: nh-f20573
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 10만 직전 편의점 할인 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 3000, merchant: cu}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 10만원 미만이라 0
+- name: 편의점 200원 일 1회
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 3000, merchant: gs25}
+  - {at: 2026-11-04T13:00, amount: 3000, merchant: mcdonalds}
+  - {at: 2026-11-05T13:00, amount: 15000, merchant: olive_young}
+  expect:
+  - {payment: 0, benefits: {daily-200: 200}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {beauty-500: 500}}
+  calc: 첫 결제 200원, 같은 날 두 번째는 일 1회라 0. 다음 날 올리브영 1만원 이상 500원
+- name: 후불교통 5%와 NH페이 0.2%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  - {at: 2026-11-04T20:00, amount: 100000, category: online_shopping, channel: online, payment_method: nh_pay}
+  expect:
+  - {payment: 0, benefits: {transit-5: 75}}
+  - {payment: 1, benefits: {nh-pay-online-0-2: 200}}
+  calc: 1,500 x 5% = 75. 100,000 x 0.2% = 200

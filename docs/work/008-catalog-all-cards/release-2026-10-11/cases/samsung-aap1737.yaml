@@ -1,0 +1,73 @@
+card: samsung-aap1737
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 할인점 30만 구간 7%와 쇼핑 통합 월 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T11:00, amount: 30000, merchant: emart, channel: offline}
+  - {at: 2026-11-04T20:00, amount: 20000, merchant: coupang, channel: online}
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: olive_young, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-7-15: 2100}, counted: 30000}
+  - {payment: 1, benefits: {online-mall-7-15: 900}, counted: 20000}
+  - {payment: 2, benefits: {}, counted: 10000}
+  calc: 30,000 × 7% = 2,100. 쿠팡 20,000 × 7% = 1,400이나 남은 한도 900. 쇼핑 한도 소진 뒤 올리브영은 없음. 할인 건도 실적 인정
+- name: 60만 구간 15%와 생활 편의 월 7천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20000, merchant: starbucks, channel: online}
+  - {at: 2026-11-03T12:00, amount: 30000, merchant: cu, channel: offline}
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: kurly, channel: online}
+  expect:
+  - {payment: 0, benefits: {starbucks-7-15: 3000}, counted: 20000}
+  - {payment: 1, benefits: {convenience-7-15: 4000}, counted: 30000}
+  - {payment: 2, benefits: {}, counted: 20000}
+  calc: 스타벅스 사이렌오더 20,000 × 15% = 3,000. CU 30,000 × 15% = 4,500이나 남은 4,000. 컬리는 생활 편의 한도 소진
+- name: 영역마다 한도가 따로
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T11:00, amount: 50000, merchant: homeplus, channel: offline}
+  - {at: 2026-11-03T13:00, amount: 50000, merchant: twosome, channel: offline}
+  - {at: 2026-11-03T15:00, amount: 50000, category: hospital, channel: offline}
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: baemin, channel: online}
+  expect:
+  - {payment: 0, benefits: {mart-7-15: 3000}, counted: 50000}
+  - {payment: 1, benefits: {coffee-7-15: 3000}, counted: 50000}
+  - {payment: 2, benefits: {medical-7-15: 3000}, counted: 50000}
+  - {payment: 3, benefits: {}, counted: 20000}
+  calc: 50,000 × 7% = 3,500이지만 영역마다 3,000원. 배민은 생활 편의 한도 소진
+- name: 실적 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T11:00, amount: 30000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 0 구간은 혜택 없음
+- name: 스트리밍 6천원 이상 정기결제 30%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 13500, merchant: netflix, billing: subscription}
+  - {at: 2026-11-06T09:00, amount: 5900, merchant: melon, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {streaming-30: 3000}, counted: 13500}
+  - {payment: 1, benefits: {}, counted: 5900}
+  calc: 13,500 × 30% = 4,050이나 월 3,000. 멜론 5,900원은 6천원 미만
+- name: 상품권과 무이자할부는 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T11:00, amount: 30000, merchant: emart, category: gift_card, channel: offline}
+  - {at: 2026-11-04T20:00, amount: 30000, merchant: coupang, channel: online, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 30000}
+  calc: 상품권은 할인과 실적 모두 제외. 무이자할부는 할인 제외, 실적 인정
+- name: 다이소 오프라인과 배달앱 각 영역 7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T11:00, amount: 10000, merchant: daiso, channel: offline}
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: yogiyo, channel: online}
+  expect:
+  - {payment: 0, benefits: {health-beauty-7-15: 700}, counted: 10000}
+  - {payment: 1, benefits: {delivery-fresh-7-15: 1400}, counted: 20000}
+  calc: 10,000 × 7% = 700. 20,000 × 7% = 1,400

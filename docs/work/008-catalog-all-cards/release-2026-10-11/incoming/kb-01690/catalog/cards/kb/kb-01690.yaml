@@ -1,0 +1,181 @@
+schema_version: 2
+id: kb-01690
+issuer: kb
+name: KB국민 직장인보너스 체크카드
+short_name: KB 직장인보너스 체크
+kind: check
+product_codes:
+  - '01690'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01690', fetched_at: '2026-10-11', review_no: 201230-04342-HMS}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000, 500000, 1000000]
+    spend:
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000, 300000: 10000, 500000: 20000, 1000000: 50000}
+      - {key: fuel-base, per: month, base: 300000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: point, pick: best}
+    benefits:
+      - key: tax-7000
+        title: 국세·지방세 7,000원 환급할인
+        source: page
+        evidence: ['국세·지방세 | 7천원 | 건당 10만원 이상 시 [월 1회] | 30만원 이상 시', '건당 10만원 이상 시 7천원 환급할인 [월 1회]']
+        target:
+          categories: [tax]
+        when:
+          - amount: {min: 100000}
+        reward: {type: cashback, fixed: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: insurance-2000
+        title: 보험료 2,000원 환급할인
+        source: page
+        evidence: ['보험료 | 2천원 | 건당 10만원 이상 시 [월 1회]', '실적조건 : 전월 이용실적 30만원 이상']
+        target:
+          categories: [insurance.private]
+        when:
+          - amount: {min: 100000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: telecom-1000
+        title: 이동통신요금 자동이체 1,000원 환급할인
+        source: page
+        evidence: ['자동이체금액 건당 5만원 이상 이용 시 1천원 정액할인 [월 1회]', '제공조건 : 해당 카드로 3대 이동통신사(SKT, KT, LG U+) 자동이체 등록', '할인 제외 : 유무선 통신요금 통합 청구금액', '실적조건 : 전월 이용실적 30만원 이상']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 50000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [유무선 통합청구 요금 자동이체는 빠진다]
+      - key: transit-5
+        title: 버스·지하철 5% 할인
+        source: page
+        evidence: [대중교통(버스·지하철) | 5% | 월 이용금액 2만원까지, '후불교통 (시내버스, 지하철) 5% 청구할인', 고속/시외버스 5% 환급할인, '할인 제외 : 공항버스', 전월 이용실적 30만원 이상 시 할인 적용]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [공항버스는 빠진다, 후불교통 할인은 실제 이용일이 아니라 이용내역서에 적힌 이용일 기준이다]
+      - key: gs-weekday-50
+        title: GS칼텍스 주중 리터당 50원 환급할인
+        source: page
+        evidence: ['GS칼텍스 리터당 주중 50원 , 주말 60원 환급할인', '건당 이용금액 10만원까지 할인 [월 이용금액 30만원까지 할인 적용]', '할인제외 : GS칼텍스 비제휴 주유소 이용금액 / LPG 이용금액', '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [gs_caltex]
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: cashback, per_liter: 50}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel-base}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [비제휴 주유소와 LPG는 빠진다]
+      - key: gs-weekend-60
+        title: GS칼텍스 주말 리터당 60원 환급할인
+        source: page
+        evidence: ['GS칼텍스 리터당 주중 50원 , 주말 60원 환급할인', '건당 이용금액 10만원까지 할인 [월 이용금액 30만원까지 할인 적용]', '할인제외 : GS칼텍스 비제휴 주유소 이용금액 / LPG 이용금액', '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [gs_caltex]
+        when:
+          - day:
+              in: [sat, sun]
+        reward: {type: cashback, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel-base}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [비제휴 주유소와 LPG는 빠진다]
+      - key: everland-50
+        title: 에버랜드 50% 환급할인
+        source: page
+        evidence: ['이용금액 건당 3만원~5만원까지 할인 적용(1회 최대 할인금액 25,000원)', '제공조건 : 현장 티켓 발매', '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [everland]
+        when:
+          - channel: offline
+            amount: {min: 30000}
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [현장 티켓 발매만 할인한다]
+      - key: outback-10
+        title: 아웃백 10% 환급할인
+        source: page
+        evidence: ['이용금액 건당 3만원~10만원까지 할인 적용(1회 최대 할인금액 10,000원)', '할인제외 : 할인대상 가맹점이 백화점 및 대형할인점에 입점한 점포인 경우', '실적조건 : 전월 이용실적 20만원 이상']
+        target:
+          merchants: [outback]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [백화점·대형할인점 입점 점포는 빠진다]
+      - key: department-5
+        title: 롯데·현대·신세계백화점 5% 환급할인
+        source: page
+        evidence: ['이용금액 건당 5만원~10만원까지 할인 적용(1회 최대 할인금액 5,000원)', '실적조건 : 전월 이용실적 50만원 이상']
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - amount: {min: 50000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: happypoint-5
+        title: 해피포인트 가맹점 5% 현장적립
+        source: page
+        evidence: [해피포인트 | 5% 현장적립 | 해피포인트 가맹점 1천원 이상 이용 시, '적립제외 : 일부 해피포인트 가맹점에서 통신사 멤버십카드로 할인 또는 사이즈 업그레이드 서비스 적용 시']
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette, paris_croissant, pascucci]
+        when:
+          - amount: {min: 1000}
+        reward: {type: points, program: happy_point, rate: 5}
+        stack: point
+        unmodeled: [통신사 멤버십 할인이나 사이즈 업그레이드를 받은 결제는 적립하지 않는다, '파리바게뜨·배스킨라빈스·던킨·파스쿠찌·파리크라상 말고 다른 해피포인트 가맹점(리나스, 빚은 등)은 공통 가맹점이 없어 담지 않았다']
+    unmodeled: [전월 실적은 직장인보너스 체크카드 동일계열카드(신한은행·농협 계좌전용)의 이용을 합산한다, '최초 발급 후 사용등록일부터 60일까지는 실적이 없어도 통합한도 5천원 안에서 국세·지방세, GS칼텍스, 에버랜드, 아웃백을 할인한다. 기간을 담을 수 없어 계산하지 않는다', '무승인 금액(자판기, 터널통행료, 기차·고속버스 취소 반환 수수료)과 정부지원금은 실적에서 빠진다', 스피드메이트 엔진오일 교환과 정비공임 할인, SK렌터카 현장할인은 계산하지 않는다, 통합할인한도는 전표 매입 순서대로 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2012년 8월 6일 출시만 적었다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통 이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits[insurance-2000].target', question: 원문 '보험료'에 4대 사회보험료가 드는지 문구가 없다, assumed: 민간 보험료만}
+  - {path: 'revisions[0].benefits[gs-weekend-60].when', question: 주말에 공휴일이 드는지 문구가 없다, assumed: 토요일과 일요일만. 평일 공휴일은 주중 50원}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 통합할인한도는 전월 20만원 이상 5천원, 30만원 이상 1만원, 50만원 이상 2만원, 100만원 이상 5만원. 해피포인트 적립은 실적 조건과 통합한도가 없다. 건당 3만원~5만원까지 할인은 3만원 이상 결제에서 5만원까지만 할인 계산에 넣는다는 뜻으로 옮겼다.

@@ -1,0 +1,162 @@
+card: hana-5865
+cases:
+- name: 실적 30만원 직전
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 25000
+    merchant: bodyfriend_rental
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 299,999원은 실적 하한 미달이므로 0원
+- name: 실적 30만원과 렌탈 월 합산
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 8000
+    merchant: bodyfriend_rental
+    billing: autopay
+  - at: 2026-11-05T10:00
+    amount: 8000
+    merchant: bodyfriend_rental
+    billing: autopay
+  - at: 2026-11-05T10:00
+    amount: 25000
+    merchant: bodyfriend_rental
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      rental-discount: 8000
+    counted: 8000
+  - payment: 1
+    benefits:
+      rental-discount: 5000
+    counted: 8000
+  - payment: 2
+    benefits: {}
+    counted: 25000
+  calc: 공식 예시 8천원 2건은 8천원+5천원. 월 13,000원 소진 후 0원
+- name: 1만원 미만 렌탈 전액
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 7999
+    merchant: bodyfriend_rental
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      rental-discount: 7999
+  calc: 월 한도보다 작은 렌탈 7,999원은 전액 할인
+- name: 다른 가맹점 자동납부 제외
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 25000
+    merchant: kt
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 렌탈 지정 가맹점만 대상
+- name: 자동납부 아닌 렌탈 제외
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 25000
+    merchant: bodyfriend_rental
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부 조건이 없으면 0원
+- name: 마트 할인 월한도 직전과 이후
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 166666
+    merchant: emart
+  - at: 2026-11-05T10:00
+    amount: 34
+    merchant: traders
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: homeplus
+  expect:
+  - payment: 0
+    benefits:
+      mart-discount: 4999
+    counted: 0
+  - payment: 1
+    benefits:
+      mart-discount: 1
+    counted: 0
+  - payment: 2
+    benefits: {}
+    counted: 10000
+  calc: 166,666×3%=4,999원 절사, 34×3%=1원. 합산 월5천원 이후 0원
+- name: 커피 할인 한도
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: coffee_bean
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: coffee_bean
+  expect:
+  - payment: 0
+    benefits:
+      coffee-discount: 5000
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 10000
+  calc: 커피빈50,000×10%=5,000원. 같은달 추가할인0원
+- name: 상품권 제외
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 50000
+    merchant: emart
+    category: gift_card
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 마트 상품권은 할인 제외
+- name: 마트와 커피 한도 별도
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 100000
+    merchant: lotte_mart
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: coffee_bean
+  expect:
+  - payment: 0
+    benefits:
+      mart-discount: 3000
+    counted: 0
+  - payment: 1
+    benefits:
+      coffee-discount: 1000
+    counted: 0
+  calc: 마트3,000원과 커피1,000원은 별도월한도
+- name: 신규 등록 특례
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 25000
+    merchant: bodyfriend_rental
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      rental-discount: 13000
+  calc: 등록월은 실적0원이어도30만원구간. 렌탈25,000원 중13,000원 할인
+  holder:
+    started_on: '2026-11-01'

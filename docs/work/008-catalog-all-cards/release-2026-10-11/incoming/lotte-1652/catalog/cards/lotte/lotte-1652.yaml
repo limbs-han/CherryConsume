@@ -1,0 +1,48 @@
+schema_version: 2
+id: lotte-1652
+issuer: lotte
+name: LOCA PLATINUM 할인형
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 100000}
+  - {scope: global, brand: mastercard, amount: 100000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00022_20260929_10005.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2020-07-10'
+    source: manual
+    tiers: [0, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 1500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: [오토·스마트 캐시백을 신청한 이용금액과 장애인 고용부담금은 할인에서 빠진다]
+    benefits:
+      - key: all-0-5
+        title: 국내외 가맹점 0.5% 결제일 할인
+        source: manual
+        evidence: [국내외 가맹점 결제일 할인, 기본할인 150만원 미만 0.5%, 기본할인과 특별할인은 중복 제공되지 않습니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+        tiers: {to: 0}
+      - key: all-1-0
+        title: 국내외 가맹점 1.0% 결제일 할인
+        source: manual
+        evidence: [국내외 가맹점 결제일 할인, 특별할인 150만원 이상 1.0%, 'LOCA 카드를 최초 발급 받은 경우, 카드발급일~다음달 말일까지 지난달 이용실적에 상관없이 특별적립이 제공됩니다.']
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1.0}
+        tiers: {from: 1500000}
+    unmodeled: ['SPECIAL GIFT 특급호텔 F&B 5만원 이용권은 발급 첫해 500만원, 그 뒤 지난해 2,000만원 이용 시 해마다 주는 이용권이라 계산하지 않는다', LOCA 시리즈 카드가 아닌 롯데카드 이용금액만 실적에서 빠져 다른 LOCA 시리즈 카드 이용금액도 실적에 합산될 수 있다. 이 카드 결제만 센다, 가족카드 이용금액이 본인카드 실적에 합산된다, 해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 오토·스마트 캐시백 신청 이용금액과 장애인 고용부담금은 실적에서 빠진다, 신규 발급 특례는 LOCA 카드를 처음 발급받은 경우에만 받는다, 롯데카드의 다른 결제일 할인 혜택과 겹치면 할인이 큰 혜택 하나만 준다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 온라인 판매 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다, assumed: '[]'}
+notes: 2026-10-11 상품설명서 대조. LOCA CLASSIC과 할인 규칙이 같고 연회비 10만원(기본 7천+제휴 9만3천)과 SPECIAL GIFT, Mastercard Platinum 서비스가 더해진 다른 상품이다. 실적 제외와 할인 제외 목록은 LOCA CLASSIC과 같은 문구라 같은 업종으로 옮겼다. 할인한도 없음.

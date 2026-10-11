@@ -1,0 +1,276 @@
+{
+  "reviewed_at": "2026-10-10",
+  "reviewed_count": 6,
+  "scope": "다른 작성자의 삼성·신한6장 공식원문 독립 대조. 카드와 공통파일 수정 없음",
+  "finding_count": 8,
+  "catalog_modified": false,
+  "cards": [
+    {
+      "card_id": "samsung-abp1689",
+      "result": "불일치 있음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/samsung/samsung-abp1689.yaml",
+      "sha256": "f997fb5968ddbd89489795629ffa71caab812b2ae3e42ee0dbfcb7ee15e9bbdf",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/samsung.yaml",
+      "issuer_sha256": "cee70fd98347ca9ea6eecd55f79728ed17f8eec3c2e43aae66ea92df8ed29cb4",
+      "checked_sources": [
+        "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+        "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoxGvFrR4XmFk4SJJNDR9VM%3D&sn=1"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1689-page-ec21241839d3.html",
+          "sha256": "9ea5f80c9f1f1790b13d274e5307c3fb99695e78df1c9e2e68257b327ca3b49f"
+        },
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1689-pdf-a81520750e62.pdf",
+          "sha256": "11214db7b1c410f0f902cf7b5417b3a6958e2d21d5d9299a47f90dcd19b55f74"
+        }
+      ],
+      "checks": {
+        "effective_from": "출시일을 현재 전체 규칙 확정 시행일로 쓰지 않음. 수집일 추정 표시와 open_questions 있음",
+        "points": "기존 samsung_bigpoint/mysinhan_point만 사용. 새 임의 포인트 환산 프로그램 없음",
+        "fees": "삼성3장 및 Hey Young 연회비0원 원문 일치. SOL/Point Plan 수집 본문 연회비는 JS 템플릿이므로0원 직접 근거 제한",
+        "source": "공식 페이지 URL 열기 성공. 상세 대조는 packet 공식 상품 페이지와 삼성 PDF 전체 수집 원문",
+        "limits": "쇼핑과 의료교육 각각2000/4000/6000원. 같은 영역내 모든혜택 공유. 무이자 제외 issuer기본값은 체크카드에서 실질 적용거래없음"
+      },
+      "findings": [
+        {
+          "path": "revisions[0].new_card",
+          "file_value": "발급다음달말까지 무조건 최저30만 구간",
+          "official_value": "탈회 후 재발급은 신규 혜택 보장 없이 실제 전월30만 실적 필요",
+          "evidence": "탈회 후 카드를 재발급받은 경우 전월 이용실적 충족 시 제공",
+          "severity": "조건이 빠짐",
+          "impact": "재가입 여부 사실 질문 등으로 구조화 필요. 재가입 후 실적0원인데도 최대4000원 캐시백 가능",
+          "source_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+          "document": "국민행복 삼성체크카드 V2 공식 상품 안내"
+        },
+        {
+          "path": "revisions[0].benefits[*].unmodeled",
+          "file_value": "모든 쇼핑·의료·교육 혜택에 어린이집/요양병원/학원/쇼핑 제외를 한꺼번에 복사",
+          "official_value": "각 혜택의 제외만 안내",
+          "evidence": "의료·산후조리원은 요양병원, 보건소, 동물병원 제외",
+          "severity": "표기만 다름",
+          "impact": "혜택별 안내를 좁혀야 이용자가 무관한 조건을 해당 혜택 조건으로 오해하지 않음",
+          "source_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1689",
+          "document": "국민행복 삼성체크카드 V2 공식 상품 안내"
+        }
+      ]
+    },
+    {
+      "card_id": "samsung-abp1383",
+      "result": "불일치 있음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/samsung/samsung-abp1383.yaml",
+      "sha256": "44f8b43b59182446dc20f572f9e7a05d08a1ef659a10b679b01fd045415c221b",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/samsung.yaml",
+      "issuer_sha256": "cee70fd98347ca9ea6eecd55f79728ed17f8eec3c2e43aae66ea92df8ed29cb4",
+      "checked_sources": [
+        "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1383",
+        "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtt%2FCVin7XowUF9Aumz%2Fca70%3D&sn=1"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1383-page-4c16e07c55de.html",
+          "sha256": "1ab7a8f33581515148b8049259a4e0338dc8fc7e781ba9851efa9e4c1bc6e27a"
+        },
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1383-pdf-b065991b1904.pdf",
+          "sha256": "4e3ad5ce7f0ce120721aac2aafedb02a9f4ca09dec5a25e4c67c702db3c81664"
+        }
+      ],
+      "checks": {
+        "effective_from": "출시일을 현재 전체 규칙 확정 시행일로 쓰지 않음. 수집일 추정 표시와 open_questions 있음",
+        "points": "기존 samsung_bigpoint/mysinhan_point만 사용. 새 임의 포인트 환산 프로그램 없음",
+        "fees": "삼성3장 및 Hey Young 연회비0원 원문 일치. SOL/Point Plan 수집 본문 연회비는 JS 템플릿이므로0원 직접 근거 제한",
+        "source": "공식 페이지 URL 열기 성공. 상세 대조는 packet 공식 상품 페이지와 삼성 PDF 전체 수집 원문",
+        "annual_fact": "300만원 상향은 달성 다음날부터 발급월 기준12개월 종료까지. scope card와 매 발급주년 갱신 안내 있음",
+        "cgv": "각 온라인·현장 일1회 연3회 서로 별도. 5000원 할인전 조건을 onsite 입력2000원으로 복원",
+        "stack": "CASHBACK은 onsite 뒤 실제 승인잔액0.2% 추가. POINT는 삼성할인 거래 적립 제외하므로 onsite와 기본포인트 같은 묶음",
+        "uncomputed": "지정 놀이공원50%·워터파크30% 서비스 미지원과 일1회 연5회 안내 보존"
+      },
+      "findings": [
+        {
+          "path": "revisions[0].facts[three-month-average-high] 및 unmodeled",
+          "file_value": "scope card에 직전3개월 질문만 저장",
+          "official_value": "CGV 이용 당시 직전3개월 월평균30만원 기준",
+          "evidence": "직전 3개월 월평균 이용금액 30만원 이상",
+          "severity": "조건이 빠짐",
+          "impact": "scope card는 허용된 형식이나 월마다 달라지는 답의 기준월과 갱신 안내 없음. 연간300만원 질문처럼 이용월마다 확인한다는 안내 필요. 계산 기능 확정 오류로 단정하지 않음",
+          "source_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1383",
+          "document": "삼성체크카드 & CASHBACK 공식 상품 안내"
+        }
+      ]
+    },
+    {
+      "card_id": "samsung-abp1384",
+      "result": "불일치 있음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/samsung/samsung-abp1384.yaml",
+      "sha256": "59bc875d5ea48e34013fcbb4d17e9c4032944651cddc83caeed6fff711c7ef9a",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/samsung.yaml",
+      "issuer_sha256": "cee70fd98347ca9ea6eecd55f79728ed17f8eec3c2e43aae66ea92df8ed29cb4",
+      "checked_sources": [
+        "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1384",
+        "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtq8MFWUCS2fcFFhXMhoOsZc%3D&sn=1"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1384-page-30e2c7278bb9.html",
+          "sha256": "468f3db3e8c665cc9c54ae081f10abbf3bba007058927def3016b4bc2d99bc44"
+        },
+        {
+          "path": "2026-10-05/samsung/_issuer/ix-abp1384-pdf-16d2424d7b6f.pdf",
+          "sha256": "4e3ad5ce7f0ce120721aac2aafedb02a9f4ca09dec5a25e4c67c702db3c81664"
+        }
+      ],
+      "checks": {
+        "effective_from": "출시일을 현재 전체 규칙 확정 시행일로 쓰지 않음. 수집일 추정 표시와 open_questions 있음",
+        "points": "기존 samsung_bigpoint/mysinhan_point만 사용. 새 임의 포인트 환산 프로그램 없음",
+        "fees": "삼성3장 및 Hey Young 연회비0원 원문 일치. SOL/Point Plan 수집 본문 연회비는 JS 템플릿이므로0원 직접 근거 제한",
+        "source": "공식 페이지 URL 열기 성공. 상세 대조는 packet 공식 상품 페이지와 삼성 PDF 전체 수집 원문",
+        "annual_fact": "300만원 상향은 달성 다음날부터 발급월 기준12개월 종료까지. scope card와 매 발급주년 갱신 안내 있음",
+        "cgv": "각 온라인·현장 일1회 연3회 서로 별도. 5000원 할인전 조건을 onsite 입력2000원으로 복원",
+        "stack": "CASHBACK은 onsite 뒤 실제 승인잔액0.2% 추가. POINT는 삼성할인 거래 적립 제외하므로 onsite와 기본포인트 같은 묶음",
+        "uncomputed": "지정 놀이공원50%·워터파크30% 서비스 미지원과 일1회 연5회 안내 보존"
+      },
+      "findings": [
+        {
+          "path": "revisions[0].facts[three-month-average-high] 및 unmodeled",
+          "file_value": "scope card에 직전3개월 질문만 저장",
+          "official_value": "CGV 이용 당시 직전3개월 월평균30만원 기준",
+          "evidence": "직전 3개월 월평균 이용금액 30만원 이상",
+          "severity": "조건이 빠짐",
+          "impact": "scope card는 허용된 형식이나 월마다 달라지는 답의 기준월과 갱신 안내 없음. 연간300만원 질문처럼 이용월마다 확인한다는 안내 필요. 계산 기능 확정 오류로 단정하지 않음",
+          "source_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1384",
+          "document": "삼성체크카드 & POINT 공식 상품 안내"
+        }
+      ]
+    },
+    {
+      "card_id": "shinhan-bubdgr",
+      "result": "불일치 있음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/shinhan/shinhan-bubdgr.yaml",
+      "sha256": "393023ab0f1764cf285d2b321220872988345f829df2b6530e7c1dff236ee032",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/shinhan.yaml",
+      "issuer_sha256": "36cd903d3a971e1c32fc9cd3040ee7cf324b5a96798e4cd4f05b2ce6ad099a54",
+      "checked_sources": [
+        "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/shinhan/_issuer/ix-bubdgr-page-9d6e17a3680f.html",
+          "sha256": "c39fd6936e984a40ff706ec834f5681323aaf4887fbd67ac47e93a425b73bf85"
+        }
+      ],
+      "checks": {
+        "effective_from": "출시일을 현재 전체 규칙 확정 시행일로 쓰지 않음. 수집일 추정 표시와 open_questions 있음",
+        "points": "기존 samsung_bigpoint/mysinhan_point만 사용. 새 임의 포인트 환산 프로그램 없음",
+        "fees": "삼성3장 및 Hey Young 연회비0원 원문 일치. SOL/Point Plan 수집 본문 연회비는 JS 템플릿이므로0원 직접 근거 제한",
+        "source": "공식 페이지 URL 열기 성공. 상세 대조는 packet 공식 상품 페이지와 삼성 PDF 전체 수집 원문",
+        "country": "일본3편의점/베트남롯데·Grab/미국스타벅스 각각 국가명 key와 지역전용별칭 사용. generic업체 해외전체로 확대하지 않음",
+        "services": "수수료면제·ATM·라운지·CU품목즉시할인·MTR 자동합계 미지원 명시. CU즉시할인 뒤 실제 승인액을 편의점 청구할인 기초로 사용",
+        "limits": "국내편의점 일1월3월3000, 교통 국내외 별도월3000, 국가별행사5000/3000/3000/5000. 행사2026-12-31 종료"
+      },
+      "findings": [
+        {
+          "path": "revisions[0].spend.month_offset",
+          "file_value": "시내버스·지하철을 결제수단 구분 없이1개월 늦게 실적 반영",
+          "official_value": "모바일 후불교통은 늦추지 않고 전월 사용분 실적 반영",
+          "evidence": "모바일 후불 교통카드 이용금액은 전월 이용금액이 반영",
+          "severity": "금액이 틀림",
+          "impact": "payment_method mobile_tmoney와 billing postpaid_transit 입력이 있는 거래도 현 month_offset에 걸림. 현재 입력으로 구분 가능한 모바일 예외를 안내만 남겨서는 실적 경계에서 혜택 구간 오류가 남음. 모바일 입력 의미를 선불 전용으로 제한한다면 별도 증거 필요",
+          "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225714_2206.html",
+          "document": "신한카드 SOL트래블 체크 공식 상품 안내"
+        }
+      ]
+    },
+    {
+      "card_id": "shinhan-pobdhm",
+      "result": "불일치 있음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/shinhan/shinhan-pobdhm.yaml",
+      "sha256": "c6b3e740cb961dc7c3b7fec2cbacda55c5b36e6a0345a12c6d2bc4dd6f65f979",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/shinhan.yaml",
+      "issuer_sha256": "36cd903d3a971e1c32fc9cd3040ee7cf324b5a96798e4cd4f05b2ce6ad099a54",
+      "checked_sources": [
+        "https://www.shinhancard.com/pconts/html/card/apply/check/1226114_2206.html"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/shinhan/_issuer/ix-pobdhm-page-1a17403fc002.html",
+          "sha256": "665f9e32db61cc0d04a295d26b7b1a873aff94e01ea58ef33f7d6c0e29ef384b"
+        }
+      ],
+      "checks": {
+        "effective_from": "출시일을 현재 전체 규칙 확정 시행일로 쓰지 않음. 수집일 추정 표시와 open_questions 있음",
+        "points": "기존 samsung_bigpoint/mysinhan_point만 사용. 새 임의 포인트 환산 프로그램 없음",
+        "fees": "삼성3장 및 Hey Young 연회비0원 원문 일치. SOL/Point Plan 수집 본문 연회비는 JS 템플릿이므로0원 직접 근거 제한",
+        "source": "공식 페이지 URL 열기 성공. 상세 대조는 packet 공식 상품 페이지와 삼성 PDF 전체 수집 원문",
+        "new": "일상생활비/편의점20만 floor, 주말배달0 floor tier_by_benefit 정확",
+        "stack": "기본건당0.2/0.4/0.8/1%와SOL0.1%는 daily-life한도공유. 주말1000P는 별도중복. 편의점은기본추가모두제외",
+        "exclusions": "실적 학원·학습지 제외, 학교납입금은실적포함/적립제외. 수도만제외. 철도·약국 제외 정확"
+      },
+      "findings": [
+        {
+          "path": "revisions[0].spend.month_offset",
+          "file_value": "시내버스·지하철을 결제수단 구분 없이1개월 늦게 실적 반영",
+          "official_value": "모바일 후불교통은 늦추지 않고 전월 사용분 실적 반영",
+          "evidence": "모바일 후불 교통카드 이용금액은 전월 이용금액이 반영",
+          "severity": "금액이 틀림",
+          "impact": "payment_method mobile_tmoney와 billing postpaid_transit 입력이 있는 거래도 현 month_offset에 걸림. 현재 입력으로 구분 가능한 모바일 예외를 안내만 남겨서는 실적 경계에서 혜택 구간 오류가 남음. 모바일 입력 의미를 선불 전용으로 제한한다면 별도 증거 필요",
+          "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1226114_2206.html",
+          "document": "신한카드 Point Plan 체크 공식 상품 안내"
+        }
+      ]
+    },
+    {
+      "card_id": "shinhan-bggc7q",
+      "result": "불일치 있음",
+      "file": "tmp/release-card-expansion/recommended-others/catalog/cards/shinhan/shinhan-bggc7q.yaml",
+      "sha256": "8ade4acc5d69cb4aafd531e3fae220e1e351888e1a65184170e863706f6ea35d",
+      "issuer_file": "tmp/release-card-expansion/recommended-others/catalog/issuers/shinhan.yaml",
+      "issuer_sha256": "36cd903d3a971e1c32fc9cd3040ee7cf324b5a96798e4cd4f05b2ce6ad099a54",
+      "checked_sources": [
+        "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/shinhan/_issuer/ix-bggc7q-page-cb23cb19150b.html",
+          "sha256": "923e801eac58174fc4f94e30ee8b81e9b88227c85b0271534216aff0bbd80fb0"
+        }
+      ],
+      "checks": {
+        "effective_from": "출시일을 현재 전체 규칙 확정 시행일로 쓰지 않음. 수집일 추정 표시와 open_questions 있음",
+        "points": "기존 samsung_bigpoint/mysinhan_point만 사용. 새 임의 포인트 환산 프로그램 없음",
+        "fees": "삼성3장 및 Hey Young 연회비0원 원문 일치. SOL/Point Plan 수집 본문 연회비는 JS 템플릿이므로0원 직접 근거 제한",
+        "source": "공식 페이지 URL 열기 성공. 상세 대조는 packet 공식 상품 페이지와 삼성 PDF 전체 수집 원문",
+        "limits": "교통3000/통신월1/CGV월1/각생활영역일1월5. 카페·생활2키 횟수공유, 국내모두통합5000/10000/20000/30000. 간편결제보다생활우선",
+        "overseas": "해외1.2% 일시불은실적조건없이국내통합한도와별도. ATM US$3 자동계산미지원명시"
+      },
+      "findings": [
+        {
+          "path": "revisions[0].spend.month_offset",
+          "file_value": "시내버스·지하철을 결제수단 구분 없이1개월 늦게 실적 반영",
+          "official_value": "모바일 후불교통은 늦추지 않고 전월 사용분 실적 반영",
+          "evidence": "모바일 후불 교통카드 이용금액은 전월 이용금액이 반영",
+          "severity": "금액이 틀림",
+          "impact": "payment_method mobile_tmoney와 billing postpaid_transit 입력이 있는 거래도 현 month_offset에 걸림. 현재 입력으로 구분 가능한 모바일 예외를 안내만 남겨서는 실적 경계에서 혜택 구간 오류가 남음. 모바일 입력 의미를 선불 전용으로 제한한다면 별도 증거 필요",
+          "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html",
+          "document": "신한카드 Hey Young 체크 공식 상품 안내"
+        },
+        {
+          "path": "revisions[0].benefits[telecom-2k].target",
+          "file_value": "SKT·KT·LGU+ 업체 전체에2천원",
+          "official_value": "이동통신요금 자동납부만",
+          "evidence": "이동통신요금 : SKT, KT, LG U+",
+          "severity": "금액이 틀림",
+          "impact": "telecom.internet_tv 업종 입력으로 구분 가능. 해당 업체 인터넷·TV5만원 자동납부에도2000원 지급 가능하므로 exclude_categories 추가 필요",
+          "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1196867_2206.html",
+          "document": "신한카드 Hey Young 체크 공식 상품 안내"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "국가·접수일·지정품목·카드브랜드는 현재 입력에 없을 수 있으므로 국가전용가맹점과 명확한미지원안내 범위로 검토",
+    "삼성 PDF는 공식 수집본문으로 대조. 신한 연회비 JS템플릿2장은원문직접근거 제한",
+    "새로작성한 엔진시험 없음. 작성자의 CGV 손계산과 엔진동작을 읽어 금액복원 확인"
+  ]
+}

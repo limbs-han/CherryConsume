@@ -1,0 +1,136 @@
+schema_version: 2
+id: woori-103483
+issuer: woori
+name: 갤러리아 Platinum 우리카드
+kind: credit
+product_codes:
+  - '103483'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103483', fetched_at: '2026-10-05'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2025-07-17'
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, childcare, department_store, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [별도 전용 가맹점번호로 승인되는 PG 업체와 일부 간편결제 이용은 할인 제외, 백화점 내 별도 가맹점번호 입점매장(편의점·카페 등)과 백화점 외 복합공간(고메이 494 한남 등)은 갤러리아 할인 제외]
+    limits:
+      - key: galleria
+        per: month
+        amount: {500000: 10000, 1000000: 20000}
+      - {key: life, per: month, amount: 10000}
+      - {key: base, per: month, amount: 30000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: galleria-dept-5
+        title: 갤러리아 백화점·갤러리아몰 5% 청구할인
+        source: page
+        evidence: [갤러리아 백화점/갤러리아몰 5~7% 청구할인, 50만원 이상 ~ 100만원 미만 | 5% | 1만원, '쿠폰/포인트 사용, 현장할인 적용 후 실제 카드사에 매입되는 금액 기준 청구할인 적용', 무이자할부 결제 시 할인 제외]
+        target:
+          merchants: [galleria]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: galleria}
+        tiers: {from: 500000, to: 500000}
+        unmodeled: [갤러리아몰은 공식 홈페이지·앱 직접 결제만 대상이고 링크로 연결된 다른 사이트 결제는 제외]
+      - key: galleria-dept-7
+        title: 갤러리아 백화점·갤러리아몰 7% 청구할인
+        source: page
+        evidence: [100만원 이상 | 7% | 2만원]
+        target:
+          merchants: [galleria]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {shared: galleria}
+        tiers: {from: 1000000}
+        unmodeled: [갤러리아몰은 공식 홈페이지·앱 직접 결제만 대상이고 링크로 연결된 다른 사이트 결제는 제외]
+      - key: life-rail-3
+        title: KTX·SRT 온라인 3% 청구할인
+        source: page
+        evidence: ['교통 | KTX, SRT, 카카오T(택시)', 교통 영역은 공식 홈페이지 및 앱을 통한 승차권/택시요금 온라인 결제 건에 한하여 할인 제공, 50만원 이상 | 3% | 1만원]
+        target:
+          merchants: [korail, srt]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        unmodeled: [여행사·편의점 등 승차권 판매대리점 결제는 할인 제외]
+      - key: life-kakao-t-3
+        title: 카카오T 택시 3% 청구할인
+        source: page
+        evidence: [교통 영역은 공식 홈페이지 및 앱을 통한 승차권/택시요금 온라인 결제 건에 한하여 할인 제공, '카카오T 내 주차, 대리 등 택시 외 서비스 결제 시 할인 제외']
+        target:
+          merchants: [kakao_t]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        unmodeled: ['카카오T는 택시 요금만 대상이고 주차, 대리 등은 할인 제외']
+      - key: life-delivery-3
+        title: 배달의민족·쿠팡이츠 3% 청구할인
+        source: page
+        evidence: ['배달앱 | 배달의민족, 쿠팡이츠', 배달앱 영역은 공식 배달앱에서 '앱 내 카드결제' 통한 온라인 결제 건에 한하여 할인 제공, 배달앱 영역은 건당 2만원 이상 결제 시 할인 적용]
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - {channel: online}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        unmodeled: ['입점 음식점의 음식·음료 주문만 대상이고 멤버십, 테이블 오더, 커머스·마트 물품구매는 할인 제외']
+      - key: life-ott-3
+        title: 넷플릭스·티빙·유튜브 프리미엄 3% 청구할인
+        source: page
+        evidence: ['OTT | 넷플릭스, 티빙, 유튜브 프리미엄', OTT 영역은 공식 홈페이지를 통한 스트리밍 구독 서비스 정기결제 건에 한하여 할인 제공, '1회성 일반구매 결제, 구글 플레이/애플 앱스토어 등 앱마켓을 통한 인앱결제, 통신요금 포함 결제 시 할인 제외']
+        target:
+          merchants: [netflix, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: life}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        unmodeled: [통신요금에 포함해 결제한 OTT는 할인 제외]
+      - key: life-1pct
+        title: 국내외 가맹점 1% 청구할인
+        source: page
+        evidence: [국내외 가맹점 1% 청구할인, 50만원 이상 | 1% | 3만원, '할인 제외 : 갤러리아(백화점, 몰, 문화센터 포함) 이용금액 전체, 생활 영역(교통, 배달앱, OTT) 청구할인 적용된 이용금액 전체', '''생활 영역 청구할인''과 ''국내외 가맹점 청구할인''은 중복해서 제공되지 않습니다. (할인 금액 높은 서비스로 자동 적용)', '''생활 영역 청구할인''의 할인한도 초과 시 ''국내외 가맹점 청구할인''이 적용됩니다.']
+        target:
+          all: true
+          exclude_merchants: [galleria]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: base}
+        tiers: {from: 500000}
+    unmodeled: [갤러리아 이용금액 전체가 전월실적에서 빠진다. 가맹점으로 실적을 뺄 수 없어 백화점 업종 전체를 실적에서 뺐다, 생활 영역 할인 받은 이용금액은 전월실적에서 빠진다, '해외 가맹점 이용금액, 교통카드 이용금액, 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다', 국내 가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다, 갤러리아 백화점 5% 현장할인은 직전 3개월 내 갤러리아 구매 이력이 있을 때 회원별 월 3회 정상상품만이라 담지 않았다, 갤러리아 문화센터 5% 현장할인은 문화센터 결제를 가릴 수 없어 담지 않았다, 갤러리아 백화점 최대 6개월 무이자할부와 24/36개월 장기할부는 금액 혜택이 아니라 담지 않았다, VISA Platinum 서비스는 국제브랜드가 따로 제공한다, '정부지원금, 관세, 공공임대료, 각종 수수료·이자는 실적과 1% 할인에서 빠진다']
+open_questions:
+  - {path: 'revisions[0].new_card', question: 카드 수령(사용)등록일과 사용개시일 중 빠른 날이 기준인데 한 날짜만 받는다, assumed: registration}
+  - {path: 'revisions[0].spend.exclude_categories', question: 갤러리아 이용금액만 실적에서 빠지는데 가맹점 단위 실적 제외가 없어 백화점 업종 전체를 뺐다. 다른 백화점 이용도 실적에서 빠져 실적이 적게 잡힌다, assumed: 백화점 업종 전체 제외}
+  - {path: 'revisions[0].benefit_exclusions', question: 1% 할인 제외 목록이 실적 제외 목록과 같아 생활 영역과 갤러리아 할인에도 같은 제외를 썼다, assumed: 모든 혜택에 같은 제외}
+  - {path: 'revisions[0].benefits', question: 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-05 수집한 공식 상품 페이지 원문을 2026-10-11 대조했다. 2026-10-11 우리카드 사이트는 정기 점검이라 새로 열지 못했다. 상품 출시일 2025-07-17, 여신금융협회 심의필 2025-C1a-09850. 연회비 해외겸용(VISA)·국내전용 3만원(기본 7천원, 제휴 2만3천원). 가족카드 발급 불가. 전월실적은 국내외 가맹점 이용금액이다. 생활 영역과 1%는 결제마다 큰 쪽 하나이고 생활 영역 한도를 다 쓰면 1%가 붙는다.

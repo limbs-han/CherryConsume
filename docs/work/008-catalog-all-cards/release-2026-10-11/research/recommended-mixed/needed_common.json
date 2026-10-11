@@ -1,0 +1,298 @@
+{
+  "definitions": [
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "spotify",
+        "name": "스포티파이",
+        "category": "streaming",
+        "aliases": [
+          "스포티파이"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "korean_air",
+        "name": "대한항공",
+        "category": "travel.airline",
+        "aliases": [
+          "대한항공"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "asiana_airlines",
+        "name": "아시아나항공",
+        "category": "travel.airline",
+        "aliases": [
+          "아시아나항공"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "jin_air",
+        "name": "진에어",
+        "category": "travel.airline",
+        "aliases": [
+          "진에어"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "jeju_air",
+        "name": "제주항공",
+        "category": "travel.airline",
+        "aliases": [
+          "제주항공"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "hana_tour",
+        "name": "하나투어",
+        "category": "travel.agency",
+        "aliases": [
+          "하나투어"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "agoda",
+        "name": "아고다",
+        "category": "travel.agency",
+        "aliases": [
+          "아고다"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "expedia",
+        "name": "익스피디아",
+        "category": "travel.agency",
+        "aliases": [
+          "익스피디아"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "hotels_com",
+        "name": "호텔스닷컴",
+        "category": "travel.agency",
+        "aliases": [
+          "호텔스닷컴"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "shinsegae_simon",
+        "name": "신세계사이먼",
+        "category": "department_store",
+        "aliases": [
+          "신세계사이먼"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "hyundai_premium_outlet",
+        "name": "현대프리미엄아울렛",
+        "category": "department_store",
+        "aliases": [
+          "현대프리미엄아울렛"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "lotte_premium_outlet",
+        "name": "롯데프리미엄아울렛",
+        "category": "department_store",
+        "aliases": [
+          "롯데프리미엄아울렛"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "altteul_fuel",
+        "name": "알뜰주유소",
+        "category": "fuel",
+        "aliases": [
+          "알뜰주유소"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "gs_the_fresh",
+        "name": "GS더프레시",
+        "category": "grocery_mart",
+        "aliases": [
+          "GS더프레시"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19149"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "no_brand",
+        "name": "노브랜드",
+        "category": "grocery_mart",
+        "aliases": [
+          "노브랜드"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19149"
+      ]
+    },
+    {
+      "file": "categories.yaml",
+      "definition": {
+        "code": "electric_vehicle_charge",
+        "name": "전기차 충전"
+      },
+      "source_urls": [
+        "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09771"
+      ]
+    },
+    {
+      "file": "categories.yaml",
+      "definition": {
+        "code": "education.culture_center",
+        "name": "문화센터"
+      },
+      "source_urls": [
+        "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09771"
+      ]
+    },
+    {
+      "file": "categories.yaml",
+      "definition": {
+        "code": "kids_cafe",
+        "name": "키즈카페"
+      },
+      "source_urls": [
+        "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09771"
+      ]
+    },
+    {
+      "file": "categories.yaml",
+      "definition": {
+        "code": "education.primary_secondary_fee",
+        "name": "초중고 납입금"
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12782",
+        "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09122",
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "shilla_dfs",
+        "name": "신라면세점",
+        "category": "travel.duty_free",
+        "aliases": [
+          "신라면세점"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "lotte_dfs",
+        "name": "롯데면세점",
+        "category": "travel.duty_free",
+        "aliases": [
+          "롯데면세점"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    },
+    {
+      "file": "merchants.yaml",
+      "definition": {
+        "key": "shinsegae_dfs",
+        "name": "신세계면세점",
+        "category": "travel.duty_free",
+        "aliases": [
+          "신세계면세점"
+        ]
+      },
+      "source_urls": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17504"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+card: samsung-aap1893
+holder:
+  started_on: '2026-01-01'
+  options: [{option: light_installment, choice: none, effective_from: '2026-01-01'}]
+cases:
+- name: LG U+ 통신요금 40만 구간 월 3천원 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-25T09:00, amount: 60000, merchant: lg_uplus, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {uplus-telecom: 3000}, counted: 60000}
+  calc: 정기결제액만큼 할인하되 40만 구간 월 한도 3,000원
+- name: 40만 직전이면 통신요금 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-25T09:00, amount: 60000, merchant: lg_uplus, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 커피 80만 구간 통합 월 3천원과 스타벅스 사이렌오더
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 40000, merchant: twosome, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 40000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-5: 2000}, counted: 40000}
+  - {payment: 1, benefits: {starbucks-5: 1000}}
+  calc: 40,000 × 5% = 2,000. 스타벅스 2,000이나 남은 한도 1,000
+- name: 편의점 배달앱 120만 구간 통합 월 5천원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 60000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-03T19:00, amount: 60000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 3000}}
+  - {payment: 1, benefits: {delivery-5: 2000}}
+  calc: 60,000 × 5% = 3,000. 배민 3,000이나 남은 한도 2,000
+- name: 무이자할부 제외와 지하철 실적 인정
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 100000, merchant: gs25, installment_months: 3, interest_free: true, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 1500}
+  calc: 무이자할부는 할인과 실적 제외. 이 카드는 대중교통을 실적에서 빼지 않는다

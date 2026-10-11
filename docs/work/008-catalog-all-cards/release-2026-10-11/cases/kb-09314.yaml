@@ -1,0 +1,131 @@
+card: kb-09314
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 LFmall 5% 양수
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: lfmall, channel: online}
+  expect:
+  - {payment: 0, benefits: {lfmall-discount-5: 10000}, counted: 0}
+  calc: 200,000원 × 5% = 10,000원. 30만 구간 월 한도 20,000원 안. 할인받은 결제는 전액 실적 제외
+- name: 30만 구간 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: lfmall, channel: online}
+  expect:
+  - {payment: 0, benefits: {lfmall-discount-5: 5000}, counted: 0}
+  calc: 299,999원은 0 구간. 10,000원 중 월 한도 5,000원
+- name: 30만 구간 한도 직전과 직후
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 399980, merchant: lfmall, channel: online}
+  - {at: 2026-11-06T10:00, amount: 1000, merchant: lfmall, channel: online}
+  - {at: 2026-11-07T10:00, amount: 1000, merchant: lfmall, channel: online}
+  expect:
+  - {payment: 0, benefits: {lfmall-discount-5: 19999}, counted: 0}
+  - {payment: 1, benefits: {lfmall-discount-5: 1}, counted: 0}
+  - {payment: 2, benefits: {}}
+  calc: 399,980원 × 5% = 19,999원. 다음 1,000원은 50원 중 남은 한도 1원. 셋째는 한도 소진으로 0원
+- name: 0 구간 한도 직전과 직후
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 99980, merchant: lfmall, channel: online}
+  - {at: 2026-11-06T10:00, amount: 1000, merchant: lfmall, channel: online}
+  expect:
+  - {payment: 0, benefits: {lfmall-discount-5: 4999}, counted: 0}
+  - {payment: 1, benefits: {lfmall-discount-5: 1}, counted: 0}
+  calc: 99,980원 × 5% = 4,999원. 다음 50원 중 0 구간 월 한도 5,000원의 남은 1원
+- name: LFmall 무이자할부 할인 제외와 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: lfmall, channel: online, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무이자할부는 할인과 적립 제외, 실적도 제외라 0원
+- name: LF 오프라인 매장 할인 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: lfmall, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: LF 오프라인 매장은 할인 제외, LFmall 이용금액은 적립 제외. 할인받지 않아 실적 100,000원
+- name: 신규 실적 유예 첫 다음 달 30만 구간 한도
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 500000, merchant: lfmall, channel: online}
+  expect:
+  - {payment: 0, benefits: {lfmall-discount-5: 20000}, counted: 0}
+  calc: 사용등록 다음 달 말일까지 유예. 25,000원 중 30만 구간 한도 20,000원
+- name: 신규 실적 유예 끝난 달
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 500000, merchant: lfmall, channel: online}
+  expect:
+  - {payment: 0, benefits: {lfmall-discount-5: 5000}}
+  calc: 9월 등록이면 10월 말일로 유예 끝. 11월은 0 구간 한도 5,000원
+- name: 생애 최초 발급 아니면 유예 없음
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: false}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 500000, merchant: lfmall, channel: online}
+  expect:
+  - {payment: 0, benefits: {lfmall-discount-5: 5000}}
+  calc: 재발급이나 가족카드 단독 발급은 유예 미적용. 0 구간 한도 5,000원
+- name: 국내 가맹점 0.5% 적립 양수
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {pointree-0-5: 50}, counted: 10000}
+  calc: 10,000원 × 0.5% = 50포인트. 실적 조건과 한도 없음
+- name: 적립 원 미만 버림
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1999, category: cafe}
+  expect:
+  - {payment: 0, benefits: {pointree-0-5: 9}, counted: 1999}
+  calc: 1,999원 × 0.5% = 9.995. 원 미만 버림 9포인트
+- name: 해외 가맹점 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {pointree-0-5: 100}}
+  calc: 국내외 가맹점 0.5%. 20,000원 × 0.5% = 100포인트
+- name: 지방세는 적립과 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: tax.local}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 세금은 적립 제외, 실적 제외
+- name: 아파트관리비는 적립과 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: apartment_fee}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 아파트관리비는 적립 제외, 실적 제외
+- name: 상품권 구입은 적립과 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: gift_card.voucher}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 상품권 구입은 적립 제외, 실적 제외
+- name: 유이자 할부는 적립과 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: online_shopping, installment_months: 3}
+  expect:
+  - {payment: 0, benefits: {pointree-0-5: 150}, counted: 30000}
+  calc: 유이자 할부는 제외 목록에 없다. 30,000원 × 0.5% = 150포인트, 실적 30,000원

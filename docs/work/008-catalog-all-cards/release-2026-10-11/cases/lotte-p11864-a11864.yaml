@@ -1,0 +1,77 @@
+card: lotte-p11864-a11864
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 자동이체 12000 한도와 할인 결제 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 50000, merchant: woongjin_thinkbig, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {thinkbig-autopay: 12000}
+    counted: 0
+  calc: 30만 구간 월 12000원. 할인받은 결제는 실적에서 빠짐
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-10T10:00, amount: 50000, merchant: woongjin_thinkbig, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만 미만
+- name: 200만 구간 30000, 두 번째는 월 1회라 없음
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 50000, merchant: woongjin_thinkbig, billing: autopay}
+  - {at: 2026-11-20T10:00, amount: 50000, merchant: woongjin_thinkbig, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {thinkbig-autopay: 30000}
+  - payment: 1
+    benefits: {}
+  calc: 200만 구간 30000원, 월 1회
+- name: 결제액이 한도보다 적으면 결제액만큼
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 9000, merchant: woongjin_thinkbig, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {thinkbig-autopay: 9000}
+  calc: 9000원 < 16000원
+- name: 롯데마트 5% 건당 5천, 5만원 미만 없음
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, merchant: lotte_mart}
+  - {at: 2026-11-06T10:00, amount: 200000, merchant: lotte_mart}
+  - {at: 2026-11-07T10:00, amount: 49999, merchant: lotte_mart}
+  - {at: 2026-11-08T10:00, amount: 80000, merchant: lotte_mart}
+  expect:
+  - payment: 0
+    benefits: {lotte-mart: 4000}
+  - payment: 1
+    benefits: {lotte-mart: 5000}
+  - payment: 2
+    benefits: {}
+  - payment: 3
+    benefits: {}
+  calc: 80000 x 5% = 4000, 200000 x 5% = 10000은 건당 5000, 5만원 미만 없음, 월 2회 넘어 없음
+- name: 롯데마트는 59만9999원이면 없음
+  prev_month_spend: 599999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, merchant: lotte_mart}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 60만 미만
+- name: 신규 발급 특례 기간 롯데마트 할인
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, merchant: lotte_mart}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: woongjin_thinkbig, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {lotte-mart: 4000}
+  - payment: 1
+    benefits: {thinkbig-autopay: 12000}
+  calc: 10월 등록이라 11월 말까지 롯데마트 60만 구간, 자동이체 30만 구간

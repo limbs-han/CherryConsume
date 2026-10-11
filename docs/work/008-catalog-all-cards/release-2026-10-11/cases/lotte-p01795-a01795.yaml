@@ -1,0 +1,55 @@
+card: lotte-p01795-a01795
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: CJ온스타일 5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: cj_onstyle}
+  expect:
+  - payment: 0
+    benefits: {cj-onstyle-5: 5000}
+  calc: 100,000 × 5% = 5,000. 실적 무관
+- name: CJ온스타일 월 한도 3만원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 700000, merchant: cj_onstyle}
+  expect:
+  - payment: 0
+    benefits: {cj-onstyle-5: 30000}
+  calc: 700,000 × 5% = 35,000, 월 한도 30,000
+- name: 올리브영 10%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 27000, merchant: olive_young}
+  expect:
+  - payment: 0
+    benefits: {oliveyoung-10: 3000}
+  calc: 현장할인이라 입력은 할인 뒤 낸 금액 27,000. 원래 금액 30,000 × 10% = 3,000
+- name: 빕스 20% 매출 20만원까지 1일 1회
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 300000, merchant: vips}
+  - {at: 2026-11-05T18:00, amount: 50000, merchant: vips}
+  expect:
+  - payment: 0
+    benefits: {cj-food-20: 40000}
+  - payment: 1
+    benefits: {}
+  calc: 낸 금액 300,000의 원래 금액은 20만원을 넘는다. 매출 20만원까지 × 20% = 40,000. 같은 날 두 번째는 제외
+- name: 뚜레쥬르 10%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: tous_les_jours}
+  expect:
+  - payment: 0
+    benefits: {twosome-10: 1000}
+  calc: 낸 금액 9,000. 원래 금액 10,000 × 10% = 1,000
+- name: 롯데리아 1000원당 50원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12500, merchant: lotteria}
+  expect:
+  - payment: 0
+    benefits: {food-discount-50per1k: 600}
+  calc: 12,500원은 1,000원 12단위. 12 × 50 = 600
