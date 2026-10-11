@@ -1,0 +1,70 @@
+schema_version: 2
+id: lotte-p01795-a01795
+issuer: lotte
+name: The CJ 롯데카드
+kind: credit
+product_codes: [P01795-A01795]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 5000}
+  - {scope: global, brand: visa, amount: 6000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P01795-A01795', fetched_at: 2026-10-10, review_no: 제2025-C1a-10252호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2025-07-01
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefits:
+      - key: cj-onstyle-5
+        title: CJ온스타일 5% 청구할인
+        source: page
+        evidence: ['CJ온스타일 전 매체(CJ온스타일, 방송, 카탈로그)에서 결제 시 이용금액의 5% 청구할인', 월 할인한도 3만원(이용금액 기준 60만원) 限 (본인/가족 통합적용), 전월 실적 무관]
+        target:
+          merchants: [cj_onstyle]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 30000}
+      - key: oliveyoung-10
+        title: 올리브영 10% 현장할인
+        source: page
+        evidence: [올리브영에서 결제 시 이용금액의 10% 현장할인, 전월 실적 무관]
+        target:
+          merchants: [olive_young]
+        reward: {type: onsite_discount, rate: 10}
+      - key: cj-food-20
+        title: 빕스 20% 현장할인
+        source: page
+        evidence: ['빕스, 한쿡, 더플레이스, 제일제면소, CJ푸드월드, 더방, 더스테이크하우스, 계절밥상에서 결제 시 이용금액의 20% 현장할인', 1일 1회 매출금액 20만원 이내(브랜드 각각 적용), 백화점 및 할인점 입점매장 제외]
+        target:
+          merchants: [vips]
+        reward: {type: onsite_discount, rate: 20}
+        limits:
+          - {per: day, count: 1}
+          - {per: txn, amount: 40000}
+        unmodeled: ['한쿡, 더플레이스, 제일제면소, CJ푸드월드, 더방, 더스테이크하우스, 계절밥상도 같은 20% 할인 대상이지만 가맹점이 없어 계산하지 않는다', 백화점과 할인점에 입점한 매장은 할인하지 않는다, 결제금액의 2% THE CJ 카드 적립금은 계산하지 않는다]
+      - key: twosome-10
+        title: 뚜레쥬르·투썸플레이스 10% 현장할인
+        source: page
+        evidence: ['뚜레쥬르, 투썸플레이스에서 결제 시 이용금액의 10% 현장할인', CGV 외 가맹점 전월실적 무관]
+        target:
+          merchants: [tous_les_jours, twosome]
+        reward: {type: onsite_discount, rate: 10}
+      - key: food-discount-50per1k
+        title: 롯데리아·엔제리너스 1,000원당 50원 현장할인
+        source: page
+        evidence: [롯데리아·나뚜루·엔제리너스, '1,000원당 50원 현장할인']
+        target:
+          merchants: [angel_in_us, lotteria]
+        reward:
+          type: onsite_discount
+          per_unit: {unit: 1000, amount: 50}
+        unmodeled: [나뚜루도 같은 할인 대상이지만 가맹점이 없어 계산하지 않는다]
+    unmodeled: ['CGV 1,500원 청구할인은 전월 청구서 기준 30만원 이상 실적이 필요하다. 실적 기준이 다른 혜택과 달라 계산하지 않는다', '롯데월드 종합이용권 50%, 롯데시네마 1,500원, 생어거스틴 10% 할인은 지난달 신용구매 20만원 이상이 조건이다. 실적 제외 목록을 확인하지 못해 계산하지 않는다', 올리브영 결제금액의 1% THE CJ 카드 적립금은 계산하지 않는다, 'CJ온스타일 할인쿠폰, 박준 뷰티랩·박승철 헤어스튜디오 할인, 롯데백화점 e-쿠폰, 롯데ON, 면세점 할인과 무이자할부는 계산하지 않는다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 페이지는 2025년 7월 기준이다. 지금 혜택의 시작일을 찾지 못했다, assumed: '2025-07-01'}
+  - {path: 'revisions[0].benefits[oliveyoung-10]', question: '올리브영, 뚜레쥬르·투썸플레이스 현장할인과 롯데리아·엔제리너스 1,000원당 50원 할인은 상품 페이지에 한도와 횟수 문구가 없다. 한도가 없는지 확인한다', assumed: 한도 없음}
+  - {path: sources, question: 상품설명서 PDF 2011-A00014_20250807_10013.pdf는 글꼴 때문에 글자를 읽지 못했다. 상품 페이지만 대조했다}
+notes: 2026-10-10 상품 페이지(2025년 7월 기준, 카드출시일 2011-03-04)를 대조했다. 신용카드. 전월 실적과 무관한 CJ 혜택과 롯데리아 할인만 계산한다. 빕스 20%는 1일 1회, 매출 20만원까지라 건당 4만원 한도로 담았다. 초안은 CJ온스타일과 CJ푸드빌을 전 가맹점 대상으로 잘못 두었다.
