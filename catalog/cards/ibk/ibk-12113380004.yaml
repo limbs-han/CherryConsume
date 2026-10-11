@@ -1,0 +1,151 @@
+schema_version: 2
+id: ibk-12113380004
+issuer: ibk
+name: I-나눔(일반)
+kind: credit
+product_codes:
+  - '12113380004'
+  - '12113380005'
+  - '12113380006'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 14000}
+  - {scope: global, brand: master, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0004&pageId=CA01010000', fetched_at: 2026-10-10, review_no: 제2026-4095호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-05-19
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, tax, utility]
+    limits:
+      - key: integrated
+        per: month
+        amount: {500000: 20000, 700000: 30000, 1000000: 40000}
+    benefits:
+      - key: living-online-1
+        title: 온라인쇼핑·홈쇼핑·배달앱 1% 청구할인
+        source: page
+        evidence: [LIVING - 1%~1.5% 할인, 일반 | 전월 50만원 이상 이용 시 | 1% 할인 |, '[온라인쇼핑] 쿠팡, G마켓, 11번가, 옥션, 인터파크', '[홈쇼핑] GS홈쇼핑, 롯데홈쇼핑, 현대홈쇼핑, CJ홈쇼핑, NS홈쇼핑, 홈&쇼핑', '[배달앱] 배달의민족, 쿠팡이츠, 요기요', ※ 공식앱 및 홈페이지를 통한 결제 건에 한함. (가맹점 직접결제 및 상품권 구매는 할인 제외)]
+        target:
+          merchants: [auction, baemin, cj_onstyle, coupang, coupang_eats, eleven_st, gmarket, gs_shop, home_and_shopping, hyundai_homeshopping, interpark, lotte_homeshopping, ns_homeshopping, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 홈쇼핑 전화 주문은 온라인 결제로 기록하지 않으면 계산하지 않는다
+      - key: living-offline-1
+        title: 대형마트·편의점·반려동물 1% 청구할인
+        source: page
+        evidence: ['[대형마트] 이마트, 롯데마트, 홈플러스', ※ 오프라인 결제 건에 한함, '※ 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스 등), 백화점 및 아울렛 입점 매장, 창고형 할인매장(트레이더스 홀세일클럽, 롯데마트 맥스 등)은 제외', '[편의점] GS25, CU, 세븐일레븐', '[반려동물] 동물병원, 애완동물 업종', ※ 오프라인 결제 건에 한함]
+        target:
+          categories: [pet]
+          merchants: [cu, emart, gs25, homeplus, lotte_mart, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [백화점·대형할인점·아울렛 입점 매장과 롯데마트 맥스는 제외]
+      - key: living-coffee-1
+        title: 커피전문점 1% 청구할인
+        source: page
+        evidence: ['[커피] 스타벅스, 커피빈, 투썸플레이스, 폴바셋, 이디야', ※ 현장결제와 각 커피 브랜드의 공식앱을 통한 온라인 결제 건에 한함, '※ 커피 브랜드의 상품권, 선불카드 구입/충전 제외']
+        target:
+          merchants: [coffee_bean, ediya, paul_bassett, starbucks, twosome]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [백화점·대형할인점·아울렛 입점 매장은 제외]
+      - key: living-transit-1
+        title: 버스·지하철 1% 청구할인
+        source: page
+        evidence: ['[교통] 대중교통, 택시', '- 대중교통 : 버스, 지하철', ※ 시외버스, 고속버스 할인 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: living-taxi-1
+        title: 택시 1% 청구할인
+        source: page
+        evidence: ['- 택시 : 택시, 카카오T(택시)', '※ 택시 : 오프라인 결제 건에 한함. 단, 카카오T(택시)는 온라인 결제도 할인대상에 포함']
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: living-kakaot-1
+        title: 카카오T 택시 1% 청구할인
+        source: page
+        evidence: ['- 택시 : 택시, 카카오T(택시)', '※ 택시 : 오프라인 결제 건에 한함. 단, 카카오T(택시)는 온라인 결제도 할인대상에 포함']
+        target:
+          merchants: [kakao_t]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [카카오T의 택시 결제만 대상이고 대리운전 등은 제외]
+      - key: living-fuel-1
+        title: 주유 1% 청구할인
+        source: page
+        evidence: ['[주유·충전] 국내 주유소 및 전기차 충전소', ※ 주유·충전 이용금액 합산 최대 월 50만원까지 할인대상으로 인정]
+        target:
+          categories: [fuel]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {per: month, base: 500000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [전기차 충전소는 담을 업종이 없어 계산하지 않는다. 월 50만원 인정 한도는 주유와 충전 합산이다]
+      - key: living-telecom-1
+        title: 휴대폰요금 자동이체 1% 청구할인
+        source: page
+        evidence: ['[통신] SKT, KT, LG U+ 통신요금 자동이체', ※ 순수 통신요금 자동이체 이용금액에 한함. 약정금액 대납, 지점을 통한 월납 등 제외, '※ 일부 알뜰폰, 선불폰, 결합상품(인터넷, TV, 유선전화 등) 요금할인 적용 제외']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: membership-5
+        title: OTT·온라인 멤버십 정기결제 5% 청구할인
+        source: page
+        evidence: [MEMBERSHIP - 5%~7% 할인, 일반 | 전월 50만원 이상 이용 시 | 5% 할인 |, '[OTT] 넷플릭스, 유튜브프리미엄, 디즈니플러스, 티빙', ※ 공식앱 및 홈페이지를 통해 직접 신청한 정기결제 건에 한함. (1회성 결제건은 할인 제외), '[온라인 멤버십] 쿠팡 와우멤버십, 네이버 멤버십플러스']
+        target:
+          merchants: [coupang_wow, disney_plus, naver_plus_membership, netflix, tving, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [공식앱이나 홈페이지에서 직접 신청한 정기결제만 대상이다]
+    unmodeled: [ALL 국내·외 가맹점 0.5%는 I-나눔 기부포인트로 쌓여 자동 기부되고 회원이 쓸 수 없어 계산하지 않는다, '우대할인 LIVING 1.5%, MEMBERSHIP 7%는 최근 3개월 매달 50만원 이상 연속 이용이 조건이라 계산하지 않고 일반 할인율만 계산한다. 카드 사용 등록일부터 다음 달 말까지와 등록월 포함 4개월째 말일까지의 우대 특례도 계산하지 않는다', 월 할인한도는 매출이 처리되는 순서대로 차감한다, 각종 간편결제로 결제하면 할인되지 않을 수 있다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외 후불교통을 시내버스와 지하철 업종 제외로 옮겼다. 후불교통 유료도로 이용분은 담을 업종이 없다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 expand2 조사. 공식 상품 페이지에서 옮겼다. 일반 할인율만 계산해 우대 대상 회원에게는 실제보다 적게 보인다 I-나눔(아동,장애)(12113380005)는 혜택이 같은 상품이라 이 카드로 등록한다. I-나눔(동물,환경)(12113380006)도 혜택이 같은 상품이라 이 카드로 등록한다.
