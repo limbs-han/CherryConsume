@@ -1,0 +1,52 @@
+schema_version: 2
+id: lotte-p14430-a14430
+issuer: lotte
+name: Trip to 로카
+kind: credit
+product_codes: [P14430-A14430]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14430-A14430', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14430-A14430.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-05-23'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['정부지원금(보육료, 육아학비 등), 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 관세·벌금·과태료·민원 발급 수수료·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적과 할인에서 빠진다']
+    benefits:
+      - key: domestic-1-2
+        title: 국내 가맹점 1.2% 결제일 할인
+        source: page
+        evidence: [국내 가맹점 1.2% 결제일 할인, 전월실적 30만원 이상, 할인한도 없이 혜택 제공]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1.2}
+        tiers: {from: 300000}
+      - key: overseas-2
+        title: 해외 가맹점 2.0% 결제일 할인
+        source: page
+        evidence: [해외 가맹점 2.0% 결제일 할인, 전월실적 30만원 이상, 할인한도 없이 혜택 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+        tiers: {from: 300000}
+    unmodeled: [이 카드가 아닌 롯데카드 이용금액은 실적에서 빠진다, 가족카드 이용금액이 본인카드 실적에 합산된다, 해외 이용과 이동통신·대중교통처럼 다음 달 접수되는 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, 이 카드로 결제하면 롯데카드가 주는 L.POINT 적립은 없다]
+notes: 2026-10-11 상품 페이지와 상품설명서(2023년 6월 기준) 대조. 출시일 2023-05-23. 지난달 30만원 이상이면 국내 1.2%, 해외 2.0%를 한도 없이 준다. 신규 발급 특례는 카드발급일부터 다음 달 말일까지 실적과 상관없이 혜택이라 30만 구간으로 넣었다.
