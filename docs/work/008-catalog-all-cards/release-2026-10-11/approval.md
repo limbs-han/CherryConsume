@@ -1,8 +1,8 @@
 # 출시용 카드 승인 목록
 
-새 카드 25장을 준비했다. 운영 반영 뒤 기존 카드와 합쳐 218장이다. 운영 반영은 아직 하지 않았다.
+새 카드 67장을 준비했다. 운영 반영 뒤 기존 카드와 합쳐 260장이다. 운영 반영은 아직 하지 않았다.
 
-새 카드 손계산 1628개, 기존 손계산 1770개, 교육비 분류 연결 92개가 앱 계산과 일치했다. 카탈로그 오류 0개와 경고 19개. 실제 승인 함수 검사와 상품 중복 검사를 통과했다.
+새 카드 손계산 1849개, 기존 손계산 1770개, 교육비 분류 연결 92개가 앱 계산과 일치했다. 카탈로그 오류 0개와 경고 22개. 실제 승인 함수 검사와 상품 중복 검사를 통과했다.
 
 ## 이번 목록에서 확인할 내용
 
@@ -43,6 +43,48 @@
 | [삼성 iD ENERGY 카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1753) | 20,000원 | 주유 1만원 이상 10,000원 할인 · 대중교통 10% 할인 · 택시 10% 할인 |
 | [삼성 SFC iD SELECT ALL 카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1876) | 20,000원 | [SELECT 1 국내 0.7%] 국내 가맹점 0.7% 할인 · [SELECT 1 관리비·통신] 아파트 관리비·통신 10% 할인 · [SELECT 1 교육] 학습지 10% 할인 외 10개 |
 | [갤러리아 Platinum 우리카드](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103483) | 30,000원 | 갤러리아 백화점·갤러리아몰 5% 청구할인 · 갤러리아 백화점·갤러리아몰 7% 청구할인 · KTX·SRT 온라인 3% 청구할인 외 4개 |
+| [SC제일은행-현대카드M](https://www.hyundaicard.com/upload/card/T_AOB-20260310-1658-84_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SC_M_V3.pdf) | 30,000원 | 온라인몰 5% M포인트 적립 · 일반음식점 5% M포인트 적립 · 해외 가맹점 5% M포인트 적립 외 1개 |
+| [암웨이 현대카드](https://www.hyundaicard.com/upload/card/T_AOB-20260727-1140-35_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%95%94%EC%9B%A8%EC%9D%B4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V2.pdf) | 30,000원 | 한국암웨이 1.5% M포인트 적립 · 국내외 가맹점 1% M포인트 적립 |
+| [kt-현대카드M Edition3(통신할인형2.0)](https://www.hyundaicard.com/upload/card/T_AOB-20260403-1734-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_KT_M%20Ed3_%ED%86%B5%EC%8B%A02.0_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf) | 20,000원 | kt 통신요금 자동이체 청구할인 24개월 (전월 50만 1만5천원, 100만 2만5천원) |
+| [바디프랜드 현대카드](https://www.hyundaicard.com/upload/card/T_AOB-20260512-1055-63_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%B0%94%EB%94%94%ED%94%84%EB%9E%9C%EB%93%9C%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf) | 20,000원 | 바디프랜드 렌탈·구독료 정기결제 청구 할인 (전월 40만 8천원, 80만 1만2천원, 120만 1만6천원) |
+| [현대큐밍 현대카드](https://www.hyundaicard.com/upload/card/T_AOB-20260512-1104-10_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80%ED%81%90%EB%B0%8D%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf) | 20,000원 | 현대큐밍 렌탈·구독료 정기결제 청구 할인 (전월 40만 8천원, 80만 1만2천원, 120만 1만6천원) |
+| [교원웰스 현대카드](https://www.hyundaicard.com/upload/card/T_AOB-20260512-1041-69_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EA%B5%90%EC%9B%90%EC%9B%B0%EC%8A%A4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf) | 20,000원 | 교원웰스 렌탈·구독료 정기결제 청구 할인 (전월 40만 8천원, 80만 1만2천원, 120만 1만6천원) |
+| [LG전자 현대카드](https://www.hyundaicard.com/upload/card/260416_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_LG%EC%A0%84%EC%9E%90%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf) | 20,000원 | LG전자 렌탈·구독료 정기결제 청구 할인 (전월 40만 8천원, 80만 1만2천원, 120만 1만6천원) |
+| [DB손해보험 현대카드](https://www.hyundaicard.com/upload/card/T_AOB-20260720-1555-29_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_DB%EC%86%90%ED%95%B4%EB%B3%B4%ED%97%98_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf) | 30,000원 | DB손해보험 보험 유지 시 국내외 가맹점 청구 할인 (전월 50만 월 1만2천원, 100만 월 1만7천원) · DB손해보험 보험 미이용 시 국내외 가맹점 0.5% M포인트 적립 |
+| [KB국민 쏘영 체크카드](https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01570) | 없음 | 멜론·YouTube Premium 5% 환급할인 · GS25·CU 5% 환급할인 · 패스트푸드 업종 5% 환급할인 외 1개 |
+| [KB국민 내고장사랑 체크카드](https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01656) | 없음 | CGV 20% 환급할인 · 놀이공원 업종 20% 환급할인 · 아웃백 10% 환급할인 외 3개 |
+| [KB국민 히어로즈체크카드](https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01934) | 없음 | 어학시험 TOEIC·JPT 10% 환급할인 · 철도·고속버스·시외버스 20% 환급할인 · 넷플릭스·유튜브프리미엄 20% 환급할인 외 2개 |
+| [KB국민 레고랜드 체크카드](https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02230) | 없음 | 스타벅스 20% 환급할인 · 대중교통 10% 청구·환급할인 · 통신요금 자동납부 2,500원 환급할인 외 3개 |
+| [KB국민 펫코노미 카드](https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04404) | 30,000원 | 동물병원·반려동물 서비스·용품점 30% 청구할인 · 인터파크쇼핑 10% 청구할인 · 이마트·홈플러스·롯데마트 5% 청구할인 |
+| [넥센타이어 KB국민카드](https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04426) | 12,000/14,000원 | 넥센타이어 렌탈료 자동이체 청구할인 · 메가박스·CGV 온라인 예매 3,500원 청구할인 |
+| [KB국민 굿데이올림카드](https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09063) | 9,000/14,000/15,000/20,000원 | 주유소·충전소 리터당 60원 청구할인 · 이마트·롯데마트·홈플러스 10% 청구할인 · 통신요금 10% 청구할인 외 4개 |
+| [LIKIT fun 체크카드](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12794-A12794) | 없음 | 스타벅스·엔제리너스 1천원 캐시백 · 롯데시네마·CGV 2천원 캐시백 · 세븐일레븐·GS25·CU 1천원 캐시백 외 1개 |
+| [프리미엄 렌탈DC 넥센타이어 롯데카드](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P11280-A11280) | 12,000/15,000원 | 넥센타이어 렌탈료 자동이체 청구할인 |
+| [LOCA for Shopping](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13395-A13395) | 20,000원 | 이마트·홈플러스·롯데마트 10% 결제일 할인 · 쿠팡·SSG.COM·티몬·G마켓·옥션·11번가 10% 결제일 할인 · 롯데·GS·NS·현대·CJ·홈앤쇼핑 10% 결제일 할인 외 1개 |
+| [LOCA LIKIT Eat](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13943-A13943) | 10,000원 | 음식점 60% 결제일 할인 · 배달의민족·쿠팡이츠·요기요 60% 결제일 할인 · 스타벅스·투썸플레이스·할리스·폴바셋 60% 결제일 할인 외 1개 |
+| [LOCA LIKIT Play](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13949-A13949) | 10,000원 | SK에너지·S-OIL·GS칼텍스·현대오일뱅크 60% 결제일 할인 · 롯데시네마·CGV·메가박스 60% 결제일 할인 · 넷플릭스·왓챠·유튜브·멜론·지니 정기결제 60% 결제일 할인 외 1개 |
+| [네이버페이 쇼핑엔로카 PLAN+](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14381-A14381) | 10,000원 | 플랜할인 미이용 시 국내외 1% 네이버페이 포인트 적립 |
+| [메리츠화재 보험엔로카](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15500-A15500) | 20,000원 | 메리츠화재 보험료 자동이체 결제일 할인 |
+| [예다함 상조엔로카](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15623-A15623) | 20,000원 | 예다함 상조 월납입금 자동납부 캐시백 |
+| [소노아임레디 상조엔로카](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15627-A15627) | 20,000원 | 소노아임레디 상조 월납입금 자동납부 캐시백 |
+| [교원라이프 상조엔로카](https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15633-A15633) | 20,000원 | 교원라이프 상조 월납입금 자동납부 캐시백 |
+| [삼성 페이 삼성카드 taptap](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1521) | 10,000원 | 삼성 페이 온라인 결제 10% 할인 · 삼성 페이 오프라인 결제 10% 할인 · 이동통신요금 자동납부 10% 할인 외 2개 |
+| [T 라이트 삼성카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1613) | 25,000원 | SKT 통신요금 자동납부 할인 · 커피전문점 5% 할인 · 스타벅스 5% 할인 외 2개 |
+| [신세계 Art & Science 삼성카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1694) | 20,000원 | 신세계백화점 5% 할인 · 생활요금 자동납부 5% 할인 · 영화 5,000원 할인 외 4개 |
+| [삼성 SFC iD ALL 카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1728) | 20,000원 | 백화점 5% 할인(많이 쓰는 영역) · 할인점 5% 할인(많이 쓰는 영역) · 슈퍼마켓 5% 할인(많이 쓰는 영역) 외 4개 |
+| [SK렌터카 삼성카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1740) | 30,000원 | SK렌터카 월 렌탈료 할인(보증금 할부 이용) · SK렌터카 월 렌탈료 할인 |
+| [네이버웹툰 삼성 iD 카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1785) | 10,000원 | 네이버 디지털콘텐츠·네이버플러스 멤버십 50% 적립 · 온라인쇼핑몰 5% 적립 · 배달앱·스타벅스 5% 적립 외 2개 |
+| [단비교육 삼성카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1843) | 15,000원 | 단비교육 온라인 결제 7,000~12,000원 할인 · 생활요금 정기결제 1,000원 할인 · 보험료 1,000원 할인 |
+| [넥센타이어 삼성카드](https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1907) | 15,000원 | 넥센타이어 렌탈료 10,000~16,000원 할인 · 주유 10% 할인(렌탈 미이용) · 편의점·커피전문점 10% 할인(렌탈 미이용) 외 1개 |
+| [카드의정석 EVERY CHECK](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102495) | 없음 | 국내외 0.2% 기본 적립 · 공연티켓 1만원 특별 적립 · 놀이공원·워터파크 1만원 특별 적립 외 3개 |
+| [D4카드의정석II](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103305) | 12,000원 | 커피 4대 브랜드 55% 청구할인 · 대중교통·택시 33% 청구할인 · 편의점 11% 청구할인 외 1개 |
+| [모임WON CHECK](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103748) | 없음 | 모임 음식점·주점 저녁 5% 캐시백 · 모임 커피전문점 저녁 5% 캐시백 · 모임 CU 저녁 5% 캐시백 외 5개 |
+| [U+ X 우리카드](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103751) | 25,000원 | LG U+ 통신요금 자동납부 청구할인 (전월 40만 1만원, 80만 1만5천원, 120만 2만원) |
+| [카드의정석 POINT II](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103764) | 10,000/12,000원 | 국내 기본 0.8% 적립 · 이동통신 자동납부 5% 특별 적립 · 대중교통 5% 특별 적립 외 5개 |
+| [바디프랜드 Platinum 우리카드](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500095) | 45,000원 | 바디프랜드 렌탈요금 자동납부 청구할인 (전월 100만 2만7천원, 150만 3만2천원, 200만 3만7천원) · LIFE 카카오T 주차·택시 10% 청구할인 · LIFE 배달의민족·쿠팡이츠 10% 청구할인 외 1개 |
+| [카드의정석2 SPIKE CHECK](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500104) | 없음 | [시즌] 프로배구 입장권 30% 캐시백 · [시즌] KOVO STORE 20% 캐시백 · 블로킹 외식 3% 캐시백 외 3개 |
+| [카드의정석 NEW우리V카드](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835068) | 2,000/5,000원 | Woori 할인 대형마트·백화점·주유·병의원·학원 5% 청구할인 · 패밀리레스토랑 25% 청구할인 건당 2만5천원 · 토다이 25% 청구할인 건당 2만5천원 일 1회 외 4개 |
+| [카드의정석 가득한 할인 카드](https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835097) | 5,000/10,000원 | 쇼핑 대형마트·백화점 5% 청구할인 · 쇼핑 온라인·홈쇼핑 5% 청구할인 · 가족 학원·병원·보험 5% 청구할인 외 6개 |
 
 
 ## 승인 뒤 처리

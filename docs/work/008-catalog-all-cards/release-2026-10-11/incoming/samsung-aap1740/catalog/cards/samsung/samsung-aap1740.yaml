@@ -1,0 +1,73 @@
+schema_version: 2
+id: samsung-aap1740
+issuer: samsung
+name: SK렌터카 삼성카드
+short_name: SK렌터카 삼성
+search_names: [SK렌터카 삼성카드, SK렌터카 카드]
+kind: credit
+product_codes: [AAP1740]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1740', fetched_at: 2026-10-11}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtgD0acIpcH0wL97yGCv%2B1a4%3D&sn=1', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2021-10-08
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    options:
+      - key: deposit_installment
+        title: SK렌터카 보증금 24·36개월 할부 이용 여부
+        choices:
+          - {key: none, title: 보증금 할부 미이용 또는 완납}
+          - {key: using, title: 보증금 24·36개월 할부 이용 중}
+        default: none
+        change: next_month
+    benefits:
+      - key: rental-installment
+        title: SK렌터카 월 렌탈료 할인(보증금 할부 이용)
+        source: manual
+        evidence: ['SK렌터카 장기렌터카 월 렌탈료 정기결제 시, 보증금 24·36개월 할부 이용 여부에 따라 5,000원~30,000원 결제일할인', 'SK렌터카 보증금 24·36개월 할부 이용 회원 전월 이용금액대별 통합 월 할인한도 50만원 이상 15,000원, 100만원 이상 30,000원', 'SK렌터카 장기렌터카 월 렌탈료가 월 할인금액보다 적은 경우, 월 렌탈료만큼 해당월 회원님의 카드 결제대금에서 자동 차감']
+        target:
+          merchants: [sk_rentcar]
+        when:
+          - option:
+              deposit_installment: [using]
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {500000: 15000, 1000000: 30000}
+        tiers: {from: 500000}
+      - key: rental
+        title: SK렌터카 월 렌탈료 할인
+        source: manual
+        evidence: ['SK렌터카 보증금 24·36개월 할부 미이용·완납 회원 전월 이용금액대별 통합 월 할인한도 50만원 이상 5,000원, 100만원 이상 20,000원', SK렌터카 월 렌탈료 정기결제 2건 이상 이용 시에도 통합 할인한도 내에서 제공]
+        target:
+          merchants: [sk_rentcar]
+        when:
+          - option:
+              deposit_installment: [none]
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {500000: 5000, 1000000: 20000}
+        tiers: {from: 500000}
+    unmodeled: ['스피드메이트 차량 점검 서비스(엔진오일 교환 20,000원 현장할인 연 2회, 안전점검·펑크 수리·위치 교환 무료 연 1회)는 연간 횟수와 사전 의사 전달 조건이라 계산하지 않는다', 'SK렌터카 보증금 24·36개월 할부(건별 300만원 이상, 연 4.7%)는 할부 서비스라 계산하지 않는다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일 2021-10-08을 시행일로 두었다. 대조한 상품안내장은 2022.8판(심의필 2021-C1a-08966호)이다, assumed: '2021-10-08'}
+  - {path: 'revisions[0].benefits', question: 할인의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].benefits[rental].target', question: SK렌터카 가맹점이 공통 파일에 없어 sk_rentcar를 새로 제안했다, assumed: sk_rentcar}
+notes: 2026-10-11 상품안내장(2022.8판) 확인. 출시 2021-10-08. 연회비 해외겸용 Mastercard·국내전용 모두 30,000원(기본 7,000+제휴 23,000). 렌탈료 할인은 월 렌탈료만큼 월 한도까지 차감하고 보증금 할부 이용 여부로 한도가 다르다. 발급월+1개월까지는 50만 구간 혜택을 준다. 실적 제외는 무이자할부, 4대보험, 국세·지방세·공과금, 초중고 납입금, 대학 등록금, 대중교통, 택시, 아파트 관리비, 임대료, 기프트·선불카드, 상품권이다.

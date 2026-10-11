@@ -627,7 +627,7 @@
 - key: daemyung_imready
   name: 대명아임레디
   category: other
-  aliases: [대명아임레디]
+  aliases: [대명아임레디, 소노아임레디]
 - key: coway_rental
   name: 코웨이 렌탈
   category: other
@@ -1060,3 +1060,96 @@
   name: 에듀윌
   category: education.academy
   aliases: [에듀윌, EDUWILL]
+- key: korea_amway
+  name: 한국암웨이
+  category: other
+  aliases: [한국암웨이, 암웨이, Amway, A페이]
+- key: hyundai_cuming
+  name: 현대큐밍 렌탈
+  category: other
+  aliases: [현대큐밍, 현대큐밍 렌탈]
+- key: nexen_tire_rental
+  name: 넥센타이어 렌탈
+  billing: autopay
+  category: other
+  aliases: [넥센타이어 렌탈, 넥센타이어, NEXEN TIRE]
+- key: meritz_fire
+  name: 메리츠화재
+  category: insurance.private
+  aliases: [메리츠화재, 메리츠화재해상보험, MERITZ]
+- key: yedaham
+  name: 예다함
+  category: other
+  aliases: [예다함, 예다함상조, 예다함 상조]
+- key: kyowon_life
+  name: 교원라이프
+  category: other
+  aliases: [교원라이프, 교원라이프 상조, KYOWON LIFE]
+- key: sk_magic
+  name: SK매직
+  category: other
+  aliases: [SK매직, SK magic, 에스케이매직]
+- key: sk_rentcar
+  name: SK렌터카
+  category: other
+  aliases: [SK렌터카, SK rent a car, 에스케이렌터카]
+- key: naver_series
+  name: 네이버 시리즈
+  category: streaming
+  aliases: [네이버 시리즈, 네이버시리즈, 시리즈온]
+- key: chzzk
+  name: 치지직
+  category: streaming
+  aliases: [치지직, CHZZK]
+- key: danbi_education
+  name: 단비교육
+  category: education.study_material
+  aliases: [단비교육, 윙크, WINK, 캐츠홈, wink.co.kr]
+- key: yes24_ticket
+  name: YES24 티켓
+  category: other
+  aliases: [YES24 티켓, 예스24티켓]
+- key: melon_ticket
+  name: 멜론티켓
+  category: other
+  aliases: [멜론티켓, MELON TICKET]
+- key: ticketlink
+  name: 티켓링크
+  category: other
+  aliases: [티켓링크, TICKETLINK]
+- key: ocean_world
+  name: 오션월드
+  category: other
+  aliases: [오션월드, 비발디파크 오션월드]
+- key: myrealtrip
+  name: 마이리얼트립
+  category: travel.agency
+  aliases: [마이리얼트립, MYREALTRIP]
+- key: kovo_ticket
+  name: 한국배구연맹 프로배구 입장권
+  category: other
+  aliases: [KOVO, 한국배구연맹]
+- key: kovo_store
+  name: KOVO STORE
+  category: online_shopping
+  aliases: [KOVO STORE, KOVO 스토어]
+- key: tgif
+  name: TGI 프라이데이스
+  category: restaurant.general
+  aliases: [TGIF, TGI FRIDAYS, 티지아이프라이데이]
+- key: mad_for_garlic
+  name: 매드포갈릭
+  category: restaurant.general
+  aliases: [매드포갈릭, MAD FOR GARLIC]
+- key: pizza_hut
+  name: 피자헛
+  category: restaurant.general
+  aliases: [피자헛, PIZZA HUT]
+- key: dr_robin
+  name: 닥터로빈
+  category: restaurant.general
+  aliases: [닥터로빈, DR.ROBIN]
+- key: saint_augustin
+  name: 생어거스틴
+  category: restaurant.general
+  aliases: [생어거스틴, SAINT AUGUSTIN]

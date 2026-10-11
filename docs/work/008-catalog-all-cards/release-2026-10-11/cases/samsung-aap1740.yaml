@@ -1,0 +1,37 @@
+card: samsung-aap1740
+holder:
+  started_on: '2026-01-01'
+  options: [{option: deposit_installment, choice: none, effective_from: '2026-01-01'}]
+cases:
+- name: 할부 미이용 50만 구간 월 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-15T09:00, amount: 450000, merchant: sk_rentcar, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {rental: 5000}, counted: 450000}
+  calc: 렌탈료만큼 할인하되 50만 구간 한도 5,000
+- name: 50만 직전이면 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-15T09:00, amount: 450000, merchant: sk_rentcar, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 보증금 할부 이용 100만 구간 월 3만원
+  prev_month_spend: 1000000
+  holder:
+    options: [{option: deposit_installment, choice: using, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-15T09:00, amount: 450000, merchant: sk_rentcar, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {rental-installment: 30000}}
+  calc: 할부 이용 100만 구간 한도 30,000
+- name: 무이자할부와 택시는 실적 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 100000, category: grocery_mart, installment_months: 3, interest_free: true, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 10000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 0}
+  calc: 무이자할부와 택시는 실적 제외

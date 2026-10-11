@@ -1,0 +1,144 @@
+schema_version: 2
+id: woori-500104
+issuer: woori
+name: 카드의정석2 SPIKE CHECK
+kind: check
+product_codes:
+  - '500104'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500104', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-09-10'
+    source: page
+    tiers: [0, 200000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: [결제대행·간편결제 가맹점명으로 접수되면 캐시백 제외, 우리카드 다른 프로모션과 중복 적용 불가]
+    limits:
+      - key: spike
+        per: month
+        amount: {200000: 5000, 500000: 10000}
+      - {key: spike-day, per: day, amount: 5000}
+      - key: serve
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+      - {key: serve-day, per: day, amount: 3000}
+      - key: blocking
+        per: month
+        amount: {200000: 10000, 500000: 20000}
+      - key: dining
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+      - key: cvs
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+      - key: transit
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+      - key: ticket
+        per: month
+        amount: {200000: 3000, 500000: 6000}
+    benefits:
+      - key: spike-30
+        title: '[시즌] 프로배구 입장권 30% 캐시백'
+        source: page
+        evidence: [프로배구 입장권 30% 캐시백, 전월 국내외 가맹점 이용 실적 20만원 이상 시 할인 제공, 일 한도 5천원까지 할인 제공, '시즌 서비스 대상 월(10월, 11월, 12월, 1월, 2월, 3월, 4월)에 결제(승인)된 건에 한하여 캐시백 제공', '스파이크(SPIKE) 서비스 | 5,000원 | 10,000원']
+        target:
+          merchants: [kovo_ticket]
+        when:
+          - months: [1, 2, 3, 4, 10, 11, 12]
+          - {channel: online}
+        reward: {type: cashback, rate: 30}
+        limits:
+          - {shared: spike-day}
+          - {shared: spike}
+        tiers: {from: 200000}
+        unmodeled: ['KOVO 홈페이지·앱에서 우리카드 카드의정석2 SPIKE 권종을 골라 결제한 건만이고, 그 권종을 주는 구단 경기만이다']
+      - key: serve-store-20
+        title: '[시즌] KOVO STORE 20% 캐시백'
+        source: page
+        evidence: [한국배구연맹 공식 온라인 스토어(KOVO STORE) | 20%, 전월 국내외 가맹점 이용 실적 20만원 이상 시 캐시백 제공, 통합 일 한도 3천원까지 캐시백 제공, '서브(SERVE) 서비스 | 3,000원 | 6,000원']
+        target:
+          merchants: [kovo_store]
+        when:
+          - months: [1, 2, 3, 4, 10, 11, 12]
+          - {channel: online}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: serve-day}
+          - {shared: serve}
+        tiers: {from: 200000}
+      - key: blocking-dining
+        title: 블로킹 외식 3% 캐시백
+        source: page
+        evidence: ['외식 | 음식점, 주점 업종 | 3%', '통합 일 1회, 건당 최대 1천원까지 캐시백 제공', 오프라인 매장 결제 건에 한하여 캐시백 제공, '20만원 이상 50만원 미만 | 3,000원 | 10,000원', '50만원 이상 | 6,000원 | 20,000원']
+        target:
+          categories: [pub, restaurant]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {shared: dining}
+          - {shared: blocking}
+        tiers: {from: 200000}
+        unmodeled: [백화점·대형마트·면세점·공항·미군부대·리조트 등 입점 매장 제외]
+      - key: blocking-cvs
+        title: 블로킹 편의점 3% 캐시백
+        source: page
+        evidence: ['편의점 | GS25, CU, 세븐일레븐', '통합 일 1회, 건당 최대 1천원까지 캐시백 제공', 오프라인 매장 결제 건에 한하여 캐시백 제공]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {shared: cvs}
+          - {shared: blocking}
+        tiers: {from: 200000}
+        unmodeled: [입점 매장 제외]
+      - key: blocking-transit
+        title: 블로킹 교통 3% 캐시백
+        source: page
+        evidence: ['교통 | 대중교통(버스/지하철), 택시업종, 카카오T(택시) 철도(KTX), 쏘카', 건당 최대 1천원까지 캐시백 제공, '고속버스, 시외버스, 공항버스, 공항철도(직통열차)는 캐시백 제외']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+          merchants: [kakao_t, korail, socar]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: transit}
+          - {shared: blocking}
+        tiers: {from: 200000}
+        unmodeled: [공항버스와 공항철도 직통열차는 제외, '카카오T는 앱에 등록한 이 카드로 앱 결제한 택시만, 택시 호출앱 결제가 별도 가맹점으로 잡히면 제외', 코레일은 KTX만 대상이다]
+      - key: blocking-ticket
+        title: 블로킹 티켓 3% 캐시백
+        source: page
+        evidence: ['티켓 | 티켓링크, NOL티켓, YES24티켓, 멜론티켓', 티켓 결제 건에 한하여 건당 최대 1천원까지 캐시백 제공, 공식 홈페이지 및 앱을 통한 결제 건에 한하여 캐시백 제공]
+        target:
+          merchants: [interpark_ticket, melon_ticket, ticketlink, yes24_ticket]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: ticket}
+          - {shared: blocking}
+        tiers: {from: 200000}
+    unmodeled: [서브 서비스의 우리카드 우리WON 프로배구단 홈경기장 식음매장·MD샵 30%는 담을 가맹점이 없어 계산하지 않는다, '매치포인트 서비스(시즌 월 입장권 2회 2천원, 3회 3천원 추가 캐시백)는 계산하지 않는다', 시즌 부스터(비시즌 5~9월 합산실적 100만·200만 이상이면 다음 시즌 스파이크·서브 월 한도 추가)는 계산하지 않는다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 신규 특례는 처음 발급받은 경우만이다, '환금성 업종, 신차 구매, 의약품 전용몰·제약회사, 공공임대료, 관세, 정부지원금, 국가·공공기관 가맹점 이용금액은 실적에서 빠진다']
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-09-10. 연회비 없음. 전월 국내외 20만/50만 이상. 시즌(10~4월) 스파이크 KOVO 입장권 30% 일 5천 월 5천/1만원, 서브 KOVO STORE 20% 일 3천 월 3천/6천원. 블로킹 외식·편의점·교통·티켓 3% 건당 1천원, 영역 월 3천/6천원, 통합 월 1만/2만원.

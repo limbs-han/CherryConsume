@@ -1,0 +1,136 @@
+schema_version: 2
+id: kb-02230
+issuer: kb
+name: KB국민 레고랜드 체크카드
+short_name: KB 레고랜드 체크
+kind: check
+product_codes:
+  - '02230'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02230', fetched_at: '2026-10-11', review_no: 제241119-05864-TRM}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠진다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 발급받았나요?'}
+    limits:
+      - key: integrated
+        per: month
+        amount: {0: 20000, 300000: 20000, 500000: 30000, 1000000: 50000}
+    benefits:
+      - key: starbucks-20
+        title: 스타벅스 20% 환급할인
+        source: page
+        evidence: [스타벅스 (사이렌 오더 포함) | 20% | 4천원(1회당) | 1만원 이상 이용 시, 상품권 구매 및 스타벅스 카드 충전 시 할인 적용 제외, '전월 이용 실적이 30만원 미만인 경우에도 1구간(30만원이상)에 해당하는 서비스 및 월 통합 할인한도가 제공됩니다. * 단, 대중교통 할인 서비스, 통신요금 할인 서비스는 제외']
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, amount: 4000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [스타벅스 카드 충전과 백화점·대형마트 입점 매장은 할인에서 빠진다]
+      - key: transit-10
+        title: 대중교통 10% 청구·환급할인
+        source: page
+        evidence: ['후불교통(시내버스.지하철) 청구할인, 고속/시외버스 환급할인 | 10% | 2천원', 실제 카드사용일이 아닌 이용내역서상 기재된 이용일 기준으로 적용, 실적 유예기간 미적용]
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 2000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [후불교통은 실제 사용일이 아니라 이용내역서에 적힌 이용일 기준으로 할인한다]
+      - key: telecom-2500
+        title: 통신요금 자동납부 2,500원 환급할인
+        source: page
+        evidence: ['SKT, KT, LGU+, LiivM | 2,500원 | 5만원 이상 이용 시', 건당 5만원 이상 자동납부 시 2, 500원 정액 할인 적용(월1회), 유무선 통신요금 통합청구금액 자동이체 시 할인제외, 실적 유예기간 미적용]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 50000}
+        reward: {type: cashback, fixed: 2500}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [유·무선 통신요금 통합청구 자동이체는 할인에서 빠진다]
+      - key: subscription-5
+        title: 멜론·지니·넷플릭스·웨이브 5% 환급할인
+        source: page
+        evidence: ['멜론, 지니, 넷플릭스, 웨이브 | 5% | 2천원', 공식 홈페이지 및 모바일(앱)을 통한 정기결제 시 제공, 간편결제(Pay) 또는 구글 플레이스토어 및 앱스토어를 통한 인앱 결제건 등은 할인 제외]
+        target:
+          merchants: [genie, melon, netflix, wavve]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 2000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [공식 홈페이지와 앱의 정기결제만 할인하고 간편결제와 인앱결제는 빠진다]
+      - key: kyobo-5
+        title: 교보문고 5% 환급할인
+        source: page
+        evidence: ['교보문고 | 5% | 2,500원(1회당) | 2만원 이상 이용 시', 핫트랙스 이용금액 할인 제외, 인터넷 결제 시 교보문고 직영 홈페이지에서 이용한 경우만 할인 제공]
+        target:
+          merchants: [kyobo_book]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 2500}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [핫트랙스 이용금액은 할인에서 빠진다]
+      - key: gs25-5
+        title: GS25 5% 환급할인
+        source: page
+        evidence: [GS25 | 5% | 1천원(1회당) | 1만원 이상 이용 시]
+        target:
+          merchants: [gs25]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: [레고랜드 코리아 5% 환급할인은 레고랜드 가맹점 키가 없어 계산하지 않는다. 월 1만원 한도이고 통합할인한도와 따로다, '무승인 금액(자판기, 터널통행료, 유료도로, 기차·고속버스 취소 반환 수수료)과 정부지원금, 포인트리 충전금액은 실적에서 빠진다', 통합할인한도는 전표 매입 순서대로 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2022.02.11 출시만 적었다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 레고랜드 할인은 공통 가맹점 legoland가 생기면 더한다.

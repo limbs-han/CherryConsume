@@ -1,0 +1,83 @@
+schema_version: 2
+id: lotte-c12794-a12794
+issuer: lotte
+name: LIKIT fun 체크카드
+kind: check
+product_codes: [C12794-A12794]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12794-A12794', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00032_20260716_10005.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 500000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: coffee-cashback
+        title: 스타벅스·엔제리너스 1천원 캐시백
+        source: manual
+        evidence: ['커피 스타벅스, 엔제리너스 1천원 3회 6회 9회', 건당 5천원 이상 결제 시 혜택이 적용됩니다., 상품권 및 선불카드 구매·충전 건은 혜택이 적용되지 않습니다.]
+        target:
+          merchants: [angel_in_us, starbucks]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - per: month
+            count: {300000: 3, 500000: 6, 700000: 9}
+        tiers: {from: 300000}
+      - key: movie-cashback
+        title: 롯데시네마·CGV 2천원 캐시백
+        source: manual
+        evidence: ['영화 롯데시네마, CGV 2천원 1회 2회 3회', 정액 캐시백 혜택은 이용금액이 캐시백 금액 이상인 건만 혜택이 적용됩니다., '현장 결제, 공식 홈페이지 및 앱을 통한 예매 시 혜택이 적용되며, 기프티콘, 상품권 구매 등 영화 예매 이외의 건은 혜택이 적용되지 않습니다.']
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - amount: {min: 2000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - per: month
+            count: {300000: 1, 500000: 2, 700000: 3}
+        tiers: {from: 300000}
+      - key: convenience-cashback
+        title: 세븐일레븐·GS25·CU 1천원 캐시백
+        source: manual
+        evidence: ['편의점 세븐일레븐, GS25, CU 1천원 1회 2회 3회', 건당 5천원 이상 결제 시 혜택이 적용됩니다., 선불카드 구매·충전 건은 혜택이 적용되지 않습니다.]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - per: month
+            count: {300000: 1, 500000: 2, 700000: 3}
+        tiers: {from: 300000}
+      - key: telecom-cashback
+        title: SKT·KT·LG U+ 자동이체 2천원 캐시백
+        source: manual
+        evidence: ['이동통신 SKT, KT, LG U+ 2천원 1회', '이동통신요금 자동이체 결제 건에만 월 1회(최초 결제 접수 건) 제공되며, 인터넷·TV 등 결합상품 결제 건, 알뜰폰 이용요금 결제 건은 혜택이 적용되지 않습니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 2000}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+    unmodeled: [커피는 현장 결제(사이렌오더 포함)만 대상이고 백화점·마트 입점 매장은 빠질 수 있다, 영화는 예매만 대상이고 기프티콘·상품권 구매는 빠진다, 상품권·선불카드 구매와 충전은 캐시백하지 않는다, 본인과 가족카드의 실적과 캐시백 한도를 합산한다, 롯데카드의 다른 캐시백 혜택과 겹치면 금액이 큰 혜택 하나만 준다, 'LIKIT fun 체크카드가 아닌 롯데카드 이용금액, 장애인 고용부담금, 포인트 충전, 이자·수수료는 실적에서 빠진다', 캐시백은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2019-11-29이고 설명서는 2026년 7월 기준이다, assumed: '2026-10-11'}
+notes: 2026-10-11 상품 페이지와 상품설명서(2026년 7월 기준) 대조. 지난달 30만원 이상이면 캐시백 횟수가 구간마다 늘어난다. 캐시백 혜택이 적용된 이용금액도 실적에 넣는다. 신규 발급 특례는 사용등록일부터 다음 달 말일까지 30만 구간이다. 연회비 없음.

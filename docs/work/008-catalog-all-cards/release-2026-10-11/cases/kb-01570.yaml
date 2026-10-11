@@ -1,0 +1,63 @@
+card: kb-01570
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 5만 구간 멜론 5%
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10900, merchant: melon}
+  expect:
+  - {payment: 0, benefits: {streaming-5: 545}, counted: 10900}
+  calc: 10,900원 × 5% = 545원
+- name: 경계 직전 49999
+  prev_month_spend: 49999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10900, merchant: melon}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 편의점 5% 월 1천원
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cu}
+  - {at: 2026-11-06T10:00, amount: 4999, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 1000}}
+  - {payment: 1, benefits: {}}
+  calc: 1,500원 중 월 1,000원. 5천원 미만 제외
+- name: 패스트푸드 7천원 이상
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 8000, category: restaurant.fastfood}
+  expect:
+  - {payment: 0, benefits: {fastfood-5: 400}}
+  calc: 8,000원 × 5% = 400원
+- name: 고속버스 1만원 이상
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1000}, counted: 20000}
+  calc: 1,000원
+- name: 통합한도 5천원
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-01T10:00, amount: 30000, merchant: youtube_premium}
+  - {at: 2026-11-02T10:00, amount: 30000, merchant: cu}
+  - {at: 2026-11-03T10:00, amount: 30000, category: restaurant.fastfood}
+  - {at: 2026-11-04T10:00, amount: 30000, category: transit.bus_express}
+  expect:
+  - {payment: 3, benefits: {transit-5: 1000}}
+  calc: 영역마다 1,000원, 합계 4,000원으로 통합한도 안
+- name: 신규 유예 편의점만
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25}
+  - {at: 2026-11-05T11:00, amount: 10000, category: restaurant.fastfood}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  - {payment: 1, benefits: {}}
+  calc: 편의점만 유예 적용

@@ -1,0 +1,55 @@
+card: kb-04426
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈료 1만1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {nexen-rental: 11000}, counted: 0}
+  calc: 월 11,000원. 할인받은 결제는 실적 제외
+- name: 경계 직전 699999
+  prev_month_spend: 699999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {nexen-rental: 11000}}
+  calc: 30만 구간
+- name: 100만 구간 렌탈 두 건 합산
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: nexen_tire_rental, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {nexen-rental: 15000}}
+  - {payment: 1, benefits: {nexen-rental: 5000}}
+  calc: 월 20,000원 안에서 합산
+- name: 0 구간 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 0 구간
+- name: CGV 온라인 3,500원 하루 2회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, channel: online}
+  - {at: 2026-11-05T11:00, amount: 15000, merchant: megabox, channel: online}
+  - {at: 2026-11-05T12:00, amount: 15000, merchant: cgv, channel: online}
+  expect:
+  - {payment: 0, benefits: {movie-3500: 3500}}
+  - {payment: 1, benefits: {movie-3500: 3500}}
+  - {payment: 2, benefits: {}}
+  calc: 1일 2회
+- name: 신규 유예 렌탈 1만1천원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {nexen-rental: 11000}}
+  calc: 유예기간 11,000원

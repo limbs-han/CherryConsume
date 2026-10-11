@@ -1,0 +1,93 @@
+card: kb-09063
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 주유 일 10만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-60: 3229}, counted: 0}
+  calc: 일 10만원까지만 넣어 100,000 × 60 ÷ 1,858 = 3,229.2 버림 3,229. 할인받은 결제는 실적 제외
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 0 구간
+- name: 30만 구간 이마트 월 3만원 이용분
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-10: 3000}, counted: 0}
+  calc: 3만원 × 10% = 3,000원
+- name: 120만 구간 마트 10만원 이용분
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: homeplus, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-10: 10000}}
+  calc: 10만원 × 10% = 10,000원
+- name: 통신 3만원 이용분
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: telecom.mobile}
+  expect:
+  - {payment: 0, benefits: {telecom-10: 3000}}
+  calc: 3만원 × 10%
+- name: 택시 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {transit-10: 2000}}
+  calc: 20,000원 × 10%
+- name: 해외 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-5: 10000}}
+  calc: 20만원 × 5% = 10,000원
+- name: 음식점은 60만 구간부터
+  prev_month_spend: 599999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 구간은 외식 할인 없음
+- name: 60만 구간 음식점 10%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {dining-10: 5000}}
+  calc: 5만원 × 10% = 5,000원
+- name: 120만 구간 학원 10%
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 400000, category: education.academy}
+  expect:
+  - {payment: 0, benefits: {academy-10: 30000}}
+  calc: 30만원 × 10% = 30,000원
+- name: 무이자할부 할인 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 무이자할부는 할인 제외
+- name: 신규 유예 1구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: lotte_mart, channel: offline}
+  - {at: 2026-11-05T11:00, amount: 30000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {mart-10: 3000}}
+  - {payment: 1, benefits: {}}
+  calc: 유예기간 1구간. 외식은 2구간부터라 없음

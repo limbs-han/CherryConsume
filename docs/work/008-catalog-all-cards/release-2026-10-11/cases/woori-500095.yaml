@@ -1,0 +1,48 @@
+card: woori-500095
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 바디프랜드 자동납부 2만7천원 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {bodyfriend-rental: 27000}, counted: 40000}
+  calc: 100만 이상 150만 미만 월 27,000원 한도
+- name: 200만 구간 요금이 한도보다 적으면 요금만
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {bodyfriend-rental: 30000}, counted: 30000}
+  calc: 한도 37,000원보다 요금 30,000원이 적어 30,000원
+- name: 100만 직전은 할인 없음
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 100만 미만 할인 없음
+- name: 배달앱 10%와 실적 제외, 월 5천원 공유 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 30000, merchant: baemin, channel: online}
+  - {at: 2026-11-06T19:00, amount: 30000, merchant: netflix, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {life-delivery: 3000}, counted: 0}
+  - {payment: 1, benefits: {life-ott: 2000}, counted: 0}
+  calc: 3,000원 뒤 남은 월 한도 2,000원
+- name: 1만원 미만 결제는 LIFE 할인 없음
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 9000, merchant: kakao_t, channel: online}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9000}
+  calc: 건당 1만원 이상만 할인
+- name: 카카오T 온라인 결제 10%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 20000, merchant: kakao_t, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-kakao-t: 2000}, counted: 0}
+  calc: 2만원의 10% 2,000원, 할인 건은 실적 제외

@@ -1,0 +1,143 @@
+schema_version: 2
+id: samsung-aap1694
+issuer: samsung
+name: 신세계 Art & Science 삼성카드
+short_name: 신세계 Art & Science 삼성
+search_names: [Art & Science 삼성카드, 신세계 아트앤사이언스, 아트앤사이언스 삼성카드]
+kind: credit
+product_codes: [AAP1694]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1694', fetched_at: 2026-10-11}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtgocxAjQ2lWIvCRgQUYcbIU%3D&sn=1', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2020-12-23
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, 간편결제 자체 가맹점번호로 승인되는 일부 간편결제는 할인하지 않을 수 있다]
+    limits:
+      - key: living
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 20000}
+      - key: mart-fuel
+        per: month
+        count: {400000: 2, 800000: 4, 1200000: 6}
+      - {key: cafe-bakery, per: month, amount: 5000}
+    benefits:
+      - key: shinsegae-5
+        title: 신세계백화점 5% 할인
+        source: manual
+        evidence: [신세계백화점 5% 결제일할인, '전월 이용금액대별 월 할인한도 40만원 이상 5,000원, 80만원 이상 10,000원, 120만원 이상 20,000원', '오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {400000: 5000, 800000: 10000, 1200000: 20000}
+        tiers: {from: 400000}
+        unmodeled: [상품권·주차장 같은 쇼핑 외 결제와 임대매장은 할인하지 않는다]
+      - key: living-5
+        title: 생활요금 자동납부 5% 할인
+        source: manual
+        evidence: [생활요금 자동납부 시 5% 결제일할인, '아파트 관리비, 도시가스요금, 4대 사회보험(건강보험, 국민연금, 고용보험, 산재보험)', '통신 SKT, SK브로드밴드, KT, LG U+ 이동통신/인터넷/유선전화요금', '렌탈 코웨이, SK매직', '전월 이용금액대별 통합 월 할인한도 40만원 이상 5,000원, 80만원 이상 10,000원, 120만원 이상 20,000원']
+        target:
+          categories: [apartment_fee, insurance.social, utility.gas]
+          merchants: [coway, coway_rental, kt, lg_uplus, sk_broadband, sk_magic, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: living}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: ['통신의 결합상품요금, IoT 요금, 단말기 구매금액, 대리점 결제와 렌탈의 일반 제품 구매는 할인하지 않는다']
+      - key: movie-5000
+        title: 영화 5,000원 할인
+        source: manual
+        evidence: ['영화 티켓 13,000원 이상 결제 시 5,000원 결제일할인', 'CGV, 롯데시네마, 메가박스', '통합 월 1회, 전월 이용금액 40만원 이상 시 제공', 오프라인 결제 및 공식 홈페이지·앱을 통한 결제건에 한함]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 13000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+        unmodeled: [영화 티켓 결제만 할인하고 매점 결제는 제외한다]
+      - key: mart-2000
+        title: 이마트·트레이더스 2,000원 할인
+        source: manual
+        evidence: ['할인점·주유 건별 50,000원 이상 결제 시 2,000원 결제일할인', '할인점 이마트, 이마트 트레이더스', '전월 이용금액대별 통합 월 할인횟수 40만원 이상 2회, 80만원 이상 4회, 120만원 이상 6회', '할인점은 오프라인 결제건에 한하며, 기업형 슈퍼마켓(이마트 에브리데이 등), 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [emart, traders]
+        when:
+          - {channel: offline}
+          - amount: {min: 50000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: mart-fuel}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [상품권·주차장 같은 쇼핑 외 결제와 임대매장은 할인하지 않는다]
+      - key: fuel-2000
+        title: 주유 2,000원 할인
+        source: manual
+        evidence: ['할인점·주유 건별 50,000원 이상 결제 시 2,000원 결제일할인', 주유 모든 주유소, 주유는 LPG충전소 제외]
+        target:
+          categories: [fuel]
+        when:
+          - amount: {min: 50000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: mart-fuel}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [LPG충전소는 할인하지 않는다]
+      - key: cafe-20
+        title: 이디야·성심당 20% 할인
+        source: manual
+        evidence: [커피전문점·제과점 20% 결제일할인, '커피전문점 스타벅스, 이디야커피', 제과점 성심당, '전월 이용금액 40만원 이상 시 제공, 통합 월 할인한도 5,000원', '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 내 임대매장은 제외(단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공)']
+        target:
+          merchants: [ediya, sungsimdang]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: cafe-bakery}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: starbucks-20
+        title: 스타벅스 20% 할인
+        source: manual
+        evidence: ['단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: cafe-bakery}
+        tiers: {from: 400000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+    unmodeled: [전기요금 자동납부 5%는 주택용·주거용 심야·계약전력 20kW 이하만 대상이라 전기요금 업종이 더 넓어 담지 않았다, 신세계백화점 할인쿠폰과 신세계포인트 적립 같은 제휴 서비스는 계산하지 않는다, 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일 2020-12-23을 시행일로 두었다. 대조한 상품안내장은 2022.8판(심의필 2021-C1a-07262호)이다, assumed: '2020-12-23'}
+  - {path: 'revisions[0].benefits', question: 할인의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].benefits[living-5].target', question: SK매직 가맹점이 공통 파일에 없어 sk_magic을 새로 제안했다. 코웨이는 coway와 coway_rental 둘 다 넣었다, assumed: sk_magic}
+notes: 2026-10-11 상품안내장(2022.8판) 확인. 출시 2020-12-23. 연회비 해외겸용 Mastercard·국내전용 모두 20,000원(기본 7,000+제휴 13,000). 모든 할인은 전월 40만원 이상이고 발급월+1개월까지는 40만 구간 혜택을 준다. 생활요금 자동납부 5%와 할인점·주유 2,000원 할인을 받은 이용금액은 실적에서 빠진다. 실적 제외는 4대보험, 국세·지방세·공과금, 초중고 납입금, 대학 등록금, 대중교통, 택시, 아파트 관리비, 임대료, 기프트·선불카드, 상품권이다. 무이자할부는 실적에 넣고 할인에서 뺀다.

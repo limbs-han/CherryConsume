@@ -1,0 +1,69 @@
+schema_version: 2
+id: hyundai-mdbi
+issuer: hyundai
+name: DB손해보험 현대카드
+short_name: 현대 DB손해보험
+search_names: [DB손보 현대카드, DB손해보험 현대카드, DB손해보험카드]
+kind: credit
+product_codes: [MDBI]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260720-1555-29_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_DB%EC%86%90%ED%95%B4%EB%B3%B4%ED%97%98_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 혜택에서 뺀다, 현대카드의 다른 할인이 적용된 결제는 혜택에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 혜택 계산에서 뺀다]
+    options:
+      - key: insurance
+        title: DB손해보험 보험 유지 여부
+        choices:
+          - {key: insured, title: 보험료를 내는 DB손해보험 보험을 전월 1일 이상 유지}
+          - {key: not_insured, title: DB손해보험 보험 미이용 또는 해지}
+        default: null
+        change: next_month
+    benefits:
+      - key: insured-discount
+        title: DB손해보험 보험 유지 시 국내외 가맹점 청구 할인 (전월 50만 월 1만2천원, 100만 월 1만7천원)
+        source: manual
+        evidence: [50만원 이상~100만원 미만 최대 1만 2천원 청구 할인, 100만원 이상 최대 1만 7천원 청구 할인, '청구 할인은 월 할인 한도 내 건별 순차 적용되며, 청구 금액이 할인 한도보다 적을 경우 청구 금액만큼만 혜택 적용', '대상 : 보험료를 납입하는 DB손해보험 현대카드 본인 회원(보험계약자)', '기간 : 혜택 제공월 기준 전월 1일 이상 유지']
+        target: {all: true}
+        when:
+          - option:
+              insurance: [insured]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {500000: 12000, 1000000: 17000}
+        tiers: {from: 500000}
+        unmodeled: [청구 할인은 보험계약자 본인 카드에만 적용하고 가족 카드는 받지 않는다]
+      - key: not-insured-points
+        title: DB손해보험 보험 미이용 시 국내외 가맹점 0.5% M포인트 적립
+        source: manual
+        evidence: [미이용(해지) 50만원 이상 0.5% M포인트 적립, M포인트 적립 한도 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립]
+        target: {all: true}
+        when:
+          - option:
+              insurance: [not_insured]
+        reward: {type: points, program: hyundai_m_point, rate: 0.5, round: round}
+        tiers: {from: 500000}
+    unmodeled: [신규 발급 시 수령 등록월 다음 달 이용 건까지 보험 유지와 관계없이 50만 구간 청구 할인을 주는 특례는 보험 미이용 선택과 겹쳐 담지 않았다. 그 기간에는 실제보다 덜 계산된다, 할인은 결제 순서가 아니라 현대카드 매출전표 접수 순서로 적용한다, 실적은 본인과 가족 카드를 합산한다, 고속도로 통행 요금과 후불하이패스 이용 금액은 실적에서 뺀다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-11 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa Platinum) 30,000원(기본 10,000+제휴 20,000), 가족카드 10,000원. 보험 유지 여부를 옵션으로 묻는다. 유지하면 국내외 가맹점 청구 할인을 건별 순차로 월 한도까지 주고, 미이용이면 50만 이상 0.5% M포인트를 한도 없이 준다. 실적은 전월 1일~말일 일시불과 할부이고 공과금 등과 무이자 할부 이용 금액을 뺀다. 부동산 임대료는 실적 제외 목록에 없고 혜택 제외 목록에만 있다. 취소는 승인월에서 빼고 해외는 취소 달에서 뺀다.

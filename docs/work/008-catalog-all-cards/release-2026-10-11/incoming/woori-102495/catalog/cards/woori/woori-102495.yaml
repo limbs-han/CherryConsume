@@ -1,0 +1,112 @@
+schema_version: 2
+id: woori-102495
+issuer: woori
+name: 카드의정석 EVERY CHECK
+kind: check
+product_codes:
+  - '102495'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102495', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-07-14'
+    source: page
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+    limits:
+      - {key: special-month, per: month, count: 1}
+      - {key: special-year, per: year, count: 4}
+    stacks:
+      - key: main
+        pick: priority
+        order: [special-ticket, special-park, special-movie, special-travel, base-0-2]
+        spill: none
+      - {key: bonus, pick: best, spill: none}
+    benefits:
+      - key: base-0-2
+        title: 국내외 0.2% 기본 적립
+        source: page
+        evidence: [국내외 가맹점 0.2% 적립, ※ 전월실적 조건 없음, ※ 적립 한도 없음, ※ ‘특별 적립’ 서비스와 중복 제공 불가(‘특별 적립’ 우선 적용)]
+        target: {all: true}
+        reward: {type: points, program: woori_moa_point, rate: 0.2}
+      - key: special-ticket
+        title: 공연티켓 1만원 특별 적립
+        source: page
+        evidence: ['공연티켓 | 인터파크 티켓, yes24 티켓, 멜론 티켓, 티켓링크 ※ 공식 앱 또는 홈페이지를 통해 예매한 경우에만 제공', ※ 전월 이용금액 30만원 이상 시 혜택 제공, '※ 건당 1만원 이상 결제건에 한하여 혜택 제공(통합 월 1회, 연 4회)']
+        target:
+          merchants: [interpark_ticket, melon_ticket, ticketlink, yes24_ticket]
+        when:
+          - {channel: online}
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, fixed: 10000}
+        limits:
+          - {shared: special-month}
+          - {shared: special-year}
+        tiers: {from: 300000}
+      - key: special-park
+        title: 놀이공원·워터파크 1만원 특별 적립
+        source: page
+        evidence: ['놀이공원/워터파크 | 에버랜드, 롯데월드, 캐리비안베이, 오션월드 ※ 온/오프라인 가맹점 대상', ※ 온라인은 공식 앱 또는 홈페이지를 통해 예매한 경우에만 제공, '※ 건당 1만원 이상 결제건에 한하여 혜택 제공(통합 월 1회, 연 4회)']
+        target:
+          merchants: [caribbean_bay, everland, lotte_world, ocean_world]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, fixed: 10000}
+        limits:
+          - {shared: special-month}
+          - {shared: special-year}
+        tiers: {from: 300000}
+      - key: special-movie
+        title: 영화관 1만원 특별 적립
+        source: page
+        evidence: ['영화관 | CGV, 롯데시네마, 메가박스 ※ 온/오프라인 가맹점 대상', ※ 온라인은 공식 앱 또는 홈페이지를 통해 예매한 경우에만 제공, '※ 건당 1만원 이상 결제건에 한하여 혜택 제공(통합 월 1회, 연 4회)']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, fixed: 10000}
+        limits:
+          - {shared: special-month}
+          - {shared: special-year}
+        tiers: {from: 300000}
+      - key: special-travel
+        title: 여행 1만원 특별 적립
+        source: page
+        evidence: ['여행 | 야놀자, 여기어때, 마이리얼트립 ※ 공식 앱 또는 홈페이지를 통해 예매한 경우에만 제공', '※ 건당 1만원 이상 결제건에 한하여 혜택 제공(통합 월 1회, 연 4회)']
+        target:
+          merchants: [myrealtrip, yanolja, yeogi_eottae]
+        when:
+          - {channel: online}
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, fixed: 10000}
+        limits:
+          - {shared: special-month}
+          - {shared: special-year}
+        tiers: {from: 300000}
+      - key: monthly-bonus
+        title: 전월실적별 추가 적립 (30만 1천원, 60만 2천원, 90만 3천원)
+        source: page
+        evidence: [전월실적에 따라 최대 3천원 추가 적립, '30만원 이상 | 1,000원', '60만원 이상 | 2,000원', '90만원 이상 | 3,000원', ※ ‘기본/특별 적립’ 서비스와 중복 제공, ※ 매월(1일~말일) 이용실적에 따라 다음달 20일에 적립]
+        target: {all: true}
+        reward:
+          type: points
+          program: woori_moa_point
+          fixed: {300000: 1000, 600000: 2000, 900000: 3000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        stack: bonus
+        notes: 원문은 달마다 한 번 다음 달 20일에 주는 적립이다. 계산은 그 달 첫 대상 결제에 붙인다
+    unmodeled: [해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 카드 수령 등록일과 사용개시일 중 빠른 날이 속한 달에는 특별·추가 적립이 없다, 정부지원금과 국가·공공기관 가맹점 이용금액은 실적과 적립에서 빠진다, 가족카드 실적과 한도는 본인카드와 별도이고 포인트는 본인에게 합산된다, 당사 이벤트 혜택을 받은 매출은 적립에서 빠질 수 있다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2023-07-14. 연회비 없음. 국내외 0.2% 기본 적립, 전월 30만 이상 공연티켓·놀이공원·영화·여행 건당 1만원 이상 1만원 특별 적립(통합 월 1회 연 4회, 기본 대신), 전월 30만/60만/90만 이상 월 1천/2천/3천원 추가 적립.

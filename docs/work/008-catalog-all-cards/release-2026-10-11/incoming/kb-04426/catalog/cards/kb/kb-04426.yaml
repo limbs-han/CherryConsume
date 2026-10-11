@@ -1,0 +1,73 @@
+schema_version: 2
+id: kb-04426
+issuer: kb
+name: 넥센타이어 KB국민카드
+short_name: KB 넥센타이어
+kind: credit
+product_codes:
+  - '04426'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04426', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: nexen-rental
+        title: 넥센타이어 렌탈료 자동이체 청구할인
+        source: page
+        evidence: [전월 이용실적 30만원이상 이용 시 1만 1천원 청구할인, 전월 이용실적 70만원이상 이용 시 1만 5천원 청구할인, 전월 이용실적 100만원이상 이용 시 2만원 청구할인, 할인한도보다 자동이체 승인된 금액이 작을 경우 승인금액만큼 할인 적용, 넥센타이어 렌탈료 자동이체 승인 건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인, 최초 카드 사용등록일로부터 다음달 말일까지 「넥센타이어 KB국민카드」 이용실적이 없는 경우에도 렌탈료 1만 1천원까지 할인 제공]
+        target:
+          merchants: [nexen_tire_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {0: 11000, 300000: 11000, 700000: 15000, 1000000: 20000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 자동이체 승인금액 전액을 월 할인금액까지 할인한다. 여러 건이면 합산해 월 할인금액 안에서 할인한다
+      - key: movie-3500
+        title: 메가박스·CGV 온라인 예매 3,500원 청구할인
+        source: page
+        evidence: ['메가박스/CGV 온라인 영화 예매 시 승인 건당 3,500 원 청구 할인', '1일 2회, 월 4회, 연 10회 이내', 넥센타이어 KB국민카드 전월 이용실적 30만원 이상 시 할인서비스 제공]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 3500}
+        limits:
+          - {per: day, count: 2}
+          - {per: month, count: 4}
+          - {per: year, count: 10}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: ['놀이공원 현장할인(롯데월드 어드벤처 종합이용권 50%, 에버랜드 자유이용권 50%, 캐리비안베이 입장권 30%)은 이용권 한 매 값만 할인하고 일·월·연 매수 제한이 있어 결제 금액으로 계산할 수 없어 계산하지 않는다', 기본 포인트리는 적립되지 않는다, '무승인전표(대중교통, 자판기, 터널이용료, 항공기내 이용)와 정부지원금은 실적에서 빠진다', 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2017.01.24 출시만 적었다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 공통 가맹점 nexen_tire_rental이 필요하다. 연회비는 K-WORLD(JCB) 1만2천원, 마스터 1만4천원이다.
