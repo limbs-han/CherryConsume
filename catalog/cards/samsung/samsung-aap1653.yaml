@@ -1,0 +1,170 @@
+schema_version: 2
+id: samsung-aap1653
+issuer: samsung
+name: 다이소 삼성카드
+short_name: 다이소 삼성
+search_names: [다이소 삼성, 다이소 삼성카드]
+kind: credit
+product_codes: [AAP1653]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 8000}
+  - {scope: global, brand: visa, amount: 8000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1653', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtjupZY7B%2FhwyJAUGVXAndak%3D&sn=1', fetched_at: 2026-10-11, review_no: 제2020-C1a-02055호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-06-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다]
+    limits:
+      - {key: daiso-day, per: day, count: 1}
+      - {key: daiso-month, per: month, count: 5}
+      - {key: coffee-delivery-day, per: day, count: 1}
+      - {key: coffee-delivery-month, per: month, count: 5}
+    benefits:
+      - key: daiso-10k
+        title: 다이소 1만원 이상 2,000~3,000원 할인
+        source: manual
+        evidence: ['다이소에서 10,000원 이상 결제 시 2,000원~4,000원 결제일할인(청구할인)', '건별 10,000원 이상 결제 시 30만원 이상 2,000원, 60만원 이상 3,000원', '일 1회, 월 5회 제공됩니다.', '오프라인 일반 결제건에 한하며, 백화점, 할인점, 쇼핑몰 내 임대매장은 제외됩니다.']
+        target:
+          merchants: [daiso]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000, below: 20000}
+        reward:
+          type: billing_discount
+          fixed: {300000: 2000, 600000: 3000}
+        limits:
+          - {shared: daiso-day}
+          - {shared: daiso-month}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: daiso-20k
+        title: 다이소 2만원 이상 3,000~4,000원 할인
+        source: manual
+        evidence: ['건별 20,000원 이상 결제 시 30만원 이상 3,000원, 60만원 이상 4,000원', '일 1회, 월 5회 제공됩니다.', 오프라인 일반 결제건에 한하며]
+        target:
+          merchants: [daiso]
+        when:
+          - {channel: offline}
+          - amount: {min: 20000}
+        reward:
+          type: billing_discount
+          fixed: {300000: 3000, 600000: 4000}
+        limits:
+          - {shared: daiso-day}
+          - {shared: daiso-month}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: mart-1
+        title: 할인점 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 할인점·온라인쇼핑몰·편의점·의료 1% 결제일할인(청구할인)', '할인점 이마트, 이마트 트레이더스, 롯데마트, 홈플러스', '할인점의 경우, 오프라인 일반 결제건에 한하며, 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스 등), 쇼핑 외 결제건(상품권, 주차장 등), 할인점 내 임대매장은 제외됩니다.']
+        target:
+          merchants: [emart, homeplus, lotte_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [쇼핑 외 결제(주차장 등)와 임대매장은 할인하지 않는다]
+      - key: online-mall-1
+        title: 온라인쇼핑몰 1% 할인
+        source: manual
+        evidence: ['온라인쇼핑몰 삼성카드 쇼핑, G마켓, 옥션, 11번가, 인터파크, 쿠팡, 티몬, 위메프']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, interpark, samsung_card_shopping, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 1}
+      - key: convenience-1
+        title: 편의점 1% 할인
+        source: manual
+        evidence: ['편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', '편의점의 경우, 오프라인 일반 결제건에 한하며, 백화점, 할인점, 쇼핑몰 내 임대매장은 제외됩니다.']
+        target:
+          merchants: [cu, emart24, gs25, ministop, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: medical-1
+        title: 의료 1% 할인
+        source: manual
+        evidence: ['의료 병·의원, 약국, 동물병원', '의료의 경우, 오프라인 일반 결제건에 한하며, 요양병원, 보건소는 제외됩니다.']
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [요양병원과 보건소는 할인하지 않는다]
+      - key: coffee-2000
+        title: 커피전문점 1만원 이상 2,000원 할인
+        source: manual
+        evidence: ['커피전문점에서 10,000원 이상 결제 시 2,000원 결제일할인', '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 카페베네, 탐앤탐스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋', '통합 일 1회, 월 5회 제공됩니다.', 전월 이용금액 30만원 이상 시 제공됩니다., '오프라인 일반 결제건에 한하며, 백화점, 할인점, 쇼핑몰 내 임대매장은 제외됩니다.']
+        target:
+          merchants: [angel_in_us, artisee, cafe_bene, coffee_bean, ediya, hollys, pascucci, paul_bassett, tom_n_toms, twosome]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: coffee-delivery-day}
+          - {shared: coffee-delivery-month}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: starbucks-2000
+        title: 스타벅스 1만원 이상 2,000원 할인
+        source: manual
+        evidence: [커피전문점 스타벅스, '스타벅스의 경우, 사이렌오더 결제건도 혜택이 제공됩니다.', '통합 일 1회, 월 5회 제공됩니다.']
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: coffee-delivery-day}
+          - {shared: coffee-delivery-month}
+        tiers: {from: 300000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+      - key: delivery-2000
+        title: 배달앱 2만원 이상 2,000원 할인
+        source: manual
+        evidence: ['배달앱에서 20,000원 이상 결제 시 2,000원 결제일할인', '배달앱 배달의민족, 요기요, 쿠팡이츠', '통합 일 1회, 월 5회 제공됩니다.', '공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외됩니다.']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: coffee-delivery-day}
+          - {shared: coffee-delivery-month}
+        tiers: {from: 300000}
+      - key: daiso-mall-1
+        title: 다이소몰 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 다이소몰 1% 결제일할인(청구할인)', '공식 홈페이지(daisomall.co.kr)·앱을 통한 결제건에 한하며, 간편결제를 통한 결제건은 제외됩니다.']
+        target:
+          merchants: [daiso]
+        when:
+          - {channel: online}
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 1}
+    unmodeled: ['할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다, 다이소 오프라인 결제 시 다이소 멤버십 포인트 0.5% 추가 적립은 공통 포인트 종류가 없어 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품설명서 판(2023.6)의 첫날로 두었다. 상품 출시일은 2020-04-01이다, assumed: '2023-06-01'}
+  - {path: 'revisions[0].limits', question: 커피전문점과 배달앱이 각각 통합 일 1회·월 5회라고 적혀 있어 둘이 같은 횟수를 쓰는지 따로인지 불분명하다. 덜 주는 쪽으로 함께 쓴다고 두었다, assumed: shared}
+  - {path: 'revisions[0].benefits[daiso-mall-1]', question: 다이소몰 결제를 다이소 가맹점의 온라인 결제로 보았다, assumed: daiso + online}
+notes: 2026-10-11 상품설명서(2023.6판, 심의필 2020-C1a-02055호) 대조. 출시 2020-04-01. 연회비 해외겸용 VISA와 국내전용 모두 8,000원(기본 7,000+제휴 1,000). 실적 제외는 4대보험, 국세·지방세·공과금, 학교납입금, 등록금, 대중교통, 택시, 아파트 관리비, 임대료, 상품권·선불 충전이고 할인받은 금액은 실적에 들어간다. 발급월+1개월까지는 30만 구간 혜택. 다이소 할인을 받으면 같은 결제의 1% 할인은 없다.
