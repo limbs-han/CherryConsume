@@ -1,0 +1,100 @@
+schema_version: 2
+id: shinhan-buedo3
+issuer: shinhan
+name: 신한카드 SOL글로벌U 체크(쿠로미)
+short_name: 신한 SOL글로벌U 체크
+kind: check
+product_codes: [BUEDO3]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1230631_2206.html', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2024-09-23
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 캐시백하지 않는다, 키오스크나 PG사 이름으로 찍히는 결제는 캐시백하지 않는다]
+    limits:
+      - key: essential
+        per: month
+        amount: {300000: 5000, 500000: 10000}
+    benefits:
+      - key: essential-transport-10
+        title: 대중교통 10% 캐시백
+        source: page
+        evidence: [대중교통(버스/지하철) 이용금액 10% 캐시백, 시내버스/지하철에서 후불교통기능을 이용한 터치(RF)거래 시 캐시백, '시외버스, 공항버스, 고속버스 이용금액은 캐시백되지 않습니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: essential}
+        tiers: {from: 300000}
+      - key: essential-telecom-10
+        title: 이동통신요금 10% 캐시백
+        source: page
+        evidence: [이동통신요금(SKT/KT/LG U+/알뜰폰) 자동이체 시 10% 캐시백, '이동통신요금 자동이체 금액만 캐시백되며, 자동이체 외 이용금액 및 선불폰·결합상품(TV, 인터넷, 유선전화 등) 이용금액은 캐시백되지 않습니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: essential}
+        tiers: {from: 300000}
+        unmodeled: [알뜰폰허브에 입점한 알뜰폰 사업자 요금도 캐시백하지만 사업자를 가리지 못해 SKT·KT·LG U+만 계산한다, 결합상품 요금은 캐시백하지 않는다]
+      - key: daily-coffee-convenience-10
+        title: 커피·편의점 10% 캐시백
+        source: page
+        evidence: ['커피: 엔제리너스, 이디야, 커피빈, 투썸플레이스, 메가커피, 메머드커피, 빽다방, 폴바셋 및 그 외 커피전문점 업종 가맹점', '편의점: GS25, CU, 세븐일레븐, 이마트24', 오프라인 매장 이용금액만 캐시백됩니다., '커피/편의점, 배달앱, 쇼핑 영역별로 일 1회, 월 3회, 1회 1만원(캐시백 금액 기준 1천원)까지 캐시백됩니다.']
+        target:
+          categories: [cafe]
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+        tiers: {from: 300000}
+        unmodeled: [백화점·대형마트 입점 매장은 캐시백하지 않는다]
+      - key: daily-delivery-10
+        title: 배달앱 10% 캐시백
+        source: page
+        evidence: ['배달앱: 배달의민족, 요기요, 쿠팡이츠, 땡겨요', '공식 배달앱에서 ‘앱 내 카드결제’가 아닌, ‘현장결제’(물품 수령 시 결제) 이용 금액은 캐시백되지 않습니다.', '커피/편의점, 배달앱, 쇼핑 영역별로 일 1회, 월 3회, 1회 1만원(캐시백 금액 기준 1천원)까지 캐시백됩니다.']
+        target:
+          merchants: [baemin, coupang_eats, ddangyo, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+        tiers: {from: 300000}
+      - key: daily-shopping-10
+        title: 쿠팡·올리브영 10% 캐시백
+        source: page
+        evidence: ['쇼핑: 쿠팡, 올리브영(온/오프라인)', '커피/편의점, 배달앱, 쇼핑 영역별로 일 1회, 월 3회, 1회 1만원(캐시백 금액 기준 1천원)까지 캐시백됩니다.']
+        target:
+          merchants: [coupang, olive_young]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+        tiers: {from: 300000}
+    unmodeled: ['지역건강보험료 자동이체 캐시백(1회 5만원 이상, 월 1회, 전월 30만원 이상 3천원·50만원 이상 5천원)은 지역건강보험료를 다른 4대보험과 구별할 업종이 없어 계산하지 않는다', 일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 서비스는 영역별로 이용한 거래 순서대로 적용한다, 캐시백 받은 거래를 같은 달에 취소하면 횟수와 한도가 복원된다]
+open_questions:
+  - {path: 'revisions[0].benefits[daily-coffee-convenience-10].limits', question: 1회 1만원(캐시백 1천원)까지를 1만원 넘는 결제도 1만원 기준으로 캐시백한다고 보았다. 1만원 넘는 결제를 아예 빼는 뜻인지 원문만으로 확정하지 못했다, assumed: 1만원 기준으로 캐시백}
+notes: '신한카드 상품 페이지 기준. 외국인등록증을 가진 외국인 고객만 신청할 수 있는 상품이다. 쿠로미 디자인은 처음 발급할 때 발급 수수료 1천원을 받는다. 연회비는 페이지 HTML 기준 0원. 필수생활비(대중교통, 이동통신)는 통합 한도 안에서, 일상생활비(커피·편의점, 배달앱, 쇼핑)는 영역별 일 1회, 월 3회, 1회 1만원까지다. 전월 실적 제외: 현금서비스, 카드론, 연회비, 수수료, 이자, 기프트카드와 선불카드, 상품권과 선불전자지급수단, 국세, 지방세, 4대보험, 관리비, 공과금, 학교 납입금, 등록금, 취소. 신규 발급 회원은 등록월 다음 달 말까지 30만~50만원 구간을 적용한다. 2026-10-10 새 방식대로 후불교통 반영월 구분 대신 시내버스와 지하철을 실적에서 뺐다.'
