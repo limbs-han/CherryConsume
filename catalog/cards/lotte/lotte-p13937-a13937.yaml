@@ -1,0 +1,44 @@
+schema_version: 2
+id: lotte-p13937-a13937
+issuer: lotte
+name: LOCA LIKIT 1.2
+kind: credit
+product_codes: [P13937-A13937]
+status: discontinued
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: amex, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13937-A13937', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13937-A13937.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-09-15'
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: cancel_month, exclude_applied: 0}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 관세·벌금·과태료·민원 발급 수수료·인지세·송달료, 현금서비스·카드론·이자·수수료는 할인에서 빠진다']
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: all-1-2
+        title: 국내외 모든 가맹점 1.2% 결제일 할인
+        source: manual
+        evidence: [어디서나 1.2% 결제일 할인, '국내 모든 가맹점 1.2%, 해외 모든 이용금액 1.2%', 실적조건 및 할인한도 없이 혜택을 제공합니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1.2}
+      - key: online-1-5
+        title: 온라인 1.5% 결제일 할인
+        source: manual
+        evidence: [온라인 1.5% 결제일 할인, 모든 가맹점 할인과 온라인 할인은 중복으로 적용되지 않으며, 할인이 큰 혜택으로 적용됩니다.]
+        target: {all: true}
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1.5}
+    unmodeled: [롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, 이 카드로 결제하면 롯데카드가 주는 L.POINT 적립은 없다]
+notes: 2026-10-11 상품 페이지와 상품설명서(2021년 10월 기준) 대조. 출시일 2021-09-15. 상품 페이지에 신규, 추가, 교체 발급 중단이 적혀 있다. 공시 색인 1733이 이 상품이다. 실적 조건과 할인한도가 없다. 온라인은 롯데카드 업종 분류 기준이라 온라인 결제 전체로 두었다.
