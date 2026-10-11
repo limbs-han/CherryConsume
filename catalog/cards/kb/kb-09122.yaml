@@ -1,0 +1,109 @@
+schema_version: 2
+id: kb-09122
+issuer: kb
+name: KB ALL 카드
+short_name: KB ALL
+kind: credit
+product_codes:
+  - '09122'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: domestic, form: mobile, amount: 14000}
+  - {scope: global, brand: visa, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09122', fetched_at: &id001 2026-10-05}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: *id001
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: cancel_month
+      month_offset: {}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [정부지원금 결제와 신차구매 할인 전표는 혜택에서 제외한다. 가족카드 한도와 실적은 본인과 합산한다.]
+    limits:
+      - {key: integrated, per: month, amount: 3000}
+      - {key: overseas, per: month, amount: 40000}
+    benefits:
+      - key: domestic-1pct
+        title: 국내 가맹점 1% 할인
+        source: page
+        evidence: [국내 가맹점 1% 할인, 전월 이용실적 조건 및 할인한도 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: []
+      - key: overseas-2pct
+        title: 해외 가맹점 2% 할인
+        source: page
+        evidence: [해외 가맹점 2% 할인, '할인한도 : 월 4만원 (전월 이용실적 조건 없음)']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: overseas}
+        unmodeled: []
+      - key: shopping-membership-50
+        title: 쇼핑 멤버십 50% 할인
+        source: page
+        evidence: [쇼핑 멤버십 50% 할인, '네이버플러스 멤버십, 쿠팡 로켓와우 멤버십 자동납부요금', '전월 이용실적 40만원 이상 시 제공, 월 통합 할인한도 3천원']
+        target:
+          merchants: [coupang_wow, naver_plus_membership]
+        when:
+          - billing: [autopay, subscription]
+          - channel: online
+            payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, mobile_tmoney, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [공식 홈페이지의 정기결제만 제공한다. 인앱결제는 제외한다.]
+      - key: ott-10
+        title: OTT 10% 할인
+        source: page
+        evidence: [OTT 10% 할인, '넷플릭스, 유튜브 프리미엄, 웨이브, 티빙, 디즈니플러스 자동납부요금', '전월 이용실적 40만원 이상 시 제공, 월 통합 할인한도 3천원']
+        target:
+          merchants: [disney_plus, netflix, tving, wavve, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+          - channel: online
+            payment_not: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, mobile_tmoney, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [공식 홈페이지의 정기결제만 제공한다. 인앱결제는 제외한다.]
+      - key: telecom-5
+        title: 이동통신 자동납부 요금 5% 할인
+        source: page
+        evidence: [이동통신 자동납부 요금 5% 할인, 'SKT, KT, LG U+, Liiv M 이동통신 자동납부요금', '전월 이용실적 40만원 이상 시 제공, 월 통합 할인한도 3천원']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [인터넷과 IPTV 결합상품은 제외한다.]
+    unmodeled: ['해외 이용금액은 매입 완료일 기준으로 실적에 반영한다. 무승인 자판기, 터널통행료, 항공기내 이용도 실적에서 제외한다.']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 정확한 날짜를 확인해야 한다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 공식 수집 원문과 대조. 사본에서만 수정. 초중고 납입금만 적힌 제외 문구는 유치원이 포함된 school_fee 대신 primary_secondary_fee로 좁혔다. 공식 페이지에서 기존 보유 고객 재발급만 가능함을 확인했다. 재발급 전용 웹 페이지와 KB Pay 전용 신규 신청 안내를 함께 확인했다. 이 페이지의 재발급 제한만으로 단종으로 보지 않는다. 2026-10-10 새 방식으로 후불교통 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다.
