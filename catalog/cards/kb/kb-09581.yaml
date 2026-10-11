@@ -1,0 +1,144 @@
+schema_version: 2
+id: kb-09581
+issuer: kb
+name: KB저축은행 팡팡 KB체크카드
+short_name: KB 팡팡 체크
+kind: check
+product_codes:
+  - '09581'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09581', fetched_at: '2026-10-10', review_no: 260701-02230-PIF}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-07-01'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG나 간편결제 가맹점으로 분류된 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 20000, 400000: 30000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: openmarket-10
+        title: 오픈마켓 10% 환급할인
+        source: page
+        evidence: [오픈마켓 | 11번가, G마켓, SSG.COM | 10% | 7천원, '전월 이용실적 조건: KB저축은행 팡팡 KB체크카드로 전월 20만원 이상 이용 시 제공', 카드 발급 당월은 할인서비스가 제공되지 않으며 발급 다음달부터 전월 이용실적 충족 시 할인서비스 제공(실적 유예 기간 없음)]
+        target:
+          merchants: [eleven_st, gmarket, ssg_com]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 7000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: openmarket-kbpay-10
+        title: 오픈마켓 KB Pay 결제 10% 추가 환급할인
+        source: page
+        evidence: ['[KB pay 결제] 11번가, G마켓, SSG.COM | 10% | 3천원', ※ KB Pay 결제 시 할인한도 내에서 추가 할인 적용]
+        target:
+          merchants: [eleven_st, gmarket, ssg_com]
+        when:
+          - payment: [kb_pay]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        stack: kbpay
+      - key: coffee-10
+        title: 스타벅스·커피빈 10% 환급할인
+        source: page
+        evidence: [커피 | 스타벅스(사이렌오더 포함) 커피빈(퍼플오더 제외) | 10% | 4천원]
+        target:
+          merchants: [coffee_bean, starbucks]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 4000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [커피빈 퍼플오더 결제는 빠진다]
+      - key: mart-10
+        title: 대형마트 10% 환급할인
+        source: page
+        evidence: [대형마트 | 이마트, 롯데마트, 홈플러스 | 10% | 3천원]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: ott-20
+        title: 넷플릭스·유튜브 20% 환급할인
+        source: page
+        evidence: [OTT 구독 | 넷플릭스 유튜브 | 20% | 2천원 | 건당 1만원 이상 결제 시 제공, '유튜브 프리미엄, 넷플릭스 공식 홈페이지/앱을 통한 정기결제 시 할인']
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: month, amount: 2000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [공식 홈페이지와 앱 정기결제만 할인한다]
+      - key: movie-4000
+        title: 영화 4천원 환급할인
+        source: page
+        evidence: [영화 | CGV 롯데시네마 메가박스 | 건당 4천원 | 8천원(월 2회) | 이용금액 건당 1만원 이상 이용 시 제공, 매점·관람권·상품권 및 예매대행 사이트 이용 제외]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 4000}
+        limits:
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [매점·관람권·상품권과 예매대행 사이트 결제는 빠진다]
+      - key: telecom-3000
+        title: 통신 자동납부 3천원 환급할인
+        source: page
+        evidence: [통신 자동납부 | SKT KT LG U+ Liiv M | 건당 3천원 | 3천원(월 1회) | 건당 5만원 이상 결제 시 제공]
+        target:
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 50000}
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: amusement-15000
+        title: 놀이공원 1만5천원 환급할인
+        source: page
+        evidence: [놀이공원 | 에버랜드 롯데월드 | 건당 1만5천원 | 1만5천원(월 1회) | 건당 3만원 이상 결제 시 제공, '티켓 요금(입장권, 이용권) 결제 시 할인 제공하며, 상품권 구매 및 매점 이용분 할인 불가']
+        target:
+          merchants: [everland, lotte_world]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, fixed: 15000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [입장권과 이용권 결제만 할인하고 매점은 빠진다]
+    unmodeled: [패밀리레스토랑 업종 건당 5만원 이상 4천원 할인(월 1회)은 공통 업종에 패밀리레스토랑이 없어 계산하지 않는다, KB저축은행 결제계좌 전용 상품이다, '무승인 금액(자판기, 터널통행료, 유료도로, 기차·고속버스 취소 반환수수료), 정부지원금, 포인트리 충전금액, 연체료, 수수료와 이자는 실적에서 빠진다', 통합할인한도는 본인 회원 기준으로 전표 매입 순서대로 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2025.3.26 출시와 2026.07.01 심의필만 적었다. 심의일을 현재 규칙의 시작일로 잠정 적용한다., assumed: '2026-07-01'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 오픈마켓 KB Pay 추가 할인은 기본 오픈마켓 할인과 중복되어 다른 묶음에 둔다. 월간 통합할인한도는 20만원 이상 2만원, 40만원 이상 3만원이다.
