@@ -1,0 +1,105 @@
+schema_version: 2
+id: kb-01560
+issuer: kb
+name: KB국민 민 체크카드
+short_name: KB 민 체크
+kind: check
+product_codes:
+  - '01560'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01560', fetched_at: '2026-10-11', review_no: 201230-04342-HMS}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 500000: 20000}
+      - {key: fuel-base, per: month, base: 300000}
+    benefits:
+      - key: mart-5
+        title: 이마트·롯데마트·홈플러스 5% 환급할인
+        source: page
+        evidence: ['3대 대형마트 (이마트, 롯데마트, 홈플러스) | 5% (건당 3만원 이상 이용 시) | 월 10만원', '제공조건 : 오프라인 매장 이용금액', '할인제외 : 온라인(홈페이지, 애플리케이션 등) 이용금액', '실적조건 : 전월 이용실적 30만원 이상']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - channel: offline
+            amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, base: 100000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: sk-energy-60
+        title: SK에너지 리터당 60원 환급할인
+        source: page
+        evidence: [주유 (SK에너지) | 리터당 60원 (건당 이용금액 10만원까지) | 월 30만원, '할인제외 : SK에너지 비제휴 주유소 이용금액 / LPG 이용금액']
+        target:
+          merchants: [sk_energy]
+        reward: {type: cashback, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [비제휴 주유소와 LPG는 빠진다]
+      - key: fastfood-10
+        title: 패스트푸드 10% 환급할인
+        source: page
+        evidence: [패스트푸드 업종 | 10% (건당 1만원 이상 이용 시) | 월 10만원, KB국민카드 가맹점 분류상 패스트푸드 업종에 한하여 할인 제공]
+        target:
+          categories: [restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, base: 100000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: telecom-2500
+        title: 이동통신요금 자동이체 2,500원 환급할인
+        source: page
+        evidence: ['이체금액 건당 5만원 이상 시 2,500원 할인 [월 1회]', '제공조건 : 해당 카드로 3대 이동통신사(SKT, KT, LG U+) 자동이체 등록', '할인 제외 : 유무선 통신요금 통합 청구금액']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+            amount: {min: 50000}
+        reward: {type: cashback, fixed: 2500}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [유무선 통합청구 요금 자동이체는 빠진다]
+      - key: transit-5
+        title: 버스·지하철 5% 할인
+        source: page
+        evidence: [버스·지하철 5% 청구/환급 할인, 월 이용금액 3만원까지 할인, '청구 할인 대상: 후불교통(시내버스, 지하철)', '환급 할인 대상: 고속/시외 버스', '실적 조건 : 전월 이용실적 30만원']
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, base: 30000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [후불교통 할인은 실제 이용일이 아니라 이용내역서에 적힌 이용일 기준이다]
+    unmodeled: [전월 실적은 민 체크카드 동일계열카드(신한은행·농협 계좌전용)의 이용을 합산한다, 최초 발급 후 사용등록일부터 30일간은 실적이 없어도 통합한도 5천원 안에서 대형마트와 SK에너지를 할인한다. 30일 기간을 담을 수 없어 계산하지 않는다, CU편의점 3% CU포인트 적립은 공통 포인트 종류가 없어 계산하지 않는다, 스피드메이트 엔진오일 교환과 정비 할인은 계산하지 않는다, '무승인 금액(자판기, 터널통행료, 기차·고속버스 취소 반환 수수료)과 정부지원금은 실적에서 빠진다', 통합할인한도는 전표 매입 순서대로 차감한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2013년 12월 17일 출시만 적었다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통 이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 모든 할인은 전월 30만원 이상이고 통합할인한도는 30만원 이상 1만원, 50만원 이상 2만원이다. CU포인트 적립만 실적과 관계없다.
