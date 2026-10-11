@@ -1,0 +1,113 @@
+schema_version: 2
+id: samsung-aap1746
+issuer: samsung
+name: 삼성 iD POCKET 카드
+short_name: 삼성 iD POCKET
+search_names: [iD POCKET, 삼성 아이디 포켓, 아이디 포켓, 청소년 삼성카드]
+kind: credit
+product_codes: [AAP1746]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 1000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1746', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtr5UkTZRzQMbs4r7Ckg5Akc%3D&sn=1', fetched_at: 2026-10-11, review_no: 제2023-C1a-05578호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-05-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 100000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: []
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 100000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - {key: transit-2, per: month, amount: 5000}
+      - {key: life-8, per: month, amount: 5000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [transit-2, life-8, delivery-8, transit-1, life-1, delivery-1]
+        spill: none
+    benefits:
+      - key: transit-2
+        title: 대중교통 2% 할인
+        source: manual
+        evidence: [전월 이용금액 10만원 이상 시 2% 결제일할인, '대중교통 버스, 지하철', '할인한도 10만원 이상 5,000원', 2% 할인 혜택의 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용, '오프라인 결제건에 한하며, 시외·고속버스는 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: transit-2}
+        tiers: {from: 100000}
+      - key: transit-1
+        title: 대중교통 1% 할인
+        source: manual
+        evidence: [대중교통 1% 결제일할인, '대중교통 버스, 지하철', '전월 이용금액 10만원 미만 할인율 1%, 할인한도 -', '오프라인 결제건에 한하며, 시외·고속버스는 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+      - key: life-8
+        title: 편의점·델리·커피전문점 8% 할인
+        source: manual
+        evidence: [전월 이용금액 10만원 이상 시 8% 결제일할인, '편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', '델리 써브웨이, 파리바게뜨, 배스킨라빈스, 던킨', '커피전문점 스타벅스, 이디야커피', '할인한도 10만원 이상 5,000원', 8% 할인 혜택의 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용, '편의점, 델리, 커피전문점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [baskin_robbins, cu, dunkin, ediya, emart24, gs25, ministop, paris_baguette, seven_eleven, starbucks, subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 8}
+        limits:
+          - {shared: life-8}
+        tiers: {from: 100000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: delivery-8
+        title: 배달앱 8% 할인
+        source: manual
+        evidence: [전월 이용금액 10만원 이상 시 8% 결제일할인, '배달앱 배달의민족, 요기요, 쿠팡이츠', '할인한도 10만원 이상 5,000원', '배달앱은 공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 8}
+        limits:
+          - {shared: life-8}
+        tiers: {from: 100000}
+      - key: life-1
+        title: 편의점·델리·커피전문점 1% 할인
+        source: manual
+        evidence: [편의점·배달앱·델리·커피전문점 1% 결제일할인, '전월 이용금액 10만원 미만 할인율 1%, 할인한도 -', '편의점, 델리, 커피전문점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [baskin_robbins, cu, dunkin, ediya, emart24, gs25, ministop, paris_baguette, seven_eleven, starbucks, subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: delivery-1
+        title: 배달앱 1% 할인
+        source: manual
+        evidence: [편의점·배달앱·델리·커피전문점 1% 결제일할인, '전월 이용금액 10만원 미만 할인율 1%, 할인한도 -', 배달앱은 공식 홈페이지·앱을 통한 결제건에 한하며 가맹점 직접 결제건은 제외]
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1}
+    unmodeled: [만 12~18세 자녀에게 부모 명의로 발급하는 가족 신용카드다. 이용 가능 업종이 정해져 있고 월 이용한도는 10만원(일시불만)이며 부모 요청 시 50만원까지 올릴 수 있다, '할인은 승인일 기준이고 실적은 승인일 기준이며 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품설명서 판(2023.5)의 첫날로 두었다. 상품 출시일은 2021-11-30이다, assumed: '2023-05-01'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 상품설명서에 전월 이용금액 제외 대상이 따로 없어 비워 두었다, assumed: '[]'}
+  - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 상품설명서(2023.5판, 심의필 2023-C1a-05578호) 대조. 혁신금융서비스로 청소년 자녀에게 발급하는 가족 신용카드이고 신청은 부모가 한다. 연회비 국내전용 1,000원(제휴 1,000). 전월 10만원 미만은 한도 없이 1%, 10만원 이상은 대중교통 2%와 편의점·배달앱·델리·커피전문점 8%를 각각 월 5,000원까지 주고 한도를 넘긴 다음 결제부터 1%다. 발급월+1개월까지는 10만 구간 혜택. 실적은 일시불·할부 이용금액이고 따로 적힌 실적 제외 대상이 없다. 할인 제외는 무이자할부, 삼성카드 할인 적용분, 기프트·선불카드, 상품권이다.
