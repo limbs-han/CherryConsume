@@ -1,0 +1,135 @@
+schema_version: 2
+id: hana-16797
+issuer: hana
+name: 대구로 카드
+short_name: 하나 대구로
+search_names: [대구로카드]
+kind: credit
+product_codes:
+  - '16797'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16797', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2023-04-11
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+    limits:
+      - key: daily
+        per: month
+        amount: {300000: 10000, 600000: 15000}
+    benefits:
+      - key: daeguro-app-10
+        title: 대구로 앱 10% 청구할인
+        source: page
+        evidence: [대구로 앱 | 10% | 1만원 | 1만5천원, '“대구로“/”대구로 택시“ : 앱 결제가 아닌 현장결제 금액 제외']
+        target:
+          merchants: [daeguro]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+      - key: daeguro-taxi-10
+        title: 대구로 택시 앱 10% 청구할인
+        source: page
+        evidence: ['대구로 택시 앱 | 10% | 지난달 실적별 월 통합 할인 한도 30만원 이상 1만원, 60만원 이상 1만5천원', '“대구로“/”대구로 택시“ : 앱 결제가 아닌 현장결제 금액 제외']
+        target:
+          merchants: [daeguro_taxi]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+      - key: online-shop-5
+        title: 온라인 쇼핑 5% 청구할인
+        source: page
+        evidence: ['온라인 쇼핑 | 통신 자동이체 | 대중교통 | 대구 이월드(놀이공원) | 스타벅스, 커피빈(국내) | 해외 가맹점 | 5% | 1만원 | 1만5천원', '온라인 쇼핑 : G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬, GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLE, NS홈쇼핑, 홈앤쇼핑']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_homeshopping, tmon]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        notes: 쇼핑엔티, 공영홈쇼핑, GS SHOP, 현대홈쇼핑, CJ ONSTYLE, NS홈쇼핑, 홈앤쇼핑은 가맹점 키가 없어 계산하지 않는다
+      - key: telecom-autopay-5
+        title: 통신 자동이체 5% 청구할인
+        source: page
+        evidence: ['통신 자동이체 : SKT, SKB, KT, LGU+ 통신요금 자동이체', ※알뜰폰 통신요금 및 자동이체로 납부하지 않는 통신요금 제외]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        notes: SK브로드밴드는 가맹점 키가 없어 계산하지 않는다
+      - key: transit-5
+        title: 대중교통 5% 청구할인
+        source: page
+        evidence: ['대중교통 : 시내버스, 마을버스, 광역버스, 공항버스, 지하철', '※시외버스, 고속버스, 철도(KTX/SRT)는 대상에서 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: eworld-5
+        title: 대구 이월드 5% 청구할인
+        source: page
+        evidence: ['대구 이월드(놀이공원) : 대구 이월드 內 직영운영시설에서 구매하는 상품 및 서비스(입장권, 식음료, 굿즈등)']
+        target:
+          merchants: [e_world]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [이월드 안 직영 운영시설 결제만 할인한다]
+      - key: coffee-5
+        title: 스타벅스·커피빈 5% 청구할인
+        source: page
+        evidence: ['스타벅스, 커피빈(국내) | 5%']
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: overseas-5
+        title: 해외 가맹점 5% 청구할인
+        source: page
+        evidence: [해외 가맹점 | 5%, 해외 매출은 최종 원화 청구금액에 대하여 할인 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: daily}
+        tiers: {from: 300000}
+        exclude_applied: 1
+    unmodeled: ['대상 가맹점의 공식 오프라인 매장 또는 온라인몰에서만 할인하고, 상품권 구매·충전과 백화점·할인점·아울렛·쇼핑몰·휴게소·공항·호텔·리조트·역사 입점 점포는 할인하지 않는다', 별도 전용 가맹점번호로 승인되는 일부 간편결제는 할인에서 빠질 수 있다, 무승인 매출은 매출 접수 월의 이용금액에 넣는다]
+open_questions:
+  - {path: 'revisions[0].limits', question: 대구로 앱·택시 표와 생활밀착 표의 월 통합 할인 한도가 표마다 따로인지 둘이 함께인지 원문이 분명하지 않다. 덜 주는 쪽으로 함께 쓴다, assumed: 함께 쓴다}
+notes: 카드 출시 2023-04-11. 연회비 국내외겸용(VISA) 12,000원. 원문에 대구 시민만 발급한다는 조건이 없어 일반 카드로 담는다. 특화 서비스와 생활밀착업종은 표마다 지난달 실적 30만원 이상 월 1만원, 60만원 이상 월 1만5천원 통합 한도를 따로 둔다. 생활밀착업종 청구할인 받은 매출은 실적에서 빠진다. 최초 사용등록일부터 다음달 말일까지 30만원 구간 기준. 2026-10-10 상품 페이지 원문으로 작성.
