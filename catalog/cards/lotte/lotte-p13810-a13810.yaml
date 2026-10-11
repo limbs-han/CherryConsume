@@ -1,0 +1,53 @@
+schema_version: 2
+id: lotte-p13810-a13810
+issuer: lotte
+name: 네이버페이 쇼핑엔로카
+kind: credit
+product_codes: [P13810-A13810]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: amex, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13810-A13810', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13810-A13810.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-06-20'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: [오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 네이버장기할부 이용금액은 적립에서 빠진다]
+    options:
+      - key: installment
+        title: 네이버페이 장기할부 이용 여부
+        choices:
+          - {key: none, title: 장기할부 미이용}
+          - {key: using, title: 장기할부 이용 중}
+        default: null
+        change: immediate
+        unsupported: [using]
+    benefits:
+      - key: npay-1
+        title: 장기할부 미이용 시 국내외 1% 네이버페이 포인트 적립
+        source: page
+        evidence: [장기할부 미이용 시 30만원 이상 국내외 온ㆍ오프라인 이용 시 1% 적립 적립한도 없음, '네이버페이 쇼핑엔로카 카드를 최초 발급받은 경우, 카드발급일 ~ 다음 달 말일까지 지난달 이용실적에 상관없이 ... 장기할부 미이용 회원은 1%가 적립됩니다.']
+        target: {all: true}
+        when:
+          - option:
+              installment: [none]
+        reward: {type: points, program: npay_point, rate: 1}
+        tiers: {from: 300000}
+    unmodeled: ['장기할부 이용 회원은 지난달 30만원 이상이면 10,000포인트, 70만원 이상이면 15,000포인트를 장기할부 기간 동안 월 1회 받는다. 결제마다 주는 혜택이 아니라 계산하지 않는다', 네이버페이 쇼핑엔로카가 아닌 롯데카드 이용금액과 네이버장기할부 이용금액은 실적에서 빠진다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금은 실적에서 빠진다', 가족카드 이용금액이 본인카드 실적에 합산된다, 해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 결제일 할인을 받은 건은 포인트를 적립하지 않는다]
+notes: 2026-10-11 상품 페이지 대조. 네이버페이 금융상품 페이지에서만 신청한다. 출시일 2021-06-20. 장기할부 미이용 회원 1% 적립만 계산한다. 장기할부 이용 회원은 선택지로 두고 계산하지 않는다. 적립한도 없음. 공시 색인 1716은 이 상품의 옛 설명서다.
