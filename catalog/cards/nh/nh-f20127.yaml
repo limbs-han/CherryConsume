@@ -1,0 +1,103 @@
+schema_version: 2
+id: nh-f20127
+issuer: nh
+name: GOODGAME 체크카드
+short_name: 굿게임 체크
+kind: check
+product_codes:
+  - '90010186'
+  - F20127
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010186', fetched_at: 2026-10-10, review_no: 2026-3845, review_valid_until: 2027-06-30}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge, taxi, transit.bus_city, transit.subway]
+      unmodeled: [포인트로 결제한 금액은 적립에서 빠진다, 백화점·할인점(아울렛)·쇼핑몰 안 임대매장과 별도 가맹점번호로 승인되는 PG·간편결제는 적립에서 빠질 수 있다, NH농협카드의 다른 청구할인 혜택과 겹치면 큰 쪽 하나만 받는다]
+    limits:
+      - {key: game, per: month, amount: 2000}
+      - {key: daily, per: month, amount: 30000}
+    benefits:
+      - key: app-market-10
+        title: 애플 앱스토어·구글 플레이 10% NH포인트 적립
+        source: page
+        evidence: ['구글 플레이스토어, 애플 앱스토어, 원스토어 결제 시 10% NH포인트 적립', 인앱결제 건 포함, 'NH농협카드 가맹점 분류상 앱스토어는 ''APPLE'', 구글 플레이스토어는 ‘구글 플레이’로 등록된 건에 한하여 제공 (단, 유튜브 TV, 유튜브 프리미엄 등 유튜브 관련 결제 건은 제외)', '전월실적 20만원 이상 시 제공, 월 적립한도 2천원']
+        target:
+          merchants: [app_store, google_play]
+        reward: {type: points, program: nh_point, rate: 10}
+        limits:
+          - {shared: game}
+        tiers: {from: 200000}
+        unmodeled: ['매출 가맹점명이 APPLE, 구글 플레이인 건만 받는다. 유튜브 관련 결제는 빠진다', 원스토어는 ONEpay 결제만 받는데 가맹점 키가 없어 계산하지 않는다]
+      - key: steam-10
+        title: 스팀 10% NH포인트 적립
+        source: page
+        evidence: [온라인 게임유통 플랫폼 스팀(STEAM) 결제 시 10% NH포인트 적립, 결제수단으로 VISA 직접선택 또는 신용카드(국내)를 선택한 경우에만 서비스 제공 (Toss / PAYCO / 카카오페이 등 간편결제 선택 시 서비스 미제공), STEAM 계정에 자금 추가하기(STEAM 지갑에 잔액 추가하기)의 경우 서비스 제공이 되지 않습니다., '전월실적 20만원 이상 시 제공, 월 적립한도 2천원']
+        target:
+          merchants: [steam]
+        when:
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+        reward: {type: points, program: nh_point, rate: 10}
+        limits:
+          - {shared: game}
+        tiers: {from: 200000}
+        unmodeled: [스팀 지갑 잔액 추가는 빠진다]
+      - key: pc-room-10
+        title: PC방 10% NH포인트 적립
+        source: page
+        evidence: [PC방 결제 시 10% NH포인트 적립, '전월실적 20만원 이상 시 제공, 월 적립한도 2천원']
+        target:
+          categories: [pc_room]
+        reward: {type: points, program: nh_point, rate: 10}
+        limits:
+          - {shared: game}
+        tiers: {from: 200000}
+      - key: daily-weekday-0-5
+        title: 일상생활업종 월~금 0.5% NH포인트 적립
+        source: page
+        evidence: [월 ~ 금 0.5% NH포인트 적립, '커피 | 스타벅스(싸이렌오더 포함), 투썸플레이스, 커피빈', '편의점 | CU, GS25', '영화 | CGV, 롯데시네마, 메가박스', '온라인쇼핑 | G마켓, 11번가, 쿠팡, 티몬', '배달앱 | 배달의 민족, 요기요', '전월실적 20만원 이상 시 제공, 일상생활업종 서비스 통합 월 적립한도 3만원']
+        target:
+          merchants: [baemin, cgv, coffee_bean, coupang, cu, eleven_st, gmarket, gs25, lotte_cinema, megabox, starbucks, tmon, twosome, yogiyo]
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: points, program: nh_point, rate: 0.5}
+        limits:
+          - {shared: daily}
+        tiers: {from: 200000}
+      - key: daily-weekend-1
+        title: 일상생활업종 토·일 1% NH포인트 적립
+        source: page
+        evidence: ['토, 일 1% NH포인트 적립', '커피 | 스타벅스(싸이렌오더 포함), 투썸플레이스, 커피빈', '편의점 | CU, GS25', '영화 | CGV, 롯데시네마, 메가박스', '온라인쇼핑 | G마켓, 11번가, 쿠팡, 티몬', '배달앱 | 배달의 민족, 요기요', '전월실적 20만원 이상 시 제공, 일상생활업종 서비스 통합 월 적립한도 3만원']
+        target:
+          merchants: [baemin, cgv, coffee_bean, coupang, cu, eleven_st, gmarket, gs25, lotte_cinema, megabox, starbucks, tmon, twosome, yogiyo]
+        when:
+          - day:
+              in: [sat, sun]
+        reward: {type: points, program: nh_point, rate: 1}
+        limits:
+          - {shared: daily}
+        tiers: {from: 200000}
+    unmodeled: ['실적에서 과태료·범칙금, 우체국 우편요금, 가상화폐 거래소, 현금서비스·카드론, 수수료·이자, 연체료, 포인트 결제분을 뺀다', '해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다. 월말 이용이 다음 달 실적이 될 수 있다', 가족카드는 실적을 본인카드와 따로 센다]
+open_questions:
+  - {path: 'revisions[0].limits[game]', question: '앱마켓, 스팀, PC방 세 줄마다 월 적립한도 2천원이 적혀 있다. 영역마다 따로인지 셋이 함께 쓰는지 문구가 없다', assumed: 셋이 함께 월 2천 포인트}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 확인하지 못해 초안 원문 수집일로 두었다. 상품출시일은 2022-12-12다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[daily-weekday-0-5].when', question: 월~금에 공휴일이 들어가는지 문구가 없다, assumed: 요일만 본다}
+notes: 2026-10-10 상품 페이지(준법감시인 심의필 2026-3845)를 대조했다. 상품출시일 2022-12-12. 국내전용과 국내외겸용(VISA)이고 연회비 없음. 후불교통카드(버스·지하철)와 택시 이용금액은 실적과 적립에서 빠져 2026-10-10 새 방식대로 시내버스·지하철·택시 업종을 실적에서 뺐다. 게임 셋은 10%, 일상생활 업종은 평일 0.5%, 주말 1%이고 월 3만 포인트 통합 한도다. 초안의 스팀 전가맹점 대상과 일상생활 업종 범위를 고쳤다. 스팀 가맹점 키는 needed/nh-f20127.json에 제안했다.
