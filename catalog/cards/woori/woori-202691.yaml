@@ -1,0 +1,76 @@
+schema_version: 2
+id: woori-202691
+issuer: woori
+name: 우리V외국인체크카드
+kind: check
+product_codes:
+  - '202691'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=202691', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2022-09-02'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    limits:
+      - {key: cgv-month, per: month, count: 1}
+      - {key: cgv-year, per: year, count: 6}
+    benefits:
+      - key: cgv-2000
+        title: CGV 5천원 이상 2천원 청구할인
+        source: page
+        evidence: [CGV영화 최대 4천원 청구할인, '영화관람금액 5천원 이상 1만원 미만 : 2천원 할인', '월 1회, 연 6회', 현장구입 또는 CGV 홈페이지에서 예매한 경우 서비스제공 (예매대행사이트 제외), 모든 부가서비스는 전월 국내가맹점 이용실적 10만원 이상인 카드에 대해 제공합니다.]
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 5000, below: 10000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: cgv-month}
+          - {shared: cgv-year}
+        tiers: {from: 100000}
+        unmodeled: [영화 관람료가 아닌 매점 결제와 예매대행사이트 결제는 제외]
+      - key: cgv-4000
+        title: CGV 1만원 이상 4천원 청구할인
+        source: page
+        evidence: ['영화관람금액 1만원 이상 : 4천원 할인', '월 1회, 연 6회']
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {shared: cgv-month}
+          - {shared: cgv-year}
+        tiers: {from: 100000}
+        unmodeled: [영화 관람료가 아닌 매점 결제와 예매대행사이트 결제는 제외]
+      - key: mart-5
+        title: 3대 할인점 5% 청구할인
+        source: page
+        evidence: ['3대 할인점 5% 청구할인 (이마트, 롯데마트, 홈플러스)', 할인대상 가맹점에서 건당 3만원 이상 결제시 5% 청구 할인, '할인대상 가맹점 통합 월1회, 월 최대 3천원 할인', '※ 인터넷 매장, 이마트 에브리데이, 홈플러스 익스프레스, 롯데 슈퍼 구매액은 할인 불가']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, count: 1}
+          - {per: month, amount: 3000}
+        tiers: {from: 100000}
+    unmodeled: ['놀이공원 현장할인(에버랜드·롯데월드·서울랜드·경주월드 자유이용권 50%, 캐리비안베이 입장권 30% 등, 통합 월 1회)은 이용권 종류를 결제로 알 수 없어 계산하지 않는다', '환전·송금 환율 우대, 송금수수료 면제, 우리은행 자동화기기 인출수수료 면제는 결제 혜택이 아니다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일 문구가 없어 페이지 심의일 2022-09-02로 두었다, assumed: '2022-09-02'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 페이지에 실적 제외 목록이 없다. 다른 우리 체크카드와 같은 제외를 둔다, assumed: '연회비, 아파트관리비, 대학 등록금, 상품권, 4대보험, 선불 충전, 세금, 공과금 제외'}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 확인했다. 연회비 없음. 외국인 대상 체크카드지만 일반 상품으로 담았다. 모든 부가서비스는 전월 국내가맹점 이용실적 10만원 이상, 발급등록월 다음 달 말일까지는 10만원으로 본다. 취소는 취소매출표 접수월 실적에서 뺀다. CGV 5천원 이상 1만원 미만 2천원, 1만원 이상 4천원, 월 1회 연 6회. 이마트·롯데마트·홈플러스 오프라인 3만원 이상 5%, 월 1회 최대 3천원.
