@@ -1,0 +1,81 @@
+schema_version: 2
+id: kb-04409
+issuer: kb
+name: CHALLENGE BAG KB국민카드
+short_name: KB 챌린지백
+kind: credit
+product_codes:
+  - '04409'
+status: on_sale
+annual_fees:
+  - {scope: global, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04409', fetched_at: '2026-10-11', review_no: 제2023-C1a-02720호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 적립에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: 11st-11
+        title: 11번가 SK PAY 결제 OK캐쉬백 11% 적립
+        source: page
+        evidence: [11번가에서 SK PAY 등록 후 결제 시 | 11% | 5만점 | 건당 2만원 이상 이용 시 제공 이용건당 최대 1만점 이내 제공, '(KB PAY, 삼성페이, 네이버페이 등 타 간편결제 또는 ISP에 등록하여 11번가에서 결제 시에는 서비스가 제공되지 않습니다.)', 최초 발급받은 CHALLENGE BAG KB국민카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일(실적유예기간)까지 이용실적이 없는 경우에도 11번가 OK캐쉬백 포인트 특별적립 서비스가 제공됩니다.]
+        target:
+          merchants: [eleven_st]
+        when:
+          - payment: [eleven_pay]
+          - amount: {min: 20000}
+        reward: {type: points, program: ok_cashbag, rate: 11}
+        limits:
+          - {per: txn, amount: 10000}
+          - {per: month, amount: 50000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        exclude_applied: 1
+      - key: life-5
+        title: 생활밀착업종 OK캐쉬백 5% 적립
+        source: page
+        evidence: ['daily : 커피, 편의점, 약국 업종', 'weekly : 패밀리레스토랑, 패스트푸드, 주유/충전소 업종', 'monthly : 학원, 골프/골프연습장, 미용실 업종', 생활밀착업종 | 5% | 1만점 | 2만점 | 건당 1만원 이상 이용 시 제공, (단, 월 적립한도 1만점이내 제공)]
+        target:
+          categories: [beauty.salon, cafe, convenience, education.academy, fuel, pharmacy, restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: ok_cashbag, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 10000, 400000: 10000, 800000: 20000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        exclude_applied: 1
+        unmodeled: [패밀리레스토랑과 골프장·골프연습장 업종은 공통 업종이 넓어 계산하지 않는다]
+      - key: base-0-1
+        title: 전 가맹점 OK캐쉬백 0.1% 기본적립
+        source: page
+        evidence: [전 가맹점 OK캐쉬백 0.1% 기본적립, 적립 제외 대상 이외 이용금액에 대해 OK캐쉬백 포인트 0.1% 기본 적립]
+        target: {all: true}
+        reward: {type: points, program: ok_cashbag, rate: 0.1}
+    unmodeled: [기본 포인트리는 적립되지 않는다, SK PAY에 이 카드를 등록해 11번가에서 결제해야 한다. 결제수단 11PAY로 본다, 월 적립한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].benefits[base-0-1]', question: 특별적립 결제에 0.1% 기본적립을 더 주는지 원문이 밝히지 않는다. 같은 묶음에 두어 큰 쪽 하나만 준다, assumed: same stack}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 연회비는 K-WORLD(JCB)와 Master 모두 1만5천원이다. 생활밀착업종의 daily, weekly, monthly는 업종 묶음 이름으로 보고 횟수 제한으로 옮기지 않았다. 특별적립 받은 매출은 실적에서 빠진다.
