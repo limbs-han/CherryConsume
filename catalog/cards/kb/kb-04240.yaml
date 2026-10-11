@@ -1,0 +1,53 @@
+schema_version: 2
+id: kb-04240
+issuer: kb
+name: KB국민 Liiv M 카드
+short_name: KB Liiv M
+kind: credit
+product_codes:
+  - '04240'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04240', fetched_at: '2026-10-11', review_no: 제2019-C1a-09159호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: liivm-autopay
+        title: Liiv M 통신료 자동이체 월 1만~1만5천원 청구할인
+        source: page
+        evidence: [Liiv M 통신료 자동이체 할인 | 1구간(50만원 이상) 1만원 | 2구간(100만원 이상) 1만5천원, '최초 카드 사용 등록일로부터 다음달 말일까지는 Liiv M 카드 실적이 없는 경우에도 1구간(전월 이용실적 50만원 이상)에 해당하는 10,000원 청구할인 서비스가 적용됩니다.', 할인금액보다 자동이체 승인금액이 작을 경우 승인금액만큼 할인 적용됩니다., 통신료 자동이체 승인 건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인 됩니다., 해당 할인서비스는 Liiv M 카드로 Liiv M 통신료 자동이체 등록 시에만 제공]
+        target:
+          merchants: [liiv_m]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {0: 10000, 500000: 10000, 1000000: 15000}
+        tiers:
+          from: 500000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: [정부지원금과 무승인전표(자판기·터널통행료·항공기 내 이용)는 실적에서 빠진다, Mastercard로 발급하면 전월 30만원 이상 시 호텔·인천공항 발레파킹과 국내공항 라운지 같은 티타늄 서비스가 있다. 결제 할인이 아니라 담지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2019. 10. 28 출시라고만 적었다. 현재 규칙의 시작일을 확인해야 한다. 수집일을 잠정 시작일로 둔다., assumed: '2026-10-11'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 옮겼다. 후불교통요금 실적 제외는 시내버스와 지하철 업종 제외로 둔다. 연회비는 국내전용과 Master 모두 2만원이다.
