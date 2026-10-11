@@ -1,0 +1,44 @@
+schema_version: 2
+id: woori-102857
+issuer: woori
+name: 쿠쿠 우리카드
+kind: credit
+product_codes:
+  - '102857'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102857', fetched_at: '2026-10-11', review_no: 제2023-C1a-13396호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-12-11'
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: rental-autopay
+        title: 쿠쿠 렌탈요금 자동납부 청구할인
+        source: page
+        evidence: ['30만원 이상 ~ 70만원 미만 | 10,000원 | 쿠쿠 렌탈요금 자동납부 또는 제품구매 장기할부(24/36개월) 필수', '70만원 이상 ~ 120만원 미만 | 15,000원', '120만원 이상 | 20,000원', ※ 자동납부 또는 장기할부 건이 여러 건인 경우 합산하여 할인한도 내에서 통합 할인 적용됩니다., '쿠쿠 우리카드로 할인받은 이용금액(해당 이용금액 전체), 쿠쿠 장기할부 이용금액 ... 전월실적에 포함되지 않습니다.']
+        target:
+          merchants: [cuckoo_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 10000, 700000: 15000, 1200000: 20000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [가족카드는 청구할인을 받지 못한다, 쿠쿠 제품구매 24·36개월 장기할부 월 청구금액도 같은 한도로 할인하지만 결제 기록으로 담지 못해 계산하지 않는다, 쿠쿠 장기할부 이용금액은 실적에서 빠지지만 담지 못한다. 장기할부를 기록하면 실적이 크게 잡힐 수 있다]
+    unmodeled: ['해외 이용금액, 교통카드 이용금액, 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다', 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '공공임대료, 정부지원금, 국가·공공기관 가맹점 이용금액은 실적에서 빠진다', 할인은 거래 매입 순서대로 한도를 쓴다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2023-12-11. 연회비 15,000원. 전월 국내외 30만/70만/120만 이상 쿠쿠 렌탈요금 자동납부 월 1만/1만5천/2만원 청구할인, 할인받은 이용금액 전체 실적 제외. 신규 다음 달 말까지 30만 구간.
