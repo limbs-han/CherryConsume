@@ -1,0 +1,173 @@
+schema_version: 2
+id: kb-09561
+issuer: kb
+name: KB국민 WE:SH Travel 카드
+short_name: KB WE:SH Travel
+kind: credit
+product_codes:
+  - '09561'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+  - {scope: domestic, form: mobile, amount: 19000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 19000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09561', fetched_at: '2026-10-10'}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2026-10-10'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요?'}
+    limits:
+      - key: daily
+        per: month
+        amount: {0: 5000, 300000: 10000, 700000: 20000, 1200000: 30000}
+    benefits:
+      - key: daily-online-shopping
+        title: 온라인 쇼핑 KB Pay 10% 청구할인
+        source: page
+        evidence: ['온라인 쇼핑 : 11번가, G마켓, SSG.COM', '[공통] 대상 영역에서 KB Pay로 결제시에만 할인 제공되며, 그 외 결제수단으로 결제 시 할인 제공되지 않음', 자주 쓰는 일상 영역 | 온라인 쇼핑 | 10% | 1만원 | 2만원 | 3만원, '건당 할인한도 : 1만원', '최초 발급받은 KB국민 WE:SH Travel 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일까지는 전월 국내 이용실적 30만원 미만 시에도 월 5천원 한도까지만 할인 제공']
+        target:
+          merchants: [eleven_st, gmarket, ssg_com]
+        when:
+          - channel: online
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 10000}
+          - {shared: daily}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: ['상품권, 여행, 항공권, 티켓, 도서, 별도 팝업사이트 결제는 제외한다']
+      - key: daily-online-fashion
+        title: 온라인 패션 KB Pay 10% 청구할인
+        source: page
+        evidence: ['온라인 패션 : 무신사, W컨셉, 지그재그, 29CM', '[온라인 패션] 공식 홈페이지/앱 결제 건에 한함', '건당 할인한도 : 1만원']
+        target:
+          merchants: [musinsa, twentynine_cm, wconcept, zigzag]
+        when:
+          - channel: online
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 10000}
+          - {shared: daily}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: daily-coffee
+        title: 커피 KB Pay 10% 청구할인
+        source: page
+        evidence: ['커피 : 커피 오프라인 매장, 커피 모바일 앱(스타벅스 사이렌오더, 커피빈 퍼플오더, 메가커피 메가오더)', '[커피] 커피 오프라인 매장은 커피전문점 업종 매장 결제 건에 한함 백화점/대형마트 등 일부 입점 매장 제외 커피 앱 주문은 공식 모바일앱 일반 결제 건에 한함', '건당 할인한도 : 1만원']
+        target:
+          categories: [cafe]
+        when:
+          - payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 10000}
+          - {shared: daily}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [커피 앱 주문은 스타벅스 사이렌오더·커피빈 퍼플오더·메가커피 메가오더만 대상이다, 백화점·대형마트 입점 매장은 제외한다]
+      - key: daily-convenience
+        title: 편의점 KB Pay 10% 청구할인
+        source: page
+        evidence: ['편의점 : GS25, CU', '[편의점] 오프라인 매장 일반결제건에 한함 (온라인 가맹점 제외) 백화점, 대형마트 등 일부 입점 매장 제외', '건당 할인한도 : 1만원']
+        target:
+          merchants: [cu, gs25]
+        when:
+          - channel: offline
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 10000}
+          - {shared: daily}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [백화점·대형마트 입점 매장은 제외한다]
+      - key: daily-movie
+        title: 영화관 KB Pay 10% 청구할인
+        source: page
+        evidence: ['영화관 : 롯데시네마, CGV, 메가박스', '[영화관] 매점, 관람권(상품권) 구입, 예매 대행사이트는 제외', '건당 할인한도 : 1만원']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 10000}
+          - {shared: daily}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: ['매점, 관람권 구입, 예매 대행사이트 결제는 제외한다']
+      - key: travel-online-5
+        title: 온라인 항공·면세점 KB Pay 5% 청구할인
+        source: page
+        evidence: ['온라인 항공 : 대한항공, 아시아나', '온라인 면세점 : 롯데면세점, 신라면세점, 신세계면세점, 현대백화점 면세점', '[공통] 공식 홈페이지/앱에서 KB Pay 결제시에만 할인 제공', '[온라인 항공] 외화 결제 건은 해외 가맹점으로 분류하여 할인 미제공', 온라인 항공/면세점 | 5% | 월 2만원 (연 8만원) | 30만원, '최초 발급받은 KB국민 WE:SH Travel 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일까지는 전월 국내 이용실적 30만원 미만 시에도 월 1만원 한도까지만 할인 제공']
+        target:
+          merchants: [asiana_airlines, hyundai_dfs_online, korean_air, lotte_dfs_online, shilla_dfs_online, shinsegae_dfs_online]
+        when:
+          - region: domestic
+            channel: online
+            payment: [kb_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 10000, 300000: 20000}
+          - {per: year, amount: 80000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: rail-bus-10
+        title: 철도·고속버스 10% 청구할인
+        source: page
+        evidence: ['철도(일반/KTX/SRT), 고속·시외버스 업종', 철도·고속버스 | 10% | 월 1만원 (연 6만원) | 30만원, '최초 발급받은 KB국민 WE:SH Travel 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로부터 다음달 말일까지는 전월 국내 이용실적 30만원 미만 시에도 월 5,000원 한도까지만 할인 제공']
+        target:
+          categories: [transit.bus_express, transit.bus_intercity, transit.rail]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 5000, 300000: 10000}
+          - {per: year, amount: 60000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: ['KB손해보험 다이렉트 여행자보험 KB Pay 10% 할인(월 5천원, 연 2만원)은 대상 가맹점을 담을 키가 없어 계산하지 않는다', 해외 이용 수수료 1.25% 면제와 환율우대 100%는 청구 환율 계산이라 할인으로 계산하지 않는다, 전 세계 공항 라운지 연 2회 무료는 계산하지 않는다, '정부지원금, 자판기·터널이용료·항공기내 같은 무승인 전표는 실적에서 빠진다', 할인받은 결제는 실적에서 빠지지만 여행자보험 할인 결제는 실적에 넣는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2024.04.08 출시라고만 적었다. 현재 규칙의 시작일을 찾지 못해 수집일로 둔다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].spend.interest_free', question: 원문 실적 제외 목록에 무이자할부가 없어 실적에 넣었다, assumed: count}
+notes: 2026-10-10 KB국민카드 상품 페이지를 직접 받아 대조했다. 이 카드의 실적 제외 목록에는 후불교통이 없어 교통 업종을 실적에 남긴다. 가족카드는 발급되지 않는다. 일상 영역 다섯 곳은 월 할인한도를 함께 쓰고 건당 1만원 한도가 있다.
