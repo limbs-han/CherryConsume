@@ -1,0 +1,79 @@
+card: hana-12932
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 주유 10% 건당 10만원까지
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 120000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-10: 10000}
+    counted: 0
+  calc: 10만원까지만 계산해 10,000. 할인 받은 매출은 실적 제외
+- name: 40만 구간 직전 주유는 혜택 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 50000
+  calc: 40만원 미만이라 0원
+- name: 70만 구간 주유 한도 3만
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: sk_energy, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: hd_oilbank, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 100000, merchant: hd_oilbank, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-10: 10000}
+  - payment: 1
+    benefits: {fuel-10: 10000}
+  - payment: 2
+    benefits: {fuel-10: 10000}
+  - payment: 3
+    benefits: {}
+  calc: 하루 1회 10,000씩 세 번이면 한도 30,000 소진
+- name: 하루 두 번째 주유는 혜택 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: sk_energy, payment_method: physical_card}
+  - {at: 2026-11-04T18:00, amount: 50000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-10: 5000}
+  - payment: 1
+    benefits: {}
+  calc: 1일 1회
+- name: 커피 5% 한도 직후 페이결제 1%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, payment_method: samsung_pay}
+  expect:
+  - payment: 0
+    benefits: {coffee-5: 5000}
+  - payment: 1
+    benefits: {pay-1: 100}
+    counted: 10000
+  calc: 100,000 x 5% = 5,000 한도. 다음 1만원 페이결제는 1% 100원이고 실적 포함
+- name: 실적 없이 페이결제 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: restaurant.general, payment_method: kakao_pay}
+  expect:
+  - payment: 0
+    benefits: {pay-1: 300}
+    counted: 30000
+  calc: 30,000 x 1% = 300. 페이결제 할인은 실적 포함
+- name: 주유를 페이로 결제하면 주유 10% 우선
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: sk_energy, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {fuel-10: 5000}
+  calc: 할인율 높은 주유 10% 하나만

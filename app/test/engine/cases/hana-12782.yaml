@@ -1,0 +1,58 @@
+card: hana-12782
+cases:
+- name: 국내 일반 10000 곱하기 0.3퍼센트는 30
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      domestic-03: 30
+  calc: 국내 일반 10000 곱하기 0.3퍼센트는 30
+- name: 국내 하나페이 10000 곱하기 0.4퍼센트는 40
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: hana_pay
+  expect:
+  - payment: 0
+    benefits:
+      domestic-pay-04: 40
+  calc: 국내 하나페이 10000 곱하기 0.4퍼센트는 40
+- name: 해외 10000 곱하기 0.4퍼센트는 40
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    region: overseas
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      overseas-04: 40
+  calc: 해외 10000 곱하기 0.4퍼센트는 40
+- name: 세금은 적립 제외
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: tax.local
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 세금은 제외 목록에 있다
+- name: 초중고 납입금 제외
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: education.primary_secondary_fee
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 초중고 납입금 제외

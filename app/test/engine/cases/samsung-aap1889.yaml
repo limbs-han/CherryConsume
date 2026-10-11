@@ -1,0 +1,62 @@
+card: samsung-aap1889
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: G마켓 5% 40만 구간 월 2만P
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T20:00, amount: 300000, merchant: gmarket, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T20:00, amount: 200000, merchant: auction, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {gmarket-5: 15000}, counted: 300000}
+  - {payment: 1, benefits: {gmarket-5: 5000}, counted: 200000}
+  calc: 300,000 × 5% = 15,000. 옥션 10,000이나 남은 5,000. 적립 받아도 실적 인정
+- name: 40만 직전이면 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-02T20:00, amount: 100000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 생활 3% 통합 월 5천P
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 50000, merchant: cu, payment_method: physical_card}
+  - {at: 2026-11-03T19:00, amount: 30000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 20000, category: transit.subway, payment_method: physical_card}
+  - {at: 2026-11-05T08:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-3: 1500}}
+  - {payment: 1, benefits: {delivery-3: 900}}
+  - {payment: 2, benefits: {transit-3: 600}, counted: 20000}
+  - {payment: 3, benefits: {taxi-fuel-3: 600}, counted: 20000}
+  calc: 50,000 × 3% = 1,500, 30,000 × 3% = 900, 20,000 × 3% = 600 두 건. 교통과 택시는 실적 인정
+- name: 쇼핑 의료 3%와 인터넷면세점 통합 월 1만P
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-02T15:00, amount: 300000, merchant: hyundai_department, payment_method: physical_card}
+  - {at: 2026-11-03T15:00, amount: 100000, merchant: shilla_dfs_online, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 50000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shop-3: 9000}}
+  - {payment: 1, benefits: {dfs-online-3: 1000}}
+  - {payment: 2, benefits: {}}
+  calc: 300,000 × 3% = 9,000. 면세점 3,000이나 남은 1,000. 병원은 한도 소진
+- name: 디지털콘텐츠 이동통신 해외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-25T09:00, amount: 70000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T19:00, amount: 100000, category: restaurant, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-20: 3000}}
+  - {payment: 1, benefits: {mobile-5: 3000}}
+  - {payment: 2, benefits: {overseas-2: 2000}, counted: 100000}
+  calc: 17,000 × 20% = 3,400이나 한도 3,000. 70,000 × 5% = 3,500이나 한도 3,000. 해외 2,000
+- name: 무이자할부 적립과 실적 제외
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 90000, merchant: gmarket, channel: online, installment_months: 3, interest_free: true, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무이자할부는 적립과 실적 모두 제외

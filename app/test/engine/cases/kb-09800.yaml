@@ -1,0 +1,114 @@
+card: kb-09800
+holder:
+  started_on: '2026-01-01'
+  options: [{option: pay, choice: kb_pay, effective_from: '2026-01-01'}]
+cases:
+- name: KB Pay 15% 건당 3천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: kb_pay}
+  - {at: 2026-11-05T11:00, amount: 50000, category: cafe, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {pay-kbpay-15: 1500}, counted: 0}
+  - {payment: 1, benefits: {pay-kbpay-15: 3000}}
+  calc: 10000 x 15% = 1500, 50000 x 15% = 7500이지만 건당 3000. 할인받은 결제는 실적 제외
+- name: 40만 경계 직전
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 40만원 미만 할인 없음
+- name: 고르지 않은 네이버페이는 할인 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: KB Pay를 골랐다
+- name: 패션몰 KB Pay 중복
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: musinsa, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {pay-kbpay-15: 3000, fashion-kbpay-5: 1000}}
+  calc: 20000 x 15% = 3000 건당 한도 3000, 20000 x 5% = 1000
+- name: 디지털 30% 건당 3천원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-30: 3000}}
+  calc: 17000 x 30% = 5100, 건당 3000
+- name: 해외 2% 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  calc: 100000 x 2%
+- name: 신규 유예 KB Pay 월 7500
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    options: [{option: pay, choice: kb_pay, effective_from: '2026-01-01'}]
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: cafe, payment_method: kb_pay}
+  - {at: 2026-11-06T10:00, amount: 20000, category: cafe, payment_method: kb_pay}
+  - {at: 2026-11-07T10:00, amount: 20000, category: cafe, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {pay-kbpay-15: 3000}}
+  - {payment: 1, benefits: {pay-kbpay-15: 3000}}
+  - {payment: 2, benefits: {pay-kbpay-15: 1500}}
+  calc: 유예 월 한도 15000의 50% = 7500, 건당 3000 유지
+- name: 후불교통 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무승인 RF후불교통 실적 제외
+- name: 일반 승인 철도 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 철도는 실적에 남긴다
+- name: naver_pay 골랐을 때 10% 건당 2천원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pay, choice: naver_pay, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: naver_pay}
+  - {at: 2026-11-05T11:00, amount: 30000, category: cafe, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {pay-naverpay-10: 1000}}
+  - {payment: 1, benefits: {pay-naverpay-10: 2000}}
+  calc: 10000 x 10% = 1000, 30000 x 10% = 3000이지만 건당 2000
+- name: kakao_pay 골랐을 때 10% 건당 2천원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pay, choice: kakao_pay, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: kakao_pay}
+  - {at: 2026-11-05T11:00, amount: 30000, category: cafe, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {pay-kakaopay-10: 1000}}
+  - {payment: 1, benefits: {pay-kakaopay-10: 2000}}
+  calc: 10000 x 10% = 1000, 30000 x 10% = 3000이지만 건당 2000
+- name: toss_pay 골랐을 때 10% 건당 2천원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pay, choice: toss_pay, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: toss_pay}
+  - {at: 2026-11-05T11:00, amount: 30000, category: cafe, payment_method: toss_pay}
+  expect:
+  - {payment: 0, benefits: {pay-tosspay-10: 1000}}
+  - {payment: 1, benefits: {pay-tosspay-10: 2000}}
+  calc: 10000 x 10% = 1000, 30000 x 10% = 3000이지만 건당 2000

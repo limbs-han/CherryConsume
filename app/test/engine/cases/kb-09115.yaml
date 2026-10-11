@@ -1,0 +1,67 @@
+card: kb-09115
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 KB Pay 온라인 쇼핑 1만원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: eleven_st, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-shopping-10-1: 10000}, counted: 0}
+  - {payment: 1, benefits: {}}
+  calc: 150,000 x 10% = 15,000, 1구간 한도 1만원. KB Pay가 아니면 할인 없음. 할인받은 결제는 실적 제외
+- name: 120만 구간 온라인 2만원 한도
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: ssg_com, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {online-shopping-10-1: 20000}}
+  calc: 300,000 x 10% = 30,000, 3구간 한도 2만원
+- name: 주유와 편의점 함께 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: sk_energy, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: cu, channel: offline}
+  - {at: 2026-11-07T10:00, amount: 20000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-100-per-l: 5000}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {}}
+  calc: 92,900 / 1,858 = 50리터 x 100원 = 5,000. 공유 한도 5천원 소진
+- name: 편의점 5% 통신 10% OTT 30% 함께 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: gs25, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: skt, billing: autopay}
+  - {at: 2026-11-07T10:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 1000}}
+  - {payment: 1, benefits: {telecom-10: 2000}}
+  - {payment: 2, benefits: {ott-30: 1000}}
+  calc: 20,000 x 5% = 1,000. 20,000 x 10% = 2,000. 17,000 x 30% = 5,100이나 통신과 함께 3천원 한도라 1,000
+- name: 해외 5% 아웃백 30%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: other, region: overseas}
+  - {at: 2026-11-06T19:00, amount: 120000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {overseas-5: 5000}}
+  - {payment: 1, benefits: {family-restaurant-30: 30000}}
+  calc: 200,000 x 5% = 10,000, 한도 5천원. 120,000 x 30% = 36,000, 월 3만원
+- name: 30만 경계 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-06T19:00, amount: 50000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 할인 없음
+- name: 신규 유예 1구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {online-shopping-10-1: 10000}}
+  calc: 사용등록 다음 달 말일까지 1구간

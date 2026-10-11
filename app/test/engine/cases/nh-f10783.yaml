@@ -1,0 +1,391 @@
+card: nh-f10783
+cases:
+- name: 혜택 양수 basic-domestic-1
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits:
+      basic-domestic-1: 100
+    counted: 10000
+  calc: 10000 × 1% = 100.
+- name: 혜택 양수 basic-nhpay-2
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: online_shopping
+    channel: online
+    payment_method: nh_pay
+  expect:
+  - payment: 0
+    benefits:
+      basic-nhpay-2: 200
+    counted: 10000
+  calc: 10000 × 2% = 200.
+- name: 혜택 양수 basic-overseas-2
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: restaurant.general
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      basic-overseas-2: 200
+    counted: 10000
+  calc: 10000 × 2% = 200.
+- name: 혜택 양수 living-utility-10
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: apartment_fee
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      living-utility-10: 1000
+    counted: 0
+  calc: 10000 × 10% = 1000.
+- name: 혜택 양수 living-telecom-10
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    merchant: skt
+    category: telecom.mobile
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      living-telecom-10: 1000
+    counted: 10000
+  calc: 10000 × 10% = 1000.
+- name: 혜택 양수 living-delivery-10
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      living-delivery-10: 1000
+    counted: 10000
+  calc: 10000 × 10% = 1000.
+- name: 혜택 양수 living-mart-10
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    merchant: emart
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      living-mart-10: 1000
+    counted: 10000
+  calc: 10000 × 10% = 1000.
+- name: 혜택 양수 living-insurance-10
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: insurance.private
+  expect:
+  - payment: 0
+    benefits:
+      living-insurance-10: 1000
+    counted: 10000
+  calc: 10000 × 10% = 1000.
+- name: 혜택 양수 living-pet-10
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: pet.vet
+  expect:
+  - payment: 0
+    benefits:
+      living-pet-10: 1000
+    counted: 10000
+  calc: 10000 × 10% = 1000.
+- name: 혜택 양수 living-digital-30
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    merchant: netflix
+    billing: subscription
+  expect:
+  - payment: 0
+    benefits:
+      living-digital-30: 3000
+    counted: 10000
+  calc: 10000 × 30% = 3000.
+- name: 실적 40만원 직전
+  prev_month_spend: 399999
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 399999 < 400000.
+- name: 신규 등록월 기본만 제공
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      basic-domestic-1: 100
+  calc: 등록월 생활할인 없음. 기본만 10000 × 1% = 100.
+- name: 신규 다음달 생활 실적 면제 없음
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      basic-domestic-1: 100
+  calc: 전월실적 0이면 생활은 40만원 미달. 기본은 신규 특례 적용.
+- name: 생활 영역 한도 뒤 기본으로 복귀
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 50000
+    merchant: coupang
+    channel: online
+  - at: 2026-10-11T12:00
+    amount: 50000
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      living-delivery-10: 5000
+  - payment: 1
+    benefits:
+      basic-domestic-1: 500
+  calc: 첫날 50000 × 10% = 5000으로 영역한도 소진. 다음날 기본 50000 × 1% = 500.
+- name: 기본 할인 금액이 더 큰 경우
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 600000
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      basic-domestic-1: 6000
+  calc: 생활은 5000 상한, 기본은 600000 × 1% = 6000이라 기본을 선택.
+- name: 기본 일 만원 월 4만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 1000000
+    category: restaurant.general
+  - at: 2026-10-10T12:00
+    amount: 1000000
+    category: restaurant.general
+  - at: 2026-10-11T12:00
+    amount: 1000000
+    category: restaurant.general
+  - at: 2026-10-12T12:00
+    amount: 1000000
+    category: restaurant.general
+  - at: 2026-10-13T12:00
+    amount: 1000000
+    category: restaurant.general
+  - at: 2026-10-14T12:00
+    amount: 1000000
+    category: restaurant.general
+  expect:
+  - payment: 0
+    benefits:
+      basic-domestic-1: 10000
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits:
+      basic-domestic-1: 10000
+  - payment: 3
+    benefits:
+      basic-domestic-1: 10000
+  - payment: 4
+    benefits:
+      basic-domestic-1: 10000
+  - payment: 5
+    benefits: {}
+  calc: 일 10000, 월 40000 상한. 같은 날 두 번째와 월 누적 40000 이후는 0.
+- name: 생활 합산 2만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 50000
+    merchant: coupang
+    channel: online
+  - at: 2026-10-11T12:00
+    amount: 50000
+    merchant: emart
+  - at: 2026-10-12T12:00
+    amount: 50000
+    category: insurance.private
+  - at: 2026-10-13T12:00
+    amount: 50000
+    category: pet.vet
+  - at: 2026-10-14T12:00
+    amount: 50000
+    merchant: skt
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      living-delivery-10: 5000
+  - payment: 1
+    benefits:
+      living-mart-10: 5000
+  - payment: 2
+    benefits:
+      living-insurance-10: 5000
+  - payment: 3
+    benefits:
+      living-pet-10: 5000
+  - payment: 4
+    benefits:
+      basic-domestic-1: 500
+  calc: 영역 네 개가 각각 5000원으로 생활 합산 20000 소진. 다섯째는 기본 500.
+- name: 디지털 일회 결제 기본만
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    merchant: netflix
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      basic-domestic-1: 100
+  calc: 정기결제가 아니므로 생활 30% 없음. 기본 1%.
+- name: 공과금 일반결제 제외
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: utility.electricity
+    billing: normal
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 공과금은 기본에서 제외. 생활은 자동납부만 대상.
+- name: 관리비 일반결제 공통 제외 확인
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: apartment_fee
+    billing: normal
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 공식은 관리비를 공과금으로 분류하며 공과금을 할인 제외한다. 자동납부 직접대상만 생활 할인 예외이다.
+- name: NH페이 오프라인 기본 1%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-06-01'
+  payments:
+  - at: 2026-10-10T12:00
+    amount: 10000
+    category: restaurant.general
+    payment_method: nh_pay
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      basic-domestic-1: 100
+  calc: NH페이 2%는 국내 온라인만 대상.
+- name: 관리비 일반결제 기본할인 제외
+  prev_month_spend: 400000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: apartment_fee
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 관리비는 공통할인 제외. 일반결제에는 기본1%를 주지 않는다
+  holder:
+    started_on: '2026-01-01'
+- name: 관리비 자동납부 직접대상 예외
+  prev_month_spend: 400000
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: apartment_fee
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      living-utility-10: 1000
+  calc: 관리비 자동납부는 직접대상 예외로10%인1,000원
+  holder:
+    started_on: '2026-01-01'

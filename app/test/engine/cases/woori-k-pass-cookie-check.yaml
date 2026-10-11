@@ -1,0 +1,83 @@
+card: woori-k-pass-cookie-check
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 해외 30만원 미만 1%
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}}
+  calc: 100,000 × 1% = 1,000
+- name: 해외 30만원 이상 2%
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 6000}}
+  calc: 300,000 × 2% = 6,000
+- name: 해외 실적 25만 직전은 없음
+  prev_month_spend: 249999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 해외 캐시백은 전월 25만원부터
+- name: 후불 대중교통 월 5만원 문턱
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 30000, category: transit.bus_city, billing: postpaid_transit}
+  - {at: 2026-11-10T08:00, amount: 20000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {transit-3000: 3000}}
+  calc: 둘째 결제에서 월 합계 50,000이 되어 3,000
+- name: 쿠팡 2만원 이상 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-mall-2000: 2000}}
+  calc: 건당 2만원 이상 2,000
+- name: CGV 1만5천원 이상 5천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 15000, merchant: cgv}
+  expect:
+  - {payment: 0, benefits: {movie-5000: 5000}}
+  calc: 건당 15,000 이상 5,000
+- name: GS25 1만원 이상 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {daily-1000: 1000}}
+  calc: 건당 1만원 이상 1,000
+- name: YBM NET 3만원 이상 3천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: ybm_net, channel: online}
+  expect:
+  - {payment: 0, benefits: {language-3000: 3000}}
+  calc: 건당 3만원 이상 3,000
+- name: 스타벅스 1만원 이상 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {starbucks-2000: 2000}}
+  calc: 건당 1만원 이상 2,000
+- name: 실적 20만 직전은 국내 혜택 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 국내 혜택은 전월 20만원부터
+- name: 네이버페이 1만원 이상 추가 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: other, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {easypay-1000: 1000}}
+  calc: 건당 1만원 이상 1,000

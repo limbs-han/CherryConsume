@@ -1,0 +1,81 @@
+card: hana-16797
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 대구로 앱 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 23000, merchant: daeguro, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {daeguro-app-10: 2300}
+    counted: 23000
+  calc: 23,000 x 10% = 2,300. 특화 서비스는 실적에서 빠지지 않음
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T19:00, amount: 23000, merchant: daeguro, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 할인 없음
+- name: 대구로 택시 10%와 30만 구간 한도 1만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 95000, merchant: daeguro_taxi, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T19:00, amount: 10000, merchant: daeguro_taxi, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {daeguro-taxi-10: 9500}
+  - payment: 1
+    benefits: {daeguro-taxi-10: 500}
+  calc: 95,000 x 10% = 9,500. 다음 10,000 x 10% = 1,000인데 한도 1만에서 500 남음
+- name: 60만 구간 쿠팡 5% 한도 1만5천과 실적 제외
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 400000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {online-shop-5: 15000}
+    counted: 0
+  calc: 400,000 x 5% = 20,000인데 60만 구간 한도 15,000. 할인 받은 매출은 실적에서 빠짐
+- name: SKT 자동이체 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 55000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {telecom-autopay-5: 2750}
+  calc: 55,000 x 5% = 2,750
+- name: 지하철 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-5: 75}
+  calc: 1,500 x 5% = 75
+- name: 이월드 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: e_world, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {eworld-5: 2500}
+  calc: 50,000 x 5% = 2,500
+- name: 스타벅스 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6300, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-5: 315}
+  calc: 6,300 x 5% = 315
+- name: 해외 5% 원 미만 버림
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10010, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-5: 500}
+  calc: 10,010 x 5% = 500.5를 버림 500

@@ -1,0 +1,39 @@
+card: samsung-aap1786
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.5% 영역 1% 해외 2%는 실적과 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T12:00, amount: 30000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 200000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 300000, merchant: tway_air, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 150}, counted: 30000}
+  - {payment: 1, benefits: {zone-1: 500}, counted: 50000}
+  - {payment: 2, benefits: {zone-1-offline: 2000}, counted: 200000}
+  - {payment: 3, benefits: {overseas-2: 2000}, counted: 100000}
+  - {payment: 4, benefits: {zone-1: 3000}, counted: 300000}
+  calc: 30,000 × 0.5% = 150P. 쿠팡 50,000 × 1% = 500P. 백화점 200,000 × 1% = 2,000P. 해외 100,000 × 2% = 2,000P. 티웨이 300,000 × 1% = 3,000P
+- name: 50만 구간 디지털 50% 버거 30% 영화 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 20000, merchant: shake_shack, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 14000, merchant: cgv, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T19:00, amount: 14000, merchant: megabox, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-50: 5000}, counted: 17000}
+  - {payment: 1, benefits: {burger-30: 6000}, counted: 20000}
+  - {payment: 2, benefits: {movie-5000: 5000}, counted: 14000}
+  - {payment: 3, benefits: {base-0-5: 70}, counted: 14000}
+  calc: 넷플릭스 8,500은 한도 5,000. 쉐이크쉑 20,000 × 30% = 6,000. 영화 첫 건 5,000으로 월 한도가 차서 둘째 건은 할인 없이 14,000 × 0.5% = 70P. 할인 건도 실적에 들어간다
+- name: 실적 50만원 직전이면 디지털 할인 없이 0.5%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 85}, counted: 17000}
+  calc: 499,999원은 0 구간이라 할인이 없고 17,000 × 0.5% = 85P
