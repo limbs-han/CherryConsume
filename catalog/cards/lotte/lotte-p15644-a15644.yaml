@@ -1,0 +1,106 @@
+schema_version: 2
+id: lotte-p15644-a15644
+issuer: lotte
+name: K-패스엔로카
+kind: credit
+product_codes: [P15644-A15644]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15644-A15644', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00001_20260929_10002.pdf', fetched_at: 2026-10-10, review_no: 제2025-C1a-00611호}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2024-12-31
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      unmodeled: [롯데카드의 다른 결제일 할인과 겹치면 할인금액이 큰 혜택 하나만 받는다]
+    benefits:
+      - key: transit
+        title: 버스·지하철 10~15% 결제일 할인
+        source: page
+        evidence: [지난달(1~말일) 이용실적 40만원 이상 ~ 80만원 미만시 10% 결제일 할인, 지난달(1~말일) 이용실적 80만원 이상 시 15% 결제일 할인, 대중교통 | 버스/지하철 | 1만원 | 1.5만원, '지하철, 시내버스 이용 건만 혜택이 제공되며 택시, 고속버스, 시외버스 이용 금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward:
+          type: billing_discount
+          rate: {400000: 10, 800000: 15}
+        limits:
+          - per: month
+            amount: {400000: 10000, 800000: 15000}
+        tiers: {from: 400000}
+        unmodeled: [대중교통은 한 달 이용액이 다음 달 결제되고 롯데카드 접수일 기준으로 할인 대상과 한도 달이 정해진다]
+      - key: coffee
+        title: 커피 10~15% 결제일 할인
+        source: page
+        evidence: ['커피 | 스타벅스, 폴바셋, 할리스커피, 투썸플레이스 | 3천원 | 6천원', '오프라인 매장 및 각 커피브랜드의 공식앱을 통한 온라인 결제건에 할인 혜택이 제공되며, 상품권 및 선불카드 구입·충전 건은 할인 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [hollys, paul_bassett, starbucks, twosome]
+        reward:
+          type: billing_discount
+          rate: {400000: 10, 800000: 15}
+        limits:
+          - per: month
+            amount: {400000: 3000, 800000: 6000}
+        tiers: {from: 400000}
+        unmodeled: ['백화점, 할인점, 쇼핑몰 등에 입점한 매장은 할인하지 않는다', 커피 브랜드 상품권과 선불카드 구입·충전은 할인하지 않는다]
+      - key: convenience
+        title: 편의점 10~15% 결제일 할인
+        source: page
+        evidence: ['편의점 | GS25, CU, 세븐일레븐 | 3천원 | 6천원', 'GS25, CU, 세븐일레븐 오프라인 결제 건에 한하며, 온라인(간편결제 등) 결제건은 적용 제외됩니다.']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward:
+          type: billing_discount
+          rate: {400000: 10, 800000: 15}
+        limits:
+          - per: month
+            amount: {400000: 3000, 800000: 6000}
+        tiers: {from: 400000}
+      - key: online-shopping
+        title: 쿠팡·네이버페이 10~15% 결제일 할인
+        source: page
+        evidence: ['온라인 쇼핑 | 쿠팡, 네이버페이(네이버파이낸셜) | 3천원 | 6천원', 네이버페이의 경우 롯데카드 등록 기준 네이버페이(네이버파이낸셜)가맹점 결제 건에 대해 혜택을 제공합니다., '기프트·선불카드 충전 및 구매, 포인트 충전, 상품권(모바일 상품권 포함) 구매건은 모두 할인제외 됩니다.']
+        target:
+          exclude_categories: [gift_card, prepaid_charge]
+          merchants: [coupang, naver_pay]
+        reward:
+          type: billing_discount
+          rate: {400000: 10, 800000: 15}
+        limits:
+          - per: month
+            amount: {400000: 3000, 800000: 6000}
+        tiers: {from: 400000}
+        unmodeled: [일부 PG 업체를 거친 결제는 할인하지 않는다, 'PG를 통한 네이버페이 인증형 결제, 다른 간편결제에 등록된 네이버페이, 네이버 디지털콘텐츠, 네이버페이 분류상 상품권·후원·보험·렌탈·항공·여행·호텔 결제는 할인하지 않는다']
+      - key: streaming
+        title: 스트리밍 10~15% 결제일 할인
+        source: page
+        evidence: ['스트리밍 | 넷플릭스, 유튜브, 왓챠, 멜론, 지니뮤직, 디즈니플러스 | 3천원 | 6천원', '공식 홈페이지 및 앱을 통해 직접 신청한 정기결제(자동납부) 이용 건만 혜택이 제공되며, 1회성 일반구매 결제 및 통신요금 내 합산 청구, 앱마켓(구글플레이·앱스토어 등) 결제와 같이 가맹점 구분이 불가한 경우에는 혜택이 제공되지 않습니다.']
+        target:
+          merchants: [disney_plus, genie, melon, netflix, watcha, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward:
+          type: billing_discount
+          rate: {400000: 10, 800000: 15}
+        limits:
+          - per: month
+            amount: {400000: 3000, 800000: 6000}
+        tiers: {from: 400000}
+    unmodeled: [신규 발급 특례는 K-패스엔로카를 처음 발급한 경우에만 받는다, K-패스 환급은 정부 정책이라 카드 혜택으로 계산하지 않는다, '해외 이용금액은 현지 매출일자, 이동통신처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 실적에 반영한다', '오토·스마트 캐시백 신청 금액, 장애인 고용부담금, TV 수신료, 고속도로 통행요금, 무승인전표, 관세·벌금·과태료·민원 수수료·인지세·송달료, 기후동행카드 충전과 결제는 실적에서 빠진다', 롯데카드가 주는 L.POINT 적립은 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 카드출시일 2024-12-31 뒤 혜택이 바뀌었는지 확인하지 못했다. 출시일을 시행일로 두었다, assumed: '2024-12-31'}
+notes: 2026-10-10 상품 페이지와 상품설명서(2026년 8월 기준)를 대조했다. 숫자가 같다. 신용카드, 가족카드 발급 불가. 실적은 이 카드 이용금액이고 할인 받은 결제 전체와 대중교통 전체를 실적에서 뺀다. 할인율은 구간마다 10%와 15%, 한도는 업종 줄마다 따로다. 초안은 네이버페이를 빠뜨렸다.
