@@ -1,0 +1,206 @@
+schema_version: 2
+id: hana-4984
+issuer: hana
+name: 하나멤버스 1Q(원큐) 카드 ALL in
+short_name: 하나 1Q ALL in
+kind: credit
+product_codes:
+  - '4984'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 28000}
+  - {scope: global, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4984', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-10-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      exclude_categories: [education.academy, fuel, gift_card, prepaid_charge, tax, utility]
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {academy-money: 600000, hospital-money: 600000}
+      from: registration
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+    facts:
+      - {key: hana_bank_account, type: bool, scope: card, ask: 이 카드 결제계좌가 하나은행 계좌인가요}
+    limits:
+      - {key: life, per: month, amount: 10000}
+      - {key: premium, per: month, amount: 20000}
+    benefits:
+      - key: life-autopay-money
+        title: 통신·렌탈·케이블TV·전기 자동이체 10만원마다 5천 하나머니
+        source: page
+        evidence: [5대 영역 월 합산 이용 금액에 따라 하나머니 적립, 지난달 실적 30만원 이상시 최대 1만 하나머니 제공, 이번달 합산 사용금액이 10만원이 될 때마다 5천 하나머니 적립 | 통합 월 최대 1만 하나머니, '통신 : SKT, SKB, KT, LGU+ 자동이체 통신요금', '렌탈 : 코웨이, 청호나이스, 교원 웰스 자동이체 요금', '케이블TV : LG헬로비전, 티브로드, HCN, 딜라이브 자동이체 요금', '전기요금 : 한국전력 자동이체 전기요금']
+        target:
+          categories: [utility.electricity]
+          merchants: [chungho_rental, coway, coway_rental, dlive, hcn, kt, lg_hellovision, lg_uplus, sk_broadband, skt, wells]
+        when:
+          - billing: [autopay]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: life-transit-money
+        title: 버스·지하철 10만원마다 5천 하나머니
+        source: page
+        evidence: ['교통 : 시내버스, 마을버스, 광역버스, 지하철, 공항철도 (시외버스, 고속버스 제외)', 통합 월 최대 1만 하나머니]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: mart-money
+        title: 마트 10만원마다 5천 하나머니
+        source: page
+        evidence: ['마트 | 이마트, 이마트 트레이더스, 홈플러스, 롯데마트, 이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼, GS슈퍼 | 이번달 합산 이용금액이 10만원이 될 때 마다 5천 하나머니 적립 | 월 최대 1만 하나머니 | 월 최대 2만 하나머니', '마트 : 상품권 및 기프트카드 구매, 선불카드 충전 금액, 임대매장 매출 제외']
+        target:
+          merchants: [emart, emart_everyday, gs_the_fresh, homeplus, homeplus_express, lotte_mart, lotte_super, traders]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - per: month
+            amount: {300000: 10000, 600000: 20000}
+        tiers: {from: 300000}
+      - key: department-money
+        title: 백화점 10만원마다 5천 하나머니
+        source: page
+        evidence: ['백화점 | 신세계백화점, 롯데백화점, 현대백화점 | 월 최대 1만 하나머니 | 월 최대 2만 하나머니', '백화점 : 온라인몰 이용금액, 상품권 및 기프트카드 구매, 선불카드 충전 금액, 임대매장 매출 제외']
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - per: month
+            amount: {300000: 10000, 600000: 20000}
+        tiers: {from: 300000}
+      - key: online-money
+        title: 온라인쇼핑 10만원마다 5천 하나머니
+        source: page
+        evidence: ['온라인쇼핑 | GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLES홈쇼핑, NS홈쇼핑, 홈앤쇼핑, G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬 | 월 최대 1만 하나머니 | 월 최대 2만 하나머니', '온라인쇼핑 : 상품권 구매 제외']
+        target:
+          merchants: [auction, cj_onstyle, coupang, eleven_st, gmarket, gs_shop, home_and_shopping, hyundai_homeshopping, lotte_homeshopping, ns_homeshopping, public_homeshopping, shopping_ntv, tmon]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - per: month
+            amount: {300000: 10000, 600000: 20000}
+        tiers: {from: 300000}
+      - key: fuel-money
+        title: 주유 10만원마다 5천 하나머니
+        source: page
+        evidence: ['주유 (LPG충전 포함) | SK에너지, GS칼텍스, S-Oil, 현대오일뱅크, 알뜰주유소 | 월 최대 1만 하나머니 | 월 최대 2만 하나머니', 적립대상 주유 가맹점 이용금액은 지난달 실적 산정 제외]
+        target:
+          merchants: [altteul_fuel, gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - per: month
+            amount: {300000: 10000, 600000: 20000}
+        tiers: {from: 300000}
+      - key: academy-money
+        title: 학원 10만원마다 5천 하나머니
+        source: page
+        evidence: [학원 | 학원업종 (온라인 이용금액 제외) | 이번달 합산 이용금액이 10만원이 될 때 마다 5천 하나머니 적립 | 지난달 실적 60만원 이상 통합 월 최대 2만 하나머니, 적립대상 학원 가맹점 이용금액은 지난달 실적 산정 제외]
+        target:
+          categories: [education.academy]
+        when:
+          - {channel: offline}
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: premium}
+        tiers: {from: 600000}
+      - key: hospital-money
+        title: 병원·동물병원 10만원마다 5천 하나머니
+        source: page
+        evidence: ['병원 | 종합병원, 일반병원, 한의원, 동물병원 | 이번달 합산 이용금액이 10만원이 될 때 마다 5천 하나머니 적립']
+        target:
+          categories: [hospital, pet.vet]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: premium}
+        tiers: {from: 600000}
+      - key: apartment-money
+        title: 아파트관리비 자동이체 10만원 이상 5천 하나머니
+        source: page
+        evidence: [아파트관리비 자동이체 결제시 월 1회 5천 하나머니 적립, 지난달 사용금액 60만원 이상 시 제공, 아파트관리비 자동이체 금액 10만원 이상시 5천 하나머니 적립 | 월 최대 5천 하나머니]
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+          - amount: {min: 100000}
+        reward: {type: points, program: hana_money, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 600000}
+      - key: overseas-money
+        title: 해외 10만원마다 5천 하나머니
+        source: page
+        evidence: [해외 | 해외 모든 가맹점 | 이번달 합산 이용금액이 10만원이 될 때 마다 5천 하나머니 적립 | 월 최대 1만 하나머니, 지난달 실적 30만원 이상시 최대 1만 하나머니 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+      - key: coffee-4000
+        title: 하나은행 결제계좌 스타벅스·커피빈 월 1회 4,000원 청구할인
+        source: page
+        evidence: ['커피 | 스타벅스, 커피빈 | 4천원 이상 결제하면 4천원 청구할인 | 월 1회 4,000원', 지난달 실적 30만원 이상 시 제공, 지난달 말일 기준 결제 계좌를 하나은행 계좌로 지정 시 제공]
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - {fact: hana_bank_account}
+          - amount: {min: 4000}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+    unmodeled: ['생활 적립은 통신, 렌탈, 교통, 케이블TV, 전기 다섯 영역 이용액을 합쳐 10만원마다 주지만, 여기서는 자동이체 영역과 교통 영역을 따로 합쳐 덜 줄 수 있다', 공항철도는 생활 적립 대상이지만 업종으로 가리지 못해 넣지 않았다, '전기요금은 아파트, 빌라, 상가 등 일괄 납부 단체요금이 빠진다', 마트와 백화점 적립은 임대매장 매출이 빠진다, 커피 할인은 상품권 구매와 백화점·마트 입점 점포에서 빠진다, 아이행복 정부지원금은 실적에서 빠진다, '본인카드, 모바일카드, 가족카드의 실적, 적립한도, 할인횟수를 합산한다', 무승인 매출은 매출이 접수된 달의 실적에 들어간다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 규칙이 시작된 날을 찾지 못해 수집한 날로 두었다., assumed: '2026-10-10'}
+  - {path: 'revisions[0].benefits[life-transit-money].target', question: '요약 표는 교통에 택시를 적었지만 상세 기준은 시내버스, 마을버스, 광역버스, 지하철, 공항철도만 적었다.', assumed: 택시 제외}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문 실적 제외는 공과금과 도시가스다. 전기와 수도가 공과금에 드는지 원문만으로 단정할 수 없어 utility 전체를 뺐다., assumed: utility 전체}
+  - {path: 'revisions[0].new_card', question: 아파트관리비 적립이 신규 특례에서 60만원 기준을 받는지 원문에 없다., assumed: 30만원 기준이라 아파트관리비 적립 없음}
+notes: 2026-10-10 공식 상품 페이지에서 옮겼다. 연회비 국내전용 28,000원, 국내외겸용 30,000원. 하나머니 1하나머니 = 1원. 영역별 이번 달 합산 이용금액이 10만원이 될 때마다 5천 하나머니라 달 합계 보상으로 넣었다. 마트, 백화점, 온라인쇼핑, 주유는 영역마다 30만 구간 1만, 60만 구간 2만 하나머니 한도다. 주유와 학원 업종 이용액은 적립을 받지 않아도 실적에서 빠진다. 초안의 생활 적립은 통신 업종 전체를 넣어 원문보다 넓었고, 해외와 렌탈, 케이블TV를 빠뜨렸다.
