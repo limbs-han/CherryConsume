@@ -157,7 +157,8 @@ jobs:
     needs: [prepare, push]
     if: always() && needs.prepare.result == 'success' && (needs.push.result == 'success' || needs.push.result == 'skipped')
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # 폴더마다 복사와 삭제를 해 승인이 많으면 오래 걸린다. 2026-10-11 135건에 맞춰 늘렸다
+    timeout-minutes: 60
     steps:
       - uses: databricks/setup-cli@6a2e75f1f954d87503702c408deea63216c0799d # v1.18.0
       - name: 올린 폴더를 done/으로 옮기기
