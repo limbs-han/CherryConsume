@@ -1,0 +1,112 @@
+schema_version: 2
+id: samsung-aap1786
+issuer: samsung
+name: 삼성 iD NOMAD 카드
+short_name: 삼성 iD NOMAD
+search_names: [iD NOMAD, 노마드 카드, 아이디 노마드]
+kind: credit
+product_codes: [AAP1786]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 47000}
+  - {scope: global, brand: mastercard, amount: 49000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1786', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpykgaA2lVM8pemgAZOa%2Fjw%3D&sn=1', fetched_at: 2026-10-10}
+  - {id: brand, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpykgaA2lVM8pemgAZOa%2Fjw%3D&sn=2', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2022-12-22
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불과 할부 이용금액은 할인과 적립을 하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인과 적립을 하지 않는다', '고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 적립하지 않는다']
+    limits:
+      - {key: digital, per: month, amount: 5000}
+      - {key: burger, per: month, amount: 10000}
+      - {key: movie, per: month, amount: 5000}
+    benefits:
+      - key: base-0-5
+        title: 국내 가맹점 0.5% 빅포인트 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 국내외 가맹점 2%/1%/0.5% 빅포인트 적립', 0.5% 그 외 가맹점]
+        target: {all: true}
+        reward: {type: points, program: samsung_bigpoint, rate: 0.5}
+      - key: overseas-2
+        title: 해외 2% 빅포인트 적립
+        source: manual
+        evidence: [2% 해외 해외 가맹점 및 해외 직접구매 이용건, 해외는 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 2}
+      - key: zone-1
+        title: 여행·쇼핑 영역 1% 빅포인트 적립
+        source: manual
+        evidence: ['항공 대한항공, 아시아나항공, 제주항공, 진에어, 티웨이항공', 여행 여행사, '온라인 쇼핑몰 쿠팡, 티몬, 위메프, SSG.COM, G마켓, 옥션, 11번가, 인터파크, 삼성카드 쇼핑', '할인점 이마트, 롯데마트, 홈플러스', '면세점 신라면세점, 신라인터넷면세점', '할인점은 온라인몰도 포함되며, 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스 등), 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          categories: [travel.agency]
+          merchants: [asiana_airlines, auction, coupang, eleven_st, emart, gmarket, homeplus, interpark, jeju_air, jin_air, korean_air, lotte_mart, samsung_card_shopping, shilla_dfs, shilla_dfs_online, ssg_com, tway_air]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        unmodeled: [할인점과 면세점의 임대매장과 쇼핑 외 결제는 1%가 아니다]
+      - key: zone-1-offline
+        title: 백화점·프리미엄 아울렛 1% 빅포인트 적립
+        source: manual
+        evidence: ['백화점 신세계/롯데/현대/갤러리아백화점, AK 플라자', '프리미엄 아울렛 신세계사이먼 프리미엄 아울렛, 현대프리미엄아울렛, 롯데프리미엄아울렛', '백화점, 프리미엄 아울렛은 오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [ak_plaza, galleria, hyundai_department, hyundai_premium_outlet, lotte_department, lotte_premium_outlet, shinsegae_department, shinsegae_premium_outlet]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        unmodeled: [임대매장과 상품권·주차장 같은 쇼핑 외 결제는 1%가 아니다]
+      - key: digital-50
+        title: 디지털콘텐츠·멤버십 50% 할인
+        source: manual
+        evidence: [디지털콘텐츠/멤버십 정기결제 시 50% 결제일할인, '디지털콘텐츠 넷플릭스, 유튜브 프리미엄, 디즈니+, 웨이브, 티빙, 왓챠, 멜론, FLO', 멤버십 네이버플러스 멤버십, '통합 월 할인한도 : 5,000원', 전월 이용금액 50만원 이상 시 제공, '디지털콘텐츠는 구글플레이, 앱스토어 등을 통한 결제건(인앱 결제) 제외']
+        target:
+          merchants: [disney_plus, flo, melon, naver_plus_membership, netflix, tving, watcha, wavve, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: digital}
+        tiers: {from: 500000}
+      - key: burger-30
+        title: 쉐이크쉑·써브웨이 30% 할인
+        source: manual
+        evidence: [쉐이크쉑/써브웨이 30% 결제일할인, '통합 월 할인한도 : 10,000원', 전월 이용금액 50만원 이상 시 제공, '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [shake_shack, subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: burger}
+        tiers: {from: 500000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: movie-5000
+        title: 영화 5,000원 할인
+        source: manual
+        evidence: ['영화 티켓 건별 12,000원 이상 결제 시 5,000원 결제일할인', '영화 CGV, 롯데시네마, 메가박스', '통합 월 할인한도 : 5,000원', 전월 이용금액 50만원 이상 시 제공, 오프라인 결제 및 공식 홈페이지/앱을 통한 결제건에 한함]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 12000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {shared: movie}
+        tiers: {from: 500000}
+        unmodeled: [영화 티켓 결제만 할인하고 매점 결제는 제외한다]
+    unmodeled: ['기프트 서비스(여행·여가·면세점 영역에서 건별 10만원 이상 결제 시 영역별 연 1회, 통합 연 3회 20,000원 결제일할인. 발급 2년차부터는 전년도 이용금액 100만원 이상)는 발급일 기준 연간 횟수와 전년도 누적 실적을 담을 수 없어 넣지 않았다', 골프장·골프연습장 1% 적립은 업종이 없어 담지 않았고 0.5%로 계산한다, 'Mastercard PLATINUM 서비스(공항 라운지, 발렛파킹, Dine with Mastercard 등)는 결제 할인이 아니라 담지 않았다', '할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 할인과 적립의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].benefits[zone-1]', question: 상품설명서는 2023.2판이고 1% 온라인 쇼핑몰에 티몬과 위메프가 있다. 두 곳은 영업을 멈춰 넣지 않았다. 상품 페이지 심의필은 2025-10-28이라 더 새 설명서가 있을 수 있다, assumed: 2023.2판 목록에서 티몬과 위메프를 뺌}
+notes: 2026-10-10 상품설명서(2023.2판, 심의필 2022-C1a-11419호)와 Mastercard PLATINUM 안내(2026)를 대조. 카드 출시 2022-12-22. 연회비 해외겸용 Mastercard 49,000원(기본 7,000+제휴 42,000), 국내전용 47,000원(기본 7,000+제휴 40,000). 적립 2%/1%/0.5%는 전월 실적과 한도 없이 주고 한 결제에 하나만 받는다. 디지털·쉐이크쉑·써브웨이·영화 할인은 전월 50만원 이상이고 할인 건은 적립하지 않는다. 할인 받은 이용금액도 실적에 들어간다. 발급월+1개월까지는 50만원 미만이어도 할인 제공. 대중교통과 택시는 실적에서 빠진다.
