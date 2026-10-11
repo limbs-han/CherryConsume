@@ -138,6 +138,11 @@ def onsite_rate_100(f):
     benefit(f)["reward"] = {"type": "onsite_discount", "rate": 100}
 
 
+def name_matches_other_alias(f):
+    # 앱은 공식 이름과 별칭을 함께 찾아 겹치면 카탈로그 순서에 따라 다른 가맹점에 맞는다
+    f["merchants.yaml"].append({"key": "sbux_reserve", "name": "스 벅", "category": "cafe", "aliases": ["리저브"]})
+
+
 CASES = [
     (set_tiers, R + "tiers"),
     (table_key_not_in_tiers, R + "limits[integrated].amount: 구간표 키 [400000]"),
@@ -165,6 +170,7 @@ CASES = [
     (id_differs_from_file, ": id: 파일 이름"),
     (issuer_missing, ": issuer: issuers/shinhan.yaml이 없다"),
     (merchant_unknown_category, "merchants.yaml: [starbucks].category"),
+    (name_matches_other_alias, "merchants.yaml: [sbux_reserve].aliases: 별칭 스 벅가 starbucks와 겹친다"),
     (billing_cycle_basis, R + "spend.basis"),
     (per_liter_without_price, R + "benefits[cafe-10].reward.per_liter"),
     (waived_table_starts_too_high, R + "limits[integrated].amount: 구간표의 가장 작은 키 300000가 적용 첫 구간 0"),

@@ -44,7 +44,7 @@ def _check_common(cat: Catalog) -> list[Problem]:
     for m in cat.merchants.values():
         if m.category not in cat.categories:
             out.append(Problem("error", "merchants.yaml", f"[{m.key}].category", f"업종 {m.category}가 없다"))
-        for alias in m.aliases:
+        for alias in [m.name, *m.aliases]:
             norm = alias.replace(" ", "").lower()
             if norm in seen and seen[norm] != m.key:
                 out.append(
