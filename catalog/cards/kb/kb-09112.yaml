@@ -1,0 +1,68 @@
+schema_version: 2
+id: kb-09112
+issuer: kb
+name: 삼성AI구독 KB국민카드
+short_name: KB 삼성AI구독
+kind: credit
+product_codes:
+  - '09112'
+status: on_sale
+annual_fees:
+  - {scope: global, amount: 20000}
+  - {scope: global, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09112', fetched_at: '2026-10-11', review_no: 제2024-C1a-09463호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.water]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - key: samsung-ai
+        per: month
+        amount: {0: 5000, 300000: 10000, 700000: 12000, 1000000: 14000}
+    benefits:
+      - key: samsung-ai-autopay
+        title: 삼성AI구독 자동납부 월 1만~1만4천원 청구할인
+        source: page
+        evidence: [삼성 AI구독 자동납부 할인 | 1만원 | 1만2천원 | 1만4천원, 할인금액보다 구독 자동납부 금액이 적을 경우 결제금액 까지만 할인이 적용됩니다., 삼성AI구독 자동납부 결제 건이 여러 건인 경우 합산하여 월 할인 금액 내에서 할인됩니다.]
+        target:
+          merchants: [samsung_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {shared: samsung-ai}
+        tiers: {from: 300000}
+      - key: samsung-ai-welcome
+        title: 실적 유예기간 삼성AI구독 자동납부 월 5천원 청구할인
+        source: page
+        evidence: [최초 카드 사용등록일(KB Pay등 간편결제 등록 포함)로부터 다음달 말일(실적 유예기간)까지「삼성AI구독 KB국민카드」전월 이용실적 30만원 미만 시에도 월 할인한도 5천원까지 할인이 제공됩니다.]
+        target:
+          merchants: [samsung_subscription]
+        when:
+          - billing: [autopay]
+          - {fact: first_personal_issue}
+          - card_month: {min: 0, max: 1}
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {shared: samsung-ai}
+        tiers: {to: 0}
+    unmodeled: [삼성전자 AI구독 클럽 자동납부만 대상이다, '정부지원금과 무승인전표(공항버스, 자판기, 터널통행료, 항공기내 이용)는 실적에서 빠진다', 'PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 공통 가맹점 삼성전자 구독(samsung_subscription)을 쓴다. 실적 유예기간 한도가 1구간보다 낮은 5천원이라 0 구간에만 붙는 별도 혜택으로 두었다.
