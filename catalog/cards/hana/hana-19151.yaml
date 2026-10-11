@@ -1,0 +1,129 @@
+schema_version: 2
+id: hana-19151
+issuer: hana
+name: MOVING카드 PLAY모드
+short_name: 하나 MOVING PLAY
+search_names: [MOVING카드 PLAY, 무빙카드 플레이]
+kind: credit
+product_codes:
+  - '19151'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19151', fetched_at: 2026-10-10}
+checked_at: 2026-10-10
+revisions:
+  - effective_from: 2026-07-01
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+    options:
+      - key: mode
+        title: MOVING 모드
+        choices:
+          - {key: play, title: PLAY 모드}
+          - {key: other, title: 하나Pay에서 바꾼 다른 모드}
+        default: play
+        change: immediate
+        unsupported: [other]
+    benefits:
+      - key: coffee-30
+        title: 커피 30% 적립
+        source: page
+        evidence: ['커피 | 스타벅스, 커피빈, 이디야, 투썸플레이스,메가MGC커피, 컴포즈커피 | 30% | 60% | 1만 하나머니', '커피 : 오프라인 매장 결제, 공식앱 또는 공식 홈페이지를 통한 주문 및 결제에 한하여 서비스 제공되며, 별개의 배달앱 혹은 식당 예약앱을 통한 결제는 서비스 제외됨.', '(지난 달 실적 조건 50만원 이상, 일 실적 조건 1원 이상 , 월 적립 한도 1만 하나머니)']
+        target:
+          merchants: [coffee_bean, compose_coffee, ediya, mega_coffee, starbucks, twosome]
+        when:
+          - option:
+              mode: [play]
+        reward: {type: points, program: hana_money, rate: 30, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: convenience-10
+        title: 편의점 10% 적립
+        source: page
+        evidence: ['편의점 | GS25, CU, 이마트24 , 세븐일레븐 | 10% | 20% | 1만 하나머니', '편의점 : 오프라인 결제 건에 한하여 서비스 제공됨']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+          - option:
+              mode: [play]
+        reward: {type: points, program: hana_money, rate: 10, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: online-shop-10
+        title: 온라인 쇼핑 10% 적립
+        source: page
+        evidence: ['온라인쇼핑 | 쿠팡, 네이버플러스스토어, SSG.COM, 컬리, G마켓, 옥션, 11번가 | 10% | 1만 하나머니', '온라인 쇼핑 : 공식 홈페이지(온라인/모바일앱)을 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건은 서비스에서 제외됨']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, naver_plus_store, ssg_com]
+        when:
+          - {channel: online}
+          - option:
+              mode: [play]
+        reward: {type: points, program: hana_money, rate: 10, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: delivery-10
+        title: 딜리버리 10% 적립
+        source: page
+        evidence: ['딜리버리 | 쿠팡이츠, 배달의민족, 요기요 | 10% | 1만 하나머니', '딜리버리 : 공식 홈페이지(온라인/모바일 앱)을 통한 결제 건에 한하여 서비스가 제공되며, 음식점 직접 결제 건은 서비스에서 제외됨']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+          - option:
+              mode: [play]
+        reward: {type: points, program: hana_money, rate: 10, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: fashion-10
+        title: 트렌디패션 10% 적립
+        source: page
+        evidence: ['트렌디패션 | 무신사, W컨셉, SSF SHOP, 29CM, 지그재그 | 10% | 1만 하나머니', '트렌디패션 : 공식 홈페이지(온라인/모바일 앱)을 통한 결제 건에 한하여 서비스가 제공']
+        target:
+          merchants: [musinsa, twentynine_cm, wconcept, zigzag]
+        when:
+          - {channel: online}
+          - option:
+              mode: [play]
+        reward: {type: points, program: hana_money, rate: 10, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        notes: SSF SHOP은 가맹점 키가 없어 계산하지 않는다
+      - key: digital-30
+        title: 디지털 구독 30% 적립
+        source: page
+        evidence: ['디지털 구독 | 스트리밍 | 넷플릭스, 디즈니플러스, 유튜브 프리미엄, 웨이브, 티빙, 멜론,지니, FLO, 스포티파이 | 30% | 1만 하나머니 | 멤버십 | 쿠팡와우멤버십, 네이버플러스멤버십, 컬리멤버스, 배민클럽', '디지털 구독 : 월 자동납부 건만 서비스 제공되며, 포인트, 캐시, 머니 충전,콘텐츠 개별 결제, 간편결제 및 앱스토어를 통한 결제 건(인앱결제)은 서비스 제외됨']
+        target:
+          merchants: [baemin_club, coupang_wow, disney_plus, flo, genie, kurly_members, melon, naver_plus_membership, netflix, spotify, tving, wavve, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+          - payment_not: [coupay, eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+          - option:
+              mode: [play]
+        reward: {type: points, program: hana_money, rate: 30, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        notes: 스트리밍과 멤버십이 한 영역이라 월 한도 1만 하나머니를 함께 쓰는 것으로 담았다
+    unmodeled: [커피와 편의점은 3일 연속 1원 이상 이용하면 기본 적립률의 2배를 준다. 연속 이용일 조건을 계산하지 못해 기본 적립률만 계산한다, 가맹점 정보가 결제대행업체나 간편결제 가맹점으로 찍히면 영역 적립에서 빠진다, 무이자할부 결제는 적립하지 않는다. 부분 무이자할부 전체 금액도 같다, 가족카드 전월·일 이용금액과 월 적립한도는 본인카드와 합산된다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 커피와 편의점 3일 연속 이용 2배 적립을 계산하려면 연속 이용일 조건이 필요하다. 지금은 기본 적립률만 계산해 혜택을 적게 보여 준다, assumed: 기본 적립률만}
+  - {path: 'revisions[0].benefits[5].limits', question: 표에서 스트리밍과 멤버십이 월 한도 1만 하나머니 칸을 함께 쓰는지 따로 쓰는지 원문 글로는 구분되지 않는다, assumed: 둘이 함께 1만}
+notes: MOVING카드의 PLAY 모드. GLOBAL 모드 hana-19153처럼 3일 연속 2배는 빼고 기본 적립률만 담는다. 카드 출시 2026-07-01. 연회비 국내전용·국내외겸용(Mastercard) 20,000원. 모든 적립은 지난달 실적 50만원 이상. 최초 사용등록일부터 다음달 말일까지 50만원 이상 기준. PLAY 모드로 적립 받은 매출 전체는 실적에서 빠진다. 적립 영역이 겹치면 큰 서비스 하나만 준다. 하나머니 소수점 이하 반올림. 2026-10-10 상품 페이지 원문으로 작성.
