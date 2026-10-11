@@ -1,0 +1,82 @@
+schema_version: 2
+id: lotte-p13949-a13949
+issuer: lotte
+name: LOCA LIKIT Play
+kind: credit
+product_codes: [P13949-A13949]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: amex, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13949-A13949', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트 충전은 할인에서 빠진다]
+    limits:
+      - {key: integrated, per: month, amount: 13000}
+    benefits:
+      - key: fuel-60
+        title: SK에너지·S-OIL·GS칼텍스·현대오일뱅크 60% 결제일 할인
+        source: page
+        evidence: ['SK에너지, S-OIL, GS칼텍스, 현대오일뱅크 60% 결제일 할인', LPG 충전소 이용금액은 혜택이 제공되지 않습니다., 지난달 1일~말일까지 LOCA LIKIT Play 카드로 40만원 이상 이용 시 혜택이 제공됩니다., 할인한도는 모든 혜택 통합 월 1만 3천원 한도 내에서 제공합니다.]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: billing_discount, rate: 60}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: movie-60
+        title: 롯데시네마·CGV·메가박스 60% 결제일 할인
+        source: page
+        evidence: ['롯데시네마, CGV, 메가박스 60% 결제일 할인', '현장 결제, 공식 홈페이지 및 앱을 통한 예매 시 할인 혜택이 제공되며, 기프티콘, 상품권 구매 등 영화 예매 이외의 건은 혜택이 제공되지 않습니다.', 지난달 1일~말일까지 LOCA LIKIT Play 카드로 40만원 이상 이용 시 혜택이 제공됩니다., 할인한도는 모든 혜택 통합 월 1만 3천원 한도 내에서 제공합니다.]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        reward: {type: billing_discount, rate: 60}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: streaming-60
+        title: 넷플릭스·왓챠·유튜브·멜론·지니 정기결제 60% 결제일 할인
+        source: page
+        evidence: ['넷플릭스, 왓챠, 유튜브, 멜론, 지니 60% 결제일 할인', '공식 홈페이지 및 앱을 통해 직접 신청한 정기결제(자동납부) 이용 건만 혜택이 제공되며, 1회성 일반구매 결제 및 통신요금 내 합산 청구, 앱마켓(구글플레이·앱스토어 등) 결제와 같이 가맹점 구분이 불가한 경우에는 혜택이 제공되지 않습니다.', 지난달 1일~말일까지 LOCA LIKIT Play 카드로 40만원 이상 이용 시 혜택이 제공됩니다., 할인한도는 모든 혜택 통합 월 1만 3천원 한도 내에서 제공합니다.]
+        target:
+          merchants: [genie, melon, netflix, watcha, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 60}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: membership-60
+        title: 쿠팡 로켓와우·네이버플러스 멤버십 60% 결제일 할인
+        source: page
+        evidence: ['쿠팡 로켓와우, 네이버플러스 멤버십 60% 결제일 할인', 지난달 1일~말일까지 LOCA LIKIT Play 카드로 40만원 이상 이용 시 혜택이 제공됩니다., 할인한도는 모든 혜택 통합 월 1만 3천원 한도 내에서 제공합니다.]
+        target:
+          merchants: [coupang_wow, naver_plus_membership]
+        reward: {type: billing_discount, rate: 60}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+    unmodeled: [주유는 LPG 충전소 이용금액을 할인하지 않는다. 영화는 예매만 대상이고 기프티콘·상품권 구매는 빠진다, 가족카드 이용금액과 할인한도가 본인카드와 합산된다, 해외 이용금액은 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', LOCA LIKIT Play 카드가 아닌 롯데카드 이용금액은 실적에 넣지 않는다, 롯데카드의 다른 결제일 할인 혜택과 겹치면 할인이 큰 혜택 하나만 준다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2021-09-15이다, assumed: '2026-10-11'}
+  - {path: sources, question: 상품설명서 PDF 주소를 상품 페이지에서 찾지 못해 상품 페이지만 근거로 했다}
+notes: 2026-10-11 상품 페이지 대조. 출시일 2021-09-15. 지난달 40만원 이상이면 네 영역 60% 결제일 할인, 모든 혜택 통합 월 13,000원. 할인 혜택이 적용된 이용금액 전체가 실적에서 빠진다. 대중교통(버스, 지하철)은 시외·고속버스까지 실적에서 뺐다. 신규 발급 특례는 발급일부터 다음 달 말일까지 실적과 상관없이 혜택 제공이라 40만 구간으로 넣었다.
