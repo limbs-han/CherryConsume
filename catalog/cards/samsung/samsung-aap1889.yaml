@@ -1,0 +1,172 @@
+schema_version: 2
+id: samsung-aap1889
+issuer: samsung
+name: G마켓 삼성카드
+short_name: G마켓 삼성
+search_names: [G마켓 삼성카드, G마켓카드, 지마켓 삼성카드]
+kind: credit
+product_codes: [AAP1889]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1889', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtubVCogyHcNF1iR0L6oq9vw%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2025-08-28'
+    source: manual
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 적립하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 적립하지 않는다', 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 적립하지 않는다]
+    limits:
+      - key: daily-3
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - key: shop-3
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+    benefits:
+      - key: gmarket-5
+        title: G마켓·옥션 5% 빅포인트 적립
+        source: manual
+        evidence: [G마켓/옥션 5% 빅포인트 적립, '전월 이용금액대별 통합 월 적립한도 40만원 이상 20,000P, 80만원 이상 40,000P', 'G마켓, 옥션 공식 홈페이지/앱을 통한 결제건에 한함']
+        target:
+          merchants: [auction, gmarket]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 5}
+        limits:
+          - per: month
+            amount: {400000: 20000, 800000: 40000}
+        tiers: {from: 400000}
+      - key: convenience-3
+        title: 편의점 3% 빅포인트 적립
+        source: manual
+        evidence: [편의점/배달앱/대중교통/택시/주유 3% 빅포인트 적립, '편의점 CU, GS25, 세븐일레븐, 이마트24', '전월 이용금액대별 통합 월 적립한도 40만원 이상 5,000P, 80만원 이상 10,000P', '편의점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: samsung_bigpoint, rate: 3}
+        limits:
+          - {shared: daily-3}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 적립하지 않는다]
+      - key: delivery-3
+        title: 배달앱 3% 빅포인트 적립
+        source: manual
+        evidence: ['배달앱 배달의민족, 쿠팡이츠, 요기요', '배달앱은 공식 홈페이지/앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 3}
+        limits:
+          - {shared: daily-3}
+        tiers: {from: 400000}
+      - key: transit-3
+        title: 버스·지하철 3% 빅포인트 적립
+        source: manual
+        evidence: ['대중교통 버스, 지하철', '대중교통은 오프라인 결제건에 한하며, 시외/고속버스는 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: samsung_bigpoint, rate: 3}
+        limits:
+          - {shared: daily-3}
+        tiers: {from: 400000}
+      - key: taxi-fuel-3
+        title: 택시·주유 3% 빅포인트 적립
+        source: manual
+        evidence: [택시 택시, '주유 SK에너지, GS칼텍스, HD현대오일뱅크, S-OIL', 주유는 LPG충전소 제외]
+        target:
+          categories: [taxi]
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 3}
+        limits:
+          - {shared: daily-3}
+        tiers: {from: 400000}
+        unmodeled: [LPG 충전소는 적립하지 않는다]
+      - key: shop-3
+        title: 백화점·할인점·아울렛·면세점·SPA·의료 3% 빅포인트 적립
+        source: manual
+        evidence: [백화점/할인점/프리미엄 아울렛/면세점/SPA 패션/의료/학원 3% 빅포인트 적립, '백화점 신세계/롯데/현대/갤러리아백화점, AK플라자', '할인점 이마트, 트레이더스 홀세일 클럽, 롯데마트, 농협 하나로마트', '프리미엄아울렛 신세계사이먼 프리미엄 아울렛, 현대프리미엄아울렛, 롯데프리미엄아울렛', 면세점 신라/롯데/신세계/동화/HDC신라/JDC(제주)/JTO(제주)면세점, 'SPA 패션 유니클로, 자라, H&M, 8SECONDS', '의료 병/의원, 약국', '전월 이용금액대별 통합 월 적립한도 40만원 이상 5,000P, 80만원 이상 10,000P', '의료는 오프라인 결제건에 한하며, 요양병원, 보건소, 동물병원은 제외']
+        target:
+          categories: [hospital, pharmacy]
+          merchants: [ak_plaza, eight_seconds, emart, galleria, hm, hyundai_department, hyundai_premium_outlet, lotte_department, lotte_dfs, lotte_mart, lotte_premium_outlet, nh_hanaro_mart, shilla_dfs, shinsegae_department, shinsegae_dfs, shinsegae_premium_outlet, shinsegae_simon, traders, uniqlo, zara]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 3}
+        limits:
+          - {shared: shop-3}
+        tiers: {from: 400000}
+        unmodeled: ['임대매장, 상품권·주차장 같은 쇼핑 외 결제, 할인점 안 기업형 슈퍼마켓은 적립하지 않는다', 요양병원과 보건소는 적립하지 않는다]
+      - key: dfs-online-3
+        title: 인터넷면세점 3% 빅포인트 적립
+        source: manual
+        evidence: ['면세점은 국내 오프라인 매장 및 공식 홈페이지/앱(내국인 전용)을 통한 결제건에 한하며, 임대매장 및 해외 오프라인 매장은 제외']
+        target:
+          merchants: [lotte_dfs_online, shilla_dfs_online, shinsegae_dfs_online]
+        when:
+          - {channel: online}
+        reward: {type: points, program: samsung_bigpoint, rate: 3}
+        limits:
+          - {shared: shop-3}
+        tiers: {from: 400000}
+      - key: digital-20
+        title: 디지털콘텐츠 정기결제 20% 빅포인트 적립
+        source: manual
+        evidence: [디지털콘텐츠 정기결제 시 20% 빅포인트 적립, '디지털콘텐츠 넷플릭스, 디즈니+, 유튜브, 티빙, 멜론, FLO', '통합 월 적립한도 : 3,000 P', 전월 이용금액 40만원 이상 시 제공, '구글플레이, 앱스토어 등을 통한 결제건(인앱 결제) 제외', 유튜브는 유튜브 프리미엄 결제건에 한함]
+        target:
+          merchants: [disney_plus, flo, melon, netflix, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: points, program: samsung_bigpoint, rate: 20}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 400000}
+      - key: mobile-5
+        title: 이동통신 정기결제 5% 빅포인트 적립
+        source: manual
+        evidence: [이동통신 정기결제 시 5% 빅포인트 적립, '이동통신 SKT/KT/LG U+/알뜰폰(SK텔링크, KT스카이라이프, KT M모바일, 헬로모바일, 미디어로그) 이동통신요금', '통합 월 적립한도 : 3,000P', 전월 이용금액 40만원 이상 시 제공]
+        target:
+          merchants: [hello_mobile, kt, kt_m_mobile, kt_skylife, lg_uplus, media_log, sk_telink, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: samsung_bigpoint, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 400000}
+        unmodeled: ['알뜰폰 결합상품요금, 단말기 구매금액, 대리점 카드 결제는 적립하지 않는다', KT·LG U+·KT스카이라이프는 이동통신요금만 적립하고 인터넷·TV 요금은 제외한다]
+      - key: overseas-2
+        title: 해외 가맹점 2% 빅포인트 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 해외 가맹점 2% 빅포인트 적립', 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 2}
+        unmodeled: [해외 온라인 거래라도 국내 가맹점으로 승인되는 결제(국내 PG 등)는 적립하지 않는다]
+    unmodeled: ['3% 영역의 학원(입시·보습·외국어·예체능계, 오프라인)은 학원 업종이 더 넓어 담지 않았다. 동화·HDC신라·JDC·JTO 면세점은 가맹점이 없어 담지 않았다', 적립은 매출전표 접수 순으로 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일 2025-08-28과 상품설명서 2025.9판을 시행일로 두었다, assumed: '2025-08-28'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 이 카드는 대중교통과 택시를 실적에서 빼지 않는다. 삼성카드는 사회보험료를 공과금으로 분류해 insurance.social도 뺐다, assumed: 'insurance.social 포함, 교통 제외 없음'}
+  - {path: 'revisions[0].benefits[mobile-5].when', question: 이동통신 정기결제를 자동납부로 보았다, assumed: 'billing: autopay'}
+notes: 2026-10-10 상품설명서(2025.9판, 여신금융협회 심의필 제2025-C1a-12727호)와 상품 페이지 대조. 연회비 국내전용과 해외겸용 VISA 모두 15,000원(기본 7,000+제휴 8,000). 기본 적립은 없다. 발급월+1개월까지 40만 구간 혜택을 준다. 실적 제외는 무이자할부, 4대보험, 국세·지방세·공과금, 아파트관리비, 부동산 임대료, 유치원·초중고 납입금, 대학 등록금, 기프트·선불카드, 상품권이다. 적립 받은 결제도 실적에 넣는다.
