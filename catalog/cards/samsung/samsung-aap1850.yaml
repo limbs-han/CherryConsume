@@ -1,0 +1,126 @@
+schema_version: 2
+id: samsung-aap1850
+issuer: samsung
+name: 알라딘 만권당 삼성카드
+short_name: 알라딘 만권당
+search_names: [만권당 카드, 알라딘 만권당, 알라딘카드]
+kind: credit
+product_codes: [AAP1850]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1850', fetched_at: 2026-10-10}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtqQJCQb7LeFg657QYBTpVrE%3D&sn=1', fetched_at: 2026-10-10}
+checked_at: '2026-10-10'
+revisions:
+  - effective_from: '2024-12-03'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - key: coffee-bakery
+        per: month
+        amount: {300000: 3000, 600000: 5000}
+    benefits:
+      - key: aladin-15
+        title: 알라딘 15% 할인
+        source: manual
+        evidence: [알라딘 15% 결제일할인, '전월 이용금액대별 통합 월 할인한도 30만원 이상 10,000원, 60만원 이상 20,000원', '오프라인 및 공식 홈페이지/앱을 통한 결제건에 한하며, 캐시 충전건은 제외', '구글플레이, 앱스토어 등을 통한 결제건(인앱 결제) 제외']
+        target:
+          merchants: [aladin]
+        when:
+          - billing_not: [in_app, subscription]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - per: month
+            amount: {300000: 10000, 600000: 20000}
+        tiers: {from: 300000}
+        unmodeled: [알라딘 캐시 충전은 할인하지 않는다]
+      - key: mangwondang-50
+        title: 알라딘 만권당 월정액 50% 할인
+        source: manual
+        evidence: [알라딘 만권당 월정액 정기결제 서비스 50% 결제일할인, '월 할인한도 : 6,150원', 전월 이용금액 30만원 이상 시 제공, '구글플레이, 앱스토어 등을 통한 결제건(인앱 결제) 제외']
+        target:
+          merchants: [aladin]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 6150}
+        tiers: {from: 300000}
+        unmodeled: [알라딘 정기결제 중 만권당 월정액만 할인한다]
+      - key: online-5
+        title: 온라인쇼핑몰 5% 할인
+        source: manual
+        evidence: [온라인쇼핑몰 5% 결제일할인, '온라인쇼핑몰 쿠팡, 네이버플러스 스토어, SSG.COM, 롯데ON, G마켓, 옥션, 11번가, 삼성카드 쇼핑', '전월 이용금액대별 통합 월 할인한도 30만원 이상 3,000원, 60만원 이상 5,000원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, lotte_on, naver_plus_store, samsung_card_shopping, ssg_com]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 3000, 600000: 5000}
+        tiers: {from: 300000}
+      - key: study-5
+        title: 학습지 5% 할인
+        source: manual
+        evidence: [학원/학습지/인터넷강의 5% 결제일할인, '학습지 웅진씽크빅, 교원, 대교, 한솔교육', '전월 이용금액대별 통합 월 할인한도 30만원 이상 3,000원, 60만원 이상 5,000원']
+        target:
+          merchants: [daekyo, hansol_education, kyowon, woongjin_thinkbig]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 3000, 600000: 5000}
+        tiers: {from: 300000}
+      - key: coffee-bakery-10
+        title: 커피전문점·제과점 10% 할인
+        source: manual
+        evidence: [커피전문점/제과점 10% 결제일할인, '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '제과점 파리바게뜨, 뚜레쥬르, 던킨', '전월 이용금액대별 통합 월 할인한도 30만원 이상 3,000원, 60만원 이상 5,000원', '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [blue_bottle, coffee_bean, dunkin, ediya, paris_baguette, tous_les_jours, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: coffee-bakery}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: starbucks-10
+        title: 스타벅스 10% 할인
+        source: manual
+        evidence: [커피전문점/제과점 10% 결제일할인, '단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: coffee-bakery}
+        tiers: {from: 300000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 백화점·할인점·쇼핑몰 임대매장은 제외한다]
+      - key: overseas-1
+        title: 해외 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 1% 결제일할인', 해외 가맹점 및 해외 직접구매 이용건, 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+    unmodeled: ['교육 5%의 학원(입시·보습·외국어·예체능계, 오프라인)은 학원 업종이 더 넓어 담지 않았다. 인터넷강의(이투스, 메가스터디교육, 대성마이맥, 천재교과서 밀크T)는 가맹점이 없어 담지 않았다. 학습지와 같은 월 할인한도를 쓴다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2024-12-03이고 상품설명서는 2025.2판이다. 출시일을 시행일로 두었다, assumed: '2024-12-03'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통은 후불교통기능·모바일교통기능 결제건이다. 새 방식대로 시내버스와 지하철을 뺐다. 이 카드는 무이자할부와 할인 받은 결제를 실적에서 빼지 않는다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits[mangwondang-50].when', question: 알라딘의 정기결제를 만권당 월정액으로 보았다. 만권당 정기결제는 알라딘 15%를 받지 않는 것으로 두었다, assumed: 'billing: subscription'}
+notes: 2026-10-10 상품설명서(2025.2판, 여신금융협회 심의필 제2024-C1a-15164호)와 상품 페이지 대조. 연회비 국내전용과 해외겸용 Mastercard 모두 15,000원(기본 7,000+제휴 8,000). 발급월+1개월까지 30만 구간 혜택을 준다. 영역마다 월 할인한도가 따로다. 실적 제외는 4대보험, 국세·지방세·공과금, 아파트관리비, 부동산 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통(후불교통·모바일교통), 택시, 기프트·선불카드, 상품권이다.
