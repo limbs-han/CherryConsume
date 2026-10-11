@@ -1,0 +1,48 @@
+schema_version: 2
+id: kb-09137
+issuer: kb
+name: KB NEED Global 카드
+short_name: KB NEED Global
+kind: credit
+product_codes:
+  - '09137'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+  - {scope: domestic, brand: local, form: mobile, amount: 24000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 24000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09137', fetched_at: '2026-10-11', review_no: 제2026-C1a-05678호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-04-30'
+    source: page
+    tiers: [0]
+    spend:
+      basis: prev_calendar_month
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+    benefits:
+      - key: overseas-3-5
+        title: 해외 가맹점 3.5% 청구할인
+        source: page
+        evidence: [해외 가맹점 3.5% 청구할인, 전월 이용실적 조건 및 할인한도 없음, 국내외겸용 카드에 한하여 제공, 해외 온라인 사이트에서 국내 가맹점(결제대행업체(PG))으로 결제되는 경우 국내 할인으로 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 3.5}
+      - key: domestic-0-5
+        title: 국내 가맹점 0.5% 청구할인
+        source: page
+        evidence: [국내 가맹점 0.5% 청구할인, 전월 이용실적 조건 및 할인한도 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+    unmodeled: [해외 결제는 국내외겸용 카드만 된다, 정부지원금(보육료·유치원보조비·바우처) 결제와 신차구매 청구할인 전표는 할인에서 빠진다, RF 후불교통요금 할인 제외를 시내버스·지하철 업종 제외로 옮겨 승인된 버스·지하철 결제도 할인에서 빠진다]
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 2026.04.30 출시라 출시일을 첫 개정 시작일로 둔다. 전월 실적 조건과 할인 한도가 없다.
