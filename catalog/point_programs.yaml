@@ -16,3 +16,11 @@
 - {key: ok_cashbag, name: OK캐쉬백, won_per_point: 1}
 - {key: baemin_point, name: 배민포인트, won_per_point: 1}
 - {key: eleven_pay_point, name: 11PAY 포인트, won_per_point: 1}
+- {key: costco_reward_point, name: 코스트코 리워드 포인트, won_per_point: 1}
+- {key: cj_olive_point, name: 올리브 포인트, won_per_point: 1}
+- {key: ssg_money, name: SSG MONEY, won_per_point: 1}
+- {key: amex_mr, name: American Express 멤버십 리워즈, won_per_point: 10}
+- {key: air_money, name: Air Money, won_per_point: 1}
+- {key: h_point, name: H.Point, won_per_point: 1}
+- {key: travel_wallet_point, name: 트래블월렛 트래블 포인트, won_per_point: 1}
+- {key: musinsa_money, name: 무신사머니, won_per_point: 1}

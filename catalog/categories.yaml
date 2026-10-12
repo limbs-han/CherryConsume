@@ -79,7 +79,10 @@
 - {code: annual_fee, name: 연회비}
 - {code: laundry, name: 세탁}
 - {code: pc_room, name: PC방}
-- {code: sports, name: 스포츠·레저}
+- code: sports
+  name: 스포츠·레저
+  children:
+    - {code: golf, name: 골프}
 - code: pet
   name: 반려동물
   children:
@@ -88,3 +91,12 @@
 - {code: pub, name: 주점·바}
 - {code: childcare, name: 어린이집}
 - {code: maternity_center, name: 산후조리원}
+- code: car
+  name: 자동차
+  children:
+    - {code: ev_charging, name: 전기차 충전}
+    - {code: parking, name: 주차장}
+    - {code: car_wash, name: 세차}
+    - {code: car_repair, name: 차량정비}
+    - {code: toll, name: 통행료}
+- {code: traditional_market, name: 전통시장}
