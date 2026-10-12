@@ -1,0 +1,42 @@
+card: kb-04293
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 KT 자동납부
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-automatic-discount: 7000}, counted: 0}
+  calc: 30만 구간 월 7,000원. 할인받은 결제는 실적 제외
+- name: 70만 경계 직전
+  prev_month_spend: 699999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-automatic-discount: 7000}}
+  calc: 699,999원은 30만 구간
+- name: 70만 구간
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-automatic-discount: 11000}}
+  calc: 70만 구간 11,000원
+- name: 30만 미만 유예 아님
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만원 미만 할인 없음
+- name: 신규 유예 3500원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {kt-automatic-discount: 3500}}
+  calc: 사용등록 다음 달 말일까지 월 3,500원

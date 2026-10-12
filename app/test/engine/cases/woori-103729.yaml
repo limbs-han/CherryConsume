@@ -1,0 +1,32 @@
+card: woori-103729
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {all-0-8: 400}, counted: 50000}
+  calc: 50,000 × 0.8% = 400
+- name: 40만 구간 네이버페이 온라인 2.8%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {all-0-8: 400, easypay-online-2: 1000}}
+  calc: 0.8% 400 + 2% 1,000
+- name: 40만 직전은 추가 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {all-0-8: 400}}
+  calc: 40만 미만
+- name: 40만 구간 추가 한도 1만원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1000000, category: online_shopping, channel: online, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {all-0-8: 8000, easypay-online-2: 10000}}
+  calc: 2% 20,000 중 1만원. 0.8% 8,000

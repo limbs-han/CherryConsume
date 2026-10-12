@@ -1,0 +1,65 @@
+card: kb-02065
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 이마트 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 3000}, counted: 60000}
+  calc: 60,000원 × 5% = 3,000원. 40만 구간 쇼핑·교육 한도 5,000원 안
+- name: 40만 경계 직전 399999
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만은 할인 없음
+- name: 쇼핑과 학습지가 통합 한도를 함께 쓴다
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 160000, merchant: gmarket, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, category: education.study_material}
+  expect:
+  - {payment: 0, benefits: {online-homeshopping-5: 8000}}
+  - {payment: 1, benefits: {study-material-5: 2000}}
+  calc: 80만 구간 한도 10,000원. G마켓 8,000원 뒤 학습지 5,000원 중 남은 2,000원
+- name: 네이버페이 결제는 쇼핑 할인 제외
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 각종 페이 이용금액은 쇼핑 할인 제외
+- name: 120만 구간 통신 자동납부 5%
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-autopay-5: 7000}}
+  calc: 200,000원 × 5% = 10,000원 중 120만 구간 자동납부 한도 7,000원
+- name: 아파트관리비 자동납부 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: apartment_fee, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {apartment-autopay-5: 2000}, counted: 40000}
+  calc: 40,000원 × 5% = 2,000원. 아파트관리비는 실적 제외 목록에 없다
+- name: 신규 유예 생애 최초 발급은 40만 구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: homeplus, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  calc: 10,000원 중 40만 구간 한도 5,000원
+- name: 교통요금은 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 교통요금은 실적에서 뺀다

@@ -1,0 +1,41 @@
+card: kb-02225
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 커피빈 3천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 6000, merchant: coffee_bean}
+  - {at: 2026-11-05T15:00, amount: 6000, merchant: coffee_bean}
+  expect:
+  - {payment: 0, benefits: {coffeebean-3000: 3000}}
+  - {payment: 1, benefits: {}}
+  calc: 건당 3천원. 같은 날 둘째 결제는 일 1회라 0원
+- name: 경계 직전 499999는 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 6000, merchant: coffee_bean}
+  expect:
+  - {payment: 0, benefits: {}, counted: 6000}
+  calc: 50만 미만은 혜택 없음
+- name: 커피빈 5천원 미만 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4999, merchant: coffee_bean}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 5천원 이상만
+- name: 생활 영역 편의점 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: convenience}
+  expect:
+  - {payment: 0, benefits: {life-5: 1000}, counted: 20000}
+  calc: 20,000 × 5% = 1,000
+- name: 생활 영역 50만 구간 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {life-5: 10000}}
+  calc: 15,000원 중 50만 구간 한도 1만원

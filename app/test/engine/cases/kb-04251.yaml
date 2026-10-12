@@ -1,0 +1,46 @@
+card: kb-04251
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 첫 해 KB손해보험 10%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 500000, merchant: kb_insurance}
+  expect:
+  - {payment: 0, benefits: {kb-insurance-10: 30000}, counted: 0}
+  calc: 50,000원 중 연간 한도 30,000원. 등록 첫 1년 실적 조건 없음
+- name: 1년 지난 뒤 보험 할인 없음
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2027-02-05T10:00, amount: 200000, merchant: kb_insurance}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 1년 뒤 3개월 조건은 담지 않아 0원
+- name: 30만 구간 패밀리레스토랑 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 50000, merchant: vips}
+  expect:
+  - {payment: 0, benefits: {family-restaurant-20: 10000}, counted: 0}
+  calc: 50,000 × 20% = 10,000
+- name: 경계 직전 299999 레스토랑 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T19:00, amount: 50000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만
+- name: 통신 자동납부 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay, category: telecom.mobile}
+  expect:
+  - {payment: 0, benefits: {telecom-3000: 3000}, counted: 0}
+  calc: 월 1회 3,000원
+- name: 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-60: 3000}, counted: 0}
+  calc: 92,900 / 1,858 = 50리터, 50 × 60 = 3,000

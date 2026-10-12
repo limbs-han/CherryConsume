@@ -1,0 +1,29 @@
+card: lotte-p13403-a13403
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 학원 오프라인 10만원 이상 5%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 300000, category: education.academy, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 99999, category: education.academy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {education-5pct: 15000}}
+  - {payment: 1, benefits: {}}
+  calc: 300,000 × 5% = 15,000. 99,999원은 10만원 미만
+- name: 월 한도 2만5천원
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 400000, category: education.study_material, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 200000, category: education.academy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {education-5pct: 20000}}
+  - {payment: 1, benefits: {education-5pct: 5000}}
+  calc: 400,000 × 5% = 20,000. 다음 10,000 중 남은 한도 5,000
+- name: 150만 직전이면 할인 없음
+  prev_month_spend: 1499999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 300000, category: education.academy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 1,499,999원은 0 구간

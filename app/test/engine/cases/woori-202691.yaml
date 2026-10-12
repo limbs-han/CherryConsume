@@ -1,0 +1,53 @@
+card: woori-202691
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: CGV 두 구간과 월 1회
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 9999, merchant: cgv}
+  - {at: 2026-11-05T19:00, amount: 10000, merchant: cgv}
+  expect:
+  - payment: 0
+    benefits: {cgv-2000: 2000}
+  - payment: 1
+    benefits: {}
+  calc: 9,999원은 5천원 이상 1만원 미만이라 2천원. 두 번째는 월 1회를 써서 0원
+- name: CGV 1만원 이상 4천원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 10000, merchant: cgv}
+  expect:
+  - payment: 0
+    benefits: {cgv-4000: 4000}
+  calc: 1만원 이상 4천원
+- name: 실적 직전 99999
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-04T19:00, amount: 10000, merchant: cgv}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 10만원에 1원 모자라 0원
+- name: 마트 3만원 이상 5% 최대 3천원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 29999, merchant: emart, channel: offline}
+  - {at: 2026-11-04T11:00, amount: 40000, merchant: homeplus, channel: offline}
+  - {at: 2026-11-05T11:00, amount: 100000, merchant: lotte_mart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {mart-5: 2000}
+  - payment: 2
+    benefits: {}
+  calc: 29,999원은 3만원 미만 0원. 40,000원 x 5% = 2,000원. 월 1회를 써서 세 번째는 0원
+- name: 마트 한도 3천원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {mart-5: 3000}
+  calc: 100,000원 x 5% = 5,000원이 월 3천원에 걸림

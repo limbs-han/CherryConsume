@@ -1,0 +1,44 @@
+card: kb-04494
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 경계 직전 399999
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 39000, merchant: boram_sangjo, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 39000}
+  calc: 0 구간
+- name: 40만 구간 상조 5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 39000, merchant: boram_sangjo, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {boram-autopay: 5000}, counted: 0}
+  calc: 월 한도 5,000원. 할인 받은 건은 실적 제외
+- name: 120만 구간 상조 1만1천원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 39000, merchant: boram_sangjo, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {boram-autopay: 11000}}
+  calc: 월 한도 11,000원
+- name: KB Pay G마켓 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 30000, merchant: gmarket, payment_method: kb_pay}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gmarket}
+  expect:
+  - {payment: 0, benefits: {kbpay-openmarket-10: 3000}}
+  - {payment: 1, benefits: {}}
+  calc: 30,000 × 10%. KB Pay가 아니면 없음
+- name: 신규 유예 상조 2천5백원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T09:00, amount: 39000, merchant: boram_sangjo, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {boram-autopay: 2500}}
+  calc: 유예기간 월 2,500원 한도

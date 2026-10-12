@@ -1,0 +1,61 @@
+card: kb-09531
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 커피 100원 20만 구간
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4500, category: cafe, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-100: 100}, counted: 4500}
+  calc: 3천원 이상 오프라인 커피 100원
+- name: 경계 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4500, category: cafe, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만 미만 혜택 없음
+- name: 커피 하루 1회와 최소금액
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4500, category: cafe, channel: offline}
+  - {at: 2026-11-05T15:00, amount: 4500, category: cafe, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 2999, category: cafe, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-100: 100}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {}}
+  calc: 같은 날 두 번째는 없음, 3천원 미만 없음
+- name: 편의점 200원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {convenience-200: 200}}
+  calc: 5천원 이상 200원
+- name: 구글플레이 200원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5500, merchant: google_play, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mobile-200: 200}}
+  calc: 5천원 이상 200원
+- name: 배민 500원과 타사 페이 제외
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: baemin, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {delivery-500: 500}}
+  - {payment: 1, benefits: {}}
+  calc: 1만원 이상 500원. 네이버페이는 제외
+- name: 후불교통 실적 제외, 철도 포함
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway}
+  - {at: 2026-11-06T10:00, amount: 30000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 30000}
+  calc: 버스·지하철은 실적 제외, 철도는 포함

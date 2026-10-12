@@ -1,0 +1,71 @@
+card: woori-500080
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 커피 특별 1.5% 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {special-coffee-earn: 300}
+  calc: 20,000원 x 1.5% = 300점
+- name: 실적 직전 299999 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만이라 적립 없음
+- name: 기본 0.3%와 간편결제 1.5% 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 30000, category: restaurant.general, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {basic-earn: 90, pay-additional-earn: 450}
+  calc: 30,000원 x 0.3% = 90점, 30,000원 x 1.5% = 450점
+- name: 50만 구간 월 한도 2만점
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 2000000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {special-coffee-earn: 20000}
+  calc: 2,000,000원 x 1.5% = 30,000점이 50만 구간 월 한도 2만점에 걸림
+- name: 이월드 캐시백 뒤 같은 달 에버랜드는 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: e_world}
+  - {at: 2026-11-15T10:00, amount: 40000, merchant: everland}
+  expect:
+  - payment: 0
+    benefits: {eworld-cashback-50: 20000, basic-earn: 120}
+  - payment: 1
+    benefits: {basic-earn: 120}
+  calc: 이월드 40,000원 x 50% = 20,000원. 통합 월 1회라 에버랜드는 할인 없음. 기본 0.3%는 따로 120점
+- name: 특별과 0.5% 영역 각 1건
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-05T11:00, amount: 10000, category: transit.subway}
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: kepco_ev}
+  - {at: 2026-11-05T13:00, amount: 20000, merchant: cgv}
+  - {at: 2026-11-05T14:00, amount: 100000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-05T15:00, amount: 100000, merchant: emart, channel: offline}
+  - {at: 2026-11-05T16:00, amount: 100000, merchant: coupang, channel: online}
+  - {at: 2026-11-05T17:00, amount: 100000, merchant: s_oil}
+  - {at: 2026-11-05T18:00, amount: 100000, category: restaurant.general, region: overseas}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: lotte_world}
+  expect:
+  - {payment: 0, benefits: {special-telecom-earn: 750}}
+  - {payment: 1, benefits: {special-transit-earn: 150}}
+  - {payment: 2, benefits: {special-ev-earn: 300}}
+  - {payment: 3, benefits: {special-movie-earn: 300}}
+  - {payment: 4, benefits: {half-department-earn: 500}}
+  - {payment: 5, benefits: {half-mart-earn: 500}}
+  - {payment: 6, benefits: {half-online-earn: 500}}
+  - {payment: 7, benefits: {half-fuel-earn: 500}}
+  - {payment: 8, benefits: {half-overseas-earn: 500}}
+  - {payment: 9, benefits: {amusement-park-50: 20000, basic-earn: 60}}
+  calc: 1.5%는 750, 150, 300, 300점. 0.5%는 각 500점. 롯데월드 현장할인 뒤 결제 20,000원은 정가 40,000원의 50%라 할인 20,000원과 기본 0.3% 60점. 합계 적립 3,620점은 월 1만점 안

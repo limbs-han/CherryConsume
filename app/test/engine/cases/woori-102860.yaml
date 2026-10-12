@@ -1,0 +1,74 @@
+card: woori-102860
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 기본 0.8%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {base-0-8: 400}, counted: 50000}
+  calc: 50,000 × 0.8% = 400
+- name: 30만 직전은 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 미만
+- name: 1만원 미만은 적립 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 1만원 미만 제외
+- name: 스타벅스 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {special-3-coffee: 600}}
+  calc: 20,000 × 3% = 600
+- name: 휴대전화 자동납부 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: hello_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {special-3-mobile: 1500}}
+  calc: 50,000 × 3% = 1,500
+- name: 지하철 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {special-3-transit: 300}}
+  calc: 10,000 × 3% = 300
+- name: CGV 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cgv}
+  expect:
+  - {payment: 0, benefits: {special-3-movie: 900}}
+  calc: 30,000 × 3% = 900
+- name: 이마트 오프라인 1%와 30만 구간 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1200000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-1-offline: 10000}}
+  calc: 12,000 중 월 1만점
+- name: 쿠팡 1%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-1-online: 1000}}
+  calc: 100,000 × 1% = 1,000
+- name: S-OIL 1%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: s_oil}
+  expect:
+  - {payment: 0, benefits: {special-1-fuel: 500}}
+  calc: 50,000 × 1% = 500

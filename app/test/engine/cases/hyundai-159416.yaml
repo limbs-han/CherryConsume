@@ -1,0 +1,40 @@
+card: hyundai-159416
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 이상 기본 0.5% 반올림
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 6517, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-05: 33}, counted: 6517}
+  calc: 가이드북 예시 6,517 x 0.5% = 32.58 반올림 33
+- name: 50만 직전은 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 50만 미만 기본·추가 혜택 제외
+- name: 이마트 5%, 월 5천 넘으면 미적립
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, merchant: emart}
+  - {at: 2026-11-06T10:00, amount: 40000, merchant: traders}
+  expect:
+  - {payment: 0, benefits: {emart-5: 4000}, counted: 80000}
+  - {payment: 1, benefits: {emart-5: 1000}, counted: 40000}
+  calc: 80,000 x 5% = 4,000. 남은 한도 1,000만 적립하고 나머지는 미적립
+- name: 온라인몰 하루 1회, 병원과 학원 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: coupang, channel: online}
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: gmarket, channel: online}
+  - {at: 2026-11-06T10:00, amount: 30000, category: hospital}
+  - {at: 2026-11-07T10:00, amount: 100000, category: education.academy}
+  expect:
+  - {payment: 0, benefits: {online-5: 1000}, counted: 20000}
+  - {payment: 1, benefits: {}, counted: 20000}
+  - {payment: 2, benefits: {medical-5: 1500}, counted: 30000}
+  - {payment: 3, benefits: {academy-5: 5000}, counted: 100000}
+  calc: 온라인몰 영역 하루 1회라 둘째 결제는 적립 없음. 30,000 x 5% = 1,500. 100,000 x 5% = 5,000

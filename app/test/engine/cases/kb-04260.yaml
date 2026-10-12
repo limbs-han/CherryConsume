@@ -1,0 +1,63 @@
+card: kb-04260
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 반려동물 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: pet.vet}
+  expect:
+  - {payment: 0, benefits: {pet-10: 10000}, counted: 0}
+  calc: 100,000원 × 10% = 10,000원. 할인받은 결제는 전액 실적 제외
+- name: 90만 구간 반려동물 한도 5만원
+  prev_month_spend: 900000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 600000, category: pet}
+  expect:
+  - {payment: 0, benefits: {pet-10: 50000}}
+  calc: 60,000원 중 90만 구간 월 한도 50,000원
+- name: 90만 경계 직전 899999
+  prev_month_spend: 899999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 600000, category: pet}
+  expect:
+  - {payment: 0, benefits: {pet-10: 30000}}
+  calc: 60만 구간 월 한도 30,000원
+- name: 30만 경계 직전 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: pet}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 30만원 미만은 할인 없음. 실적 100,000원
+- name: 60만 구간 대형마트 한도 1만원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-5: 10000}, counted: 0}
+  calc: 15,000원 중 2구간 월 한도 10,000원
+- name: 30만 구간 G마켓 온라인 한도 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: gmarket, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-5: 5000}, counted: 0}
+  calc: 10,000원 중 1구간 월 한도 5,000원
+- name: 신규 유예 실적 없어도 1구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: pet}
+  expect:
+  - {payment: 0, benefits: {pet-10: 10000}}
+  calc: 사용등록 다음 달 말일까지 1구간 서비스
+- name: 무이자할부 할인과 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: pet, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무이자할부는 할인 제외이고 실적도 제외

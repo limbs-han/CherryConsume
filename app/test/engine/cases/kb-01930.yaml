@@ -1,0 +1,74 @@
+card: kb-01930
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: education.academy}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 0 구간
+- name: 30만 구간 학원 건당 10만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, category: education.academy}
+  expect:
+  - {payment: 0, benefits: {academy-7: 5000}}
+  calc: 100,000 × 7% = 7,000. 월 한도 5,000
+- name: 50만 구간 학원 7천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: education.academy}
+  expect:
+  - {payment: 0, benefits: {academy-7: 7000}}
+  calc: 100,000 × 7%
+- name: 교보문고 매장 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, merchant: kyobo_book, channel: offline}
+  expect:
+  - {payment: 0, benefits: {book-5: 2000}}
+  calc: 40,000 × 5%
+- name: 동물병원 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, category: pet.vet}
+  - {at: 2026-11-04T11:00, amount: 29999, category: pet.vet}
+  expect:
+  - {payment: 0, benefits: {pet-5: 3000}}
+  - {payment: 1, benefits: {}}
+  calc: 60,000 × 5%. 3만원 미만은 없음
+- name: 약국은 50만 구간부터
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: pharmacy}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 구간 약국 한도 없음
+- name: 50만 구간 약국
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: pharmacy}
+  expect:
+  - {payment: 0, benefits: {pharmacy-5: 2000}}
+  calc: 40,000 × 5%
+- name: 지하철 월 1,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1500}, counted: 0}
+  calc: 40,000 × 5% = 2,000. 월 한도 1,500. 지하철은 실적 제외
+- name: 신규 유예 학원만 1구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: education.academy}
+  - {at: 2026-11-04T11:00, amount: 20000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {academy-7: 3500}}
+  - {payment: 1, benefits: {}}
+  calc: 50,000 × 7%. 교통은 유예 없음

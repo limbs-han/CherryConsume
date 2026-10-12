@@ -1,0 +1,52 @@
+card: kb-09321
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 지하철 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 1550, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-10: 155}, counted: 0}
+  calc: 1,550원의 10% 155원. 버스·지하철은 실적 제외
+- name: 30만 경계 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 5000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}, counted: 5000}
+  calc: 30만원 미만 할인 없음
+- name: 커피 KB Pay 5%+5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 10000, category: cafe, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {living-5: 500, kbpay-living-5: 500}, counted: 0}
+  calc: 10,000원 5% 500원과 KB Pay 추가 5% 500원
+- name: 이동통신 자동납부 1만원 이상 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 50000, category: telecom.mobile, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T09:00, amount: 9999, category: telecom.mobile, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-telecom-5: 2500}}
+  - {payment: 1, benefits: {}}
+  calc: 50,000원 5% 2,500원. 9,999원은 1만원 미만
+- name: 생활서비스 월 5천원 함께
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 80000, category: pharmacy}
+  - {at: 2026-11-06T09:00, amount: 50000, category: telecom.mobile, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-5: 4000}}
+  - {payment: 1, benefits: {living-telecom-5: 1000}}
+  calc: 약국 4,000원 뒤 남은 생활서비스 한도 1,000원
+- name: 신규 유예
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+  payments:
+  - {at: 2026-11-05T09:00, amount: 10000, category: convenience}
+  expect:
+  - {payment: 0, benefits: {living-5: 500}}
+  calc: 사용등록 다음 달 말일까지 실적 조건 없이 제공

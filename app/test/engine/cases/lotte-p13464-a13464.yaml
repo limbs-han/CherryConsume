@@ -1,0 +1,25 @@
+card: lotte-p13464-a13464
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 플러스 가맹점 L.pay 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 45900, merchant: lotte_mart, payment_method: l_pay}
+  expect:
+  - {payment: 0, benefits: {plus-lpay-1-5: 675}, counted: 45900}
+  calc: 45,900원은 1천원 단위 45개 × 15P = 675P
+- name: 플러스 가맹점 실물카드는 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 45900, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 450}}
+  calc: 45개 × 10P = 450P
+- name: 30만 직전이면 0.1%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 45900, merchant: lotte_mart, payment_method: l_pay}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 45}}
+  calc: 45개 × 1P = 45P

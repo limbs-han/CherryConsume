@@ -1,0 +1,27 @@
+card: hyundai-zrup
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 기본 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-08: 80}}
+  calc: 10,000 x 0.8% = 80
+- name: 이마트 10만원 1.6%, 10만원 미만은 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart}
+  - {at: 2026-11-06T10:00, amount: 99999, merchant: emart}
+  expect:
+  - {payment: 0, benefits: {plus-16: 1600}}
+  - {payment: 1, benefits: {base-08: 799}}
+  calc: 100,000 x 1.6% = 1,600. 99,999 x 0.8% = 799.99 버림 799
+- name: 해외 주유는 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: fuel, region: overseas}
+  expect:
+  - {payment: 0, benefits: {base-08: 1600}}
+  calc: 추가 혜택은 국내 가맹점만. 200,000 x 0.8% = 1,600

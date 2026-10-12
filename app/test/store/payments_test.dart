@@ -334,7 +334,6 @@ void main() {
     setup(s);
     const wrong = [
       '롯데하이마트 강남점',
-      'COSTCO',
       '파고다 토익학원',
       '카카오TV',
       '카카오페이지',

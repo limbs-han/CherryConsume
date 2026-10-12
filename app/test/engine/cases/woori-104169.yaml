@@ -1,0 +1,37 @@
+card: woori-104169
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 최저 구간 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 50000, merchant: lg_appliance_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {lg-subscription-autopay: 29000}, counted: 50000}
+  calc: 최저 구간 한도 29,000원
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 50000, merchant: lg_appliance_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 최저 구간보다 1원 적다. 최초 발급 사실을 답하지 않았다
+- name: 최고 구간 한도와 일반 결제 제외
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 50000, merchant: lg_appliance_subscription, billing: autopay}
+  - {at: 2026-11-21T10:00, amount: 50000, merchant: lg_appliance_subscription, billing: normal}
+  expect:
+  - {payment: 0, benefits: {lg-subscription-autopay: 40000}, counted: 50000}
+  - {payment: 1, benefits: {}, counted: 50000}
+  calc: 최고 구간 한도 40,000원. 자동납부가 아닌 결제는 할인 없음
+- name: 최초 발급 특례 등록 다음 달
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first-issuance-eligible: true}
+  payments:
+  - {at: 2026-11-20T10:00, amount: 5000, merchant: lg_appliance_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {lg-subscription-autopay: 5000}, counted: 5000}
+  calc: 등록 다음 달까지 최저 구간. 승인금액 5,000원이 한도보다 적어 5,000원

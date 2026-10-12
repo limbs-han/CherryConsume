@@ -1,0 +1,55 @@
+card: kb-09116
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 70만 구간 쿠팡 KB Pay 10%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: coupang, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {online-10: 15000}, counted: 0}
+  calc: 20,000원 중 2구간 월 한도 15,000원. 할인 건 실적 제외
+- name: 30만 직전 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 0 구간
+- name: 실물카드 결제는 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: KB Pay 결제만 할인
+- name: 커피와 편의점 한도 함께
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: cafe, channel: offline, payment_method: kb_pay}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: cu, channel: offline, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {coffee-cvs-10: 3000}, counted: 0}
+  - {payment: 1, benefits: {coffee-cvs-10: 2000}, counted: 0}
+  calc: 3,000원 뒤 남은 한도 2,000원
+- name: 롯데마트 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: lotte_mart, channel: offline, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {offline-shop-5: 3000}, counted: 0}
+  calc: 60,000원 × 5% = 3,000원
+- name: 대한항공 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: korean_air, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {air-dfs-5: 15000}, counted: 0}
+  calc: 300,000원 × 5% = 15,000원
+- name: 스타벅스 사이렌오더 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12000, merchant: starbucks, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {coffee-app-10: 1200}, counted: 0}
+  calc: 12,000원 × 10% = 1,200원
