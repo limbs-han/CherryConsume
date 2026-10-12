@@ -1,0 +1,86 @@
+schema_version: 2
+id: hyundai-mimb
+issuer: hyundai
+name: iM뱅크-현대카드M
+short_name: 현대 iM뱅크 M
+search_names: [iM뱅크 현대카드M, iM뱅크-현대카드M, 아이엠뱅크 현대카드M]
+kind: credit
+product_codes: [MIMB]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/260420_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%95%84%EC%9D%B4%EC%97%A0%EB%B1%85%ED%81%AC%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 1000000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립에서 뺀다, 현대카드의 다른 할인이 적용된 결제는 적립에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 적립에서 뺀다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다]
+    limits:
+      - {key: plus-5, per: month, amount: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [online-5, restaurant-5, overseas-5, base-15]
+        spill: split
+    benefits:
+      - key: online-5
+        title: 온라인몰 5% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 100만원 이상 시 온라인몰, 일반음식점, 해외 가맹점 5% M포인트 적립, '온라인몰 : 네이버쇼핑, 쿠팡, G마켓, 옥션, 11번가, SSG.COM, 컬리', '대상점 통합해 월 1만 M포인트 적립 한도 (본인+가족 카드 합산 기준, 적립 한도 초과 시 기본 혜택 적립률 적용)', 쿠팡의 경우 쿠팡이츠 결제 건은 적립 제외, 대상 온라인몰의 공식 홈페이지 및 앱 내 결제 건에 한해 적립 적용]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, naver_plus_store, ssg_com]
+          exclude_merchants: [coupang_eats]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus-5}
+        tiers: {from: 1000000}
+        unmodeled: [네이버쇼핑은 네이버 도메인으로 확인되는 가맹점만 적립한다, 상품 선택 시 연결된 다른 사이트나 앱에서 결제하면 적립하지 않는다]
+      - key: restaurant-5
+        title: 일반음식점 5% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 100만원 이상 시 온라인몰, 일반음식점, 해외 가맹점 5% M포인트 적립, 대상점 통합해 월 1만 M포인트 적립 한도]
+        target:
+          categories: [restaurant.general]
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus-5}
+        tiers: {from: 1000000}
+      - key: overseas-5
+        title: 해외 가맹점 5% M포인트 적립
+        source: manual
+        evidence: ['해외 가맹점 : 해외 온·오프라인 가맹점', 대상점 통합해 월 1만 M포인트 적립 한도]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus-5}
+        tiers: {from: 1000000}
+      - key: base-15
+        title: 국내외 가맹점 1.5% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1.5% M포인트 적립, 1회 및 연간 적립 한도 제한 없음, '4,639원 결제 시 70 M포인트 적립']
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1.5, round: round}
+        tiers: {from: 500000}
+    unmodeled: [간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되는 결제는 추가 혜택에서 빼고 1.5%만 준다, 적립은 매출전표 접수 순서로 한도를 적용한다, M 긴급적립은 결제 혜택이 아니라 계산하지 않는다, 실적과 적립 한도는 본인과 가족 카드를 합산한다, 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-11 공식 가이드북(2026-04 기준) 대조. 혜택과 실적 기준이 SC제일은행-현대카드M(hyundai-154997)과 같아 그 파일을 따랐다. 연회비 국내전용과 국내외겸용(VISA Platinum) 30,000원(기본 10,000+제휴 20,000), 가족카드 10,000원. 전월 50만 이상 국내외 1.5%, 100만 이상 온라인몰·일반음식점·해외 5%이고 세 영역 합쳐 월 1만 M포인트를 넘으면 1.5%로 적립한다. 매출 건별 소수점 이하 반올림. 실적 제외 목록은 카드론 등, 수수료, 공과금, 상품권·선불카드뿐이라 전기·가스·관리비·무이자 할부는 실적에 넣는다. 공과금 중 상하수도 요금은 utility.water로 뺀다. 취소는 승인월에서 빼고 해외는 취소 달에서 뺀다. 신규 발급은 수령 등록월 다음 달 이용 건까지 50만·100만 미만도 혜택을 줘 100만 구간으로 둔다.
