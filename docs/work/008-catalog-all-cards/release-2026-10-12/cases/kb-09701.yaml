@@ -1,0 +1,43 @@
+card: kb-09701
+holder:
+  started_on: '2026-07-01'
+cases:
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 0 구간
+- name: 30만 구간 주유 건당 10만원까지 월 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 150000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-3: 3000}}
+  calc: 100,000 × 3% = 3,000. 월 한도 3,000
+- name: 60만 구간 커피 패스트푸드
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: cafe}
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.fastfood}
+  expect:
+  - {payment: 0, benefits: {cafe-3: 300}}
+  - {payment: 1, benefits: {fastfood-3: 300}}
+  calc: 각 10,000 × 3%
+- name: 리브엠 3만원 이상 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 33000, merchant: liiv_m}
+  expect:
+  - {payment: 0, benefits: {liiv-m-3000: 3000}}
+  calc: 정액 3,000
+- name: SKT 5만원 이상 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 55000, category: telecom.mobile, merchant: skt}
+  - {at: 2026-11-04T11:00, amount: 49999, category: telecom.mobile, merchant: kt}
+  expect:
+  - {payment: 0, benefits: {telecom-2000: 2000}}
+  - {payment: 1, benefits: {}}
+  calc: 5만원 이상 정액 2,000. 49,999원은 미달

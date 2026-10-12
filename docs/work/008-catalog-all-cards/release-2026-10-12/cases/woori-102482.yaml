@@ -1,0 +1,63 @@
+card: woori-102482
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 저녁 음식점 3만원 이상 5% 건당 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 80000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {kaltoe-dining: 3000}, counted: 80000}
+  calc: 8만원 5% 4,000원이 건당 3,000원으로 줄어든다
+- name: 낮 음식점은 캐시백 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 40000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 저녁 6~11시만
+- name: 30만 직전은 캐시백 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T19:00, amount: 40000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 30만 미만
+- name: 저녁 카페와 CU, 칼퇴 월 4천원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T20:00, amount: 30000, merchant: starbucks, channel: offline}
+  - {at: 2026-11-06T20:00, amount: 30000, merchant: cu, channel: offline}
+  - {at: 2026-11-07T20:00, amount: 30000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {kaltoe-cafe: 1500}, counted: 30000}
+  - {payment: 1, benefits: {kaltoe-cu: 1500}, counted: 30000}
+  - {payment: 2, benefits: {kaltoe-cu: 1000}, counted: 30000}
+  calc: 1,500원씩 받고 셋째 건은 월 4,000원 중 남은 1,000원
+- name: 헬스 10만원 이상 월 5천원, 올리브영과 밀리의 서재
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: sports, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: olive_young, channel: offline}
+  - {at: 2026-11-07T10:00, amount: 9900, merchant: millie, billing: subscription, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-gym: 5000}, counted: 200000}
+  - {payment: 1, benefits: {life-olive-young: 1000}, counted: 20000}
+  - {payment: 2, benefits: {life-millie: 495}, counted: 9900}
+  calc: 헬스 1만원이 월 5천원으로, 올리브영 1천원, 밀리 495원
+- name: 택시와 쏘카
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 60000, merchant: socar, channel: online}
+  expect:
+  - {payment: 0, benefits: {mobility-taxi: 1000}, counted: 20000}
+  - {payment: 1, benefits: {mobility-socar: 2000}, counted: 60000}
+  calc: 1,000원, 쏘카 3,000원이 건당 2,000원
+- name: 해외 저녁 음식점은 캐시백 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 40000, category: restaurant, channel: offline, region: overseas}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 해외가맹점 이용금액 캐시백 제외

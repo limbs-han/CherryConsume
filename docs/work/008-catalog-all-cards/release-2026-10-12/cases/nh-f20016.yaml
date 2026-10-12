@@ -1,0 +1,247 @@
+card: nh-f20016
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 20만원 직전은 기본 적립만
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 20}
+    counted: 10000
+  calc: 기본 10,000 × 0.2% = 20. 추가적립은 전월 20만원 이상이라 0
+- name: 실적 20만원 경계 1위 영역 추가
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 20, smart-coffee-first: 40}
+  calc: 커피 영역만 이용해 1위. 기본 20 + 추가 10,000 × 0.4% = 40
+- name: 2위 영역은 0.2% 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 60, smart-online-first: 120}
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-coffee-second: 20}
+  calc: 온라인 30,000 1위 0.4% = 120. 커피 10,000은 2위라 0.2% = 20. 순위는 달 중간 잠정값
+- name: 같은 금액이면 영역 번호 순
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 20, smart-coffee-first: 40}
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-online-first: 40}
+  calc: 두 번째 결제 때 온라인과 커피가 각 10,000으로 같아 영역 번호가 앞선 ① 온라인이 1위. 0.4% = 40
+- name: 3위 영역은 기본만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: coupang, channel: online}
+  - {at: 2026-11-05T11:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, category: taxi}
+  expect:
+  - payment: 2
+    benefits: {base-point-0-2: 20}
+  calc: 택시 영역 10,000은 3위라 추가적립 없음. 기본 20
+- name: 월 추가적립 한도 5천 포인트 직전과 직후
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1000000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 249750, merchant: coupang, channel: online}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: coupang, channel: online}
+  - {at: 2026-11-08T10:00, amount: 10000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 2000, smart-online-first: 4000}
+  - payment: 1
+    benefits: {base-point-0-2: 499, smart-online-first: 999}
+  - payment: 2
+    benefits: {base-point-0-2: 20, smart-online-first: 1}
+  - payment: 3
+    benefits: {base-point-0-2: 20}
+  calc: 4,000 + 249,750 × 0.4% = 999 버림. 누적 4,999라 다음 결제는 남은 1만, 그 뒤 0. 기본 적립은 한도 없음
+- name: 신규 등록 다음 달 말까지 실적 미달이어도 추가적립
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 20, smart-coffee-first: 40}
+  calc: 10월 등록이라 11월 말까지 20만 구간 특례. 기본 20 + 0.4% 40
+- name: 신규 특례 지난 뒤 실적 미달
+  prev_month_spend: 0
+  holder: {started_on: '2026-09-15'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 20}
+  calc: 9월 등록 특례는 10월 말까지. 11월은 전월 0원이라 기본만
+- name: 후불 대중교통 실물카드만 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: mobile_tmoney}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 3, smart-transit-first: 6}
+  - payment: 1
+    benefits: {base-point-0-2: 3}
+  calc: 1,500 × 0.2% = 3, 0.4% = 6. 모바일티머니 후불은 실물카드 RF가 아니라 추가 없음
+- name: 이동통신은 자동납부만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: skt, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 100, smart-telecom-first: 200}
+  - payment: 1
+    benefits: {base-point-0-2: 100}
+  calc: 자동납부 50,000 × 0.4% = 200. 일반 결제는 영역 밖이라 기본 100만
+- name: 구독 정기결제
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription, channel: online}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 34, smart-subscription-first: 68}
+  calc: 17,000 × 0.2% = 34, 0.4% = 68
+- name: 해외 영역
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 200, smart-overseas-first: 400}
+  calc: 해외 100,000 × 0.2% = 200, 0.4% = 400
+- name: 오프라인 마트와 잡화
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: olive_young}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: emart, channel: online}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 100, smart-mart-first: 200}
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-goods-first: 40}
+  - payment: 2
+    benefits: {base-point-0-2: 20}
+  calc: 마트 오프라인 0.4% = 200, 올리브영도 같은 ② 영역 1위 40. 이마트 온라인은 영역 밖
+- name: 상품권과 세금은 적립과 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: gift_card.voucher}
+  - {at: 2026-11-05T11:00, amount: 100000, category: tax.local}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 0
+  calc: 상품권, 세금은 적립과 실적 모두 제외
+- name: 택시 1위
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 40, smart-taxi-first: 80}
+  calc: 택시만 이용해 ④ 영역 1위. 20,000 × 0.2% = 40, 0.4% = 80
+- name: 2위 영역 online
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: gmarket, channel: online}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-online-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 2위 영역 mart
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: homeplus, channel: offline}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-mart-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 2위 영역 goods
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: daiso}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-goods-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 2위 영역 telecom
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-telecom-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 2위 영역 subscription
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: youtube_premium, billing: subscription, channel: online}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-subscription-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 2위 영역 transit
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-transit-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 2위 영역 taxi
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, category: taxi}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-taxi-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 2위 영역 overseas
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, category: other, region: overseas}
+  expect:
+  - payment: 1
+    benefits: {base-point-0-2: 20, smart-overseas-second: 20}
+  calc: 커피 100,000이 1위라 이 영역 10,000은 2위. 기본 20 + 0.2% 20
+- name: 해외 커피 결제는 해외 영역에만 쌓인다
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, merchant: starbucks, region: overseas}
+  - {at: 2026-11-04T10:00, amount: 40000, merchant: coupang}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {base-point-0-2: 100, smart-overseas-first: 200}
+  - payment: 1
+    benefits: {base-point-0-2: 80, smart-online-second: 80}
+  - payment: 2
+    benefits: {base-point-0-2: 20}
+  calc: 해외 스타벅스 5만원은 ⑥ 해외에만 쌓여 1위 0.4% 200. 쿠팡 4만원은 ② 순위 0.2% 80. CU 1만원은 ⑤ 커피 3위라 기본 20만. 두 영역에 쌓으면 커피 6만원 1위로 CU에 40이 붙는다

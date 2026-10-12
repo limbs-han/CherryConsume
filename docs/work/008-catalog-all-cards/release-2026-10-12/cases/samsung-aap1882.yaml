@@ -1,0 +1,49 @@
+card: samsung-aap1882
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 토스페이 15% 간편결제 10% 쇼핑몰 10%와 통합 한도
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 20000, category: restaurant.general, channel: offline, payment_method: toss_pay}
+  - {at: 2026-11-03T20:00, amount: 30000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-04T20:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {toss-pay-15: 3000}, counted: 0}
+  - {payment: 1, benefits: {easypay-10: 3000}, counted: 0}
+  - {payment: 2, benefits: {mall-10: 4000}, counted: 0}
+  calc: 20,000 × 15% = 3,000. 30,000 × 10% = 3,000. 쿠팡 50,000 × 10% = 5,000이나 30만 구간 통합 한도 10,000에서 남은 4,000. 할인 건은 실적 제외
+- name: 실적 30만원 직전이면 토스 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T12:00, amount: 20000, category: restaurant.general, channel: offline, payment_method: toss_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 299,999원은 0 구간이라 할인이 없고 실적에 20,000이 들어간다
+- name: 디지털 50% 60만 구간 한도 7천원과 스타벅스 50%
+  prev_month_spend: 650000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4000, merchant: google_play, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-06T09:00, amount: 12000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {inapp-50: 2000}, counted: 0}
+  - {payment: 1, benefits: {digital-50: 5000}, counted: 0}
+  - {payment: 2, benefits: {starbucks-50: 5000}, counted: 0}
+  calc: 구글플레이 4,000 × 50% = 2,000. 넷플릭스 8,500은 60만 구간 한도 7,000에서 남은 5,000. 스타벅스 6,000은 월 한도 5,000
+- name: 해외 2%는 실적과 무관하고 실적에 들어간다
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}, counted: 100000}
+  calc: 100,000 × 2% = 2,000
+- name: 토스쇼핑 15%와 토스프라임 50%
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-02T20:00, amount: 20000, merchant: toss_shopping, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 4900, merchant: toss_prime, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {toss-shopping-15: 3000}, counted: 0}
+  - {payment: 1, benefits: {toss-prime-50: 2450}, counted: 0}
+  calc: 20,000 × 15% = 3,000. 4,900 × 50% = 2,450

@@ -1,0 +1,48 @@
+card: woori-102861
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.3%와 1만원 미만 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, category: restaurant.general, amount: 20000, channel: offline}
+  - {at: 2026-11-04T11:00, category: restaurant.general, amount: 9999, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {points-basic-0-3: 60}
+  - payment: 1
+    benefits: {}
+  calc: 2만 x 0.3% 60. 1만원 미만은 적립 제외
+- name: 실적 1원 모자라면 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, merchant: starbucks, amount: 20000, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미달
+- name: 특별 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: starbucks, amount: 20000, channel: offline}
+  - {at: 2026-11-05T10:00, merchant: skt, category: telecom.mobile, amount: 60000, billing: autopay}
+  - {at: 2026-11-06T10:00, category: transit.subway, amount: 10000}
+  expect:
+  - payment: 0
+    benefits: {points-coffee-movie-1-5: 300}
+  - payment: 1
+    benefits: {points-telecom-1-5: 900}
+  - payment: 2
+    benefits: {points-transit-1-5: 150}
+  calc: 2만 x 1.5% 300, 6만 x 1.5% 900, 1만 x 1.5% 150
+- name: 쇼핑 0.5%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: emart, amount: 100000, channel: offline}
+  - {at: 2026-11-05T10:00, merchant: coupang, amount: 100000, channel: online}
+  expect:
+  - payment: 0
+    benefits: {points-shopping-offline-0-5: 500}
+  - payment: 1
+    benefits: {points-online-0-5: 500}
+  calc: 10만 x 0.5% 500씩

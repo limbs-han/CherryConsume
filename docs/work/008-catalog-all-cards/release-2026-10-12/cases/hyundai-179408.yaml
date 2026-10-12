@@ -1,0 +1,55 @@
+card: hyundai-179408
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 쿠팡 10% 월 6천원 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-mall-10: 6000}, counted: 0}
+  calc: 10,000원 중 50만 구간 월 한도 6,000원. 할인받은 결제는 실적 제외
+- name: 50만 직전 499999 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: hospital}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 50만원 미만은 혜택 없음
+- name: 100만 구간 병원 10%와 1일 1회
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: hospital}
+  - {at: 2026-11-05T11:00, amount: 20000, category: pharmacy}
+  expect:
+  - {payment: 0, benefits: {hospital-pharmacy-10: 5000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 20000}
+  calc: 50,000원 × 10% = 5,000원. 병원·약국 통합 1일 1회라 약국은 0원
+- name: 50만 구간 학원 10% 월 6천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-06T10:00, amount: 100000, category: education.academy}
+  expect:
+  - {payment: 0, benefits: {academy-10: 6000}, counted: 0}
+  calc: 10,000원 중 월 한도 6,000원
+- name: 50만 구간 SK에너지 주유 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 50000, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {fuel-10: 5000}, counted: 0}
+  calc: 50,000원 × 10% = 5,000원
+- name: 100만 구간 SKT 자동납부 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 80000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-bill-10: 8000}, counted: 0}
+  calc: 80,000원 × 10% = 8,000원. 100만 구간 한도 10,000원 안
+- name: 아파트 관리비 자동납부 10%는 한도 6천원, 실적 제외
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-10T10:00, amount: 200000, category: apartment_fee, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-bill-10: 6000}, counted: 0}
+  calc: 20,000원 중 월 한도 6,000원. 관리비는 실적 제외

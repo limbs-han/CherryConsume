@@ -1,0 +1,71 @@
+schema_version: 2
+id: kb-09348
+issuer: kb
+name: KB 전통시장온누리카드
+short_name: KB 전통시장온누리
+kind: credit
+product_codes:
+  - '09348'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: domestic, form: mobile, amount: 14000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09348', fetched_at: '2026-10-12', review_no: 제2025-C1a-07821호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-06-30'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 결제와 일부 간편결제는 할인에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: market-5
+        title: 전통시장 5% 청구할인
+        source: page
+        evidence: [전통시장가맹점 이용 청구할인 | 40만원 이상 | 5% | 월 5천원, 건당 1만원 이상 이용 시, 전통시장가맹점은 국세청 지정 전통시장 가맹점(월 1회 갱신), 실적 유예기간에는 40만원 이상 구간의 할인을 제공한다]
+        target:
+          categories: [traditional_market]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers:
+          from: 400000
+          to: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: market-10
+        title: 전통시장 10% 청구할인
+        source: page
+        evidence: [전통시장가맹점 이용 청구할인 | 80만원 이상 | 10% | 월 1만원, 건당 1만원 이상 이용 시]
+        target:
+          categories: [traditional_market]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 800000}
+    unmodeled: ['온누리상품권 차감 이용 5~10% 환급할인(월 5천원~1만원, 건당 1만원 이상)은 온누리상품권 앱에 등록해 잔액으로 결제한 경우라 결제 입력으로 판단할 수 없어 계산하지 않는다. 전통시장 할인과 중복된다', KB Pay 쇼핑 탭 이용 5~10% 청구할인(월 5천원~1만원)은 KB Pay 앱 쇼핑 탭 안의 결제라 담을 가맹점이 없어 계산하지 않는다, 가족카드 실적은 본인과 합산한다, 해외 이용금액은 매입 완료 기준 일시불만 실적에 넣는다, '정부지원금, 자판기·터널통행료·항공기내 같은 무승인 전표는 실적에서 빠진다', 할인은 전표 매입 순서대로 한도 안에서 적용한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2025.06.30 출시라고만 적었다. 현재 규칙의 시작일로 잠정 적용한다., assumed: '2025-06-30'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문의 무승인전표(교통요금, 터널통행료) 실적 제외를 시내버스, 지하철, 통행료 업종 제외로 옮겼다. 승인된 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다', assumed: 'transit.bus_city, transit.subway, car.toll'}
+  - {path: 'revisions[0].facts', question: 원문은 실적 유예 대상을 생애 첫 발급으로 적지 않았다. 다른 KB 카드처럼 생애 첫 본인 발급만 유예하는 쪽으로 두었다, assumed: first_personal_issue}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 새 업종 전통시장으로 국세청 지정 전통시장 할인을 담았다. 온누리상품권 차감과 KB Pay 쇼핑 탭 할인은 빼서 실제보다 덜 준다.

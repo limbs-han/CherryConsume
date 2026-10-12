@@ -1,0 +1,447 @@
+card: nh-f10807
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: pack, choice: discount, effective_from: '2026-01-01'}
+cases:
+- name: 할인 PACK 40만 구간 스타벅스 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {d-starbucks-10: 1000}
+    counted: 10000
+  calc: 10,000 x 10% = 1,000
+- name: 실적 40만 직전은 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만원보다 1원 적어 0
+- name: 여가 영역 월 한도 8천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: cgv}
+  expect:
+  - payment: 0
+    benefits: {d-digital-30: 5100}
+  - payment: 1
+    benefits: {d-movie-10: 2900}
+  calc: 17,000 x 30% = 5,100. 영화 30,000 x 10% = 3,000이지만 여가 한도 8,000에서 남은 2,900
+- name: 80만 구간 병원 한도 1만5천원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: hospital, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {d-hospital-pharmacy-10: 15000}
+  calc: 200,000 x 10% = 20,000이지만 건강 영역 80만 구간 한도 15,000
+- name: 후불교통 15%는 실적에서 빠짐
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {d-transit-15: 1500}
+    counted: 0
+  calc: 10,000 x 15% = 1,500. 후불교통은 실적 제외
+- name: 통신요금 자동납부 월 1회
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-20T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {d-telecom-3: 1500}
+  - payment: 1
+    benefits: {}
+  calc: 50,000 x 3% = 1,500. 두 번째는 월 1회를 넘어 0
+- name: 무이자할부는 혜택 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, interest_free: true}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 무이자할부 이용금액은 할인 제외
+- name: 신규 등록 다음 달 말까지 40만 구간 특례
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    options:
+    - {option: pack, choice: discount, effective_from: '2026-10-15'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {d-starbucks-10: 1000}
+  calc: 10월 등록이라 11월 말까지 최소 구간. 10,000 x 10% = 1,000
+- name: 적립 PACK 기본 1%와 1위 영역 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-movie-first: 300}
+  calc: 쿠팡은 스마트 영역 밖이라 기본 1% 100. 스타벅스는 여가 영역 1위라 기본 100 + 추가 3% 300
+- name: 적립 PACK 2위 영역 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: hospital}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-movie-second: 200}
+  calc: 건강 30,000 1위 3% 900. 여가 10,000 2위 2% 200. 순위는 달 중간 잠정값
+- name: 적립 PACK 실적 40만 직전은 적립 없음
+  prev_month_spend: 399999
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 기본적립과 스마트적립 모두 40만원 이상 조건
+- name: 할인 PACK d-dept-5
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: lotte_department, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {d-dept-5: 1000}
+  calc: 20,000 x 5% = 1000
+- name: 할인 PACK d-mart-5
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {d-mart-5: 1000}
+  calc: 20,000 x 5% = 1000
+- name: 할인 PACK d-homeshopping-5
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: gs_shop}
+  expect:
+  - payment: 0
+    benefits: {d-homeshopping-5: 1000}
+  calc: 20,000 x 5% = 1000
+- name: 할인 PACK d-fuel-5
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: fuel}
+  expect:
+  - payment: 0
+    benefits: {d-fuel-5: 1000}
+  calc: 20,000 x 5% = 1000
+- name: 할인 PACK d-apartment-3
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {d-apartment-3: 600}
+  calc: 20,000 x 3% = 600
+- name: 할인 PACK d-salon-10
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: beauty.salon, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {d-salon-10: 2000}
+  calc: 20,000 x 10% = 2000
+- name: 할인 PACK d-sports-5
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: sports, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {d-sports-5: 1000}
+  calc: 20,000 x 5% = 1000
+- name: 할인 PACK d-rail-taxi-5
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: korail}
+  expect:
+  - payment: 0
+    benefits: {d-rail-taxi-5: 1000}
+  calc: 20,000 x 5% = 1000
+- name: 할인 PACK d-cafe-10
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: twosome}
+  expect:
+  - payment: 0
+    benefits: {d-cafe-10: 2000}
+  calc: 20,000 x 10% = 2000
+- name: 할인 PACK d-bakery-5
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: paris_baguette}
+  expect:
+  - payment: 0
+    benefits: {d-bakery-5: 1000}
+  calc: 20,000 x 5% = 1000
+- name: 적립 PACK health 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: hospital, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-health-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK hb 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: sports, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-hb-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK hb 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, category: sports, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-hb-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK dept 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: lotte_department, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-dept-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK dept 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: lotte_department, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-dept-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK mart 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-mart-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK mart 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-mart-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK homeshopping 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs_shop}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-homeshopping-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK homeshopping 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs_shop}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-homeshopping-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK travel 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: korail}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-travel-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK travel 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: korail}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-travel-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK airline 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: korean_air, channel: online}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-airline-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK airline 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: korean_air, channel: online}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-airline-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK digital 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: netflix, billing: subscription}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-digital-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK digital 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: netflix, billing: subscription}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-digital-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK cafe 1위 3%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: twosome}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 100, smart-cafe-first: 300}
+  calc: 이 영역만 써서 1위. 기본 1% 100, 추가 3% 300
+- name: 적립 PACK cafe 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: hospital, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: twosome}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-health-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-cafe-second: 200}
+  calc: 건강 30,000 1위 900. 이 영역 10,000 2위 2% 200, 기본 1% 100
+- name: 적립 PACK health 2위 2%
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: pack, choice: points, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: cgv}
+  - {at: 2026-11-05T10:00, amount: 10000, category: hospital, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {p-base-1: 300, smart-movie-first: 900}
+  - payment: 1
+    benefits: {p-base-1: 100, smart-health-second: 200}
+  calc: 여가 30,000 1위 900. 건강 10,000 2위 2% 200, 기본 1% 100

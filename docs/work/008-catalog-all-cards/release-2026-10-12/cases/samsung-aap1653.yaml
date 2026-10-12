@@ -1,0 +1,69 @@
+card: samsung-aap1653
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 다이소 30만 구간 1만원과 2만원 이상
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T11:00, amount: 15000, merchant: daiso, channel: offline}
+  - {at: 2026-11-03T15:00, amount: 25000, merchant: daiso, channel: offline}
+  - {at: 2026-11-04T11:00, amount: 25000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {daiso-10k: 2000}, counted: 15000}
+  - {payment: 1, benefits: {}, counted: 25000}
+  - {payment: 2, benefits: {daiso-20k: 3000}, counted: 25000}
+  calc: 1만원 이상 2,000원. 같은 날 두 번째는 일 1회라 없음. 다음 날 2만원 이상 3,000원
+- name: 다이소 60만 구간 4천원과 월 5회
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-02T11:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-03T11:00, amount: 10000, merchant: daiso, channel: offline}
+  - {at: 2026-11-04T11:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-05T11:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-06T11:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-07T11:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {daiso-20k: 4000}}
+  - {payment: 1, benefits: {daiso-10k: 3000}}
+  - {payment: 4, benefits: {daiso-20k: 4000}}
+  - {payment: 5, benefits: {}}
+  calc: 60만 구간 2만원 이상 4,000, 1만원 이상 3,000. 여섯 번째는 월 5회를 넘어 없음
+- name: 실적 30만 직전이면 다이소와 커피 할인 없고 1%는 받는다
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T11:00, amount: 20000, merchant: daiso, channel: offline}
+  - {at: 2026-11-03T12:00, amount: 20000, merchant: cu, channel: offline}
+  - {at: 2026-11-03T15:00, amount: 20000, merchant: twosome, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {convenience-1: 200}}
+  - {payment: 2, benefits: {}}
+  calc: 0 구간은 다이소·커피·배달앱 정액 할인이 없다. 편의점 1%는 실적 무관 20,000 × 1% = 200
+- name: 커피와 배달앱은 통합 일 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 10000, merchant: starbucks, channel: online}
+  - {at: 2026-11-03T19:00, amount: 25000, merchant: baemin, channel: online}
+  - {at: 2026-11-04T19:00, amount: 25000, merchant: coupang_eats, channel: online}
+  - {at: 2026-11-05T09:00, amount: 12000, merchant: ediya, channel: offline}
+  expect:
+  - {payment: 0, benefits: {starbucks-2000: 2000}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {delivery-2000: 2000}}
+  - {payment: 3, benefits: {coffee-2000: 2000}}
+  calc: 같은 날 커피를 받으면 배달앱은 없음. 다음 날은 각각 2,000원
+- name: 할인점 온라인쇼핑몰 의료 다이소몰 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T11:00, amount: 50000, merchant: emart, channel: offline}
+  - {at: 2026-11-03T20:00, amount: 30000, merchant: gmarket, channel: online}
+  - {at: 2026-11-04T10:00, amount: 20000, category: pharmacy, channel: offline}
+  - {at: 2026-11-04T20:00, amount: 30000, merchant: daiso, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T21:00, amount: 30000, merchant: daiso, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {mart-1: 500}}
+  - {payment: 1, benefits: {online-mall-1: 300}}
+  - {payment: 2, benefits: {medical-1: 200}}
+  - {payment: 3, benefits: {daiso-mall-1: 300}}
+  - {payment: 4, benefits: {}}
+  calc: 각 1%. 다이소몰 네이버페이 결제는 간편결제라 제외

@@ -1,0 +1,212 @@
+card: woori-500055
+cases:
+- name: wonpay-additional-earn 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: woori_won_pay
+    channel: online
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      wonpay-additional-earn: 50
+      basic-earn: 20
+  calc: wonpay-additional-earn 양수
+- name: special-coffee-earn 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: starbucks
+    channel: offline
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      special-coffee-earn: 100
+  calc: special-coffee-earn 양수
+- name: special-coffee-other 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: paul_bassett
+    channel: offline
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      special-coffee-other: 100
+  calc: special-coffee-other 양수
+- name: special-shopping-earn 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: emart
+    channel: offline
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      special-shopping-earn: 100
+  calc: special-shopping-earn 양수
+- name: special-fuel-earn 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: sk_energy
+    channel: offline
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      special-fuel-earn: 100
+  calc: special-fuel-earn 양수
+- name: special-transport-earn 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: transit.bus_city
+    channel: offline
+    billing: postpaid_transit
+  expect:
+  - payment: 0
+    benefits:
+      special-transport-earn: 100
+  calc: special-transport-earn 양수
+- name: special-taxi-earn 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: taxi
+    channel: offline
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      special-taxi-earn: 100
+  calc: special-taxi-earn 양수
+- name: special-kakao-taxi-earn 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: kakao_t
+    channel: online
+    billing: normal
+  expect:
+  - payment: 0
+    benefits:
+      special-kakao-taxi-earn: 100
+  calc: special-kakao-taxi-earn 양수
+- name: 30만원 미만과 기본 적립
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      basic-earn: 20
+  calc: 30만원 미만과 기본 적립
+- name: 60만원 구간 영역 6천 한도
+  prev_month_spend: 600000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 600000
+    payment_method: physical_card
+    merchant: starbucks
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      special-coffee-earn: 6000
+  - payment: 1
+    benefits:
+      basic-earn: 20
+  calc: 60만원 구간 영역 6천 한도
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits:
+      basic-earn: 20
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.
+- name: 최초 발급 특례
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: woori_won_pay
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      basic-earn: 20
+      wonpay-additional-earn: 50
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: true
+- name: 만기·해지 재발급 특례 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: woori_won_pay
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      basic-earn: 20
+  calc: 최초 발급과 만기·해지 재발급을 정적 사실로 구별. 발급월·다음달 범위는 card_month0~1로 제한한다.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: false
+- name: 카카오T 기차는 택시 혜택 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 50000
+    payment_method: physical_card
+    merchant: kakao_t
+    category: transit.rail
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      basic-earn: 100
+  calc: 카카오T라도 철도 결제는 택시 특별 혜택 제외. 별도 기본률만 적용.

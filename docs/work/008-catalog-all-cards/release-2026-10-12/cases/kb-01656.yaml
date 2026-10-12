@@ -1,0 +1,62 @@
+card: kb-01656
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 CGV 건당 2만원까지
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cgv}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: cgv}
+  expect:
+  - {payment: 0, benefits: {cgv-20: 4000}, counted: 30000}
+  - {payment: 1, benefits: {}}
+  calc: 2만원 × 20% = 4,000원. 월 이용금액 2만원을 다 써서 다음은 0원
+- name: 경계 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cgv}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 에버랜드 20%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: everland}
+  expect:
+  - {payment: 0, benefits: {amusement-20: 10000}}
+  calc: 5만원 × 20% = 10,000원
+- name: 아웃백 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 120000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {outback-10: 10000}}
+  calc: 10만원 × 10% = 10,000원
+- name: GS25 3%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {gs25-3: 600}}
+  calc: 2만원 × 3% = 600원
+- name: 교보문고 3%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: kyobo_book}
+  expect:
+  - {payment: 0, benefits: {kyobo-3: 450}}
+  calc: 15,000원 × 3% = 450원
+- name: 교통은 30만 구간부터
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만 구간은 교통 없음
+- name: 30만 구간 고속버스 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1000}, counted: 30000}
+  calc: 2만원 × 5% = 1,000원

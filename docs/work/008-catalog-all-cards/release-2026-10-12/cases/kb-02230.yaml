@@ -1,0 +1,96 @@
+card: kb-02230
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 스타벅스 20% 회당 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {starbucks-20: 4000}, counted: 30000}
+  - {payment: 1, benefits: {starbucks-20: 2000}, counted: 10000}
+  calc: 30,000원 × 20% = 6,000원 중 회당 4,000원. 10,000원 × 20% = 2,000원
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 스타벅스 1만원 미만 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 1만원 미만
+- name: 대중교통 고속버스 10% 월 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {transit-10: 2000}, counted: 30000}
+  calc: 30,000원 × 10% = 3,000원 중 월 2,000원
+- name: 지하철 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {transit-10: 1000}, counted: 0}
+  calc: 10,000원 × 10% = 1,000원. 후불교통은 실적 제외
+- name: 통신요금 자동납부 2,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, category: telecom.mobile, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 60000, category: telecom.mobile, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-2500: 2500}}
+  - {payment: 1, benefits: {}}
+  calc: 건당 5만원 이상 자동납부 월 1회
+- name: 넷플릭스 5% 월 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix}
+  expect:
+  - {payment: 0, benefits: {subscription-5: 850}}
+  calc: 17,000원 × 5% = 850원
+- name: 교보문고 5% 회당 2,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: kyobo_book}
+  expect:
+  - {payment: 0, benefits: {kyobo-5: 2500}}
+  calc: 60,000원 × 5% = 3,000원 중 회당 2,500원
+- name: GS25 5% 회당 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {gs25-5: 1000}}
+  calc: 30,000원 × 5% = 1,500원 중 회당 1,000원
+- name: 통합한도 30만 구간 2만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-01T10:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-02T10:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-03T10:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - {payment: 4, benefits: {starbucks-20: 4000}}
+  - {payment: 5, benefits: {}}
+  calc: 회당 4,000원 × 5회 = 20,000원으로 통합한도 소진
+- name: 신규 유예 스타벅스는 주고 교통은 안 줌
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 20000, category: transit.bus_express}
+  expect:
+  - {payment: 0, benefits: {starbucks-20: 4000}}
+  - {payment: 1, benefits: {}}
+  calc: 유예기간 1구간. 대중교통은 유예 미적용

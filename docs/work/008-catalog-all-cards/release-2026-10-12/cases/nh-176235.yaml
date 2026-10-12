@@ -1,0 +1,108 @@
+card: nh-176235
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: type, choice: baby, effective_from: '2026-01-01'}
+cases:
+- name: A형 병원 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: hospital}
+  expect:
+  - payment: 0
+    benefits: {baby-medical-3: 3000}
+    counted: 0
+  calc: 100,000 x 3% = 3,000. 병원은 실적 제외
+- name: A형 실적 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: hospital}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0
+- name: A형 온라인 쇼핑 3만원 이상 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 29999, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {baby-online-shop-3: 900}
+  - payment: 1
+    benefits: {}
+  calc: 30,000 x 3% = 900. 29,999는 3만원 미만이라 0
+- name: A형 커피 10%와 통합 한도 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {baby-coffee-10: 4000}
+  - payment: 1
+    benefits: {baby-coffee-10: 1000}
+  calc: 4,000 받은 뒤 30만 구간 통합 한도 5,000에서 남은 1,000
+- name: A형 아웃백 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: outback}
+  expect:
+  - payment: 0
+    benefits: {baby-restaurant-5: 3000}
+  calc: 60,000 x 5% = 3,000
+- name: A형 통신요금 자동이체 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: telecom.mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {baby-telecom-1k: 1000}
+  calc: 정액 1,000
+- name: A형 지하철 3% 월 1,500원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, category: transit.subway}
+  expect:
+  - payment: 0
+    benefits: {baby-transit-3: 1500}
+  calc: 60,000 x 3% = 1,800이지만 한도 1,500
+- name: B형 학원 3%
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: type, choice: children, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: education.academy}
+  expect:
+  - payment: 0
+    benefits: {children-education-3: 3000}
+  calc: 100,000 x 3% = 3,000
+- name: C형 에코머니 0.3%
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: type, choice: green, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant}
+  expect:
+  - payment: 0
+    benefits: {green-eco-points: 300}
+  calc: 50만 구간 100,000 x 0.3% = 300
+- name: C형 영화관 2천원과 커피 10%
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: type, choice: green, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {green-movie-2000: 2000}
+  - payment: 1
+    benefits: {green-coffee-10: 1000}
+  calc: 영화 정액 2,000. 커피 10,000 x 10% = 1,000. 에코머니 30보다 커서 할인 하나만

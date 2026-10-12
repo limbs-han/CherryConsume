@@ -1,0 +1,114 @@
+card: samsung-aap1544
+holder:
+  started_on: '2026-01-01'
+  options: [{option: package, choice: daily, effective_from: '2026-01-01'}]
+cases:
+- name: 일상 패키지 네이버페이 온라인 10% 30만 구간 하한
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 30000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {daily-npay-10: 3000}, counted: 0}
+  calc: 30,000 × 10% = 3,000P. 10% 적립 건은 실적 제외라 0
+- name: 실적 30만원 직전이면 0.5%만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 30000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 150}, counted: 30000}
+  calc: 299,999원은 0 구간이라 패키지 없음. 30,000 × 0.5% = 150P이고 0.5% 건은 실적 인정
+- name: 일상 10% 월 5천P 한도 직전 직후와 다음 결제 대체 적립
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 40000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-04T20:00, amount: 15000, merchant: eleven_st, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-05T20:00, amount: 10000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-06T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {daily-npay-10: 4000}, counted: 0}
+  - {payment: 1, benefits: {daily-npay-10: 1000}, counted: 0}
+  - {payment: 2, benefits: {base-0-5: 50}, counted: 10000}
+  - {payment: 3, benefits: {daily-delivery-5: 1000}, counted: 0}
+  calc: 4,000P 뒤 15,000 × 10% = 1,500이나 남은 한도 1,000. 한도를 다 쓴 다음 건은 0.5% 50P. 배민 네이버페이는 10% 한도 소진 뒤 5% 20,000 × 5% = 1,000P
+- name: 커피 편의점 배달앱 5% 통합 월 5천P 한도
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 60000, merchant: twosome, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 30000, merchant: cu, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-coffee-5: 3000}, counted: 0}
+  - {payment: 1, benefits: {daily-convenience-5: 1500}, counted: 0}
+  - {payment: 2, benefits: {daily-delivery-5: 500}, counted: 0}
+  - {payment: 3, benefits: {base-0-5: 50}, counted: 10000}
+  calc: 60,000 × 5% = 3,000, 30,000 × 5% = 1,500, 20,000 × 5% = 1,000이나 남은 500. 한도 소진 뒤 GS25는 0.5% 50P
+- name: 스타벅스 사이렌오더 5%와 커피전문점 온라인은 0.5%
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 10000, merchant: starbucks, channel: online, payment_method: physical_card}
+  - {at: 2026-11-02T09:00, amount: 10000, merchant: twosome, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-starbucks-5: 500}, counted: 0}
+  - {payment: 1, benefits: {base-0-5: 50}, counted: 10000}
+  calc: 스타벅스는 사이렌오더도 5% 10,000 × 5% = 500P. 투썸은 오프라인만이라 0.5% 50P
+- name: 온라인 패키지 10%와 7만원 이상 3천P 추가
+  prev_month_spend: 350000
+  holder:
+    options: [{option: package, choice: online, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T20:00, amount: 70000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-10T20:00, amount: 80000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-12T08:00, amount: 10000, merchant: twosome, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-npay-10: 7000, online-extra-3000: 3000}, counted: 0}
+  - {payment: 1, benefits: {online-npay-10: 3000}, counted: 0}
+  - {payment: 2, benefits: {base-0-5: 50}, counted: 10000}
+  calc: 70,000 × 10% = 7,000P와 추가 3,000P. 두 번째는 월 1회를 써서 추가 없음, 10%는 한도 10,000 − 7,000 = 3,000. 온라인 패키지의 커피는 0.5%
+- name: 3천P 추가는 7만원 미만이면 없다
+  prev_month_spend: 350000
+  holder:
+    options: [{option: package, choice: online, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T20:00, amount: 69999, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {online-npay-10: 6999}, counted: 0}
+  calc: 69,999 × 10% = 6,999.9, 버림 6,999P. 7만원 미만이라 추가 없음
+- name: 적립 제외와 실적 제외
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: tax, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-04T20:00, amount: 30000, merchant: gmarket, channel: online, payment_method: naver_pay, installment_months: 3, interest_free: true}
+  - {at: 2026-11-05T10:00, amount: 20000, category: transit.subway, payment_method: mobile_tmoney}
+  - {at: 2026-11-06T12:00, amount: 10000, merchant: cu, category: gift_card, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 30000}
+  - {payment: 2, benefits: {}, counted: 0}
+  - {payment: 3, benefits: {base-0-5: 50}, counted: 0}
+  calc: 국세는 적립과 실적 모두 제외. 무이자할부는 적립 제외지만 실적 인정. 모바일티머니 지하철은 적립과 실적 제외. 편의점 상품권은 5% 제외라 0.5% 50P, 실적 제외
+- name: 해외 0.5% 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: restaurant, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 500}, counted: 100000}
+  calc: 해외 100,000 × 0.5% = 500P. 실적 조건과 한도 없음
+- name: 신규 발급 다음 달까지 실적 무관 패키지
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+  payments:
+  - {at: 2026-11-03T20:00, amount: 20000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {daily-npay-10: 2000}, counted: 0}
+  calc: 10월 발급이라 11월 말까지 30만 구간. 20,000 × 10% = 2,000P
+- name: 신규 특례가 끝난 달은 실적 미달이면 0.5%
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-15'
+  payments:
+  - {at: 2026-11-03T20:00, amount: 20000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 100}, counted: 20000}
+  calc: 9월 발급 특례는 10월 말까지. 11월은 전월 0원이라 0.5% 20,000 × 0.5% = 100P

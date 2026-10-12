@@ -1,0 +1,47 @@
+card: woori-103735
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 일반 업종 0.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: online_shopping}
+  expect:
+  - payment: 0
+    benefits: {all-0-5: 500}
+  calc: 100,000원 x 0.5% = 500원
+- name: 음식점 0.5%와 0.3% 추가
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-04T13:00, amount: 20000, merchant: lotte_super}
+  expect:
+  - payment: 0
+    benefits: {all-0-5: 50, life-0-3: 30}
+  - payment: 1
+    benefits: {all-0-5: 100, life-0-3: 60}
+  calc: 10,000원 x 0.5% = 50원, x 0.3% = 30원. 롯데슈퍼 20,000원은 100원과 60원
+- name: 해외 음식점은 추가 할인 한 번만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {all-0-5: 50, life-0-3: 30}
+  calc: 기본 50원. 생활업종과 해외 추가는 같은 묶음이라 30원 하나만
+- name: 공과금 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: utility.electricity}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 할인 제외 업종이라 0원
+- name: 해외 일반 업종 0.3% 추가
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: online_shopping, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {all-0-5: 50, life-0-3-overseas: 30}
+  calc: 10,000원 x 0.5% = 50원, 해외 추가 x 0.3% = 30원

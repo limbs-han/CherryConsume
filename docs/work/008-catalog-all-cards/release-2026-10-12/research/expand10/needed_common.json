@@ -1,0 +1,81 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kfc",
+      "name": "KFC",
+      "category": "restaurant.fastfood",
+      "aliases": [
+        "KFC",
+        "케이에프씨"
+      ]
+    },
+    "card_id": "hyundai-158097",
+    "source_url": "https://www.hyundaicard.com/upload/card/%28%EC%83%81%ED%92%88%EC%84%A4%EB%AA%85%EC%84%9C%29%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20Teens_260801.pdf",
+    "evidence": "패스트푸드 : 맥도날드, 롯데리아, KFC, 버거킹, 맘스터치"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kb_insurance",
+      "name": "KB손해보험",
+      "category": "insurance.private",
+      "aliases": [
+        "KB손해보험",
+        "KB손보",
+        "KB다이렉트"
+      ]
+    },
+    "card_id": "kb-04251",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04251",
+    "evidence": "KB손해보험 보험료 10% 청구할인, 건당 10만원 이상, 연간 3만원 한도"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "tmap",
+      "name": "티맵",
+      "category": "other",
+      "aliases": [
+        "티맵",
+        "TMAP",
+        "티맵모빌리티"
+      ]
+    },
+    "card_id": "kb-09389",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09389",
+    "evidence": "티맵 기본 30%, KB Pay 결제 시 추가 20% (최대 50%), 월 할인한도 1만 5천원, 티맵 유료서비스 한정"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "interpark_ticket",
+      "name": "인터파크티켓",
+      "category": "other",
+      "aliases": [
+        "인터파크티켓",
+        "NOL 티켓",
+        "INTERPARK TICKET"
+      ]
+    },
+    "card_id": "kb-09770",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09770",
+    "evidence": "티켓 (NOL 티켓, 온라인) 20%, 월 할인한도 5천원 (월 2만5천원 이용금액까지). combined/common-evidence.json의 kb-01914 제안과 같은 key"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ypaymore",
+      "name": "와이페이모어",
+      "category": "travel.agency",
+      "aliases": [
+        "와이페이모어",
+        "ypaymore",
+        "YPAYMORE"
+      ]
+    },
+    "card_id": "kb-09828",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09828",
+    "evidence": "와이페이모어 판매 항공권 10% 청구할인"
+  }
+]

@@ -1,0 +1,68 @@
+card: samsung-aap1878
+holder:
+  started_on: '2026-01-01'
+  options: [{option: select, choice: restaurant, effective_from: '2026-01-01'}]
+cases:
+- name: 음식점 옵션 주중 5% 쇼핑몰 5% 주말 10%와 통합 한도
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 40000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T20:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T19:00, amount: 40000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {r-restaurant-weekday-5: 2000}, counted: 0}
+  - {payment: 1, benefits: {r-mall-5: 1000}, counted: 0}
+  - {payment: 2, benefits: {r-restaurant-weekend-10: 3000}, counted: 0}
+  calc: 월요일 40,000 × 5% = 2,000. 쿠팡 20,000 × 5% = 1,000. 금요일 40,000 × 10% = 4,000이나 음식점 30만 구간 한도 5,000에서 남은 3,000. 음식점·쇼핑몰 할인 건은 실적 제외
+- name: 실적 30만원 직전이면 음식점 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T12:00, amount: 40000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 299,999원은 0 구간이라 옵션 할인이 없고 실적에 40,000이 들어간다
+- name: 쇼핑 옵션 60만 구간 주중 5% 주말 10% 한도 1만원과 음식점 5%
+  prev_month_spend: 650000
+  holder:
+    options: [{option: select, choice: shopping, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-02T20:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 20000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-07T20:00, amount: 100000, merchant: musinsa, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {s-mall-weekday-5: 1000}, counted: 0}
+  - {payment: 1, benefits: {s-restaurant-5: 1000}, counted: 0}
+  - {payment: 2, benefits: {s-mall-weekend-10: 9000}, counted: 0}
+  calc: 쿠팡 월요일 20,000 × 5% = 1,000. 음식점 20,000 × 5% = 1,000. 무신사 토요일 100,000 × 10% = 10,000이나 60만 구간 쇼핑 한도 10,000에서 남은 9,000
+- name: 간편결제 옵션 1%와 해외 2%는 실적과 무관
+  prev_month_spend: 0
+  holder:
+    options: [{option: select, choice: easypay, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {easypay-1: 500}, counted: 50000}
+  - {payment: 1, benefits: {overseas-2: 2000}, counted: 100000}
+  calc: 50,000 × 1% = 500. 해외 100,000 × 2% = 2,000. 두 할인 건은 실적에 들어간다
+- name: 생활 편의 5%와 인앱 디지털 50% 통합 한도
+  prev_month_spend: 350000
+  holder:
+    options: [{option: select, choice: easypay, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-02T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-02T09:00, amount: 10000, merchant: starbucks, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 10000, merchant: ediya, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T22:00, amount: 30000, category: taxi, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: socar, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 4000, merchant: google_play, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 1000}, counted: 20000}
+  - {payment: 1, benefits: {coffee-5-starbucks: 500}, counted: 10000}
+  - {payment: 2, benefits: {coffee-5: 500}, counted: 10000}
+  - {payment: 3, benefits: {taxi-5: 1500}, counted: 30000}
+  - {payment: 4, benefits: {carshare-5: 3500}, counted: 80000}
+  - {payment: 5, benefits: {inapp-50: 2000}, counted: 4000}
+  - {payment: 6, benefits: {digital-50: 3000}, counted: 17000}
+  calc: 배민 1,000, 스타벅스 사이렌오더 500, 이디야 500. 택시 1,500 뒤 쏘카 4,000은 택시·카셰어링 한도 5,000에서 남은 3,500. 구글플레이 2,000 뒤 넷플릭스 8,500은 30만 구간 한도 5,000에서 남은 3,000. 이 할인 건은 실적에 들어간다

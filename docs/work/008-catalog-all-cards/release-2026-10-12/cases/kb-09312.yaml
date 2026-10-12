@@ -1,0 +1,11 @@
+card: kb-09312
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 통행료 0.1% 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 25000, category: car.toll}
+  expect:
+  - {payment: 0, benefits: {hipass-pointree: 25}}
+  calc: 25000 x 0.1% = 25점

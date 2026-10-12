@@ -1,0 +1,22 @@
+card: samsung-aap1921
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 0.7%와 해외 3.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T09:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 200000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-0-7: 700}}
+  - {payment: 1, benefits: {overseas-3-5: 7000}}
+  calc: 100,000 × 0.7% = 700, 200,000 × 3.5% = 7,000
+- name: 무이자할부와 지하철은 할인 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-02T09:00, amount: 300000, category: department_store, installment_months: 3, interest_free: true, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {}}
+  calc: 할인 제외

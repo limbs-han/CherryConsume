@@ -1,0 +1,26 @@
+card: woori-500107
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 음식점 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-04T13:00, amount: 12345, category: cafe, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {all-1-2: 120}
+  - payment: 1
+    benefits: {all-1-2: 148}
+  calc: 10,000원 x 1.2% = 120원. 해외 12,345원 x 1.2% = 148.14원 버림 148원
+- name: 세금과 상품권은 할인 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: tax}
+  - {at: 2026-11-04T13:00, amount: 50000, category: gift_card.voucher}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 할인 제외 업종이라 0원

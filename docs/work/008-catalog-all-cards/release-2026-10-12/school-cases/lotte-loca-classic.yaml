@@ -1,0 +1,22 @@
+card: lotte-loca-classic
+cases:
+- name: 추가 초중고 업종도 기존 학교납입금처럼 혜택 제외
+  prev_month_spend: 3000000
+  payments:
+  - at: 2026-11-06T12:00
+    amount: 10000
+    category: education.primary_secondary_fee
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 초중고 학교납입금은 기존 학교납입금 제외 범위 안에 들어간다. 새 업종을 골라도 적립이나 할인은 0원이다.
+- name: 추가 유치원 업종도 기존 학교납입금처럼 혜택 제외
+  prev_month_spend: 3000000
+  payments:
+  - at: 2026-11-06T12:00
+    amount: 10000
+    category: education.kindergarten
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 기존 학교납입금 제외는 유치원을 포함한다. 새 유치원 업종을 골라도 혜택은 0원이다.

@@ -1,0 +1,31 @@
+card: samsung-aap1855
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: SK주유 120만 구간 월 3만5천
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 200000, merchant: sk_energy, payment_method: physical_card}
+  - {at: 2026-11-12T08:00, amount: 200000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {sk-fuel-10: 20000}, counted: 0}
+  - {payment: 1, benefits: {sk-fuel-10: 15000}}
+  calc: 200,000 × 10% = 20,000, 남은 한도 15,000. SK주유는 실적 제외
+- name: 40만 직전이면 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-02T08:00, amount: 50000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 40만 구간 통신 편의점 온라인
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-25T09:00, amount: 33000, merchant: sk_broadband, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 20000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 200000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 1650}}
+  - {payment: 1, benefits: {cvs-5: 1000}, counted: 20000}
+  - {payment: 2, benefits: {online-5: 5000}}
+  calc: 33,000 × 5% = 1,650, 20,000 × 5% = 1,000, 200,000 × 5% = 10,000이나 한도 5,000

@@ -1,0 +1,55 @@
+card: hana-18398
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 일반 0.7% 반올림
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10050, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {general-domestic-overseas: 70}
+  calc: 10,050 x 0.7% = 70.35를 반올림 70
+- name: 신세계백화점 주중 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shinsegae-dept-weekday: 2000}
+  calc: 2026-11-04 수요일. 200,000 x 1% = 2,000
+- name: 신세계백화점 주말 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-07T10:00, amount: 200000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shinsegae-dept-weekend: 4000}
+  calc: 2026-11-07 토요일. 200,000 x 2% = 4,000
+- name: 해외 3%와 통합 한도 넘친 금액은 0.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 1600000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-3: 48000}
+  - payment: 1
+    benefits: {overseas-3: 2000, general-domestic-overseas: 233}
+  calc: 1,600,000 x 3% = 48,000. 다음 결제는 남은 한도 2,000을 위해 66,667원에 3%, 남은 33,333원은 0.7% = 233.3을 반올림 233
+- name: 대한항공 3%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 500000, merchant: korean_air, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {airline-3: 15000}
+  calc: 500,000 x 3% = 15,000
+- name: 아고다 3%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: agoda, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {travel-3: 6000}
+  calc: 200,000 x 3% = 6,000

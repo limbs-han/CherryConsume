@@ -1,0 +1,27 @@
+card: ibk-12113310001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈료 1만2천원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: wellrix_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {wellrix-rental: 12000}}
+  calc: 렌탈료 30,000원, 월 한도 12,000원
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: wellrix_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 70만 구간 두 건 합산
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: wellrix_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: wellrix_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {wellrix-rental: 10000}}
+  - {payment: 1, benefits: {wellrix-rental: 7000}}
+  calc: 첫 건 렌탈료 전액 10,000원. 둘째는 월 17,000원에 남은 7,000원

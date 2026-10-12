@@ -1,0 +1,126 @@
+schema_version: 2
+id: kb-04415
+issuer: kb
+name: H.Point KB국민카드
+short_name: KB H.Point
+search_names: [H.Point 카드, 에이치포인트 KB, 현대백화점 KB]
+kind: credit
+product_codes:
+  - '04415'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: jcb, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04415', fetched_at: '2026-10-11', review_no: 제2017-C1a-08731호}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [annual_fee, gift_card, prepaid_charge]
+      unmodeled: [호텔·백화점·대형마트·철도역사 등에 입점한 가맹점과 결제대행업체(PG) 전용 가맹점으로 승인된 결제는 할인에서 빠진다]
+    limits:
+      - key: life-5
+        per: month
+        amount: {300000: 10000, 600000: 20000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [daily-5, weekly-5, monthly-5, movie-3500, hpoint-base-0-5]
+        spill: none
+      - {key: extra}
+    benefits:
+      - key: daily-5
+        title: 커피·편의점·약국 5% 청구할인
+        source: page
+        evidence: ['Daily 할인 혜택 커피, 편의점, 약국 업종 5%청구할인', 이용건당 1만원 이상 사용시 적용, 30만원 이상 | 5% | 1만원 | 60만원 이상 | 2만원, 3대 생활영역 통합한도로 적용됩니다.]
+        target:
+          categories: [cafe, convenience, pharmacy]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life-5}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: weekly-5
+        title: 패스트푸드·주유소 5% 청구할인
+        source: page
+        evidence: ['Weekly 할인 혜택 패밀리레스토랑, 패스트푸드, 주유소/충전소 업종 5%청구할인', 이용건당 1만원 이상 사용시 적용, 3대 생활영역 통합한도로 적용됩니다.]
+        target:
+          categories: [fuel, restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life-5}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [패밀리레스토랑 업종도 대상이지만 공통 업종이 일반음식점과 나뉘지 않아 담지 않았다]
+      - key: monthly-5
+        title: 학원·미용실 5% 청구할인
+        source: page
+        evidence: ['Monthly 할인 혜택 학원, 골프/골프연습장, 미용실 업종 5%청구할인', 이용건당 1만원 이상 사용시 적용, 3대 생활영역 통합한도로 적용됩니다.]
+        target:
+          categories: [beauty.salon, education.academy]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life-5}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [골프·골프연습장 업종도 대상이지만 공통 업종이 없어 담지 않았다]
+      - key: movie-3500
+        title: CGV·메가박스 온라인 예매 3,500원 청구할인
+        source: page
+        evidence: ['CGV/메가박스 온라인 영화 예매 시 승인건당 3,500원 청구할인', '카드별 1일 2회, 월 4회, 연 10회 이내', H.Point KB국민카드 전월 이용실적 30만원(일시불+할부) 이상 이용 시 할인서비스 제공]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 3500}
+        limits:
+          - {per: day, count: 2}
+          - {per: month, count: 4}
+          - {per: year, count: 10}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [매출전표 업종이 전자상거래PG로 잡힌 예매는 할인에서 빠진다]
+      - key: hpoint-base-0-5
+        title: 모든 가맹점 0.5% H.Point 적립
+        source: page
+        evidence: [모든 이용금액(일부 제외) 0.5% 적립, '전월 실적 조건, 적립한도 및 횟수 제한이 없습니다.', '적립 제외 : 생활영역 할인 매출건(해당 매출 전체), 무이자할부, 아파트관리비, 각종 세금 및 공과금, 대학(대학원)등록금, 각종 수수료 및 이자, 연체료, 연회비, 정부지원금, 장/단기 카드대출, 상품권 및 선불카드 구입/충전금액', H.Point는 현대백화점그룹 통합 멤버십 포인트로 1p=1원 이며]
+        target:
+          exclude_categories: [apartment_fee, education.tuition, tax, utility]
+          all: true
+        when:
+          - {interest_free: false}
+        reward: {type: points, program: h_point, rate: 0.5}
+        unmodeled: [정부지원금 결제는 적립하지 않는다]
+      - key: hpoint-hyundai-1
+        title: 현대백화점그룹 1% H.Point 추가 적립
+        source: page
+        evidence: [현대백화점 그룹 내 이용 시 추가 1.0% H.Point 추가 적립됩니다.(추가적립은 기본적립과 별개로 적립됩니다.), '전월 실적 조건, 적립한도 및 횟수 제한이 없습니다.', 현대백화점그룹 내 별도 임대매장 이용 시에는 기본적립 서비스(0.5%)만 제공됩니다., H.Point는 현대백화점그룹 통합 멤버십 포인트로 1p=1원 이며]
+        target:
+          merchants: [hyundai_department, the_hyundai_com]
+        when:
+          - {interest_free: false}
+        reward: {type: points, program: h_point, rate: 1}
+        stack: extra
+        unmodeled: [현대백화점그룹 안 별도 임대매장은 추가 적립하지 않는다, 현대백화점과 더현대닷컴 말고 다른 현대백화점그룹 가맹점은 대상 범위가 원문에 없어 담지 않았다]
+    unmodeled: ['롯데월드·에버랜드 50%, 캐리비안베이 30% 현장할인은 지정 이용권에만 주어 담지 않았다', 최초 카드 사용등록일부터 다음 달 말일까지 영화와 놀이공원 할인은 실적 없이 준다. 생애 최초 발급 조건이 있어 담지 않았다, 월 할인한도는 본인회원 기준이고 가족카드 이용분이 실적에 들어간다, 할인과 적립은 전표 매입 순서대로 한도를 채운다, H.Point KB국민카드는 기본 포인트리가 적립되지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 출시일은 2017-08-10이다, assumed: '2026-10-11'}
+  - {path: 'revisions[0].benefits', question: 포인트의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 KB국민카드 상품 페이지 대조. 연회비 K-WORLD(JCB)와 국내외겸용(Master) 모두 12,000원(기본 7천+제휴 5천). H.Point 기본 0.5%, 현대백화점그룹 1% 추가(실적·한도 없음). 생활영역 5%는 건당 1만원 이상, 전월 30만 이상 월 1만원, 60만 이상 월 2만원 통합 한도. 생활영역·영화·놀이공원 할인 매출은 실적과 적립에서 전부 빠진다. H.Point 1p = 1원.

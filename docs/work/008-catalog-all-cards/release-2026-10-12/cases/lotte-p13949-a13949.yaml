@@ -1,0 +1,40 @@
+card: lotte-p13949-a13949
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 60% 통합 한도 13,000원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: sk_energy}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: cgv}
+  expect:
+  - payment: 0
+    benefits: {fuel-60: 6000}
+    counted: 0
+  - payment: 1
+    benefits: {movie-60: 7000}
+  calc: 10000 x 60% = 6000, 15000 x 60% = 9000은 남은 통합 한도 7000. 할인받은 결제 전액 실적 제외
+- name: 스트리밍 정기결제 60%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 13500, merchant: netflix, billing: subscription}
+  expect:
+  - payment: 0
+    benefits: {streaming-60: 8100}
+  calc: 13500 x 60% = 8100
+- name: 멤버십 60%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 7890, merchant: coupang_wow}
+  expect:
+  - payment: 0
+    benefits: {membership-60: 4734}
+  calc: 7890 x 60% = 4734
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: sk_energy}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만 미만

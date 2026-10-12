@@ -1,0 +1,28 @@
+card: lotte-1030
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 0.2% 적립 1천원 단위
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {lotte-lpoint-0-2: 110}
+  calc: 1천원 단위 55개 × 2P = 110P
+- name: 해외 가맹점도 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {lotte-lpoint-0-2: 200}
+  calc: 100개 × 2P = 200P
+- name: 무이자할부 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: department_store, installment_months: 3, interest_free: true}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 모든 무이자 할부 건은 적립 제외

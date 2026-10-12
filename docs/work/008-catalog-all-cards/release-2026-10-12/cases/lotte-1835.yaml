@@ -1,0 +1,38 @@
+card: lotte-1835
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 300만 구간 기본 1.2%
+  prev_month_spend: 3000000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {basic-1-2: 600}}
+  calc: 50,000 × 1.2% = 600
+- name: 300만 직전이면 없음
+  prev_month_spend: 2999999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 2,999,999원은 0 구간
+- name: 백화점 2.4%와 공동 한도 2만원 뒤 넘친 금액은 1.2%
+  prev_month_spend: 3000000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 500000, category: department_store, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, category: travel.hotel, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 500000, category: department_store, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {dept-2-4: 12000}}
+  - {payment: 1, benefits: {travel-2-4: 2400}}
+  - {payment: 2, benefits: {dept-2-4: 5600, basic-1-2: 3199}}
+  calc: 500,000 × 2.4% = 12,000. 호텔 100,000 × 2.4% = 2,400. 남은 한도 5,600은 233,333원분이고 한도에 쓴 결제액을 올림해 나머지 266,666 × 1.2% = 3,199.99, 버림 3,199
+- name: 해외 2.4%와 2만원 미만은 기본
+  prev_month_spend: 3000000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 19999, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-2-4: 2400}}
+  - {payment: 1, benefits: {basic-1-2: 239}}
+  calc: 100,000 × 2.4% = 2,400. 19,999 × 1.2% = 239.988, 버림 239

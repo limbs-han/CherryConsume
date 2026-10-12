@@ -1,0 +1,87 @@
+card: woori-103686
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 스타벅스 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {ten-coffee-10: 2000}}
+  calc: 20,000 × 10% = 2,000
+- name: 40만 직전은 혜택 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 커피 영역 월 5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: mega_coffee}
+  expect:
+  - {payment: 0, benefits: {ten-coffee-10: 5000}}
+  calc: 6,000을 영역 한도 5,000으로 자른다
+- name: 편의점 오프라인 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {ten-convenience-10: 1000}}
+  calc: 10,000 × 10%
+- name: 후불 지하철과 카카오T 교통 영역 합산
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.subway, billing: postpaid_transit}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: kakao_t, channel: online}
+  expect:
+  - {payment: 0, benefits: {ten-transit-10: 3000}}
+  - {payment: 1, benefits: {ten-kakao-t-10: 2000}}
+  calc: 3,000 뒤 교통 영역 남은 2,000
+- name: 택시 오프라인 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T22:00, amount: 15000, category: taxi, channel: offline}
+  expect:
+  - {payment: 0, benefits: {ten-taxi-10: 1500}}
+  calc: 15,000 × 10%
+- name: 통신 자동납부 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {ten-telecom-10: 5000}}
+  calc: 50,000 × 10% = 5,000
+- name: 해외 음식점은 TEN 해외 우선
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: restaurant, region: overseas}
+  expect:
+  - {payment: 0, benefits: {ten-overseas-10: 3000}}
+  calc: 30,000 × 10%. ONE 1%는 겹쳐 받지 않는다
+- name: TEN 통합 월 1만원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: starbucks}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: kt, billing: autopay}
+  - {at: 2026-11-07T10:00, amount: 50000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {ten-coffee-10: 5000}}
+  - {payment: 1, benefits: {ten-telecom-10: 5000}}
+  - {payment: 2, benefits: {}}
+  calc: 5,000 + 5,000으로 통합 1만원을 다 썼다
+- name: 80만 구간 음식점 1%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 50000, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {one-dining-1: 500}}
+  calc: 50,000 × 1%
+- name: 온라인 네이버페이 1%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 30000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {one-pay-1: 300}}
+  calc: 30,000 × 1%

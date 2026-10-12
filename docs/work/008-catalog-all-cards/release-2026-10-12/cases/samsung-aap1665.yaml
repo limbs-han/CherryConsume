@@ -1,0 +1,27 @@
+card: samsung-aap1665
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 70만 구간 통신요금 월 1만원 한도
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-25T09:00, amount: 60000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {kt-telecom: 10000}, counted: 60000}
+  calc: 자동납부액만큼 할인하되 70만 구간 0건 한도 10,000원
+- name: 30만 구간 통신요금이 한도보다 적으면 그 금액만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-25T09:00, amount: 5000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {kt-telecom: 5000}}
+  calc: 5,000원 < 한도 7,000원
+- name: 30만 직전이면 할인 없음과 택시 실적 제외
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-25T09:00, amount: 60000, merchant: kt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-26T09:00, amount: 10000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {}, counted: 0}
+  calc: 0 구간. 택시는 실적 제외

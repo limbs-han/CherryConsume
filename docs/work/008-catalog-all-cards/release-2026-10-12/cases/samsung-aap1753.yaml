@@ -1,0 +1,53 @@
+card: samsung-aap1753
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 50만 구간 월 1회 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 50000, merchant: sk_energy}
+  - {at: 2026-11-10T08:00, amount: 50000, merchant: gs_caltex}
+  expect:
+  - {payment: 0, benefits: {fuel-10000: 10000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 0}
+  calc: 50만 구간은 월 1회 10,000원. 주유 업종은 실적 제외
+- name: 주유 150만 구간 월 3회와 일 1회
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 30000, merchant: s_oil}
+  - {at: 2026-11-03T18:00, amount: 30000, merchant: s_oil}
+  - {at: 2026-11-04T08:00, amount: 10000, merchant: hd_oilbank}
+  - {at: 2026-11-05T08:00, amount: 30000, merchant: sk_energy}
+  - {at: 2026-11-06T08:00, amount: 30000, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {fuel-10000: 10000}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {fuel-10000: 10000}}
+  - {payment: 3, benefits: {fuel-10000: 10000}}
+  - {payment: 4, benefits: {}}
+  calc: 같은 날 두 번째는 일 1회라 없음. 세 번 받으면 월 3만원
+- name: 실적 50만 직전이면 주유 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 50000, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 0 구간은 혜택 없음
+- name: 주유 1만원 미만은 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 9999, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건별 1만원 이상만
+- name: 대중교통 택시 10% 통합 월 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 30000, category: transit.subway, channel: offline}
+  - {at: 2026-11-04T23:00, amount: 30000, category: taxi, channel: offline}
+  - {at: 2026-11-05T23:00, amount: 10000, category: taxi, channel: online}
+  expect:
+  - {payment: 0, benefits: {transit-10: 3000}, counted: 0}
+  - {payment: 1, benefits: {taxi-10: 2000}, counted: 0}
+  - {payment: 2, benefits: {}, counted: 0}
+  calc: 30,000 × 10% = 3,000, 남은 2,000. 앱 택시는 오프라인이 아니라 없음. 대중교통과 택시는 실적 제외

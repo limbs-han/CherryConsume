@@ -1,0 +1,52 @@
+schema_version: 2
+id: kb-09349
+issuer: kb
+name: KB 전통시장온누리체크카드
+short_name: KB 전통시장온누리 체크
+kind: check
+product_codes:
+  - '09349'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09349', fetched_at: '2026-10-12', review_no: 250626-03375-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-06-30'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [car.toll, education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제, 대행사이트 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: market-5
+        title: 전통시장 5% 환급할인
+        source: page
+        evidence: [전통시장가맹점 이용 | 5% | 월 2천원 | 건당 1만원 이상 | 국세청 지정 전통시장(월 1회 갱신), 전월 40만원 이상 이용 시 제공, 실적 유예기간 전월 실적 40만원 미만이면 월 1천원까지 할인]
+        target:
+          categories: [traditional_market]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1000, 400000: 2000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: ['온누리상품권 차감 이용 5% 환급할인(월 2천원, 건당 1만원 이상)은 온누리상품권 앱에 등록해 잔액으로 결제한 경우라 결제 입력으로 판단할 수 없어 계산하지 않는다. 전통시장 할인과 중복된다', KB Pay 쇼핑 탭 이용 5% 환급할인(월 2천원)은 KB Pay 앱 쇼핑 탭 안의 결제라 담을 가맹점이 없어 계산하지 않는다, '정부지원금, 포인트리 충전, 자판기·유료도로·터널통행료·기차 고속버스 취소 반환수수료 같은 무승인 금액은 실적에서 빠진다', 해외 이용금액은 매입 완료 기준 일시불만 실적에 넣는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2025.6.30 출시라고만 적었다. 현재 규칙의 시작일로 잠정 적용한다., assumed: '2025-06-30'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문의 후불교통요금과 무승인 유료도로·터널통행료 실적 제외를 시내버스, 지하철, 통행료 업종 제외로 옮겼다. 승인된 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다', assumed: 'transit.bus_city, transit.subway, car.toll'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 새 업종 전통시장으로 국세청 지정 전통시장 할인을 담았다. 지방세는 상하수도를 포함해 tax.local과 utility.water로 뺐다. 온누리상품권 차감과 KB Pay 쇼핑 탭 할인은 빼서 실제보다 덜 준다.

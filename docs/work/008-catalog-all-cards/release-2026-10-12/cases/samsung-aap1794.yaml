@@ -1,0 +1,41 @@
+card: samsung-aap1794
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 렌탈료 30만 구간 7천원 월 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 35900, merchant: coway, billing: autopay}
+  - {at: 2026-11-04T09:00, amount: 20000, merchant: coway, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental: 7000}, counted: 35900}
+  - {payment: 1, benefits: {}, counted: 20000}
+  calc: 30만 구간 7,000. 월 1회라 두 번째는 없음. 할인 건도 실적 인정
+- name: 렌탈료 120만 구간 1만3천원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 35900, merchant: coway, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental: 13000}, counted: 35900}
+  calc: 120만 구간 13,000
+- name: 실적 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T09:00, amount: 35900, merchant: coway, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 35900}
+  calc: 0 구간은 혜택 없음
+- name: 생활요금 1만원 이상 1천원 월 3회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 55000, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T09:00, amount: 33000, merchant: kt, billing: autopay}
+  - {at: 2026-11-07T09:00, amount: 9999, merchant: lg_uplus, billing: autopay}
+  - {at: 2026-11-08T09:00, amount: 22000, merchant: sk_broadband, billing: autopay}
+  - {at: 2026-11-09T09:00, amount: 22000, merchant: lg_uplus, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-1000: 1000}, counted: 55000}
+  - {payment: 2, benefits: {}, counted: 9999}
+  - {payment: 3, benefits: {living-1000: 1000}, counted: 22000}
+  - {payment: 4, benefits: {}, counted: 22000}
+  calc: 1만원 미만은 제외. 세 번째 할인 뒤 월 3회를 다 써서 다섯 번째는 없음

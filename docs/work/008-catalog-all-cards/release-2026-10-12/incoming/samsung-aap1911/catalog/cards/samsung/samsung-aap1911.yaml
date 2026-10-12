@@ -1,0 +1,67 @@
+schema_version: 2
+id: samsung-aap1911
+issuer: samsung
+name: 무신사 삼성카드
+short_name: 무신사 삼성카드
+search_names: [무신사 삼성, 무신사카드]
+kind: credit
+product_codes: [AAP1911]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1911', fetched_at: '2026-10-05'}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtirrHgGvgzb%2B5%2BFC76c8MI4%3D&sn=1', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-02-25'
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: ['고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 대금결제, 삼성카드의 다른 행사 혜택이 적용된 이용금액은 적립하지 않는다']
+    stacks:
+      - key: main
+        pick: priority
+        order: [musinsa, base-1]
+        spill: none
+    benefits:
+      - key: musinsa
+        title: 무신사 10%·2% 무신사머니리워드 적립
+        source: manual
+        evidence: [무신사 이용 시 10%/2% 무신사머니리워드 적립, '전월 이용금액대별 적립률 및 통합 월 적립한도 30만원 이상 | 30만원 미만 | 적립률 10% | 2% | 적립한도 40,000P | 20,000P', '* 온라인은 공식 홈페이지/앱을 통한 결제건에 한함 * 오프라인은 국내 매장에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외', '* 통합 월 적립한도 초과 시 ‘국내외 가맹점 1% 무신사머니리워드 적립’ 혜택 제공 불가', (1 무신사머니리워드=1 무신사머니 포인트의 가치), (1 무신사머니 포인트=1원의 가치)]
+        target:
+          merchants: [musinsa]
+        when:
+          - {region: domestic}
+          - payment_not: [baemin_pay, coupay, eleven_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward:
+          type: points
+          program: musinsa_money
+          rate: {0: 2, 300000: 10}
+        limits:
+          - per: month
+            amount: {0: 20000, 300000: 40000}
+        unmodeled: ['29CM, 솔드아웃, 무신사 스탠다드, 무신사 엠프티도 무신사 적립 대상이지만 공통 가맹점이 없어 담지 않았다', '백화점, 할인점, 쇼핑몰 안의 임대매장 결제는 적립하지 않는다']
+      - key: base-1
+        title: 국내외 가맹점 1% 무신사머니리워드 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 국내외 가맹점 1% 무신사머니리워드 기본 적립', '* 국내외 가맹점 적립 대상에 ‘무신사’는 제외 * 해외는 해외겸용카드에 한해 제공']
+        target:
+          all: true
+          exclude_merchants: [musinsa]
+        reward: {type: points, program: musinsa_money, rate: 1}
+    unmodeled: [무신사 결제가 결제대행업체나 간편결제 가맹점으로 승인되면 무신사 적립에서 빠진다. 간편결제로 낸 무신사 결제는 적립하지 않는 것으로 계산한다, 무신사머니리워드는 무신사 회원이고 무신사페이먼츠 서비스에 가입해야 무신사머니 포인트로 바뀐다, 본인카드와 가족카드의 실적과 적립한도는 합산한다, 적립은 매출전표 접수 순서대로 한다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 포인트의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 상품안내장(2026.4판, 심의필 2026-C1a-04220호) 대조. 출시 2026-02-25. 연회비 해외겸용 Mastercard와 국내전용 1만원(기본 7천+제휴 3천), 가족 3천원. 무신사 10%(전월 30만 이상, 월 4만P)·2%(30만 미만, 월 2만P), 무신사를 뺀 국내외 1%(실적·한도 없음). 둘은 중복되지 않고 무신사 통합 한도를 넘으면 1%도 없다. 발급월+1개월까지는 30만 이상 구간을 준다. 무신사머니리워드 1 = 무신사머니 포인트 1 = 1원.

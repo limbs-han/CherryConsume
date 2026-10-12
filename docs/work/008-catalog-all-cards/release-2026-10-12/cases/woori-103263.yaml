@@ -1,0 +1,32 @@
+card: woori-103263
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈 자동납부 1만원, 할인 건 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: hyundai_rental_service, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental-autopay: 10000}, counted: 0}
+  calc: 30만 구간 월 1만원. 할인받은 이용금액 전체 실적 제외
+- name: 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: hyundai_rental_service, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 30만 미만
+- name: 최고 구간 요금이 한도보다 적으면 요금만
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 8000, merchant: hyundai_rental_service, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental-autopay: 8000}}
+  calc: 한도 25000보다 요금 8,000원이 적다
+- name: 최고 구간 한도
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: hyundai_rental_service, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental-autopay: 25000}}
+  calc: 월 25000원

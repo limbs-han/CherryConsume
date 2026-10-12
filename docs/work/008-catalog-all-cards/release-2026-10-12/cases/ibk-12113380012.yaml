@@ -1,0 +1,46 @@
+card: ibk-12113380012
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {basic-0-2: 100}}
+  calc: 50,000원 × 0.2% = 100원
+- name: 쿠팡 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {special-online-0-6: 300}}
+  calc: 50,000원 × 0.6% = 300원
+- name: 스타벅스 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-coffee-0-6: 60}}
+  calc: 10,000원 × 0.6% = 60원
+- name: 지하철 후불교통 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T08:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {special-transit-0-6: 60}}
+  calc: 10,000원 × 0.6% = 60원
+- name: 택시 오프라인 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T23:00, amount: 20000, category: taxi, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-taxi-0-6: 120}}
+  calc: 20,000원 × 0.6% = 120원
+- name: 카카오T 온라인 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T23:00, amount: 20000, merchant: kakao_t, channel: online}
+  expect:
+  - {payment: 0, benefits: {special-kakaot-0-6: 120}}
+  calc: 20,000원 × 0.6% = 120원

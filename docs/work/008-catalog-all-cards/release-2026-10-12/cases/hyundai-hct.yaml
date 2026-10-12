@@ -1,0 +1,25 @@
+card: hyundai-hct
+holder:
+  started_on: '2026-08-01'
+cases:
+- name: 국내 결제 0.7% 할인
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {domestic-0-7: 70}}
+  calc: 10,000원의 0.7%
+- name: 해외 결제 2% 할인
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.general, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 200}}
+  calc: 10,000원의 2%
+- name: 임대료는 할인 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 500000, category: rent}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 부동산 임대료 할인 제외

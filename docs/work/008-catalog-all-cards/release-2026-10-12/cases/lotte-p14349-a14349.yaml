@@ -1,0 +1,25 @@
+card: lotte-p14349-a14349
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 롯데마트 10% 일 1만원 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 120000, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lotte-mart-discount: 10000}}
+  calc: 120,000 × 10% = 12,000이나 일 한도 10,000
+- name: 100만 직전이면 5%
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 60000, merchant: lotte_mart_max, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lotte-mart-discount: 3000}}
+  calc: 60,000 × 5% = 3,000
+- name: 5천원 미만은 할인 없음
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 4999, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 5천원 미만

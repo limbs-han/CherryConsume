@@ -1,0 +1,59 @@
+schema_version: 2
+id: woori-104129
+issuer: woori
+name: 우리 원주사랑 체크카드
+kind: check
+product_codes:
+  - '104129'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104129', fetched_at: '2026-10-12', review_no: 준법 심의필 2026-C00611(2026.03.11)}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-02-24'
+    source: page
+    tiers: [0, 200000, 400000, 600000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: ['우편요금, 과태료·범칙금·벌금, 여권발급비용, 국가·공공기관·공공단체 가맹점 이용금액은 적립에서 빠진다']
+    limits:
+      - key: points
+        per: month
+        amount: {200000: 5000, 400000: 10000, 600000: 15000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [special-market-2, base-0-2]
+        spill: none
+    benefits:
+      - key: base-0-2
+        title: 국내 기본 0.2% 모아포인트
+        source: page
+        evidence: [기본적립 | 상기 가맹점 외 국내 적립 대상 가맹점 | 0.2%, 전월 국내 가맹점 이용실적 20만원 이상 시 적립, 기본적립과 특별적립은 중복 적용되지 않음, 결제 건당 1만원 미만 금액 적립 제외, 기본/특별 통합 월 적립한도 5, 000점 10, 000점 15, 000점]
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: points, program: woori_moa_point, rate: 0.2}
+        limits:
+          - {shared: points}
+        tiers: {from: 200000}
+      - key: special-market-2
+        title: 전통시장 2% 모아포인트
+        source: page
+        evidence: [특별적립 | 전통시장 (국세청 전통시장 등록 가맹점 기준) | 2.0%]
+        target:
+          categories: [traditional_market]
+        reward: {type: points, program: woori_moa_point, rate: 2}
+        limits:
+          - {shared: points}
+        tiers: {from: 200000}
+    unmodeled: [원주사랑상품권 가맹점에서는 원주사랑상품권 잔액이 먼저 차감된다. 상품권 차감분의 실적과 적립 여부는 원문에 없다, 서비스 제공은 매입 순서대로 적용된다, 매월 1~2일에 접수된 취소는 전월 실적에서 뺀다]
+notes: 2026-10-12 expand98 업종 재조사. 전통시장 업종이 생겨 다시 옮겼다. 발급은 원주시민이 아니어도 된다.

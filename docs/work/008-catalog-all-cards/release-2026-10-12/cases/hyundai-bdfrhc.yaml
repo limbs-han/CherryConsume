@@ -1,0 +1,42 @@
+card: hyundai-bdfrhc
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 정기결제 8천원 할인과 실적 제외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental-autopay: 8000}, counted: 0}
+  calc: 40만 이상 80만 미만 월 8,000원. 할인 적용 건은 실적에서 뺀다
+- name: 120만 구간 1만6천원, 요금이 적으면 그 금액만
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12000, merchant: bodyfriend_rental, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental-autopay: 12000}, counted: 0}
+  - {payment: 1, benefits: {rental-autopay: 4000}, counted: 0}
+  calc: 첫 건 12,000원 전액, 둘째 건은 월 16,000원 중 남은 4,000원
+- name: 40만 직전은 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 40만 미만 할인 제외
+- name: 정기결제가 아닌 납부는 할인 없음
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: bodyfriend_rental, billing: normal}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 정기결제 건만 할인
+- name: 신규 등록 다음 달까지는 40만 구간
+  holder: {started_on: '2026-10-20'}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {rental-autopay: 8000}, counted: 0}
+  calc: 수령 등록월 다음 달 이용 건까지 40만 구간 한도

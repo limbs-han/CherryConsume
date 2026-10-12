@@ -1,0 +1,103 @@
+schema_version: 2
+id: kb-09381
+issuer: kb
+name: KB차차차 신용카드
+short_name: KB차차차
+kind: credit
+product_codes:
+  - '09381'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09381', fetched_at: '2026-10-12', review_no: 제2023-C1a-04942호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2023-05-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1500000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      month_offset: {}
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: fuel-150
+        title: 주유 리터당 150원 청구할인
+        source: page
+        evidence: ['SK, GS, S-Oil, 현대 주유소(충전소 포함) 리터당 150원~300원 청구할인', 1구간(40만원 이상) | 150원/L | 20만원 주유 이용금액까지, SK에너지 고시 휘발유가 기준으로 리터를 환산한다]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: billing_discount, per_liter: 150}
+        limits:
+          - {per: month, base: 200000}
+        tiers:
+          from: 400000
+          to: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: fuel-200
+        title: 주유 리터당 200원 청구할인
+        source: page
+        evidence: ['SK, GS, S-Oil, 현대 주유소(충전소 포함) 리터당 150원~300원 청구할인', 2구간(80만원 이상) | 200원/L | 30만원 주유 이용금액까지, SK에너지 고시 휘발유가 기준으로 리터를 환산한다]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: billing_discount, per_liter: 200}
+        limits:
+          - {per: month, base: 300000}
+        tiers: {from: 800000, to: 800000}
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: fuel-250
+        title: 주유 리터당 250원 청구할인
+        source: page
+        evidence: ['SK, GS, S-Oil, 현대 주유소(충전소 포함) 리터당 150원~300원 청구할인', 3구간(150만원 이상) | 250원/L | 35만원 주유 이용금액까지, SK에너지 고시 휘발유가 기준으로 리터를 환산한다]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: billing_discount, per_liter: 250}
+        limits:
+          - {per: month, base: 350000}
+        tiers: {from: 1500000, to: 1500000}
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: fuel-300
+        title: 주유 리터당 300원 청구할인
+        source: page
+        evidence: ['SK, GS, S-Oil, 현대 주유소(충전소 포함) 리터당 150원~300원 청구할인', 4구간(200만원 이상) | 300원/L | 40만원 주유 이용금액까지, SK에너지 고시 휘발유가 기준으로 리터를 환산한다]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: billing_discount, per_liter: 300}
+        limits:
+          - {per: month, base: 400000}
+        tiers: {from: 2000000, to: 2000000}
+        notes: 원문은 SK에너지 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: car-service-10
+        title: 차량정비·주차·세차 10% 청구할인
+        source: page
+        evidence: ['차량정비, 주차, 세차 10% 청구할인', '자동차정비/부품/인테리어, 주차장, 세차장, 기타 차량서비스 업종', '1구간(40만원 이상) 월 1만원, 2구간(80만원 이상) 월 2만원', 실적 유예기간에는 1구간 서비스를 제공한다]
+        target:
+          categories: [car.car_repair, car.car_wash, car.parking]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 10000, 400000: 10000, 800000: 20000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: [기타 차량서비스 업종은 담을 업종이 없어 계산하지 않는다, 가족카드 실적은 본인과 합산한다, 해외 이용금액은 매입 완료 기준 일시불만 실적에 넣는다, '정부지원금, 공항버스·자판기·터널통행료·항공기내 같은 무승인 전표는 실적에서 빠진다. 공항버스는 담을 업종이 없다', 할인은 전표 매입 순서대로 한도 안에서 적용한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 출시일을 찾지 못해 심의일로 두었다., assumed: '2023-05-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문의 무승인전표(대중교통, 터널통행료) 실적 제외를 시내버스, 지하철, 통행료 업종 제외로 옮겼다. 승인된 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다', assumed: 'transit.bus_city, transit.subway, car.toll'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 새 업종 차량정비, 주차장, 세차로 차량서비스 혜택을 담았다. 실적 유예기간은 본인 생애 첫 발급만 1구간 혜택을 준다. 초중고 학교납입금만 적혀 있어 primary_secondary_fee로 뺐다.

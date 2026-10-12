@@ -1,0 +1,32 @@
+card: kb-04409
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 11번가 11PAY 11%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: eleven_st, payment_method: eleven_pay}
+  expect:
+  - {payment: 0, benefits: {11st-11: 5500}, counted: 0}
+  calc: 50,000원 × 11% = 5,500점. 특별적립 매출은 실적 제외
+- name: 40만 직전 11번가는 기본 0.1%만
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: eleven_st, payment_method: eleven_pay}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 50}, counted: 50000}
+  calc: 0 구간이라 기본 0.1% = 50점
+- name: 80만 구간 편의점 5%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: convenience}
+  expect:
+  - {payment: 0, benefits: {life-5: 1000}, counted: 0}
+  calc: 20,000원 × 5% = 1,000점
+- name: 편의점 1만원 미만은 기본만
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, category: convenience}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 9}, counted: 9000}
+  calc: 건당 1만원 미만 특별적립 없음. 0.1% = 9점

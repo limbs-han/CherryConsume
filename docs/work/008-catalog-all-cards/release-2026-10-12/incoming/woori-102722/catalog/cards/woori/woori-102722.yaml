@@ -1,0 +1,51 @@
+schema_version: 2
+id: woori-102722
+issuer: woori
+name: 트래블월렛 우리카드
+short_name: 트래블월렛 우리
+search_names: [트래블월렛, 트래블월렛 우리카드]
+kind: credit
+product_codes:
+  - '102722'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102722', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: ['정부지원금(보육료, 유치원 보조비, 바우처), 우편요금, 여권발급비용, 과태료·범칙금·벌금, 공공기관 가맹점 이용금액, 각종 수수료와 이자는 적립하지 않는다']
+    benefits:
+      - key: travel-point-domestic-1
+        title: 국내 가맹점 1% 트래블 포인트 적립
+        source: page
+        evidence: [전월 국내가맹점 이용 실적 | 40만원 이상 | 국내 | 1.0% | 없음, '적립/사용단위 : 1 포인트 = 1원', '트래블 포인트란? 트래블월렛 우리카드 이용 시 적립되는 포인트로 트래블페이 충전 시 사용 가능합니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: travel_wallet_point, rate: 1}
+        tiers: {from: 400000}
+    unmodeled: [해외 2% 적립은 담지 않았다. 우리카드 트래블페이로 결제한 해외 이용금액은 적립에서 빠지는데 결제 입력으로 트래블페이와 신용 결제를 가를 수 없다, 국내 가맹점 취소매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 해외 이용 수수료 면제는 결제 혜택으로 계산하지 않는다, 트래블 포인트는 트래블월렛에 가입한 뒤부터 적립된다, 한도와 적립은 매입 순서대로 적용된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 출시일은 2023-07-07이다, assumed: '2026-10-11'}
+  - {path: 'revisions[0].new_card.from', question: 신규 특례 기준일은 카드 수령(사용)등록일과 사용개시일 중 빠른 날이다. 사용 등록일로 두었다, assumed: registration}
+  - {path: 'revisions[0].benefits', question: 포인트의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-11 우리카드 상품 페이지(2025년 8월 기준, 심의필 2023-C1a-07389호) 대조. 연회비 해외겸용(VISA)·국내전용 모두 20,000원(기본 7,000+제휴 13,000), 가족카드 없음. 전월 국내가맹점 실적 40만원 이상이면 국내 1%, 해외 2% 트래블 포인트 적립, 한도 없음. 해외가맹점 이용금액은 실적에서 빠진다. 트래블 포인트는 트래블월렛 운영 포인트로 1포인트 = 1원이다.
