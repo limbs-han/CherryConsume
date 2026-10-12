@@ -1,0 +1,42 @@
+card: nh-f20600
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 직전 전통시장은 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, category: traditional_market, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 실적 미달이고 전통시장은 기본 적립도 없음
+- name: 전통시장 15%와 통합 한도 1만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 60000, category: traditional_market, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 20000, category: traditional_market, channel: offline}
+  expect:
+  - {payment: 0, benefits: {market-15: 9000}, counted: 60000}
+  - {payment: 1, benefits: {market-15: 1000}, counted: 20000}
+  calc: 6만원의 15% 9,000점, 다음 건은 남은 한도 1,000점
+- name: 생활영역 0.3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: starbucks, channel: offline}
+  - {at: 2026-11-05T13:00, amount: 10000, merchant: gs25, channel: offline}
+  - {at: 2026-11-05T14:00, amount: 10000, category: travel.duty_free, channel: offline}
+  - {at: 2026-11-05T15:00, amount: 10000, category: restaurant, channel: offline, region: overseas}
+  expect:
+  - {payment: 0, benefits: {life-0-3: 30}, counted: 10000}
+  - {payment: 1, benefits: {life-store-0-3: 30}, counted: 10000}
+  - {payment: 2, benefits: {life-overseas-0-3: 30}, counted: 10000}
+  - {payment: 3, benefits: {life-abroad-0-3: 30}, counted: 10000}
+  calc: 각 1만원의 0.3% 30점
+- name: 기본 0.2%는 실적 없이
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, category: restaurant, channel: offline}
+  - {at: 2026-11-05T13:00, amount: 10000, category: taxi, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20}, counted: 10000}
+  - {payment: 1, benefits: {base-0-2: 20}, counted: 0}
+  calc: 1만원의 0.2% 20점, 택시는 실적 제외
