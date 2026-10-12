@@ -1,0 +1,56 @@
+schema_version: 2
+id: hyundai-27380
+issuer: hyundai
+name: SSG.COM카드 Edition2
+short_name: 현대 SSG.COM
+search_names: [SSG.COM카드, SSG닷컴 카드, 쓱카드]
+kind: credit
+product_codes: [SGE2]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: visa, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=SGE2', fetched_at: 2026-10-11}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AZX-20260320-1452-98_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SSG%20ed2_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-11, review_no: 제2025-C1a-18055호}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2025-12-01
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    stacks:
+      - key: main
+        pick: priority
+        order: [ssg-com-7, base-0-5]
+        spill: none
+    benefits:
+      - key: base-0-5
+        title: SSG.COM 외 가맹점 0.5% SSG MONEY 적립
+        evidence: [전월 이용금액 30만원 이상 시 SSG MONEY 최대 7% 적립, 그 외 가맹점 | 0.5% | 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립, 'SSG.COM은 물론 전국 이마트, 신세계백화점, 스타벅스 등 SSGPAY 온·오프라인 가맹점에서 현금처럼 사용하실 수 있는 결제 수단입니다']
+        target:
+          all: true
+          exclude_merchants: [ssg_com]
+        reward: {type: points, program: ssg_money, rate: 0.5, round: round}
+        tiers: {from: 300000}
+        notes: 한도 없음. SSG.COM 결제는 7%만이고 한도를 넘으면 적립 없음
+      - key: ssg-com-7
+        title: SSG.COM 7% SSG MONEY 적립
+        evidence: [전월 이용금액 30만원 이상 시 SSG MONEY 최대 7% 적립, SSG.COM | 7% | 월 1만 SSG MONEY(초과 시 미적립), 'SSG.COM : 월 1만 SSG MONEY까지 적립', 매출 건별로 소수점 이하 반올림 후 적립]
+        target:
+          merchants: [ssg_com]
+        reward: {type: points, program: ssg_money, rate: 7, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        unmodeled: [SSG.COM 대상점 기준은 현대카드 홈페이지 기준을 따른다]
+        notes: 월 1만 SSG MONEY, 넘으면 적립 없음
+    unmodeled: ['신세계 유니버스 클럽, 쓱배송 클럽, SSG 7클럽 가입 회원이 이 카드를 SSGPAY에 등록하면 전월 30만원 이상일 때 매달 SSG MONEY 3,900원을 주지만 결제 혜택이 아니라 계산하지 않는다', 적립은 결제 순서가 아니라 현대카드 매출전표 접수 순서대로 한도를 쓴다, 대중교통·하이패스 등 사후 승인 가맹점은 매출전표 접수일 달의 실적으로 센다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다, 현대카드의 다른 할인 서비스가 적용된 결제는 실적과 적립에서 뺀다, 월 적립 한도를 넘긴 뒤 혜택 받은 결제를 취소하면 한도 때문에 빠졌던 이전 결제에 다음 달 15일경 적립한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2022-05-16이고 가이드북은 2025년 12월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다, assumed: '2025-12-01'}
+notes: 2026-10-11 공식 가이드북(2025년 12월 기준) 대조. 연회비 국내전용과 국내외겸용(VISA) 10,000원(기본 10,000+제휴 0), 가족카드 없음. 전월 30만 이상 SSG.COM 7%(월 1만 SSG MONEY, 넘으면 미적립), 그 외 가맹점 0.5% 무제한. 건별 소수점 이하 반올림. SSG MONEY 원화 가치는 가이드북이 SSG MONEY를 원 단위로 적은 문구(매달 SSG MONEY 3,900원 제공)로 1원으로 본다. 실적 제외와 적립 제외는 공과금, 전기·가스, 아파트 관리비, 학교 납입금·등록금, 상품권·선불카드, 4대보험, 고속도로 통행료, 고속버스, 다른 할인 적용 결제, 무이자 할부. 신규 발급 시 발급월 다음 달 이용 건까지 30만 구간. 취소는 승인월 실적에서 뺀다.
