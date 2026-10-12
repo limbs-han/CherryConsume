@@ -1,0 +1,132 @@
+schema_version: 2
+id: kb-09065
+issuer: kb
+name: KB국민 Easy shopping 티타늄카드
+short_name: KB Easy shopping
+kind: credit
+product_codes:
+  - '09065'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 30000}
+  - {scope: global, brand: k_world_jcb, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+  - {scope: domestic, brand: local, form: mobile, amount: 24000}
+  - {scope: global, brand: k_world_jcb, form: mobile, amount: 24000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 24000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09065', fetched_at: '2026-10-11', review_no: 제2026-C1a-02335호, review_valid_until: '2027-02-22'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility.electricity, utility.water]
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 전용 가맹점 결제와 전용 가맹점번호로 승인되는 일부 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 적립에서 빠진다']
+    options:
+      - key: select
+        title: 선택서비스
+        choices:
+          - {key: apartment, title: 아파트 관리비}
+          - {key: convenience, title: 편의점}
+          - {key: delivery, title: 배달앱}
+        default: null
+        change: next_month
+    limits:
+      - key: shopping
+        per: month
+        amount: {500000: 15000, 1000000: 25000, 1500000: 35000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: shopping-online-10
+        title: 11번가·옥션·G마켓·쿠팡·위메프·티몬 10% 포인트리 적립
+        source: page
+        evidence: [Shopping 서비스 | 온라인쇼핑몰 11번가, 옥션, G마켓 | 10% | 1만5천점 | 2만5천점 | 3만5천점, '소셜커머스: 쿠팡, 위메프, 티몬', '* 상품권, 여행, 항공권, 티켓, 도서, 별도 팝업사이트 제외']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, tmon, wemakeprice]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 500000}
+        unmodeled: [온라인쇼핑몰과 소셜커머스의 상품권·여행·항공권·티켓·도서와 별도 팝업사이트 결제는 적립에서 빠진다]
+      - key: shopping-offline-10
+        title: 대형마트·백화점 10% 포인트리 적립
+        source: page
+        evidence: ['대형마트: 이마트, 롯데마트, 홈플러스', '* 온라인결제, 상품권 구매 및 임대매장, SSM(이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스 등) 이용금액 제외', '백화점: 롯데백화점, 현대백화점, 신세계백화점', '* 온라인결제, 상품권 구매 이용금액 제외']
+        target:
+          merchants: [emart, homeplus, hyundai_department, lotte_department, lotte_mart, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 500000}
+        unmodeled: [대형마트 임대매장 결제는 적립에서 빠진다]
+      - key: select-apartment-5
+        title: '[선택] 아파트 관리비 5% 포인트리 적립'
+        source: page
+        evidence: [관리비 | 아파트 관리비 | 5% | 5천점, 당사를 통해 조회 가능한 아파트에 한해 자동납부 등록 가능]
+        target:
+          categories: [apartment_fee]
+        when:
+          - option:
+              select: [apartment]
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+      - key: select-convenience-5
+        title: '[선택] GS25·CU·세븐일레븐 5% 포인트리 적립'
+        source: page
+        evidence: [편의점 | GS25, CU, 세븐일레븐 | 5% | 5천점, '* 백화점, 마트 등 일부 입점 매장의 경우 제외']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - option:
+              select: [convenience]
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+      - key: select-delivery-5
+        title: '[선택] 배달의민족·요기요·마켓컬리 5% 포인트리 적립'
+        source: page
+        evidence: [배달앱 | 배달의 민족, 요기요, 마켓컬리 | 5% | 5천점]
+        target:
+          merchants: [baemin, kurly, yogiyo]
+        when:
+          - option:
+              select: [delivery]
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+      - key: kbpay-5
+        title: 11번가·옥션·G마켓 KB Pay 5% 포인트리 추가 적립
+        source: page
+        evidence: [+KB Pay 서비스 | 온라인쇼핑몰에서 KB Pay 이용 시 | 5% | 5천점, '온라인쇼핑몰 : 11번가, 옥션, G마켓', 일반결제(ISP) 이용금액은 서비스 제외, Shopping서비스의 온라인쇼핑몰 이용 혜택과 중복 적용되며, 적립한도는 각각 적용]
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - payment: [kb_pay]
+          - {channel: online}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        stack: kbpay
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 없이 50만원 구간 혜택을 주는 신규 특례는 계산하지 않는다, 정부지원금(보육료·유치원보조비·바우처)과 무승인전표(자판기·터널통행료·항공기내 이용)는 실적에서 빠진다, 공항 라운지와 발레파킹 같은 티타늄 서비스는 계산하지 않는다, 적립 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2021.06.24 출시만 적었다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 실적 제외 '교통요금'이 후불교통만인지 교통 전체인지 분명하지 않다. 덜 주는 쪽으로 교통 업종 전체를 실적에서 뺐다. 택시는 남겼다., assumed: transit}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. Shopping 서비스의 온라인쇼핑몰·소셜커머스와 대형마트·백화점을 두 혜택으로 나누고 한도 하나를 함께 쓴다.
