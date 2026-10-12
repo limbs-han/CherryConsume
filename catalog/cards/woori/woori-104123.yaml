@@ -1,0 +1,44 @@
+schema_version: 2
+id: woori-104123
+issuer: woori
+name: 삼성AI구독 우리카드
+kind: credit
+product_codes:
+  - '104123'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104123', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2025-07-15'
+    source: page
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: samsung-ai-subscription-autopay
+        title: 삼성AI구독 요금 자동납부 청구할인
+        source: page
+        evidence: ['30만원 이상 ~ 70만원 미만 | 10,000원 | 삼성AI구독 요금 자동납부 필수', '70만원 이상 ~ 150만원 미만 | 15,000원', '150만원 이상 | 25,000원', '삼성AI구독 요금 자동납부 이용 시에만 적용되며, 자동납부가 아닌 일반 결제(1회성 단순결제 등)는 할인이 적용되지 않습니다.', 삼성AI구독 우리카드로 할인받은 구독요금 자동납부 금액(해당 이용금액 전체) ... 전월실적에 포함되지 않습니다.]
+        target:
+          merchants: [samsung_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 10000, 700000: 15000, 1500000: 25000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [가족카드는 청구할인을 받지 못한다, 삼성전자 구독 가맹점 중 삼성AI구독 요금 자동납부만 할인한다]
+    unmodeled: [가족카드 전월 이용실적은 본인카드와 합산한다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 공공임대료와 국가·공공기관 가맹점 이용금액은 실적에서 빠진다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2025-07-15. 연회비 20,000원. 전월 국내외 30만/70만/150만 이상 월 할인한도 10,000/15,000/25,000원. 할인받을 금액보다 승인금액이 적으면 승인금액만큼 할인한다. 신규 발급 다음 달 말까지 최저 구간.
