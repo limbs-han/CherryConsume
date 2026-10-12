@@ -1,0 +1,66 @@
+schema_version: 2
+id: hyundai-btmce
+issuer: hyundai
+name: 현대카드 Summit CE
+short_name: 현대 Summit CE
+search_names: [Summit CE, 서밋 CE, 현대카드 Summit CE]
+kind: credit
+product_codes: [BTMCE]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 80000}
+  - {scope: global, brand: visa, amount: 80000}
+  - {scope: global, brand: amex, amount: 80000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=BTMCE', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/%28%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81%29%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20Summit%20CE_260513.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-05-01
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 1000000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립하지 않는다, 현대카드의 다른 할인이 적용된 결제는 적립하지 않는다, 국제브랜드 수수료와 해외서비스 수수료는 적립하지 않는다]
+    limits:
+      - {key: plus-5, per: month, amount: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [plus-m-5, base-m-1-5]
+        spill: split
+    benefits:
+      - key: plus-m-5
+        title: 학원·병원·약국·항공사·여행사 5% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 100만원 이상 시 교육, 병원, 여행, 골프 5% M포인트 적립, '교육 : 학원/유치원 업종', '병원 : 병원/약국 업종', '여행 : 국내 항공사/여행사/특급호텔 업종', '골프 : 골프장/골프연습장 업종', '대상점 통합해 월 1만 M포인트 적립 한도 (본인+가족 카드 합산 기준, 적립 한도 초과 시 기본 혜택 적립률 적용)', 추가 혜택은 대상점별 국내 가맹점에 한해 제공, 병원의 경우 동물병원 및 의료기기 업종은 추가 혜택 제외]
+        target:
+          categories: [education.academy, hospital, pharmacy, travel.agency, travel.airline]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: hyundai_m_point, rate: 5, round: round}
+        limits:
+          - {shared: plus-5}
+        tiers: {from: 1000000}
+        unmodeled: [특급호텔과 골프장·골프연습장도 5% 대상이지만 숙박과 스포츠 업종이 더 넓어 계산하지 않고 1.5%로 둔다, 유치원 업종도 5% 대상이지만 사립유치원 납입금은 적립 제외라 계산하지 않는다, 의료기기 업종은 1.5%다, 간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되는 결제는 1.5%다]
+      - key: base-m-1-5
+        title: 국내외 가맹점 1.5% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1.5% M포인트 적립, 1회 및 연간 적립 한도 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립]
+        target: {all: true}
+        reward: {type: points, program: hyundai_m_point, rate: 1.5, round: round}
+        tiers: {from: 500000}
+    unmodeled: [연간 5만원 크레딧(백화점·주유·다이닝 5만원 이상 결제 또는 7만 M포인트 교환)은 연간·누적 이용 금액 조건이라 계산하지 않는다, 적립은 매출전표 접수 순서로 한다, 실적과 적립 한도는 본인과 가족 카드를 합산한다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, M 긴급적립을 쓰면 적립 포인트가 상환에 쓰인다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2025-01-06이고 가이드북은 2026년 5월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다, assumed: '2026-05-01'}
+notes: 2026-10-11 공식 가이드북(2026년 5월 기준) 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 80,000원(기본 20,000+제휴 60,000), 가족카드 20,000원. 전월 50만 이상 국내외 1.5% M포인트 무제한, 100만 이상 국내 학원·병원·약국·항공사·여행사 5%(통합 월 1만 M포인트, 넘으면 1.5%). 특급호텔과 골프는 업종이 더 넓어 뺐다. 건별 소수점 이하 반올림. 신규 발급 시 수령 등록월 다음 달 이용 건까지 기본·추가 모두 줘 100만 구간으로 둔다. 실적 제외는 카드론·연회비·공과금·상품권·선불카드뿐이다.
