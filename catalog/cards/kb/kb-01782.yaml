@@ -1,0 +1,94 @@
+schema_version: 2
+id: kb-01782
+issuer: kb
+name: 카카오페이 KB국민 체크카드
+short_name: KB 카카오페이 체크
+kind: check
+product_codes:
+  - '01782'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01782', fetched_at: '2026-10-11', review_no: 제241119-05864-TRM}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 전용 가맹점 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 적립에서 빠진다']
+    limits:
+      - {key: life, per: month, amount: 10000}
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: kakaopay-2
+        title: 카카오페이 결제 2% 카카오페이머니 적립
+        source: page
+        evidence: [카카오페이 간편결제 | 2% | 1만p, 카카오페이 결제 시 카카오페이머니 2% 적립, '적립 제외대상 : 취소금액, 대학(대학원)등록금, 각종 수수료 및 이자, 상품권 및 선불카드 구입(충전)금액, 포인트리 충전금액, 정부지원금, 연체료, 지방세(지방세, 상하수도, 세외수입) 제외', 카카오페이머니 1점=1원]
+        target:
+          exclude_categories: [education.tuition, tax.local, utility.water]
+          all: true
+        when:
+          - payment: [kakao_pay]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        notes: 카카오페이머니로 적립한다. 1점이 1원이고 현금처럼 쓰는 선불 포인트라 캐시백으로 둔다
+      - key: cafe-1
+        title: 커피전문점 1% 카카오페이머니 적립
+        source: page
+        evidence: [커피전문점업종 | 1% | 월통합 1만p, 커피전문점업종/제과아이스크림업종/CU편의점/대중교통 적립서비스는 월간통합적립한도 1만p 적용]
+        target:
+          categories: [cafe]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: bakery-1
+        title: 제과·아이스크림 1% 카카오페이머니 적립
+        source: page
+        evidence: [제과아이스크림 업종 | 1%, 제과아이스크림 업종 이용시 카카오페이머니 1% 적립]
+        target:
+          categories: [restaurant.bakery]
+          merchants: [baskin_robbins]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: cu-1
+        title: CU 1% 카카오페이머니 적립
+        source: page
+        evidence: [CU편의점 | 1%, CU편의점 이용 시 카카오페이머니 1% 적립]
+        target:
+          merchants: [cu]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: transit-1
+        title: 버스·지하철 1% 카카오페이머니 적립
+        source: page
+        evidence: ['대중교통(버스,지하철) (단, 고속/시외버스 제외) | 1%', '후불교통(시내버스/지하철), 고속/시외버스 결제 시 적립', '적립 제외대상 : 공항버스, 통학버스, 유료도로, 터널, 전기차 충전 제외', 실제 카드이용일이 아닌 이메일 이용내역서상 기재된 이용일 기준으로 적용됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: [후불교통 적립은 이메일 이용내역서에 적힌 이용일 기준이다, 공항버스와 통학버스는 적립에서 빠진다]
+    unmodeled: ['무승인 금액(자판기·터널통행료·기차/고속버스 취소 반환수수료), 정부지원금, 포인트리 충전금액은 실적에서 빠진다', 생애 최초 발급 카드에 사용등록일부터 다음 달 말일까지 실적 없이 적립을 주는 신규 특례는 계산하지 않는다, 카카오페이머니는 카드 신청 때 적은 이메일 계정이 카카오페이 계정과 같아야 적립된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].benefits[transit-1].target', question: 요약표는 고속·시외버스를 빼고 상세 설명은 고속·시외버스도 적립한다고 적었다. 덜 주는 쪽으로 시내버스와 지하철만 둔다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].stacks', question: 카카오페이로 커피전문점이나 CU에서 결제하면 2%와 1%를 함께 주는지 원문에 없다. 덜 주는 쪽으로 둘 중 큰 하나만 준다, assumed: best}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 적립은 카카오페이머니라 포인트 목록에 kakao_pay_money를 더하면 points로 바꿀 수 있다. 지금은 1점 1원인 캐시백으로 둔다.
