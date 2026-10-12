@@ -1,0 +1,35 @@
+schema_version: 2
+id: kb-09168
+issuer: kb
+name: KB국민 하이패스2.0 SIM카드
+short_name: KB 하이패스2.0 SIM
+kind: credit
+product_codes:
+  - '09168'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 2000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09168', fetched_at: '2026-10-12', review_no: 180205-00345-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2018-02-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend:
+      basis: prev_calendar_month
+      month_offset: {}
+      exclude_applied: 0
+    benefits:
+      - key: hipass-pointree
+        title: 하이패스 통행료 0.1% 포인트리 적립
+        source: page
+        evidence: [하이패스 이용금액의 0.1% 포인트리 적립, 실적조건과 적립한도 없음, 고속도로 하이패스 통행료 후불결제에만 사용할 수 있다]
+        target:
+          categories: [car.toll]
+        reward: {type: points, program: kb_pointree, rate: 0.1}
+    unmodeled: [한국도로공사 출퇴근 시간대 통행료 50%·20% 할인은 도로공사 제도라 카드 혜택으로 계산하지 않는다, 이 카드는 하이패스 통행료 후불결제에만 쓸 수 있고 일반 신용구매와 후불교통은 안 된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2016.10.19 출시와 2018.02.05 심의만 적었다. 카드사 공통 규칙이 있는 심의일을 시작일로 잠정 적용한다., assumed: '2018-02-05'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 새 업종 통행료로 하이패스 0.1% 포인트리 적립을 담았다.
