@@ -1,0 +1,118 @@
+schema_version: 2
+id: woori-104151
+issuer: woori
+name: 카드의정석2 SHOPPER
+kind: credit
+product_codes:
+  - '104151'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 28000}
+  - {scope: global, brand: visa, amount: 28000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104151', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-04-15'
+    source: page
+    tiers: [0, 500000, 1000000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, gift_card, prepaid_charge, transit.bus_express, transit.bus_intercity]
+      unmodeled: ['환금성 업종, 신차구매, 의약품 전용몰·제약회사, 수수료·이자·대출은 할인에서 빠진다', 가맹점명이 결제대행업체나 간편결제로 찍힌 결제는 할인에서 빠진다, 다른 쿠폰·할인 프로모션과 중복되지 않는다]
+    limits:
+      - key: basic
+        per: month
+        amount: {500000: 10000, 1000000: 20000, 2000000: 40000}
+      - key: extra
+        per: month
+        amount: {500000: 5000, 1000000: 10000, 2000000: 20000}
+    stacks:
+      - {key: main}
+      - {key: extra}
+    benefits:
+      - key: shopping-basic-10
+        title: 온라인 쇼핑 10% 청구할인
+        source: page
+        evidence: ['온라인 | 쿠팡, 네이버플러스 스토어, 마켓컬리 | 10%', 전월 실적 50만원 이상 시 할인 제공, 공식 홈페이지/앱 결제 건에 한하여 할인 제공, 멤버십 정기결제 건 할인 제외, 50만원 이상~100만원 미만 | 1만원 | 5천원 | 5천원, 100만원 이상~200만원 미만 | 2만원 | 1만원, 200만원 이상 | 4만원 | 2만원]
+        target:
+          merchants: [coupang, kurly, naver_plus_store]
+        when:
+          - {channel: online}
+          - billing_not: [subscription]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: basic}
+        tiers: {from: 500000}
+        unmodeled: [홈페이지·앱 안 링크로 연결되는 다른 사이트 결제는 빠진다, '매장 QR, 바코드, MST/NFC 같은 모바일 오프라인 결제는 빠진다']
+      - key: shopping-offline-10
+        title: 오프라인 쇼핑 10% 청구할인
+        source: page
+        evidence: [백화점 | 롯데/신세계/현대백화점 | 10%, 면세점 | 롯데/신세계/신라면세점, 프리미엄 아울렛 | 롯데/신세계사이먼/현대 프리미엄 아울렛, '스타필드 | 스타필드, 스타필드 시티', '대형마트 | 이마트, 트레이더스 홀세일 클럽, 롯데마트', '대형슈퍼 | GS더프레시, 롯데슈퍼(롯데프레시)', '잡화 | 올리브영, 다이소', 오프라인 매장 결제 건에 한하여 할인 제공]
+        target:
+          merchants: [daiso, emart, gs_the_fresh, hyundai_department, hyundai_premium_outlet, lotte_department, lotte_dfs, lotte_mart, lotte_premium_outlet, lotte_super, olive_young, shilla_dfs, shinsegae_department, shinsegae_dfs, shinsegae_premium_outlet, shinsegae_simon, starfield, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: basic}
+        tiers: {from: 500000}
+        unmodeled: ['별도 가맹점번호로 승인돼 가맹점명이 다른 결제(푸드코트 외 식음료 매장, 기내면세 등)는 빠진다', '주차료, 전기차 충전, 멤버십 가입, 문화센터 같은 상품 구매 외 서비스는 빠진다', '공항, 미군부대, 리조트, 기차역 등의 입점·임대 매장은 빠진다', 스타필드 마켓 등 파생 브랜드는 빠진다]
+      - key: shopping-weekday-5
+        title: 주중 온라인 쇼핑 5% 추가 청구할인
+        source: page
+        evidence: ['Week 할인 | [온라인 쇼핑] 주중(월~금) 결제 시 추가 청구할인 | +5%', 전월 실적 50만원 이상 시 할인 제공]
+        target:
+          merchants: [coupang, kurly, naver_plus_store]
+        when:
+          - {channel: online}
+          - billing_not: [subscription]
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: extra}
+          - {shared: basic}
+        tiers: {from: 500000}
+        stack: extra
+      - key: shopping-weekend-5
+        title: 주말 오프라인 쇼핑 5% 추가 청구할인
+        source: page
+        evidence: ['Weekend 할인 | [오프라인 쇼핑] 주말(토,일) 결제 시 추가 청구할인 | +5%', 전월 실적 50만원 이상 시 할인 제공]
+        target:
+          merchants: [daiso, emart, gs_the_fresh, hyundai_department, hyundai_premium_outlet, lotte_department, lotte_dfs, lotte_mart, lotte_premium_outlet, lotte_super, olive_young, shilla_dfs, shinsegae_department, shinsegae_dfs, shinsegae_premium_outlet, shinsegae_simon, starfield, traders]
+        when:
+          - {channel: offline}
+          - day:
+              in: [sat, sun]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: extra}
+          - {shared: basic}
+        tiers: {from: 500000}
+        stack: extra
+      - key: shopping-membership-50
+        title: 쇼핑 멤버십 정기결제 50% 청구할인
+        source: page
+        evidence: ['멤버십 | 쿠팡 와우, 네이버플러스, 컬리멤버스 | 50%', 전월 실적 50만원 이상 시 서비스 제공, 멤버십 정기결제 건에 한하여 할인 제공, 쇼핑 멤버십 할인 | 5천원 (50만원 이상 전 구간)]
+        target:
+          merchants: [coupang_wow, kurly_members, naver_plus_membership]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+    unmodeled: [해외 이용금액·교통카드 이용금액·통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '정부지원금, 공공임대료, 관세, 환금성 업종, 신차구매, 의약품 전용몰, 국가·공공기관 가맹점 이용금액은 실적에서 빠진다', 할인은 거래 매입 순서대로 한도를 쓴다]
+open_questions:
+  - {path: 'revisions[0].limits', question: 추가 5%가 기본 10% 한도와 따로 나오는지 원문이 분명하지 않다, assumed: 추가 5%도 기본 한도를 함께 쓴다}
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-04-15. 연회비 28,000원 해외겸용만. 전월 국내외 50만/100만/200만 이상 쇼핑 기본 10% 월 1만/2만/4만원, 주중 온라인·주말 오프라인 추가 5% 월 5천/1만/2만원, 멤버십 50% 월 5천원. 신규 다음 달 말까지 50만 구간. 가족카드 발급 불가.
