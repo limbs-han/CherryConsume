@@ -1,0 +1,84 @@
+schema_version: 2
+id: hyundai-amgle2
+issuer: hyundai
+name: American Express® Gold Card Edition2
+short_name: 현대 Amex Gold
+search_names: [Amex Gold, 아메리칸 엑스프레스 골드 카드, 아멕스 골드]
+kind: credit
+product_codes: [AMGLE2]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: amex, amount: 300000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=AMGLE2', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/AMEX_Ed2_Gold_2603.pdf', fetched_at: 2026-10-11, review_no: 제2025-C1a-16172호}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-03-01
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    stacks:
+      - key: main
+        pick: priority
+        order: [overseas-area, travel-area, duty-free-area, base-mr]
+        spill: split
+    benefits:
+      - key: base-mr
+        title: 국내외 가맹점 1,000원당 1 MR 적립
+        evidence: ['전월 이용 금액 50만원 이상 시 국내외 가맹점 이용 금액 1,000원당 1 멤버십 리워즈(MR) 적립', 기본 혜택 대상점은 추가 혜택 대상점 외 국내외 가맹점임, 적립 한도 없이 혜택 제공, 매출 건별로 소수점 이하 반올림 후 적립, (1 MR = 10원)]
+        target: {all: true}
+        reward: {type: points, program: amex_mr, rate: 0.1, round: round}
+        tiers: {from: 500000}
+        notes: 한도 없음. 1 MR = 10원이라 이용 금액의 1%
+      - key: overseas-area
+        title: 해외 가맹점 1,000원당 3 MR 적립
+        evidence: ['전월 이용 금액 50만원 이상 시 5개 영역* 이용 금액 1,000원당 3 멤버십 리워즈(MR) 적립', '*해외가맹점, 국내 특급호텔, 여행·항공사, 골프·골프연습장, 면세점', '영역별 월 4,500 멤버십 리워즈(MR) 한도 내 적립(초과 시 1,000원당 1 멤버십 리워즈(MR) 적립)', 추가 혜택 대상 가맹점 및 업종 이용 시 기본 혜택은 중복 제공되지 않음, 매출 건별로 소수점 이하 반올림 후 적립, 해외 가맹점 및 해외 온라인 사이트에서 원화로 결제 시 기본 혜택 대상점으로 구분되어 기본 혜택 적용]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: amex_mr, rate: 0.3, round: round}
+        limits:
+          - {per: month, amount: 4500}
+        tiers: {from: 500000}
+        unmodeled: [해외 가맹점과 해외 온라인 사이트에서 원화로 결제하면 기본 1 MR만 적립한다, 영역별 적립 한도는 본인과 가족 카드를 합산한다]
+        notes: 월 4,500 MR, 넘으면 1,000원당 1 MR
+      - key: travel-area
+        title: 여행·항공사 1,000원당 3 MR 적립
+        evidence: ['전월 이용 금액 50만원 이상 시 5개 영역* 이용 금액 1,000원당 3 멤버십 리워즈(MR) 적립', '*해외가맹점, 국내 특급호텔, 여행·항공사, 골프·골프연습장, 면세점', '영역별 월 4,500 멤버십 리워즈(MR) 한도 내 적립(초과 시 1,000원당 1 멤버십 리워즈(MR) 적립)', 추가 혜택 대상 가맹점 및 업종 이용 시 기본 혜택은 중복 제공되지 않음, 매출 건별로 소수점 이하 반올림 후 적립, '국내 특급호텔, 여행·항공사, 골프·골프연습장, 면세점 업종은 국내 가맹점에서 원화 결제 시에만 추가 혜택 적용', '간편결제서비스(네이버페이, 스마일페이 등)로 결제 시 기본 혜택 대상점으로 구분되어 기본 혜택 적용']
+        target:
+          categories: [travel.agency, travel.airline]
+        when:
+          - {region: domestic}
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: amex_mr, rate: 0.3, round: round}
+        limits:
+          - {per: month, amount: 4500}
+        tiers: {from: 500000}
+        unmodeled: [국내 가맹점에서 원화로 결제한 건만 적립한다, 영역별 적립 한도는 본인과 가족 카드를 합산한다]
+        notes: 국내 여행사와 항공사. 월 4,500 MR, 넘으면 1,000원당 1 MR
+      - key: duty-free-area
+        title: 면세점 1,000원당 3 MR 적립
+        evidence: ['전월 이용 금액 50만원 이상 시 5개 영역* 이용 금액 1,000원당 3 멤버십 리워즈(MR) 적립', '*해외가맹점, 국내 특급호텔, 여행·항공사, 골프·골프연습장, 면세점', '영역별 월 4,500 멤버십 리워즈(MR) 한도 내 적립(초과 시 1,000원당 1 멤버십 리워즈(MR) 적립)', 추가 혜택 대상 가맹점 및 업종 이용 시 기본 혜택은 중복 제공되지 않음, 매출 건별로 소수점 이하 반올림 후 적립, '국내 특급호텔, 여행·항공사, 골프·골프연습장, 면세점 업종은 국내 가맹점에서 원화 결제 시에만 추가 혜택 적용', '간편결제서비스(네이버페이, 스마일페이 등)로 결제 시 기본 혜택 대상점으로 구분되어 기본 혜택 적용']
+        target:
+          categories: [travel.duty_free]
+        when:
+          - {region: domestic}
+          - payment_not: [coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: amex_mr, rate: 0.3, round: round}
+        limits:
+          - {per: month, amount: 4500}
+        tiers: {from: 500000}
+        unmodeled: [국내 가맹점에서 원화로 결제한 건만 적립한다, 영역별 적립 한도는 본인과 가족 카드를 합산한다]
+        notes: 국내 면세점. 월 4,500 MR, 넘으면 1,000원당 1 MR
+    unmodeled: ['국내 특급호텔과 골프·골프연습장 영역의 1,000원당 3 MR은 공통 업종(숙박, 스포츠·레저)이 원문보다 넓어 담지 않았다. 이 결제는 기본 1 MR로 계산한다', '연 25만원 상당 바우처(첫해 누적 250만원, 이후 전년 2,400만원 이상)와 메탈 플레이트는 연간·누적 이용 금액 조건이라 계산하지 않는다', 적립은 결제 순서가 아니라 현대카드 매출전표 접수 순서대로 한도를 쓴다, 실적은 본인과 가족 카드를 합산한다, 대중교통 등 사후 승인 가맹점은 매출전표 접수일 달의 실적으로 센다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다, 월 적립 한도를 넘긴 뒤 혜택 받은 결제를 취소하면 한도 때문에 빠졌던 이전 결제에 다음 달 15일경 적립한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일은 2023-11-27이고 가이드북은 2026년 3월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다, assumed: '2026-03-01'}
+notes: 2026-10-11 공식 가이드북(2026년 3월 기준) 대조. 연회비 국내외겸용(Amex Platinum Elite) 300,000원(기본 100,000+제휴 200,000), 가족카드 100,000원. 전월 50만 이상 국내외 1,000원당 1 MR 무제한, 5개 영역(해외가맹점, 국내 특급호텔, 여행·항공사, 골프·골프연습장, 면세점) 1,000원당 3 MR 영역별 월 4,500 MR, 넘으면 1 MR. MR 원화 가치는 가이드북의 1 MR = 10원(연회비 환불 계산 기준)을 쓴다. 건별 소수점 이하 반올림. 실적 제외는 카드론·연회비·공과금·상품권·선불카드이고 무이자 할부는 실적에 든다. 적립 제외는 카드사 기본과 같다. 신규 발급 시 발급월 다음 달 이용 건까지 50만 구간. 간편결제와 해외 원화 결제는 기본 혜택만.
