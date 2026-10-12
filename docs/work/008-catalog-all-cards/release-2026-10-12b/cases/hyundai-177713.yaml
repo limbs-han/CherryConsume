@@ -1,0 +1,36 @@
+card: hyundai-177713
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 기본 0.3% 반올림
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4639, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-03: 14}, counted: 4639}
+  calc: 가이드북 예시 4,639 x 0.3% = 13.9 반올림 14
+- name: 30만 이상 음식점 3%, 한도 넘으면 0.3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, category: restaurant.general}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {plus-3-dining: 4500}, counted: 150000}
+  - {payment: 1, benefits: {plus-3-convenience: 500, base-03: 100}, counted: 50000}
+  calc: 150,000 x 3% = 4,500. 남은 500은 16,667원분, 나머지 33,333 x 0.3% = 100
+- name: 30만 직전 쿠팡이츠는 0.3%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: coupang_eats, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-03: 60}, counted: 20000}
+  calc: 30만 미만 추가 혜택 제외. 20,000 x 0.3% = 60
+- name: 요기요와 시내버스 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: yogiyo, channel: online}
+  - {at: 2026-11-06T10:00, amount: 10000, category: transit.bus_city}
+  expect:
+  - {payment: 0, benefits: {plus-3-delivery: 600}, counted: 20000}
+  - {payment: 1, benefits: {plus-3-transit: 300}, counted: 10000}
+  calc: 각 3%

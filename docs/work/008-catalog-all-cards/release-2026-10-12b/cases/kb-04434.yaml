@@ -1,0 +1,74 @@
+card: kb-04434
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 삼성 페이 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {samsung-pay-10: 5000}, counted: 0}
+  calc: 50,000원 × 10% = 5,000원. 할인받은 결제는 전액 실적 제외
+- name: 삼성 페이 건당 3만원 미만 제외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 29999, category: restaurant.general, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 29999}
+  calc: 건당 3만원 이상만 할인
+- name: 40만 경계 직전 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 40만원 미만은 할인 없음
+- name: 삼성 페이 월 한도 1만5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: restaurant.general, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {samsung-pay-10: 15000}}
+  calc: 20,000원 중 월 한도 15,000원
+- name: 커피 5% 건당 1만원 이상
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: cafe}
+  - {at: 2026-11-06T10:00, amount: 9999, category: cafe}
+  expect:
+  - {payment: 0, benefits: {samsung-pay-5: 1000}, counted: 20000}
+  - {payment: 1, benefits: {}}
+  calc: 20,000원 × 5% = 1,000원. 9,999원은 건당 1만원 미만. 생활 할인은 실적 제외 대상이 아니다
+- name: 삼성 페이로 커피 결제하면 큰 쪽 하나
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: cafe, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {samsung-pay-10: 4000}, counted: 0}
+  calc: 10% 4,000원과 5% 2,000원 중 큰 쪽 하나
+- name: 통신 자동납부와 생활 영역 한도 함께
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 100000, category: pharmacy}
+  expect:
+  - {payment: 0, benefits: {samsung-pay-5-telecom: 3000}}
+  - {payment: 1, benefits: {samsung-pay-5: 2000}}
+  calc: 60,000원 × 5% = 3,000원. 남은 월 한도 2,000원
+- name: 신규 유예 실적 없어도 할인
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {samsung-pay-10: 5000}}
+  calc: 사용등록 다음 달 말일까지 실적 없이도 할인
+- name: 무이자할부 할인과 실적 제외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, payment_method: samsung_pay, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무이자할부는 할인 제외이고 실적도 제외

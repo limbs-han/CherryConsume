@@ -1,0 +1,38 @@
+card: shinhan-aoac7s
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.3%와 쇼핑 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-03T13:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-3: 30}, counted: 10000}
+  - {payment: 1, benefits: {shopping-1: 500}}
+  calc: 10,000 × 0.3% = 30. 50,000 × 1% = 500
+- name: 생활 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 2000, category: transit.subway, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 40000, category: utility.gas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {living-telecom-2: 1200}}
+  - {payment: 1, benefits: {living-transit-2: 40}, counted: 0}
+  - {payment: 2, benefits: {living-gas-2: 800}}
+  calc: 60,000 × 2% = 1,200. 2,000 × 2% = 40. 40,000 × 2% = 800
+- name: 해외 1%와 월 3만P 한도 뒤 기본
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 3100000, category: department_store, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 30000}}
+  calc: 3,100,000 × 1% = 31,000이지만 월 한도 30,000. 넘친 금액도 같은 한도라 0
+- name: 30만 직전이면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 구간

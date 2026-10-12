@@ -1,0 +1,55 @@
+card: ibk-12112980001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 AK몰 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: ak_mall, channel: online}
+  expect:
+  - {payment: 0, benefits: {ak-shopping-3: 3000}}
+  calc: 100,000원 × 3% = 3,000원. 30만 구간 통합한도 10,000원 안
+- name: 경계 직전 299999 AK몰
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: ak_mall, channel: online}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 AK쇼핑 할인 없음
+- name: AK몰 통합한도와 3만원 미만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 400000, merchant: ak_mall, channel: online}
+  - {at: 2026-11-05T10:00, amount: 29999, merchant: ak_mall, channel: online}
+  expect:
+  - {payment: 0, benefits: {ak-shopping-3: 10000}}
+  - {payment: 1, benefits: {}}
+  calc: 400,000원 × 3% = 12,000원 중 통합한도 10,000원. 둘째는 3만원 미만
+- name: AK플라자 5% 현장할인 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 95000, merchant: ak_plaza, channel: offline}
+  expect:
+  - {payment: 0, benefits: {ak-members-5: 5000}}
+  calc: 할인 뒤 95,000원은 할인 전 100,000원. 100,000원 × 5% = 5,000원
+- name: 영화 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 12000, merchant: cgv, channel: offline}
+  expect:
+  - {payment: 0, benefits: {movie-2000: 2000}}
+  calc: 1만원 이상 결제 2,000원
+- name: 커피 10% 1회 2만원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 2000}}
+  calc: 20,000원까지 × 10% = 2,000원
+- name: 베이커리 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: paris_baguette, channel: offline}
+  expect:
+  - {payment: 0, benefits: {bakery-10: 1000}}
+  calc: 10,000원 × 10% = 1,000원

@@ -1,0 +1,49 @@
+schema_version: 2
+id: shinhan-boac5b
+issuer: shinhan
+name: LG U+ 스마트플랜 Plus 신한카드
+short_name: 신한 LG U+ 스마트플랜 Plus
+kind: credit
+product_codes: [BOAC5B]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 22000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1196321_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-10-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, insurance.social, prepaid_charge, transit.bus_city, transit.subway, utility.electricity, utility.gas]
+      interest_free: exclude
+    new_card: {tier: 300000}
+    facts:
+      - {key: lgu_smart_installment, type: bool, scope: card, ask: '이 카드로 LG U+ 매장에서 통신기기를 스마트할부(18개월 또는 24개월)로 사서 아직 갚고 있나요? 다 갚았으면 아니요입니다'}
+    benefits:
+      - key: lgu-autopay
+        title: LG U+ 통신요금 자동이체 결제일 할인 (스마트할부 이용 시 월 최대 1만5천원)
+        source: page
+        evidence: ['통신기기(휴대폰/태블릿 등), 인터넷, TV, 집전화 상관없이 LG U+ 요금 통합 청구할인', '스마트할부 이용 회원 30만원 이상 70만원 미만 1만원, 70만원 이상 1만 5천원', '스마트할부 미이용 회원 30만원 이상 70만원 미만 3천원, 70만원 이상 5천원', '스마트할부 완납 시 [스마트할부 미이용 회원] 할인 한도 적용', '통신요금이 할인 한도보다 적을 경우, 통신요금 만큼 할인', 통신요금 자동이체 필수]
+        target:
+          merchants: [lg_uplus]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 3000, 700000: 5000}
+            adjust:
+              - when:
+                  fact: lgu_smart_installment
+                  card_month: {max: 17}
+                amount: {300000: 10000, 700000: 15000}
+        tiers: {from: 300000}
+        notes: 스마트할부를 갚는 동안만 높은 한도다. 18개월 할부를 기준으로 카드 등록 달부터 18개월(card_month 0~17)까지만 높은 한도를 준다. 24개월 할부나 늦게 시작한 할부는 덜 받는다
+    unmodeled: [LG U+ 스마트할부(18·24개월 연 5.9% 확정 이자) 자체는 혜택 금액으로 계산하지 않는다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, '일반 후불교통 이용금액은 전전월, 모바일 교통카드는 전월 실적에 들어가는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다, assumed: '2026-10-12'}
+notes: 'LG U+ 스마트플랜 Plus 신한카드 상품 페이지 기준(2026-10-12 headless Chrome). 심의필 제2020-C1a-03280호(2020.04.16). 연회비 국내전용 2만2천원, Mastercard 2만5천원. 가족카드 발급 불가. 실적 제외: 카드대출, 연회비, 수수료·이자, 도시가스, 전기요금, 4대보험, 무이자할부(슬림할부 포함), 거래 취소, 기프트·선불카드, 상품권·선불전자지급수단. 세금은 실적 제외 목록에 없다. 신규 발급 회원은 등록월 다음 달 말까지 30만~70만원 구간.'

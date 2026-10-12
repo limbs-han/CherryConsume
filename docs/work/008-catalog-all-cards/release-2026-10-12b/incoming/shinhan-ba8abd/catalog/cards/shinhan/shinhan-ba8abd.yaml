@@ -1,0 +1,95 @@
+schema_version: 2
+id: shinhan-ba8abd
+issuer: shinhan
+name: 신한카드 S-Choice(선택형) 체크
+short_name: 신한 S-Choice 체크
+search_names: [에스초이스 체크]
+kind: check
+product_codes:
+  - '201301300001'
+  - BA8A7O
+  - BA8ABD
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1188347_2206.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201301300001', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-03-22
+    source: page
+    tiers: [0, 200000, 300000, 500000, 800000, 1200000]
+    spend:
+      exclude_categories: [gift_card, prepaid_charge]
+      exclude_applied: 1
+    new_card: {tier: 0}
+    options:
+      - key: choice
+        title: 선택형 할인 서비스
+        choices:
+          - {key: transit, title: 대중교통}
+          - {key: coffee, title: 커피전문점}
+          - {key: shopping, title: 백화점·할인점}
+        default: null
+        change: immediate
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 2000, 300000: 3000, 500000: 5000, 800000: 8000, 1200000: 12000}
+    benefits:
+      - key: transit-10
+        title: 버스·지하철·택시 10% 캐시백
+        source: page
+        evidence: ['버스, 지하철, 택시 이용금액의 10% 할인(캐시백)', '서비스 지역: 서울, 부산, 경기, 인천, 대전, 원주, 춘천, 강릉, 울산 등( 단, 공항버스, 공항리무진, 공항철도, 터널, 인천대교, 신공항 하이웨이 제외 )', '택시: T-money(한국스마트카드), eb(캐시비) 단말기 택시의 승인 건에 한해 할인 적용', 20만원 이상 30만원 미만 | 2천원, 120만원 이상 | 1만 2천원]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        when:
+          - option:
+              choice: [transit]
+          - card_month: {min: 2}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: ['신한카드 교통카드 서비스 지역에서만 할인하고 공항버스, 공항리무진, 공항철도는 제외한다', '택시는 T-money, 캐시비 단말기 택시의 승인 건만 할인한다']
+      - key: coffee-20
+        title: 커피전문점 20% 캐시백
+        source: page
+        evidence: [모든 커피 전문점 이용 금액의 20% 할인(캐시백), '1일 1회, 월 최대 5회 제공', 신한카드 업종 기준 “커피전문점”인 경우 할인 적용, '상품권 구입, 선불카드 충전은 제외']
+        target:
+          categories: [cafe]
+        when:
+          - option:
+              choice: [coffee]
+          - card_month: {min: 2}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [신한카드 가맹점 업종이 커피전문점이 아닌 매장은 할인하지 않는다]
+      - key: shopping-10
+        title: 4대 백화점·3대 할인점 10% 캐시백
+        source: page
+        evidence: [4대 백화점 및 3대 할인점 이용 금액의 10% 할인(캐시백), '백화점: 현대, 롯데, 신세계, 갤러리아', '할인점: 이마트, 롯데마트, 홈플러스', 이마트 에브리데이·메트로/홈플러스익스프레스/롯데슈퍼 롯데마켓 등 슈퍼마켓(SSM) 매장 및 창고형 할인 매장 등은 제외, '1일 1회, 월 3회 제공', 백화점 및 할인점 할인 전 승인금액 기준 1회 10만 원까지 제공]
+        target:
+          merchants: [emart, galleria, homeplus, hyundai_department, lotte_department, lotte_mart, shinsegae_department]
+        when:
+          - option:
+              choice: [shopping]
+          - card_month: {min: 2}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [백화점 온라인몰 이용이 대상인지 원문에 없다]
+    unmodeled: ['신규 발급월 포함 2개월은 실적과 상관없이 할인 한도 2천원인데, 특례를 더 높은 실적 구간과 나눌 수 없어 그 두 달은 계산하지 않는다', 할인 적용 후 승인금액으로 실적을 더하는데 할인액만 뺄 수 없어 할인 받은 결제 전체를 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 신한은행 이체·인출 수수료 면제와 VISA 쿠폰은 결제 혜택이 아니라 계산하지 않는다, 다른 쿠폰이나 할인 혜택과 중복으로 받을 수 없다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: '상품 페이지에 실적 제외 목록이 없다. 커피 할인의 상품권 구입, 선불카드 충전 제외만 있다', assumed: 'gift_card, prepaid_charge'}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날을 찾지 못했다. 카드사 공통 규칙 시작일을 시작일로 둔다. 준법감시 심의필은 2020-07-27이다, assumed: '2024-03-22'}
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2013.01.30. 연회비 없음. 교통, 커피, 쇼핑 셋 중 하나를 골라 캐시백을 받고 바꾸면 그날 실적부터 적용한다. 전월 실적 20만/30만/50만/80만/120만원 이상 구간마다 월 할인 한도 2천/3천/5천/8천/1만2천원. 교통카드 이용실적은 전전월 기준. 캐시백 한도는 매월 초 생기고 말일에 없어지며 이월하지 않는다.

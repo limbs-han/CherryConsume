@@ -1,0 +1,46 @@
+card: kb-01599
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 커피 원문 예시 1.6%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 10, cafe-bakery-1-5: 150}, counted: 10000}
+  calc: 원문 예시 0.1% + 1.5% = 160점
+- name: 경계 직전 299999는 기본만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 10}}
+  calc: 30만 미만은 추가 적립 없음
+- name: 택시 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 20, taxi-1-5: 300}}
+  calc: 20 + 300
+- name: 통신 자동이체 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 60, telecom-2: 1200}}
+  calc: 60 + 1,200
+- name: GS25 2% 한도 3천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: gs25}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 200, gs25-2: 3000}}
+  calc: 4,000 중 한도 3,000
+- name: 아파트관리비 적립 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: apartment_fee}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 관리비는 적립 제외. 체크카드 실적 제외 목록에는 없다

@@ -1,0 +1,312 @@
+card: samsung-abp1689
+cases:
+- name: shopping-department 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    merchant: shinsegae_department
+  expect:
+  - payment: 0
+    benefits:
+      shopping-department: 200
+  calc: shopping-department 양수
+- name: shopping-outlet 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    merchant: shinsegae_premium_outlet
+  expect:
+  - payment: 0
+    benefits:
+      shopping-outlet: 200
+  calc: shopping-outlet 양수
+- name: shopping-mart 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    merchant: emart
+  expect:
+  - payment: 0
+    benefits:
+      shopping-mart: 200
+  calc: shopping-mart 양수
+- name: shopping-online 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: online
+    merchant: samsung_card_shopping
+  expect:
+  - payment: 0
+    benefits:
+      shopping-online: 200
+  calc: shopping-online 양수
+- name: shopping-daiso 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    merchant: daiso
+  expect:
+  - payment: 0
+    benefits:
+      shopping-daiso: 200
+  calc: shopping-daiso 양수
+- name: shopping-fresh 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: online
+    merchant: kurly
+  expect:
+  - payment: 0
+    benefits:
+      shopping-fresh: 200
+  calc: shopping-fresh 양수
+- name: medical 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    category: hospital
+  expect:
+  - payment: 0
+    benefits:
+      medical: 200
+  calc: medical 양수
+- name: academy 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    category: education.academy
+  expect:
+  - payment: 0
+    benefits:
+      academy: 200
+  calc: academy 양수
+- name: study 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    merchant: woongjin_thinkbig
+  expect:
+  - payment: 0
+    benefits:
+      study: 200
+  calc: study 양수
+- name: online-book 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: online
+    merchant: yes24
+  expect:
+  - payment: 0
+    benefits:
+      online-book: 200
+  calc: online-book 양수
+- name: childcare 양수
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    channel: offline
+    category: childcare
+  expect:
+  - payment: 0
+    benefits:
+      childcare: 200
+  calc: childcare 양수
+- name: 300000 쇼핑한도 경계
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 100000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: daiso
+  expect:
+  - payment: 0
+    benefits:
+      shopping-online: 2000
+  - payment: 1
+    benefits: {}
+  calc: 300000 쇼핑한도 경계
+- name: 600000 쇼핑한도 경계
+  prev_month_spend: 600000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 200000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: daiso
+  expect:
+  - payment: 0
+    benefits:
+      shopping-online: 4000
+  - payment: 1
+    benefits: {}
+  calc: 600000 쇼핑한도 경계
+- name: 1000000 쇼핑한도 경계
+  prev_month_spend: 1000000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 300000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: daiso
+  expect:
+  - payment: 0
+    benefits:
+      shopping-online: 6000
+  - payment: 1
+    benefits: {}
+  calc: 1000000 쇼핑한도 경계
+- name: 실적직전과 신규
+  prev_month_spend: 299999
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 실적직전과 신규
+- name: 최초 발급 다음달
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      shopping-online: 200
+  calc: 최초 발급 다음달
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: true
+- name: 탈회 재발급 신규 특례 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 탈회 재발급은 신규 실적면제 대상이 아니다. 실제 전월실적0원으로 혜택없음.
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: false
+- name: 탈회 재발급 실적충족
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      shopping-online: 200
+  calc: 탈회 재발급 실적충족
+  holder:
+    started_on: '2026-09-15'
+    facts:
+      first-issuance-eligible: false
+- name: 최초 발급 특례 두달 뒤 종료
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 발급월8월과다음달9월까지만 특례.10월은 card_month2이므로 실제 실적300000 필요.
+  holder:
+    started_on: '2026-08-15'
+    facts:
+      first-issuance-eligible: true
+- name: 세금 실적제외와 일반 결제 전액실적
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: tax
+  - at: 2026-10-07T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  - payment: 1
+    benefits: {}
+    counted: 10000
+  calc: 세금 10000은 실적 제외. 일반 결제 10000은 할인·캐시백이 있어도 전액 10000을 실적에 넣는다.
+- name: 유치원 본인부담 혜택과 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - at: 2026-10-06T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: education.kindergarten
+  expect:
+  - payment: 0
+    benefits:
+      childcare: 200
+    counted: 0
+  calc: 국가바우처를 뺀 유치원 본인부담10000×2%=200. 해당금액은 전월실적 제외.

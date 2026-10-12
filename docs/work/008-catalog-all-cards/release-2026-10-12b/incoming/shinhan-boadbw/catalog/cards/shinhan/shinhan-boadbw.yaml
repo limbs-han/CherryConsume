@@ -1,0 +1,42 @@
+schema_version: 2
+id: shinhan-boadbw
+issuer: shinhan
+name: KT 가족만족 DC 신한카드
+short_name: 신한 KT 가족만족 DC
+kind: credit
+product_codes: [BOADBW]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1223352_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-10-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      exclude_categories: [annual_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+    new_card: {tier: 300000}
+    benefits:
+      - key: kt-autopay
+        title: KT 통신요금 자동납부 월 최대 1만5천원 결제일 할인
+        source: page
+        evidence: ['KT 통신요금(인터넷, TV, 집전화, 휴대폰 요금) 자동납부 할인', 30만원 이상 70만원 미만 7천원, 70만원 이상 1만 5천원, 'KT 통신요금 결제금액이 월 할인한도보다 적을 경우, KT 통신요금 결제금액만큼 할인 적용됩니다.', 통신요금 자동납부 필수]
+        target:
+          merchants: [kt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 7000, 700000: 15000}
+        tiers: {from: 300000}
+        unmodeled: [KT 통신요금 가맹점으로 청구되는 알뜰폰 요금(예 kt M mobile)도 할인 대상이지만 따로 가리지 않고 kt 가맹점만 계산한다]
+    unmodeled: [본인카드와 가족카드의 전월 이용금액과 월 할인한도는 합산한다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, '일반 후불교통 이용금액은 전전월, 모바일 후불교통은 전월 실적에 들어가는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다', 할인받은 거래를 같은 달에 취소하면 한도가 복원된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다, assumed: '2026-10-12'}
+notes: 'KT 가족만족 DC 신한카드 상품 페이지 기준(2026-10-12 headless Chrome). 심의필 제2023-C1a-08411호(2023.07.27). 연회비 국내전용 1만5천원, Mastercard 1만8천원(기본). 가족카드 연회비 없음. 전월 30만~70만원 미만 월 7천원, 70만원 이상 1만5천원. 실적 제외: 카드대출, 연회비, 수수료·이자, 기프트·선불카드, 상품권·선불전자지급수단, 무이자할부(부분 무이자 포함), 지방세·국세, 4대보험, 스쿨뱅킹, 대학(원) 등록금, 도시가스·전기·수도요금, 거래 취소. 신규 발급 회원은 등록월 다음 달 말까지 30만~70만원 구간.'

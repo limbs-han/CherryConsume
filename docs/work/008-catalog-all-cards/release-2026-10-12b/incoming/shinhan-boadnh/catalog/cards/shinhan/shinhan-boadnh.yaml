@@ -1,0 +1,116 @@
+schema_version: 2
+id: shinhan-boadnh
+issuer: shinhan
+name: LGE.COM 신한카드
+short_name: 신한 LGE.COM
+kind: credit
+product_codes: [BOADNH]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 28000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1228909_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-09-27
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+    new_card: {tier: 500000}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액은 적립하지 않는다]
+    options:
+      - key: plus_service
+        title: LGE.COM 플러스 서비스 이용 여부
+        choices:
+          - {key: none, title: 플러스 서비스 미이용}
+          - {key: using, title: 플러스 서비스 이용 중}
+        default: null
+        change: immediate
+        unsupported: [using]
+    limits:
+      - key: life
+        per: month
+        amount: {300000: 8000, 500000: 10000}
+    benefits:
+      - key: lg-3
+        title: LG전자 베스트샵·LGE.COM 3% 적립
+        source: page
+        evidence: [LG전자 가맹점 3% 마이신한포인트 적립, 'LG전자 가맹점: LGE.COM, LG전자 베스트샵', '백화점, 할인점 입점 매장 제외, LGE.COM 외 온라인 판매점 제외', 50만원 이상 | 월 10만 포인트 ※ 년 30만 포인트, LGE.COM 플러스 서비스 미이용 시에만 제공되는 서비스]
+        target:
+          merchants: [lg_bestshop]
+        when:
+          - option:
+              plus_service: [none]
+        reward: {type: points, program: mysinhan_point, rate: 3}
+        limits:
+          - {per: month, amount: 100000}
+          - {per: year, amount: 300000}
+        tiers: {from: 500000}
+      - key: dept-mart-1
+        title: 백화점·할인점 1% 적립
+        source: page
+        evidence: ['전국 백화점, 할인점 1% 마이신한포인트 적립', '백화점: 현대, 신세계, 롯데, 갤러리아, AK PLAZA', '할인점: 이마트, 홈플러스, 롯데마트', 오프라인 매장 이용금액만 적립됩니다.(온라인몰 제외)]
+        target:
+          merchants: [ak_plaza, emart, galleria, homeplus, hyundai_department, lotte_department, lotte_mart, shinsegae_department]
+        when:
+          - option:
+              plus_service: [none]
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: ['백화점·할인점 안 주차장, 문화센터, 임대 매장은 적립하지 않는다']
+      - key: coffee-5
+        title: 스타벅스·투썸플레이스·폴바셋 5% 적립
+        source: page
+        evidence: [커피 5% 마이신한포인트 적립, '커피: 스타벅스, 투썸플레이스, 폴 바셋', 스타벅스 사이렌오더 포함됩니다., '투썸플레이스 투썸오더, 폴 바셋 크라운오더 이용금액은 포함되지 않습니다.']
+        target:
+          merchants: [starbucks]
+        when:
+          - option:
+              plus_service: [none]
+          - {region: domestic}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: ['스타벅스 홈페이지·앱 선물하기와 백화점, 할인점, 면세점, 공항 입점 매장은 적립하지 않는다']
+      - key: coffee-offline-5
+        title: 투썸플레이스·폴바셋 매장 5% 적립
+        source: page
+        evidence: ['커피: 스타벅스, 투썸플레이스, 폴 바셋', '투썸플레이스 투썸오더, 폴 바셋 크라운오더 이용금액은 포함되지 않습니다.']
+        target:
+          merchants: [paul_bassett, twosome]
+        when:
+          - option:
+              plus_service: [none]
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: telecom-5
+        title: 이동통신요금 자동납부 5% 적립
+        source: page
+        evidence: [이동통신요금 자동납부 5% 마이신한포인트 적립, 'SKT, KT, LG U+ 이동통신요금', '이동통신요금 자동 납부 금액만 적립되며, 자동납부 외 이용금액 및 알뜰폰·선불폰·결합상품(TV, 인터넷, 유선전화 등) 이용금액은 적립되지 않습니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - option:
+              plus_service: [none]
+          - billing: [autopay]
+        reward: {type: points, program: mysinhan_point, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: ['결합상품(TV, 인터넷, 유선전화) 요금은 적립하지 않는데 같은 통신사 가맹점이라 나누지 못한다']
+    unmodeled: [LGE.COM 플러스 서비스(구매액 일부를 12개월 뒤 청구하고 12개월 실적 400만~4천만원이면 10만~100만원 할인)는 12개월 누적 실적이라 계산하지 않는다. 플러스 서비스 이용 회원은 적립도 받지 않는다, 교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 신한카드 할인이 적용된 거래는 실적에서 빠진다]
+notes: LGE.COM 신한카드 상품 페이지 기준(2026-10-12). 출시 2024-09-27, 심의필 제2024-C1a-12520호. 연회비는 페이지 HTML의 국내전용 2만5천원, Master 2만8천원. 플러스 서비스 미이용 회원만 적립한다. LG전자 3%는 전월 50만원 이상 월 10만·연 30만 포인트, 생활 적립은 30만원 이상 월 8천, 50만원 이상 월 1만 포인트 통합 한도. 신규 발급 회원은 등록월 다음 달 말까지 50만 구간. 페이지 적립 제외 목록에 간편결제 문구가 없어 카드사 기본의 간편결제 제외를 쓰지 않았다. 무이자할부는 실적과 적립에서 빠진다. 2026-10-12 결정대로 시내버스와 지하철을 실적에서 뺐다.

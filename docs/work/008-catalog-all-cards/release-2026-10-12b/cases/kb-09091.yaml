@@ -1,0 +1,89 @@
+card: kb-09091
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 기본 0.5%만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 500}, counted: 100000}
+  calc: 100,000원 × 0.5% = 500점. 30만~50만 구간은 특별 포인트리 없음
+- name: 30만 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만은 기본 포인트리 없음
+- name: 100만 구간 상위 영역 특별 1.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 500, area-food: 1500}}
+  calc: 이번 달 식음료 영역만 이용해 상위 3개 안. 기본 500점 + 특별 100,000원 × 1.5% = 1,500점
+- name: 200만 구간 특별 4.5% 영역 한도
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 400000, category: hospital}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 2000, area-medical: 15000}}
+  calc: 400,000원 × 4.5% = 18,000점 중 영역 한도 15,000점. 기본 2,000점
+- name: 넷째 영역은 특별 적립 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-01T10:00, amount: 50000, category: cafe}
+  - {at: 2026-11-02T10:00, amount: 40000, category: hospital}
+  - {at: 2026-11-03T10:00, amount: 30000, category: telecom}
+  - {at: 2026-11-04T10:00, amount: 10000, category: sports}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 250, area-food: 250}}
+  - {payment: 1, benefits: {base-0-5: 200, area-medical: 200}}
+  - {payment: 2, benefits: {base-0-5: 150, area-telecom: 150}}
+  - {payment: 3, benefits: {base-0-5: 50}}
+  calc: 50만 구간 특별 0.5%. 레저 영역은 이용액 4위라 특별 적립 없음
+- name: 건당 100만원 이상 보너스
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1000000, category: online_shopping}
+  expect:
+  - {payment: 0, benefits: {bonus-1m: 5000}}
+  calc: 실적 조건 없이 건당 100만원 이상이면 5,000점
+- name: 영화 온라인 예매 3,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 75, movie-3500: 3500}}
+  calc: 승인건당 3,500원. 기본 15,000원 × 0.5% = 75점
+- name: 신규 유예 생애 최초 발급은 특별 0.5%
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {area-food: 500}}
+  calc: 유예기간은 50~100만 구간 특별 0.5%만. 기본 포인트리는 30만원 미만이라 없음
+- name: 교육·쇼핑·주유교통 상위 3개 영역 특별 0.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-01T10:00, amount: 60000, category: education.academy}
+  - {at: 2026-11-02T10:00, amount: 50000, merchant: emart}
+  - {at: 2026-11-03T10:00, amount: 40000, category: fuel}
+  - {at: 2026-11-04T10:00, amount: 10000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 300, area-education: 300}}
+  - {payment: 1, benefits: {base-0-5: 250, area-shopping: 250}}
+  - {payment: 2, benefits: {base-0-5: 200, area-fuel-transit: 200}}
+  - {payment: 3, benefits: {base-0-5: 50}}
+  calc: 50만 구간 특별 0.5%. 식음료는 4위라 특별 적립 없음
+- name: 레저 영역 특별 2.5%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: beauty.salon}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 500, area-leisure: 2500}}
+  calc: 150만 구간 특별 2.5%. 미용실 100,000원 × 2.5% = 2,500점

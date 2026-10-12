@@ -1,0 +1,39 @@
+card: shinhan-cbfbh9
+holder:
+  started_on: '2026-01-01'
+  options: [{option: fuel, choice: gasoline_diesel, effective_from: '2026-01-01'}]
+cases:
+- name: 휘발유 주유 유류세 환급과 리터당 80원 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: fuel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-tax-refund-gasoline: 6727, fuel-discount-80: 2152}, counted: 0}
+  calc: 50,000 × 250 / 1,858 = 6,727.6 버림 6,727. 50,000 × 80 / 1,858 = 2,152.8 버림 2,152. 주유는 실적 제외
+- name: 생활서비스 편의점 병원 커피 1만원 기준
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 15000, category: convenience, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 8000, category: pharmacy, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 5000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-convenience: 1000}, counted: 15000}
+  - {payment: 1, benefits: {life-medical: 800}, counted: 8000}
+  - {payment: 2, benefits: {life-cafe: 500}, counted: 5000}
+  calc: 15,000은 1만원 기준 10% 1,000. 8,000 × 10% = 800. 5,000 × 10% = 500
+- name: 주말 이마트 5% 1회 5만원 기준
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T15:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekend-mart-5: 2500}, counted: 60000}
+  calc: 2026-11-07 토요일. 50,000 × 5% = 2,500
+- name: 실적 30만원 직전이면 유류세 환급만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: fuel, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 10000, category: convenience, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-tax-refund-gasoline: 6727}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 10000}
+  calc: 30만원 미만은 할인 없음. 유류세 환급은 실적 조건이 없다

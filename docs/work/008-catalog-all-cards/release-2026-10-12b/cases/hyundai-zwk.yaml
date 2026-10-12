@@ -1,0 +1,58 @@
+card: hyundai-zwk
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 이상 평일 영역 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T09:00, amount: 60000, merchant: skt, billing: autopay}
+  - {at: 2026-11-02T10:00, amount: 10000, category: transit.subway}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: coupang, channel: online}
+  - {at: 2026-11-03T11:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-03T12:00, amount: 10000, merchant: cu, channel: offline}
+  - {at: 2026-11-03T13:00, amount: 10000, merchant: baemin, channel: online}
+  - {at: 2026-11-04T12:00, amount: 30000, category: restaurant.general}
+  - {at: 2026-11-04T13:00, amount: 60000, category: fuel}
+  - {at: 2026-11-04T14:00, amount: 60000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mobile-5: 3000}, counted: 60000}
+  - {payment: 1, benefits: {transit-5: 500}, counted: 10000}
+  - {payment: 2, benefits: {online-5: 1000}, counted: 30000}
+  - {payment: 3, benefits: {cafe-5: 500}, counted: 10000}
+  - {payment: 4, benefits: {convenience-5: 500}, counted: 10000}
+  - {payment: 5, benefits: {delivery-5: 500}, counted: 10000}
+  - {payment: 6, benefits: {restaurant-5: 1000}, counted: 30000}
+  - {payment: 7, benefits: {fuel-5: 2500}, counted: 60000}
+  - {payment: 8, benefits: {mart-5: 2500}, counted: 60000}
+  calc: 쿠팡 1,500은 건당 1천원, 음식점 1,500은 건당 1천원, 주유와 마트 3,000은 건당 2,500
+- name: 토요일 음식점 주유 마트 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 30000, category: restaurant.general}
+  - {at: 2026-11-07T13:00, amount: 60000, category: fuel}
+  - {at: 2026-11-08T14:00, amount: 60000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {restaurant-weekend-10: 2000}, counted: 30000}
+  - {payment: 1, benefits: {fuel-weekend-10: 5000}, counted: 60000}
+  - {payment: 2, benefits: {mart-weekend-10: 5000}, counted: 60000}
+  calc: 3,000은 건당 2천원, 6,000은 건당 5천원
+- name: 음식점 하루 1회, 월 2회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-02T12:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-02T18:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-07T12:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-09T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {restaurant-5: 500}, counted: 10000}
+  - {payment: 1, benefits: {}, counted: 10000}
+  - {payment: 2, benefits: {restaurant-weekend-10: 1000}, counted: 10000}
+  - {payment: 3, benefits: {}, counted: 10000}
+  calc: 같은 날 두 번째는 0, 세 번째 날은 월 2회를 넘어 0
+- name: 50만 직전은 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 50만 미만 혜택 제외

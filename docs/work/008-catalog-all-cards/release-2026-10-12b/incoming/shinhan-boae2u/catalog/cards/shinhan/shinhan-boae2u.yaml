@@ -1,0 +1,56 @@
+schema_version: 2
+id: shinhan-boae2u
+issuer: shinhan
+name: FOCUS 신한카드 체크
+short_name: 신한 FOCUS 체크
+kind: check
+product_codes: [BOAE2U]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/2014363_2206.html', fetched_at: 2026-10-12, review_no: 제20260901-Dpp-001호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-09-01
+    source: page
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 1
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 이 카드 서비스 밖의 프로모션 할인이 적용된 거래는 캐시백하지 않는다, PG사나 간편결제 이름으로 찍히는 결제는 캐시백하지 않는다]
+    benefits:
+      - key: cu-10
+        title: CU 10% 캐시백
+        source: page
+        evidence: [CU 10% 캐시백, '30만원 이상 70만원 미만 7천원, 70만원 이상 100만원 미만 1만 2천원, 100만원 이상 1만 7천원', '포켓CU앱/오프라인 매장 이용 시에만 캐시백되며, 백화점, 할인점, 면세점, 공항, 기차역 등 입점된 임대 매장 이용 시에는 캐시백되지 않습니다.']
+        target:
+          merchants: [cu]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - per: month
+            amount: {300000: 7000, 700000: 12000, 1000000: 17000}
+        tiers: {from: 300000}
+        unmodeled: ['CU에서 상품권, 선불카드, 편의점택배 같은 비쇼핑 결제는 캐시백하지 않는다', 백화점·할인점·공항·기차역 입점 CU는 캐시백하지 않는다]
+      - key: transit-10
+        title: 후불교통 10% 캐시백
+        source: page
+        evidence: [후불교통 요금 10% 캐시백, 30만원 이상 후불교통요금 10% 캐시백 한도 1천원, 후불교통 기능을 이용한 터치(RF) 거래 시 캐시백이 제공됩니다., '시외버스, 고속버스, 공항버스, 공항철도는 캐시백이 제공되지 않습니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 1000}
+        tiers: {from: 300000}
+    unmodeled: [CU 간편식 5% 즉시할인(1회 2천원)은 간편식 품목을 결제에서 가릴 수 없어 계산하지 않는다, 알뜰폰 요금 자동납부 10% 캐시백(월 2천원)은 알뜰폰 사업자를 가릴 가맹점이 없어 계산하지 않는다, 일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 'TV수신료, 세외수입, 포인트·캐시·예치금 충전은 실적과 캐시백에서 빠진다', 서비스는 영역별로 이용한 거래 순서대로 적용한다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+notes: 신한카드 상품 페이지 기준. 외국인 고객만 신청할 수 있고 후불교통 기능이 있는 카드로만 발급한다. 연회비 없음. 카드 출시 2026.09.01. 전월 30만/70만/100만원 구간별 CU 10% 캐시백 한도 7천/1만 2천/1만 7천원, 후불교통 10% 월 1천원. 이 카드로 신한카드 할인서비스를 받은 거래는 금액 전체가 실적에서 빠져 exclude_applied를 1로 두었다. 신규 발급 회원은 등록월 다음 달까지 30만원 구간. 국내 취소는 처음 승인한 달, 해외 취소는 취소 전표 매입 달 실적에서 뺀다.

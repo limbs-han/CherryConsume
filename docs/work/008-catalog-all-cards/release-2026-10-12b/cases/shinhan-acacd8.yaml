@@ -1,0 +1,33 @@
+card: shinhan-acacd8
+cases:
+- name: 40만 구간 LG U+ 자동납부 1만원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 65000, merchant: lg_uplus, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {uplus-telecom: 10000}}
+  calc: 65,000원 중 월 한도 1만원
+- name: 실적 직전 399999는 통신 할인 없음, 영화는 30만 구간
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 65000, merchant: lg_uplus, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 9000, merchant: cgv, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {movie-1500: 1500}}
+  calc: 40만원 미만이라 통신 0. 영화 9천원 이상 1,500원
+- name: 80만 구간 통신 1만5천과 영화 3천, 하루 2회
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 12000, merchant: lg_uplus, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 8000, merchant: lg_uplus, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T20:00, amount: 28000, merchant: megabox, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T20:10, amount: 9000, merchant: cgv, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T20:20, amount: 9000, merchant: cgv, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {uplus-telecom: 12000}}
+  - {payment: 1, benefits: {uplus-telecom: 3000}}
+  - {payment: 2, benefits: {movie-3000: 3000}}
+  - {payment: 3, benefits: {movie-1500: 1500}}
+  - {payment: 4, benefits: {}}
+  calc: 통신 12,000원 다 할인, 다음 8,000원은 남은 3,000원. 영화는 통합 일 2회라 세 번째는 0

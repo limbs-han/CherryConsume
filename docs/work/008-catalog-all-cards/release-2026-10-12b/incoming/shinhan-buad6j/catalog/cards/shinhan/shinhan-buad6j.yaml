@@ -1,0 +1,62 @@
+schema_version: 2
+id: shinhan-buad6j
+issuer: shinhan
+name: 신한카드 Globus
+short_name: 신한 Globus
+search_names: [글로버스]
+kind: credit
+product_codes: [BUAD6J]
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 22000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1221213_2207.html', fetched_at: 2026-10-12, review_no: 제2023-C1a-05150호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2023-04-18
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트 사용 금액과 신한카드 할인서비스를 받은 거래는 적립하지 않는다, 해외 현금인출과 해외 가상화폐·사행성 가맹점 이용은 적립하지 않는다]
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: domestic-point-0-7
+        title: 국내 0.7% 적립
+        source: page
+        evidence: [국내 신판(일시불+할부) 이용금액에 대해 마이신한포인트 0.7% 적립, 전월 실적 30만원 이상 이용 시 제공, 기본 및 특별 포인트 적립 한도는 없습니다.]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: mysinhan_point, rate: 0.7}
+        tiers: {from: 300000}
+      - key: overseas-point-1-7
+        title: 해외 일시불 1.7% 적립
+        source: page
+        evidence: [해외(일시불) 이용금액에 대해 마이신한포인트 1.7% 적립, 전월 실적 30만원 이상 이용 시 제공, 기본 및 특별 포인트 적립 한도는 없습니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 1.7}
+        tiers: {from: 300000}
+        unmodeled: [해외 온라인 사이트라도 국내 결제대행사를 거쳐 국내 가맹점으로 결제되면 적립하지 않는다, 해외 이용금액을 분할납부로 바꾸면 적립하지 않는다]
+    unmodeled: [국제브랜드 수수료 1%와 해외서비스 수수료 0.18% 할인은 수수료가 결제 금액에 없어 계산하지 않는다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 본인과 가족카드 이용금액을 합산해 전월 실적을 본다, 무승인 매입은 매입 월 이용금액으로 센다]
+notes: '신한카드 상품 페이지 기준. 연회비 국내전용 22,000원, Mastercard 25,000원. 포인트 적립은 전월 30만원 이상이고 한도가 없다. 해외 수수료 할인은 실적과 한도 없이 준다. 취소는 국내는 승인된 달, 해외는 신한카드 접수 확정일 기준으로 뺀다. 실적 제외: 카드대출, 연회비, 수수료·이자, 기프트·선불카드, 상품권·선불전자지급수단, 지방세·국세·4대보험, 아파트관리비, 도시가스·전기·수도요금, 거래 취소, 해외 가상화폐·사행성 가맹점. 신규 회원은 등록월+1개월까지 실적과 관계없이 적립.'

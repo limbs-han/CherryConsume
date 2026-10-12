@@ -1,0 +1,38 @@
+card: shinhan-poidzr
+cases:
+- name: 20만 구간 기본 0.2%와 특별 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: department_store, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 50000, category: hospital, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 10000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-point: 100}}
+  - {payment: 1, benefits: {hospital-special: 500}}
+  - {payment: 2, benefits: {mart-special: 500}}
+  - {payment: 3, benefits: {cafe-special: 100}}
+  calc: 50,000 x 0.2% = 100. 병원·마트 50,000 x 1% = 500. 스타벅스 10,000 x 1% = 100
+- name: 실적 직전 199999는 적립 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: department_store, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만
+- name: 60만 구간 2%, 영역별 월 30만원까지
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 400000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 100000, category: department_store, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-special: 6000}}
+  - {payment: 1, benefits: {base-point: 400}}
+  calc: 30만원까지 x 2% = 6,000. 기본 100,000 x 0.4% = 400
+- name: 200만 구간 OTT 100% 한도 2천
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 17000, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-membership-100: 2000}}
+  calc: 17,000원 100% 중 월 한도 2,000P

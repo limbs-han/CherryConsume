@@ -1,0 +1,79 @@
+card: kb-00236
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: OTT 20% 월 5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 17000, merchant: tving, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-20: 3400}, counted: 0}
+  - {payment: 1, benefits: {ott-20: 1600}}
+  calc: 17000 x 20% = 3400, 남은 1600
+- name: KB Pay 오픈마켓 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {openmarket-kbpay-10: 3000}}
+  calc: 30000 x 10%
+- name: 40만 경계 직전
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 40만원 미만 할인 없음
+- name: 신규 유예 월 2500
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {openmarket-kbpay-10: 2500}}
+  calc: 유예기간 월 2500원 한도
+- name: 후불교통 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무승인전표(대중교통) 실적 제외
+- name: 일반 승인 철도 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 철도는 실적에 남긴다
+- name: 전기차 충전 20% 80만 구간 1만5천원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, category: car.ev_charging}
+  - {at: 2026-11-06T10:00, amount: 30000, category: car.ev_charging}
+  expect:
+  - {payment: 0, benefits: {ev-charging-20: 12000}}
+  - {payment: 1, benefits: {ev-charging-20: 3000}}
+  calc: 60000 x 20% = 12000, 남은 한도 3000
+- name: 주차 세차 20% 월 5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: car.parking}
+  - {at: 2026-11-06T10:00, amount: 10000, category: car.car_wash}
+  expect:
+  - {payment: 0, benefits: {parking-carwash-20: 4000}}
+  - {payment: 1, benefits: {parking-carwash-20: 1000}}
+  calc: 20000 x 20% = 4000, 남은 한도 1000
+- name: 신규 유예 충전 월 5천원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: car.ev_charging}
+  expect:
+  - {payment: 0, benefits: {ev-charging-20: 5000}}
+  calc: 유예기간 월 5천원 한도

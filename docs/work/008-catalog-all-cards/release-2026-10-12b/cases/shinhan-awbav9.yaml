@@ -1,0 +1,43 @@
+card: shinhan-awbav9
+holder:
+  started_on: '2026-01-01'
+  facts: {shinhan_bank_account: true}
+cases:
+- name: 30만 구간 기본 0.3%와 신한은행 추가 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, region: overseas, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 20000, category: utility.gas, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 10000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-3: 300, bank-shopping-0-7: 700}, counted: 100000}
+  - {payment: 1, benefits: {base-0-3: 300, bank-overseas-0-7: 700}, counted: 100000}
+  - {payment: 2, benefits: {base-0-3: 150, bank-life-telecom-1-7: 850}, counted: 50000}
+  - {payment: 3, benefits: {base-0-3: 60, bank-life-gas-1-7: 340}, counted: 20000}
+  - {payment: 4, benefits: {base-0-3: 30}, counted: 10000}
+  calc: 이마트 100,000 × (0.3% + 0.7%), 해외 100,000 × (0.3% + 0.7%), SKT 50,000 × (0.3% + 1.7%), 도시가스 20,000 × (0.3% + 1.7%), 카페 10,000 × 0.3%
+- name: 30만 직전은 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 30만원 미만
+- name: 월 3만 포인트 통합 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 2900000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-3: 8700, bank-shopping-0-7: 20300}, counted: 2900000}
+  - {payment: 1, benefits: {base-0-3: 600, bank-shopping-0-7: 400}, counted: 200000}
+  calc: 첫 결제 29,000. 둘째 결제 기본 600을 먼저 계산하고 남은 400이 추가 적립
+- name: 버스 후불교통 1.7% 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-3: 4, bank-life-transit-1-7: 25}, counted: 0}
+  calc: 1,500 × 0.3% = 4.5 → 4, 1,500 × 1.7% = 25.5 → 25. 버스는 실적에서 뺐다

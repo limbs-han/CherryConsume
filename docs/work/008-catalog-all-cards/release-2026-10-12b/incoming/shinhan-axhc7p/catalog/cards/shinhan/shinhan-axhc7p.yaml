@@ -1,0 +1,122 @@
+schema_version: 2
+id: shinhan-axhc7p
+issuer: shinhan
+name: L.PAY 신한카드 체크
+short_name: 신한 L.PAY 체크
+kind: check
+product_codes: [AXHC7P]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1197028_2206.html', fetched_at: 2026-10-12, review_no: 제20210511-Dpi-001호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2020-06-17
+    source: page
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인서비스가 적용된 거래는 적립하지 않는다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 700000: 10000, 1000000: 20000}
+      - key: lpay-count
+        per: month
+        count: {300000: 3, 700000: 6, 1000000: 9}
+    stacks:
+      - key: main
+        pick: priority
+        order: [special-lotte-0-5, special-transit-0-5, special-taxi-0-5, base-0-1]
+        spill: split
+      - {key: lpay}
+    benefits:
+      - key: base-0-1
+        title: 국내외 0.1% L.POINT 적립
+        source: page
+        evidence: [국내/해외 이용금액 0.1% 포인트 적립, 전월 이용조건 및 월 적립한도 없음, 국내/해외 일시불 대상, '특별적립, 추가적립 서비스가 적용된 거래의 경우 기본적립 서비스가 적용되지 않습니다.']
+        target: {all: true}
+        when:
+          - {lump_sum: true}
+        reward: {type: points, program: lotte_lpoint, rate: 0.1}
+      - key: special-transit-0-5
+        title: 후불교통 0.5% L.POINT 적립
+        source: page
+        evidence: ['후불교통(버스/지하철) 및 택시, 롯데 더드림영역 이용금액 0.5% 포인트 적립', 후불교통기능을 이용한 터치(RF) 거래시 적용됩니다., 특별적립 및 추가적립 서비스는 전월 이용금액에 따른 통합 적립한도 내에서 서비스 적용]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: points, program: lotte_lpoint, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [시외·고속·공항버스와 공항철도 후불교통도 대상이지만 업종으로 가리지 못해 시내버스와 지하철만 계산한다]
+      - key: special-taxi-0-5
+        title: 택시 0.5% L.POINT 적립
+        source: page
+        evidence: ['후불교통(버스/지하철) 및 택시, 롯데 더드림영역 이용금액 0.5% 포인트 적립', 택시의 경우 오프라인 현장 결제만 가능하며 온라인/ 자동결제 등은 적용 제외됩니다.]
+        target:
+          categories: [taxi]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: lotte_lpoint, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: special-lotte-0-5
+        title: 롯데 더드림영역 0.5% L.POINT 적립
+        source: page
+        evidence: ['롯데ON, 롯데백화점, 롯데마트, 롯데슈퍼, 롯데홈쇼핑, 롯데시네마, 롯데호텔(리조트 포함), 롯데면세점, 롭스, 세븐일레븐', 롯데마트의 경우 롯데VIC마켓이 포함됩니다., 오프라인 가맹점 중 일부 임대매장의 경우 서비스 대상에 포함되지 않습니다.]
+        target:
+          merchants: [lohbs_plus, lotte_cinema, lotte_department, lotte_dfs, lotte_dfs_online, lotte_homeshopping, lotte_mart, lotte_mart_max, lotte_on, lotte_super, seven_eleven]
+        reward: {type: points, program: lotte_lpoint, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [롯데호텔·리조트는 공통 가맹점이 없어 계산하지 않는다, 일부 임대매장은 적립하지 않는다]
+      - key: lpay-online-2-5
+        title: 롯데 더드림영역 L.PAY 온라인 2.5% 추가 적립
+        source: page
+        evidence: [L.PAY 온라인 결제 시 2.5% 추가 포인트 적립 (특별적립 0.5% + 추가적립 2.5% = 최대 총 3%), L.PAY 온라인 결제 추가 적립 서비스는 적립 전 승인 금액 건당 5만원까지, '30만원 이상 70만원 미만 영역별 월 3회, 70만원 이상 100만원 미만 영역별 월 6회, 100만원 이상 영역별 월 9회']
+        target:
+          merchants: [lohbs_plus, lotte_cinema, lotte_department, lotte_dfs, lotte_dfs_online, lotte_homeshopping, lotte_mart, lotte_mart_max, lotte_on, lotte_super, seven_eleven]
+        when:
+          - {channel: online}
+          - payment: [l_pay]
+        reward: {type: points, program: lotte_lpoint, rate: 2.5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: lpay-count}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: lpay
+      - key: lpay-offline-0-5
+        title: 롯데 더드림영역 L.PAY 오프라인 0.5% 추가 적립
+        source: page
+        evidence: [L.PAY 오프라인 결제 시 0.5% 추가 포인트 적립 (특별적립 0.5% + 추가적립 0.5% = 최대 총 1%), L.PAY 오프라인 결제 추가적립 서비스는 적립 전 승인금액 건당 15만원까지 서비스 적용됩니다.]
+        target:
+          merchants: [lohbs_plus, lotte_cinema, lotte_department, lotte_dfs, lotte_dfs_online, lotte_homeshopping, lotte_mart, lotte_mart_max, lotte_on, lotte_super, seven_eleven]
+        when:
+          - {channel: offline}
+          - payment: [l_pay]
+        reward: {type: points, program: lotte_lpoint, rate: 0.5}
+        limits:
+          - {per: txn, base: 150000}
+          - {shared: lpay-count}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        stack: lpay
+    unmodeled: ['L.PAY 추가 적립 횟수는 원문에서 영역별 월 3, 6, 9회인데 영역별로 나누지 않고 열 개 영역을 합쳐 월 3, 6, 9회로 계산한다. 실제보다 적게 잡힌다', 일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 롯데ON에 접속해 산 롯데마트 상품은 롯데ON 횟수로 센다, 롯데멤버스 회원을 탈회하면 적립하지 않는다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+notes: 신한카드 상품 페이지 기준. 연회비 국내전용과 Visa 모두 없음. 포인트는 롯데 L.POINT로 적립한다. 기본 0.1%는 조건과 한도 없이 일시불에, 특별적립 0.5%는 후불교통·택시·롯데 더드림영역에, L.PAY 추가 적립은 롯데 더드림영역에서 L.PAY로 결제할 때 온라인 2.5%(건당 5만원까지), 오프라인 0.5%(건당 15만원까지)다. 특별과 추가 적립은 전월 30만/70만/100만원 구간 통합 한도 5천/1만/2만P 안이다. 특별적립은 기본 적립을 대신해 같은 묶음, 추가 적립은 다른 묶음이다. 신규 발급 회원은 등록월 다음 달까지 30만원 구간. 실적 제외는 현금서비스, 카드론, 연회비, 수수료, 이자, 기프트·선불카드, 취소, 지방세, 수도요금, 국세, 4대보험, 스쿨뱅킹, 상품권·선불전자지급수단.

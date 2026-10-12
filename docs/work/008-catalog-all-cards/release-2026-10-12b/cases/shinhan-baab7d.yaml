@@ -1,0 +1,47 @@
+card: shinhan-baab7d
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 요기요 15% 일 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T18:00, amount: 20000, merchant: yogiyo, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {yogiyo-15: 2000}}
+  calc: 20,000 x 15% = 3,000원이 일 2천원에 걸림
+- name: 실적 직전 199999는 혜택 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T18:00, amount: 10000, merchant: yogiyo, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만
+- name: 이디야 7천원 미만은 없음
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6900, merchant: ediya, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 8000, merchant: ediya, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {ediya-10: 800}}
+  calc: 6,900원은 건당 7천원 미만. 8,000 x 10% = 800원
+- name: CU 10%와 통합한도 6천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-01T18:00, amount: 20000, merchant: yogiyo, payment_method: physical_card}
+  - {at: 2026-11-02T18:00, amount: 20000, merchant: yogiyo, payment_method: physical_card}
+  - {at: 2026-11-03T18:00, amount: 20000, merchant: yogiyo, payment_method: physical_card}
+  - {at: 2026-11-04T18:00, amount: 30000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {yogiyo-15: 2000}}
+  - {payment: 1, benefits: {yogiyo-15: 2000}}
+  - {payment: 2, benefits: {yogiyo-15: 2000}}
+  - {payment: 3, benefits: {}}
+  calc: 요기요 2천원 세 번으로 20만 구간 통합 6천원을 다 써 CU는 없음
+- name: CU 1만원 이상 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T18:00, amount: 12000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cu-10: 1200}}
+  calc: 12,000 x 10% = 1,200원

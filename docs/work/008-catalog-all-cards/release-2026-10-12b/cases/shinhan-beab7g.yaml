@@ -1,0 +1,39 @@
+card: shinhan-beab7g
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 신세계백화점과 생활 할인
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 200000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T15:00, amount: 50000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 6000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-06T09:00, amount: 30000, merchant: yes24, channel: online, payment_method: physical_card}
+  - {at: 2026-11-07T09:00, amount: 50000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shinsegae-dept-5: 5000}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {emart-5: 3000}}
+  - {payment: 3, benefits: {coffee-5: 300}}
+  - {payment: 4, benefits: {online-book-5: 1500}}
+  - {payment: 5, benefits: {fuel-5: 2500}}
+  calc: 백화점 20만 × 5% = 1만이지만 1회 5천. 같은 날 둘째는 일 1회. 이마트 3,000, 커피 300, 서점 1,500, 주유 2,500. 생활 합계 7,300으로 1만 안
+- name: 0 구간 SRT와 지하철 3% 월 5만원까지
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T08:00, amount: 60000, merchant: srt, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 20000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {srt-3: 1500}}
+  - {payment: 1, benefits: {transit-3: 600}, counted: 0}
+  - {payment: 2, benefits: {}}
+  calc: SRT 5만원까지 3% = 1,500. 지하철 2만 × 3% = 600. 이마트는 50만 구간부터
+- name: 경계 직전 499999 백화점 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만원 미만 백화점 할인 없음

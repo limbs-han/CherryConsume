@@ -1,0 +1,36 @@
+card: hyundai-xcut
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 이상 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: olive_young}
+  expect:
+  - {payment: 0, benefits: {base-1: 100}, counted: 10000}
+  - {payment: 1, benefits: {base-1: 100}, counted: 10000}
+  calc: 100만 미만이라 올리브영도 1%
+- name: 50만 직전은 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 50만 미만 혜택 제외
+- name: 100만 이상 올리브영 5%, 한도 넘으면 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: olive_young, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {beauty-delivery-5: 7500}, counted: 150000}
+  - {payment: 1, benefits: {convenience-5: 2500, base-1: 500}, counted: 100000}
+  calc: 7,500. 남은 2,500은 50,000원분, 나머지 50,000 x 1% = 500. 할인 받은 결제도 실적에 든다
+- name: 무신사 네이버페이는 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: musinsa, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {base-1: 100}, counted: 10000}
+  calc: 간편결제는 국내외 가맹점으로 구분돼 1%

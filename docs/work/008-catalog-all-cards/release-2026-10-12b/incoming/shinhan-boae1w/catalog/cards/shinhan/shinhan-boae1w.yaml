@@ -1,0 +1,108 @@
+schema_version: 2
+id: shinhan-boae1w
+issuer: shinhan
+name: SKT T&Life 신한카드
+short_name: 신한 SKT T&Life
+kind: credit
+product_codes: [BOAE1W]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 27000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/2013495_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-10-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트로 결제한 금액과 이 카드 서비스 밖의 프로모션 할인이 적용된 거래는 할인하지 않는다, PG사 이름으로 찍히는 간편결제는 할인하지 않는다]
+    limits:
+      - key: tlife
+        per: month
+        amount: {300000: 5000, 700000: 7000, 1200000: 12000}
+    benefits:
+      - key: skt-autopay
+        title: SKT 통신요금 자동납부 결제일 할인 (월 최대 1만원)
+        source: page
+        evidence: ['SKT (휴대폰, 인터넷 , TV) 할인은 자동납부 시 적용되며', SKT 통신요금이 할인 한도 미만인 경우 결제금액 만큼 서비스가 적용되며, 30만원 이상 70만원 미만 6천원, 70만원 이상 120만원 미만 8천원, 120만원 이상 1만원]
+        target:
+          merchants: [skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 6000, 700000: 8000, 1200000: 10000}
+        tiers: {from: 300000}
+      - key: tlife-offline
+        title: T라이프 편의점·커피·다이소 5% 결제일 할인
+        source: page
+        evidence: ['편의점 : GS25, CU, 세븐일레븐, 이마트24', '커피전문점 : 투썸플레이스, 메가MGC커피, 컴포즈커피, 빽 다방, 스타벅스', '잡화 : 올리브영, 다이소', '편의점, 커피전문점, 잡화는 국내 오프라인 매장에서 이용한 경우에만 할인됩니다.']
+        target:
+          merchants: [compose_coffee, cu, daiso, emart24, gs25, paik_coffee, seven_eleven]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: tlife}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점, 쇼핑몰, 면세점, 공항, 기차역 입점 매장은 할인하지 않는다']
+      - key: tlife-cafe-oliveyoung
+        title: T라이프 스타벅스·투썸·메가커피·올리브영 5% 결제일 할인
+        source: page
+        evidence: ['스타벅스 사이렌 오더, 투썸플레이스 투썸 오더, 메가 MGC커피 메가 오더 이용시에도 할인됩니다.', 올리브영은 공식 홈페이지/모바일 앱 이용 시에도 할인됩니다.]
+        target:
+          merchants: [mega_coffee, olive_young, starbucks, twosome]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: tlife}
+        tiers: {from: 300000}
+        unmodeled: ['입점 매장, 스타벅스 선물하기, 상품권과 선불카드 충전은 할인하지 않는다']
+      - key: tlife-subscription
+        title: T라이프 구독 5% 결제일 할인
+        source: page
+        evidence: ['T 우주, 넷플릭스, 네이버플러스 멤버십, 쿠팡 와우 멤버십', 공식 홈페이지에 직접 접속/신청하여 정기결제(자동이체)를 이용하는 경우에 한하여 할인됩니다.]
+        target:
+          merchants: [coupang_wow, naver_plus_membership, netflix, t_universe_pass]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: tlife}
+        tiers: {from: 300000}
+        unmodeled: ['앱마켓 인앱결제, 1회성 결제, 통신요금 합산 결제는 할인하지 않는다']
+      - key: tlife-baemin
+        title: T라이프 배달의민족 5% 결제일 할인
+        source: page
+        evidence: ['배달의민족 공식 앱에서 ‘앱 내 카드결제’가 아닌, ‘현장결제’(물품 수령 시 결제)이용금액은 할인되지 않습니다.']
+        target:
+          merchants: [baemin]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: tlife}
+        tiers: {from: 300000}
+        unmodeled: ['B마트, 배민스토어, 배민상회, 배민페이머니 충전, 배민상품권, 배민클럽 구독료는 할인하지 않는다']
+    unmodeled: ['SKT 라이트할부 상환 기간 월 최대 2천원 할인(30만 1천원, 70만 이상 2천원)은 결제 한 건에 붙지 않는 월 할인이라 계산하지 않는다', 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 할인은 이용한 거래 순서대로 적용하고 같은 달에 취소하면 횟수와 한도가 복원된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다, assumed: '2026-10-12'}
+notes: 'SKT T&Life 신한카드 상품 페이지 기준(2026-10-12 headless Chrome). 심의필 제2026-C1a-07701호(2026.05.27). 연회비 국내전용 2만7천원, Mastercard 3만원. 가족카드 불가, 후불교통 기능 카드로만 발급. 할인은 전월 30만원 이상. SKT 통신 6천/8천/1만원, T라이프 5% 월 5천/7천/1만2천원(30만/70만/120만). 실적 제외: 카드대출, 연회비, 수수료·이자, 기프트·선불카드, 무이자할부, 지방세·국세·지방세외수입·환경개선부담금, 4대보험, 스쿨뱅킹, 대학(원) 등록금, 아파트관리비, 도시가스·전기·TV수신료·수도요금, 상품권·선불전자지급수단, 전자지급수단 충전, 거래 취소. 국내 취소는 최초 승인 달, 해외 취소는 매입 달에서 뺀다. 신규 발급 회원은 등록월 다음 달까지 30만~70만원 구간.'

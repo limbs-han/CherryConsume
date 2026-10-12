@@ -1,0 +1,39 @@
+card: shinhan-cbtcez
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 영역별 할인
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 40000, category: hospital, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: yes24, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 25000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 7890, merchant: coupang_wow, billing: subscription, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-5: 2000}, counted: 40000}
+  - {payment: 1, benefits: {online-mall-5: 1500}, counted: 30000}
+  - {payment: 2, benefits: {education-bookstore-5: 1000}, counted: 20000}
+  - {payment: 3, benefits: {delivery-5: 1250}, counted: 25000}
+  - {payment: 4, benefits: {ott-50: 5000}, counted: 17000}
+  - {payment: 5, benefits: {membership-3000: 3000}, counted: 7890}
+  calc: 병원 2,000, 쿠팡 1,500, 서점 1,000, 배민 1,250, 넷플릭스 8,500이지만 건당 5천, 와우 3천. 합 13,750으로 1만 5천 한도 안
+- name: 30만 구간 한도 5천원과 영역별 월 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, category: pharmacy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, category: pharmacy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-5: 3000}, counted: 100000}
+  - {payment: 1, benefits: {}, counted: 100000}
+  - {payment: 2, benefits: {online-mall-5: 2000}, counted: 100000}
+  calc: 약국 건당 3천, 둘째 약국은 월 1회를 넘는다, 쿠팡은 남은 한도 2천
+- name: 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 40000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 30만원 미만

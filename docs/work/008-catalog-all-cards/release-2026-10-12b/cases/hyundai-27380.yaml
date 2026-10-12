@@ -1,0 +1,29 @@
+card: hyundai-27380
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: SSG.COM 7%와 그 외 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: ssg_com, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 15100, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ssg-com-7: 3500}, counted: 50000}
+  - {payment: 1, benefits: {base-0-5: 76}, counted: 15100}
+  calc: 50,000 x 7% = 3,500. 15,100 x 0.5% = 75.5 반올림 76
+- name: SSG.COM 월 1만 한도 넘으면 적립 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 150000, merchant: ssg_com, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 20000, merchant: ssg_com, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ssg-com-7: 10000}, counted: 150000}
+  - {payment: 1, benefits: {}, counted: 20000}
+  calc: 150,000 x 7% = 10,500이나 한도 10,000. 다음 SSG.COM 결제는 미적립이고 0.5%도 없다
+- name: 전월 30만원 직전이면 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: ssg_com, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만이라 혜택 없음

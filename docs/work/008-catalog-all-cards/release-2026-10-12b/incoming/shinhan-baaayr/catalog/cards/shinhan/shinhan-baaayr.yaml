@@ -1,0 +1,67 @@
+schema_version: 2
+id: shinhan-baaayr
+issuer: shinhan
+name: 전통시장사랑 체크 신한카드
+short_name: 신한 전통시장사랑 체크
+kind: check
+product_codes: [BAAAYR]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1232098_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2016-05-09
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [gift_card, prepaid_charge, transit.bus_city, transit.subway]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 600000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 600000: 10000}
+    benefits:
+      - key: market-10
+        title: 전통시장 10% 할인
+        source: page
+        evidence: [전통시장 이용금액의 10% 할인, 횟수 제한없음, 전월 이용금액에 따른 통합할인한도 적용, 국세청 기준 전통시장 등록 가맹점에 한해 할인서비스 제공]
+        target:
+          categories: [traditional_market]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [국세청에 전통시장으로 등록된 가맹점만 대상이다]
+      - key: transit-3
+        title: 대중교통 3% 할인
+        source: page
+        evidence: [대중교통(버스/지하철/철도)이용금액의 3%할인, 전통시장사랑 체크카드를 후불교통카드로 이용시 제공, '(단,공항버스,공항리무진,공할철도,터널,인천대교,신공항하이웨이 제외)']
+        target:
+          categories: [transit.bus_city, transit.rail, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['공항버스, 공항리무진, 공항철도는 대상이 아니다']
+      - key: all-0-1
+        title: 전 가맹점 0.1% 할인
+        source: page
+        evidence: [전 가맹점 이용금액의 0.1%할인, 전통시장 및 대중교통(버스/지하철/철도)서비스와 중복 적용되지 않습니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: [교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다]
+notes: 전통시장사랑 체크 신한카드 상품 페이지 기준. 연회비 없음. 전통시장 10%, 후불교통 버스·지하철·철도 3%, 전 가맹점 0.1%를 전월 30만원 이상이면 월 5천원, 60만원 이상이면 월 1만원 통합한도 안에서 할인한다. 0.1%는 앞의 두 혜택과 겹치지 않아 한 묶음에 두었다. 신규 발급 회원은 등록월 다음 달 말까지 1만원 한도라 60만 구간으로 두었다. 실적 제외는 수수료, 이자, 기프트카드, 선불카드 충전, 취소만 적혀 있다. 혜택 제외 목록이 페이지에 없어 카드사 기본값의 간편결제 제외만 두었다.

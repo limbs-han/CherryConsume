@@ -1,0 +1,262 @@
+{
+  "reviewed_at": "2026-10-10",
+  "scope": "작성하지 않은 하나8 사본의 공식 원문 독립 대조. 카드·카드사 파일 수정 없음. 공통 카테고리 연결과 실행 검사는 부모 및 작성자 검증 범위",
+  "reviewed_count": 8,
+  "finding_count": 0,
+  "previous_finding_count": 24,
+  "previous_findings_resolved": true,
+  "interpretation_question_count": 0,
+  "catalog_modified": false,
+  "packet_file": "tmp/card-ready-review/mixed/packet.json",
+  "packet_sha256": "f67f1868fe86085ecc7786b9647fa5599e765ad1f503a6eaa02b91384cef1a07",
+  "cards": [
+    {
+      "card_id": "hana-12395",
+      "name": "현대렌탈서비스 하나카드",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-12395.yaml",
+      "sha256": "0eb4111fb041ad5a7f6f302bea710de4ea534b2d2f1f40c2dfa11220551364df",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12395"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-12395-page-8824adf29598.html",
+          "sha256": "d16835768db54e936fb0ee0b5ae10a080d073ec1a1d06dbb0fec3692897c79ac"
+        }
+      ],
+      "previous_finding_count": 2,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "공식 문구 그대로 등록월·다음달 최저구간만 지급. 신규 key card_month0~1, 기존 key min2로 높은 실제실적 구간과 중복 방지",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "공식 웹 주소 열기 및 packet 공식 수집 전체 원문 대조",
+        "followup": "2026-10-10 후속 수정 재대조. 신규 고실적 max 해석 철회 및 접수순 안내 보완 확인"
+      },
+      "findings": []
+    },
+    {
+      "card_id": "hana-15349",
+      "name": "대명아임레디 플러스 하나카드",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-15349.yaml",
+      "sha256": "9fdaba986a515254cab801fd20eb2706306cae8ea5a5f47b183443164103a332",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15349"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-15349-page-97ce63052fe3.html",
+          "sha256": "6bc7473110f1ef609547a7cf6bfcc3150ebfd930524a5c0869276e516e1fe8d3"
+        }
+      ],
+      "previous_finding_count": 3,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "공식 문구 그대로 등록월·다음달 최저구간만 지급. 신규 key card_month0~1, 기존 key min2로 높은 실제실적 구간과 중복 방지",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "공식 웹 주소 열기 및 packet 공식 수집 전체 원문 대조",
+        "interest_free": "무이자할부 실적 포함, 할인 제외 원문과 when_any interest_free true 일치",
+        "followup": "2026-10-10 후속 수정 재대조. 신규 고실적 max 해석 철회 및 접수순 안내 보완 확인"
+      },
+      "findings": []
+    },
+    {
+      "card_id": "hana-17403",
+      "name": "마이 코웨이 하나카드",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-17403.yaml",
+      "sha256": "81baaf54d9a0438f0d26e9ad9db65c2cba9da6db7ea5325fc5f9451bc4fbe4da",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17403"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-17403-page-2cc3cd948567.html",
+          "sha256": "c0a47081e2899435685f420d2d745881585b7421b804fc8fbe99ae4a2ba86a56"
+        }
+      ],
+      "previous_finding_count": 3,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "최초 등록일부터 다음달말 최저 구간 보장. 12395·15349 고실적 해석은 별도 확인사항 참조",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "공식 웹 주소 열기 및 packet 공식 수집 전체 원문 대조"
+      },
+      "findings": []
+    },
+    {
+      "card_id": "hana-18023",
+      "name": "토스뱅크 하나카드 Wide",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-18023.yaml",
+      "sha256": "0f06f314137b8e7966c34ee4281c87dfd9284297835625a32946e11ad15e593a",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18023"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-18023-page-2de174d6cc9d.html",
+          "sha256": "a61920027083d6554497a6d7abc5077c48849f7e9168d26df59a8154d0ccfbcb"
+        }
+      ],
+      "previous_finding_count": 4,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "등록월은 실제 실적과 무관 1%. card_month max0 별도 혜택. 다음달부터 min1과 실적 구간별 1%·2%. 세 혜택 모두 wide-monthly 월10만원 공유",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "공식 웹 주소 열기 및 packet 공식 수집 전체 원문 대조",
+        "status": "공식 발급 중단 안내와 discontinued 일치",
+        "installment": "실적 포함하되 모든 할부는 할인 제외. 선결제해도 제외하는 일시불 조건 일치"
+      },
+      "findings": []
+    },
+    {
+      "card_id": "hana-17398",
+      "name": "SK인텔릭스 플러스 하나카드",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-17398.yaml",
+      "sha256": "4a1b5b23c8ae3ac211946fb45940580f09df8c19af53d0d48583dc9e38d05d6f",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17398"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-17398-page-d42a37caf603.html",
+          "sha256": "6bb5830462d2ca5b7ef663ceec280672e7ad86c787680b4b8ea48cc7f4cce56c"
+        }
+      ],
+      "previous_finding_count": 3,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "최초 등록일부터 다음달말 최저 구간 보장. 12395·15349 고실적 해석은 별도 확인사항 참조",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "공식 웹 주소 열기 및 packet 공식 수집 전체 원문 대조"
+      },
+      "findings": []
+    },
+    {
+      "card_id": "hana-11810",
+      "name": "BS렌탈 플러스 하나카드",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-11810.yaml",
+      "sha256": "24a30026e33032af0d7891cc8f29bf86d8fc59d2c5dbe3959e40f0631da93277",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11810"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-11810-page-67d8f8584f19.html",
+          "sha256": "b59cb357d3ef0ba5e12f30b34e95d946ed94759804bdb8f6d522e39502e60456"
+        }
+      ],
+      "previous_finding_count": 3,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "최초 등록일부터 다음달말 최저 구간 보장. 12395·15349 고실적 해석은 별도 확인사항 참조",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "공식 웹 주소 열기 및 packet 공식 수집 전체 원문 대조"
+      },
+      "findings": []
+    },
+    {
+      "card_id": "hana-18068",
+      "name": "삼성 AI 구독 하나카드",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-18068.yaml",
+      "sha256": "3c88b329a2c54729ccd26dc6a014620a76d89520c6025c38762cca2bc5d40aac",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18068"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-18068-page-d8952b8b3b5b.html",
+          "sha256": "0947e87928dcdd81067c46e2baf274a51a68c480c03ac1013ecae6a17adbc7a6"
+        }
+      ],
+      "previous_finding_count": 3,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "최초 등록일부터 다음달말 최저 구간 보장. 12395·15349 고실적 해석은 별도 확인사항 참조",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "공식 웹 주소 열기 및 packet 공식 수집 전체 원문 대조",
+        "target": "삼성전자 직접 구독만 대상. 다른 운영사의 삼성전자 상품 구독 제외 안내 보존"
+      },
+      "findings": []
+    },
+    {
+      "card_id": "hana-19410",
+      "name": "코웨이라이프솔루션 하나카드",
+      "result": "불일치 없음",
+      "file": "tmp/release-card-expansion/hana8/catalog/cards/hana/hana-19410.yaml",
+      "sha256": "0ad25d7cc586eeb438884fa18342b93c5bf002b4c3d7370c373264e75e6f740a",
+      "issuer_file": "tmp/release-card-expansion/hana8/catalog/issuers/hana.yaml",
+      "issuer_sha256": "f91b128a8d154a6d57dce6388a29fb1238a6ae8825496f1010ad343b57d7289b",
+      "checked_sources": [
+        "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19410"
+      ],
+      "source_text_hashes": [
+        {
+          "path": "2026-10-04/hana/_issuer/ix-19410-page-03cca69d0150.html",
+          "sha256": "58c6866c9901e3d7557a23b67550727648eca2e178f29526d6d243dc0737828d"
+        }
+      ],
+      "previous_finding_count": 3,
+      "previous_findings_resolved": true,
+      "checks": {
+        "fees": "국내·해외 브랜드별 연회비 원문 일치",
+        "school": "초중고만 제외하는 primary_secondary_fee로 수정. 유치원 전체 제외하지 않음",
+        "spend": "직접 적힌 제외 항목, 부동산임대료 유무, 일시불·할부 승인 기준, 할부 이용월 전액, 취소 접수월 차감 대조",
+        "tiers_benefits": "실적 구간, 지정 제휴처, 자동납부 조건, 결제액을 넘지 않는 100% 할인과 월 합산 한도 대조",
+        "new": "최초 등록일부터 다음달말 최저 구간 보장. 12395·15349 고실적 해석은 별도 확인사항 참조",
+        "family": "12395에만 본인·가족 합산 보존. 나머지 원문에 없는 문구 삭제 확인",
+        "source_access": "웹 직접 열기는 내부 오류. 공식 URL로 수집한 packet 전체 원문 대조"
+      },
+      "findings": []
+    }
+  ],
+  "interpretation_questions": [],
+  "followup_required": "없음. 작성자 수정 뒤 카드2장 신규 기간 조건과 금액 및 해시 다시 확인"
+}

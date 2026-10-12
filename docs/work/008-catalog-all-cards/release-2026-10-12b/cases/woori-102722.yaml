@@ -1,0 +1,18 @@
+card: woori-102722
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 전월 40만원 국내 1%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {travel-point-domestic-1: 500}}
+  calc: 50,000 × 1% = 500P
+- name: 전월 40만원 직전이면 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간은 혜택 없음

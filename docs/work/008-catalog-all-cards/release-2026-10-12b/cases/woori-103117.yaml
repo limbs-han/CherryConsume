@@ -1,0 +1,29 @@
+card: woori-103117
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 KREAM 5% 건당 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: kream, channel: online}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: kream, channel: online}
+  expect:
+  - {payment: 0, benefits: {kream-5: 500}, counted: 0}
+  - {payment: 1, benefits: {kream-5: 1000}, counted: 0}
+  calc: 10,000원 × 5% = 500원. 100,000원 × 5% = 5,000원 중 건당 1,000원
+- name: 경계 직전 KREAM은 기본 0.2%
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: kream, channel: online}
+  expect:
+  - {payment: 0, benefits: {kream-base-0-2: 200}, counted: 0}
+  calc: 20만 미만이라 5% 없음. 0.2% 200원. KREAM은 실적 제외
+- name: 일반 가맹점 0.2% 월 5천원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 2499500, category: restaurant.general}
+  - {at: 2026-11-06T10:00, amount: 1000000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 4999}, counted: 2499500}
+  - {payment: 1, benefits: {base-0-2: 1}, counted: 1000000}
+  calc: 2,499,500원 × 0.2% = 4,999원. 다음은 2,000원 중 남은 한도 1원

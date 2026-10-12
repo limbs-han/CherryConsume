@@ -1,0 +1,25 @@
+card: shinhan-plad43
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 일반 결제 0.5% 실적 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-domestic: 250}}
+  calc: 50,000 x 0.5% = 250
+- name: SOL페이 0.9%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: restaurant.general, payment_method: shinhan_sol_pay}
+  expect:
+  - {payment: 0, benefits: {daily-solpay: 450}}
+  calc: 50,000 x 0.9% = 450
+- name: 해외 일시불 0.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-overseas: 500}}
+  calc: 100,000 x 0.5% = 500

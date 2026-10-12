@@ -1,0 +1,49 @@
+card: shinhan-pobdov
+cases:
+- name: 금액별 적립률과 SOL페이 추가
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 19999, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 500000, category: department_store, payment_method: physical_card}
+  - {at: 2026-11-04T14:00, amount: 10000, category: restaurant.general, payment_method: shinhan_sol_pay}
+  expect:
+  - {payment: 0, benefits: {daily-under-20k: 39}}
+  - {payment: 1, benefits: {daily-20k: 80}}
+  - {payment: 2, benefits: {daily-100k: 800}}
+  - {payment: 3, benefits: {daily-500k: 5000}}
+  - {payment: 4, benefits: {daily-under-20k: 20, daily-solpay-extra: 10}}
+  calc: 19,999 x 0.2% = 39. 20,000 x 0.4% = 80. 100,000 x 0.8% = 800. 500,000 x 1% = 5,000. SOL페이 10,000원은 0.2% 20 + 0.1% 10
+- name: 실적 직전 199999는 일상 적립 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만
+- name: 편의점 5%와 해외 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  - {payment: 1, benefits: {daily-overseas: 1000}}
+  calc: 10,000 x 5% = 500. 해외 100,000 x 1% = 1,000
+- name: 20만 미만 주말 배달앱 월 1회
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-07T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: shinhan_sol_pay}
+  - {at: 2026-11-08T19:00, amount: 20000, merchant: yogiyo, channel: online, payment_method: shinhan_sol_pay}
+  expect:
+  - {payment: 0, benefits: {weekend-delivery: 1000}}
+  - {payment: 1, benefits: {}}
+  calc: 토요일 2만원 1천P. 월 1회라 일요일은 0
+- name: 5월 통합 한도 1만
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-05-04T10:00, amount: 1500000, category: department_store, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-500k: 10000}}
+  calc: 1,500,000 x 1% = 15,000이 5월 한도 5천+5천=1만에 걸림

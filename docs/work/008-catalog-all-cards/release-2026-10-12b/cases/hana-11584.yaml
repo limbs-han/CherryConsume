@@ -1,0 +1,42 @@
+card: hana-11584
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 오프라인 0.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {domestic-0-7: 70}
+  calc: 10,000원 x 0.7% = 70원
+- name: 온라인 1.7% 월 10만원 한도 뒤에는 0원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6000000, merchant: coupang, channel: online}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {domestic-online-1-7: 100000}
+  - payment: 1
+    benefits: {}
+  calc: 6,000,000원 x 1.7% = 102,000원이 월 한도 100,000원에 걸림. 한도를 다 쓴 뒤 온라인은 0.7%도 없음
+- name: 해외 1.7% 월 1만원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1000000, category: restaurant.general, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-1-7: 10000}
+  calc: 1,000,000원 x 1.7% = 17,000원이 월 한도 10,000원에 걸림
+- name: 온라인 약국 0.7%와 무이자 할부 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: pharmacy, channel: online}
+  - {at: 2026-11-04T11:00, amount: 100000, merchant: emart, channel: offline, installment_months: 3, interest_free: true}
+  expect:
+  - payment: 0
+    benefits: {pharmacy-online-0-7: 70}
+  - payment: 1
+    benefits: {}
+  calc: 10,000원 x 0.7% = 70원. 무이자 할부는 할인 제외

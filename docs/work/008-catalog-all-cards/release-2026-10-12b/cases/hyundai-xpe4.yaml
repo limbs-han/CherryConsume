@@ -1,0 +1,52 @@
+card: hyundai-xpe4
+cases:
+- name: basic-1 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits:
+      basic-1: 100
+  calc: 10000 곱하기 1% = 100. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: 50만원 실적 경계 499999
+  prev_month_spend: 499999
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원 경계에서 특별 적립 또는 1% 할인 자격이 바뀐다.
+- name: 50만원 실적 경계 500000
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      basic-1: 100
+  calc: 50만원 경계에서 특별 적립 또는 1% 할인 자격이 바뀐다.
+- name: 신규 다음달까지 50만원 실적 면제
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      basic-1: 100
+  calc: 신규 다음달 말일까지는 전월 실적 50만원을 충족한 것으로 적용한다.

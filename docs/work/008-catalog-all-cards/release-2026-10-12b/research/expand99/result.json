@@ -1,0 +1,280 @@
+[
+  {
+    "card_id": "hyundai-139504",
+    "status": "ready",
+    "reason": "포인트 재조사: 가이드북 바우처 예시(9,876 포인트 -> 바우처 9,880원, 4,000 포인트 -> 4,000원)로 costco_reward_point 1원 제안. costco 가맹점은 사본 merchants에 있다. 연회비 2만, 전월 50만 이상 코스트코 외 1%, 온라인몰 3%, 매장 2%(통합 연 50만P, 넘으면 미적립). 상품 코드 CSTCE2",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AWO-20260312-1311-23_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%BD%94%EC%8A%A4%ED%8A%B8%EC%BD%94%20%EB%A6%AC%EC%9B%8C%EB%93%9C%20Ed2_V4.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "포인트는 연 1회 코스트코 전용 바우처로 바뀐다"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "출시일은 2023-12-07이고 가이드북은 2026년 3월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다"
+      }
+    ]
+  },
+  {
+    "card_id": "hyundai-180208",
+    "status": "blocked",
+    "reason": "포인트 재조사: 가이드북(2026년 6월 기준)에 스마일캐시 원화 가치 문구가 없다(적립 예시 '4,655원 x 0.7% = 32.585 -> 33 스마일캐시'뿐). G마켓 공식 페이지는 403으로 열리지 않았다. 혜택 전부가 스마일캐시라 blocked 유지. 상품 코드 GMSE4",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%A7%80%EB%A7%88%EC%BC%93%20%EA%BC%AD%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V5_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-181108",
+    "status": "ready",
+    "reason": "포인트 재조사: 가이드북 '1 올리브 포인트=1원으로 환산'으로 cj_olive_point 1원 제안. 연회비 1.5만, 전월 30만 이상 올리브영 20%(월 1만P), 온라인쇼핑·커피·배달앱 5%(영역별 월 2천P, 적용 건 실적 제외). 상품 코드 OLVYE2",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AZA-20260709-1425-77_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%98%AC%EB%A6%AC%EB%B8%8C%EC%98%81%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20Plus_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "백화점·할인점·쇼핑몰·기차역 입점 올리브영과 입점 커피전문점 제외",
+      "올리브영 온라인몰은 올영PAY나 일반결제만"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "출시일은 2026-06-18이고 가이드북은 2026년 7월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다"
+      }
+    ]
+  },
+  {
+    "card_id": "hyundai-27380",
+    "status": "ready",
+    "reason": "포인트 재조사: 가이드북이 SSG MONEY를 원 단위로 적은 문구('매달 SSG MONEY 3,900원 제공', '현금처럼 사용하실 수 있는 결제 수단')로 ssg_money 1원 제안. '1 SSG MONEY = 1원' 문장 자체는 없다. 연회비 1만, 전월 30만 이상 SSG.COM 7%(월 1만, 넘으면 미적립), 그 외 0.5%. 상품 코드 SGE2",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AZX-20260320-1452-98_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SSG%20ed2_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "클럽 가입 시 매달 SSG MONEY 3,900원은 결제 혜택이 아니라 계산하지 않는다"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "출시일은 2022-05-16이고 가이드북은 2025년 12월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다"
+      }
+    ]
+  },
+  {
+    "card_id": "hyundai-amgle2",
+    "status": "ready",
+    "reason": "포인트 재조사: 가이드북 '(1 MR = 10원)'으로 amex_mr 10원 제안. 연회비 30만, 전월 50만 이상 1,000원당 1 MR, 해외·여행·항공사·면세점 1,000원당 3 MR(영역별 월 4,500 MR, 넘으면 1 MR)",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/AMEX_Ed2_Gold_2603.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "국내 특급호텔과 골프·골프연습장 영역은 공통 업종(숙박, 스포츠·레저)이 원문보다 넓어 담지 않고 기본 1 MR로 계산한다",
+      "연간 보너스 바우처는 연간·누적 이용 금액 조건이라 계산하지 않는다",
+      "해외 원화 결제와 간편결제는 기본 1 MR만 적립한다(간편결제는 payment_not으로 담음, 해외 원화 결제는 못 담음)",
+      "영역별 한도는 본인+가족 카드 합산"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "출시일은 2023-11-27이고 가이드북은 2026년 3월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다"
+      }
+    ]
+  },
+  {
+    "card_id": "hyundai-amgre2",
+    "status": "ready",
+    "reason": "포인트 재조사: 가이드북 '(1 MR = 10원)'으로 amex_mr 10원 제안. 연회비 15만, 전월 50만 이상 1,000원당 1 MR, 해외·여행·항공사·면세점 1,000원당 2 MR(영역별 월 2,000 MR, 넘으면 1 MR)",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/AMEX_Ed2_Green_2603.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "국내 특급호텔과 골프·골프연습장 영역은 공통 업종(숙박, 스포츠·레저)이 원문보다 넓어 담지 않고 기본 1 MR로 계산한다",
+      "연간 보너스 바우처는 연간·누적 이용 금액 조건이라 계산하지 않는다",
+      "해외 원화 결제와 간편결제는 기본 1 MR만 적립한다(간편결제는 payment_not으로 담음, 해외 원화 결제는 못 담음)",
+      "영역별 한도는 본인+가족 카드 합산"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "출시일은 2023-11-27이고 가이드북은 2026년 3월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다"
+      }
+    ]
+  },
+  {
+    "card_id": "hyundai-ampte2",
+    "status": "ready",
+    "reason": "포인트 재조사: 가이드북 '(1 MR = 10원)'으로 amex_mr 10원 제안. 연회비 100만, 전월 50만 이상 1,000원당 1 MR, 해외·여행·항공사·면세점 1,000원당 5 MR(영역별 월 15,000 MR, 넘으면 1 MR)",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/AMEX_Ed2_The%20Platinum_2603.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "국내 특급호텔과 골프·골프연습장 영역은 공통 업종(숙박, 스포츠·레저)이 원문보다 넓어 담지 않고 기본 1 MR로 계산한다",
+      "연간 보너스 바우처는 연간·누적 이용 금액 조건이라 계산하지 않는다",
+      "해외 원화 결제와 간편결제는 기본 1 MR만 적립한다(간편결제는 payment_not으로 담음, 해외 원화 결제는 못 담음)",
+      "영역별 한도는 본인+가족 카드 합산"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "출시일은 2023-11-27이고 가이드북은 2026년 3월 기준이다. 그 사이 혜택이 같았는지 확인하지 않았다"
+      }
+    ]
+  },
+  {
+    "card_id": "hyundai-hdshe2",
+    "status": "blocked",
+    "reason": "포인트 재조사: 가이드북(2026년 10월 기준)과 상품 페이지에 Hmall 적립금 원화 가치 문구가 없다. 기본 혜택 1% 적립금을 못 담으면 Hmall 7% 청구할인만 남아 카드가 크게 약해 보여 blocked 유지",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=HDSHE2",
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260722-0946-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80%ED%99%88%EC%87%BC%ED%95%91%20Ed2_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113300001",
+    "status": "ready",
+    "reason": "상품 페이지 'Air Money 포인트 적립(1포인트=1원)' 문구로 air_money 제안. 전월 70만 이상 기본 1%, 특별 1.5%, 해외 2%(월 통합 10만P)와 현재 페이지에 있는 특별할인 커피 10%·온라인 5%·백화점마트 5%를 담았다. 후불교통 실적 제외는 시내버스·지하철로 담았다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=330&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "특별할인 가맹점 전체 이용금액 포인트 제외는 그 가맹점을 포인트 대상에서 빼서 담음",
+      "바우처·라운지 등 프리미엄 서비스",
+      "해외 이용 다음 달 실적 반영 가능",
+      "임대매장 할인 제외"
+    ],
+    "open_questions": [
+      "시행일",
+      "해외 호텔·면세점이 2%인지 1.5%인지"
+    ]
+  },
+  {
+    "card_id": "kb-04415",
+    "status": "ready",
+    "reason": "상품 페이지 'H.Point는 현대백화점그룹 통합 멤버십 포인트로 1p=1원' 문구로 h_point 제안. H.Point 0.5%·현대백화점그룹 1% 추가, 생활영역 5%(1만원 이상, 30만 1만원·60만 2만원 통합), CGV·메가박스 3,500원을 담았다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04415"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "패밀리레스토랑, 골프 업종 없음",
+      "놀이공원 현장할인(지정 이용권)",
+      "신규 실적 유예(생애 최초 발급 조건)",
+      "현대백화점그룹 추가 적립은 현대백화점·더현대닷컴만",
+      "임대매장·PG 제외",
+      "정부지원금 적립 제외"
+    ],
+    "open_questions": [
+      "시행일",
+      "포인트 원 미만 처리"
+    ]
+  },
+  {
+    "card_id": "lotte-p15732-a15732",
+    "status": "ready",
+    "reason": "상품설명서 '적립/사용단위 : 1포인트 = 1원' 문구로 travel_wallet_point 제안. 국내 1%(실적·한도 없음)를 담았다. 해외 1%는 트래블페이 결제분 적립 제외를 결제 입력으로 가를 수 없어 뺐다(덜 주는 쪽)",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15732-A15732",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00008_20250603_10001.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "해외 1% 적립(트래블페이 결제 구분 불가)",
+      "정부지원금·고속도로 통행료·무승인전표 등 일부 적립 제외"
+    ],
+    "open_questions": [
+      "포인트 원 미만 처리"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1724",
+    "status": "blocked",
+    "reason": "상품안내장 2022.8판은 삼성전자 포인트를 '현금처럼 사용 가능한 포인트'로만 적었고, 삼성전자 멤버십 포인트 공식 페이지에도 1포인트 원화 가치 문구가 없다. 모든 혜택이 이 포인트라 담을 수 없다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1724",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpXeUVLruZzN4QNYiuMbUmk%3D&sn=1",
+      "https://www.samsung.com/sec/membership/membershipPoint"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "삼성전자 포인트 원화 가치 공식 문구"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1873",
+    "status": "blocked",
+    "reason": "상품안내장 2025.8판과 상품 페이지에 번개포인트는 '현금처럼 사용 가능'으로만 적혀 있고 1포인트가 몇 원인지 없다. 번개장터 공식 안내도 찾지 못했다(언론 기사만). 포인트를 더할 근거가 없고 번개장터 가맹점도 없다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1873",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtp%2FWtXjkUjgXl1oUO438k8g%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "번개포인트 원화 가치 공식 문구"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1911",
+    "status": "ready",
+    "reason": "상품안내장 2026.4판 대조. 무신사머니리워드 1=무신사머니 포인트 1=1원 문구로 musinsa_money 제안. 무신사 10%/2%(월 4만/2만P)와 무신사 제외 국내외 1%를 담았다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1911",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtirrHgGvgzb%2B5%2BFC76c8MI4%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "29CM·솔드아웃·무신사 스탠다드·무신사 엠프티 가맹점 없음",
+      "임대매장 제외",
+      "PG·간편결제 승인 무신사 결제는 적립 0으로 계산",
+      "고속도로 통행료 등 일부 적립 제외"
+    ],
+    "open_questions": [
+      "포인트 원 미만 처리"
+    ]
+  },
+  {
+    "card_id": "shinhan-boacfh",
+    "status": "blocked",
+    "reason": "신한카드 상품 페이지에 탑보너스포인트 원화 가치 문구가 없고 운영은 서원유통 기준을 따른다고만 적었다. 서원유통 공식 안내도 찾지 못했다. 모든 적립이 이 포인트라 담을 수 없다. 탑마트 가맹점도 없다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1200927_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "탑보너스포인트 원화 가치 공식 문구"
+    ]
+  },
+  {
+    "card_id": "woori-102722",
+    "status": "ready",
+    "reason": "상품 페이지 '적립/사용단위 : 1 포인트 = 1원' 문구로 travel_wallet_point 제안. 전월 국내가맹점 40만 이상 국내 1%를 담았다. 해외 2%는 트래블페이 결제분 적립 제외를 결제 입력으로 가를 수 없어 뺐다(덜 주는 쪽)",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102722"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "해외 2% 적립(트래블페이 결제 구분 불가)",
+      "국내 취소매출 1~2일 접수 시 전월 차감",
+      "정부지원금 등 일부 적립 제외"
+    ],
+    "open_questions": [
+      "시행일",
+      "신규 특례 기준일(등록일과 사용개시일 중 빠른 날)",
+      "포인트 원 미만 처리"
+    ]
+  }
+]

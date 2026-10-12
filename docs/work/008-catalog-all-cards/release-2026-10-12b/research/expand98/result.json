@@ -1,0 +1,231 @@
+[
+  {
+    "card_id": "kb-00230",
+    "status": "ready",
+    "reason": "새 업종 전기차 충전, 주차장, 세차로 핵심 혜택을 담았다. 손해보험만 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=00230"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "손해보험 자동차보험 1만원 청구할인(공통 업종 없음)",
+      "수소차 충전소",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "출시일 2024-08-08을 시작일로 둠",
+      "무승인 대중교통·터널통행료 실적 제외를 시내버스·지하철·통행료 업종 제외로 옮김",
+      "손해보험 업종 필요"
+    ]
+  },
+  {
+    "card_id": "kb-00235",
+    "status": "ready",
+    "reason": "새 업종 전기차 충전, 주차장, 세차로 핵심 혜택을 담았다. 손해보험만 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=00235"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "손해보험 자동차보험 1만원 청구할인(공통 업종 없음)",
+      "수소차 충전소",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "출시일 2024-11-13을 시작일로 둠",
+      "무승인 대중교통·터널통행료 실적 제외를 시내버스·지하철·통행료 업종 제외로 옮김",
+      "손해보험 업종 필요"
+    ]
+  },
+  {
+    "card_id": "kb-00236",
+    "status": "ready",
+    "reason": "새 업종 전기차 충전, 주차장, 세차로 핵심 혜택을 담았다. 손해보험만 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=00236"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "손해보험 자동차보험 1만원 청구할인(공통 업종 없음)",
+      "수소차 충전소",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "출시일 2025-07-22를 시작일로 둠",
+      "무승인 대중교통·터널통행료 실적 제외를 시내버스·지하철·통행료 업종 제외로 옮김",
+      "손해보험 업종 필요"
+    ]
+  },
+  {
+    "card_id": "kb-09168",
+    "status": "ready",
+    "reason": "하이패스 통행료 전용 카드. 0.1% 포인트리 적립을 새 업종 통행료로 담았다. 출퇴근 할인은 도로공사 제도라 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09168"
+    ],
+    "case_count": 1,
+    "unmodeled": [
+      "도로공사 출퇴근 통행료 할인"
+    ],
+    "open_questions": [
+      "시작일을 심의일 2018-02-05로 둠"
+    ]
+  },
+  {
+    "card_id": "kb-09312",
+    "status": "ready",
+    "reason": "기아 차량 탑재 하이패스 전용 카드. 0.1% 포인트리 적립을 새 업종 통행료로 담았다. 출퇴근 할인은 도로공사 제도라 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09312"
+    ],
+    "case_count": 1,
+    "unmodeled": [
+      "도로공사 출퇴근 통행료 할인"
+    ],
+    "open_questions": [
+      "출시일이 없어 심의일 2024-12-09를 시작일로 둠"
+    ]
+  },
+  {
+    "card_id": "kb-09348",
+    "status": "ready",
+    "reason": "국세청 지정 전통시장 가맹점 5%·10%를 새 업종 전통시장으로 담았다. 온누리상품권 차감과 KB Pay 쇼핑 탭은 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09348"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "온누리상품권 차감 이용 할인",
+      "KB Pay 쇼핑 탭 할인",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "출시일 2025-06-30을 시작일로 둠",
+      "무승인 교통·터널통행료 실적 제외를 업종 제외로 옮김",
+      "유예 대상을 생애 첫 본인 발급으로 둠"
+    ]
+  },
+  {
+    "card_id": "kb-09349",
+    "status": "ready",
+    "reason": "국세청 지정 전통시장 가맹점 5%를 새 업종 전통시장으로 담았다. 온누리상품권 차감과 KB Pay 쇼핑 탭은 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09349"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "온누리상품권 차감 이용 할인",
+      "KB Pay 쇼핑 탭 할인"
+    ],
+    "open_questions": [
+      "출시일 2025-06-30을 시작일로 둠",
+      "후불교통·무승인 유료도로 실적 제외를 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "kb-09381",
+    "status": "ready",
+    "reason": "주유 리터당 150~300원(SK·GS·S-Oil·현대)과 차량정비·주차·세차 10%를 새 업종으로 담았다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09381"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "기타 차량서비스 업종",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "출시일이 없어 심의일 2023-05-12를 시작일로 둠",
+      "무승인 대중교통·터널통행료 실적 제외를 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "kb-09613",
+    "status": "blocked",
+    "reason": "골프 혜택 대상이 골프연습장 업종(스크린골프 포함)과 스포츠·레저용품 업종이다. 새 업종 골프는 골프장까지 포함해 원문보다 넓고, 골프웨어·용품 업종은 없다. 핵심인 골프 혜택을 뺄 수밖에 없어 그대로 보류",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09613"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p14744-a14744",
+    "status": "blocked",
+    "reason": "어디로든 그린카드 X LOCA. 상품설명서를 다시 봤다. 핵심 혜택 친환경차 충전 20~40%(월 2만)의 대상이 '그린카드 홈페이지에서 확인하는 포인트 적립대상 충전소'로 지정 목록이라 car.ev_charging 업종보다 좁다. 공식 목록도 열지 못했다. 빼면 크게 약해져 blocked. 실적의 후불교통 제외는 새 방식으로 담을 수 있다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14744-A14744",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14744-A14744.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "그린카드 적립대상 충전소 목록이 사실상 모든 충전소인지 확인되면 car.ev_charging으로 담을 수 있다"
+    ]
+  },
+  {
+    "card_id": "nh-f20600",
+    "status": "ready",
+    "reason": "쿵야싱싱체크. 전통시장 15%(국세청 기준 전통시장 등록 가맹점)를 traditional_market으로 담았다. 생활영역 0.3%(하나로마트·농협몰·GS25·CU·올리브영·다이소·CGV·스타벅스·파리바게뜨·해외·면세점)와 함께 전월 30만 이상, 통합 월 1만점. 기본 0.2%는 실적·한도 없음이고 전통시장·생활영역 이용분에는 주지 않는다. 실적에서 후불교통 버스·지하철과 택시를 뺀다",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010545"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "백화점·할인점 안 임대매장, 별도 가맹점번호 간편결제는 빠질 수 있다",
+      "CGV는 영화관람권만이고 매점 제외",
+      "생활영역 해외이용분은 기본 0.2%를 주지 않는 쪽으로 기본을 국내 이용만 계산",
+      "가상화폐 거래소, 포인트 결제분은 실적 제외"
+    ],
+    "open_questions": [
+      "시행일이 원문에 없어 확인한 날로 두었다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1825",
+    "status": "blocked",
+    "reason": "삼성 iD PLUG-IN. 상품안내장과 상품 페이지의 '전기차 충전 사업자 확인' 이미지를 봤다. 핵심 혜택 전기차 충전 20%/40%(월 1만/2만)의 대상이 지정 충전사업자 32곳(E-pit, GS차지비, GS칼텍스, SK에너지, SK일렉링크, 환경부, 한국전력, 테슬라 등)이라 car.ev_charging 업종보다 좁다. GS칼텍스·SK에너지는 주유 가맹점과 겹쳐 가맹점으로도 담을 수 없다. 주차장도 케이엠파크만, 대리운전은 카카오 T 대리만이라 car.parking을 쓸 수 없다. 빼면 크게 약해져 blocked",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1825",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtkAmOLGY1JJa6ARpu35M5cM%3D&sn=1",
+      "https://static11.samsungcard.com/wcms/personal/files/EV_Charging_Station.png"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "전기차 충전 업종 안에서 사업자를 고르는 방법(업종과 가맹점을 함께 거는 조건)이 생기면 다시 본다"
+    ]
+  },
+  {
+    "card_id": "woori-104129",
+    "status": "ready",
+    "reason": "우리 원주사랑 체크카드. 전통시장 업종(국세청 등록 전통시장)이 생겨 특별적립 2%를 traditional_market으로 담았다. 기본 0.2%(1만원 이상), 전월 20/40/60만 통합 월 5천/1만/1만5천점, 기본과 특별 중복 없음, 신규 특례 20만 구간",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104129"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "원주사랑상품권 잔액이 먼저 차감되는 결제의 실적과 적립 여부는 원문에 없다",
+      "우편요금, 과태료, 여권발급비, 공공기관 가맹점은 적립 제외",
+      "서비스는 매입 순서대로 적용"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104130",
+    "status": "ready",
+    "reason": "우리 속초사랑 체크카드. 전통시장 업종(국세청 등록 전통시장)이 생겨 특별적립 2%를 traditional_market으로 담았다. 기본 0.2%(1만원 이상), 전월 20/40/60만 통합 월 5천/1만/1만5천점, 기본과 특별 중복 없음, 신규 특례 20만 구간",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104130"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "속초사랑상품권 잔액이 먼저 차감되는 결제의 실적과 적립 여부는 원문에 없다",
+      "우편요금, 과태료, 여권발급비, 공공기관 가맹점은 적립 제외",
+      "서비스는 매입 순서대로 적용",
+      "1만원 미만 적립 제외가 국내 적립 대상 가맹점 전체로 적혀 있어 전통시장에도 1만원 이상 조건을 두었다(덜 주는 해석)"
+    ],
+    "open_questions": []
+  }
+]

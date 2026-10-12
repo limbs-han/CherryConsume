@@ -1,0 +1,89 @@
+card: ibk-12112580004
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 평일 버스 100원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-weekday: 100}, counted: 0}
+  calc: 평일 1회 100원. 교통특화 이용금액은 실적 제외
+- name: 50만 구간 평일 지하철 200원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1550, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-weekday: 200}}
+  calc: 평일 1회 200원
+- name: 50만 구간 주말 버스 300원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-07T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-weekend: 300}}
+  calc: 50만 구간 주말 1회 300원
+- name: 20만 구간 주말 200원과 1일 3회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-08T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  - {at: 2026-11-08T09:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  - {at: 2026-11-08T10:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  - {at: 2026-11-08T11:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-weekend: 200}}
+  - {payment: 1, benefits: {transit-weekend: 200}}
+  - {payment: 2, benefits: {transit-weekend: 200}}
+  - {payment: 3, benefits: {}}
+  calc: 주말 1회 200원, 1일 3회까지
+- name: 경계 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 철도 5%와 1일 1회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 50000, category: transit.rail, channel: online}
+  - {at: 2026-11-04T09:00, amount: 50000, category: transit.rail, channel: online}
+  expect:
+  - {payment: 0, benefits: {rail-express-5: 2500}, counted: 0}
+  - {payment: 1, benefits: {}}
+  calc: 50,000원 × 5% = 2,500원. 같은 날 둘째는 1일 1회 초과
+- name: 택시 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T23:00, amount: 20000, category: taxi, channel: offline}
+  expect:
+  - {payment: 0, benefits: {taxi-5: 1000}}
+  calc: 20,000원 × 5% = 1,000원
+- name: GS칼텍스 리터당 40원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, merchant: gs_caltex}
+  expect:
+  - {payment: 0, benefits: {fuel-gs-40: 2000}}
+  calc: 92,900원 ÷ 1,858원 = 50리터 × 40원 = 2,000원
+- name: 휴대폰 자동이체 3% 최대 1200원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-3: 1200}}
+  calc: 50,000원 × 3% = 1,500원 중 최대 1,200원
+- name: 아웃백 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T18:00, amount: 50000, merchant: outback, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dining-10: 5000}}
+  calc: 50,000원 × 10% = 5,000원
+- name: 메가박스 온라인 예매 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T18:00, amount: 15000, merchant: megabox, channel: online}
+  expect:
+  - {payment: 0, benefits: {movie-2000: 2000}}
+  calc: 온라인 예매 2,000원

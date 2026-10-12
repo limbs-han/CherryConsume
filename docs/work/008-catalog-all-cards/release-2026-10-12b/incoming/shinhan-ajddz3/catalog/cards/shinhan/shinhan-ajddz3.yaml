@@ -1,0 +1,173 @@
+schema_version: 2
+id: shinhan-ajddz3
+issuer: shinhan
+name: 신한카드 ECO Plan
+short_name: 신한 ECO Plan
+search_names: [에코플랜]
+kind: credit
+product_codes: [AJDDZ3]
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 20000}
+  - {scope: global, brand: visa, amount: 23000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1238499_2207.html', fetched_at: 2026-10-12, review_no: 제2026-C1h-10246호, review_valid_until: 2027-07-06}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-04-13
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card:
+      tier: 300000
+      tier_by_benefit: {monday-transit-1000: 0}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [이 카드 서비스 밖의 프로모션 할인이 적용된 거래와 포인트 사용 금액은 할인하지 않는다, 키오스크나 간편결제로 가맹점명이 PG업체명이나 간편결제명으로 찍히면 할인하지 않는다]
+    limits:
+      - key: eco-life
+        per: month
+        amount: {300000: 10000, 700000: 20000, 1200000: 30000}
+      - key: healthy
+        per: month
+        amount: {300000: 5000, 700000: 10000, 1200000: 15000}
+      - key: daily-vibe
+        per: month
+        amount: {300000: 5000, 700000: 10000, 1200000: 15000}
+    benefits:
+      - key: monday-transit-1000
+        title: 월요일 버스·지하철 이용일 1천원 캐시백
+        source: page
+        evidence: [매주 월요일 버스/지하철 이용일당 1천원 캐시백, 전월 이용금액 30만원 이상 시 서비스가 제공됩니다., 후불교통 기능을 이용한 터치(RF) 거래 시 캐시백이 제공됩니다., '매주 월요일의 본인 및 가족카드 이용 건을 통합하여, 일 1회까지만 캐시백이 제공됩니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+          - day:
+              in: [mon]
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+        tiers: {from: 300000}
+        unmodeled: ['시외버스, 고속버스, 공항버스, 공항철도는 캐시백하지 않는다', 모바일 후불교통이 아니라 실물 카드 터치(RF) 거래만 캐시백한다]
+      - key: eco-mobility-10
+        title: 쏘카·SRT 10% 할인
+        source: page
+        evidence: ['교통 | 공유 모빌리티 | SOCAR, 따릉이', '교통 | 철도 | KTX, SRT', 교통 · 페이퍼리스 · 그린마켓 10% 결제일 할인, SOCAR는 카쉐어링 이용 시에만 할인되며 주차 등 기타 서비스 이용금액은 할인되지 않습니다.]
+        target:
+          merchants: [socar, srt]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: eco-life}
+        tiers: {from: 300000}
+      - key: eco-ev-10
+        title: 전기차 충전 10% 할인
+        source: page
+        evidence: [교통 | 전기차 | 전기차 충전, 전기차 충전요금은 아파트 관리비 등 다른 이용 건에 포함된 결제 건인 경우 할인되지 않습니다.]
+        target:
+          categories: [car.ev_charging]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: eco-life}
+        tiers: {from: 300000}
+      - key: eco-paperless-10
+        title: 밀리의서재·스타벅스 사이렌오더 10% 할인
+        source: page
+        evidence: ['페이퍼리스 | 전자도서 | 밀리의서재, 리디북스, 예스24', 페이퍼리스 | 전자영수증 | 스타벅스 사이렌오더, 공식 홈페이지/모바일앱에 직접 접속하여 결제한 경우에만 할인됩니다.]
+        target:
+          merchants: [millie, starbucks]
+        when:
+          - {channel: online}
+          - billing_not: [in_app]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: eco-life}
+        tiers: {from: 300000}
+        unmodeled: [스타벅스는 사이렌오더 결제만 할인한다]
+      - key: eco-market-10
+        title: SSG.COM·컬리·오아시스마켓 10% 할인
+        source: page
+        evidence: ['그린마켓 | 신선식품몰 | SSG.COM, 컬리, 오아시스마켓', '아름다운 가게, 오아시스마켓은 오프라인 매장 및 공식 홈페이지/모바일앱 이용 시 할인됩니다.']
+        target:
+          merchants: [kurly, oasis_market, ssg_com]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: eco-life}
+        tiers: {from: 300000}
+      - key: healthy-fitness-10
+        title: 피트니스·골프 업종 10% 할인
+        source: page
+        evidence: ['피트니스 | 스포츠센타/레포츠클럽, 테니스장, 수영장, 실내/외 골프장 업종', 피트니스 · 스포츠웨어 · 그린푸드 10% 결제일 할인]
+        target:
+          categories: [sports]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: healthy}
+        tiers: {from: 300000}
+      - key: healthy-sportswear-10
+        title: 나이키·무신사·29CM 온라인 10% 할인
+        source: page
+        evidence: ['스포츠웨어(온라인) | 아디다스, 나이키, 노스페이스, 안다르, 젝시믹스, 무신사, 29CM', 스포츠웨어(온라인) 영역은 공식 홈페이지/모바일앱 결제 시에만 할인됩니다.]
+        target:
+          merchants: [musinsa, nike_com, twentynine_cm]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: healthy}
+        tiers: {from: 300000}
+      - key: healthy-greenfood-10
+        title: 써브웨이 10% 할인
+        source: page
+        evidence: ['그린푸드 | 써브웨이, 샐러디, 포케올데이', 그린푸드 영역은 오프라인 매장 이용 시에만 할인됩니다.]
+        target:
+          merchants: [subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: healthy}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·면세점·공항·기차역 입점 매장은 할인하지 않는다]
+      - key: daily-store-10
+        title: 편의점·다이소 10% 할인
+        source: page
+        evidence: ['편의점 | CU, GS25, 세븐일레븐', 'H&B스토어 | 올리브영, 다이소', 편의점 영역 및 다이소는 오프라인 매장 이용 시에만 할인]
+        target:
+          merchants: [cu, daiso, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily-vibe}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·면세점·공항·기차역 입점 매장은 할인하지 않는다]
+      - key: daily-oliveyoung-10
+        title: 올리브영 10% 할인
+        source: page
+        evidence: ['H&B스토어 | 올리브영, 다이소', 올리브영은 오프라인 매장 및 공식 홈페이지/모바일앱 이용 시 할인됩니다.]
+        target:
+          merchants: [olive_young]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily-vibe}
+        tiers: {from: 300000}
+      - key: daily-appstore-10
+        title: 앱스토어 10% 할인
+        source: page
+        evidence: ['앱스토어 | 애플 앱스토어, 구글 플레이스토어', 앱스토어 영역은 해외 가맹점으로 결제되는 경우에는 할인되지 않습니다.]
+        target:
+          merchants: [app_store, google_play]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: daily-vibe}
+        tiers: {from: 300000}
+    unmodeled: [ECO 기부 포인트 0.2%는 기부에만 쓰여 사용자 혜택으로 계산하지 않는다, 디지털 명세서 신청 1천원 캐시백은 결제 혜택이 아니라 계산하지 않는다, 'KTX는 공통 가맹점 korail이 일반열차까지 넓어 넣지 않았다. 따릉이, 리디북스, 예스24 전자도서, 아름다운가게, 아디다스, 노스페이스, 안다르, 젝시믹스, 샐러디, 포케올데이는 공통 가맹점이 없어 넣지 않았다', 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, '본인과 가족카드의 전월 이용금액, 월 서비스 횟수와 한도를 합산한다']
+notes: '신한카드 상품 페이지 기준. 연회비 국내 20,000원, Visa 23,000원. 후불교통 기능이 있는 카드로만 발급. 전월 30만/70만/120만원 이상 구간에서 ECO Life(교통·페이퍼리스·그린마켓) 1만/2만/3만원, Healthy Plan 5천/1만/1만5천원, Daily Vibe 5천/1만/1만5천원 월 할인 한도. 모두 10% 결제일 할인. 매주 월요일 후불교통 버스·지하철 이용일당 1천원 캐시백(일 1회, 전월 30만원 이상). 신규 회원은 등록월+1개월까지 30만 구간, 월요일 캐시백은 실적과 관계없이. 취소는 국내는 처음 승인된 달, 해외는 취소 전표 매입 달. 실적 제외: 카드대출, 연회비, 수수료·이자, 기프트·선불카드, 지방세·국세·지방세외수입·환경개선부담금, 4대보험, 스쿨뱅킹·대학 등록금, 아파트관리비·도시가스·전기·TV수신료·수도요금, 상품권·선불전자지급수단, 포인트·캐시 충전, 거래 취소.'

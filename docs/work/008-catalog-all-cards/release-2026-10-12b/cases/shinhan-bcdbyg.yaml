@@ -1,0 +1,238 @@
+card: shinhan-bcdbyg
+cases:
+- name: 일반 가맹점 999원
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 999
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 999원 × 0.1% = 0P. 공식 최소결제액 조건 없음.
+- name: 일반 가맹점 1000원
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 1000
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 1
+  calc: 1000원 × 0.1% = 1P. 공식 최소결제액 조건 없음.
+- name: 일반 가맹점 1001원
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 1001
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 1
+  calc: 1001원 × 0.1% = 1P. 공식 최소결제액 조건 없음.
+- name: 일반 가맹점 10000원
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 10
+  calc: 10000원 × 0.1% = 10P. 공식 최소결제액 조건 없음.
+- name: 11PAY 특별 적립
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    merchant: eleven_st
+    payment_method: eleven_pay
+  expect:
+  - payment: 0
+    benefits:
+      special-0-5-percent-11st: 50
+  calc: 10,000원 × 0.5% = 50P. 기본적립과 합산하지 않는다.
+- name: 11번가 다른 결제수단
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    merchant: eleven_st
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 특별적립 대상 가맹점은 기본적립에서 제외되며 11PAY 아닌 결제는 특별적립 조건 불충족.
+- name: 다른 매장 11PAY 기본 적립
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: restaurant
+    payment_method: eleven_pay
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 10
+  calc: 특별대상은 11번가뿐. 다른매장은 0.1% 기본적립.
+- name: 해외 기본 적립
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: restaurant
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 10
+  calc: 국내외 가맹점 기본 0.1% 적립.
+- name: 무이자할부 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: restaurant
+    interest_free: true
+    installment_months: 3
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 무이자할부는 기본과 특별 적립 모두 제외된다.
+- name: tax 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: tax
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 공통 적립 제외 업종이므로 0P.
+- name: utility 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: utility
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 공통 적립 제외 업종이므로 0P.
+- name: apartment_fee 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: apartment_fee
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 공통 적립 제외 업종이므로 0P.
+- name: insurance.social 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: insurance.social
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 공통 적립 제외 업종이므로 0P.
+- name: education.tuition 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: education.tuition
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 공통 적립 제외 업종이므로 0P.
+- name: gift_card 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: gift_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 공통 적립 제외 업종이므로 0P.
+- name: prepaid_charge 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: prepaid_charge
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 공식 공통 적립 제외 업종이므로 0P.
+- name: 고실적과 무관한 기본 적립
+  prev_month_spend: 1000000
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 10000
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 10
+  calc: 전월실적 1,000,000원에도 기본률과 한도가 달라지지 않는다.
+- name: 횟수와 월한도 없음
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T12:00
+    amount: 1000000
+    category: restaurant
+  - at: 2026-11-05T12:01
+    amount: 1000000
+    category: restaurant
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 1000
+  - payment: 1
+    benefits:
+      basic-0-1-percent: 1000
+  calc: 같은날 각각 1,000,000원 × 0.1% 적립. 횟수 및 월 적립한도 없다.
+- name: 일반 상품권은 기프트카드 제외와 구분
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: gift_card.voucher
+  expect:
+  - payment: 0
+    benefits:
+      basic-0-1-percent: 10
+  calc: 공식 제외는 기프트카드 구매. 일반상품권10,000원×0.1%=10P
+- name: 선불 기프트카드는 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: gift_card.prepaid_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 기프트카드 구매는 공식 적립 제외
+- name: 상품권 종류 미상이면 확인 요청
+  prev_month_spend: 0
+  payments:
+  - at: 2026-11-05T10:00
+    amount: 10000
+    merchant: emart
+    category: gift_card
+  expect:
+  - payment: 0
+    benefits: {}
+    warnings:
+    - needs_input
+  calc: 부모업종만으로 기프트카드 여부를 확정하지 않는다. 확인 전 적립0P

@@ -1,0 +1,2722 @@
+{
+  "approved": false,
+  "approval_required": true,
+  "job_id": 665396523935248,
+  "base_files_digest": "fdfc4c3b10c9badce4db45558a88e0371e6adb5d37b97c9051b3a27235f138ea",
+  "cards": [
+    {
+      "card_id": "shinhan-acacd8",
+      "name": "LG U+ Bora 신한카드 Big Plus",
+      "path": "cards/shinhan/shinhan-acacd8.yaml",
+      "draft_id": "fad1c437-7722-4c11-98fc-82ba10e4082b",
+      "sha256": "2be445cf12950ae0458486990ad3654ba413cbafea3c1fd74119c1600dc1fbf1",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1202226_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2021-C1a-01341호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "local",
+          "amount": 22000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-acacd8"
+    },
+    {
+      "card_id": "shinhan-ajddz3",
+      "name": "신한카드 ECO Plan",
+      "path": "cards/shinhan/shinhan-ajddz3.yaml",
+      "draft_id": "fc824378-e9bd-4786-a3ff-260a20e291b9",
+      "sha256": "d627a3423f3ca2e1ba0d14aa3d635d8196f6e8796337a40bbec87ffe7c51f215",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1238499_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2026-C1h-10246호",
+          "review_valid_until": "2027-07-06"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "local",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 23000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-ajddz3"
+    },
+    {
+      "card_id": "shinhan-aoac7s",
+      "name": "신한 슈퍼SOL 체크",
+      "path": "cards/shinhan/shinhan-aoac7s.yaml",
+      "draft_id": "10bb5419-e2b7-4ed9-9d54-8bb8d37f95b2",
+      "sha256": "831811b1246ea97d3327d9ce1e7cc155104dd670026c7ba9c20e44f2f07dc36c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1196727_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20260826-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-aoac7s"
+    },
+    {
+      "card_id": "shinhan-asabkp",
+      "name": "K-onepass 신한카드 S-Line 체크",
+      "path": "cards/shinhan/shinhan-asabkp.yaml",
+      "draft_id": "41f8bd33-144f-494a-881c-5ec443d3151b",
+      "sha256": "b17ba98d2112c7ddb9c8def6e9e2acf076bb8475c5b17d47d0dce70ecb7ac18c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1219453_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20221117-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "local",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].limits[integrated]",
+          "question": "통합할인한도가 교통·주유와 홈쇼핑 할인에도 걸리는지 원문이 따로 적지 않았다. 적게 주는 쪽으로 모든 할인에 걸었다",
+          "assumed": "모든 할인에 적용"
+        },
+        {
+          "path": "revisions[0].new_card",
+          "question": "신규 회원은 등록월+1개월까지 통합할인한도 1만원만 적혀 있고 0.2% 기본적립도 주는지는 적혀 있지 않다. 할인은 60만 구간, 기본적립은 주지 않는 쪽으로 두었다",
+          "assumed": "할인 600000, 기본적립 0"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "시행일이 원문에 없어 심의필 날짜를 넣었다",
+          "assumed": "2022-11-17"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-asabkp"
+    },
+    {
+      "card_id": "shinhan-ataamk",
+      "name": "신한카드 B.Big(삑)",
+      "path": "cards/shinhan/shinhan-ataamk.yaml",
+      "draft_id": "16eac41c-5a6c-45fd-98ef-561def68f427",
+      "sha256": "5fb158a5d9480ce6a0ea4dcb342c25c1fb5ed18f311192e04f13a465bd60f6f1",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1187938_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 13000
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 10000
+        },
+        {
+          "scope": "domestic",
+          "brand": "amex",
+          "amount": 10000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-ataamk"
+    },
+    {
+      "card_id": "shinhan-axdbmr",
+      "name": "신한카드 Deep On Platinum+",
+      "path": "cards/shinhan/shinhan-axdbmr.yaml",
+      "draft_id": "d6ea0fc0-1125-4fff-b739-34a0e253e352",
+      "sha256": "e0a770acebb3c3d9cb38c25a7778a0f2e3a0ce702e89d8f9b05e47edfa1f63b0",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188280_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 33000
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        },
+        {
+          "path": "revisions[0].benefit_exclusions",
+          "question": "무이자할부 거래가 할인에서 빠지는지 상품 페이지에 없다. 신한카드 기본값대로 뺐다",
+          "assumed": true
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-axdbmr"
+    },
+    {
+      "card_id": "shinhan-axhc7p",
+      "name": "L.PAY 신한카드 체크",
+      "path": "cards/shinhan/shinhan-axhc7p.yaml",
+      "draft_id": "0c0bf56c-b00c-46c2-88d3-42c4369cf940",
+      "sha256": "62d293623358d62049c9e888c63d18407661babce5e608e3423f72f3fa037285",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1197028_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20210511-Dpi-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-axhc7p"
+    },
+    {
+      "card_id": "shinhan-ba8c82",
+      "name": "나주사랑 신한카드 S-Choice(선택형) 체크",
+      "path": "cards/shinhan/shinhan-ba8c82.yaml",
+      "draft_id": "cd4a8713-d65c-4d23-ac2e-f82e726ae3c8",
+      "sha256": "9b054f64eb65bbd840f5a99a1f26b04901d2fed3040528bfef898520415d0c05",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1197175_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20200825-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend",
+          "question": "상품 페이지에 전월 실적 제외 대상이 적혀 있지 않다",
+          "assumed": "제외 없음"
+        },
+        {
+          "path": "revisions[0].new_card",
+          "question": "신규 발급월 포함 2개월 2천원 한도라 기준일을 발급일로 두었다",
+          "assumed": "issue"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-ba8c82"
+    },
+    {
+      "card_id": "shinhan-ba9bma",
+      "name": "CJ ONE 신한카드 체크",
+      "path": "cards/shinhan/shinhan-ba9bma.yaml",
+      "draft_id": "6fadad89-3bef-4791-9b78-1110af224cd3",
+      "sha256": "a8cb0c1c482a5095525ceb13a1e093e8ba0c3d186e5e9b7943eff7db828b6524",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1188363_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-ba9bma"
+    },
+    {
+      "card_id": "shinhan-bdab6r",
+      "name": "신한카드 Edu",
+      "path": "cards/shinhan/shinhan-bdab6r.yaml",
+      "draft_id": "e95a19cc-5671-40b8-a97e-81536fa5109c",
+      "sha256": "d59e04cee6ec7af470dcd62c15266e64a3aa5a79d3a747ed137cb99ef0de097e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188281_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 23000
+        },
+        {
+          "scope": "domestic",
+          "brand": "amex",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bdab6r"
+    },
+    {
+      "card_id": "shinhan-bdbdma",
+      "name": "신한카드 Edu Plan+",
+      "path": "cards/shinhan/shinhan-bdbdma.yaml",
+      "draft_id": "d4115218-dc12-47a9-bdc6-af82a91e019b",
+      "sha256": "d02cb48ff1e2521ba5cf2996fb109272500a7888f61d8dc0720098ad77b58bd0",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1228598_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2025-C1h-16397호",
+          "review_valid_until": "2026-11-10"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202407120001",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 40000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 43000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bdbdma"
+    },
+    {
+      "card_id": "shinhan-beab7g",
+      "name": "신세계 신한카드",
+      "path": "cards/shinhan/shinhan-beab7g.yaml",
+      "draft_id": "cb9257df-02b0-42c0-af23-ca29515c631d",
+      "sha256": "88aacd752b3c0935735866f23669e45e8e55e2ffc6e3ee4248e9323e9a96cbfc",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188439_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 12000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "지금 혜택 구성이 시작된 날을 원문에서 찾지 못해 신한카드 부속약관 시행일로 두었다. 출시일은 2017-04-01이다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-beab7g"
+    },
+    {
+      "card_id": "shinhan-bebbak",
+      "name": "신세계 신한카드 체크",
+      "path": "cards/shinhan/shinhan-bebbak.yaml",
+      "draft_id": "99c689fb-1106-401d-8b19-723c3f00498f",
+      "sha256": "6dea2303834762d6d4f114916ad7355b73054b5a0b5b5e6bed9d54f0b52151ca",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1187968_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        },
+        {
+          "path": "revisions[0].benefits",
+          "question": "주요 업종 적립의 월 적립 한도가 상품 페이지에 없다. 한도 없이 두었다",
+          "assumed": null
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bebbak"
+    },
+    {
+      "card_id": "shinhan-berbee",
+      "name": "KT 신한카드 체크",
+      "path": "cards/shinhan/shinhan-berbee.yaml",
+      "draft_id": "0dd1a75c-3870-4ec2-9be1-2f4bdcd08722",
+      "sha256": "f6e4523d3853ffa8f1ec4a84af776da46501542b31efc9781f39a21ae23ad45c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1188338_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-berbee"
+    },
+    {
+      "card_id": "shinhan-betbfw",
+      "name": "리디 신한카드 체크",
+      "path": "cards/shinhan/shinhan-betbfw.yaml",
+      "draft_id": "6e214b08-48d5-4b61-8cab-41d7e8f04d1a",
+      "sha256": "e01f543865962589ff12603f0426e3a159d1915ff7e93090a9697fcf685a98e2",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1188337_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-betbfw"
+    },
+    {
+      "card_id": "shinhan-bggdvj",
+      "name": "신한카드 Hey Young 체크",
+      "path": "cards/shinhan/shinhan-bggdvj.yaml",
+      "draft_id": "033f64a3-a7fe-46f3-8f16-40695749d060",
+      "sha256": "a6681aa77b2773aa6f5cc67010cce861668a11ea8f2cf15180d1d39019502ecf",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1235589_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20250408-Dpp-002호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bggdvj"
+    },
+    {
+      "card_id": "shinhan-bgmd1j",
+      "name": "LG트윈스 신한카드 체크",
+      "path": "cards/shinhan/shinhan-bgmd1j.yaml",
+      "draft_id": "a99c083a-ce8f-45b9-8caf-a832458ad786",
+      "sha256": "6b6f9f1f83c98b9fb9f95017710ebcf31af919e3dcfce1832cb3c6ce62ae40f6",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1218091_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20260609-Dpp-002호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bgmd1j"
+    },
+    {
+      "card_id": "shinhan-biabix",
+      "name": "신한카드 Deep Oil",
+      "path": "cards/shinhan/shinhan-biabix.yaml",
+      "draft_id": "8a23fb1f-48c5-49c8-83d7-28bb7896c2fd",
+      "sha256": "66bcd0aaab57791c22732b807d67bf43004b3aa50640a997cfdaf905dae541c8",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188274_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201802130001",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "amex",
+          "amount": 10000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 13000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-biabix"
+    },
+    {
+      "card_id": "shinhan-blbbsk",
+      "name": "신한카드 Deep Taking",
+      "path": "cards/shinhan/shinhan-blbbsk.yaml",
+      "draft_id": "44843ba9-c0bf-4a72-af4d-36f63a60c31f",
+      "sha256": "51f625e03ba46f858d3fcb550b274583462d5727a8dc6391dcc3f52a4041dd44",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188287_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "jcb",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-blbbsk"
+    },
+    {
+      "card_id": "shinhan-bnac46",
+      "name": "신한카드 Deep Once",
+      "path": "cards/shinhan/shinhan-bnac46.yaml",
+      "draft_id": "dc229412-7759-4402-916b-224972d4230e",
+      "sha256": "2a5add36f59f29958a67c09fa4e5942d23cf7e02846e51824d3d696188d68360",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1192802_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2021-C1a-04524호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 23000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits[living-thinkbig]",
+          "question": "웅진씽크빅과 예다함은 정기결제·월부금만 대상인데 결제의 청구 방식을 자동이체나 정기결제로 넣은 건만 적립한다",
+          "assumed": "autopay 또는 subscription"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bnac46"
+    },
+    {
+      "card_id": "shinhan-bnbc47",
+      "name": "신한카드 Deep Once Plus",
+      "path": "cards/shinhan/shinhan-bnbc47.yaml",
+      "draft_id": "8d13f739-30e4-4e15-af11-1056a07c9c7b",
+      "sha256": "0c02bc0ba2ed6e9e1e68f3025a6a7d03ffa89f33e67443e780ebc44a75a1022b",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1192801_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2021-C1a-04525호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "local",
+          "amount": 27000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "시행일이 원문에 없어 심의필 날짜를 넣었다",
+          "assumed": "2021-05-28"
+        },
+        {
+          "path": "revisions[0].benefits[rental-lgcare]",
+          "question": "LG전자 케어솔루션을 공통 가맹점 LG전자 가전구독(lg_appliance_subscription)으로 보았다",
+          "assumed": "lg_appliance_subscription"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bnbc47"
+    },
+    {
+      "card_id": "shinhan-boac5b",
+      "name": "LG U+ 스마트플랜 Plus 신한카드",
+      "path": "cards/shinhan/shinhan-boac5b.yaml",
+      "draft_id": "41692c54-f809-4340-acb0-dafa5650e218",
+      "sha256": "8681dcddd228b07bd42548b10227c7b20e9e0d53b7cf75ad3cd642b31e2e4149",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1196321_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 22000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다",
+          "assumed": "2026-10-12"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boac5b"
+    },
+    {
+      "card_id": "shinhan-boac5c",
+      "name": "SKT T라이트 신한카드",
+      "path": "cards/shinhan/shinhan-boac5c.yaml",
+      "draft_id": "446111a9-dbfb-4ca9-8590-fe645effe283",
+      "sha256": "ae5a564244a66f1e0304a17ae9d20735fa71509a81c73fc2432d2bdf0119e0a9",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1196330_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 22000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "지금 혜택 구성이 시작된 날을 원문에서 찾지 못해 신한카드 부속약관 시행일로 두었다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boac5c"
+    },
+    {
+      "card_id": "shinhan-boad8r",
+      "name": "KT 가족만족 할부 신한카드",
+      "path": "cards/shinhan/shinhan-boad8r.yaml",
+      "draft_id": "050269bb-3f03-4bd4-beb6-ef9fa545a95f",
+      "sha256": "b8e0ae2a2a060e807c0b636c544345b1dbe843647d72463868dac3252b4c3f5d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1221484_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 22000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "지금 혜택 구성이 시작된 날을 원문에서 찾지 못해 신한카드 부속약관 시행일로 두었다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boad8r"
+    },
+    {
+      "card_id": "shinhan-boadbw",
+      "name": "KT 가족만족 DC 신한카드",
+      "path": "cards/shinhan/shinhan-boadbw.yaml",
+      "draft_id": "ac2d7494-7286-486b-8f01-4c374629a541",
+      "sha256": "fe287e41a8d5823dc47d8de05d101a64ad6e3bbd254568a47d9c6672fa99298a",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1223352_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 18000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다",
+          "assumed": "2026-10-12"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boadbw"
+    },
+    {
+      "card_id": "shinhan-boadg4",
+      "name": "K-패스 신한카드",
+      "path": "cards/shinhan/shinhan-boadg4.yaml",
+      "draft_id": "59f6cb26-d569-4181-b3f3-e7eeb91b31b8",
+      "sha256": "1939c09b562b4df276da9e108664b45e558515248d77c969649eec44ff7987d8",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1225543_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 7000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 10000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다",
+          "assumed": "2026-10-12"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boadg4"
+    },
+    {
+      "card_id": "shinhan-boadg5",
+      "name": "K-패스 신한카드 체크",
+      "path": "cards/shinhan/shinhan-boadg5.yaml",
+      "draft_id": "c0b2969d-882c-478a-b37b-d4d05991cb60",
+      "sha256": "605d2e0f0a75183d953636efb09e190ac358e794f095979e55b8527404aa190c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225544_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boadg5"
+    },
+    {
+      "card_id": "shinhan-boadnh",
+      "name": "LGE.COM 신한카드",
+      "path": "cards/shinhan/shinhan-boadnh.yaml",
+      "draft_id": "09d55410-4199-4098-83d4-e4230da6cdc6",
+      "sha256": "4bbd902bcd7c38891a9579798c0da31bd113577568ecbda55abd89a73a78a4d1",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1228909_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 25000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 28000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boadnh"
+    },
+    {
+      "card_id": "shinhan-boadnu",
+      "name": "신한 후불 기후동행 체크카드",
+      "path": "cards/shinhan/shinhan-boadnu.yaml",
+      "draft_id": "e0986570-3e1a-47da-b809-1618d28a0f58",
+      "sha256": "8332d42c4791735d77dd45b836d78a6c2d6c1951a55b9514b0542cb88071cc29",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1230302_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20241113-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "local",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boadnu"
+    },
+    {
+      "card_id": "shinhan-boadt2",
+      "name": "LG전자 The 구독케어 신한카드",
+      "path": "cards/shinhan/shinhan-boadt2.yaml",
+      "draft_id": "5b4074a8-2425-4d46-b70a-5fa104b0f891",
+      "sha256": "5b88473bfc84118f9d21003dd60dde12468a93f86a3d3ad56615fa38005ff694",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1234346_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 22000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boadt2"
+    },
+    {
+      "card_id": "shinhan-boae1w",
+      "name": "SKT T&Life 신한카드",
+      "path": "cards/shinhan/shinhan-boae1w.yaml",
+      "draft_id": "1c7e1cee-db64-41e1-b3fa-8525049f8dd0",
+      "sha256": "d1704560d6fcecef41f366f6f080142a07ea8d4b745dbbeaa1b094069173209f",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/2013495_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 27000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다",
+          "assumed": "2026-10-12"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boae1w"
+    },
+    {
+      "card_id": "shinhan-boae2u",
+      "name": "FOCUS 신한카드 체크",
+      "path": "cards/shinhan/shinhan-boae2u.yaml",
+      "draft_id": "334991c9-07b6-4a39-9299-89880e97ec0a",
+      "sha256": "f4cebf9a475aa67d505ec50b5f25dd097ba85dc4cecb429cc3f495cd4d0f9ff1",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/2014363_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20260901-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-boae2u"
+    },
+    {
+      "card_id": "shinhan-bobct3",
+      "name": "땡겨요 신한카드 체크",
+      "path": "cards/shinhan/shinhan-bobct3.yaml",
+      "draft_id": "3fe2175b-56b6-4e21-b697-16d57b449b07",
+      "sha256": "9b58f7dcbcf7dbd41d128855d2bc31bcdfdcca8fa851e353f829acb9c9f56fab",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1215119_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다",
+          "assumed": "2026-10-12"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bobct3"
+    },
+    {
+      "card_id": "shinhan-bobct4",
+      "name": "땡겨요 신한카드 체크(라이더형)",
+      "path": "cards/shinhan/shinhan-bobct4.yaml",
+      "draft_id": "b9a04a43-0206-4e01-a50e-5a07a376f67f",
+      "sha256": "9856fe6f17f31989dfe09eefd3f0a1475b347381f1b08e5ab905d6196c4c7ceb",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1215124_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "지금 혜택 구성이 시작된 날을 원문에서 찾지 못해 신한카드 부속약관 시행일로 두었다. 출시일은 2022-01-18이다",
+          "assumed": "2024-03-22"
+        },
+        {
+          "path": "revisions[0].limits[integrated].amount",
+          "question": "월 통합적립한도 표에서 20만원 이상 칸이 비어 있어 20만원 미만 칸의 5만 포인트가 두 구간을 묶은 칸이라고 보았다",
+          "assumed": "50000"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-bobct4"
+    },
+    {
+      "card_id": "shinhan-btdd41",
+      "name": "신한카드 EVerywhere",
+      "path": "cards/shinhan/shinhan-btdd41.yaml",
+      "draft_id": "d1f5565a-e6fd-4ca4-9d62-18a7eea6abe0",
+      "sha256": "ffe23146cb3c879def0dc4b05062d147e115a377aa4d45c07a212025ed2c8679",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1219683_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 19000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 22000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다",
+          "assumed": "2026-10-12"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-btdd41"
+    },
+    {
+      "card_id": "shinhan-buad6j",
+      "name": "신한카드 Globus",
+      "path": "cards/shinhan/shinhan-buad6j.yaml",
+      "draft_id": "d1c8e1bc-9b45-46f6-b16c-ca2ea8c5765d",
+      "sha256": "afd74a9bf067980c00f211e261f6ce1fc51366a3701846e3946e7ede37936864",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1221213_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2023-C1a-05150호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "local",
+          "amount": 22000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 25000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-buad6j"
+    },
+    {
+      "card_id": "shinhan-pobdov",
+      "name": "Point Plan 체크(SOL 모임)",
+      "path": "cards/shinhan/shinhan-pobdov.yaml",
+      "draft_id": "04142a80-7f04-4d02-adb4-e3bc55493de3",
+      "sha256": "f31df69e43e372ca11a7cac8301e3f122eb5e33fd318ee95e985257f44a8ada1",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1231651_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20240610-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "시행일이 원문에 없어 심의필 날짜를 넣었다",
+          "assumed": "2024-06-10"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-pobdov"
+    },
+    {
+      "card_id": "shinhan-pobe2z",
+      "name": "SOL LINK 신한카드 Point Plan 체크",
+      "path": "cards/shinhan/shinhan-pobe2z.yaml",
+      "draft_id": "b05c52ba-da49-4c39-8f41-4260ff435985",
+      "sha256": "315179e73be4c485c98da752770dbb62aab99d9bd1674088568fef718cd61408",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/2014281_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20260909-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-pobe2z"
+    },
+    {
+      "card_id": "shinhan-poddr1",
+      "name": "신한카드 Discount Plan",
+      "path": "cards/shinhan/shinhan-poddr1.yaml",
+      "draft_id": "9118a116-2b2f-4808-a79d-3dc97d77a252",
+      "sha256": "568b86e98eb69e82ee1adb5bda7173b5747c52d6f855c8936854927b92bdfd04",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1232369_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 15000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-poddr1"
+    },
+    {
+      "card_id": "shinhan-poedr2",
+      "name": "신한카드 Discount Plan+ (플러스)",
+      "path": "cards/shinhan/shinhan-poedr2.yaml",
+      "draft_id": "2b41cd2e-1abb-4cd1-8ab7-3e667f6b1306",
+      "sha256": "a83a503228adf208385fd5e17dda6b33220ade52ee0a0ccfdebc88d9ba27f4b6",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1232390_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2025-C1h-16475호",
+          "review_valid_until": "2026-11-11"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202503280002",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 50000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 50000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-poedr2"
+    },
+    {
+      "card_id": "shinhan-pofdvs",
+      "name": "SOL메이트 신한카드 SOL Plan",
+      "path": "cards/shinhan/shinhan-pofdvs.yaml",
+      "draft_id": "5df014c9-8c83-4db5-a6f5-982ff1bcbf18",
+      "sha256": "09f1f3345435cb9a653c127c8c79b4fceee22db1376c184041f6ba7cb4c6755e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1235283_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 30000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 33000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다",
+          "assumed": "2026-10-12"
+        }
+      ],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-pofdvs"
+    },
+    {
+      "card_id": "shinhan-poidzr",
+      "name": "SOL 메이트 신한카드 SOL Plan 체크",
+      "path": "cards/shinhan/shinhan-poidzr.yaml",
+      "draft_id": "8341bf98-20fc-48cf-acff-5abd732bb5af",
+      "sha256": "71e79a3cb2f377b1b7d99920ad862e60469b9edf23bbc8c0a2689b8ace5bb206",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1239102_2206.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제20260907-Dpp-001호"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-poidzr"
+    },
+    {
+      "card_id": "shinhan-poje1k",
+      "name": "SOL메이트 신한카드 SOL Plan+ (플러스)",
+      "path": "cards/shinhan/shinhan-poje1k.yaml",
+      "draft_id": "09204fd7-b754-4c2e-9888-0e728dcb97fc",
+      "sha256": "df52e1f7b70202a6af9a84bcd1f02460c7b2be9b7884873f8460fe4db5d9db39",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1239172_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202606010002",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 50000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 53000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand12",
+      "incoming": "release-20261012b-shinhan-poje1k"
+    },
+    {
+      "card_id": "shinhan-aebc6s",
+      "name": "신한투자증권 CMA R+ 신한카드 Love 체크",
+      "path": "cards/shinhan/shinhan-aebc6s.yaml",
+      "draft_id": "2ec4f365-1975-491e-a745-78adeac6fd30",
+      "sha256": "5c46c6eb6c0e7c6461c41d95935e003290f69400ab9a21466b69d7627dd5f9f2",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1187977_2206.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201503090003",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "원문 실적 제외는 연회비, 각종수수료, 이자, 거래취소, 선불카드 충전, 기프트카드 구매 \"등\"이다. 나머지 항목을 알 수 없다",
+          "assumed": "annual_fee, gift_card.prepaid_card, prepaid_charge"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2015.03.09이고 카드사 공통 규칙 시작일을 시작일로 둔다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-aebc6s"
+    },
+    {
+      "card_id": "shinhan-aqdd6n",
+      "name": "신한카드 봄",
+      "path": "cards/shinhan/shinhan-aqdd6n.yaml",
+      "draft_id": "847e5ec4-72a5-442d-aa81-850f73b62340",
+      "sha256": "ccedf98289c176f58e4a666b744d8b2a46f0025c8e05fd3d3390c4a00a43380c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1221135_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 17000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 20000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-aqdd6n"
+    },
+    {
+      "card_id": "shinhan-aqed6o",
+      "name": "신한카드 봄(체크)",
+      "path": "cards/shinhan/shinhan-aqed6o.yaml",
+      "draft_id": "7fcdace3-dc98-4410-a587-1111d426f44a",
+      "sha256": "1856ebaa99310b58d41ab09cf2016c9a288e1af1ecc8b325ed78b6b91644622f",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1221136_2206.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202303140002",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2023.03.20이고 카드사 공통 규칙 시작일을 시작일로 둔다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-aqed6o"
+    },
+    {
+      "card_id": "shinhan-asaact",
+      "name": "신한카드 S-Line 체크",
+      "path": "cards/shinhan/shinhan-asaact.yaml",
+      "draft_id": "aaf7d498-2d46-47aa-aea9-12e3552ebf1f",
+      "sha256": "a604e5aa0fa98e003ccdd3af800f3d18b5f662d153560eca4fcb52eaebf2ba90",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1188362_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-asaact"
+    },
+    {
+      "card_id": "shinhan-awbav9",
+      "name": "신한카드 주거래 체크",
+      "path": "cards/shinhan/shinhan-awbav9.yaml",
+      "draft_id": "45fcc08d-4504-4931-afbd-387713869b65",
+      "sha256": "575787d86a1cedadfcf77680d364e97ed6a09fbac600497e8a4103fd9212f4f6",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1187975_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "upi",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits[base-0-3]",
+          "question": "원문에 결제 계좌가 타행이면 기본서비스 0.7%만 적립된다는 문장이 있지만 기본 적립은 0.3%로 안내되어 서로 맞지 않는다. 덜 주는 쪽으로 기본 0.3%만 두었다",
+          "assumed": "기본 0.3%"
+        },
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-awbav9"
+    },
+    {
+      "card_id": "shinhan-axgc75",
+      "name": "신한카드 YaY",
+      "path": "cards/shinhan/shinhan-axgc75.yaml",
+      "draft_id": "8e1607a5-9afc-4e8b-b212-ff1c728a576b",
+      "sha256": "133f49bb59cf2d2f03c28757309a929d7a5c368f7fe3a5973ecac69a0bc8ea3e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1196674_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202005150001",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 23000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 26000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2020.05.19이고 카드사 공통 규칙 시작일을 시작일로 둔다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-axgc75"
+    },
+    {
+      "card_id": "shinhan-axpe17",
+      "name": "카카오뱅크 착붙 신한카드",
+      "path": "cards/shinhan/shinhan-axpe17.yaml",
+      "draft_id": "b97cfa46-9482-4788-ba0a-226c418b9baa",
+      "sha256": "178b90c14eef9b83dbc5b71c577469caeaca0d00eb0fb30636a8faf503823b7e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/2013453_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 23000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-axpe17"
+    },
+    {
+      "card_id": "shinhan-ayaazf",
+      "name": "신한카드 YOLO ⓘ",
+      "path": "cards/shinhan/shinhan-ayaazf.yaml",
+      "draft_id": "176a66d9-4067-4f6c-8ad0-bd6aa4ff8270",
+      "sha256": "fe5fc19e6bd8b5b390227a206f941444c8664070044028b8f1af2cbdc94b2c33",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1187924_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2025-C1h-16947호",
+          "review_valid_until": "2026-11-20"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 18000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-ayaazf"
+    },
+    {
+      "card_id": "shinhan-ba7dt7",
+      "name": "신한카드 Simple Platinum# Splendor Plus",
+      "path": "cards/shinhan/shinhan-ba7dt7.yaml",
+      "draft_id": "3e3233f4-8504-4a3f-9e12-777245aa56c5",
+      "sha256": "97fea7515af3ca2f40fd6ac88fc8f432ea3e96e5b98557892e68b0afe66172ff",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1235398_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202508290001",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 27000
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 27000
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "form": "mobile",
+          "amount": 22000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].benefits[movie-1500].reward",
+          "question": "영화와 서울랜드 할인 결제가 1% 캐시백도 함께 받는지 원문에 없다. 덜 주는 쪽으로 같은 묶음에 두어 큰 쪽만 준다",
+          "assumed": "큰 쪽 하나"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-ba7dt7"
+    },
+    {
+      "card_id": "shinhan-ba8abd",
+      "name": "신한카드 S-Choice(선택형) 체크",
+      "path": "cards/shinhan/shinhan-ba8abd.yaml",
+      "draft_id": "1c867aed-7583-4cfd-bf83-602d4e2d8990",
+      "sha256": "8fed1ecd2d01a017e22bd4437e7227d683177a82d0613faff52096b941239a91",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1188347_2206.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201301300001",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "상품 페이지에 실적 제외 목록이 없다. 커피 할인의 상품권 구입, 선불카드 충전 제외만 있다",
+          "assumed": "gift_card, prepaid_charge"
+        },
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택이 시작된 날을 찾지 못했다. 카드사 공통 규칙 시작일을 시작일로 둔다. 준법감시 심의필은 2020-07-27이다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-ba8abd"
+    },
+    {
+      "card_id": "shinhan-baaayr",
+      "name": "전통시장사랑 체크 신한카드",
+      "path": "cards/shinhan/shinhan-baaayr.yaml",
+      "draft_id": "3b881755-2aac-43bd-b162-9a64ca1cf1e2",
+      "sha256": "00d764a076d807417aaac4339aea212d77530912c568a58d8825a74380f4cc81",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1232098_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "unionpay",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-baaayr"
+    },
+    {
+      "card_id": "shinhan-baab7d",
+      "name": "요기요 신한카드 체크",
+      "path": "cards/shinhan/shinhan-baab7d.yaml",
+      "draft_id": "824757cc-e6a9-4c95-a3e8-3c05d2d3ca83",
+      "sha256": "c6e2b940bf08777282fb8f067b396eabdddfc0bf1353e52b7afa142c6e7fdd57",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1188364_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        },
+        {
+          "path": "revisions[0].spend.exclude_categories",
+          "question": "전월 실적 제외 대상에 국세, 지방세, 관리비, 공과금이 적혀 있지 않다. 원문대로 실적에 넣었다",
+          "assumed": "수수료, 이자, 기프트카드, 선불카드, 할인 적용 금액, 취소만 제외"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-baab7d"
+    },
+    {
+      "card_id": "shinhan-baabwe",
+      "name": "카카오페이 신한 체크카드",
+      "path": "cards/shinhan/shinhan-baabwe.yaml",
+      "draft_id": "d7140f0c-812d-44ac-b71b-c0b312df2c48",
+      "sha256": "57b2f2bbe66458c72e72085401f282d5b5a8de1a3a8c5341ea8a769bf97fa8d6",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1187963_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-baabwe"
+    },
+    {
+      "card_id": "shinhan-bcaazx",
+      "name": "신한카드 Shopping",
+      "path": "cards/shinhan/shinhan-bcaazx.yaml",
+      "draft_id": "43fbe806-f814-4767-a9e3-8b81f797d2f9",
+      "sha256": "6f0f1118bc7b6d4aa811547a8521818d810edfe07c102ca7bb23f96f5795ef0a",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1187935_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "brand": "amex",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 23000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "이 혜택 구성의 시행일이 상품 페이지에 없어 확인한 날을 넣었다",
+          "assumed": "2026-10-12"
+        },
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bcaazx"
+    },
+    {
+      "card_id": "shinhan-be9cqz",
+      "name": "투썸플레이스 신한카드 체크",
+      "path": "cards/shinhan/shinhan-be9cqz.yaml",
+      "draft_id": "7b6483ed-6ae4-41a6-aeb1-604096413400",
+      "sha256": "dbe9da1882e12cc41a28542f81cf85462a9cb0cbc5d735a5d1a2d85542677341",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1212166_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-be9cqz"
+    },
+    {
+      "card_id": "shinhan-bgbbtm",
+      "name": "청년취업 FANtastic S 신한카드 체크",
+      "path": "cards/shinhan/shinhan-bgbbtm.yaml",
+      "draft_id": "e825a116-fa09-4ce5-a7df-f216359d7eb2",
+      "sha256": "7fd928be560c01c18c6f6bea0641d8dbf664143449c442015639683af1603832",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1188341_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bgbbtm"
+    },
+    {
+      "card_id": "shinhan-bgjcs5",
+      "name": "신한카드 On 체크",
+      "path": "cards/shinhan/shinhan-bgjcs5.yaml",
+      "draft_id": "258679ca-c42f-4ed3-8f22-afd6b905e53e",
+      "sha256": "d279b436cce8963800441d5853227fb83d87dbdbd6939c308c492ff6d99b8ca0",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1214936_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bgjcs5"
+    },
+    {
+      "card_id": "shinhan-bgnd9k",
+      "name": "신한카드 Pick E 체크",
+      "path": "cards/shinhan/shinhan-bgnd9k.yaml",
+      "draft_id": "ad199b47-f421-41d4-afc3-af10a02a6f9d",
+      "sha256": "ace9366fdf323c92d75b747cfacb8e2f2cab7cd1a34daf65bae44ab8e4d44d84",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1221536_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bgnd9k"
+    },
+    {
+      "card_id": "shinhan-bgod9l",
+      "name": "신한카드 Pick I 체크",
+      "path": "cards/shinhan/shinhan-bgod9l.yaml",
+      "draft_id": "b877df79-d0f9-452a-954d-e44414ea269e",
+      "sha256": "ea36865bad8d5472791811f1c50b117c3c8a9166aa8991b05711072f3b56159c",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1221538_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bgod9l"
+    },
+    {
+      "card_id": "shinhan-blcdmh",
+      "name": "신한카드 The PET",
+      "path": "cards/shinhan/shinhan-blcdmh.yaml",
+      "draft_id": "ed793085-49cc-40f2-b36e-db955c0b6715",
+      "sha256": "9823843b7b6f1c48ff64d9b35208010fdc37932dc5da69e90e037f0cdf23127d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1228839_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 23000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-blcdmh"
+    },
+    {
+      "card_id": "shinhan-boadp9",
+      "name": "알리익스프레스 신한카드",
+      "path": "cards/shinhan/shinhan-boadp9.yaml",
+      "draft_id": "502b4813-9929-4e9d-9186-5436aa478e3d",
+      "sha256": "9ad614e4a72d0d4826b5dc87a7d9e5fdf1005986db648f5d1ecb29e3993dcf81",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1231466_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 16000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 19000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-boadp9"
+    },
+    {
+      "card_id": "shinhan-boadur",
+      "name": "코웨이 신한카드",
+      "path": "cards/shinhan/shinhan-boadur.yaml",
+      "draft_id": "e572a754-5a4b-462c-90bc-78cecd80fcae",
+      "sha256": "d32ed4f856f753011848f38a2c1340e74ec1b3398150e56a3e6aca0b8f3223a6",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1234723_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202507080001",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 27000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-boadur"
+    },
+    {
+      "card_id": "shinhan-bpac88",
+      "name": "신한카드 MY CAR",
+      "path": "cards/shinhan/shinhan-bpac88.yaml",
+      "draft_id": "a184c274-0cfe-494a-9acd-614f8384e949",
+      "sha256": "6cd473c1dfba017676499379d91af5f6f0ca707404c8de40a68a08525e71b22f",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1197177_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 27000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 30000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "지금 혜택 구성의 시행일이 상품 페이지에 없어 확인한 날을 넣었다",
+          "assumed": "2026-10-12"
+        },
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bpac88"
+    },
+    {
+      "card_id": "shinhan-bubdrh",
+      "name": "신한카드 SOL트래블J 체크",
+      "path": "cards/shinhan/shinhan-bubdrh.yaml",
+      "draft_id": "e205aa17-2a29-4d75-9f6f-b7d56a6c74d4",
+      "sha256": "3044e7695edb9aade6adc19648b5e52c2c5911da3011eb637e2a683af993828e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1232877_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bubdrh"
+    },
+    {
+      "card_id": "shinhan-bubdwl",
+      "name": "신한카드 SOL트립앤샵 체크",
+      "path": "cards/shinhan/shinhan-bubdwl.yaml",
+      "draft_id": "5183a9e3-2739-414e-81d3-84e66a847f76",
+      "sha256": "efacfee24cbd26ee74e8c1da9168b4fa655388ca57523f51b0c417bf966bc79e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1236362_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-bubdwl"
+    },
+    {
+      "card_id": "shinhan-caidbl",
+      "name": "티머니 Pay & GO 신한카드",
+      "path": "cards/shinhan/shinhan-caidbl.yaml",
+      "draft_id": "420a0f0c-a945-4e4c-886f-9ac453dff242",
+      "sha256": "f6eaba7e09039f69b5f21c22fbcf2745dfcb731fa793a37a0ce9edfc47740756",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1216792_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 18000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "지금 혜택 구성의 시행일이 상품 페이지에 없어 확인한 날을 넣었다",
+          "assumed": "2026-10-12"
+        },
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-caidbl"
+    },
+    {
+      "card_id": "shinhan-cbscey",
+      "name": "신한카드 국민행복",
+      "path": "cards/shinhan/shinhan-cbscey.yaml",
+      "draft_id": "300b6070-7623-4d2a-8d88-45e41e0db6fa",
+      "sha256": "934743b7f4ca7344ba9322a898fdfaf7d3fddccba5a69c673135a6e04a12dd64",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1200235_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-cbscey"
+    },
+    {
+      "card_id": "shinhan-cbtcez",
+      "name": "신한카드 국민행복 체크",
+      "path": "cards/shinhan/shinhan-cbtcez.yaml",
+      "draft_id": "7fe87a9d-a1ab-4da2-8aac-623aa47c42d4",
+      "sha256": "3a7986a612f77e8efef6e90ec23aee82ccc8f2afec2d1adb1c4b3a026458710b",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1200238_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-cbtcez"
+    },
+    {
+      "card_id": "shinhan-plad43",
+      "name": "신한카드 플리",
+      "path": "cards/shinhan/shinhan-plad43.yaml",
+      "draft_id": "0192ec67-1311-42ed-acf1-d1598ed1d78b",
+      "sha256": "3dd0e35ec7753829be7586a907a9b505b014049908d992fd51785df10bb3b157",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1220329_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202211280002",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 18000
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].effective_from",
+          "question": "현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2022.05.18이고 카드사 공통 규칙 시작일을 시작일로 둔다",
+          "assumed": "2024-03-22"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-plad43"
+    },
+    {
+      "card_id": "shinhan-plbcy4",
+      "name": "신한카드 플리(체크)",
+      "path": "cards/shinhan/shinhan-plbcy4.yaml",
+      "draft_id": "ae6664f2-4304-4dca-a1c0-4737253c8c2b",
+      "sha256": "fd4b250bd3a7c3f23e0babdea5a6198b8ab272052b887c61a51894a1f7286c55",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1216831_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 0
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 0
+        }
+      ],
+      "open_questions": [
+        {
+          "path": "revisions[0].spend.cancellation",
+          "question": "취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다",
+          "assumed": "cancel_month"
+        }
+      ],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-plbcy4"
+    },
+    {
+      "card_id": "shinhan-pobdmx",
+      "name": "신한카드 Point Plan 체크 SOL",
+      "path": "cards/shinhan/shinhan-pobdmx.yaml",
+      "draft_id": "e71561ff-2651-4704-9fcd-0a5008e12092",
+      "sha256": "ddd99a64c559bf4fceb5e4108bf08dd899b9d0addd71bc68a230a14a9ff30aed",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/check/1229580_2206.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 0
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-pobdmx"
+    },
+    {
+      "card_id": "shinhan-pofdvr",
+      "name": "신한카드 SOL Plan",
+      "path": "cards/shinhan/shinhan-pofdvr.yaml",
+      "draft_id": "af260582-fb36-4d02-9c4e-b11491e9f113",
+      "sha256": "ea87c36ca87411c25dd497dbf32f838f52f42a79a8a50190ab30dc01288fb888",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1235253_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202508180003",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 30000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 33000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-pofdvr"
+    },
+    {
+      "card_id": "shinhan-pogdxc",
+      "name": "신한카드 Simple Plan",
+      "path": "cards/shinhan/shinhan-pogdxc.yaml",
+      "draft_id": "8bc7a554-c454-4e64-8638-f88e664b5c29",
+      "sha256": "c358774bc4dafc4f73628732a229e65a5263a326547472277d1d49b8adaf309d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1237253_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 15000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 18000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-pogdxc"
+    },
+    {
+      "card_id": "shinhan-pohdxd",
+      "name": "신한카드 Simple Plan+ (플러스)",
+      "path": "cards/shinhan/shinhan-pohdxd.yaml",
+      "draft_id": "17b0fcdb-8ebc-4f63-80d0-f0408ed5ad7c",
+      "sha256": "3a930b605f8960bd02e9a2e79ff63f95f7bdd68bff129a4044e4115b08f7af4e",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1237252_2207.html",
+          "fetched_at": "2026-10-12",
+          "review_no": "제2026-C1h-02346호",
+          "review_valid_until": "2027-02-22"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 47000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 50000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-pohdxd"
+    },
+    {
+      "card_id": "shinhan-poje1j",
+      "name": "신한카드 SOL Plan+ (플러스)",
+      "path": "cards/shinhan/shinhan-poje1j.yaml",
+      "draft_id": "1b130778-90bc-4667-85d3-26173622a08e",
+      "sha256": "d5db951bbd98413df9b0b68ca8b55df7b3cacfc38653203aa788244bec2ac31d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1239171_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 50000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 53000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-poje1j"
+    },
+    {
+      "card_id": "shinhan-poke1m",
+      "name": "신한카드 Hi-Point Plan",
+      "path": "cards/shinhan/shinhan-poke1m.yaml",
+      "draft_id": "fedf6b4a-b6d6-465d-b841-91ad2446a2a2",
+      "sha256": "9119e1be577e8eae5585c7873c119d94ae29f7b966baa46af4c8ac2353073d23",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/2013774_2207.html",
+          "fetched_at": "2026-10-12"
+        },
+        {
+          "id": "api",
+          "kind": "api",
+          "url": "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202607130002",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 20000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 23000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 23000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-poke1m"
+    },
+    {
+      "card_id": "shinhan-pole1n",
+      "name": "신한카드 Hi-Point Plan+ (플러스)",
+      "path": "cards/shinhan/shinhan-pole1n.yaml",
+      "draft_id": "a80dee8e-6988-4d5c-bdf5-cde2a101e5e6",
+      "sha256": "85278f9c2324a06f5fa5c3469a9c3e4b05f800b4f1b6fa17514cd536aac3c32d",
+      "sources": [
+        {
+          "id": "page",
+          "kind": "product_page",
+          "url": "https://www.shinhancard.com/pconts/html/card/apply/credit/2013775_2207.html",
+          "fetched_at": "2026-10-12"
+        }
+      ],
+      "annual_fees": [
+        {
+          "scope": "domestic",
+          "amount": 50000
+        },
+        {
+          "scope": "global",
+          "brand": "mastercard",
+          "amount": 53000
+        },
+        {
+          "scope": "global",
+          "brand": "visa",
+          "amount": 53000
+        }
+      ],
+      "open_questions": [],
+      "group": "expand13",
+      "incoming": "release-20261012b-shinhan-pole1n"
+    }
+  ],
+  "shared_files": [
+    {
+      "path": "cards/shinhan/shinhan-bcbdna.yaml",
+      "sha256": "1067cf0760d53365fe7b50fdc60ceeb8006d3094a111823f9d0bfb0689d0d16e"
+    },
+    {
+      "path": "cards/shinhan/shinhan-bgkcza.yaml",
+      "sha256": "759e9d0f3d29312c824632ef34402b73f9396253ff873a126bb515cebd4445d2"
+    },
+    {
+      "path": "cards/shinhan/shinhan-bgsdu9.yaml",
+      "sha256": "a340782a5de4d8d092f95e250a54eb897914164d5d6fd1e00d07443b2d15cd78"
+    },
+    {
+      "path": "cards/shinhan/shinhan-bjbcg5.yaml",
+      "sha256": "7bf0d30638c69dca8b48d7d6b80dbcfae64f1d4d429e5eec90b302529e3c6d1d"
+    },
+    {
+      "path": "cards/shinhan/shinhan-buddo2.yaml",
+      "sha256": "806fee3a7182d6b5930b5fcf8e8ddefca0d3aa2ec03801d0c15b717c7b2e65fe"
+    },
+    {
+      "path": "cards/shinhan/shinhan-buedo3.yaml",
+      "sha256": "35c8217fb04224a140bac09e331041e24890641f0d6960b2bf86eaa6975b8992"
+    },
+    {
+      "path": "cards/shinhan/shinhan-cheoeum.yaml",
+      "sha256": "5b3c9d58eee265dcca091e8091af145809333ae72961a40182610db475cd9989"
+    },
+    {
+      "path": "cards/shinhan/shinhan-pointplan.yaml",
+      "sha256": "2523f5a589c64c14eab465f917a7ce8e8d0741104ee3a754bed75e74f415a7dd"
+    },
+    {
+      "path": "merchants.yaml",
+      "sha256": "149b583e8fa2466c9c8e56201851abffdfe25a25a9e132d157b0fb5f98d81431"
+    }
+  ],
+  "operation_order": [
+    "운영 현재 값과 끊긴 승인 확인",
+    "공통 항목과 기존 카드 분류 연결 승인 후 봇 내보내기 확인",
+    "새 카드별 초안 번호로 승인하고 검수 대기 닫기",
+    "앱 배포용 카탈로그 내보내기 확인"
+  ]
+}

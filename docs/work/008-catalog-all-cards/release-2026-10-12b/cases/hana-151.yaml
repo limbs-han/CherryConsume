@@ -1,0 +1,114 @@
+card: hana-151
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 상품설명서 예시 마트 65000과 18000
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 65000, category: grocery_mart}
+  - {at: 2026-11-04T11:00, amount: 18000, category: grocery_mart}
+  expect:
+  - payment: 0
+    benefits: {life-200: 600}
+  - payment: 1
+    benefits: {}
+  calc: 65,000원은 2만원 3단위 x 200원 = 600원. 18,000원은 2만원 미만이라 0원
+- name: 실적 직전 249999
+  prev_month_spend: 249999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 65000, category: grocery_mart}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 25만원보다 1원 적어 0원
+- name: 주유 병원 인터넷쇼핑 생활 캐쉬백
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: fuel}
+  - {at: 2026-11-04T11:00, amount: 20000, category: hospital}
+  - {at: 2026-11-04T12:00, amount: 59999, category: online_shopping}
+  expect:
+  - payment: 0
+    benefits: {life-200: 400}
+  - payment: 1
+    benefits: {life-200: 200}
+  - payment: 2
+    benefits: {life-200: 400}
+  calc: 2만원당 200원. 40,000원 400원, 20,000원 200원, 59,999원은 2단위라 400원
+- name: 영화 1만원 경계
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9999, merchant: megabox}
+  - {at: 2026-11-04T11:00, amount: 10000, merchant: lotte_cinema}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {movie-3000: 3000}
+  calc: 9,999원은 1만원 미만이고 일반 캐쉬백에서도 영화 가맹점은 빠져 0원. 10,000원은 3,000원
+- name: 일반 업종 2만원당 100원
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: cafe}
+  - {at: 2026-11-04T11:00, amount: 39999, category: cafe}
+  - {at: 2026-11-04T12:00, amount: 19999, category: cafe}
+  expect:
+  - payment: 0
+    benefits: {general-100: 200}
+  - payment: 1
+    benefits: {general-100: 100}
+  - payment: 2
+    benefits: {}
+  calc: 40,000원 2단위 200원, 39,999원 1단위 100원, 19,999원 0단위 0원
+- name: 월 통합 한도 1만원 직전과 직후
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: megabox}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: megabox}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: megabox}
+  - {at: 2026-11-07T10:00, amount: 200000, category: grocery_mart}
+  - {at: 2026-11-08T10:00, amount: 20000, category: cafe}
+  expect:
+  - payment: 0
+    benefits: {movie-3000: 3000}
+  - payment: 1
+    benefits: {movie-3000: 3000}
+  - payment: 2
+    benefits: {movie-3000: 3000}
+  - payment: 3
+    benefits: {life-200: 1000}
+  - payment: 4
+    benefits: {}
+  calc: 영화 3회 9,000원 뒤 마트 2,000원 중 남은 1,000원만. 한도가 차 그다음 0원
+- name: 해외 이용과 국세 제외
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: grocery_mart, region: overseas}
+  - {at: 2026-11-04T11:00, amount: 100000, category: tax}
+  - {at: 2026-11-04T12:00, amount: 100000, category: education.tuition}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits: {}
+  calc: 해외 사용분, 국세, 대학등록금은 캐쉬백 제외라 0원
+- name: 신규 특례 기간 안
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: grocery_mart}
+  expect:
+  - payment: 0
+    benefits: {life-200: 200}
+  calc: 10월 발급이면 11월 말까지 25만 구간으로 보아 200원
+- name: 신규 특례 기간 뒤
+  prev_month_spend: 0
+  holder: {started_on: '2026-09-15'}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: grocery_mart}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 9월 발급 특례는 10월 말에 끝나 전월 0원이면 0원

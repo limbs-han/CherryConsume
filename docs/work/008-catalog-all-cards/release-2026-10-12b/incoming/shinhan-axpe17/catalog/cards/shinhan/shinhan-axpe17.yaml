@@ -1,0 +1,126 @@
+schema_version: 2
+id: shinhan-axpe17
+issuer: shinhan
+name: 카카오뱅크 착붙 신한카드
+short_name: 카카오뱅크 착붙 신한
+kind: credit
+product_codes: [AXPE17]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 23000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/2013453_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-06-19
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.academy, education.primary_secondary_fee, education.study_material, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.academy, education.primary_secondary_fee, education.study_material, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 착붙 서비스 이외의 프로모션 할인이 적용된 거래는 할인하지 않는다, 포인트·캐시·사이버머니·예치금 충전과 국가·공공기관 가맹점 이용금액은 할인하지 않는다]
+    limits:
+      - key: online
+        per: month
+        amount: {500000: 10000, 1000000: 25000}
+      - key: offline
+        per: month
+        amount: {500000: 10000, 1000000: 25000}
+    benefits:
+      - key: online-pay-10
+        title: 온라인 간편결제 10% 할인
+        source: page
+        evidence: ['간편결제(온라인) | 10% | 카카오페이, 네이버페이, 신한 SOL페이*', 할인금액 기준 1회 최대 5천원까지 제공, 동일 가맹점의 경우 1일 1회에 한하여 서비스 제공, 간편결제(온라인) 서비스는 온라인 이용에 한하여 서비스가 제공됩니다., 50만원 이상 100만원 미만 | 100만원 이상 | 할인한도 | 1만원 | 2만 5천원]
+        target: {all: true}
+        when:
+          - {channel: online}
+          - payment: [kakao_pay, naver_pay, shinhan_sol_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {per: day, count: 1}
+          - {shared: online}
+        tiers: {from: 500000}
+        unmodeled: [원문은 같은 가맹점만 하루 1회인데 가맹점을 구별하지 않고 하루 1회로 계산한다]
+      - key: online-ai-10
+        title: ChatGPT·Claude 10% 할인
+        source: page
+        evidence: ['AI | 10% | ChatGPT, Claude', 'AI 서비스는 서비스별 공식 웹사이트를 통해 AI를 구독한 경우에만 서비스가 제공되며, 간편결제(네이버페이, 카카오페이 등) 및 인앱결제(앱스토어,구글플레이 등)건은 제외됩니다.']
+        target:
+          merchants: [chatgpt, claude]
+        when:
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+          - billing_not: [in_app]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: online}
+        tiers: {from: 500000}
+      - key: online-membership-50
+        title: 네이버플러스·쿠팡와우 멤버십 50% 할인
+        source: page
+        evidence: ['멤버십 | 50% | 네이버플러스 멤버십, 쿠팡와우 멤버십', '멤버십 서비스는 공식 홈페이지를 통한 정기결제(자동납부) 시에만 적용되며,1회성 일반구매 결제, 구글 플레이/애플 앱스토어 등 앱마켓을 통한 인앱결제, 통신요금 포함 결제는 적용되지 않습니다.']
+        target:
+          merchants: [coupang_wow, naver_plus_membership]
+        when:
+          - billing: [autopay, subscription]
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: online}
+        tiers: {from: 500000}
+        unmodeled: [통신요금 포함 결제는 할인하지 않는다]
+      - key: offline-mart-10
+        title: 이마트·트레이더스 10% 할인
+        source: page
+        evidence: ['마트 | 10% | 이마트, 트레이더스 홀세일 클럽', 마트, 생활 서비스는 오프라인 매장에 한하여 서비스가 제공됩니다.]
+        target:
+          merchants: [emart, traders]
+        when:
+          - {channel: offline}
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: offline}
+        tiers: {from: 500000}
+      - key: offline-coffee-10
+        title: 커피전문점 10% 할인
+        source: page
+        evidence: [커피 | 10% | 커피전문점 업종, '커피 서비스는 커피전문점 업종이 아닌 가맹점 (백화점 할인점, 공항 등의 입점 매장, 앱결제 등)에서 결제 시 제공되지 않습니다.']
+        target:
+          categories: [cafe]
+        when:
+          - {channel: offline}
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: offline}
+        tiers: {from: 500000}
+        unmodeled: ['백화점, 할인점, 공항 입점 매장과 결제대행업체로 잡히는 키오스크 결제는 할인하지 않는다']
+      - key: offline-life-10
+        title: 올리브영·다이소 10% 할인
+        source: page
+        evidence: ['생활 | 10% | 올리브영, 다이소', 마트, 생활 서비스는 오프라인 매장에 한하여 서비스가 제공됩니다.]
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - {channel: offline}
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: offline}
+        tiers: {from: 500000}
+    unmodeled: [교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, TV수신료와 세외수입과 포인트·캐시·예치금 충전과 의약품 전용몰은 전월 실적에서 빠진다, 신규 발급 특례는 최초 신규 발급 회원만 받는다. 만기나 해지 후 재발급은 받지 않는다]
+notes: '신한카드 상품 페이지 기준. 카카오뱅크 앱에서만 신청한다. 연회비는 국내전용 2만원, Mastercard 2만 3천원. 온라인 서비스(간편결제, AI, 멤버십)와 오프라인 서비스(마트, 커피, 생활)는 전월 50만, 100만원 구간마다 각각 월 1만, 2만 5천원 한도다. 간편결제 할인은 카카오페이, 네이버페이, 신한 SOL페이 온라인 결제가 대상이라 카드사 기본 간편결제 제외를 쓰지 않고 다른 혜택에만 간편결제 제외를 걸었다. 취소는 국내는 처음 승인한 달, 해외는 취소 전표가 매입된 달 실적에서 뺀다. 실적 제외: 카드대출, 연회비, 수수료, 이자, 기프트카드와 선불카드, 세금과 세외수입, 4대보험, 학교 납입금과 등록금, 관리비, 도시가스, 전기, TV수신료, 수도, 상품권과 선불전자지급수단, 포인트·캐시 충전, 학원, 의약품 전용몰과 제약회사·약국, 취소.'

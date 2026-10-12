@@ -1,0 +1,29 @@
+card: hyundai-177711
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 기본 0.5% 반올림
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4639, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-05: 23}, counted: 4639}
+  calc: 30만 미만이라 추가 없음. 4,639 x 0.5% = 23.195 반올림 23
+- name: 30만 이상 음식점 5%, 한도 넘으면 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, category: restaurant.general}
+  - {at: 2026-11-06T10:00, amount: 40000, merchant: gs25, channel: offline}
+  expect:
+  - {payment: 0, benefits: {plus-5-dining: 4000}, counted: 80000}
+  - {payment: 1, benefits: {plus-5-convenience: 1000, base-05: 100}, counted: 40000}
+  calc: 80,000 x 5% = 4,000. 남은 1,000은 20,000원분, 나머지 20,000 x 0.5% = 100
+- name: 배민 앱과 지하철 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: baemin, channel: online}
+  - {at: 2026-11-06T10:00, amount: 10000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {plus-5-delivery: 1000}, counted: 20000}
+  - {payment: 1, benefits: {plus-5-transit: 500}, counted: 10000}
+  calc: 각 5%

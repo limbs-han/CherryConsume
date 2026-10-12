@@ -1,0 +1,29 @@
+card: shinhan-baaayr
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 전통시장 10%와 0.1%, 30만 구간 한도 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 30000, category: traditional_market, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 30000, category: traditional_market, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {market-10: 3000}, counted: 30000}
+  - {payment: 1, benefits: {all-0-1: 100}, counted: 100000}
+  - {payment: 2, benefits: {market-10: 1900}, counted: 30000}
+  calc: 30,000 × 10% = 3,000, 100,000 × 0.1% = 100, 남은 한도 1,900
+- name: 후불교통 지하철 3%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 50000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-3: 1500}, counted: 0}
+  calc: 50,000 × 3% = 1,500. 지하철은 실적에서 뺐다
+- name: 30만 직전 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 30000, category: traditional_market, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 30만원 미만

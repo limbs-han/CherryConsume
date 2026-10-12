@@ -1,0 +1,40 @@
+card: samsung-aap1843
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 단비교육 70만 구간 월 9천원 한도
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T20:00, amount: 33000, merchant: danbi_education, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {danbi: 9000}, counted: 33000}
+  calc: 결제금액만큼 할인하되 70만 구간 월 한도 9,000원
+- name: 30만 직전이면 단비교육 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T20:00, amount: 33000, merchant: danbi_education, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 생활요금 1천원 통합 월 3회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-11T09:00, amount: 30000, merchant: sk_broadband, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-12T09:00, amount: 80000, category: insurance.private, payment_method: physical_card}
+  - {at: 2026-11-13T09:00, amount: 20000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {living-autopay: 1000}}
+  - {payment: 1, benefits: {living-autopay: 1000}}
+  - {payment: 2, benefits: {insurance: 1000}}
+  - {payment: 3, benefits: {}}
+  calc: 1,000원씩 3회. 네 번째는 횟수 소진
+- name: 1만원 미만 정기결제는 할인 없음과 지하철 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 9999, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-11T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {}, counted: 0}
+  calc: 건별 1만원 이상만. 대중교통은 실적 제외

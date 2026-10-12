@@ -1,0 +1,29 @@
+card: lotte-p15500-a15500
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 70만 구간 보험료 16,000원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: meritz_fire, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {meritz-insurance-discount: 16000}
+    counted: 0
+  calc: 50000 x 100% = 50000, 70만 구간 월 16000. 할인받은 보험료 전액 실적 제외
+- name: 보험료가 한도보다 적으면 보험료만큼
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: meritz_fire, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {meritz-insurance-discount: 9000}
+  calc: 9000 x 100% = 9000
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: meritz_fire, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만 미만

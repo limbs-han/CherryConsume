@@ -1,0 +1,344 @@
+card: shinhan-poedr2
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: time-cafe 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-03T10:00
+    amount: 8000
+    payment_method: physical_card
+    merchant: starbucks
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      time-cafe: 800
+  calc: 8,000원 기준 800원
+- name: time-restaurant 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-04T12:00
+    amount: 15000
+    payment_method: physical_card
+    category: restaurant.general
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      time-restaurant: 1000
+  calc: 15,000원 기준 1,000원
+- name: time-convenience 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-05T19:00
+    amount: 9000
+    payment_method: physical_card
+    merchant: cu
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      time-convenience: 900
+  calc: 9,000원 기준 900원
+- name: time-delivery 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-06T20:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: baemin
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      time-delivery: 1000
+  calc: 20,000원 기준 1,000원
+- name: daily-mart 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-07T11:00
+    amount: 30000
+    payment_method: physical_card
+    merchant: emart
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      daily-mart: 3000
+  calc: 30,000원 기준 3,000원
+- name: daily-online 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-08T11:00
+    amount: 60000
+    payment_method: physical_card
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      daily-online: 5000
+  calc: 60,000원 기준 5,000원
+- name: daily-outlet 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-09T11:00
+    amount: 40000
+    payment_method: physical_card
+    merchant: lotte_premium_outlet
+  expect:
+  - payment: 0
+    benefits:
+      daily-outlet: 4000
+  calc: 40,000원 기준 4,000원
+- name: daily-goods 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-10T11:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: olive_young
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      daily-goods: 2000
+  calc: 20,000원 기준 2,000원
+- name: move-fuel 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-11T11:00
+    amount: 60000
+    payment_method: physical_card
+    merchant: s_oil
+  expect:
+  - payment: 0
+    benefits:
+      move-fuel: 2500
+  calc: 60,000원 기준 2,500원
+- name: move-socar 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-12T11:00
+    amount: 30000
+    payment_method: physical_card
+    merchant: socar
+  expect:
+  - payment: 0
+    benefits:
+      move-socar: 1500
+  calc: 30,000원 기준 1,500원
+- name: move-parking 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-13T11:00
+    amount: 10000
+    payment_method: physical_card
+    category: car.parking
+  expect:
+  - payment: 0
+    benefits:
+      move-parking: 500
+  calc: 10,000원 기준 500원
+- name: move-taxi 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-14T11:00
+    amount: 20000
+    payment_method: physical_card
+    category: taxi
+  expect:
+  - payment: 0
+    benefits:
+      move-taxi: 1000
+  calc: 20,000원 기준 1,000원
+- name: life-overseas 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-15T11:00
+    amount: 40000
+    payment_method: physical_card
+    category: restaurant.general
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      life-overseas: 2000
+  calc: 40,000원 기준 2,000원
+- name: life-medical 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-16T11:00
+    amount: 20000
+    payment_method: physical_card
+    category: hospital
+  expect:
+  - payment: 0
+    benefits:
+      life-medical: 1000
+  calc: 20,000원 기준 1,000원
+- name: life-salon 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-17T11:00
+    amount: 30000
+    payment_method: physical_card
+    category: beauty.salon
+  expect:
+  - payment: 0
+    benefits:
+      life-salon: 1500
+  calc: 30,000원 기준 1,500원
+- name: life-bookstore 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-18T11:00
+    amount: 20000
+    payment_method: physical_card
+    merchant: yes24
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      life-bookstore: 1000
+  calc: 20,000원 기준 1,000원
+- name: monthly-utility 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-19T09:00
+    amount: 60000
+    payment_method: physical_card
+    category: utility.gas
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      monthly-utility: 5000
+  calc: 60,000원 기준 5,000원
+- name: monthly-telecom 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-20T09:00
+    amount: 40000
+    payment_method: physical_card
+    merchant: skt
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      monthly-telecom: 4000
+  calc: 40,000원 기준 4,000원
+- name: monthly-digital 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-21T09:00
+    amount: 17000
+    payment_method: physical_card
+    merchant: netflix
+    billing: subscription
+  expect:
+  - payment: 0
+    benefits:
+      monthly-digital: 2000
+  calc: 17,000원 기준 2,000원
+- name: monthly-fitness 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-22T09:00
+    amount: 80000
+    payment_method: physical_card
+    category: sports
+  expect:
+  - payment: 0
+    benefits:
+      monthly-fitness: 4000
+  calc: 80,000원 기준 4,000원
+- name: movie-5000 양수
+  prev_month_spend: 1800000
+  payments:
+  - at: 2026-11-23T09:00
+    amount: 14000
+    payment_method: physical_card
+    merchant: cgv
+  expect:
+  - payment: 0
+    benefits:
+      movie-5000: 5000
+  calc: 14,000원 기준 5,000원
+- name: 40만 구간 Time 한도 5천원
+  prev_month_spend: 400000
+  payments:
+  - at: 2026-11-03T10:00
+    amount: 20000
+    merchant: starbucks
+    channel: offline
+    payment_method: physical_card
+  - at: 2026-11-03T12:00
+    amount: 20000
+    category: restaurant.general
+    channel: offline
+    payment_method: physical_card
+  - at: 2026-11-03T19:00
+    amount: 20000
+    merchant: cu
+    channel: offline
+    payment_method: physical_card
+  - at: 2026-11-03T20:00
+    amount: 20000
+    merchant: baemin
+    channel: online
+    payment_method: physical_card
+  - at: 2026-11-04T20:00
+    amount: 20000
+    merchant: yogiyo
+    channel: online
+    payment_method: physical_card
+  - at: 2026-11-05T20:00
+    amount: 20000
+    merchant: yogiyo
+    channel: online
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      time-cafe: 1000
+  - payment: 1
+    benefits:
+      time-restaurant: 1000
+  - payment: 2
+    benefits:
+      time-convenience: 1000
+  - payment: 3
+    benefits:
+      time-delivery: 1000
+  - payment: 4
+    benefits:
+      time-delivery: 1000
+  - payment: 5
+    benefits: {}
+  calc: 1회 1만원 기준 1,000원씩 다섯 번이면 한도 5,000원
+- name: DAY 시간 밖
+  prev_month_spend: 400000
+  payments:
+  - at: 2026-11-03T16:00
+    amount: 10000
+    merchant: starbucks
+    channel: offline
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 07~15시 밖
+- name: 40만 직전이면 없음
+  prev_month_spend: 399999
+  payments:
+  - at: 2026-11-03T11:00
+    amount: 30000
+    merchant: emart
+    channel: offline
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만원 미만 구간

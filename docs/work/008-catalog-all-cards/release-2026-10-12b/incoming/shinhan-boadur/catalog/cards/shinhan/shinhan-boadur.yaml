@@ -1,0 +1,51 @@
+schema_version: 2
+id: shinhan-boadur
+issuer: shinhan
+name: 코웨이 신한카드
+short_name: 코웨이 신한
+search_names: [코웨이카드]
+kind: credit
+product_codes:
+  - '202507080001'
+  - BOADUR
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 27000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1234723_2207.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202507080001', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2025-06-24
+    source: page
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트 사용 거래의 포인트 금액은 할인하지 않는다, 코웨이 신한카드로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체를 할인하지 않는다]
+    benefits:
+      - key: coway-rental
+        title: 코웨이 렌탈요금 자동납부 결제일 할인
+        source: page
+        evidence: [코웨이 렌탈요금 자동납부 시 최대 월3만원 결제일 할인, 30만원 이상 70만원 미만 | 70만원 이상 150만원 미만 | 150만원 이상, 결제일 할인 | 1만 3천원 | 1만 7천원 | 3만원, 렌탈요금 자동납부 금액이 월 할인 한도보다 적을 경우 자동납부 금액만큼 할인 적용됩니다., 코웨이 신한카드로 렌탈요금 할인 받은 전체 금액(해당 거래금액 전체)]
+        target:
+          merchants: [coway, coway_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 700000: 17000, 1500000: 30000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [렌탈 명의자와 카드 명의자가 같아야 자동납부를 등록할 수 있다]
+    unmodeled: ['후불교통카드 이용금액(시내·광역·시외·고속버스, 지하철)은 실적에서 빠진다. 교통카드 이용금액의 반영월과 상관없이 버스와 지하철을 실적에서 뺀다', '지방세외수입, 환경개선부담금, TV수신료, 전자지급수단 충전은 실적에서 빠진다', 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 최초 신규 발급 특례는 만기나 해지 뒤 재발급이면 받지 못한다]
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2025.06.24. 연회비 국내 2.7만원, 해외겸용(Mastercard) 3만원. 코웨이 렌탈요금 자동납부 금액을 전월 30만/70만/150만원 이상 구간마다 월 1.3만/1.7만/3만원까지 결제일 할인하고 할인 받은 거래는 금액 전체가 실적에서 빠진다. 무이자할부와 부동산 임대료도 실적 제외. 상품 API 서비스 목록에는 1.9만, 2.1만, 2.3만원 할인 같은 다른 서비스 코드도 있으나 상품 페이지 표를 따른다.

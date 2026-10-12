@@ -1,0 +1,64 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ridi",
+      "name": "리디",
+      "category": "streaming",
+      "aliases": [
+        "리디",
+        "RIDI",
+        "리디북스"
+      ]
+    },
+    "card_id": "shinhan-axdbmr",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188280_2207.html",
+    "evidence": "월납 20% 결제일 할인 대상 리디북스. expand2 hyundai-32285가 제안한 ridi와 같은 정의"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "speedmate",
+      "name": "스피드메이트",
+      "category": "car.car_repair",
+      "aliases": [
+        "스피드메이트",
+        "SPEEDMATE"
+      ]
+    },
+    "card_id": "shinhan-biabix",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1188274_2207.html",
+    "evidence": "정비소(스피드메이트) 10% 결제일 할인 / 오프라인 현장 일반 결제만 가능"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "mammoth_coffee",
+      "name": "매머드커피",
+      "category": "cafe",
+      "aliases": [
+        "매머드커피"
+      ]
+    },
+    "card_id": "shinhan-boadg5",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1225544_2206.html",
+    "evidence": "커피전문점: 스타벅스, 메가MGC커피, 매머드커피"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "lg_bestshop",
+      "name": "LG전자 베스트샵",
+      "category": "other",
+      "aliases": [
+        "LG전자 베스트샵",
+        "LG베스트샵",
+        "LGE.COM",
+        "엘지전자 온라인몰"
+      ]
+    },
+    "card_id": "shinhan-boadnh",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1228909_2207.html",
+    "evidence": "LG전자 가맹점: LGE.COM, LG전자 베스트샵 / 백화점, 할인점 입점 매장 제외, LGE.COM 외 온라인 판매점 제외"
+  }
+]

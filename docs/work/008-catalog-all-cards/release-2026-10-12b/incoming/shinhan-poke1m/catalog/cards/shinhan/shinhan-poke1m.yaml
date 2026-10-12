@@ -1,0 +1,89 @@
+schema_version: 2
+id: shinhan-poke1m
+issuer: shinhan
+name: 신한카드 Hi-Point Plan
+short_name: 신한 Hi-Point Plan
+search_names: [하이포인트플랜]
+kind: credit
+product_codes:
+  - '202607130002'
+  - POKE1M
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 23000}
+  - {scope: global, brand: visa, amount: 23000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/2013774_2207.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202607130002', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-06-09
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {tier: 500000}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트 사용 거래의 포인트 금액은 적립하지 않는다, Hi-Point Plan 서비스가 아닌 프로모션 할인을 받은 거래는 적립하지 않는다]
+    limits:
+      - {key: integrated, per: month, amount: 50000}
+    stacks:
+      - {key: main}
+    benefits:
+      - key: base
+        title: 국내외 기본 0.5~1.5% 적립
+        source: page
+        evidence: ['기본 적립 : 국내/외 이용금액 최대 1.5% 마이신한포인트 적립', 기본 적립 | 0.5% | 1% | 1.3% | 1.5%, 통합 적립 한도 | 5만 포인트, '기본 적립과 특별 적립은 중복 적용되지 않으며, 특별 적립 영역 가맹점은 기본 적립 대상에서 제외됩니다.']
+        target:
+          all: true
+          exclude_merchants: [coffee_bean, daiso, ediya, emart, gs_caltex, kt, lg_uplus, lotte_mart, mega_coffee, olive_young, paul_bassett, sk_energy, skt, starbucks, twosome]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {0: 0.5, 500000: 1, 1000000: 1.3, 1500000: 1.5}
+        limits:
+          - {shared: integrated}
+        stack: main
+        unmodeled: [해외 일시불을 할부로 바꾸면 적립하지 않는다]
+      - key: special
+        title: 생활 밀착 가맹점 1~5% 특별 적립
+        source: page
+        evidence: ['특별 적립 : 생활 밀착 가맹점 최대 5% 마이신한포인트 적립', 특별 적립 | 1% | 2% | 3.5% | 5%, '마트 | 롯데마트, 이마트', '생활 | 다이소, 올리브영', '주유 | SK에너지, GS칼텍스', '카페 | 스타벅스, 이디야, 커피빈, 투썸플레이스, 폴바셋, 메가커피', '특별 적립 영역은 오프라인 매장 이용 시에만 적립되며, 백화점, 할인점, 면세점, 공항 등 입점 매장 이용금액은 적립되지 않습니다.']
+        target:
+          merchants: [coffee_bean, daiso, ediya, emart, gs_caltex, lotte_mart, mega_coffee, olive_young, paul_bassett, sk_energy, starbucks, twosome]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {0: 1, 500000: 2, 1000000: 3.5, 1500000: 5}
+        limits:
+          - {shared: integrated}
+        stack: main
+        unmodeled: ['백화점, 할인점, 면세점, 공항 입점 매장은 적립하지 않는다', '마트 주차비, 문화센터, 입점 임대 매장은 적립하지 않는다', 주유는 LPG를 적립하지 않는다, 스타벅스 사이렌오더는 적립되지만 온라인으로 기록하면 기본 적립으로 계산한다]
+      - key: special-telecom
+        title: 통신요금 자동납부 1~5% 특별 적립
+        source: page
+        evidence: ['통신요금 | SKT, LG U+, KT 통신요금 자동납부', 특별 적립 | 1% | 2% | 3.5% | 5%, '통신요금 자동납부 금액만 특별 적립되며, 자동납부 외 이용금액 및 알뜰폰 · 선불폰 · 결합상품(TV, 인터넷, 유선전화 등) 이용금액은 특별 적립되지 않습니다.']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {0: 1, 500000: 2, 1000000: 3.5, 1500000: 5}
+        limits:
+          - {shared: integrated}
+        stack: main
+        unmodeled: [약정금액 대납과 지점을 통한 정기결제는 특별 적립하지 않는다]
+    unmodeled: [포인트 리필(마이신한포인트 1만 포인트 이상 사용 결제 시 월 1회 1천 포인트)은 포인트 사용 금액을 입력으로 알 수 없어 계산하지 않는다, 일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, '세외수입(환경개선부담금, 과태료, 여권 발급비, 우편요금, 공공기관 가맹점), TV수신료, 신차판매, 의약품 전용몰·제약회사, 전자지급수단 충전은 실적과 적립에서 빠진다', 본인카드와 가족카드의 전월 이용금액과 적립 한도를 합산한다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 최초 신규 발급 특례는 Hi-Point Plan 만기나 해지 뒤 재발급이면 받지 못한다, 온라인 결제는 해당 업체 사이트나 앱에서 직접 결제해야 혜택을 준다]
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2026.06.09. 연회비 국내 2만원, 해외겸용(Mastercard, VISA) 2.3만원. 전월 이용금액(일시불+할부) 50만원 미만, 50만~100만, 100만~150만, 150만원 이상 구간별 기본 0.5/1/1.3/1.5%, 특별 1/2/3.5/5%. 특별 적립 가맹점은 기본 적립에서 빠지고 둘을 합쳐 월 5만 포인트 한도. 국내 취소는 최초 승인 달, 해외 취소는 취소 전표 매입 달 실적에서 뺀다. 최초 신규 발급 회원은 등록월 다음 달까지 50만~100만원 구간.

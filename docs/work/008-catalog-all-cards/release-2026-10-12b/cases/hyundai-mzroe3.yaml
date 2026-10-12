@@ -1,0 +1,49 @@
+card: hyundai-mzroe3
+cases:
+- name: 4959 곱하기 1.2퍼센트 59.508 반올림 60
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 4959
+    category: other
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      m-point-earn-1-2: 60
+  calc: 4959 곱하기 1.2퍼센트 59.508 반올림 60
+- name: 4958 곱하기 1.2퍼센트 59.496 반올림 59
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 4958
+    category: other
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      m-point-earn-1-2: 59
+  calc: 4958 곱하기 1.2퍼센트 59.496 반올림 59
+- name: 무이자 할부는 적립 제외
+  prev_month_spend: 0
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    interest_free: true
+    installment_months: 3
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 무이자 할부는 적립 제외
+- name: 전기요금 제외
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: utility.electricity
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 전기요금은 적립 제외

@@ -1,0 +1,34 @@
+card: hyundai-btvv
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 직전 백화점은 1.5%
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: hyundai_department, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-15: 300}, counted: 20000}
+  calc: 100만 미만이라 20,000 x 1.5% = 300
+- name: 100만 이상 백화점 5%, 마트에서 한도 넘으면 1.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: hyundai_department, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 120000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {department-5: 5000}, counted: 100000}
+  - {payment: 1, benefits: {mart-5: 5000, base-15: 300}, counted: 120000}
+  calc: 100,000 x 5% = 5,000. 남은 한도 5,000은 100,000원분, 나머지 20,000 x 1.5% = 300
+- name: 학원 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: education.academy}
+  expect:
+  - {payment: 0, benefits: {education-5: 5000}, counted: 100000}
+  calc: 100,000 x 5% = 5,000
+- name: 쿠팡 온라인 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-5: 1500}, counted: 30000}
+  calc: 30,000 x 5% = 1,500

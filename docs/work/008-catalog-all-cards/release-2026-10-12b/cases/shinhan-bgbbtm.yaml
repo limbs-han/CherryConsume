@@ -1,0 +1,48 @@
+card: shinhan-bgbbtm
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 신한 SOL페이 15% 건당 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, category: grocery_mart, payment_method: shinhan_sol_pay}
+  expect:
+  - {payment: 0, benefits: {sol-pay-15: 2000}, counted: 15000}
+  calc: 15,000원 × 15% = 2,250원. 건당 최대 2,000원
+- name: 쿠팡 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {social-commerce-10: 1500}, counted: 15000}
+  calc: 15,000원 × 10% = 1,500원
+- name: CU 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cu-10: 1000}, counted: 10000}
+  calc: 10,000원 × 10% = 1,000원
+- name: 스타벅스 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-10: 1200}, counted: 12000}
+  calc: 12,000원 × 10% = 1,200원
+- name: 경계 직전 299999 쿠팡 없음과 해외 1.2%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, category: cafe, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 15000}
+  - {payment: 1, benefits: {overseas-1-2: 1200}, counted: 100000}
+  calc: 30만 미만은 국내 캐시백 없음. 해외 100,000원 × 1.2% = 1,200원
+- name: 1만원 미만 CU 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9999}
+  calc: 건당 1만원 이상만

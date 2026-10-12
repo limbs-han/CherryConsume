@@ -1,0 +1,106 @@
+schema_version: 2
+id: shinhan-bubdrh
+issuer: shinhan
+name: 신한카드 SOL트래블J 체크
+short_name: 신한 SOL트래블J 체크
+kind: check
+product_codes: [BUBDRH]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1232877_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2025-05-02
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {donki-h1: 0, donki-h2: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+      categories: [annual_fee, gift_card, prepaid_charge]
+      unmodeled: [포인트로 결제한 금액과 SOL트래블J 체크 서비스 이외의 프로모션 할인이 적용된 거래는 할인하지 않는다, 키오스크 결제처럼 가맹점명이 PG업체명으로 찍히는 거래는 할인하지 않는다]
+    benefits:
+      - key: convenience-5
+        title: 국내 4개 편의점 5% 결제일 할인
+        source: page
+        evidence: ['4개 편의점: CU, GS25, 세븐일레븐, 이마트24', '편의점 통합 일 1회, 월 3회, 월 3천원까지 할인', 오프라인 매장에 한하여 적용되며 인터넷이나 모바일 앱을 통한 온라인 거래는 할인 서비스가 제공되지 않습니다., 국내 결제일 할인 서비스는 전월 국내 이용금액 30만원 이상 시 서비스가 적용됩니다.]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        unmodeled: ['온라인 매장, 백화점, 할인점 등 입점 매장은 할인하지 않는다']
+      - key: transit-1
+        title: 국내 대중교통 1% 결제일 할인
+        source: page
+        evidence: ['국내 대중교통: 시내버스, 시외버스, 지하철, 공항버스, 공항철도', 월 3천원까지 할인, 후불교통 기능을 이용한 터치(RF) 거래 시 결제일 할인 서비스가 제공되며 고속버스 이용은 할인 대상에 포함되지 않습니다.]
+        target:
+          categories: [transit.bus_city, transit.bus_intercity, transit.subway]
+        when:
+          - {region: domestic}
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        unmodeled: [공항철도 후불교통 이용도 대상이지만 철도 업종 전체를 넣을 수 없어 계산하지 않는다]
+      - key: donki-h1
+        title: 일본 돈키호테 50% 결제일 할인 (1~6월)
+        source: page
+        evidence: [돈키호테 50% 할인, '할인금액 기준 반기별 2만원(1~6월/7~12월 각 2만원), 연 4만원까지 혜택 제공됩니다.', 일본 여행 서비스는 전월 국내 이용금액 30만원 이상 시 서비스가 적용됩니다., 일본 내 오프라인 가맹점에 한해 서비스 적용됩니다.]
+        target:
+          merchants: [don_quijote]
+        when:
+          - {region: overseas}
+          - {channel: offline}
+          - months: [1, 2, 3, 4, 5, 6]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: year, amount: 20000}
+        tiers: {from: 300000}
+      - key: donki-h2
+        title: 일본 돈키호테 50% 결제일 할인 (7~12월)
+        source: page
+        evidence: [돈키호테 50% 할인, '할인금액 기준 반기별 2만원(1~6월/7~12월 각 2만원), 연 4만원까지 혜택 제공됩니다.', 일본 여행 서비스는 전월 국내 이용금액 30만원 이상 시 서비스가 적용됩니다., 일본 내 오프라인 가맹점에 한해 서비스 적용됩니다.]
+        target:
+          merchants: [don_quijote]
+        when:
+          - {region: overseas}
+          - {channel: offline}
+          - months: [7, 8, 9, 10, 11, 12]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: year, amount: 20000}
+        tiers: {from: 300000}
+      - key: overseas-transit-1
+        title: 해외 대중교통 컨택리스 1% 결제일 할인
+        source: page
+        evidence: ['해외 대중교통 : 버스, 지하철, 트램 등', 월 3천원까지 할인, 택시 이용은 할인 대상에 포함되지 않습니다., 전월 이용금액 관계없이 할인 서비스가 제공됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {per: month, amount: 3000}
+        unmodeled: [컨택리스 방식으로 결제한 대중교통만 대상이다]
+    unmodeled: ['국제 브랜드 수수료 1%, 해외 서비스 수수료 0.2%, 해외 ATM 인출 수수료 면제는 혜택 금액으로 계산하지 않는다', 일본 스타벅스 50% 할인(반기 5천원)은 결제 입력으로 일본 매장과 다른 나라 매장을 가를 수 없어 계산하지 않는다, CU 행사상품 5% 즉시할인은 지정 품목이라 계산하지 않는다, '2026-12-31까지의 해외 가맹점 프로모션(일본 3대 편의점, 베트남 롯데마트와 Grab, 미국 스타벅스 5%)과 마스터 트래블 리워드는 나라를 가를 수 없어 계산하지 않는다', 신규 발급 회원의 일본 여행 서비스는 등록월 다음 달까지 국내 이용금액 누적 30만원을 채운 뒤부터 주는데 누적 달성을 담을 수 없어 신규 기간에는 주지 않는다, 교통카드 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 'TV수신료, 지방세외수입, 환경개선부담금, 전자지급수단 충전은 실적에서 빠진다', 해외 이용금액은 실적에 넣지 않는다]
+notes: 신한카드 SOL트래블J 체크 상품 페이지 기준. Mastercard 단독, 연회비 없음. 실적은 전월 국내 이용금액이다. 국내 편의점 5%와 국내 대중교통 1%, 일본 돈키호테 50%는 전월 국내 30만원 이상에서 준다. 돈키호테는 반기마다 2만원이라 1~6월과 7~12월 혜택으로 나눠 연 한도로 담았다. 국내 취소는 처음 승인한 달 실적에서 뺀다. 2026-10-10 새 방식대로 후불교통 반영월 구분 대신 시내버스와 지하철을 실적에서 뺐다.

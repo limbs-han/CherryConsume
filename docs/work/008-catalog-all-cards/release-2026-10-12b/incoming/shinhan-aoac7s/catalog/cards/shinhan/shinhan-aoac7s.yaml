@@ -1,0 +1,106 @@
+schema_version: 2
+id: shinhan-aoac7s
+issuer: shinhan
+name: 신한 슈퍼SOL 체크
+short_name: 신한 슈퍼SOL 체크
+kind: check
+product_codes: [AOAC7S]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1196727_2206.html', fetched_at: 2026-10-12, review_no: 제20260826-Dpp-001호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2020-06-01
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [gift_card, prepaid_charge, transit.bus_city, transit.subway]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge, tax, utility.water]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 적립하지 않는다]
+    limits:
+      - {key: integrated, per: month, amount: 30000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [living-telecom-2, living-transit-2, living-gas-2, shopping-1, overseas-1, base-0-3]
+        spill: split
+    benefits:
+      - key: base-0-3
+        title: 국내외 0.3% 기본 적립
+        source: page
+        evidence: [국내/외 가맹점 0.3% 포인트 적립, 포인트 적립서비스는 신한 슈퍼SOL 체크카드 전월(1일~말일) 이용금액 실적 30만원 이상 시 제공됩니다.(기본적립 및 추가적립 모두 해당), 한 회원 당 월 최대 3만 포인트까지 적립(해당 월 총 청구금액 기준)]
+        target: {all: true}
+        reward: {type: points, program: mysinhan_point, rate: 0.3}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: living-telecom-2
+        title: 이동통신요금 자동이체 총 2% 적립
+        source: page
+        evidence: [생활가맹점 총 2% 포인트 적립(기본 0.3%+ 추가 1.7%), 이동통신 요금(SKT/KT/LGU+) 자동 이체 거래건, '통신사 약정금액 대납, 통신사 지점을 통한 월납, 알뜰폰은 적립 제외됩니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: living-transit-2
+        title: 버스·지하철 후불교통 총 2% 적립
+        source: page
+        evidence: [생활가맹점 총 2% 포인트 적립(기본 0.3%+ 추가 1.7%), 버스/지하철 후불교통카드 이용금액, 버스/지하철의 후불교통카드 이용금액만 적립됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [시외·광역·공항버스 후불교통도 대상이지만 업종으로 가리지 못해 시내버스와 지하철만 계산한다]
+      - key: living-gas-2
+        title: 도시가스 총 2% 적립
+        source: page
+        evidence: [생활가맹점 총 2% 포인트 적립(기본 0.3%+ 추가 1.7%), 도시가스 이용금액]
+        target:
+          categories: [utility.gas]
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: shopping-1
+        title: 쇼핑 가맹점 총 1% 적립
+        source: page
+        evidence: [쇼핑 가맹점 총 1% 포인트 적립(기본 0.3%+추가 0.7%), '3개 할인점(이마트, 롯데마트, 홈플러스)', '3개 백화점(롯데백화점, 현대백화점, 신세계 백화점)', '3개 온라인몰(11번가, G마켓, 옥션)', '3개 소셜커머스(쿠팡, 티몬, 롯데홈쇼핑)', '이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스 등 기업형 슈퍼마켓(SSM) 및 백화점, 할인점의 상품권 구매는 제외됩니다.']
+        target:
+          merchants: [auction, coupang, eleven_st, emart, gmarket, homeplus, hyundai_department, lotte_department, lotte_homeshopping, lotte_mart, shinsegae_department, tmon]
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: overseas-1
+        title: 해외 일시불 총 1% 적립
+        source: page
+        evidence: [해외 가맹점 이용금액 총 1% 포인트 적립(기본 0.3%+추가 0.7%), 해외 일시불 이용금액(해외사이트 거래 포함), 해외 일시불 거래 후 할부로 전환하는 경우는 제외됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: [교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 월 3만P 한도는 결제월에 청구되는 총 금액 기준이라 매입이 늦은 거래는 다음 달 한도를 쓴다, 카드 이용 시점과 결제 시점에 결제계좌가 신한은행이어야 적립된다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+notes: 신한카드 상품 페이지 기준. 연회비 국내전용과 Mastercard 모두 없음. 카드 출시 2020.06.01. 전월 30만원 이상이면 기본 0.3%, 생활가맹점(이동통신 자동이체, 버스·지하철 후불교통, 도시가스) 총 2%, 쇼핑 12곳과 해외 일시불 총 1%를 적립하고 모두 월 3만P 한도 안이다. 추가 적립은 기본 0.3%를 포함한 총 비율이라 같은 묶음에 두었다. 신규 발급 회원은 등록월 다음 달까지 실적과 상관없이 적립해 30만원 구간을 준다. 실적 제외는 수수료, 이자, 상품권·기프트·선불카드·선불전자지급수단, 취소뿐이다. 취소 금액을 어느 달 실적에서 빼는지 페이지에 없어 카드사 기본값을 쓴다.

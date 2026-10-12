@@ -1,0 +1,149 @@
+schema_version: 2
+id: shinhan-bpac88
+issuer: shinhan
+name: 신한카드 MY CAR
+short_name: 신한 MY CAR
+kind: credit
+product_codes: [BPAC88]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 27000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1197177_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-10-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, car, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.gas, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 400000
+      tier_by_benefit: {auto-finance-base: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      unmodeled: [포인트로 결제한 금액과 다른 신한카드 할인(이벤트 포함)을 받은 거래는 할인하지 않는다]
+    facts:
+      - {key: my_car_hipass, type: bool, scope: card, ask: 이 카드와 함께 발급한 후불 하이패스 카드를 쓰나요}
+    options:
+      - key: fuel
+        title: 주로 넣는 연료
+        choices:
+          - {key: gasoline_diesel, title: 휘발유·경유·등유}
+          - {key: lpg, title: LPG}
+        default: null
+        change: immediate
+    limits:
+      - {key: fuel_base, per: month, base: 150000}
+      - {key: car_energy, per: month, amount: 10000}
+    stacks:
+      - {key: main}
+      - {key: monthly}
+    benefits:
+      - key: auto-finance-base
+        title: 오토금융 미이용 회원 월 정액 캐시백
+        source: page
+        evidence: [미이용/종료 후 | 3천원 | 5천원 | 1만원, 신한카드 오토금융(장기할부 포함)을 미이용한 경우, 캐시백 금액은 총 오토금융 이용금액(전월 말일 기준) 구간별 신한카드 MY CAR 전월(1일~말일) 신용결제 이용금액에 따라 당월 15일(공휴일 등의 경우+1~2영업일 내)에 신한카드 MY CAR 결제계좌로 캐시백 제공됩니다., '신한카드 MY CAR를 신규 발급한 경우, 발급월 신용결제 이용금액에 따라 익월부터 캐시백 서비스가 제공됩니다.']
+        target: {all: true}
+        when:
+          - month_total: {min: 1}
+        reward:
+          type: cashback
+          basis: month_total
+          fixed: {400000: 3000, 800000: 5000, 1200000: 10000}
+        tiers: {from: 400000}
+        stack: monthly
+        unmodeled: [원문은 그 달 이용과 관계없이 전월 실적으로 주는데 앱은 그 달 결제가 있을 때 계산한다, 오토금융이나 12개월 이상 장기할부로 차를 샀으면 총 오토금융 이용금액 구간에 따라 월 5천~4만원을 받는다. 앱은 미이용 회원 금액만 계산한다]
+      - key: fuel-80
+        title: 주유소 리터당 80원 할인
+        source: page
+        evidence: [국내 주유소 이용금액 리터당 80원 결제일 할인, 주유/충전 서비스는 월 최대 15만원 이용금액까지 할인 가능합니다., 주유/충전/전기차 충전 서비스는 월 통합 1만원까지 할인 가능합니다., '할인금액은 SK에너지가 통보한 휘발유/LPG 리터당 고시가 기준이며, 경유와 등유는 휘발유가 기준으로 환산하여 할인 적용됩니다.']
+        target:
+          categories: [fuel]
+        when:
+          - option:
+              fuel: [gasoline_diesel]
+        reward: {type: billing_discount, per_liter: 80}
+        limits:
+          - {shared: fuel_base}
+          - {shared: car_energy}
+        tiers: {from: 400000}
+        unmodeled: [리터는 SK에너지 고시 휘발유가로 환산한다. 앱은 전국 평균 휘발유 가격으로 환산한다]
+      - key: lpg-40
+        title: 충전소 LPG 리터당 40원 할인
+        source: page
+        evidence: [국내 충전소 이용금액 리터당 40원 결제일 할인, 주유/충전 서비스는 월 최대 15만원 이용금액까지 할인 가능합니다.]
+        target:
+          categories: [fuel]
+        when:
+          - option:
+              fuel: [lpg]
+        reward: {type: billing_discount, per_liter: 40}
+        limits:
+          - {shared: fuel_base}
+          - {shared: car_energy}
+        tiers: {from: 400000}
+        unmodeled: [리터는 SK에너지 고시 LPG가로 환산해야 하지만 앱은 휘발유 가격으로 환산해 실제보다 적게 계산한다]
+      - key: ev-30
+        title: 전기차 충전요금 30% 할인
+        source: page
+        evidence: [전기차 충전요금 30% 결제일 할인, '급속/완속 충전 요금은 환경부, 한국전기차 충전서비스, 한국전력, 포스코ICT 충전기에 한함', 이동형 충전요금은 파워큐브 충전기에 한함]
+        target:
+          merchants: [happy_charger, kepco_ev, me_ev_charger]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: car_energy}
+        tiers: {from: 400000}
+        unmodeled: [포스코ICT와 파워큐브 충전기는 공통 가맹점이 없어 넣지 않았다]
+      - key: parking-2000
+        title: 주차장 건당 2천원 할인
+        source: page
+        evidence: [국내 주차장 이용 시 건당 2천원 결제일 할인, '일 1회, 월 2회 할인 제공', 당사 주차장 업종으로 등록된 가맹점에 한하여 제공됩니다.]
+        target:
+          categories: [car.parking]
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+        tiers: {from: 400000}
+      - key: hipass-1000
+        title: 후불 하이패스 월 1천원 할인
+        source: page
+        evidence: [후불 하이패스 이용 시 월 1천원 결제일 할인, 월 1회 할인 제공, 후불 하이패스 주차장 이용은 해당되지 않습니다., 신한카드 MY CAR와 동시 발급된 하이패스 카드에 한하여 할인 제공되며 동시 발급된 하이패스 이용금액은 신한카드 MY CAR 신용결제 이용금액에 합산됩니다.]
+        target:
+          categories: [car.toll]
+        when:
+          - {fact: my_car_hipass}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+        unmodeled: [동시 발급한 후불 하이패스 카드로 낸 통행료만 받는다]
+      - key: coffee-500
+        title: 커피전문점 건당 500원 할인
+        source: page
+        evidence: [커피전문점 업종 이용 시 건당 500원 결제일 할인, '일 1회, 월 4회 할인 제공', '백화점, 할인점, 면세점, 공항 등에 입점된 매장 및 상품권, 선불카드 구입/충전 건은 할인 적용되지 않습니다.']
+        target:
+          categories: [cafe]
+        reward: {type: billing_discount, fixed: 500}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 4}
+        tiers: {from: 400000}
+        unmodeled: ['백화점, 할인점, 면세점, 공항 입점 커피전문점은 할인하지 않는다']
+    unmodeled: [자동차 신용결제 구매 0.2% 캐시백(연 10만원)은 구매월부터 3개월 뒤 말일까지 일반 신용결제 누적 100만원 조건이라 계산하지 않는다, '4대 정비업체(스피드메이트, 오토오아시스, 블루핸즈, 오토큐) 건당 2만원 할인은 공통 가맹점이 없어 계산하지 않는다', 카카오T 대리운전 건당 2천원 할인은 택시와 가맹점을 구별할 수 없어 계산하지 않는다, 자동차 구매금액(장기렌터카 렌트료 포함)은 실적에서 빠진다. 신차 구매 업종이 따로 없어 자동차 업종 전체를 실적에서 뺐다. 주차와 통행료와 충전 이용액도 실적에 잡히지 않아 실제보다 적게 잡힌다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 본인과 가족카드의 실적과 할인 횟수와 한도를 합산한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일이 상품 페이지에 없어 확인한 날을 넣었다, assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비는 국내전용 2만 7천원, Mastercard 3만원. 자동차 이용 서비스(주유·충전·전기차, 주차, 하이패스, 커피)는 전월 신용결제 40만원 이상에서 받는다. 주유 80원/L, LPG 40원/L은 월 15만원 이용분까지이고 전기차 30%와 합쳐 월 1만원 한도다. 오토금융 미이용 회원 캐시백은 전월 40만, 80만, 120만원 구간마다 3천, 5천, 1만원이다. 신규 발급 회원은 등록월 다음 달 말까지 실적과 관계없이 자동차 이용 서비스를 받는다. 실적 제외: 카드대출, 연회비, 수수료, 이자, 기프트카드와 선불카드, 상품권과 선불전자지급수단, 지방세, 수도, 국세, 4대보험, 초중고 납입금, 대학등록금, 도시가스, 전기, 자동차 구매금액, 취소.'

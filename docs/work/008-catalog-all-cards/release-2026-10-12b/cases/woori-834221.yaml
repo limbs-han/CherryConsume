@@ -1,0 +1,62 @@
+card: woori-834221
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 이마트 오프라인 건당 5만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {offline-shopping-10: 5000}}
+  calc: 원문 예시. 50,000 × 10% = 5,000
+- name: 30만 직전은 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 0 구간
+- name: 오프라인 월 6천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: olive_young, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {offline-shopping-10: 5000}}
+  - {payment: 1, benefits: {offline-shopping-10: 1000}}
+  calc: 5,000 뒤 남은 1,000
+- name: 70만 구간 온라인 카카오페이 10%+5%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: online_shopping, channel: online, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {online-shopping-10: 5000, online-pay-5: 2500}}
+  calc: 원문 예시. 50,000 × 15% = 7,500. 온라인 한도 8,000 안
+- name: 30만 구간 온라인은 합쳐 월 4천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {online-shopping-10: 4000}}
+  calc: 10% 5,000이 먼저 월 4,000에서 잘리고 5%는 남은 한도가 없다
+- name: 주말 SK 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 100000, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {weekend-fuel-60: 3229}}
+  calc: 100,000 ÷ 1,858 × 60 = 3,229.2 버림
+- name: 평일 주유는 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 수요일
+- name: 스타벅스 건당 1천원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 1000}}
+  calc: 1,500을 건당 1,000으로

@@ -1,0 +1,174 @@
+schema_version: 2
+id: shinhan-boadg4
+issuer: shinhan
+name: K-패스 신한카드
+short_name: 신한 K-패스(모두의카드)
+search_names: [K-패스 신한카드, 모두의카드 신한, 신한 모두의카드]
+kind: credit
+product_codes: [BOADG4]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 7000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1225543_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-10-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 할인하지 않는다, 키오스크나 간편결제로 결제해 가맹점명이 PG사나 간편결제명으로 찍히면 생활 할인에서 빠진다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 7000, 600000: 15000}
+      - {key: daily, per: day, count: 1}
+    benefits:
+      - key: transit-10
+        title: 대중교통(버스·지하철) 10% 결제일 할인
+        source: page
+        evidence: ['대중교통(버스, 지하철) 이용 시 10% 결제일 할인', 후불교통 기능을 이용한 터치(RF) 거래 시 할인, '고속버스, 공항버스, 시외버스, 공항철도는 할인되지 않음', 30만원 이상60만원 미만 7천원, 60만원 이상 1만 5천원]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [공항버스와 공항철도는 할인하지 않는다, 버스와 지하철 요금은 명세서에 적힌 이용일 기준으로 할인한다]
+      - key: easypay-5
+        title: 간편결제 5% 결제일 할인
+        source: page
+        evidence: ['신한 SOL페이, 삼성페이, 네이버페이, 카카오페이, 쿠페이', 해당 간편결제(Pay)에 신한 모두의카드 등록 후 국내 온/오프라인 이용 시 할인됩니다., 간편결제를 통한 해외거래 및 교통카드 이용금액은 할인에서 제외됩니다., 할인 서비스는 거래 건별 이용금액 2만원 이상 시 적용되며, '할인 전 이용금액 기준 일 1회, 6만원까지 할인됩니다.', '간편결제 할인과 생활 할인 서비스는 중복되어 적용되지 않으며, 모두 해당될 경우 간편결제 할인 서비스가 적용됩니다.']
+        target:
+          exclude_categories: [transit]
+          all: true
+        when:
+          - payment: [coupay, kakao_pay, naver_pay, samsung_pay, shinhan_sol_pay]
+          - {region: domestic}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: life-delivery
+        title: 배달앱 5% 결제일 할인
+        source: page
+        evidence: ['배달앱: 배달의 민족, 요기요', 공식 배달앱에서 ‘앱 내 카드결제’ 시 할인되며, 할인 서비스는 거래 건별 이용금액 2만원 이상 시 적용되며, '할인 전 이용금액 기준 일 1회, 6만원까지 할인됩니다.']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: life-convenience
+        title: 편의점 5% 결제일 할인
+        source: page
+        evidence: ['편의점: GS25, CU', '오프라인 매장에 한하여 할인되며, 인터넷이나 모바일 앱을 통한 온라인 거래는 할인되지 않습니다.']
+        target:
+          merchants: [cu, gs25]
+        when:
+          - {channel: offline}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: life-coffee
+        title: 커피전문점 5% 결제일 할인
+        source: page
+        evidence: ['커피전문점: 스타벅스, 메가MGC커피, 매머드커피', 오프라인 매장 및 공식 앱으로 결제 시 할인됩니다.]
+        target:
+          merchants: [mammoth_coffee, mega_coffee, starbucks]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점 입점 매장과 상품권, 선불카드 충전, 선물하기는 할인하지 않는다']
+      - key: life-oliveyoung
+        title: 올리브영 5% 결제일 할인
+        source: page
+        evidence: ['오프라인 매장 및 공식 홈페이지, 공식 앱으로 결제 시 할인됩니다.']
+        target:
+          merchants: [olive_young]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점 입점 매장과 상품권, 선불카드 충전, 선물하기는 할인하지 않는다']
+      - key: life-medical
+        title: 병원·약국 5% 결제일 할인
+        source: page
+        evidence: [병원/약국 업종 할인 서비스는 신한카드 가맹점 업종 기준에 따라 할인됩니다., 동물병원은 할인되지 않습니다.]
+        target:
+          categories: [hospital, pharmacy]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: life-ott
+        title: 넷플릭스·유튜브 프리미엄 5% 결제일 할인
+        source: page
+        evidence: ['OTT: 넷플릭스, 유튜브 프리미엄', 서비스 대상 가맹점 공식 홈페이지에 직접 접속하여 신청한 정기결제(자동이체)를 이용하는 경우에 한하여 서비스 적용됩니다., OTT 할인 서비스는 거래 건별 이용금액 1만원 이상 시 적용됩니다.]
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - billing: [subscription]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['1회성 결제, 앱마켓 인앱결제, 통신요금 합산 결제는 할인하지 않는다']
+      - key: life-telecom
+        title: 이동통신요금 자동납부 5% 결제일 할인
+        source: page
+        evidence: ['이동통신요금 : SKT, KT, LG U+', 순수 통신요금 자동납부 결제금액만 할인됩니다., '약정금액 대납, 지점을 통한 월납, 알뜰폰 요금은 할인되지 않습니다.', 이동통신 할인 서비스는 월 1회 적용됩니다.]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 60000}
+          - {per: month, count: 1}
+          - {shared: daily}
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: [모두의카드는 사업 참여 지역 주민등록 거주자만 신청할 수 있다, K-패스 대중교통비 환급은 모두의카드 앱에 카드를 등록해야 받고 정부 사업이라 계산하지 않는다, 통합 한도는 대중교통 할인에 가장 먼저 쓰고 나머지는 거래 순서대로 쓴다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 일 1회와 6만원 기준은 간편결제와 생활 할인을 합쳐 하루 한 번으로 보았다. 원문이 서비스별인지 합산인지 밝히지 않아 덜 주는 쪽을 골랐다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 이 혜택 구성이 시작된 날을 공식 원문에서 찾지 못해 확인한 날로 두었다, assumed: '2026-10-12'}
+notes: 'K-패스 신한카드 상품 페이지 기준(2026-10-12 headless Chrome). 페이지 제목과 상품명은 신한 모두의카드로 바뀌었다. 카드 출시 2024.03.27, 심의필 제2026-C1a-14743호(2026.09.23). 연회비 국내전용 7천원, Mastercard 1만원. 가족카드 불가. 대중교통 10%, 간편결제 5%, 생활 5%가 월 통합 한도 7천원(30만~60만원 미만), 1만5천원(60만원 이상)을 함께 쓴다. 간편결제와 생활 할인은 겹치지 않고 간편결제가 먼저라 같은 묶음에 두었다. 실적 제외: 카드대출, 연회비, 수수료·이자, 거래 취소, 기프트·선불카드, 상품권·선불전자지급수단, 지방세외수입·환경개선부담금·TV수신료, 국세·지방세, 4대보험, 스쿨뱅킹, 대학(원) 등록금, 아파트관리비, 도시가스·전기·수도요금. 무이자할부는 실적에 들어가고 할인에서 빠진다. 신규 발급 회원은 등록월 다음 달 말까지 30만~60만원 구간.'

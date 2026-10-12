@@ -1,0 +1,49 @@
+card: shinhan-poje1k
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 기본 1%와 특별 2.5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 400000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 50000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base: 1000}}
+  - {payment: 1, benefits: {special-mart: 7500}}
+  - {payment: 2, benefits: {special-cafe: 250}}
+  - {payment: 3, benefits: {special-hospital: 1250}}
+  calc: 10만 × 1% = 1,000. 이마트는 영역 월 30만원까지 × 2.5% = 7,500. 커피 250, 병원 1,250
+- name: 100만 구간 기본 1.5% 특별 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base: 1500}}
+  - {payment: 1, benefits: {special-hospital: 5000}}
+  calc: 10만 × 1.5% = 1,500. 10만 × 5% = 5,000
+- name: 경계 직전 399999 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만 적립 없음
+- name: 200만 구간 통신요금 100% 5천 포인트
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-11T09:00, amount: 60000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {subscribe-100: 5000}}
+  - {payment: 1, benefits: {base: 900}}
+  calc: 통신요금 6만원 100%지만 한도 5천. 통신요금은 기본 적립에서 빠짐. 식당 6만 × 1.5% = 900
+- name: 경계 직전 1999999 담을수록 없음
+  prev_month_spend: 1999999
+  payments:
+  - {at: 2026-11-10T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 카드 이용금액만으로는 200만원부터

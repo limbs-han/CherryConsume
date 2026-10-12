@@ -1,0 +1,106 @@
+schema_version: 2
+id: shinhan-axgc75
+issuer: shinhan
+name: 신한카드 YaY
+short_name: 신한 YaY
+search_names: [야이]
+kind: credit
+product_codes:
+  - '202005150001'
+  - AXGC75
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 23000}
+  - {scope: global, brand: visa, amount: 26000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1196674_2207.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202005150001', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-03-22
+    source: page
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility.water]
+    new_card: {tier: 500000}
+    benefit_exclusions:
+      categories: [annual_fee, gift_card, prepaid_charge]
+      unmodeled: [포인트 사용 거래의 포인트 금액은 적립하지 않는다, YaY로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체를 적립하지 않는다]
+    benefits:
+      - key: ott-30
+        title: OTT 정기결제 30% 적립
+        source: page
+        evidence: [OTT 30% 포인트 적립, '넷플릭스, 유튜브 프리미엄, 왓챠플레이', 월 5천 포인트까지 적립, 서비스 대상 가맹점 공식 사이트에 직접 접속하여 신청한 정기결제(자동이체) 이용 건에 한하여 서비스 적용됩니다., 마리아쥬 서비스는 신한카드 YaY의 전월(1일~말일) 이용금액 50만원 이상인 경우 당월(1일~말일) 이용금액에 대하여 포인트 적립됩니다.]
+        target:
+          merchants: [netflix, watcha, youtube_premium]
+        when:
+          - billing: [autopay]
+          - {region: domestic}
+        reward: {type: points, program: mysinhan_point, rate: 30}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        unmodeled: ['앱 내 결제, 앱마켓 결제, 통신요금 합산 결제는 제외한다']
+      - key: delivery-15
+        title: 배달앱 15% 적립
+        source: page
+        evidence: [밀딜리버리 기본 15% 포인트 적립, '배달의민족, 요기요, 쿡솜씨, 프레딧', '월 1만 포인트까지 적립, 월 합산 2회 제공', 서비스 대상 가맹점 공식 사이트(앱)에 직접 접속하여 이용하는 경우에 한하여 서비스 적용되며 현장 카드 결제는 서비스 제공되지 않습니다.]
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: points, program: mysinhan_point, rate: 15}
+        limits:
+          - {per: month, count: 2}
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        unmodeled: ['쿡솜씨, 프레딧은 공통 가맹점이 없어 계산하지 않는다', '같은 달 OTT와 밀딜리버리를 함께 쓰면 밀딜리버리에 15%를 더 적립(월 1만 포인트)하는데, 다른 결제에 달린 조건이라 계산하지 않는다']
+      - key: online-shopping-2500
+        title: 온라인쇼핑 5만원 이상 2,500포인트 적립
+        source: page
+        evidence: ['쿠팡, G마켓, 11번가, 롯데ON, SSG.COM, 마켓컬리, 오아시스마켓', '1회 2,500포인트, 일 1회, 월 합산 5회 제공', 건당 5만원 이상 이용 시 포인트 적립]
+        target:
+          merchants: [coupang, eleven_st, gmarket, kurly, lotte_on, oasis_market, ssg_com]
+        when:
+          - {channel: online}
+          - {region: domestic}
+          - amount: {min: 50000}
+        reward: {type: points, program: mysinhan_point, fixed: 2500}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+        tiers: {from: 500000}
+      - key: home-game-10
+        title: 앱마켓 10% 적립
+        source: page
+        evidence: [홈게임방 10% 포인트 적립, '앱마켓, NC소프트, 레고 온라인스토어', '월 1만 포인트까지 적립, 월 합산 3회 제공', '앱마켓은 구글 플레이 스토어, 애플 앱스토어에 한하여 서비스 적용됩니다.']
+        target:
+          merchants: [app_store, google_play]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: month, count: 3}
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        unmodeled: [NC소프트 N코인과 레고 온라인스토어는 공통 가맹점이 없어 계산하지 않는다]
+      - key: home-interior-10
+        title: 오늘의집 10% 적립
+        source: page
+        evidence: [홈테리어 10% 포인트 적립, '런드리고, 오늘의집', '월 1만 포인트까지 적립, 월 합산 3회 제공', 서비스 대상 가맹점 공식 사이트(앱)에 직접 접속하여 이용하는 경우에 한하여 서비스 적용됩니다.]
+        target:
+          merchants: [ohouse]
+        when:
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: month, count: 3}
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        unmodeled: [런드리고는 공통 가맹점이 없어 계산하지 않는다]
+    unmodeled: ['홈바/홈카페 10% 적립(스타벅스 사이렌오더, 와인앤모어 오프라인)은 사이렌오더를 다른 스타벅스 결제와 나눌 수 없고 와인앤모어 가맹점이 없어 계산하지 않는다', 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 서비스는 이용한 거래 순서대로 적용한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2020.05.19이고 카드사 공통 규칙 시작일을 시작일로 둔다, assumed: '2024-03-22'}
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2020.05.19. 연회비 국내 2.3만원, 해외겸용(Visa) 2.6만원. 모든 서비스는 전월 이용금액 50만원 이상, 국내 거래만. 신규 회원은 등록월 다음 달 말까지 실적과 관계없이 제공.

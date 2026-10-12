@@ -1,0 +1,62 @@
+card: shinhan-aebc6s
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 스타벅스 20% 1만원까지
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-20: 2000}, counted: 0}
+  calc: 1만원까지 20% = 2,000
+- name: 20만 직전 할인 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 15000}
+  calc: 20만원 미만
+- name: 이마트 5% 통합 한도 5천
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  - {payment: 1, benefits: {}}
+  calc: 100,000 x 5% = 5,000으로 20만 구간 한도 소진
+- name: 80만 구간 아웃백 20%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 150000, merchant: outback, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {outback-20: 20000}}
+  calc: 10만원까지 20% = 20,000
+- name: GS샵 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 40000, merchant: gs_shop, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {gs-shop-5: 2000}}
+  calc: 40,000 x 5% = 2,000
+- name: 파리크라상 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 30000, merchant: paris_croissant, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {paris-croissant-20: 7500}}
+  calc: 현장 할인이라 낸 돈 30,000은 할인 전 37,500. 37,500 x 20% = 7,500
+- name: 현대백화점 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 60000, merchant: hyundai_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {department-5: 3000}}
+  calc: 60,000 x 5% = 3,000
+- name: GS칼텍스 리터당 40원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: gs_caltex, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-40: 1076}}
+  calc: 50,000 / 1,858원 x 40 = 1,076 원 미만 버림

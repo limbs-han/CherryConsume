@@ -1,0 +1,35 @@
+card: samsung-aap1798
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 메가스터디 온라인 70만 구간 9천원 한도
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 6000, merchant: megastudy, channel: online}
+  - {at: 2026-11-04T20:00, amount: 50000, merchant: megastudy, channel: online}
+  - {at: 2026-11-05T20:00, amount: 50000, merchant: megastudy, channel: online}
+  expect:
+  - {payment: 0, benefits: {megastudy: 6000}, counted: 6000}
+  - {payment: 1, benefits: {megastudy: 3000}, counted: 50000}
+  - {payment: 2, benefits: {}, counted: 50000}
+  calc: 6,000 전액. 남은 한도 9,000 − 6,000 = 3,000. 한도를 다 써서 세 번째 없음
+- name: 실적 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: megastudy, channel: online}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 0 구간은 혜택 없음
+- name: 생활요금과 보험 통합 월 3회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 55000, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T09:00, amount: 80000, category: insurance.private}
+  - {at: 2026-11-07T09:00, amount: 150000, category: apartment_fee, billing: autopay}
+  - {at: 2026-11-08T09:00, amount: 22000, merchant: kt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-1000: 1000}, counted: 55000}
+  - {payment: 1, benefits: {insurance-1000: 1000}, counted: 80000}
+  - {payment: 2, benefits: {living-1000: 1000}, counted: 0}
+  - {payment: 3, benefits: {}, counted: 22000}
+  calc: 세 번 1,000씩. 아파트 관리비는 실적 제외. 네 번째는 월 3회를 다 썼다

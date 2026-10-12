@@ -1,0 +1,53 @@
+card: samsung-aap1766
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 50만 구간 리터당 70원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-70: 3500}, counted: 92900}
+  calc: 92,900 ÷ 1,858 = 50리터 × 70원 = 3,500원. 할인 건도 실적 인정
+- name: 주유 100만 구간 리터당 90원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-90: 4500}, counted: 92900}
+  calc: 50리터 × 90원 = 4,500원
+- name: 실적 50만 직전이면 0.5%만
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 464}, counted: 92900}
+  - {payment: 1, benefits: {base-0-5: 100}, counted: 20000}
+  calc: 92,900 × 0.5% = 464.5, 버림 464. 20,000 × 0.5% = 100
+- name: 생활 필수 1.5%와 영화 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: cu, channel: offline}
+  - {at: 2026-11-06T20:00, amount: 100000, merchant: coupang, channel: online}
+  - {at: 2026-11-07T19:00, amount: 14000, merchant: cgv}
+  - {at: 2026-11-08T19:00, amount: 14000, merchant: cgv}
+  expect:
+  - {payment: 0, benefits: {convenience-1-5: 300}, counted: 20000}
+  - {payment: 1, benefits: {online-1-5: 1500}, counted: 100000}
+  - {payment: 2, benefits: {movie-5000: 5000}, counted: 14000}
+  - {payment: 3, benefits: {base-0-5: 70}, counted: 14000}
+  calc: 20,000 × 1.5% = 300, 100,000 × 1.5% = 1,500. 영화 5,000 월 1회 뒤는 0.5% 70
+- name: 할인점 배달앱 커피 스타벅스 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: emart, channel: offline}
+  - {at: 2026-11-05T19:00, amount: 20000, merchant: baemin, channel: online}
+  - {at: 2026-11-06T09:00, amount: 10000, merchant: twosome, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: starbucks, channel: online}
+  expect:
+  - {payment: 0, benefits: {mart-1-5: 1500}, counted: 100000}
+  - {payment: 1, benefits: {delivery-1-5: 300}, counted: 20000}
+  - {payment: 2, benefits: {coffee-1-5: 150}, counted: 10000}
+  - {payment: 3, benefits: {starbucks-1-5: 150}, counted: 10000}
+  calc: 100,000 × 1.5% = 1,500, 20,000 × 1.5% = 300, 10,000 × 1.5% = 150. 스타벅스는 사이렌오더도 1.5%

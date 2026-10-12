@@ -1,0 +1,48 @@
+card: shinhan-axhc7p
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 기본 0.1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T10:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 20}, counted: 20000}
+  calc: 20,000 × 0.1% = 20
+- name: 30만 직전이면 롯데마트도 기본 0.1%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, merchant: lotte_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-1: 50}}
+  calc: 30만원 미만 구간이라 특별적립 없음. 50,000 × 0.1% = 50
+- name: 롯데마트 특별 0.5%와 L.PAY 오프라인 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 200000, merchant: lotte_mart, channel: offline, payment_method: l_pay}
+  expect:
+  - {payment: 0, benefits: {special-lotte-0-5: 1000, lpay-offline-0-5: 750}}
+  calc: 200,000 × 0.5% = 1,000. 추가는 건당 15만원까지 150,000 × 0.5% = 750
+- name: 롯데ON L.PAY 온라인 2.5% 건당 5만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 80000, merchant: lotte_on, channel: online, payment_method: l_pay}
+  expect:
+  - {payment: 0, benefits: {special-lotte-0-5: 400, lpay-online-2-5: 1250}}
+  calc: 80,000 × 0.5% = 400. 추가는 50,000 × 2.5% = 1,250
+- name: 택시와 지하철 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 20000, category: taxi, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 2000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-taxi-0-5: 100}}
+  - {payment: 1, benefits: {special-transit-0-5: 10}, counted: 0}
+  calc: 20,000 × 0.5% = 100. 2,000 × 0.5% = 10. 지하철은 실적 제외
+- name: 통합 한도 5천P를 넘은 금액은 기본 0.1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 1100000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-lotte-0-5: 5000, base-0-1: 100}}
+  calc: 1,000,000 × 0.5% = 5,000으로 한도. 남은 100,000 × 0.1% = 100

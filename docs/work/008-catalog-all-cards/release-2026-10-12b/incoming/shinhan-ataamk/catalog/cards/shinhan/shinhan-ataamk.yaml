@@ -1,0 +1,168 @@
+schema_version: 2
+id: shinhan-ataamk
+issuer: shinhan
+name: 신한카드 B.Big(삑)
+short_name: 신한 B.Big
+kind: credit
+product_codes: [ATAAMK]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 13000}
+  - {scope: global, brand: unionpay, amount: 10000}
+  - {scope: domestic, brand: amex, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1187938_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2015-02-10
+    source: page
+    tiers: [0, 300000, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card.prepaid_card, prepaid_charge]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 500000: 12000, 1000000: 15000, 1500000: 20000}
+      - {key: online_movie_day, per: day, count: 2}
+      - {key: online_movie_month, per: month, count: 4}
+      - {key: online_movie_year, per: year, count: 12}
+    benefits:
+      - key: transit-daily
+        title: 버스·지하철 후불교통 일 최대 600원 할인
+        source: page
+        evidence: [30만원 이상 50만원 미만 | 일 200원 | 50만원 이상 100만원 미만 | 일 400원 | 100만원 이상 | 일 600원, 버스/지하철 후불 교통을 이용한 일수를 기준으로 할인 적용됩니다., 후불교통카드가 아닌 비교통 카드는 서비스 제공이 불가합니다., 당일 후불교통 이용금액이 정액 할인 금액보다 적게 이용한 경우는 당일 후불교통 이용금액으로 할인 적용됩니다, 신규 발급 회원에 대해서는 카드사용 등록월의 익월말(등록월+1개월)까지 버스/지하철 후불교통 이용금액 일 200원 할인 적용됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: day
+            amount: {300000: 200, 500000: 400, 1000000: 600}
+        tiers: {from: 300000}
+        unmodeled: [당일 후불교통 이용금액이 200원 미만이면 할인하지 않는다]
+      - key: taxi-10
+        title: 택시 10% 할인
+        source: page
+        evidence: [택시/KTX 이용 금액 10% 할인, 30만원 이상 50만원 미만 | 5천원 | 50만원 이상 100만원 미만 | 8천원 | 100만원 이상 150만원 미만 | 1만 2천원 | 150만원 이상 | 1만 5천원, '택시/KTX 가맹점 통합 일 1회, 건당 5만원까지 할인 적용됩니다.']
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - per: month
+            amount: {300000: 5000, 500000: 8000, 1000000: 12000, 1500000: 15000}
+        tiers: {from: 300000}
+        unmodeled: [KTX 10% 할인은 공통 가맹점 코레일이 KTX 밖의 열차까지 넓어 계산하지 않는다]
+      - key: cgv-4000
+        title: CGV 영화 월 1회 4천원 할인
+        source: page
+        evidence: [CGV 영화 월 1회 최대 4천원 결제일 할인, '본인, 동반자와 상관없이 총 결제 금액에서 할인 적용되며, 총 결제금액이 4천원 미만인 경우 해당 금액에 대해서 할인 적용', 서비스 이용 전월 해당 카드로 일시불+할부 이용 금액이 30만원 이상인 경우 서비스가 제공됩니다.]
+        target:
+          merchants: [cgv]
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [예매 전 영화관 매점 이용에 할인이 먼저 적용될 수 있다]
+      - key: online-movie-1500
+        title: CGV·메가박스 온라인 예매 9천원 이상 1,500원 할인
+        source: page
+        evidence: ['9천원 이상일 경우 1,500원 할인, 1만 8천원 이상일 경우 3,000원 할인', '제공기준: 통합 1일 2회, 월 4회, 연 12회 제공', 온라인 영화 할인 서비스의 경우 공식 홈페이지 및 APP을 통해 예매 시 제공됩니다.]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - channel: online
+            amount: {min: 9000, below: 18000}
+        reward: {type: billing_discount, fixed: 1500}
+        limits:
+          - {shared: online_movie_day}
+          - {shared: online_movie_month}
+          - {shared: online_movie_year}
+        tiers: {from: 300000}
+      - key: online-movie-3000
+        title: CGV·메가박스 온라인 예매 1만 8천원 이상 3천원 할인
+        source: page
+        evidence: ['9천원 이상일 경우 1,500원 할인, 1만 8천원 이상일 경우 3,000원 할인', '제공기준: 통합 1일 2회, 월 4회, 연 12회 제공']
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - channel: online
+            amount: {min: 18000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {shared: online_movie_day}
+          - {shared: online_movie_month}
+          - {shared: online_movie_year}
+        tiers: {from: 300000}
+      - key: department-5
+        title: 4대 백화점 5% 할인
+        source: page
+        evidence: ['4대 백화점(롯데, 현대, 신세계, 갤러리아) 5% 할인', '일 1회, 월 2회, 건당 10만원까지 할인 적용', 싱품권 구매 및 온라인 매장 이용건은 할인에서 제외됩니다.]
+        target:
+          merchants: [galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: convenience-5
+        title: 편의점 5% 할인
+        source: page
+        evidence: [편의점 5% 할인, '일 1회, 월 5회, 건당 1만원까지 할인 적용', 상기 서비스는 통합할인한도 범위 내에서 제공이 됩니다.]
+        target:
+          categories: [convenience]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: cafe-10
+        title: 커피전문점 10% 할인
+        source: page
+        evidence: ['스타벅스, 커피빈, 엔제리너스, 카페베네 매장', '일 1회, 월 8회, 건당 1만원까지 할인 적용']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 8}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점, 면세점 입점 커피전문점은 할인하지 않을 수 있다']
+      - key: telecom-5
+        title: 이동통신요금 5% 할인
+        source: page
+        evidence: ['SKT, KT, LG U+ 이동통신요금(결합상품 제외)', '월 2건, 건당 5만원까지 할인 적용']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [결합상품 요금은 할인하지 않는다]
+    unmodeled: ['전기요금, 통신요금, 해외이용금액 5% 연간 캐시백은 전년도 이용금액 1천만원 이상 조건이라 계산하지 않는다', 통합할인 순서는 카드사 전표 매입 순서를 따른다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비 Visa 1만 3천원, UPI 1만원, S&(아멕스 망 국내전용) 1만원. 버스·지하철 후불교통은 이용한 날마다 전월 30만, 50만, 100만원 구간에 따라 200원, 400원, 600원까지 할인한다. 택시는 10%를 일 1회 건당 5만원까지 구간별 월 5천~1만 5천원 할인한다. CGV 월 1회 4천원, CGV·메가박스 온라인 예매 1,500원 또는 3천원. 백화점, 편의점, 커피, 이동통신 할인은 통합 한도 5천~2만원 안에서 준다. 실적 제외: 현금서비스, 카드론, 연회비, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 취소. 교통카드 이용금액은 전전월 금액이 반영되어 카드사 기본값 month_offset을 쓴다. 신규 발급 회원은 등록월 다음 달 말까지 30만원 구간 한도를 적용한다.'

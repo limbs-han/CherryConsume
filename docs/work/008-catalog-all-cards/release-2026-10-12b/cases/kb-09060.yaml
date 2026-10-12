@@ -1,0 +1,32 @@
+card: kb-09060
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 CU KB Pay 50%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {cu-30: 3000, cu-kbpay-20: 2000}, counted: 0}
+  calc: 30% 3,000원과 KB Pay 20% 2,000원. 할인 건은 실적 제외
+- name: 40만 직전 CU 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 0 구간
+- name: SKT 자동납부 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 3000}, counted: 0}
+  calc: 60,000원 × 5% = 3,000원
+- name: 넷플릭스 정기결제 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-10: 1700}, counted: 0}
+  calc: 17,000원 × 10% = 1,700원

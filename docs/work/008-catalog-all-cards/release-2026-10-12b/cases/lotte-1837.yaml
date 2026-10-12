@@ -1,0 +1,50 @@
+card: lotte-1837
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 80만 구간 기본 1%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 30000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {basic-1pct: 300}, counted: 30000}
+  calc: 30,000 × 1% = 300
+- name: 80만 직전이면 혜택 없음
+  prev_month_spend: 799999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 30000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 799,999원은 0 구간
+- name: 병원 1.5%와 2만원 미만은 기본 1%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 40000, category: hospital, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 19999, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {hospital-1-5pct: 600}}
+  - {payment: 1, benefits: {basic-1pct: 199}}
+  calc: 40,000 × 1.5% = 600. 19,999원은 2만원 미만이라 19,999 × 1% = 199
+- name: 학원 오프라인 1.5%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 200000, category: education.academy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {education-1-5: 3000}}
+  calc: 200,000 × 1.5% = 3,000
+- name: 온라인 쇼핑 1.5%와 특별할인 공동 한도 1만5천원 뒤 넘친 금액은 1%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 900000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 200000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-1-5: 13500}}
+  - {payment: 1, benefits: {online-1-5: 1500, basic-1pct: 1000}}
+  calc: 900,000 × 1.5% = 13,500. 남은 한도 1,500은 100,000원분이고 나머지 100,000 × 1% = 1,000
+- name: 마트 5만원 이상 4천원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-mart-4000: 4000}}
+  calc: 5만원 이상 오프라인 마트 4,000원

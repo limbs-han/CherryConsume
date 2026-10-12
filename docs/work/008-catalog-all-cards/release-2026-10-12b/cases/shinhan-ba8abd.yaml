@@ -1,0 +1,50 @@
+card: shinhan-ba8abd
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 커피 선택 20% 20만 구간 한도 2천원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: choice, choice: coffee, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 5000, category: cafe, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 6000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-20: 1000}, counted: 0}
+  - {payment: 1, benefits: {coffee-20: 1000}, counted: 0}
+  calc: 5,000 x 20% = 1,000. 6,000 x 20% = 1,200이나 남은 한도 1,000
+- name: 20만 직전 할인 없음
+  prev_month_spend: 199999
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: choice, choice: coffee, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 5000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 5000}
+  calc: 20만원 미만이라 할인 없음
+- name: 쇼핑 선택 1회 10만원까지 10%
+  prev_month_spend: 1200000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: choice, choice: shopping, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-04T10:00, amount: 300000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-10: 10000}}
+  calc: 승인금액 10만원까지 10% = 10,000
+- name: 교통 선택 지하철 10%
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: choice, choice: transit, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-10: 150}}
+  calc: 1,500 x 10% = 150

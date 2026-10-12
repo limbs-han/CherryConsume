@@ -1,0 +1,95 @@
+schema_version: 2
+id: shinhan-ba8c82
+issuer: shinhan
+name: 나주사랑 신한카드 S-Choice(선택형) 체크
+short_name: 신한 나주사랑 S-Choice 체크
+kind: check
+product_codes: [BA8C82]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1197175_2206.html', fetched_at: 2026-10-12, review_no: 제20200825-Dpp-001호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2020-08-27
+    source: page
+    tiers: [0, 200000, 300000, 500000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    options:
+      - key: choice
+        title: S-Choice 선택 서비스
+        choices:
+          - {key: transit, title: 교통 10%}
+          - {key: coffee, title: 커피전문점 20%}
+          - {key: shopping, title: 백화점·할인점 10%}
+        default: null
+        change: immediate
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 2000, 300000: 3000, 500000: 5000, 800000: 8000, 1200000: 12000}
+    benefits:
+      - key: transit-10
+        title: 버스·지하철·택시 10% 캐시백
+        source: page
+        evidence: ['버스, 지하철, 택시 이용금액의 10% 할인(캐시백)', '택시: T-money(한국스마트카드), eb(캐시비) 단말기 택시의 승인 건에 한해 할인 적용']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        when:
+          - option:
+              choice: [transit]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [공항버스·공항리무진·공항철도는 할인하지 않는다, 택시는 티머니·캐시비 단말기 택시 승인 건만 할인한다]
+      - key: coffee-20
+        title: 커피전문점 20% 캐시백
+        source: page
+        evidence: [모든 커피 전문점 이용 금액의 20% 할인(캐시백), '1일 1회, 월 최대 5회 제공', 신한카드 업종 기준 “커피전문점”인 경우 할인 적용]
+        target:
+          categories: [cafe]
+        when:
+          - option:
+              choice: [coffee]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: shopping-10
+        title: 백화점·할인점 10% 캐시백
+        source: page
+        evidence: [4대 백화점 및 3대 할인점 이용 금액의 10% 할인(캐시백), '백화점: 현대, 롯데, 신세계, 갤러리아', '할인점: 이마트, 롯데마트, 홈플러스', '1일 1회, 월 3회 제공', 백화점 및 할인점 할인 전 승인금액 기준 1회 10만 원까지 제공]
+        target:
+          merchants: [emart, galleria, homeplus, hyundai_department, lotte_department, lotte_mart, shinsegae_department]
+          exclude_merchants: [emart_everyday, homeplus_express, lotte_super]
+        when:
+          - option:
+              choice: [shopping]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 200000}
+    unmodeled: [다른 쿠폰이나 할인 혜택과 함께 받을 수 없다]
+open_questions:
+  - {path: 'revisions[0].spend', question: 상품 페이지에 전월 실적 제외 대상이 적혀 있지 않다, assumed: 제외 없음}
+  - {path: 'revisions[0].new_card', question: 신규 발급월 포함 2개월 2천원 한도라 기준일을 발급일로 두었다, assumed: issue}
+notes: 신한카드 상품 페이지 기준. 연회비 없음. 나주시 관할 우체국에서 즉시 발급할 수 있다는 안내만 있고 나주시민 전용 문구는 없어 일반 상품으로 담았다. 세 서비스 중 하나를 고르고 변경 당일 실적부터 적용된다. 할인은 캐시백이고 전월 실적 구간별 통합 한도 2천/3천/5천/8천/1만2천원 안에서 준다. 실적은 캐시백 적용 후 승인금액 기준이고 교통카드는 전전월 이용실적. 이마트, 롯데마트, 홈플러스는 SSM 제외.

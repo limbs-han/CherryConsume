@@ -1,0 +1,48 @@
+card: kb-09152
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 토요일 음식점 2.0%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-07T12:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-07: 700, weekend-05: 500, dining-08: 800}, counted: 100000}
+  calc: 0.7% + 0.5% + 0.8% = 2.0%
+- name: 평일 기타 0.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other}
+  expect:
+  - {payment: 0, benefits: {base-07: 700}}
+  calc: 100,000 × 0.7%
+- name: 해외 2% 월 100만원까지
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1200000, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 20000}}
+  calc: 100만원 × 2%
+- name: 영화 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 14000, merchant: cgv, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-07: 98}}
+  calc: 30만 미만이라 영화 할인 없음. 14,000 × 0.7% = 98
+- name: 영화 3,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 14000, merchant: cgv, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-07: 98, movie-3500: 3500}}
+  calc: 정액 3,500원
+- name: 평일 택시와 SKT 자동납부
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: taxi}
+  - {at: 2026-11-04T13:00, amount: 50000, category: telecom.mobile, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {base-07: 140, transit-08: 160}}
+  - {payment: 1, benefits: {base-07: 350, telecom-08: 400}}
+  calc: 20,000 × 0.7%, 0.8%. 50,000 × 0.7%, 0.8%

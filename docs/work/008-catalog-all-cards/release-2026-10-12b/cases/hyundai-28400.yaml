@@ -1,0 +1,40 @@
+card: hyundai-28400
+holder:
+  started_on: '2026-01-01'
+  options: [{option: fuel_type, choice: gasoline_diesel, effective_from: '2026-01-01'}]
+cases:
+- name: 30만 이상 SK에너지 리터당 150원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-150: 4843}, counted: 0}
+  calc: 60,000 x 150 / 1,858 = 4,843.9 버림 4,843. 할인 받은 결제는 실적 제외
+- name: 1회 6만원까지만 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: hd_oilbank, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-150: 4843}, counted: 0}
+  calc: 6만원까지만 넣어 4,843
+- name: 30만 직전은 할인과 기본 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만 할인과 기본 적립 제외
+- name: 기본 0.2% 반올림
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10300, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-02: 21}, counted: 10300}
+  calc: 10,300 x 0.2% = 20.6 반올림 21
+- name: GS칼텍스 리터당 60 M포인트는 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-06T10:00, amount: 92900, merchant: gs_caltex}
+  expect:
+  - {payment: 0, benefits: {gs-caltex-60p: 3000}, counted: 92900}
+  calc: 92,900 / 1,858 = 50리터 x 60 = 3,000P

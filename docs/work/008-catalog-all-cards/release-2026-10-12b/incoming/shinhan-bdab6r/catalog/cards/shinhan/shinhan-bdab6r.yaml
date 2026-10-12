@@ -1,0 +1,74 @@
+schema_version: 2
+id: shinhan-bdab6r
+issuer: shinhan
+name: 신한카드 Edu
+short_name: 신한 Edu
+kind: credit
+product_codes: [BDAB6R]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 23000}
+  - {scope: domestic, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1188281_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2017-02-20
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.academy, education.kindergarten, education.study_material, gift_card.prepaid_card, prepaid_charge]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+    benefits:
+      - key: edu-cashback
+        title: 학원·학습지·유치원 5~10% 캐시백
+        source: page
+        evidence: [50만원 이상 100만원 미만 | 5% | 1만 5천원 | 100만원 이상 150만원 미만 | 7% | 3만원 | 150만원 이상 | 10% | 4만 5천원, '일반전문학원, 학습지, 유치원은 신한카드 가맹점 업종 기준으로 적용되며, 학원방문 결제시에만 적용됩니다.']
+        target:
+          categories: [education.academy, education.kindergarten, education.study_material]
+        when:
+          - {channel: offline}
+        reward:
+          type: cashback
+          rate: {500000: 5, 1000000: 7, 1500000: 10}
+        limits:
+          - per: month
+            amount: {500000: 15000, 1000000: 30000, 1500000: 45000}
+        tiers: {from: 500000}
+        unmodeled: [전월 이용금액과 캐시백 한도는 본인과 가족카드를 합산한다]
+      - key: mart-1
+        title: 3대 마트 1% 캐시백
+        source: page
+        evidence: ['3대 마트(홈플러스, 이마트, 롯데마트) 이용 시 1% 캐시백', '기업형 슈퍼마켓(에브리데이, 익스프레스, 롯데슈퍼) 및 온라인 마트, 상품권 구매, 주차장 이용은 제외됩니다.', '마트, 의료 각 영역별 이용금액 20만원까지 적용됩니다.']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 500000}
+      - key: medical-1
+        title: 병원·약국 1% 캐시백
+        source: page
+        evidence: ['의료(병원, 약국) 이용 시 1% 캐시백', '마트, 의료 각 영역별 이용금액 20만원까지 적용됩니다.', 병원, 약국은 신한카드 가맹점 업종 기준으로 제공됩니다.]
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 500000}
+    unmodeled: ['교육업종 20만원 이상 결제 건수에 따른 추가 캐시백(2건 3천원, 3건 4천원, 4건 이상 5천원)은 달 안의 건수로 정해져 계산하지 않는다', 당월 교육비 결제가 있을 때 주는 아파트관리비 자동이체 5천원 캐시백은 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비 Mastercard 2만 3천원, S&(아멕스 망 국내전용) 2만원. 학원·학습지·유치원 업종을 전월 50만, 100만, 150만원 구간에 따라 5%, 7%, 10% 캐시백하고 월 1만 5천, 3만, 4만 5천원까지 준다. 3대 마트와 병원·약국은 50만원 이상일 때 1%를 영역마다 월 이용금액 20만원까지 준다. 실적 제외: 학원·학습지·유치원 업종 이용금액 전체, 카드대출, 연회비, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 취소. 교통 이용금액은 전전월 금액이 반영되어 카드사 기본값 month_offset을 쓴다. 신규 발급 회원은 등록월 다음 달 말까지 50만원 구간을 적용한다.'

@@ -1,0 +1,28 @@
+card: lotte-p14345-a14345
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만원 직전이면 기본할인 0.5%
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: grocery_mart}
+  expect:
+  - payment: 0
+    benefits: {basic-discount-0-5: 250}
+  calc: 999,999원은 100만원 미만. 50,000 × 0.5% = 250
+- name: 100만원 이상이면 특별할인 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: grocery_mart}
+  expect:
+  - payment: 0
+    benefits: {special-discount-1: 500}
+  calc: 50,000 × 1% = 500. 기본할인과 중복 없음
+- name: 지하철은 할인 제외
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.subway}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 대중교통은 할인 제외

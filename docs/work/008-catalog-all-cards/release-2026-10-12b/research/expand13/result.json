@@ -1,0 +1,1017 @@
+[
+  {
+    "card_id": "shinhan-aebc6s",
+    "status": "ready",
+    "reason": "CMA R+ Love 체크. 20만~80만 구간 통합 한도 5천~3만원, GS칼텍스 리터당 40원, 백화점·할인점·GS샵 5%, 아웃백·파리크라상 20%, 스타벅스 20%. 서가앤쿡, 영화(금액 기준 없음), 테마파크(3개월 누적)는 뺐다. 실적 제외 목록이 \"등\"이라 open_questions",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1187977_2206.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201503090003"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "서가앤쿡 30% 할인(패밀리 레스토랑 통합 월 2회)은 공통 가맹점이 없어 계산하지 않는다",
+      "CGV·메가박스 영화 최대 7천원 할인은 금액 기준이 원문에 없어 계산하지 않는다",
+      "롯데월드·서울랜드 50% 할인은 직전 3개월 누적 30만원 조건이라 계산하지 않는다",
+      "CMA 추가 금리와 이체·출금 수수료 면제는 결제 혜택이 아니라 계산하지 않는다",
+      "할인 적용 후 금액으로 실적을 더하는데 할인액만 뺄 수 없어 할인 받은 결제 전체를 실적에서 뺐다. 실적이 실제보다 적게 잡힌다",
+      "대형 백화점·할인점·쇼핑몰 입점 매장은 식음료 할인에서 제외한다",
+      "다른 쿠폰이나 카드 할인과 중복으로 받을 수 없다",
+      "해외 이용금액은 매입일 기준으로 실적 달을 정한다",
+      "fuel-40: 리터는 정유사 휘발유 표준 고시유가로 환산한다",
+      "fuel-40: LPG는 제외한다",
+      "outback-20: 단품 메뉴만 할인하고 세트와 행사 메뉴는 제외한다",
+      "paris-croissant-20: 스마트 매장과 세븐스프링스 코엑스점은 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].spend.exclude_categories: 원문 실적 제외는 연회비, 각종수수료, 이자, 거래취소, 선불카드 충전, 기프트카드 구매 \"등\"이다. 나머지 항목을 알 수 없다 (assumed annual_fee, gift_card.prepaid_card, prepaid_charge)",
+      "revisions[0].effective_from: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2015.03.09이고 카드사 공통 규칙 시작일을 시작일로 둔다 (assumed 2024-03-22)"
+    ]
+  },
+  {
+    "card_id": "shinhan-afia7d",
+    "status": "exclude",
+    "reason": "신한카드 Hi-Point MyShop PLATINUM#는 사업성 경비 적립, 가맹점 대금 입금계좌 보너스, 개인사업자 공통서비스를 주는 개인사업자(가맹점주)용 카드라 소호 카드로 보고 뺀다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1188430_2207.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-afkaun",
+    "status": "exclude",
+    "reason": "신한금융 은퇴 브랜드 미래설계 고객 전용 상품이고 은행 지점에서만 발급. 일반 4Tune 체크와 같은 서비스라고 적혀 있음",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1195588_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-aqdd6n",
+    "status": "ready",
+    "reason": "신한카드 봄(신용). 국내외 0.2/0.5% 캐시백, 버스·지하철 후불교통 일 100/200원, 넷플릭스·유튜브 프리미엄 월 1만원. 분기·연 추가 캐시백은 누적이라 unmodeled",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1221135_2207.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "분기 이용금액 300만원 이상 5천원과 연 이용금액 1500만원 이상 2만원 추가 캐시백은 분기와 연 누적이라 계산하지 않는다",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "서비스는 거래 순서대로 적용한다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-aqed6o",
+    "status": "ready",
+    "reason": "봄(체크). 0.1/0.3% 캐시백 한도 없음, 버스·지하철 이용일 100/200원. 분기·연 누적 추가 캐시백은 뺐다. 신용 봄(shinhan-aqdd6n)과 다른 상품",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1221136_2206.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202303140002"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "분기 이용금액 300만원 이상 2천원, 연 이용금액 1,500만원 이상 5천원 추가 캐시백은 기간 누적 조건이라 계산하지 않는다",
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "해외 이용금액은 매입일 기준으로 실적 달을 정한다",
+      "캐시백은 거래 순서대로 적용한다",
+      "transit-daily: 국내 후불교통 서비스 지역의 후불교통 이용만 대상이다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2023.03.20이고 카드사 공통 규칙 시작일을 시작일로 둔다 (assumed 2024-03-22)"
+    ]
+  },
+  {
+    "card_id": "shinhan-asaact",
+    "status": "ready",
+    "reason": "신한카드 S-Line 체크. 연회비 없음. 30만 이상 기본적립 0.2%, 요식 11~14시 5%(1만원 이상, 일1·월5회, 건당 1천원), 후불교통 버스·지하철 5%(월 5천원), 4대 홈쇼핑·해외 5%(월2회, 건당 2,500원), 통합할인한도 5천/1만/2만원. 교통 전전월 반영은 모바일 예외가 없어 카드사 기본 month_offset",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188362_2206.html"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "특별적립 0.3%는 3개월 연속 50만원 이상 조건이라 뺐다",
+      "SK주유소 리터당 40원은 후불교통 미선택 시에만 주어 뺐다",
+      "신규 발급 통합할인한도 1만원 대신 30만 구간 5천원으로 계산(덜 주는 쪽)",
+      "요식업종에 카페 포함 여부 원문 없어 음식점만",
+      "공항버스·공항리무진 제외",
+      "금융 우대 서비스"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-asabwu",
+    "status": "exclude",
+    "reason": "shinhan-asaact와 같은 상품. S-Line 체크 미니언즈 디자인이고 상품 페이지는 이미 삭제돼 열리지 않음",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188357_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-asabxr",
+    "status": "blocked",
+    "reason": "공식 상품 페이지가 '페이지를 찾을 수 없습니다'로 열리지 않는다. 판매 종료로 보인다. 디자인형이면 shinhan-asaact S-Line 체크와 같은 상품일 수 있다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1187961_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-asad0l",
+    "status": "exclude",
+    "reason": "shinhan-asaact와 같은 상품. 신한카드 S-Line 체크(배민커넥트)는 S-Line 체크와 혜택 문구가 같고 VISA만 발급한다. 본 카드 이름 신한카드 S-Line 체크",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1217589_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-awbav9",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 전월 30만원 이상 0.3% 기본, 신한은행 결제계좌면 쇼핑·해외 0.7%, 이동통신 자동이체·버스지하철 후불·도시가스 1.7% 추가, 월 3만P",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1187975_2206.html"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "월 3만P 한도는 청구월 기준과 가족카드 합산",
+      "결제 시점 신한은행 계좌 유지 조건",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "타행 결제계좌 기본 0.7% 문구와 0.3% 안내가 서로 다름(0.3%로 둠)",
+      "취소 반영월"
+    ]
+  },
+  {
+    "card_id": "shinhan-axgc75",
+    "status": "ready",
+    "reason": "YaY. 전월 50만 이상 OTT 30%, 배달 15%, 온라인쇼핑 2,500P, 앱마켓·오늘의집 10%. 공통 가맹점이 없는 쿡솜씨·프레딧·NC소프트·레고·와인앤모어·런드리고와 스타벅스 사이렌오더, OTT 동시 이용 추가 15%는 뺐다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1196674_2207.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202005150001"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "홈바/홈카페 10% 적립(스타벅스 사이렌오더, 와인앤모어 오프라인)은 사이렌오더를 다른 스타벅스 결제와 나눌 수 없고 와인앤모어 가맹점이 없어 계산하지 않는다",
+      "해외 이용금액은 매입일 기준으로 실적 달을 정한다",
+      "서비스는 이용한 거래 순서대로 적용한다",
+      "ott-30: 앱 내 결제, 앱마켓 결제, 통신요금 합산 결제는 제외한다",
+      "delivery-15: 쿡솜씨, 프레딧은 공통 가맹점이 없어 계산하지 않는다",
+      "delivery-15: 같은 달 OTT와 밀딜리버리를 함께 쓰면 밀딜리버리에 15%를 더 적립(월 1만 포인트)하는데, 다른 결제에 달린 조건이라 계산하지 않는다",
+      "home-game-10: NC소프트 N코인과 레고 온라인스토어는 공통 가맹점이 없어 계산하지 않는다",
+      "home-interior-10: 런드리고는 공통 가맹점이 없어 계산하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2020.05.19이고 카드사 공통 규칙 시작일을 시작일로 둔다 (assumed 2024-03-22)"
+    ]
+  },
+  {
+    "card_id": "shinhan-axpe17",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 온라인 간편결제(카카오페이·네이버페이·SOL페이) 10%(건당 5천), ChatGPT·Claude 10%, 멤버십 50%, 오프라인 이마트·트레이더스·커피·올리브영·다이소 10%, 온·오프라인 각 월 1만/2만5천",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/2013453_2207.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "같은 가맹점 하루 1회를 하루 1회로 계산",
+      "키오스크 PG 결제 제외",
+      "최초 신규 발급만 특례",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-ayaazf",
+    "status": "ready",
+    "reason": "신한카드 YOLO ⓘ. 6개 영역 할인율 선택을 영역별 옵션 6개로 담았다. 영역 월 5만원, 통합할인한도 7천~4만원, 할인 거래 실적 제외",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1187924_2207.html"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "할인율은 20% 1개, 15% 2개, 10% 3개로 고르는데 이 개수 조건은 검사하지 않는다. 고른 대로 넣는다",
+      "통합할인한도는 본인과 가족카드를 합해 적용한다",
+      "분기 이용금액 250만원 이상이면 스타벅스 아메리카노 쿠폰 1매를 주는데 분기 누적이라 계산하지 않는다",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "소셜커머스와 영화는 웹사이트나 앱에 직접 접속한 결제만 대상이다"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].options",
+        "question": "할인율 선택 변경이 바로 적용되는지 다음 달부터인지 원문에 없다",
+        "assumed": "immediate"
+      },
+      {
+        "path": "revisions[0].effective_from",
+        "question": "현재 혜택의 시행일을 몰라 심의필 유효기간 시작일을 넣었다",
+        "assumed": "2025-11-21"
+      }
+    ]
+  },
+  {
+    "card_id": "shinhan-ba7dt7",
+    "status": "ready",
+    "reason": "Simple Platinum# Splendor Plus. 1% 캐시백과 마트·통신 자동이체·버스지하철 0.7% 추가, 영화 1,500/3,000원, 서울랜드 50%(전월 30만). Coin-Save 대상 2만원 이상은 계산에서 빼 덜 주는 쪽",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1235398_2207.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202508290001"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "해외 이용과 전표 매입 지연은 다음 달 이용금액에 반영될 수 있다",
+      "Coin-Save는 신한카드 다른 할인과 중복되지 않고 매출 부분 취소 시 적용하지 않는다",
+      "cashback-1-coinsave-area: 생활친화 가맹점 2만원 이상 결제는 월 10회 Coin-Save(1천원 미만 금액 할인)를 먼저 받고 11회째부터 1% 캐시백인데, 1천원 미만 금액 할인을 계산할 수 없어 2만원 이상 결제는 계산하지 않는다",
+      "seoul-land-50: 본인 자유이용권 현장구매만 할인한다",
+      "seoul-land-50: 전월 실적과 할인 횟수는 신한카드 Simple과 합산한다"
+    ],
+    "open_questions": [
+      "revisions[0].benefits[movie-1500].reward: 영화와 서울랜드 할인 결제가 1% 캐시백도 함께 받는지 원문에 없다. 덜 주는 쪽으로 같은 묶음에 두어 큰 쪽만 준다 (assumed 큰 쪽 하나)"
+    ]
+  },
+  {
+    "card_id": "shinhan-ba8abd",
+    "status": "ready",
+    "reason": "S-Choice 체크. 교통·커피·쇼핑 택1 옵션, 20만~120만 구간 한도 2천~1.2만원. 신규 2개월 2천원 특례는 계산하지 않고(card_month 2부터) 할인 거래 전체를 실적에서 빼 덜 주는 쪽. 실적 제외 목록이 원문에 없어 open_questions",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188347_2206.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201301300001"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "신규 발급월 포함 2개월은 실적과 상관없이 할인 한도 2천원인데, 특례를 더 높은 실적 구간과 나눌 수 없어 그 두 달은 계산하지 않는다",
+      "할인 적용 후 승인금액으로 실적을 더하는데 할인액만 뺄 수 없어 할인 받은 결제 전체를 실적에서 뺐다. 실적이 실제보다 적게 잡힌다",
+      "신한은행 이체·인출 수수료 면제와 VISA 쿠폰은 결제 혜택이 아니라 계산하지 않는다",
+      "다른 쿠폰이나 할인 혜택과 중복으로 받을 수 없다",
+      "transit-10: 신한카드 교통카드 서비스 지역에서만 할인하고 공항버스, 공항리무진, 공항철도는 제외한다",
+      "transit-10: 택시는 T-money, 캐시비 단말기 택시의 승인 건만 할인한다",
+      "coffee-20: 신한카드 가맹점 업종이 커피전문점이 아닌 매장은 할인하지 않는다",
+      "shopping-10: 백화점 온라인몰 이용이 대상인지 원문에 없다"
+    ],
+    "open_questions": [
+      "revisions[0].spend.exclude_categories: 상품 페이지에 실적 제외 목록이 없다. 커피 할인의 상품권 구입, 선불카드 충전 제외만 있다 (assumed gift_card, prepaid_charge)",
+      "revisions[0].effective_from: 현재 혜택이 시작된 날을 찾지 못했다. 카드사 공통 규칙 시작일을 시작일로 둔다. 준법감시 심의필은 2020-07-27이다 (assumed 2024-03-22)"
+    ]
+  },
+  {
+    "card_id": "shinhan-baaayr",
+    "status": "ready",
+    "reason": "전통시장사랑 체크 신한카드. 전통시장 10%, 후불교통 버스·지하철·철도 3%, 전가맹점 0.1%를 통합한도 5천/1만원 안에서",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1232098_2206.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "market-10: 국세청에 전통시장으로 등록된 가맹점만 대상이다",
+      "transit-3: 공항버스, 공항리무진, 공항철도는 대상이 아니다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-baab7d",
+    "status": "ready",
+    "reason": "요기요 신한 체크. 2021-02-02 신규 발급 중단이라 status discontinued. 요기요 15%(일 2천원, 월 4회), 이디야 10%(7천원 이상, 월 3천), CU 10%(1만원 이상, 월 5천). 통합한도 20/50/80/100만 구간 6천/8천/1만/1만5천",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188364_2206.html"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "교통카드 이용금액은 전전월 실적에 반영되지만 계산은 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "취소 실적 반영월 cancel_month 가정",
+      "실적 제외 목록에 세금·관리비·공과금이 없어 원문대로 실적에 넣음"
+    ]
+  },
+  {
+    "card_id": "shinhan-baabwe",
+    "status": "ready",
+    "reason": "카카오페이 신한 체크카드. 카카오페이 2%(월 1만원, 실적 무관), 후불교통 3%, 이동통신 자동이체 3%, 해외 1%. 카카오페이머니라 캐시백으로 담았다. CGV는 적립률이 없어 뺐다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1187963_2206.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "CGV 영화 최대 3천원 적립(월 1회)은 적립률이나 최소 금액이 원문에 없어 계산하지 않는다",
+      "해외 ATM 인출 1건당 US $3 적립은 결제가 아니라 계산하지 않는다",
+      "적립은 카카오페이머니로 받고 카카오페이에 가입하지 않았으면 마이신한포인트로 받는다",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "카카오페이에서 삼성페이 같은 제휴 간편결제로 결제하면 카카오페이 적립에서 빠진다"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].benefits",
+        "question": "CGV 영화 최대 3천원 적립의 적립률과 최소 금액이 원문에 없다",
+        "assumed": "계산하지 않음"
+      }
+    ]
+  },
+  {
+    "card_id": "shinhan-bcaazx",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 쇼핑 6영역 10%(쇼핑 한도), 생활 커피·잡화·온라인서점 10%와 주유 60원/L(생활 한도), 컬리 10%를 담았다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1187935_2207.html"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "해외이용 5% 연간 캐시백(전년 1천만원 조건)",
+      "프레딧, 집반찬연구소, 반디앤루니스(공통 가맹점 없음)",
+      "LPG 제외",
+      "입점 매장 제외",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "시행일 미기재",
+      "취소 반영월"
+    ]
+  },
+  {
+    "card_id": "shinhan-be9cqz",
+    "status": "ready",
+    "reason": "투썸플레이스 신한카드 체크. 30만 이상 투썸 20%(1회 1만원, 일1회), 통합 3천/6천원, 넷플릭스·유튜브 1천원(한도 1천/2천). 신규 30만 구간",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1212166_2206.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "투썸 기타 결제 3%, 사이즈업 쿠폰, 하트",
+      "입점 특수매장 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgbbtm",
+    "status": "ready",
+    "reason": "청년취업 FANtastic S 신한카드 체크. 발급 대상 제한 문구 없음. 연회비 없음. 30만 이상 신한 SOL페이 15%, 쿠팡·티몬 10%, CU 10%, 스타벅스 10%(각 1만원 이상, 일1·월4회, 건당 2천원, SOL페이 우선 중복 불가), 통합캐시백 7천/1만/1.5만/2만원, 해외 1.2% 한도 별도. 후불교통 전전월 반영은 모바일 예외가 없어 카드사 기본 month_offset",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188341_2206.html"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "해외인출 US $3 캐시백",
+      "입점 매장 제외 가능",
+      "소셜커머스 상품권·팝업 사이트 제외",
+      "신한생명 금리 우대·플래티늄 브랜드 서비스"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgjcs5",
+    "status": "ready",
+    "reason": "신한카드 On 체크. 간편결제 온라인과 생활편의영역 1~2%(각 월 8천), 해외 1.3%를 공식 페이지에서 옮겼다. 카드 페이지에 간편결제명 제외 문구가 없어 기본값을 덮었다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1214936_2206.html"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "교통카드 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다",
+      "선불전자지급수단 구매와 충전은 실적과 적립에서 빠진다",
+      "서비스는 이용한 거래 순서대로 적용한다",
+      "easypay: SK페이는 공통 결제수단에 없어 계산하지 않는다",
+      "daily-life-cafe: 백화점, 할인점, 면세점, 공항 등에 입점된 커피전문점은 적립하지 않는다",
+      "daily-life-convenience: 백화점, 할인점 등에 입점한 매장은 적립하지 않는다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgjcyu",
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [],
+    "status": "exclude",
+    "reason": "shinhan-bgjcs5와 같은 상품. 신한카드 On 체크(쥬라기)는 On 체크 디자인판으로 혜택, 연회비, 한도 문구가 같다. 상품 API의 상품 코드는 BGJCYZ",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1216884_2206.html",
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1214936_2206.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202205240001"
+    ]
+  },
+  {
+    "card_id": "shinhan-bgkcsj",
+    "status": "exclude",
+    "reason": "shinhan-bgkcza와 같은 상품. Way 체크 기본 디자인이고 혜택이 쥬라기판과 같다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1214928_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgkdbe",
+    "status": "exclude",
+    "reason": "shinhan-bgkcza와 같은 상품. Way 체크 미니언즈 여름 디자인, 혜택 같음. packet 본 카드는 shinhan-bgkcsj",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1223183_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgnd9k",
+    "status": "ready",
+    "reason": "신한카드 Pick E 체크. 20만 이상 4대 편의점·커피 10%(각 일1·월3회, 1회 1천P), 해외 일시불 1%(월 1만P). 신규는 조건 없이 20만 구간",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1221536_2206.html"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "놀이 영역 10%(업종 없음)",
+      "One Pick 맛집 적립(가맹점별 횟수)"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgndd8",
+    "status": "exclude",
+    "reason": "shinhan-bgnd9k와 같은 상품. Pick E 체크 캐릭터형(오수)은 혜택과 유의사항이 같고 디자인과 발급수수료만 다르다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1223876_2206.html",
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1221536_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgod9l",
+    "status": "ready",
+    "reason": "Pick I 체크. 전월 20만원 이상 편의점·커피 10%(일1회 월3회 회당 1천P), 디지털 구독 10%(영역별 월2회 합산 3천P), 해외 1%(월 1만P). 신규 등록월+1개월 실적 무관. 캐릭터형 bgodd9, bgodhq의 본 카드",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1221538_2206.html"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "One Pick 쇼핑몰 횟수 누적 적립 뺌",
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "입점 매장 제외, 직접 접속 결제만"
+    ],
+    "open_questions": [
+      "취소 실적 반영월 cancel_month 가정"
+    ]
+  },
+  {
+    "card_id": "shinhan-bgodd9",
+    "status": "exclude",
+    "reason": "shinhan-bgod9l와 같은 상품. 신한카드 Pick I 체크의 캐릭터형(맹구)이고 혜택 문구가 같으며 디자인 발급수수료 1천원만 다르다. 본 카드 이름 신한카드 Pick I 체크",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1223966_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bgodhq",
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [],
+    "status": "exclude",
+    "reason": "shinhan-bgod9l와 같은 상품. Pick I 체크 캐릭터형(한교동)은 Pick I 체크와 혜택, 연회비 0원이 같고 캐릭터 발급수수료 1천원만 다르다. 캐릭터형(맹구) shinhan-bgodd9와도 페이지가 같다. 상품 코드 BGODHQ",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1226245_2206.html",
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1221538_2206.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202402190001"
+    ]
+  },
+  {
+    "card_id": "shinhan-bgpdbh",
+    "status": "blocked",
+    "reason": "적립이 카카오페이포인트인데 원문에 1포인트의 원화 가치 문구가 없어 공통 포인트로 더할 수 없다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1223807_2206.html"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "카카오톡 쇼핑하기·선물하기 2% 추가 적립 뺌",
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "카카오페이 미가입이면 마이신한포인트로 적립"
+    ],
+    "open_questions": [
+      "취소 실적 반영월 cancel_month 가정"
+    ]
+  },
+  {
+    "card_id": "shinhan-bgsdub",
+    "status": "exclude",
+    "reason": "shinhan-bgsdu9와 같은 상품. 신한카드 처음 체크(마이멜로디)는 처음 체크와 혜택이 같고 캐릭터 발급수수료 1천원만 있다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1235591_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bjbbn3",
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [],
+    "status": "exclude",
+    "reason": "shinhan-bjbbe4와 같은 상품(신한카드 Deep Dream 체크). 모두드림 0.2%, 더해드림 0.6%, 챙겨드림 1.0%, 통합한도 5천/1.5만/3만, 주말 주유 리터당 40원, 택시 3·6·9회 1천원이 같다. 페이지에 신규 발급 불가라고 적혀 있다. 상품 코드 BJBBN3",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188256_2206.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201806280001"
+    ]
+  },
+  {
+    "card_id": "shinhan-blcdmh",
+    "status": "ready",
+    "reason": "신한카드 The PET. 연회비 2만/2.3만. 40만 이상 동물병원 30%, 쿠팡·네이버쇼핑·G마켓·11번가·컬리 10%, 각 한도 5천/1만/2만원. 동물병원 한도 비율을 바꾼 경우는 options로 계산 안 함",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1228839_2207.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "펫 전용몰 5곳 30%(가맹점 없음)",
+      "Pet Life 할인",
+      "최초 신규 특례",
+      "가족카드 합산"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-boad16",
+    "status": "blocked",
+    "reason": "신한카드 알뜰More(알뜰모아). 혜택이 알뜰폰 통신요금 자동이체 할인 하나뿐인데 알뜰폰 통신사 가맹점이 공통 파일에 없다. telecom.mobile은 SKT·KT·LGU+까지 넓어 더 주게 된다. 교통카드 문구는 더 이상 보류 까닭이 아니다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1219175_2207.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-boadp9",
+    "status": "ready",
+    "reason": "알리익스프레스 신한카드. 연회비 1.6만/1.9만. 30만 이상 알리 10%(해외 배송은 2만원 이상, 한도 1만/2만/3만), 음식점·카페·배민·땡겨요 10%(하루 1천원, 5천/1만/2만), 해외 1%. 새 가맹점 aliexpress를 needed/shinhan-boadp9.json에 제안",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1231466_2207.html"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "최초 신규 특례",
+      "입점 매장 업종 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-boadur",
+    "status": "ready",
+    "reason": "코웨이 신한카드. 렌탈 자동납부 결제일 할인 월 1.3만/1.7만/3만원(전월 30만/70만/150만), 할인 거래 전체 실적 제외, 무이자할부·임대료·후불교통 실적 제외",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1234723_2207.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202507080001"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "후불교통카드 이용금액(시내·광역·시외·고속버스, 지하철)은 실적에서 빠진다. 교통카드 이용금액의 반영월과 상관없이 버스와 지하철을 실적에서 뺀다",
+      "지방세외수입, 환경개선부담금, TV수신료, 전자지급수단 충전은 실적에서 빠진다",
+      "해외 이용금액은 매입일 기준으로 실적 달을 정한다",
+      "최초 신규 발급 특례는 만기나 해지 뒤 재발급이면 받지 못한다",
+      "coway-rental: 렌탈 명의자와 카드 명의자가 같아야 자동납부를 등록할 수 있다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bpac88",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 주유 80원/L·LPG 40원/L(유종 옵션), 전기차 30%, 월 1만원 통합, 주차·하이패스·커피, 오토금융 미이용 월 정액 캐시백을 담았다. 자동차 구매 캐시백은 3개월 누적 조건이라 뺐다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1197177_2207.html"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "자동차 신용결제 구매 0.2% 캐시백(3개월 누적 100만원 조건)",
+      "오토금융 이용 회원의 구간별 월 캐시백(미이용 금액만 계산)",
+      "4대 정비업체 할인(공통 가맹점 없음)",
+      "카카오T 대리운전 할인",
+      "포스코ICT·파워큐브 충전기",
+      "자동차 구매금액 실적 제외를 위해 car 업종 전체를 실적에서 뺌",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "시행일 미기재",
+      "취소 반영월"
+    ]
+  },
+  {
+    "card_id": "shinhan-bsacio",
+    "status": "blocked",
+    "reason": "My TeenS. 부모 신용카드에 붙는 만 12~18세 가족카드. 핵심 혜택이 당월 이용금액 20/30/40만원 구간별 GS25 기프티콘 2천/4천/6천원 지급인데 이번 달 누적 금액에 따른 정액 지급을 담을 모델이 없고, GS POP 할인과 GS&POINT는 멤버십 혜택이라 담을 것이 없음",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1210370_2207.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bscdng",
+    "status": "exclude",
+    "reason": "shinhan-cheoeum와 같은 상품. 처음(ANNIVERSE)은 연회비, 구간, 혜택이 처음과 같음",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1229296_2207.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bubdrh",
+    "status": "ready",
+    "reason": "신한카드 SOL트래블J 체크. 국내 편의점 5%, 국내 후불교통 1%, 일본 돈키호테 50%(반기 2만원), 해외 대중교통 1%. 실적은 국내 이용금액만. 새 가맹점 don_quijote 제안",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1232877_2206.html"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "국제 브랜드 수수료 1%, 해외 서비스 수수료 0.2%, 해외 ATM 인출 수수료 면제는 혜택 금액으로 계산하지 않는다",
+      "일본 스타벅스 50% 할인(반기 5천원)은 결제 입력으로 일본 매장과 다른 나라 매장을 가를 수 없어 계산하지 않는다",
+      "CU 행사상품 5% 즉시할인은 지정 품목이라 계산하지 않는다",
+      "2026-12-31까지의 해외 가맹점 프로모션(일본 3대 편의점, 베트남 롯데마트와 Grab, 미국 스타벅스 5%)과 마스터 트래블 리워드는 나라를 가를 수 없어 계산하지 않는다",
+      "신규 발급 회원의 일본 여행 서비스는 등록월 다음 달까지 국내 이용금액 누적 30만원을 채운 뒤부터 주는데 누적 달성을 담을 수 없어 신규 기간에는 주지 않는다",
+      "교통카드 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다",
+      "TV수신료, 지방세외수입, 환경개선부담금, 전자지급수단 충전은 실적에서 빠진다",
+      "해외 이용금액은 실적에 넣지 않는다",
+      "convenience-5: 온라인 매장, 백화점, 할인점 등 입점 매장은 할인하지 않는다",
+      "transit-1: 공항철도 후불교통 이용도 대상이지만 철도 업종 전체를 넣을 수 없어 계산하지 않는다",
+      "overseas-transit-1: 컨택리스 방식으로 결제한 대중교통만 대상이다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bubdwl",
+    "status": "ready",
+    "reason": "신한카드 SOL트립앤샵 체크. 해외 수수료 1.3% 면제, 해외 온라인 0.3% + 추가 0.7/2.2%(월 5만P), 30만 이상 편의점 5%(월 3회 3천원), 후불교통 대중교통 1%(월 3천원)",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1236362_2206.html"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "최초 신규 특례",
+      "마이셀렉트샵 캐시백",
+      "공항철도 할인",
+      "외화결제계좌 조건"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-bubdwx",
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [],
+    "status": "blocked",
+    "reason": "SOL트립앤J 체크의 핵심 혜택인 일본 돈키호테 50%, 일본 편의점(패밀리마트, 로손, 세븐일레븐) 50% 할인을 담을 수 없다. 결제 입력에 나라 구분이 없어 해외 전체에 붙이면 더 주고, 돈키호테·일본 편의점 가맹점도 없다. 빼면 해외 수수료 면제와 국내 편의점 5%, 대중교통 1%만 남아 카드가 크게 약해 보인다. 반기 한도(반기 2만원, 5천원)도 있다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1237542_2206.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202512150001"
+    ]
+  },
+  {
+    "card_id": "shinhan-buddnj",
+    "status": "exclude",
+    "reason": "shinhan-buddo2와 같은 상품. SOL글로벌 체크 기본 디자인이고 혜택이 산리오캐릭터즈판과 같다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1229905_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-buednk",
+    "status": "exclude",
+    "reason": "shinhan-buedo3와 같은 상품. SOL글로벌U 체크 기본 디자인, 혜택·연회비 같음",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1229908_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-cahao9",
+    "status": "blocked",
+    "reason": "하이패스 전용 체크. 신한 개인 체크 보유자만 추가 발급하는 통행료 전용 카드이고 혜택은 통행료 0.1% 적립뿐인데 고객이 가진 다른 체크카드의 전월 10만원 실적을 조건으로 해 지금 모델로 계산 불가. 출퇴근 할인은 도로공사 제공",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188329_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-cahb20",
+    "status": "exclude",
+    "reason": "shinhan-cahao9와 같은 상품. 신한카드 하이패스(전용) 체크(SIM형)는 하이패스(전용) 체크와 같은 0.1% 적립이고 SIM 크기만 다르다. 본 카드 이름 신한카드 하이패스(전용) 체크",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1188346_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-caidbl",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 모바일티머니 버스·지하철 30%(교통 한도 7천/1만2천/1만8천), 백화점·편의점·이동통신·커피 5%(생활 한도). 교통카드 이용금액은 같은 달 실적 반영이라 month_offset을 쓰지 않았다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1216792_2207.html"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "티머니GO 앱 고속·시외버스·택시 등 20%(결제수단 구별 불가)",
+      "K-패스 환급",
+      "입점 매장 제외"
+    ],
+    "open_questions": [
+      "시행일 미기재",
+      "취소 반영월"
+    ]
+  },
+  {
+    "card_id": "shinhan-cbscey",
+    "status": "ready",
+    "reason": "신한카드 국민행복(신용). 연회비 없음. 발급 대상 제한 문구 없음. 병원·약국·산후조리원 5%, 온라인몰 5%, 어린이집·유치원·학원·인터넷서점 10%, 배민·요기요 10%, 넷플릭스·유튜브 50%, 멤버십 3천원. 통합 1만/2만/4만원",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1200235_2207.html"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "국가바우처 지원금",
+      "롯데오너스 가맹점 없음",
+      "부모부담금만 할인",
+      "신한금융그룹 금융서비스"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-cbtcez",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 병원·약국·산후조리원, 온라인몰, 인터넷서점, 배달앱 5%(건당 3천), OTT 50%(건당 5천), 멤버십 3천원, 영역별 월 1회, 통합 한도 5천/1만/1만5천",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1200238_2206.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "어린이집·유치원 부모부담금 5%(정부지원금과 구별 불가)",
+      "롯데오너스 월회비",
+      "국가바우처와 금융 우대",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "취소 반영월"
+    ]
+  },
+  {
+    "card_id": "shinhan-plad43",
+    "status": "ready",
+    "reason": "플리. Daily 국내 SOL페이 0.9%, 그 밖 0.5%, 해외 일시불 0.5% 실적·한도 없음. Weekly 쿠폰은 매주 받기가 필요하고 Monthly 단골은 가맹점 자동 선택이라 뺐다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1220329_2207.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202211280002"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "Weekly 할인 쿠폰(월 3천원 1회, 1천원 3회, 전월 40만원 이상, 5천원 이상)은 매주 신한 SOL페이에서 쿠폰 받기를 해야 해서 계산하지 않는다. 쿠폰이 적용된 거래는 Daily 할인을 받지 않는다",
+      "Monthly 단골 적립(전월 최다 이용 오프라인 가맹점의 월 3, 6, 9번째 이용에 1천 포인트)은 가맹점이 지난달 이용으로 자동 선택되어 계산하지 않는다",
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "해외 이용금액은 매입일 기준으로 실적 달을 정한다",
+      "daily-solpay: 신한 SOL페이의 ARS결제, 일반결제, Smart결제는 0.5%로 본다",
+      "daily-overseas: 해외 서비스 수수료를 포함한 원화 청구금액으로 할인한다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2022.05.18이고 카드사 공통 규칙 시작일을 시작일로 둔다 (assumed 2024-03-22)"
+    ]
+  },
+  {
+    "card_id": "shinhan-plbcy4",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 실적·한도 없는 국내 SOL페이 0.3%, 그 밖 0.2%, 해외 일시불 0.2% 캐시백. 플리 체크(산리오캐릭터즈) PLBD46도 같은 상품이라 product_codes에 더했다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1216831_2206.html"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "Weekly 할인 쿠폰(앱에서 쿠폰 받기 필요)",
+      "Monthly 단골 적립(이용 횟수 셈 불가)",
+      "신차판매·제약회사 업종 제외",
+      "교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "취소 반영월"
+    ]
+  },
+  {
+    "card_id": "shinhan-plbd46",
+    "status": "exclude",
+    "reason": "신한카드 플리 체크(산리오캐릭터즈). shinhan-plbcy4와 같은 상품. 신한카드 플리(체크)와 연회비, Daily 0.2~0.3%, Weekly 쿠폰, Monthly 단골 적립이 같고 캐릭터 디자인만 다르다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1220330_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-poadpr",
+    "status": "exclude",
+    "reason": "shinhan-pointplan와 같은 상품. 신한카드 Point Plan(산리오캐릭터즈)는 혜택과 연회비(국내 2만원, Visa 2만3천원)가 Point Plan과 같다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1231784_2207.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pobdmx",
+    "status": "ready",
+    "reason": "신한카드 Point Plan 체크 SOL. 혜택 문구가 shinhan-pobdhm(Point Plan 체크)과 같아 그 파일을 바탕으로 썼다. pobdhm도 같은 결정으로 풀리면 같은 상품으로 합칠 수 있다. 건당 금액별 0.2~1%, SOL페이 +0.1%, 해외 1%, 통합 5천/1만/1.5만P(5·12월 +5천), 주말 배달앱 1천P, 편의점 5%",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1229580_2206.html"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "제약회사·의약품 전용몰, 할인 적용 거래 제외",
+      "부분취소 재적립"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pobdoc",
+    "status": "exclude",
+    "reason": "shinhan-pobdmx와 같은 상품. Point Plan 체크 캐릭터형(짱구)은 Point Plan 체크 SOL과 혜택 본문이 같고 디자인 수수료만 다르다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1230740_2206.html",
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1229580_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pobdpt",
+    "status": "exclude",
+    "reason": "서울시 다둥이행복카드. 발급 대상이 서울시 거주 2자녀 이상 가정의 부모로 지자체 주민 전용",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1231695_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pobds8",
+    "status": "exclude",
+    "reason": "shinhan-pobdmx와 같은 상품. 여댕냥 PET Point Plan 체크는 적립 혜택이 같고 여댕냥 패밀리몰 멤버십만 더해졌으며 Point Plan 체크와 중복 소지가 안 되고 실적이 통합된다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1232610_2206.html",
+      "https://www.shinhancard.com/pconts/html/card/apply/check/1229580_2206.html"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pofdvr",
+    "status": "ready",
+    "reason": "SOL Plan. 연회비 3만/3.3만, 40만/100만 구간 기본 1/1.5%, 특별 2.5/5%(영역별 월 30만원), 통합 5만P. OTT 100%는 계좌 잔액 조건 대신 카드 200만/300만원 조건으로만 계산. 포인트박스 10%는 뺐다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1235253_2207.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202508180003"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "적립한 SOL포인트를 SOL Plan 포인트박스로 받으면 10%를 더 주는데, 포인트박스 계좌 보유를 알 수 없어 계산하지 않는다",
+      "일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다",
+      "지방세외수입, 환경개선부담금, TV수신료, 전자지급수단 충전은 실적과 적립에서 빠진다",
+      "본인카드와 가족카드의 전월 이용금액과 적립 한도를 합산한다",
+      "해외 이용금액은 매입일 기준으로 실적 달을 정한다",
+      "최초 신규 발급 특례는 SOL Plan 만기나 해지 뒤 재발급이면 받지 못한다",
+      "신규 발급 기간의 담을수록 SOLSOL 5천 포인트 한도 특례는 계산하지 않는다",
+      "온라인 결제는 해당 업체 사이트나 앱에서 직접 결제해야 혜택을 준다",
+      "base: 해외 일시불을 할부로 바꾸면 적립하지 않는다",
+      "special-fuel: LPG는 적립하지 않는다",
+      "special-shopping: 항공권, 티켓처럼 대상 가맹점이 아닌 별도 가맹점으로 결제되면 적립하지 않는다",
+      "ott-100: 카드 전월 이용금액 100만원 이상과 결제계좌 일 잔액 100만원(200만원) 이상 영업일 15일 이상을 함께 채우면 5천(1만5천) 포인트 한도인데, 달마다 바뀌는 계좌 잔액을 알 수 없어 카드 이용금액 200만원(300만원) 이상 조건으로만 계산한다",
+      "ott-100: 유튜브 프리미엄은 PC 정기결제만 적립한다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pogdxc",
+    "status": "ready",
+    "reason": "Simple Plan 신용. 연회비 1만5천/1만8천. 실적·한도 없이 국내 1%, 해외 일시불 2% 결제일 할인. 약국·신차 업종 제외(자동차 업종 전체 제외로 덜 주는 쪽)",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1237253_2207.html"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "TV수신료, 환경개선부담금, 제약회사·의약품몰 제외",
+      "신차판매만 빠지는데 자동차 업종 전체를 뺐다",
+      "5만원 이상 2~3개월 무이자 할부 건은 할인 없음"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pohdxd",
+    "status": "ready",
+    "reason": "신한카드 Simple Plan+. 국내 1.5%, 해외 2% 실적·한도 없음, 발급 초년도 마트·병원·주유 3만원 이상 웰컴 3만원 최초 1회",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1237252_2207.html"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "가족카드 1매당 분기 150만원 이상 이용 시 1만원 캐시백은 가족카드 실적이라 계산하지 않는다",
+      "국내 5만원 이상 2~3개월 무이자 할부는 혜택 금액으로 계산하지 않는다",
+      "welcome-30000: 발급 초년도는 발급일부터 다음 해 연회비 결제월의 전월 말일까지인데 연회비 결제월을 몰라 등록월부터 열한 달째까지만 계산한다",
+      "welcome-30000: LPG 충전과 마트 내 임대 매장, 문화센터, 주차비는 대상이 아니다",
+      "welcome-30000: 가족카드 거래는 대상이 아니다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-poje1j",
+    "status": "ready",
+    "reason": "신한카드 SOL Plan+. 연회비 5만/5.3만. 40만 이상 기본 1/1.5%, 주유·온라인쇼핑·배달 특별 2.5/5%(영역별 월 30만원), 통합 6만P. OTT·멤버십·통신 100%는 결제계좌 잔액 조건 없이 받는 카드 실적 200만(5천P)·300만(1.5만P) 한도만 담았다. SOL포인트는 마이신한포인트 1:1",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/1239171_2207.html"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "결제계좌 잔액 조건 한도",
+      "포인트박스 10% 추가 입금",
+      "연간 2천만원 5만원 캐시백, 웰컴 캐시백 2만원",
+      "최초 신규 특례"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-poke1m",
+    "status": "ready",
+    "reason": "Hi-Point Plan. 공식 페이지와 API로 연회비 2만/2.3만, 구간 50/100/150만, 기본 0.5~1.5%, 특별 1~5%, 통합 5만P 확인. 특별 가맹점은 기본에서 제외. 포인트 리필은 포인트 사용 입력이 없어 뺐다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/2013774_2207.html",
+      "https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202607130002"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "포인트 리필(마이신한포인트 1만 포인트 이상 사용 결제 시 월 1회 1천 포인트)은 포인트 사용 금액을 입력으로 알 수 없어 계산하지 않는다",
+      "일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다",
+      "세외수입(환경개선부담금, 과태료, 여권 발급비, 우편요금, 공공기관 가맹점), TV수신료, 신차판매, 의약품 전용몰·제약회사, 전자지급수단 충전은 실적과 적립에서 빠진다",
+      "본인카드와 가족카드의 전월 이용금액과 적립 한도를 합산한다",
+      "해외 이용금액은 매입일 기준으로 실적 달을 정한다",
+      "최초 신규 발급 특례는 Hi-Point Plan 만기나 해지 뒤 재발급이면 받지 못한다",
+      "온라인 결제는 해당 업체 사이트나 앱에서 직접 결제해야 혜택을 준다",
+      "base: 해외 일시불을 할부로 바꾸면 적립하지 않는다",
+      "special: 백화점, 할인점, 면세점, 공항 입점 매장은 적립하지 않는다",
+      "special: 마트 주차비, 문화센터, 입점 임대 매장은 적립하지 않는다",
+      "special: 주유는 LPG를 적립하지 않는다",
+      "special: 스타벅스 사이렌오더는 적립되지만 온라인으로 기록하면 기본 적립으로 계산한다",
+      "special-telecom: 약정금액 대납과 지점을 통한 정기결제는 특별 적립하지 않는다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "shinhan-pole1n",
+    "status": "ready",
+    "reason": "신한카드 Hi-Point Plan+. 연회비 5만/5.3만. 기본 0.5/1/1.5/2%, 마트·다이소·올리브영·주유·카페(오프라인, 카페 스마트오더 포함)·이통 자동납부 특별 1/2/4/6%, 통합 월 7만P. 특별 가맹점은 기본 적립 제외. 교통카드는 2026-10-12 결정대로 실적에서 뺐다",
+    "source_urls": [
+      "https://www.shinhancard.com/pconts/html/card/apply/credit/2013775_2207.html"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다",
+      "최초 신규 발급 50만 구간 특례는 재발급 제외라 계산 안 함",
+      "포인트 리필 3천P, 웰컴 3만P",
+      "입점 매장·창고형·기업형 슈퍼 제외",
+      "가족카드 합산"
+    ],
+    "open_questions": []
+  }
+]

@@ -1,0 +1,59 @@
+card: hyundai-13725
+holder:
+  started_on: '2026-01-01'
+  options: [{option: fuel_type, choice: gasoline_diesel, effective_from: '2026-01-01'}]
+cases:
+- name: 30만 구간 SK에너지 리터당 200원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {fuel-200: 6458}, counted: 0}
+  calc: 60,000 × 200 ÷ 1,858 = 6,458.5 버림 6,458. 할인 받은 결제는 실적 제외
+- name: 70만 구간 1회 6만원까지 리터당 400원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: hd_oilbank}
+  expect:
+  - {payment: 0, benefits: {fuel-400: 12917}, counted: 0}
+  calc: 6만원까지만 넣어 60,000 × 400 ÷ 1,858 = 12,917.1 버림 12,917. 월 3만원 안
+- name: 30만 직전 SK에너지는 할인 없이 기본 적립
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {base-mpoint-0-5: 250}, counted: 50000}
+  calc: 30만원 미만은 주유 할인 없음. 50,000원은 1천원 단위 50 × 5 = 250P
+- name: GS칼텍스 리터당 60 M포인트
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-06T10:00, amount: 92900, merchant: gs_caltex}
+  expect:
+  - {payment: 0, benefits: {gs-caltex-60p: 3000}, counted: 92900}
+  calc: 92,900 ÷ 1,858 = 50리터 × 60 = 3,000P. 기본 적립 464P보다 커서 이것만
+- name: 현대해상 자동차 보험 연 1회 3만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 500000, merchant: hyundai_marine}
+  - {at: 2026-11-20T10:00, amount: 500000, merchant: hyundai_marine}
+  expect:
+  - {payment: 0, benefits: {car-insurance-30k: 30000}, counted: 0}
+  - {payment: 1, benefits: {base-mpoint-0-5: 2500}, counted: 500000}
+  calc: 첫 건 3만원 할인. 같은 해 두 번째는 연 1회를 써 기본 적립 500 × 5 = 2,500P
+- name: 국내 가맹점 0.5% 천원 미만 버림
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-08T10:00, amount: 12345, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {base-mpoint-0-5: 60}, counted: 12345}
+  calc: 12,000원까지 12 × 5 = 60P
+- name: 신규 발급 다음 달까지 30만 구간
+  holder:
+    started_on: '2026-11-02'
+    options: [{option: fuel_type, choice: gasoline_diesel, effective_from: '2026-11-02'}]
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-10T10:00, amount: 37160, merchant: sk_energy}
+  expect:
+  - {payment: 0, benefits: {fuel-200: 4000}, counted: 0}
+  calc: 발급월이라 30만 구간. 37,160 × 200 ÷ 1,858 = 4,000

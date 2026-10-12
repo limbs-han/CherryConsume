@@ -1,0 +1,23 @@
+card: lotte-1689
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 0.5% 적립 1천원 미만 절사
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12999, category: department_store}
+  expect:
+  - payment: 0
+    benefits: {lpoint-0-5: 60}
+  calc: 1천원 단위 12개 × 5P = 60P. 실적 조건 없음
+- name: 무이자할부와 아파트관리비는 적립 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: department_store, installment_months: 3, interest_free: true}
+  - {at: 2026-11-05T11:00, amount: 200000, category: apartment_fee}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 무이자할부와 아파트관리비는 적립 제외

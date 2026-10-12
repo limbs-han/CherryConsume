@@ -1,0 +1,27 @@
+card: shinhan-aqed6o
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 0.3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {monthly-cashback: 300}, counted: 100000}
+  calc: 100,000 x 0.3% = 300
+- name: 30만 직전 0.1%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {monthly-cashback: 100}}
+  calc: 100,000 x 0.1% = 100
+- name: 50만 구간 지하철 하루 200원 한 번
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  - {at: 2026-11-04T18:00, amount: 1500, category: transit.bus_city, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-daily: 200}}
+  - {payment: 1, benefits: {}}
+  calc: 이용일마다 200원, 같은 날 두 번째는 없음

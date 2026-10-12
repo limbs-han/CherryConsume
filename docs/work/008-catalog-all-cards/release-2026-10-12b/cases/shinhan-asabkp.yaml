@@ -1,0 +1,52 @@
+card: shinhan-asabkp
+holder:
+  options: [{option: transit_or_fuel, choice: transit, effective_from: '2026-01-01'}]
+cases:
+- name: 30만 구간 기본 0.2% 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T18:00, amount: 50000, category: grocery_mart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 100}}
+  calc: 50,000 x 0.2% = 100P
+- name: 실적 직전 299999는 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T18:00, amount: 50000, category: grocery_mart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만이라 적립과 할인 모두 없음
+- name: 점심 요식 5% 건당 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lunch-dining-5: 1000}}
+  calc: 30,000 x 5% = 1,500원이 건당 1,000원에 걸림. 할인 건은 적립 없음
+- name: 후불교통 지하철 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 20000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1000}}
+  calc: 20,000 x 5% = 1,000원
+- name: 홈쇼핑 5% 건당 2,500원과 30만 구간 통합 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T20:00, amount: 100000, merchant: gs_shop, payment_method: physical_card}
+  - {at: 2026-11-05T20:00, amount: 100000, merchant: cj_onstyle, payment_method: physical_card}
+  - {at: 2026-11-06T20:00, amount: 100000, merchant: lotte_homeshopping, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {homeshopping-5: 2500}}
+  - {payment: 1, benefits: {homeshopping-5: 2500}}
+  - {payment: 2, benefits: {base-point-0-2: 200}}
+  calc: 건당 2,500원 두 번이 통합 5천원을 채운다. 세 번째는 월 2회를 넘어 기본 0.2% 200P
+- name: 주유 선택 SK 리터당 40원
+  prev_month_spend: 300000
+  holder:
+    options: [{option: transit_or_fuel, choice: fuel, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-04T10:00, amount: 46450, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {sk-fuel-40: 1000}}
+  calc: 46,450 / 1,858 = 25리터 x 40원 = 1,000원

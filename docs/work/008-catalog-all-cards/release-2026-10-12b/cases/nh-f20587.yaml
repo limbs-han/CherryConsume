@@ -1,0 +1,100 @@
+card: nh-f20587
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 평일 스타벅스 0.5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {single-weekday: 50}
+  calc: 10,000원 x 0.5% = 50포인트
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만원에 1원 모자라 적립 없음
+- name: 주말 CU 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 10000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {double-weekend: 100}
+  calc: 토요일 10,000원 x 1% = 100포인트
+- name: 30만 구간 택시 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {triple-transit: 300}
+  calc: 20,000원 x 1.5% = 300포인트
+- name: 20만 구간 택시 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만이라 Triple 없음
+- name: 해외 일시불 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {triple-overseas: 1500}
+  calc: 100,000원 x 1.5% = 1,500포인트
+- name: 넷플릭스 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 17000, merchant: netflix}
+  expect:
+  - payment: 0
+    benefits: {bonus-app: 850}
+  calc: 17,000원 x 5% = 850포인트
+- name: 올리브영 오프라인 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: olive_young, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {triple-beauty: 450}
+  calc: 30,000원 x 1.5% = 450포인트
+- name: 통합 한도 3만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1000000, merchant: netflix}
+  expect:
+  - payment: 0
+    benefits: {bonus-app: 30000}
+  calc: 1,000,000원 x 5% = 50,000포인트가 월 3만 한도에 걸림
+- name: 토익 접수 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 52500, merchant: toeic}
+  expect:
+  - payment: 0
+    benefits: {triple-exam: 787}
+  calc: 52,500원 x 1.5% = 787.5포인트, 버림 787
+- name: 교보문고 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: kyobo_book}
+  expect:
+  - payment: 0
+    benefits: {triple-book: 300}
+  calc: 20,000원 x 1.5% = 300포인트
+- name: 인터파크티켓 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: interpark_ticket}
+  expect:
+  - payment: 0
+    benefits: {triple-ticket: 1500}
+  calc: 100,000원 x 1.5% = 1,500포인트

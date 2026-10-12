@@ -1,0 +1,39 @@
+card: kb-09322
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 버스 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-10: 150}, counted: 0}
+  calc: 1,500원의 10% 150점. 후불교통 실적 제외
+- name: 20만 경계 직전
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 5000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}, counted: 5000}
+  calc: 20만원 미만 적립 없음
+- name: 커피 KB Pay 1%+1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 10000, category: cafe, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {living-1: 100, kbpay-living-1: 100}, counted: 10000}
+  calc: 10,000원 1% 100점씩. 체크카드는 적립 건도 실적 포함
+- name: 이동통신 자동납부 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 50000, category: telecom.mobile, merchant: lg_uplus, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {living-telecom-1: 500}}
+  calc: 50,000원 1% 500점
+- name: 버스 월 2천점 한도
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T08:00, amount: 25000, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-10: 2000}}
+  calc: 2,500점 중 월 한도 2,000점

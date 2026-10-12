@@ -1,0 +1,34 @@
+card: ibk-12113210001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈료 1만3천원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coway_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {coway-rental: 13000}}
+  calc: 렌탈료 30,000원, 월 한도 13,000원
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coway_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 할인 없음
+- name: 120만 구간 두 건 합산
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: coway_rental, billing: autopay}
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: coway_rental, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {coway-rental: 15000}}
+  - {payment: 1, benefits: {coway-rental: 8000}}
+  calc: 첫 건 렌탈료 전액 15,000원. 둘째는 월 23,000원에 남은 8,000원
+- name: 자동이체가 아니면 제외
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: coway_rental, billing: normal}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 렌탈료 자동이체만 할인

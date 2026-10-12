@@ -1,0 +1,137 @@
+schema_version: 2
+id: shinhan-ba7dt7
+issuer: shinhan
+name: 신한카드 Simple Platinum# Splendor Plus
+short_name: 신한 Simple Platinum# Splendor Plus
+search_names: [심플 플래티늄 스플렌더]
+kind: credit
+product_codes:
+  - '202508290001'
+  - BA7DT7
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 27000}
+  - {scope: global, brand: unionpay, amount: 27000}
+  - {scope: global, brand: unionpay, form: mobile, amount: 22000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1235398_2207.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202508290001', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2025-07-31
+    source: page
+    tiers: [0, 300000]
+    spend:
+      exclude_categories: [annual_fee, transit.bus_city, transit.subway]
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      categories: [annual_fee, gift_card.prepaid_card, prepaid_charge, tax.local, utility.water]
+      unmodeled: [포인트 사용 거래는 캐시백하지 않는다]
+    limits:
+      - {key: movie-day, per: day, count: 1}
+      - {key: movie-month, per: month, count: 5}
+      - {key: movie-year, per: year, count: 12}
+    stacks:
+      - {key: main}
+      - {key: extra}
+    benefits:
+      - key: cashback-1
+        title: 국내외 가맹점 1% 캐시백
+        source: page
+        evidence: [국내외 가맹점 1% 캐시백, Coin-Save 월 10회를 제공받으신 거래는 캐시백이 제공되지 않습니다., '단기카드대출(현금서비스), 장기카드대출(카드론), 연회비, 각종수수료, 이자, 포인트사용, 지방세, 수도요금, 선불카드 충전(GIFT카드 구매 등), 무이자 할부 거래는제외됩니다.']
+        target:
+          exclude_categories: [convenience, hospital, pharmacy]
+          all: true
+          exclude_merchants: [cafe_bene, coffee_bean, dunkin, paris_baguette, starbucks, tous_les_jours]
+        reward: {type: cashback, rate: 1}
+        stack: main
+      - key: cashback-1-coinsave-area
+        title: 생활친화 가맹점 2만원 미만 1% 캐시백
+        source: page
+        evidence: [국내외 가맹점 1% 캐시백, '자주 가는 생활친화 가맹점에서 월 10회에 한하여 건당 2만원 이상 결제 시, 1천원 미만 결제금액을 할인해 드리는 서비스입니다.', '편의점, 병원( 동물병원, 요양병원 제외 ), 약국, 주요 커피&베이커리(스타벅스/커피빈/던킨도너츠/까페베네/파리바게뜨/뚜레쥬르)', 횟수한도 월 10회(이후 건에 대해서는 1% 캐시백 제공)]
+        target:
+          categories: [convenience, hospital, pharmacy]
+          merchants: [cafe_bene, coffee_bean, dunkin, paris_baguette, starbucks, tous_les_jours]
+        when:
+          - amount: {below: 20000}
+        reward: {type: cashback, rate: 1}
+        stack: main
+        unmodeled: ['생활친화 가맹점 2만원 이상 결제는 월 10회 Coin-Save(1천원 미만 금액 할인)를 먼저 받고 11회째부터 1% 캐시백인데, 1천원 미만 금액 할인을 계산할 수 없어 2만원 이상 결제는 계산하지 않는다']
+      - key: cashback-extra-07
+        title: 생활밀착 가맹점 0.7% 추가 캐시백
+        source: page
+        evidence: [생활밀착 가맹점 추가 0.7% 캐시백(총 1.7% 캐시백), 3개마트(홈플러스/이마트/롯데마트), 이동통신요금(SKT/KT/LG U+) 자동이체 거래, 대중교통(버스/지하철), '홈플러스, 이마트, 롯데마트 계열의 슈퍼슈퍼마켓(SSM) 및 온라인 매장을 포함합니다.']
+        target:
+          merchants: [emart, emart_everyday, homeplus, homeplus_express, lotte_mart, lotte_super]
+        reward: {type: cashback, rate: 0.7}
+        stack: extra
+      - key: cashback-extra-07-telecom
+        title: 이동통신요금 자동이체 0.7% 추가 캐시백
+        source: page
+        evidence: [생활밀착 가맹점 추가 0.7% 캐시백(총 1.7% 캐시백), 이동통신요금(SKT/KT/LG U+) 자동이체 거래]
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 0.7}
+        stack: extra
+      - key: cashback-extra-07-transit
+        title: 버스·지하철 0.7% 추가 캐시백
+        source: page
+        evidence: [생활밀착 가맹점 추가 0.7% 캐시백(총 1.7% 캐시백), 대중교통(버스/지하철)]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 0.7}
+        stack: extra
+      - key: movie-1500
+        title: CGV·메가박스 온라인 9천원 이상 1,500원 할인
+        source: page
+        evidence: ['CGV, 메가박스 사이트에서 영화 예매 시 최대 3,000원 결제일 할인 (9천원 이상일 경우 1,500원 할인, 1만 8천원 이상일 경우 3,000원 할인)', '제공기준: 통합 일 1회, 월 5회, 연 12회 제공', 서비스 이용 직전월 30만원(일시불+할부) 이상 이용 시 제공됩니다.]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+          - amount: {min: 9000, below: 18000}
+        reward: {type: billing_discount, fixed: 1500}
+        limits:
+          - {shared: movie-day}
+          - {shared: movie-month}
+          - {shared: movie-year}
+        tiers: {from: 300000}
+        stack: main
+      - key: movie-3000
+        title: CGV·메가박스 온라인 1만8천원 이상 3,000원 할인
+        source: page
+        evidence: ['CGV, 메가박스 사이트에서 영화 예매 시 최대 3,000원 결제일 할인 (9천원 이상일 경우 1,500원 할인, 1만 8천원 이상일 경우 3,000원 할인)', '제공기준: 통합 일 1회, 월 5회, 연 12회 제공', 서비스 이용 직전월 30만원(일시불+할부) 이상 이용 시 제공됩니다.]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+          - amount: {min: 18000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {shared: movie-day}
+          - {shared: movie-month}
+          - {shared: movie-year}
+        tiers: {from: 300000}
+        stack: main
+      - key: seoul-land-50
+        title: 서울랜드 자유이용권 50% 할인
+        source: page
+        evidence: [서울랜드 50% 할인, '할인 횟수 일 1회, 연 3회(연 기준 1월~12월)', 본인 자유이용권 현장구매에 한정, 서비스 이용 직전월 30만원(일시불+할부) 이상 이용 시 제공됩니다.]
+        target:
+          merchants: [seoul_land]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: day, count: 1}
+          - {per: year, count: 3}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: [본인 자유이용권 현장구매만 할인한다, 전월 실적과 할인 횟수는 신한카드 Simple과 합산한다]
+    unmodeled: ['교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다', 해외 이용과 전표 매입 지연은 다음 달 이용금액에 반영될 수 있다, Coin-Save는 신한카드 다른 할인과 중복되지 않고 매출 부분 취소 시 적용하지 않는다]
+open_questions:
+  - {path: 'revisions[0].benefits[movie-1500].reward', question: 영화와 서울랜드 할인 결제가 1% 캐시백도 함께 받는지 원문에 없다. 덜 주는 쪽으로 같은 묶음에 두어 큰 쪽만 준다, assumed: 큰 쪽 하나}
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2025.07.31. 연회비 국내전용·UnionPay 2.7만원, UnionPay 모바일 단독 2.2만원. 1% 캐시백과 생활밀착 0.7% 추가 캐시백은 전월 실적 조건이 없다. 캐시백은 결제일 다음 2영업일 안에 결제계좌로 들어온다. 영화와 서울랜드 할인은 직전월 30만원 이상, 신규 회원은 등록월 다음 달 말까지 실적 없이 제공. 원문 교통카드 이용금액은 전월 실적 기준 합산이라 적혀 있으나 신한 공통 방식에 따라 시내버스와 지하철을 실적에서 뺐다.

@@ -1,0 +1,41 @@
+card: shinhan-berbee
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 KT 자동납부 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {kt-telecom: 5000}}
+  calc: 50만원 이상 구간 정액 5,000원
+- name: 50만 직전 KT 3천원
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {kt-telecom: 3000}}
+  calc: 30만원 구간 정액 3,000원
+- name: 30만 직전 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만
+- name: GS25 5% 월 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {gs25-5: 1500}}
+  - {payment: 1, benefits: {gs25-5: 500}}
+  calc: 30,000 x 5% = 1,500원, 다음은 남은 500원
+- name: CGV 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cgv-10: 1500}}
+  calc: 15,000 x 10% = 1,500원

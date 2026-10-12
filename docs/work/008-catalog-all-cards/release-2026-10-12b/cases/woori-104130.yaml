@@ -1,0 +1,34 @@
+card: woori-104130
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 직전은 적립 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, category: traditional_market, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 실적 미달
+- name: 20만 구간 전통시장 2%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, category: traditional_market, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-market-2: 600}, counted: 30000}
+  calc: 3만원의 2% 600원, 기본과 중복 안 됨
+- name: 기본 0.2%와 통합 한도 5천점
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, category: restaurant, channel: offline}
+  - {at: 2026-11-06T12:00, amount: 300000, category: traditional_market, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100}, counted: 50000}
+  - {payment: 1, benefits: {special-market-2: 4900}, counted: 300000}
+  calc: 기본 100원, 전통시장 6천원 중 남은 한도 4,900원
+- name: 기본은 1만원 미만 제외
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 9000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9000}
+  calc: 1만원 미만

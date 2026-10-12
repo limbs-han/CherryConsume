@@ -1,0 +1,55 @@
+card: woori-103305
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 스타벅스 55% 건당 3,300원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-10-05T09:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-55: 3300}, counted: 0}
+  calc: 5,500원이 건당 3,300원으로, 할인 건 실적 제외
+- name: 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-10-05T09:00, amount: 5000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 5000}
+  calc: 30만 미만
+- name: 10월 커피 월 1만1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-10-01T09:00, amount: 6000, merchant: twosome, channel: offline}
+  - {at: 2026-10-02T09:00, amount: 6000, merchant: twosome, channel: offline}
+  - {at: 2026-10-03T09:00, amount: 6000, merchant: twosome, channel: offline}
+  - {at: 2026-10-04T09:00, amount: 6000, merchant: twosome, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-55: 3300}, counted: 0}
+  - {payment: 1, benefits: {coffee-55: 3300}, counted: 0}
+  - {payment: 2, benefits: {coffee-55: 3300}, counted: 0}
+  - {payment: 3, benefits: {coffee-55: 1100}, counted: 0}
+  calc: 3,300원 세 번 뒤 남은 1,100원
+- name: 12월은 커피 월 2만2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-12-01T09:00, amount: 6000, merchant: twosome, channel: offline}
+  - {at: 2026-12-02T09:00, amount: 6000, merchant: twosome, channel: offline}
+  - {at: 2026-12-03T09:00, amount: 6000, merchant: twosome, channel: offline}
+  - {at: 2026-12-04T09:00, amount: 6000, merchant: twosome, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-55: 3300}, counted: 0}
+  - {payment: 1, benefits: {coffee-55: 3300}, counted: 0}
+  - {payment: 2, benefits: {coffee-55: 3300}, counted: 0}
+  - {payment: 3, benefits: {coffee-55: 3300}, counted: 0}
+  calc: 11~12월 한도 22,000원
+- name: 택시, 편의점, 영화
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-10-05T23:00, amount: 10000, category: taxi, channel: offline}
+  - {at: 2026-10-06T12:00, amount: 5000, category: convenience, channel: offline}
+  - {at: 2026-10-07T19:00, amount: 14000, category: movie, channel: offline}
+  expect:
+  - {payment: 0, benefits: {transit-33: 2200}, counted: 0}
+  - {payment: 1, benefits: {cvs-11: 550}, counted: 0}
+  - {payment: 2, benefits: {movie-5500: 5500}, counted: 0}
+  calc: 3,300원이 건당 2,200원, 편의점 550원, 영화 5,500원

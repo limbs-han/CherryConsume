@@ -1,0 +1,73 @@
+card: woori-103483
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 갤러리아 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T14:00, amount: 100000, merchant: galleria}
+  expect:
+  - {payment: 0, benefits: {galleria-dept-5: 5000}, counted: 0}
+  calc: 100,000 × 5% = 5,000. 갤러리아 이용은 실적 제외
+- name: 50만 직전은 혜택 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T14:00, amount: 100000, merchant: galleria}
+  - {at: 2026-11-06T14:00, amount: 100000, category: restaurant}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {}}
+  calc: 0 구간
+- name: 100만 구간 갤러리아 7% 월 2만원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T14:00, amount: 400000, merchant: galleria}
+  expect:
+  - {payment: 0, benefits: {galleria-dept-7: 20000}}
+  calc: 28,000을 월 20,000으로 자른다
+- name: KTX 온라인 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 50000, merchant: korail, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-rail-3: 1500}, counted: 0}
+  calc: 50,000 × 3%. 생활 할인 받은 건은 실적 제외
+- name: 카카오T 온라인 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T23:00, amount: 20000, merchant: kakao_t, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-kakao-t-3: 600}}
+  calc: 20,000 × 3%
+- name: 배민 2만원 직전은 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 19999, merchant: baemin, channel: online}
+  - {at: 2026-11-06T19:00, amount: 30000, merchant: coupang_eats, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-1pct: 199}}
+  - {payment: 1, benefits: {life-delivery-3: 900}}
+  calc: 19,999 × 1% = 199. 30,000 × 3% = 900
+- name: 넷플릭스 정기결제 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {life-ott-3: 510}}
+  calc: 17,000 × 3%
+- name: 생활 월 1만원 넘으면 다음 결제는 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 400000, merchant: korail, channel: online}
+  - {at: 2026-11-06T09:00, amount: 100000, merchant: srt, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-rail-3: 10000}}
+  - {payment: 1, benefits: {life-1pct: 1000}}
+  calc: 12,000을 1만원으로 자른다. 둘째는 1%
+- name: 일반 가맹점 1% 월 3만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 4000000, category: online_shopping}
+  expect:
+  - {payment: 0, benefits: {life-1pct: 30000}}
+  calc: 40,000을 월 30,000으로 자른다

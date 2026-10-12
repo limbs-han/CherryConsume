@@ -1,0 +1,105 @@
+schema_version: 2
+id: shinhan-bdbdma
+issuer: shinhan
+name: 신한카드 Edu Plan+
+short_name: 신한 Edu Plan+
+kind: credit
+product_codes: [BDBDMA]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 40000}
+  - {scope: global, brand: mastercard, amount: 43000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1228598_2207.html', fetched_at: 2026-10-12, review_no: 제2025-C1h-16397호, review_valid_until: 2026-11-10}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202407120001', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-07-01
+    source: page
+    tiers: [0, 300000, 500000, 1000000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.academy, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.study_material, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, telecom, transit.bus_city, transit.rail, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {mart-1: 500000, medical-1: 500000, megabox-7000: 500000, regular-1: 500000}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 캐시백과 할인을 하지 않는다, 키오스크나 PG사 이름으로 찍히는 결제는 캐시백하지 않는다]
+    limits:
+      - {key: medical-regular, per: month, amount: 2000, base: 200000}
+    benefits:
+      - key: academy
+        title: 학원비 3~10% 캐시백
+        source: page
+        evidence: ['30만원 이상 50만원 미만 3% 1만원, 50만원 이상 100만원 미만 5% 2만원, 100만원 이상 200만원 미만 7% 5만원, 200만원 이상 10% 9만원', '학원비 오프라인 결제 시 일반전문학원, 학습지, 유치원 가맹점 업종 이용금액', 학원비 온라인 결제 시 학원비 매출 전용 결제대행업체(PG) 이용금액]
+        target:
+          categories: [education.academy, education.kindergarten, education.study_material]
+        reward:
+          type: cashback
+          rate: {300000: 3, 500000: 5, 1000000: 7, 2000000: 10}
+        limits:
+          - per: month
+            amount: {300000: 10000, 500000: 20000, 1000000: 50000, 2000000: 90000}
+        tiers: {from: 300000}
+        unmodeled: [학원비 전용 PG 가맹점으로 찍히는 온라인 학원비도 대상이지만 업종으로 가리지 못한다]
+      - key: mart-1
+        title: 3대 할인점 1% 캐시백
+        source: page
+        evidence: ['3대 할인점: 홈플러스, 이마트, 롯데마트 오프라인 매장', 50만원 이상 할인점 캐시백 한도 2천원, 3대 할인점 이용금액 합산 월 20만원까지(캐시백 금액 기준 월 2천원까지) 캐시백 됩니다., 창고형 할인매장과 할인점 계열 슈퍼마켓 이용금액은 캐시백 되지 않습니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {per: month, amount: 2000, base: 200000}
+        tiers: {from: 500000}
+        unmodeled: ['주차장, 문화센터, 할인점 입점 임대 매장은 캐시백하지 않는다']
+      - key: medical-1
+        title: 병원·약국 1% 캐시백
+        source: page
+        evidence: ['의료: 병원(종합병원, 개인병원, 치과병원, 응급실 운영 병원, 한의원), 약국 가맹점 업종', 의료 및 정기결제 이용금액 합산 월 20만원까지(캐시백 금액 기준 월 2천원까지) 캐시백 됩니다.]
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: medical-regular}
+        tiers: {from: 500000}
+      - key: regular-1
+        title: 도시가스·전기·이동통신 정기결제 1% 캐시백
+        source: page
+        evidence: ['정기결제: 도시가스, 전기요금, 이동통신(SKT, KT, LG U+) 정기결제', 도시가스, 전기요금이 아파트 관리비에 포함되는 경우 캐시백 되지 않습니다., '이동통신요금 정기결제 금액만 캐시백되며, 정기결제 외 이용금액 및 알뜰폰·선불폰·결합상품(TV, 인터넷, 유선전화 등) 이용금액은 캐시백 되지 않습니다.']
+        target:
+          categories: [utility.electricity, utility.gas]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: medical-regular}
+        tiers: {from: 500000}
+      - key: megabox-7000
+        title: 메가박스 온라인 예매 7천원 할인
+        source: page
+        evidence: [메가박스 영화 온라인 예매 7천원 즉시 할인, 월 1회 할인, 할인 받기 전 이용금액 기준 1회 7천원 이상인 경우 할인됩니다., 메가박스 공식 홈페이지/앱 이용금액만 할인되며 그 외 통신사 등 홈페이지/앱 이용금액은 할인되지 않습니다.]
+        target:
+          merchants: [megabox]
+        when:
+          - {channel: online}
+        reward: {type: onsite_discount, fixed: 7000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [메가박스 식음료 결제는 할인하지 않는다]
+    unmodeled: ['월 20만원 이상 학원비 결제 건수가 3~4건이면 5천원, 5건 이상이면 1만원 추가 캐시백은 한 달 건수로 정해 계산하지 않는다', 교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 신차 구입금액과 TV수신료는 실적에서 빠진다, '본인카드와 가족카드의 전월 이용금액, 한도, 캐시백을 합산한다', 서비스는 영역별로 이용한 거래 순서대로 적용한다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+notes: '신한카드 상품 페이지와 상품 상세 API 기준. 연회비는 API afeInfoList로 국내 4만원(기본 7천 + 제휴 3만 3천), Mastercard 4만 3천원(기본 7천 + 제휴 3만 6천). 학원비(일반전문학원, 학습지, 유치원 업종)는 전월 30만/50만/100만/200만원 구간 3/5/7/10%, 한도 1만/2만/5만/9만원. 할인점 1%와 의료·정기결제 1%는 전월 50만원 이상에 각각 월 20만원까지 2천원. 메가박스 온라인 예매 7천원 즉시할인 월 1회는 50만원 이상. 신규 발급 회원은 등록월 다음 달까지 학원비 30만원 구간, 생활비와 영화는 실적과 상관없이 받는다. 실적 제외: 학원비 대상, 카드대출, 기프트·선불카드, 상품권·선불전자지급수단, 국세·지방세·수도요금, 4대보험, 아파트관리비, 도시가스, 전기요금, 스쿨뱅킹, 대학 등록금, 취소, 신차 구입, 통신요금, 제약·약국·철도. 페이지 목록에 연회비가 없어 실적에 넣었다. 취소 금액을 어느 달 실적에서 빼는지 페이지에 없어 카드사 기본값을 쓴다.'

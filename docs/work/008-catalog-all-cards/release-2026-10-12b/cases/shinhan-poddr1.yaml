@@ -1,0 +1,85 @@
+card: shinhan-poddr1
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 오전 카페와 점심 음식점
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 6000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 50000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {day-cafe-10: 600}}
+  - {payment: 1, benefits: {day-restaurant-10: 1000}}
+  - {payment: 2, benefits: {day-restaurant-10: 1000}}
+  calc: 600원, 1만원까지 1,000원, 1,000원
+- name: 40만 직전 혜택 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T09:00, amount: 6000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만
+- name: 저녁 편의점과 배달앱
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 8000, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 25000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T23:00, amount: 8000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {night-convenience-10: 800}}
+  - {payment: 1, benefits: {night-delivery-10: 1000}}
+  - {payment: 2, benefits: {}}
+  calc: 800원, 1만원까지 1,000원, 22시 넘어 없음
+- name: Daily Plan 쇼핑과 이동 생활
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 10000, merchant: daiso, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T14:00, amount: 60000, merchant: sk_energy, payment_method: physical_card}
+  - {at: 2026-11-04T15:00, amount: 20000, merchant: socar, payment_method: physical_card}
+  - {at: 2026-11-04T16:00, amount: 20000, category: taxi, payment_method: physical_card}
+  - {at: 2026-11-04T17:00, amount: 20000, category: hospital, payment_method: physical_card}
+  - {at: 2026-11-04T17:30, amount: 30000, category: beauty.salon, payment_method: physical_card}
+  - {at: 2026-11-04T18:00, amount: 20000, merchant: yes24, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-10: 5000}}
+  - {payment: 1, benefits: {online-shopping-10: 3000}}
+  - {payment: 2, benefits: {olive-young-10: 2000}}
+  - {payment: 3, benefits: {}}
+  - {payment: 4, benefits: {fuel-5: 2500}}
+  - {payment: 5, benefits: {socar-5: 1000}}
+  - {payment: 6, benefits: {taxi-5: 1000}}
+  - {payment: 7, benefits: {medical-5: 1000}}
+  - {payment: 8, benefits: {salon-5: 1500}}
+  - {payment: 9, benefits: {bookstore-5: 1000}}
+  - {payment: 10, benefits: {overseas-5: 2500}}
+  calc: 5만원까지 5,000원, 3,000원, 2,000원, 잡화 일 1회라 다이소 없음, 2,500원, 1,000원, 1,000원, 1,000원, 1,500원, 1,000원, 5만원까지 2,500원. 합계 20,500원으로 120만 구간 3만원 안
+- name: 정기결제 한도 40만 구간 3천원과 영화
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T19:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-20: 2000}}
+  - {payment: 1, benefits: {telecom-10: 1000}}
+  - {payment: 2, benefits: {movie-5000: 5000}}
+  calc: 1만원 x 20% = 2,000원, 정기결제 한도 3천원 중 남은 1,000원, 영화 5,000원
+- name: 관리비 자동납부 10%
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {utility-10: 5000}}
+  calc: 5만원 x 10% = 5,000원
+- name: 다이소 오프라인 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T13:00, amount: 10000, merchant: daiso, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daiso-10: 1000}}
+  calc: 10,000 x 10% = 1,000원

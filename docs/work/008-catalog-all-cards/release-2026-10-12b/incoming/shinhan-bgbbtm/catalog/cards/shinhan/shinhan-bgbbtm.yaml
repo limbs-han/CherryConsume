@@ -1,0 +1,115 @@
+schema_version: 2
+id: shinhan-bgbbtm
+issuer: shinhan
+name: 청년취업 FANtastic S 신한카드 체크
+kind: check
+product_codes: [BGBBTM]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1188341_2206.html', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2024-03-22'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1000000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge]
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [apartment_fee, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.gas]
+      unmodeled: [포인트로 결제한 금액은 캐시백 제외]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 7000, 700000: 10000, 1000000: 15000, 1200000: 20000}
+      - {key: social, per: month, count: 4}
+      - {key: social-day, per: day, count: 1}
+    stacks:
+      - key: main
+        pick: priority
+        order: [sol-pay-15, social-commerce-10, cu-10, starbucks-10]
+        spill: none
+      - {key: overseas}
+    benefits:
+      - key: sol-pay-15
+        title: 신한 SOL페이 15% 캐시백
+        source: page
+        evidence: [간편결제(신한 SOL페이) 15% 캐시백, '일 1회, 월 4회 제공(건당 최대 2천원 캐시백)', 승인금액 건당 1만원 이상인 경우 캐시백 적용, 신한 SOL페이(앱카드)에서 청년취업 FANtastic S 신한카드 체크로 결제 시 적용, '국내이용 서비스가 중복일 경우 간편결제 서비스부터 적용되며, 중복 할인은 불가합니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - payment: [shinhan_sol_pay]
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 15}
+        limits:
+          - {per: txn, amount: 2000}
+          - {per: day, count: 1}
+          - {per: month, count: 4}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: social-commerce-10
+        title: 쿠팡·티몬 10% 캐시백
+        source: page
+        evidence: ['소셜커머스(쿠팡, 티몬) 10% 캐시백', '통합 일 1회, 월 4회 제공(건당 최대 2천원 캐시백)', 승인금액 건당 1만원 이상인 경우 캐시백 적용]
+        target:
+          merchants: [coupang, tmon]
+        when:
+          - {channel: online}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, amount: 2000}
+          - {shared: social-day}
+          - {shared: social}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [상품권과 별도 팝업 사이트는 제외]
+      - key: cu-10
+        title: CU 10% 캐시백
+        source: page
+        evidence: [편의점(CU) 10% 캐시백, '일 1회, 월 4회 제공(건당 최대 2천원 캐시백)', 승인금액 건당 1만원 이상인 경우 캐시백 적용]
+        target:
+          merchants: [cu]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, amount: 2000}
+          - {per: day, count: 1}
+          - {per: month, count: 4}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점, 면세점, 공항 등에 입점된 매장은 제외될 수 있다']
+      - key: starbucks-10
+        title: 스타벅스 10% 캐시백
+        source: page
+        evidence: [커피(스타벅스) 10% 캐시백, '일 1회, 월 4회 제공(건당 최대 2천원 캐시백)', 승인금액 건당 1만원 이상인 경우 캐시백 적용]
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, amount: 2000}
+          - {per: day, count: 1}
+          - {per: month, count: 4}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점, 면세점, 공항 등에 입점된 매장은 제외될 수 있다']
+      - key: overseas-1-2
+        title: 해외 1.2% 캐시백
+        source: page
+        evidence: [해외 전 가맹점 이용액(온라인 포함) 1.2% 캐시백, 통합캐시백 한도와 별도, 일/월 제한 없습니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 1.2}
+        stack: overseas
+    unmodeled: [해외인출 1건당 US $3 캐시백은 계산하지 않는다, 신한생명 대출금리 우대와 플래티늄 브랜드 서비스는 계산하지 않는다]
+notes: 상품 페이지 기준. 발급 대상 제한 문구가 없다. 후불교통카드 이용금액은 전전월 이용 기준이라 카드사 기본 month_offset을 쓴다. 모바일 후불교통 예외 문구가 없다. 신규 발급 회원은 등록월 다음 달 말까지 통합캐시백한도 7천원이라 30만 구간과 같다. 국내 혜택이 겹치면 신한 SOL페이부터 적용하고 중복은 안 된다. 해외 1.2%는 전월 실적 조건 문구가 없어 모든 구간에 준다.

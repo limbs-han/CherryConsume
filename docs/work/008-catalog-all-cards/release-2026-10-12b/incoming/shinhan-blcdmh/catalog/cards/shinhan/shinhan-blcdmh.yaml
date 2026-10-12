@@ -1,0 +1,73 @@
+schema_version: 2
+id: shinhan-blcdmh
+issuer: shinhan
+name: 신한카드 The PET
+kind: credit
+product_codes: [BLCDMH]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 23000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1228839_2207.html', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.water]
+      interest_free: exclude
+      month_offset: {}
+    new_card: {tier: 0}
+    benefit_exclusions:
+      when_any:
+        - payment: [coupay, kakao_pay, naver_pay, payco, smile_pay, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트 사용금액, 이 카드 할인서비스를 받은 거래는 다른 할인 제외]
+    options:
+      - key: limit_split
+        title: 동물병원·펫 전용몰 할인한도 변경
+        choices:
+          - {key: default, title: 기본 한도 그대로}
+          - {key: changed, title: 한도 비율을 바꿨다}
+        default: default
+        change: next_month
+        unsupported: [changed]
+    limits:
+      - key: vet
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 20000}
+      - key: shopping
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 20000}
+    benefits:
+      - key: vet-30
+        title: 동물병원 30% 할인
+        source: page
+        evidence: [전국 동물병원 30% 결제일 할인, 신한카드에 등록된 ‘동물병원 업종’ 가맹점에서 할인됩니다., 40만원 이상 80만원 미만 | 5천원, 80만원 이상 120만원 미만 | 1만원, 120만원 이상 | 2만원]
+        target:
+          categories: [pet.vet]
+        when:
+          - option:
+              limit_split: [default]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: vet}
+        tiers: {from: 400000}
+      - key: online-shopping-10
+        title: 온라인 쇼핑몰 10% 할인
+        source: page
+        evidence: [일반 온라인 쇼핑몰 10% 결제일 할인, '대상 쇼핑몰: 쿠팡, 네이버쇼핑, G마켓, 11번가, 컬리', 항공권 구매와 같이 온라인 쇼핑몰 가맹점이 아닌 별도 가맹점으로 승인되는 경우에도 할인되지 않습니다.]
+        target:
+          merchants: [coupang, eleven_st, gmarket, kurly, naver_plus_store]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 400000}
+    unmodeled: [교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, '펫 전용몰 5곳(어바웃펫, 핏펫, 강아지/고양이 대통령, 바잇미, 조공) 30% 할인은 가맹점이 없어 계산하지 않는다', 'Pet Life(페오펫 등록, 펫봄 돌봄, 포포즈 장례) 할인은 계산하지 않는다', 최초 신규 발급 회원은 다음 달까지 40만 구간이지만 재발급 회원 제외라 계산하지 않는다, 본인과 가족카드 실적과 한도 합산]
+notes: 상품 페이지 기준. 동물병원과 펫 전용몰 한도는 사용자가 10% 단위로 서로 옮길 수 있어 바꾼 경우 동물병원 할인을 계산하지 않는다. 네이버쇼핑은 네이버플러스스토어 가맹점으로 담았다.

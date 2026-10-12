@@ -1,0 +1,119 @@
+schema_version: 2
+id: shinhan-bgod9l
+issuer: shinhan
+name: 신한카드 Pick I 체크
+short_name: 신한 Pick I 체크
+kind: check
+product_codes: [BGOD9L, BGODD9, BGODHQ]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1221538_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2023-04-18
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인 서비스가 적용된 거래는 적립하지 않는다]
+    limits:
+      - {key: digital, per: month, amount: 3000}
+    benefits:
+      - key: cvs-10
+        title: 4개 편의점 10% 적립
+        source: page
+        evidence: ['4개 편의점(GS25, CU, 세븐일레븐, 이마트24) 이용 시 마이신한포인트 10% 적립', '4개 편의점 통합 일 1회, 월 3회, 1회 최대 1천 포인트까지 적립', 오프라인 매장에 한하여 적용되며, 전월 이용금액 20만원 이상 시 서비스가 제공됩니다.]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점 등 입점 매장은 적립하지 않는다]
+      - key: cafe-10
+        title: 커피전문점 10% 적립
+        source: page
+        evidence: [커피 업종 이용 시 마이신한포인트 10% 적립, '커피전문점 업종 통합 일 1회, 월 3회, 1회 최대 1천 포인트까지 적립', 전월 이용금액 20만원 이상 시 서비스가 제공됩니다.]
+        target:
+          categories: [cafe]
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점 등 입점 매장은 적립하지 않는다]
+      - key: overseas-1
+        title: 해외 1% 적립
+        source: page
+        evidence: ['해외: 해외 일시불 이용금액(해외사이트 거래 포함)', '월 적립한도: 1만 포인트', 해외겸용(Master) 카드 발급 후 이용 시 제공됩니다., 전월 이용금액 20만원 이상 시 서비스가 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 200000}
+        unmodeled: [해외겸용 Mastercard로 발급한 경우만 받는다, 해외 인출은 적립하지 않는다]
+      - key: digital-music
+        title: 음악 구독 10% 적립
+        source: page
+        evidence: ['디지털 구독: 음악 영역, OTT 영역, 도서 영역', '각 영역별 월 2회, 1회 최대 1천 포인트까지 적립', '음악 영역, OTT 영역, 도서 영역 합산 월 최대 3천 포인트까지 적립', '음악 | 멜론, 지니']
+        target:
+          merchants: [genie, melon]
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, count: 2}
+          - {shared: digital}
+        tiers: {from: 200000}
+        unmodeled: [해당 사이트나 앱에 직접 접속해 결제한 경우만 받는다]
+      - key: digital-ott
+        title: OTT 구독 10% 적립
+        source: page
+        evidence: ['각 영역별 월 2회, 1회 최대 1천 포인트까지 적립', 'OTT | 유튜브, 티빙']
+        target:
+          merchants: [tving, youtube_premium]
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, count: 2}
+          - {shared: digital}
+        tiers: {from: 200000}
+        unmodeled: [해당 사이트나 앱에 직접 접속해 결제한 경우만 받는다]
+      - key: digital-book
+        title: 도서 구독 10% 적립
+        source: page
+        evidence: ['각 영역별 월 2회, 1회 최대 1천 포인트까지 적립', 도서 | 리디북스]
+        target:
+          merchants: [ridi]
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, count: 2}
+          - {shared: digital}
+        tiers: {from: 200000}
+        unmodeled: [해당 사이트나 앱에 직접 접속해 결제한 경우만 받는다]
+    unmodeled: ['One Pick 쇼핑몰 적립은 그 달 가장 자주 쓴 온라인 쇼핑몰 1곳에서 5천원 이상 결제 3, 6, 9회마다 1천 포인트를 주는데 횟수 누적 보상을 담을 수 없어 뺐다', 일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 서비스는 이용한 거래 순서대로 적용한다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 2026-10-12 기준. 연회비 Mastercard 0원. 편의점, 커피, 해외, 디지털 구독 적립은 전월 20만원 이상일 때다. 신규 발급 회원은 등록월 다음 달 말까지 실적 조건 없이 제공한다. 전월 실적 제외: 현금서비스, 카드론, 연회비, 수수료, 이자, 기프트카드와 선불카드, 상품권과 선불전자지급수단, 국세, 지방세, 4대보험, 초중고 납입금, 대학 등록금, 관리비, 도시가스, 전기, 수도, 취소. 캐릭터형(맹구, 한교동)은 같은 상품이다. 디자인만 다른 같은 상품 BGODD9, BGODHQ도 이 카드로 등록한다.'

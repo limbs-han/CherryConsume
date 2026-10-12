@@ -1,0 +1,36 @@
+card: shinhan-bobct3
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 땡겨요 10% 건당 2천P
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 15000, merchant: ddangyo, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 30000, merchant: ddangyo, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ddangyo-10: 1500}, counted: 15000}
+  - {payment: 1, benefits: {ddangyo-10: 2000}, counted: 30000}
+  calc: 15,000 × 10% = 1,500. 30,000 × 10% = 3,000 중 건당 2,000P
+- name: 스타벅스 7천원 이상 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 6999, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-2: 200}, counted: 10000}
+  - {payment: 1, benefits: {}, counted: 6999}
+  calc: 10,000 × 2% = 200. 6,999원은 7천원 미만
+- name: 편의점 1만원 이상 2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-2: 400}, counted: 20000}
+  calc: 20,000 × 2% = 400
+- name: 경계 직전 299999 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 30만원 미만 적립 없음
