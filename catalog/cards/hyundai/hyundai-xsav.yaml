@@ -1,0 +1,79 @@
+schema_version: 2
+id: hyundai-xsav
+issuer: hyundai
+name: 현대카드 X Save
+short_name: 현대 X Save
+search_names: [X Save, 엑스 세이브, 현대카드 엑스세이브]
+kind: credit
+product_codes: [XSAV]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+  - {scope: global, brand: amex, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/20260330_X%20Save.pdf', fetched_at: 2026-10-11}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 1000000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 할인에서 뺀다, 현대카드의 다른 할인이 적용된 결제는 할인에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 할인에서 뺀다]
+    limits:
+      - {key: plus-5, per: month, amount: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [online-5, education-medical-5, base-1]
+        spill: split
+    benefits:
+      - key: online-5
+        title: 온라인몰 5% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 100만원 이상 시 온라인몰, 교육, 병원 5% 청구 할인, '온라인몰 : 네이버플러스 스토어, 쿠팡, 컬리', '대상점 통합해 월 1만원 할인 한도 (본인+가족 카드 합산 기준, 할인 한도 초과 시 기본 혜택 할인율 적용)', 추가 혜택은 대상점별 국내 가맹점에 한해 제공, 쿠팡의 경우 쿠팡이츠 결제 건은 국내외 가맹점으로 구분되어 기본 혜택 적용]
+        target:
+          merchants: [coupang, kurly, naver_plus_store]
+          exclude_merchants: [coupang_eats]
+        when:
+          - {region: domestic, channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: plus-5}
+        tiers: {from: 1000000}
+        unmodeled: [네이버플러스 스토어는 naver.com 도메인으로 확인되는 가맹점만 할인한다, 상품 선택 시 연결된 다른 사이트나 앱에서 결제하면 1%만 준다]
+      - key: education-medical-5
+        title: 학원·유치원·병원·약국 5% 청구 할인
+        source: manual
+        evidence: ['교육 : 학원/유치원 업종', '병원 : 병원/약국 업종', 병원의 경우 동물병원 및 의료기기 업종은 국내외 가맹점으로 구분되어 기본 혜택 적용, '할인 제외 기준 · 초·중·고교 학교 납입금, 대학·대학원 등록금 납부 결제 건']
+        target:
+          categories: [education.academy, education.kindergarten, hospital, pharmacy]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: plus-5}
+        tiers: {from: 1000000}
+      - key: base-1
+        title: 국내외 가맹점 1% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1% 청구 할인, 1회 및 연간 할인 한도 제한 없음, 해외 이용 금액 할인은 국내외겸용 카드에 한해 적용]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 500000}
+        unmodeled: [해외 이용 할인은 국내외겸용 카드만 준다]
+    unmodeled: [긴급할인 선지급 약정을 쓰면 할인 금액이 상환에 쓰인다, 간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되는 결제는 추가 혜택에서 빼고 1%만 준다, 할인은 매출전표 접수 순서로 한도를 적용한다, 실적과 할인 한도는 본인과 가족 카드를 합산한다, 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-11 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 30,000원(기본 10,000+제휴 20,000), 가족카드 10,000원. 전월 50만 이상 국내외 1%, 100만 이상 국내 온라인몰 3곳·학원/유치원·병원/약국 5% 청구 할인이고 합쳐 월 1만원을 넘으면 1%다. 원문에 끝수 처리가 없어 원 미만 버림. 할인 제외 목록에 사립유치원 납입금이 없어 유치원은 혜택 제외에서 빼고 5% 대상에 넣었다. 실적 제외는 카드론 등, 수수료, 공과금, 상품권·선불카드뿐이다. 취소는 승인월에서 빼고 해외는 취소 달에서 뺀다.
