@@ -1,0 +1,31 @@
+schema_version: 2
+id: lotte-1862
+issuer: lotte
+name: LOCA Professional
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 300000}
+  - {scope: global, brand: mastercard, amount: 300000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00031_20260923_10002.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2023-10-11'
+    source: manual
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+    benefits:
+      - key: base-cashback-1
+        title: 어디서나 1% 캐시백
+        source: manual
+        evidence: [어디서나 1% 캐시백, ㆍ실적 조건 및 한도 없이 혜택을 제공합니다., ㆍ할부 이용 시 이용일을 기준으로 전체 금액에 대하여 캐시백 혜택이 제공됩니다., (단, 무이자할부 이용금액은 제외됩니다.)]
+        target: {all: true}
+        reward: {type: cashback, rate: 1}
+    unmodeled: [즉시결제 1% 추가 캐시백과 Weekly 자동결제 1% 추가 캐시백은 결제 뒤 5영업일 안에 앱에서 즉시결제하거나 주간 자동결제가 출금될 때만 주므로 계산하지 않는다. 둘은 중복되지 않는다, LOCA 나누기를 신청한 결제는 캐시백을 주지 않는다, '고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 현금서비스·카드론·이자·수수료는 캐시백에서 빠진다', 3개월 이용 1천만원 이상이면 롯데상품권카드 5만원을 주는 혜택은 계산하지 않는다, 가족카드 이용금액도 본인 혜택에 합산한다]
+notes: 2026-10-11 상품설명서 대조. 출시일 2023-10-11. 상품 코드를 공개 목록에서 찾지 못해 공시 색인 id를 그대로 둔다. 기본 1% 캐시백은 실적 조건과 한도가 없다.
