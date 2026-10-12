@@ -1,0 +1,95 @@
+schema_version: 2
+id: kb-01599
+issuer: kb
+name: KB국민 kiwibank 체크카드
+short_name: KB kiwibank 체크
+kind: check
+product_codes:
+  - '01599'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01599', fetched_at: '2026-10-11', review_no: 200731-02508-HPP}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-10-11'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 간편결제, 호텔·백화점·대형마트·철도역사·아울렛 입점 가맹점은 적립에서 빠질 수 있다']
+    stacks:
+      - {key: main, pick: best}
+      - {key: extra, pick: best}
+    benefits:
+      - key: base-0-1
+        title: 국내 가맹점 0.1% 포인트리 기본 적립
+        source: page
+        evidence: [기본 적립 | 국내 가맹점 | 0.1% | 제한없음 | 전월 이용 실적 조건 및 적립한도 제한 없음, '적립 제외 : 대학(대학원)등록금, 상품권 및 선불카드 구입(충전)금액, 정부지원금, 아파트관리비, 취소금액, 지방세(지방세, 상하수도, 세외수입), 포인트리 충전금액, 각종 수수료 및 이자']
+        target:
+          exclude_categories: [apartment_fee, education.tuition, tax.local, utility.water]
+          all: true
+        when:
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 0.1}
+        unmodeled: [정부지원금 결제와 포인트리 충전금액은 적립에서 빠진다]
+      - key: cafe-bakery-1-5
+        title: 커피·제과·아이스크림 1.5% 추가 적립
+        source: page
+        evidence: [커피/제과·아이스크림업종 | 1.5% | 1만원, '커피, 제과/아이스크림 업종 | 1.5% | 30만원 이상 | 1만점', 포인트리 추가적립서비스는 KB국민 kiwibank 체크카드 전월 이용실적 30만원 이상 시에만 제공됩니다., '적립예시 : 커피전문점에서 10,000원 결제시 전월실적 조건 충족시 1.6%(160점) 적립(기본적립 0.1%+추가적립 1.5%)']
+        target:
+          categories: [cafe, restaurant.bakery]
+          merchants: [baskin_robbins]
+        reward: {type: points, program: kb_pointree, rate: 1.5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        stack: extra
+      - key: taxi-1-5
+        title: 택시 1.5% 추가 적립
+        source: page
+        evidence: [택시 업종 | 1.5% | 30만원 이상 | 1만점, '택시 업종 : KB국민카드 업종 분류 기준']
+        target:
+          categories: [taxi]
+        reward: {type: points, program: kb_pointree, rate: 1.5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        stack: extra
+      - key: telecom-2
+        title: 이동통신요금 자동이체 2% 추가 적립
+        source: page
+        evidence: [이동통신요금 자동이체 | 2% | 30만원 이상 | 1만점, 'SkT, KT, LGU+, LiivM 자동이체시에 한함', '적립 제외 : 유무선 통신요금 통합 청구금액 할인 제외']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+        stack: extra
+        unmodeled: [유·무선 통신요금 통합 청구금액은 적립에서 빠진다]
+      - key: gs25-2
+        title: GS25 2% 추가 적립
+        source: page
+        evidence: [GS25편의점 | 2% | 30만원 이상 | 3천점, '적립 제외 : 상품권 및 선불카드 구입 (충전) 제외']
+        target:
+          merchants: [gs25]
+        reward: {type: points, program: kb_pointree, rate: 2}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        stack: extra
+    unmodeled: ['무승인금액(자판기·터널통행료·기차/고속버스 취소 반환 수수료), 정부지원금, 포인트리 충전금액은 실적에서 빠진다', 적립 한도는 본인회원 기준이고 전표 매입 순서대로 채운다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2020.07.17 출시만 적었다., assumed: '2026-10-11'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문은 무승인금액(자판기, 터널통행료 등)을 실적에서 뺀다고만 적었다. 후불교통도 무승인 결제라 덜 주는 쪽으로 시내버스와 지하철을 실적에서 뺐다', assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. KB저축은행 결제계좌로 쓰는 체크카드다. 추가 적립은 기본 0.1%에 더해 받는다.
