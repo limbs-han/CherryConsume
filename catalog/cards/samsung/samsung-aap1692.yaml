@@ -1,0 +1,150 @@
+schema_version: 2
+id: samsung-aap1692
+issuer: samsung
+name: American Express® Reserve
+short_name: 아멕스 리저브
+search_names: [American Express Reserve, 삼성 아멕스 리저브, 아메리칸 엑스프레스 리저브, 아멕스 리저브]
+kind: credit
+product_codes: [AAP1692]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: amex, amount: 150000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1692', fetched_at: 2026-10-05}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlHI0XkZCVUUvHd%2Bo4ptDBQ%3D&sn=1', fetched_at: 2026-10-11}
+  - {id: elite, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlHI0XkZCVUUvHd%2Bo4ptDBQ%3D&sn=2', fetched_at: 2026-10-11}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2022-12-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 1000000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 1000000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 멤버십리워즈를 적립하지 않는다, '고속도로 통행요금, 문자알림서비스, 스마트오토서비스는 적립과 할인에서 빠진다', '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 적립과 할인에서 빠진다']
+    limits:
+      - key: extra
+        per: month
+        amount: {1000000: 10000, 2000000: 20000}
+      - key: lifestyle
+        per: month
+        amount: {1000000: 15000, 2000000: 30000}
+      - key: food
+        per: month
+        amount: {1000000: 15000, 2000000: 15000}
+      - key: coffee
+        per: month
+        amount: {1000000: 15000, 2000000: 15000}
+      - key: movie
+        per: month
+        amount: {1000000: 15000, 2000000: 15000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [food-30, coffee-30, starbucks-30, movie-30, base-1]
+        spill: none
+      - {key: extra}
+    benefits:
+      - key: base-1
+        title: 국내외 가맹점 멤버십리워즈 1% 적립
+        source: manual
+        evidence: ['국내외 가맹점 전월 이용금액에 관계없이, 적립한도 없이 기본 1% 적립', 1멤버십리워즈 = 1원의 가치]
+        target: {all: true}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        stack: main
+      - key: online-4
+        title: 온라인쇼핑 멤버십리워즈 추가 4% 적립
+        source: manual
+        evidence: [추가 4% 온라인쇼핑·해외, '온라인쇼핑 삼성카드 쇼핑, G마켓, 옥션, 11번가, 인터파크, 쿠팡, 티몬, 위메프, SSG.COM, 마켓컬리, 나이키닷컴, SSF SHOP', '추가 4% 월 적립한도 100만원 이상 통합 10,000 포인트, 200만원 이상 통합 20,000 포인트 영역별 15,000 포인트', '추가 적립 대상점의 경우, 기본 1% + 추가 4%의 형태로 적립됩니다.']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, interpark, kurly, nike_com, samsung_card_shopping, ssf_shop, ssg_com, tmon, wemakeprice]
+        reward: {type: points, program: samsung_bigpoint, rate: 4}
+        limits:
+          - {shared: extra}
+          - per: month
+            amount: {1000000: 10000, 2000000: 15000}
+        tiers: {from: 1000000}
+        stack: extra
+      - key: overseas-4
+        title: 해외 멤버십리워즈 추가 4% 적립
+        source: manual
+        evidence: [추가 4% 온라인쇼핑·해외, 해외 가맹점 및 해외 직접구매 이용건, '추가 4% 월 적립한도 100만원 이상 통합 10,000 포인트, 200만원 이상 통합 20,000 포인트 영역별 15,000 포인트']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 4}
+        limits:
+          - {shared: extra}
+          - per: month
+            amount: {1000000: 10000, 2000000: 15000}
+        tiers: {from: 1000000}
+        stack: extra
+      - key: food-30
+        title: 배달의민족·써브웨이·쉐이크쉑·도미노피자 30% 할인
+        source: manual
+        evidence: ['Food 배달의민족, 써브웨이, 쉐이크쉑, 도미노피자', Food·Coffee·Movie 30% 결제일할인, '월 할인한도 100만원 이상 통합 15,000원, 200만원 이상 통합 30,000원 영역별 15,000원', 'Food 중 배달의민족의 경우, 공식 앱을 통한 결제건에 한하며', 'Food 중 써브웨이·쉐이크쉑의 경우, 오프라인 결제건에 한해 혜택이 제공됩니다.']
+        target:
+          merchants: [baemin, dominos_pizza, shake_shack, subway]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: lifestyle}
+          - {shared: food}
+        tiers: {from: 1000000}
+        stack: main
+        unmodeled: ['배달의민족은 공식 앱 결제만, 써브웨이·쉐이크쉑은 오프라인 결제만 할인한다']
+      - key: coffee-30
+        title: 커피빈·블루보틀·투썸플레이스 30% 할인
+        source: manual
+        evidence: ['Coffee 스타벅스, 커피빈, 블루보틀, 투썸플레이스', 'Coffee의 경우, 오프라인 결제건에 한하며, 임대매장은 제외됩니다.']
+        target:
+          merchants: [blue_bottle, coffee_bean, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: lifestyle}
+          - {shared: coffee}
+        tiers: {from: 1000000}
+        stack: main
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: starbucks-30
+        title: 스타벅스 30% 할인
+        source: manual
+        evidence: ['Coffee 스타벅스, 커피빈, 블루보틀, 투썸플레이스', '단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: lifestyle}
+          - {shared: coffee}
+        tiers: {from: 1000000}
+        stack: main
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+      - key: movie-30
+        title: CGV·롯데시네마·메가박스·넷플릭스·웨이브 30% 할인
+        source: manual
+        evidence: ['Movie CGV, 롯데시네마, 메가박스, 넷플릭스, 웨이브', 'Movie의 경우, 오프라인 결제 및 공식 홈페이지·앱을 통한 결제건에 한해 혜택이 제공됩니다.']
+        target:
+          merchants: [cgv, lotte_cinema, megabox, netflix, wavve]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: lifestyle}
+          - {shared: movie}
+        tiers: {from: 1000000}
+        stack: main
+    unmodeled: ['아멕스 PLATINUM ELITE 등급 서비스와 삼성카드 선택 서비스(호텔·공항 발렛파킹, 국내외 공항 라운지, Be My Guest 레스토랑 현장할인, 공항 커피, 공항 리무진·철도)는 결제 하나에 붙는 혜택이 아니거나 현장할인이라 계산하지 않는다', 할인은 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 서비스 안내서 심의일(2022-12-01)로 두었다. 상품 출시일은 2021-03-31이다, assumed: '2022-12-01'}
+  - {path: 'revisions[0].benefits[base-1].reward.program', question: 멤버십리워즈는 따로 전환하지 않고 빅포인트와 합산해 1MR=1원으로 쓴다고 적혀 있어 samsung_bigpoint로 계산했다. 포인트 프로그램을 따로 둘지 정한다, assumed: samsung_bigpoint}
+  - {path: 'revisions[0].stacks', question: 삼성카드 할인이 적용된 결제는 멤버십리워즈 적립에서 빠져 30% 할인과 기본 1%를 한 묶음에 두었다. 할인 한도를 넘긴 다음 결제부터 기본 1%를 받는다, assumed: 'pick: priority, spill: none'}
+notes: 2026-10-11 서비스 안내서(여신금융협회 심의필 제2022-C1a-10580호)와 PLATINUM ELITE 서비스 안내(제2026-C1a-02820호, 제2026-C1a-05330호) 대조. 연회비 해외겸용 아멕스 150,000원(기본 70,000+제휴 80,000). 추가 4%는 기본 1%에 더해 받고, 추가 4% 한도를 넘기면 기본 1%만 받는다. 발급월+1개월까지는 100만원 미만이어도 100만 구간 혜택을 준다. 실적 제외는 4대보험, 국세·지방세·공과금, 초중고 납입금, 대학 등록금, 대중교통, 택시, 아파트관리비, 부동산 임대료, 기프트·선불카드 구매와 충전, 상품권이다. 무이자할부는 실적 제외 목록에 없어 실적에 넣었다.
