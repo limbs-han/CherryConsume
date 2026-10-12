@@ -1,0 +1,98 @@
+schema_version: 2
+id: hyundai-159416
+issuer: hyundai
+name: 이마트 e카드 Plus
+short_name: 현대 이마트 e Plus
+search_names: [이마트 e카드 플러스, 이마트 현대카드 e Plus, 이마트e카드 Plus]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AZX-20260324-1756-32_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%9D%B4%EB%A7%88%ED%8A%B8%20e%EC%B9%B4%EB%93%9C_Plus_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-11, review_no: 제2025-C1a-17065호}
+checked_at: 2026-10-11
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립에서 뺀다, 현대카드의 다른 할인이 적용된 결제는 적립에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 적립에서 뺀다, 부분 무이자 할부는 수수료를 내는 개월의 이용 금액만 적립한다]
+    benefits:
+      - key: emart-5
+        title: 이마트 7대 가맹점 5% 신세계포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 영역별 5% 신세계포인트 적립, '이마트 7대 가맹점 : 이마트, 트레이더스 홀세일 클럽, 이마트 에브리데이, 이마트24, 일렉트로마트, 노브랜드, 스타벅스', '영역별 월 5천 신세계포인트 적립 한도 (본인+가족 카드 합산 기준, 적립 한도 초과 시 미적립)', 이마트 7대 가맹점은 일 횟수 제한 없이 혜택 적용, 매출 건별로 소수점 이하 반올림 후 적립]
+        target:
+          merchants: [emart, emart24, emart_everyday, starbucks, traders]
+        reward: {type: points, program: shinsegae_point, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        unmodeled: [일렉트로마트와 노브랜드도 5% 대상이지만 가맹점이 없어 0.5%로 계산한다, 이마트 7대 가맹점 안 임대 매장은 0.5%만 준다, 스타벅스 온라인 선물하기와 선불카드 충전은 적립하지 않는다]
+      - key: online-5
+        title: 온라인몰 5% 신세계포인트 적립
+        source: manual
+        evidence: ['온라인몰 : G마켓, 옥션, SSG.COM, 네이버쇼핑, 쿠팡', 영역별 월 5천 신세계포인트 적립 한도, '온라인몰, 병원·약국, 학원은 본인+가족 카드 통합하여 영역별 일 1회 혜택 적용', 쿠팡의 경우 쿠팡이츠 결제 건은 국내외 가맹점으로 구분되어 기본 혜택 적용]
+        target:
+          merchants: [auction, coupang, gmarket, naver_plus_store, ssg_com]
+          exclude_merchants: [coupang_eats]
+        when:
+          - {channel: online}
+        reward: {type: points, program: shinsegae_point, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 5000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+        unmodeled: [네이버쇼핑은 naver.com 도메인으로 확인되는 가맹점만 적립한다, 상품 선택 시 연결된 다른 사이트나 앱에서 결제하면 0.5%만 준다]
+      - key: medical-5
+        title: 병원·약국 5% 신세계포인트 적립
+        source: manual
+        evidence: ['병원·약국 : 종합병원, 한의원, 약국 등 병원·약국 업종', 병원·약국 영역의 경우 동물병원 및 의료기기 업종은 국내외 가맹점으로 구분되어 기본 혜택 적용, 영역별 일 1회 혜택 적용]
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: points, program: shinsegae_point, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 5000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+      - key: academy-5
+        title: 학원 5% 신세계포인트 적립
+        source: manual
+        evidence: ['학원 : 입시학원, 예체능학원, 자동차학원 등 학원 업종', 영역별 일 1회 혜택 적용]
+        target:
+          categories: [education.academy]
+        reward: {type: points, program: shinsegae_point, rate: 5, round: round}
+        limits:
+          - {per: month, amount: 5000}
+          - {per: day, count: 1}
+        tiers: {from: 500000}
+      - key: base-05
+        title: 국내외 가맹점 0.5% 신세계포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 0.5% 신세계포인트 적립, 기본 혜택 대상점은 추가 혜택 대상점 외 국내외 가맹점임, 적립 한도 없이 혜택 제공, '6,517원 결제 시 33 신세계포인트 적립(6,517원 x 0.5% = 32.58의 소수점 이하 반올림)']
+        target:
+          exclude_categories: [education.academy, hospital, pharmacy]
+          all: true
+          exclude_merchants: [auction, coupang, emart, emart24, emart_everyday, gmarket, naver_plus_store, ssg_com, starbucks, traders]
+        reward: {type: points, program: shinsegae_point, rate: 0.5, round: round}
+        tiers: {from: 500000}
+        unmodeled: [5% 대상점 결제가 월 한도나 일 1회를 넘으면 원문은 적립하지 않는다. 대상점은 0.5%에서 빼 두었고 대상점 안 임대 매장이나 연결된 다른 사이트 결제도 0.5%를 계산하지 않는다]
+    unmodeled: [간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되는 결제는 0.5%만 준다, 백화점·할인점·쇼핑몰 안 일부 매장은 0.5%만 준다, 적립은 매출전표 접수 순서로 한도를 적용한다, 실적과 적립 한도는 본인과 가족 카드를 합산한다, TV 수신료·고속도로 통행료·후불하이패스는 실적에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다]
+open_questions:
+  - {path: product_codes, question: 카드 상세 주소의 상품 코드를 확인하지 못했다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 가이드북은 2026년 4월 기준이고 출시일은 2024-09-19다. 그 사이 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+notes: 2026-10-11 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(Visa Platinum) 30,000원(기본 10,000+제휴 20,000), 가족카드 10,000원. 전월 50만 이상 추가 혜택 대상점 외 국내외 0.5%, 이마트 7대 가맹점·온라인몰·병원약국·학원 5% 신세계포인트이고 영역별 월 5천 포인트를 넘으면 적립하지 않는다. 온라인몰·병원약국·학원은 영역별 하루 1회. 매출 건별 소수점 이하 반올림. 실적은 전월 1일~말일 일시불과 할부이고 공과금, 전기·가스·관리비, 학교 납입금, 4대보험, 고속버스, 무이자 할부 등을 뺀다. 취소는 승인월에서 빼고 해외는 취소 달에서 뺀다. 최초 신규 발급 시 수령 등록월 다음 달 이용 건까지 50만 미만도 혜택을 준다.
