@@ -1,0 +1,44 @@
+schema_version: 2
+id: woori-500091
+issuer: woori
+name: LG헬로비전 언제나 우리카드
+kind: credit
+product_codes:
+  - '500091'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500091', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2026-05-01'
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: hellovision-autopay
+        title: LG헬로비전 홈상품·렌탈 요금 자동납부 청구할인
+        source: page
+        evidence: ['30만원 이상 ~ 70만원 미만 | 8,000원 | LG헬로비전 홈상품 또는 렌탈 요금 자동납부 필수', '70만원 이상 ~ 120만원 미만 | 15,000원', '120만원 이상 | 20,000원', 홈상품(Hello TV/인터넷) 또는 렌탈(Hello rental) 요금 자동납부 건에 한하여 할인 제공, 모바일(Hello mobile) 요금은 할인대상에서 제외, LG헬로비전 언제나 우리카드로 할인받은 이용금액(해당 이용금액 전체) ... 전월실적에 포함되지 않습니다.]
+        target:
+          merchants: [lg_hellovision]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 8000, 700000: 15000, 1200000: 20000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [가족카드는 청구할인을 받지 못한다, 헬로모바일 요금은 할인 제외다. 홈상품·렌탈과 모바일 결합 요금제는 홈상품·렌탈 요금만 할인한다]
+    unmodeled: [가족카드 전월 이용실적은 본인카드와 합산한다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 공공임대료와 국가·공공기관 가맹점 이용금액은 실적에서 빠진다, 신규 특례는 처음 발급받은 경우만이다. 만기나 해지 뒤 같은 상품을 다시 받으면 해당하지 않는다]
+notes: 2026-10-11 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-05-01. 연회비 20,000원. 전월 국내외 30만/70만/120만 이상 월 할인한도 8,000/15,000/20,000원. 할인받을 금액보다 승인금액이 적으면 승인금액만큼 할인한다. 신규 발급 다음 달 말까지 최저 구간.
