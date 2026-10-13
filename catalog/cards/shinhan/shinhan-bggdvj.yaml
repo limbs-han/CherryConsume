@@ -1,0 +1,212 @@
+schema_version: 2
+id: shinhan-bggdvj
+issuer: shinhan
+name: 신한카드 Hey Young 체크
+short_name: 신한 Hey Young 체크
+kind: check
+product_codes: [BGGDT9, BGGDVJ]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1235589_2206.html', fetched_at: 2026-10-12, review_no: 제20250408-Dpp-002호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2020-06-12
+    source: page
+    tiers: [0, 200000, 500000, 800000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, transit.bus_city, transit.subway]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인서비스가 적용된 거래는 캐시백하지 않는다, Tmoney 선불 사용 금액은 실적과 캐시백에서 빠진다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000, 500000: 10000, 800000: 20000, 1000000: 30000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [overseas-1-2, transit-5, telecom-2000, cgv-5000, convenience-1000, cafe-1000, fastfood-1000, delivery-1000, living-1000, ott-1000, shopping-1000, pay-1]
+    benefits:
+      - key: transit-5
+        title: 대중교통 5% 캐시백
+        source: page
+        evidence: [대중교통 이용 금액 5% 캐시백, 마을/시내/시외/공항버스/지하철(고속버스 제외), 후불교통기능을 이용한 터치(RF방식) 거래 시 서비스가 적용됩니다., 월 최대 3천원까지 캐시백 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: telecom-2000
+        title: 이동통신요금 자동납부 2천원 캐시백
+        source: page
+        evidence: ['이동통신요금 : SKT, KT, LG U+', 건당 5만원 이상 자동납부 시 2천원 캐시백(월 1회 제공), '약정금액 대납, 지점을 통한 월납, 알뜰폰은 캐시백이 제외됩니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 50000}
+          - billing: [autopay]
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: cgv-5000
+        title: CGV 영화 예매 5천원 캐시백
+        source: page
+        evidence: [CGV 영화 예매 5천원 캐시백, 건당 2만원 이상 결제 시 5천원 캐시백(월 1회 제공), CGV사이트/앱 직접 접속이용 또는 현장 결제 시에 한하여 적용됩니다.]
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: ['기프트콘, 상품권, 매점처럼 영화 예매가 아닌 결제는 캐시백하지 않는다']
+      - key: convenience-1000
+        title: 편의점 1천원 캐시백
+        source: page
+        evidence: ['편의점 : GS25, CU, 이마트24', 건당 1만원 이상 결제 시 1천원 캐시백(일 1회/월 5회 제공), 오프라인 매장에 한하여 적용]
+        target:
+          merchants: [cu, emart24, gs25]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: cafe-1000
+        title: 카페 1천원 캐시백
+        source: page
+        evidence: ['카페 : 스타벅스, 투썸플레이스, 이디야, 폴바셋, 메가MGC커피, 빽다방, 커피빈, 엔제리너스', 건당 1만원 이상 결제 시 1천원 캐시백(일 1회/월 5회 제공), 스타벅스는 사이렌오더로 이용해도 캐시백이 적용됩니다.]
+        target:
+          merchants: [angel_in_us, coffee_bean, ediya, mega_coffee, paik_coffee, paul_bassett, starbucks, twosome]
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점 입점 매장은 캐시백하지 않는다]
+      - key: fastfood-1000
+        title: 패스트푸드 1천원 캐시백
+        source: page
+        evidence: ['패스트푸드 : KFC, 크리스피크림도넛, 배스킨라빈스', 건당 1만원 이상 결제 시 1천원 캐시백(일 1회/월 5회 제공), 오프라인 매장에 한하여 캐시백이 적용]
+        target:
+          merchants: [baskin_robbins, kfc]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [크리스피크림도넛은 공통 가맹점이 없어 계산하지 않는다]
+      - key: delivery-1000
+        title: 땡겨요 1천원 캐시백
+        source: page
+        evidence: ['배달앱 : 땡겨요', 건당 1만원 이상 결제 시 1천원 캐시백(일 1회/월 5회 제공), '땡겨요 앱에서 배달 관련 이용 시에만 캐시백이 적용되며, 온라인 충전 및 선물하기 이용 금액에는 적용되지 않습니다.']
+        target:
+          merchants: [ddangyo]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: living-1000
+        title: 올리브영·다이소 1천원 캐시백
+        source: page
+        evidence: ['생활 가맹점 : 올리브영, 다이소', 건당 1만원 이상 결제 시 1천원 캐시백(일 1회/월 5회 제공), '백화점, 할인점 등 입점 매장은 캐시백이 적용되지 않으며, 다이소는 오프라인 매장에 한하여 캐시백이 적용됩니다.']
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [올리브영 온라인도 대상이지만 다이소와 횟수를 같이 써서 오프라인만 계산한다]
+      - key: ott-1000
+        title: OTT 정기결제 1천원 캐시백
+        source: page
+        evidence: ['OTT : 넷플릭스, 디즈니플러스, 티빙', 건당 1만원 이상 결제 시 1천원 캐시백(일 1회/월 5회 제공), 공식 홈페이지를 통한 정기결제(자동이체납부) 건에만 캐시백이 적용됩니다.]
+        target:
+          merchants: [disney_plus, netflix, tving]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay, subscription]
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: shopping-1000
+        title: 온라인 쇼핑 1천원 캐시백
+        source: page
+        evidence: ['온라인 쇼핑 : 쿠팡, 무신사, 지그재그, 에이블리, 크림', 건당 2만원 이상 결제 시 1천원 캐시백(일 1회/월 5회 제공), 쿠팡이츠는 쿠팡에 포함되어 서비스 적용됩니다.]
+        target:
+          merchants: [ably, coupang, coupang_eats, kream, musinsa, zigzag]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: pay-1
+        title: 간편결제 1% 캐시백
+        source: page
+        evidence: [간편결제(Pay)로 국내 이용 시 1% 캐시백, 건당 2만원 이상 결제 시 1% 캐시백, 월 최대 5천원까지 캐시백 제공, '신한 SOL페이(신한 슈퍼SOL로 결제 포함), 삼성페이, 헤이영페이', '국내 생활 서비스와 간편결제 서비스가 중복될 경우, 생활 서비스가 우선 적용되며 간편결제 서비스는 적용되지 않습니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - amount: {min: 20000}
+          - payment: [samsung_pay, shinhan_sol_pay]
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [헤이영페이는 공통 결제수단이 없어 계산하지 않는다]
+      - key: overseas-1-2
+        title: 해외 일시불 1.2% 캐시백
+        source: page
+        evidence: [해외 전 가맹점(온라인포함) 1.2% 캐시백, 지난달 이용 금액 조건 없이 제공, 일/월 횟수 및 한도 제한 없음, 통합 캐시백 한도와 별도로 제공합니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: cashback, rate: 1.2}
+    unmodeled: [교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, '해외 ATM 인출 건당 US $3 캐시백(일 1회, 월 1만원)은 현금 인출이라 계산하지 않는다', 서비스는 영역별로 이용한 거래 순서대로 적용한다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+notes: '신한카드 상품 페이지 기준. 페이지 상품명은 신한카드 Hey Young 체크이고 수집 이름의 포차코는 카드 디자인이다. 먼작귀 등 다른 디자인과 같은 상품이다. 연회비 없음. 가족카드 불가, 후불교통 가능. 국내 일상 서비스와 간편결제 1%는 전월 20만/50만/80만/100만원 구간 통합 한도 5천/1만/2만/3만원 안이고 간편결제는 생활 서비스와 겹치면 받지 않아 같은 묶음 맨 뒤에 두었다. 해외 1.2%는 실적·한도 없이 따로다. 신규 발급 회원은 등록월 다음 달까지 20만원 구간. 실적 제외: 현금서비스, 카드론, 연회비, 수수료, 이자, 기프트·선불카드, 상품권·선불전자지급수단, Tmoney 사용 금액. 취소 금액을 어느 달 실적에서 빼는지 페이지에 없어 카드사 기본값을 쓴다. 디자인만 다른 같은 상품 BGGDT9도 이 카드로 등록한다.'
