@@ -2,6 +2,7 @@ schema_version: 2
 id: lotte-1689
 issuer: lotte
 name: 롯데백화점 AVENUEL BLACK카드
+search_names: [AVENUEL ORANGE, AVENUEL PURPLE]
 kind: credit
 product_codes: []
 status: on_sale

@@ -5,7 +5,7 @@ name: THE iD. TITANIUM (포인트)
 short_name: THE iD. TITANIUM 포인트
 search_names: [THE iD. TITANIUM, 더 아이디 티타늄 포인트, 디 아이디 티타늄]
 kind: credit
-product_codes: [AAP1777]
+product_codes: [AAP1777, AAP1778]
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 695000}
@@ -83,4 +83,4 @@ open_questions:
   - {path: 'revisions[0].effective_from', question: 부가서비스 변경 제한 기준일 2022-12-21을 시행일로 두었다. 상품설명서는 2026.9 심의판(제2026-C1a-13503호)이다, assumed: '2022-12-21'}
   - {path: 'revisions[0].benefits', question: 할인 받은 결제에 적립도 주는지 원문이 분명하지 않아 할인과 적립을 같은 묶음에 두고 큰 쪽 하나만 준다, assumed: pick best}
   - {path: 'revisions[0].benefit_exclusions.categories', question: 고속버스는 차내 단말기와 고속버스 앱 결제만 제외지만 업종을 나눌 수 없어 고속버스 전체를 혜택에서 뺐다, assumed: transit.bus_express}
-notes: 2026-10-11 상품설명서(심의필 제2026-C1a-13503호, 2026.09.04) 대조. THE iD. PLATINUM(AAP1779)의 상위 상품이다. 연회비 본인 해외겸용 VISA 700,000원, 국내전용 695,000원(기본 50,000+제휴). 국내 1.2%와 해외·면세점·항공·여행·주유 1.5%는 실적과 한도 없이 주고 서로 중복되지 않는다. 라이프스타일 50,000원 할인은 전월 50만원 이상, 발급월+1개월 유예. 실적 제외는 4대보험, 국세·지방세·공과금, 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권이다.
+notes: 2026-10-11 상품설명서(심의필 제2026-C1a-13503호, 2026.09.04) 대조. THE iD. PLATINUM(AAP1779)의 상위 상품이다. 연회비 본인 해외겸용 VISA 700,000원, 국내전용 695,000원(기본 50,000+제휴). 국내 1.2%와 해외·면세점·항공·여행·주유 1.5%는 실적과 한도 없이 주고 서로 중복되지 않는다. 라이프스타일 50,000원 할인은 전월 50만원 이상, 발급월+1개월 유예. 실적 제외는 4대보험, 국세·지방세·공과금, 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권이다. 상품 코드 AAP1778 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.

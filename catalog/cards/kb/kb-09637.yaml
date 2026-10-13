@@ -5,6 +5,7 @@ name: 해피포인트 해피리워드 KB국민 체크카드
 short_name: KB 해피리워드 체크
 kind: check
 product_codes:
+  - '09636'
   - '09637'
 status: on_sale
 annual_fees:
@@ -44,4 +45,4 @@ revisions:
 open_questions:
   - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-11'}
   - {path: name, question: 색인 이름은 쿠팡 와우 KB체크카드였지만 제휴코드 09637 상품 페이지는 해피포인트 해피리워드 KB국민 체크카드다. 페이지 이름을 따랐다, assumed: 해피포인트 해피리워드 KB국민 체크카드}
-notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 해피가맹점 할인만 담았다. 원문 지방세 제외는 지방세, 상하수도, 세외수입이라 tax.local과 utility.water로 옮겼다.
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 해피가맹점 할인만 담았다. 원문 지방세 제외는 지방세, 상하수도, 세외수입이라 tax.local과 utility.water로 옮겼다. 상품 코드 09636 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.

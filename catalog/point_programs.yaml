@@ -24,3 +24,11 @@
 - {key: h_point, name: H.Point, won_per_point: 1}
 - {key: travel_wallet_point, name: 트래블월렛 트래블 포인트, won_per_point: 1}
 - {key: musinsa_money, name: 무신사머니, won_per_point: 1}
+- {key: jeju_air_jpoint, name: 제주항공 J 포인트, won_per_point: 1}
+- {key: coupang_cash, name: 쿠팡캐시, won_per_point: 1}
+- {key: rround_pay_point, name: RROUND PAY 포인트, won_per_point: 1}
+- {key: lotte_loca_coin, name: 롯데카드 로카코인, won_per_point: 0.5}
+- {key: shinbaek_reward, name: 신백리워드, won_per_point: 1}
+- {key: ktx_mileage, name: KTX 마일리지, won_per_point: 1}
+- {key: unimile, name: UniMile, won_per_point: 1}
+- {key: toss_point, name: 토스 포인트, won_per_point: 1}

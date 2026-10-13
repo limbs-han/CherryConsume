@@ -5,7 +5,7 @@ name: 삼성 SFC iD SELECT ALL 카드
 short_name: 삼성 SFC iD SELECT ALL
 search_names: [SFC iD SELECT ALL, SFC 아이디 셀렉트 올]
 kind: credit
-product_codes: [AAP1876]
+product_codes: [AAP1875, AAP1876]
 status: on_sale
 annual_fees:
   - {scope: domestic, amount: 20000}
@@ -250,4 +250,4 @@ revisions:
 open_questions:
   - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
   - {path: 'revisions[0].benefits[home-10].when', question: 원문은 정기결제라고만 적어 자동납부와 정기결제를 모두 대상으로 두었다, assumed: 'autopay, subscription'}
-notes: 2026-10-11 상품설명서(2025.8판, 심의필 2025-C1a-09520호) 대조. 출시 2025-07-02. 연회비 해외겸용 Mastercard·국내전용 모두 20,000원(기본 7,000+제휴 13,000). SELECT 서비스 1은 국내 0.7%, 관리비·통신 10%, 교육 10% 중 하나, SELECT 서비스 2는 온라인쇼핑몰·의료·배달앱 7%와 음식점·편의점·할인점·주유 7% 중 하나를 고른다. 매월 바꿀 수 있고 신청 다음 달 1일에 반영된다. 10%와 7% 할인이 적용된 이용금액만 실적에서 빠지고 0.7%, 생활 편의 5%, 디지털 50%, 해외 2% 건은 실적에 들어간다. 이 카드는 실적 제외에 대중교통과 택시가 없다. 발급월+1개월까지는 40만 구간 혜택. 같은 이름의 SFC iD SELECT ON(AAP1878)과는 다른 상품이다.
+notes: 2026-10-11 상품설명서(2025.8판, 심의필 2025-C1a-09520호) 대조. 출시 2025-07-02. 연회비 해외겸용 Mastercard·국내전용 모두 20,000원(기본 7,000+제휴 13,000). SELECT 서비스 1은 국내 0.7%, 관리비·통신 10%, 교육 10% 중 하나, SELECT 서비스 2는 온라인쇼핑몰·의료·배달앱 7%와 음식점·편의점·할인점·주유 7% 중 하나를 고른다. 매월 바꿀 수 있고 신청 다음 달 1일에 반영된다. 10%와 7% 할인이 적용된 이용금액만 실적에서 빠지고 0.7%, 생활 편의 5%, 디지털 50%, 해외 2% 건은 실적에 들어간다. 이 카드는 실적 제외에 대중교통과 택시가 없다. 발급월+1개월까지는 40만 구간 혜택. 같은 이름의 SFC iD SELECT ON(AAP1878)과는 다른 상품이다. 상품 코드 AAP1875 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.

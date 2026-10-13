@@ -5,6 +5,7 @@ name: KB ALL point 카드
 short_name: KB ALL point
 kind: credit
 product_codes:
+  - '09157'
   - '09162'
 status: on_sale
 annual_fees:
@@ -120,4 +121,4 @@ open_questions:
   - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2015.03.24 출시만 적었다., assumed: '2026-10-11'}
   - {path: 'revisions[0].spend.exclude_categories', question: 원문의 대중교통 무승인전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
   - {path: 'revisions[0].benefits[movie-3500]', question: 영화 할인이 결제 금액보다 클 때 결제 금액까지만 주는지 원문에 없다, assumed: fixed 3500}
-notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 원문 예시대로 주말 추가 적립과 음식 추가 적립은 함께 받는다. 포인트 적립 한도는 원문에 없다.
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 원문 예시대로 주말 추가 적립과 음식 추가 적립은 함께 받는다. 포인트 적립 한도는 원문에 없다. 상품 코드 09157 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.

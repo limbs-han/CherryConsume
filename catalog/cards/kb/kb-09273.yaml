@@ -5,7 +5,9 @@ name: KB국민 톡톡 with 토스 카드
 short_name: KB 톡톡 with 토스
 kind: credit
 product_codes:
+  - '09272'
   - '09273'
+  - '09274'
   - '09483'
 status: on_sale
 annual_fees:
@@ -97,4 +99,4 @@ revisions:
 open_questions:
   - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2020.12.30 출시만 적었다., assumed: '2026-10-11'}
   - {path: 'revisions[0].spend.exclude_categories', question: 원문의 실적 제외 '교통요금'이 후불교통만인지 교통 전체인지 분명하지 않다. 덜 주는 쪽으로 교통 업종 전체를 실적에서 뺐다. 택시는 남겼다., assumed: transit}
-notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 톡톡 with Kbank 카드(09483)는 혜택과 연회비가 같아 같은 상품으로 본다. 톡톡 with Kbank(09483)는 혜택이 같은 상품이라 이 카드로 등록한다.
+notes: 2026-10-11 KB국민카드 상품 페이지를 직접 받아 대조했다. 톡톡 with Kbank 카드(09483)는 혜택과 연회비가 같아 같은 상품으로 본다. 톡톡 with Kbank(09483)는 혜택이 같은 상품이라 이 카드로 등록한다. 상품 코드 09272 페이지는 혜택이 같은 상품이라 이 카드로 등록한다. 상품 코드 09274 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.

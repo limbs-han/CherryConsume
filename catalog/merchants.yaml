@@ -1292,3 +1292,86 @@
   name: 돈키호테
   category: other
   aliases: [돈키호테, DON QUIJOTE, ドン・キホーテ]
+- key: the_people_life
+  name: 더피플라이프
+  billing: autopay
+  category: other
+  aliases: [더피플라이프, 더피플라이프 상조, THE PEOPLE LIFE]
+- key: milk_t
+  name: 밀크T
+  billing: autopay
+  category: education.study_material
+  aliases: [밀크T, 밀크T아이, 밀크T초등, 밀크T중고등]
+- key: seoul_city_gas
+  name: 서울도시가스
+  category: utility.gas
+  aliases: [서울도시가스, Seoul City Gas]
+- key: visang_onlyone
+  name: 비상교육 온리원
+  billing: autopay
+  category: education.study_material
+  aliases: [비상온리원, 비상 온리원, 비상교육 온리원]
+- key: ranking_dak
+  name: 랭킹닭컴
+  category: online_shopping
+  aliases: [랭킹닭컴, RANKINGDAK]
+- key: kumon
+  name: 구몬학습
+  billing: autopay
+  category: education.study_material
+  aliases: [구몬학습, 구몬, 교원구몬]
+- key: smart_rental
+  name: 스마트렌탈
+  billing: autopay
+  category: other
+  aliases: [스마트렌탈]
+- key: dongyang_life
+  name: 동양생명
+  category: insurance.private
+  aliases: [동양생명, 동양생명보험]
+- key: lotte_outlet
+  name: 롯데아울렛
+  category: department_store
+  aliases: [롯데아울렛, LOTTE OUTLETS]
+- key: preedlife
+  name: 프리드라이프
+  category: other
+  aliases: [프리드라이프, 웅진프리드라이프, 프리드라이프 상조]
+- key: e1_charging
+  name: E1 충전소
+  category: fuel
+  aliases: [E1충전소, E1 LPG, 이원 충전소]
+- key: zb1_plus_chat
+  name: ZB1 Plus Chat
+  billing: subscription
+  category: other
+  aliases: [ZB1 Plus Chat, ZB1 플러스챗]
+- key: cesco
+  name: 세스코
+  category: other
+  aliases: [세스코, CESCO]
+- key: happy_order
+  name: 해피오더
+  category: other
+  aliases: [해피오더, 해피오더 앱, SPC 해피오더]
+- key: hy_fresh_manager
+  name: hy 프레시 매니저
+  billing: subscription
+  category: other
+  aliases: [hy 프레시 매니저, 프레시 매니저, hy프레시매니저]
+- key: hy_fredit_mall
+  name: hy프레딧 몰
+  category: online_shopping
+  aliases: [hy프레딧 몰, hy프레딧몰, 프레딧 몰, hy 프레딧]
+- key: natural_dream
+  name: 자연드림
+  category: grocery_mart
+  aliases: [아이쿱 자연드림, iCOOP 자연드림, 자연드림 매장]
+- key: kt_wiz_park
+  name: 수원 케이티 위즈파크
+  category: sports
+  aliases: [케이티 위즈파크, 수원KT위즈파크, KT위즈파크]
+- key: kt_wiz_park_shop
+  name: 수원 케이티 위즈파크 야구용품점
+  category: sports
+  aliases: [위즈파크 야구용품점, kt wiz 샵, KT위즈 샵]
