@@ -1,0 +1,345 @@
+schema_version: 2
+id: shinhan-ayaazf
+issuer: shinhan
+name: 신한카드 YOLO ⓘ
+short_name: 신한 YOLO ⓘ
+kind: credit
+product_codes: [AYAAZF]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1187924_2207.html', fetched_at: 2026-10-12, review_no: 제2025-C1h-16947호, review_valid_until: 2026-11-20}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2025-11-21
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, prepaid_charge, transit.bus_city, transit.subway]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      unmodeled: [YOLOⓘ 할인은 다른 할인 행사와 중복 적용되지 않는다]
+    options:
+      - key: taxi
+        title: 택시 할인율
+        choices:
+          - {key: r20, title: 20%}
+          - {key: r15, title: 15%}
+          - {key: r10, title: 10%}
+        default: r10
+        change: immediate
+      - key: movie
+        title: 영화 할인율
+        choices:
+          - {key: r20, title: 20%}
+          - {key: r15, title: 15%}
+          - {key: r10, title: 10%}
+        default: r10
+        change: immediate
+      - key: coffee
+        title: 커피 할인율
+        choices:
+          - {key: r20, title: 20%}
+          - {key: r15, title: 15%}
+          - {key: r10, title: 10%}
+        default: r15
+        change: immediate
+      - key: bakery
+        title: 베이커리 할인율
+        choices:
+          - {key: r20, title: 20%}
+          - {key: r15, title: 15%}
+          - {key: r10, title: 10%}
+        default: r15
+        change: immediate
+      - key: social
+        title: 소셜커머스 할인율
+        choices:
+          - {key: r20, title: 20%}
+          - {key: r15, title: 15%}
+          - {key: r10, title: 10%}
+        default: r10
+        change: immediate
+      - key: convenience
+        title: 편의점 할인율
+        choices:
+          - {key: r20, title: 20%}
+          - {key: r15, title: 15%}
+          - {key: r10, title: 10%}
+        default: r20
+        change: immediate
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 7000, 700000: 15000, 1000000: 25000, 1500000: 40000}
+      - {key: taxi-base, per: month, base: 50000}
+      - {key: movie-base, per: month, base: 50000}
+      - {key: coffee-base, per: month, base: 50000}
+      - {key: bakery-base, per: month, base: 50000}
+      - {key: social-base, per: month, base: 50000}
+      - {key: convenience-base, per: month, base: 50000}
+    benefits:
+      - key: taxi-20
+        title: 택시 20% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', 택시 / 이용금액 기준 월 합산 5만원까지 할인됩니다.]
+        target:
+          categories: [taxi]
+        when:
+          - option:
+              taxi: [r20]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: taxi-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: taxi-15
+        title: 택시 15% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', 택시 / 이용금액 기준 월 합산 5만원까지 할인됩니다.]
+        target:
+          categories: [taxi]
+        when:
+          - option:
+              taxi: [r15]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: taxi-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: taxi-10
+        title: 택시 10% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', 택시 / 이용금액 기준 월 합산 5만원까지 할인됩니다.]
+        target:
+          categories: [taxi]
+        when:
+          - option:
+              taxi: [r10]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: taxi-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: movie-20
+        title: 영화 20% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '영화 CGV, 롯데시네마 / 이용금액 기준 월 합산 5만원까지 할인됩니다. / CGV, 롯데시네마 웹사이트/앱 직접 접속이용 또는 현장결제에 한하여 할인이 적용됩니다.']
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - option:
+              movie: [r20]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: movie-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: movie-15
+        title: 영화 15% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '영화 CGV, 롯데시네마 / 이용금액 기준 월 합산 5만원까지 할인됩니다. / CGV, 롯데시네마 웹사이트/앱 직접 접속이용 또는 현장결제에 한하여 할인이 적용됩니다.']
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - option:
+              movie: [r15]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: movie-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: movie-10
+        title: 영화 10% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '영화 CGV, 롯데시네마 / 이용금액 기준 월 합산 5만원까지 할인됩니다. / CGV, 롯데시네마 웹사이트/앱 직접 접속이용 또는 현장결제에 한하여 할인이 적용됩니다.']
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - option:
+              movie: [r10]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: movie-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: coffee-20
+        title: 커피 20% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '커피 스타벅스, 커피빈 / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - option:
+              coffee: [r20]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: coffee-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: coffee-15
+        title: 커피 15% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '커피 스타벅스, 커피빈 / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - option:
+              coffee: [r15]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: coffee-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: coffee-10
+        title: 커피 10% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '커피 스타벅스, 커피빈 / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - option:
+              coffee: [r10]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: coffee-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: bakery-20
+        title: 베이커리 20% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '베이커리 파리바게뜨, 뚜레쥬르 / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [paris_baguette, tous_les_jours]
+        when:
+          - option:
+              bakery: [r20]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: bakery-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: bakery-15
+        title: 베이커리 15% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '베이커리 파리바게뜨, 뚜레쥬르 / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [paris_baguette, tous_les_jours]
+        when:
+          - option:
+              bakery: [r15]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: bakery-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: bakery-10
+        title: 베이커리 10% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '베이커리 파리바게뜨, 뚜레쥬르 / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [paris_baguette, tous_les_jours]
+        when:
+          - option:
+              bakery: [r10]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: bakery-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: social-20
+        title: 소셜커머스 20% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '소셜커머스 티켓몬스터(티몬), 쿠팡 / 이용금액 기준 월 합산 5만원까지 할인됩니다. / 티몬, 쿠팡 웹사이트/앱 직접 접속하여 이용하는 경우에만 할인이 적용됩니다.']
+        target:
+          merchants: [coupang, tmon]
+        when:
+          - option:
+              social: [r20]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: social-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: social-15
+        title: 소셜커머스 15% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '소셜커머스 티켓몬스터(티몬), 쿠팡 / 이용금액 기준 월 합산 5만원까지 할인됩니다. / 티몬, 쿠팡 웹사이트/앱 직접 접속하여 이용하는 경우에만 할인이 적용됩니다.']
+        target:
+          merchants: [coupang, tmon]
+        when:
+          - option:
+              social: [r15]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: social-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: social-10
+        title: 소셜커머스 10% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '소셜커머스 티켓몬스터(티몬), 쿠팡 / 이용금액 기준 월 합산 5만원까지 할인됩니다. / 티몬, 쿠팡 웹사이트/앱 직접 접속하여 이용하는 경우에만 할인이 적용됩니다.']
+        target:
+          merchants: [coupang, tmon]
+        when:
+          - option:
+              social: [r10]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: social-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: convenience-20
+        title: 편의점 20% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '편의점 GS25, 세븐일레븐, CU / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - option:
+              convenience: [r20]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: convenience-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: convenience-15
+        title: 편의점 15% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '편의점 GS25, 세븐일레븐, CU / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - option:
+              convenience: [r15]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {shared: convenience-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: convenience-10
+        title: 편의점 10% 결제일 할인
+        source: page
+        evidence: ['6개 선택처에 대해 할인율 선택(20% → 1개, 15% → 2개, 10% → 3개)하면, 해당 할인율로 결제일에 할인된 금액으로 청구됩니다.', '편의점 GS25, 세븐일레븐, CU / 이용금액 기준 월 합산 5만원까지 할인됩니다.']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - option:
+              convenience: [r10]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: convenience-base}
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: ['할인율은 20% 1개, 15% 2개, 10% 3개로 고르는데 이 개수 조건은 검사하지 않는다. 고른 대로 넣는다', 통합할인한도는 본인과 가족카드를 합해 적용한다, 분기 이용금액 250만원 이상이면 스타벅스 아메리카노 쿠폰 1매를 주는데 분기 누적이라 계산하지 않는다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 소셜커머스와 영화는 웹사이트나 앱에 직접 접속한 결제만 대상이다]
+notes: 신한카드 YOLO ⓘ 상품 페이지 기준. 연회비 국내전용 1만5천원, Visa 1만8천원. 택시, 영화, 커피, 베이커리, 소셜커머스, 편의점 여섯 곳에 할인율 20% 1개, 15% 2개, 10% 3개를 골라 받는다. 고르지 않으면 편의점 20%, 커피와 베이커리 15%, 택시와 소셜커머스와 영화 10%다. 영역마다 이용금액 월 5만원까지, 전월 실적 30만, 70만, 100만, 150만원 구간별 통합할인한도 7천, 1만5천, 2만5천, 4만원 안에서 할인한다. 할인 받은 거래는 실적에서 뺀다. 실적 제외 목록이 짧아 세금과 공과금은 실적에 넣는다. 선택 변경은 연 3회이고 언제부터 바뀌는지 원문에 없어 바로 바뀌는 것으로 두었다.
