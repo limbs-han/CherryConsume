@@ -1,0 +1,80 @@
+schema_version: 2
+id: shinhan-betbfw
+issuer: shinhan
+name: 리디 신한카드 체크
+short_name: 신한 리디 체크
+kind: check
+product_codes: [BETBFW]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1188337_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2018-04-09
+    source: page
+    tiers: [0, 200000, 300000, 500000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card.prepaid_card, prepaid_charge]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 2000, 300000: 3000, 500000: 4000, 800000: 8000, 1200000: 12000}
+    benefits:
+      - key: ridi-10
+        title: 리디 10% 캐시백
+        source: page
+        evidence: [리디북스 이용 시 10% 할인(캐시백), 통합 월 1회 할인적용, 할인 전 승인금액 1회 7만원까지 적용(월 최대 7천원 할인)]
+        target:
+          merchants: [ridi]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 70000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: movie-10
+        title: CGV·롯데시네마·메가박스 10% 캐시백
+        source: page
+        evidence: ['CGV, 롯데시네마, 메가박스 예매시 10% 할인(캐시백)', '통합 일 1회, 월 3회, 할인 전 승인금액 1회 1만원까지 적용(1회 최대 1천원 할인)', 영화관련 해당 영화관 사이트/앱 직접 접속이용 또는 현장 결제 시에 한하여 할인 적용]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [영화관 매점 이용에도 할인이 먼저 적용될 수 있다]
+      - key: kfc-10
+        title: KFC 10% 캐시백
+        source: page
+        evidence: [KFC 이용시 10% 할인(캐시백), '일 1회, 월 3회, 1회 할인 전 승인금액 1회 1만원까지 적용(1회 최대 1천원 할인)', '백화점, 할인점, 마트 등 일부 쇼핑몰 내 입점된 매장에서는 할인이 적용되지 않습니다.']
+        target:
+          merchants: [kfc]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점·마트 입점 매장은 할인하지 않는다]
+    unmodeled: [할인 횟수와 금액은 승인 순서대로 통합 한도 안에서 적용한다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비 없음. 리디 10%(월 1회, 1회 7만원까지), 영화 3사 10%(일 1회 월 3회, 1회 1만원까지), KFC 10%(일 1회 월 3회, 1회 1만원까지)를 전월 20만, 30만, 50만, 80만, 120만원 구간별 통합 한도 2천, 3천, 4천, 8천, 1만 2천원 안에서 준다. 실적 제외: 연회비, 수수료, 이자, 기프트카드 구매, 선불카드 충전, 취소. 교통카드 이용금액은 전전월 금액이 반영되어 카드사 기본값 month_offset을 쓴다. 신규 발급 회원은 등록월 다음 달 말까지 통합 한도 2천원 구간을 적용한다.'
