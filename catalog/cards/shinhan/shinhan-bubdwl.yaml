@@ -1,0 +1,99 @@
+schema_version: 2
+id: shinhan-bubdwl
+issuer: shinhan
+name: 신한카드 SOL트립앤샵 체크
+kind: check
+product_codes: [BUBDWL]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1236362_2206.html', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-11-26'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      month_offset: {}
+    new_card: {tier: 0}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+      categories: [annual_fee, gift_card, prepaid_charge]
+      unmodeled: [포인트 사용금액, 다른 프로모션 할인 적용 거래는 제외]
+    limits:
+      - {key: cvs, per: month, amount: 3000, count: 3}
+    stacks:
+      - {key: main}
+      - {key: fee}
+      - {key: ovs-extra}
+    benefits:
+      - key: overseas-fee-free
+        title: 해외 수수료 1.3% 면제
+        source: page
+        evidence: [국제 브랜드 수수료(1.1%)/해외 서비스 수수료(0.2%) 면제, 전월 이용금액 관계없이 서비스가 제공됩니다., 해외 수수료 면제 한도는 없습니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.3}
+        stack: fee
+        unmodeled: [해외 ATM 인출 수수료는 면제되지 않는다, 외화결제계좌는 신한은행 SOL트래블 외화예금만 된다]
+      - key: overseas-online-0-3
+        title: 해외 온라인 0.3% 적립
+        source: page
+        evidence: [전월 실적 무관하게 0.3% 마이신한포인트 적립, 해외 온라인 거래 시 서비스 적용됩니다., '해외매장에서 단말기를 이용한 결제(IC, NFC, 스와이프 등)는 서비스가 제공되지 않습니다.', 기본적립은 전월실적과 적립한도가 없습니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {channel: online}
+        reward: {type: points, program: mysinhan_point, rate: 0.3}
+      - key: overseas-online-extra
+        title: 해외 온라인 0.7~2.2% 추가 적립
+        source: page
+        evidence: [추가적립 | - | 0.7% | 2.2% | 5만 포인트, 해외 온라인 거래 시 서비스 적용됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {channel: online}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {300000: 0.7, 500000: 2.2}
+        limits:
+          - {per: month, amount: 50000}
+        tiers: {from: 300000}
+        stack: ovs-extra
+      - key: cvs-5
+        title: 4대 편의점 5% 할인
+        source: page
+        evidence: ['4대 편의점: CU, GS25, 세븐일레븐, 이마트24', '편의점 통합 일 1회, 월 3회, 월 3천원까지 할인', 국내 오프라인 매장 이용금액만 할인되며]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: day, count: 1}
+          - {shared: cvs}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·면세점·공항 입점 매장 제외]
+      - key: transit-1
+        title: 대중교통 1% 할인
+        source: page
+        evidence: ['국내 대중교통: 시내버스, 시외버스, 지하철, 공항버스, 공항철도', 월 3천원까지 할인, '후불교통 기능을 이용한 터치(RF) 거래 시 결제일 할인 서비스가 제공되며, 고속버스 이용은 할인 대상에 포함되지 않습니다.']
+        target:
+          categories: [transit.bus_city, transit.bus_intercity, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        unmodeled: [공항철도는 철도 업종이라 담지 않았다]
+    unmodeled: [교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 최초 신규 발급 회원은 다음 달까지 조건 없이 추가적립 0.7%와 국내 할인을 주지만 재발급 회원 제외라 계산하지 않는다, 마이셀렉트샵 추가 캐시백은 계산하지 않는다, 해외 이용금액 실적은 USD 금액에 신한은행 전신환매도율을 적용한다]
+notes: 상품 페이지 기준. 해외 온라인 기본 0.3%와 추가 적립은 더해 받는다. 해외 수수료 면제는 적립과 별개다.
