@@ -1,0 +1,128 @@
+schema_version: 2
+id: shinhan-asabkp
+issuer: shinhan
+name: K-onepass 신한카드 S-Line 체크
+short_name: 신한 K-onepass S-Line 체크
+kind: check
+product_codes: [ASABKP]
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1219453_2206.html', fetched_at: 2026-10-12, review_no: 제20221117-Dpp-001호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2022-11-17
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+    new_card:
+      until: next_month_end
+      tier: 600000
+      tier_by_benefit: {base-point-0-2: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, gift_card, prepaid_charge, tax, utility]
+      unmodeled: [포인트 사용 금액은 적립하지 않는다]
+    options:
+      - key: transit_or_fuel
+        title: 교통과 주유 중 발급 때 고른 할인
+        choices:
+          - {key: transit, title: 후불교통 버스·지하철 5%}
+          - {key: fuel, title: SK주유소 리터당 40원}
+        default: null
+        change: next_month
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 600000: 10000, 1000000: 20000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [lunch-dining-5, transit-5, sk-fuel-40, homeshopping-5, base-point-0-2]
+        spill: none
+    benefits:
+      - key: base-point-0-2
+        title: 전 가맹점 0.2% 적립
+        source: page
+        evidence: [기본적립 전 가맹점 이용금액의 0.2% 적립 전월 30만원 이상 이용 시 제공, 할인 적용된 이용금액 ... 포인트 적립에서 제외]
+        target: {all: true}
+        reward: {type: points, program: mysinhan_point, rate: 0.2}
+        tiers: {from: 300000}
+      - key: lunch-dining-5
+        title: 점심 요식업종 5% 할인
+        source: page
+        evidence: [요식업종 이용금액의 5% 할인, 오전 11시~오후2시 이용금액에 한하여 제공, '1만원 이상(할인 전 승인금액 기준) 이용 시 일 1회, 월 5회, 건당 최대 1천원 할인']
+        target:
+          categories: [restaurant]
+        when:
+          - amount: {min: 10000}
+          - time: {from: '11:00', to: '14:00'}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: transit-5
+        title: 후불교통 버스·지하철 5% 할인
+        source: page
+        evidence: [후불교통 카드 선택 시 버스, 지하철 이용금액의 5% 할인, 월 최대 5천원까지 할인]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - option:
+              transit_or_fuel: [transit]
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [공항버스·공항리무진·공항철도는 할인하지 않는다]
+      - key: sk-fuel-40
+        title: SK주유소 리터당 40원 할인
+        source: page
+        evidence: [후불교통 카드 미 선택 시 SK주유소 주유 시 리터당 40원 할인, '일 1회(주유금액 5만원 이하), 주유금액 매월 30만원까지 할인 적용']
+        target:
+          merchants: [sk_energy]
+        when:
+          - option:
+              transit_or_fuel: [fuel]
+        reward: {type: billing_discount, per_liter: 40}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [LPG 주유는 할인하지 않는다]
+      - key: homeshopping-5
+        title: 홈쇼핑 5% 할인
+        source: page
+        evidence: [홈쇼핑 이용금액의 5% 할인, 'CJ, 현대, GS, 롯데 홈쇼핑에 한함', '월 2회, 건당 최대 2,500원 할인']
+        target:
+          merchants: [cj_onstyle, gs_shop, hyundai_homeshopping, lotte_homeshopping]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, amount: 2500}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: [3개월 연속 50만원 이상 이용 시 주는 특별적립 0.3%는 연속 실적을 셀 수 없어 계산하지 않는다, 신한은행 해외송금·환전·ATM 수수료 우대는 결제 혜택이 아니라 계산하지 않는다, 교통과 주유 선택을 바꾸려면 카드를 다시 발급해야 한다]
+open_questions:
+  - {path: 'revisions[0].limits[integrated]', question: 통합할인한도가 교통·주유와 홈쇼핑 할인에도 걸리는지 원문이 따로 적지 않았다. 적게 주는 쪽으로 모든 할인에 걸었다, assumed: 모든 할인에 적용}
+  - {path: 'revisions[0].new_card', question: '신규 회원은 등록월+1개월까지 통합할인한도 1만원만 적혀 있고 0.2% 기본적립도 주는지는 적혀 있지 않다. 할인은 60만 구간, 기본적립은 주지 않는 쪽으로 두었다', assumed: '할인 600000, 기본적립 0'}
+  - {path: 'revisions[0].effective_from', question: 시행일이 원문에 없어 심의필 날짜를 넣었다, assumed: '2022-11-17'}
+notes: '신한카드 상품 페이지 기준. 연회비 없음. 전월(1일~말일) 거래 시점 이용금액, 교통카드는 전전월, 해외는 매입일 기준. 실적 제외: 수수료, 이자, 기프트카드, 선불카드 충전, 거래취소. 할인 적용된 이용금액은 포인트 적립에서 빠져 할인과 기본적립을 같은 묶음에 두었다. 공과금은 utility로 담았다. 할인 방식(결제일 할인 여부)이 적혀 있지 않아 청구할인으로 두었다.'
