@@ -1,0 +1,67 @@
+schema_version: 2
+id: shinhan-be9cqz
+issuer: shinhan
+name: 투썸플레이스 신한카드 체크
+kind: check
+product_codes: [BE9CQZ]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1212166_2206.html', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-09-18'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      month_offset: {}
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, smile_pay, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트 사용금액, 이 카드 할인서비스를 받은 거래는 제외]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 3000, 600000: 6000}
+      - key: ott
+        per: month
+        amount: {300000: 1000, 600000: 2000}
+    benefits:
+      - key: twosome-20
+        title: 투썸플레이스 20% 캐시백
+        source: page
+        evidence: ['일반 결제: 투썸플레이스 매장 및 투썸하트 App 내 투썸오더/홀케이크예약 결제 건', '투썸플레이스 캐시백 서비스는 각 영역(일반 결제, 기타 결제)별 1일 1회 캐시백 적용됩니다.', 일반 결제는 캐시백 전 이용금액 기준 1회 1만원(캐시백 금액 기준 1회 2천원)까지, 30만원 이상 60만원 미만 | 3천원, 60만원 이상 | 6천원]
+        target:
+          merchants: [twosome]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점·영화관 매점·공항 입점 특수매장 제외, 배달앱 결제 제외, 투썸하트 앱의 모바일쿠폰·기프트카드 구매(기타 결제 3%)는 계산하지 않는다. 이 결제를 투썸플레이스로 기록하면 20%로 잘못 계산될 수 있다]
+      - key: ott-1k
+        title: 넷플릭스·유튜브 프리미엄 1천원 캐시백
+        source: page
+        evidence: ['OTT: 유튜브 프리미엄, 넷플릭스', 'OTT 서비스 대상별 월 1회, 캐시백 전 이용금액 1회 5천원 이상 시 캐시백 적용됩니다.', 서비스 대상 가맹점 공식 사이트에 직접 접속하여 신청한 정기 결제(자동이체) 이용 건에 한하여 서비스가 적용됩니다., 30만원 이상 60만원 미만 | 1천원, 60만원 이상 | 2천원]
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+          - amount: {min: 5000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: ott}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [대상별 월 1회. 앱마켓 결제와 통신요금 합산 결제 제외]
+        notes: OTT가 투썸 통합 한도에도 드는지 문구가 모호해 두 한도를 모두 걸었다
+    unmodeled: [교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, '투썸 기타 결제 3%, 사이즈업 쿠폰, 투썸 하트 5개는 계산하지 않는다', 투썸플레이스 앱 회원가입 후 신청할 수 있다]
+notes: 상품 페이지 기준. 신규 발급 회원은 등록월 다음 달 말까지 30만 구간이다.
