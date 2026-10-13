@@ -1,0 +1,55 @@
+schema_version: 2
+id: shinhan-aqed6o
+issuer: shinhan
+name: 신한카드 봄(체크)
+short_name: 신한 봄 체크
+search_names: [봄 체크]
+kind: check
+product_codes:
+  - '202303140002'
+  - AQED6O
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1221136_2206.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202303140002', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-03-22
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility.water]
+    new_card: {tier: 300000}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트 사용 거래의 포인트 금액은 캐시백하지 않는다, 봄(체크)으로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체를 캐시백하지 않는다]
+    benefits:
+      - key: monthly-cashback
+        title: 국내외 0.1~0.3% 캐시백
+        source: page
+        evidence: [국내외 이용금액 캐시백, 30만원 미만 | 0.1%, 30만원 이상 | 0.3%, 월 캐시백은 캐시백 금액 한도가 없습니다., 신한카드 봄(체크)의 경우 교통 서비스 가맹점(버스/지하철 후불교통) 대상 가맹점에 대해 월 캐시백 서비스가 제공되지 않습니다.]
+        target:
+          exclude_categories: [transit.bus_city, transit.subway]
+          all: true
+        reward:
+          type: cashback
+          rate: {0: 0.1, 300000: 0.3}
+      - key: transit-daily
+        title: 버스·지하철 후불교통 이용일 100~200원 캐시백
+        source: page
+        evidence: [버스/지하철 후불교통 이용금액 캐시백, 30만원 이상 50만원 미만 | 일 100원, 50만원 이상 | 일 200원, 버스/지하철 후불교통을 이용한 일수를 기준으로 서비스가 제공됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward:
+          type: cashback
+          fixed: {300000: 100, 500000: 200}
+        limits:
+          - {per: day, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [국내 후불교통 서비스 지역의 후불교통 이용만 대상이다]
+    unmodeled: ['분기 이용금액 300만원 이상 2천원, 연 이용금액 1,500만원 이상 5천원 추가 캐시백은 기간 누적 조건이라 계산하지 않는다', '교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다', 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 캐시백은 거래 순서대로 적용한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2023.03.20이고 카드사 공통 규칙 시작일을 시작일로 둔다, assumed: '2024-03-22'}
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2023.03.20. 연회비 없음. 전월 이용금액 30만원 미만 0.1%, 이상 0.3% 캐시백, 한도 없음. 버스·지하철 후불교통은 월 캐시백 대신 이용일마다 30만원 이상 100원, 50만원 이상 200원. 신규 회원은 등록월 다음 달 말까지 30만~50만원 구간. 캐시백은 다음 달 20일 결제계좌로 들어온다. 신용카드 신한카드 봄(shinhan-aqdd6n)과는 다른 상품이다.
