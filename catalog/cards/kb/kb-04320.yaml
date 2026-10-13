@@ -1,0 +1,56 @@
+schema_version: 2
+id: kb-04320
+issuer: kb
+name: KB국민 밀크T 카드
+short_name: KB 밀크T
+kind: credit
+product_codes:
+  - '04320'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: k_world_jcb, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04320', fetched_at: '2026-10-12', review_no: 제2022-C1a-05948호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2022-07-22'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [별도 가맹점번호로 승인되는 PG와 일부 간편결제는 할인에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: milkt-autopay
+        title: 밀크T 학습비 자동이체 월 최대 1만2천원·1만7천원 청구할인
+        source: page
+        evidence: ['밀크T 학습비 자동이체 시 전월 실적에 따라 청구 할인 1구간(30만원 이상) 12,000원 2구간(70만원 이상) 17,000원', 할인 금액보다 자동이체 승인금액이 작을 경우 승인금액만큼 할인 제공됩니다., 밀크T 학습비 자동이체 승인 건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인 제공, 최초 카드 사용 등록일로부터 다음 달 말일(실적 유예기간)까지 KB국민 밀크T카드 전월 이용실적이 없는 경우에도 1구간 청구 할인 서비스가 제공됩니다.]
+        target:
+          merchants: [milk_t]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {0: 12000, 300000: 12000, 700000: 17000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: ['정부지원금(보육료, 유치원보조비, 바우처)과 공항버스·자판기·터널이용료·항공기내 같은 무승인전표는 실적에서 빠진다. 공항버스와 무승인 통행료는 담을 업종이 없다', 가족카드 실적과 한도는 본인과 합산한다, 카드 수령 뒤 밀크T 고객센터에 자동이체를 따로 신청해야 한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2022.07.22 출시만 적었다. 현재 규칙의 시작일로 잠정 적용한다., assumed: '2022-07-22'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 밀크T 학습비 자동이체 전용 할인 카드이고 구조는 KB HCN kb-02249와 같다. 밀크T 가맹점은 공통 파일에 새로 더해야 한다.
