@@ -1,0 +1,69 @@
+schema_version: 2
+id: shinhan-ba9bma
+issuer: shinhan
+name: CJ ONE 신한카드 체크
+short_name: 신한 CJ ONE 체크
+kind: check
+product_codes: [BA9BMA]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1188363_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-06-25
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 800000, 1000000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, transit.bus_city, transit.subway]
+    new_card: {tier: 200000}
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000, 500000: 10000, 800000: 15000, 1000000: 20000}
+    benefits:
+      - key: olive-young-10
+        title: 올리브영 10% 캐시백
+        source: page
+        evidence: [올리브영 10% 캐시백, '일 1회, 월 3회(월: 1일~말일) 캐시백 적용, 1회 최대 1천원 까지 캐시백', 전월 이용실적에 따라 제공되는 통합캐시백한도 내에서 서비스 적용]
+        target:
+          merchants: [olive_young]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: vips-10
+        title: VIPS 10% 캐시백
+        source: page
+        evidence: [VIPS/제일제면소/더플레이스 10%캐시백, '통합 일 1회, 월 2회(월: 1일~말일) 캐시백 적용, 1회 최대 5천원까지 캐시백']
+        target:
+          merchants: [vips]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [제일제면소와 더플레이스도 같은 혜택 대상이지만 공통 가맹점이 없어 빼고 VIPS만 계산한다]
+      - key: twosome-touslesjours-10
+        title: 투썸플레이스·뚜레쥬르 10% 캐시백
+        source: page
+        evidence: [투썸플레이스/뚜레쥬르 10% 캐시백, '통합 일 1회, 월 5회(월: 1일~말일) 캐시백 적용, 1회 최대 1천원까지 캐시백']
+        target:
+          merchants: [tous_les_jours, twosome]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+    unmodeled: ['CGV 영화예매 캐시백(월 1회, 20만원 이상 최대 5천원, 50만원 이상 최대 7천원)은 결제액의 몇 %인지 정액인지 원문에 없어 계산하지 않는다', 'CJ mall 5% 캐시백(일 1회, 월 2회, 1회 최대 2천5백원)은 PC·모바일·앱 결제만 대상이고 홈쇼핑·카탈로그는 빠지는데 공통 가맹점 CJ온스타일이 홈쇼핑까지 묶여 있어 계산하지 않는다', 'CJ ONE 포인트 5% 추가 적립(올리브영, 월 3천 포인트)은 공통 포인트에 CJ ONE 포인트가 없어 계산하지 않는다', 교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 캐시백은 승인 순서대로 적용한다]
+notes: CJ ONE 신한카드 체크 상품 페이지 기준(2026-10-12). 출시 2018-07-20, 준법감시 심의필 제20260625-Dpp-001호(2026.06.25). 연회비는 페이지 HTML의 Master, UPI 모두 0원. 전월 20만·50만·80만·100만원 이상이면 통합캐시백한도 5천·1만·1만5천·2만원. 신규 발급 회원은 등록월 다음 달 말까지 통합한도 5천원(20만 구간). 실적 제외는 수수료, 이자, 기프트카드 구매, 선불카드 충전. 2026-10-10 새 방식대로 후불교통 반영월 구분 대신 시내버스와 지하철을 실적에서 뺐다.
