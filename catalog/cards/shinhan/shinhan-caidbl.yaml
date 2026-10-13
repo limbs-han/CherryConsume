@@ -1,0 +1,123 @@
+schema_version: 2
+id: shinhan-caidbl
+issuer: shinhan
+name: 티머니 Pay & GO 신한카드
+short_name: 티머니 Pay & GO 신한
+kind: credit
+product_codes: [CAIDBL]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1216792_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-10-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.gas, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트로 결제한 금액과 다른 신한카드 할인(이벤트 포함)을 받은 거래는 할인하지 않는다, 모바일티머니 충전형 교통카드 충전과 페이머니 충전은 할인하지 않는다]
+    limits:
+      - key: transit
+        per: month
+        amount: {300000: 7000, 500000: 12000, 1000000: 18000}
+      - key: life
+        per: month
+        amount: {300000: 5000, 500000: 10000, 1000000: 15000}
+    benefits:
+      - key: transit-mobile-tmoney-30
+        title: 모바일티머니 버스·지하철 30% 할인
+        source: page
+        evidence: ['대중교통(버스, 지하철) 30% 결제일 할인', '모바일티머니 앱 내 교통카드 서비스에 티머니 Pay & GO 신한카드를 등록 후 대중교통(버스, 지하철) 이용시 할인 적용됩니다.', 30만원 이상 50만원 미만 | 7천원, 50만원 이상 100만원 미만 | 1만 2천원, 100만원 이상 | 1만 8천원]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - payment: [mobile_tmoney]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: transit}
+        tiers: {from: 300000}
+        unmodeled: [아이폰은 모바일티머니 교통카드를 쓸 수 없어 할인을 받지 못한다]
+      - key: life-department-5
+        title: 4대 백화점 5% 할인
+        source: page
+        evidence: ['백화점: 현대, 신세계, 롯데, 갤러리아 백화점', 할인 전 이용금액 1회 10만원까지 할인 적용됩니다., '일 1회, 월 2회 할인 적용됩니다.', '오프라인 매장에 한하여 적용되며 온라인몰 및 상품권 구매, 문화센터 등 비쇼핑 항목은 제외됩니다.']
+        target:
+          merchants: [galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+          - payment_not: [mobile_tmoney]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: [백화점 임대 매장과 문화센터 등 비쇼핑 항목은 할인하지 않는다]
+      - key: life-convenience-5
+        title: 5대 편의점 5% 할인
+        source: page
+        evidence: ['5대 편의점: GS25, CU, 세븐일레븐, 이마트24, 미니스톱', 할인 전 이용금액 1회 1만원까지 할인 적용됩니다., '일 1회, 월 5회 할인 적용됩니다.', '오프라인 매장에 한하여 적용되며, 인터넷이나 모바일앱을 통한 온라인 거래는 할인 적용되지 않습니다.']
+        target:
+          merchants: [cu, emart24, gs25, ministop, seven_eleven]
+        when:
+          - {channel: offline}
+          - payment_not: [mobile_tmoney]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점 입점 매장은 할인하지 않는다']
+      - key: life-telecom-5
+        title: 이동통신요금 자동이체 5% 할인
+        source: page
+        evidence: ['이동통신요금: SKT, KT, LG U+ 통신요금 자동이체 할인', 할인 전 이용금액 1회 5만원까지 할인 적용됩니다., 월 2회 할인 적용됩니다., '약정금액 대납, 지점을 통한 월납, 알뜰폰은 적립 제외 됩니다.']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 2}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: life-coffee-5
+        title: 커피전문점 5% 할인
+        source: page
+        evidence: ['커피: 스타벅스, 커피빈, 카페베네, 투썸플레이스, 엔젤리너스', 할인 전 이용금액 1회 1만원까지 할인 적용됩니다., '일 1회, 월 8회 할인 적용됩니다.']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, starbucks, twosome]
+        when:
+          - payment_not: [mobile_tmoney]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 8}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점, 면세점, 공항 입점 매장은 할인하지 않는다']
+    unmodeled: ['티머니GO 앱 고속·시외버스, 따릉이, 킥보드, 택시 20% 할인(일 1회, 1회 2천원, 교통 한도 공유)은 티머니GO 앱 결제를 결제수단으로 구별할 수 없어 계산하지 않는다', K-패스 환급은 정부 정책 환급이라 계산하지 않는다, 실물카드에는 교통 기능이 없고 모바일티머니에 후불청구형으로 등록해 쓴다. 교통카드 이용금액은 그 달 실적에 반영된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성의 시행일이 상품 페이지에 없어 확인한 날을 넣었다, assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비는 국내전용 1만 5천원, Mastercard 1만 8천원. 모바일티머니 앱에 등록해 탄 버스·지하철 30% 할인은 교통 한도(전월 30만, 50만, 100만원 구간 7천, 1만 2천, 1만 8천원), 백화점·편의점·이동통신·커피 5% 할인은 생활 한도(5천, 1만, 1만 5천원)를 쓴다. 생활 할인은 모바일티머니 앱으로 결제하면 받지 못한다. 원문에 교통카드 이용금액은 전월 이용금액이 전월 이용금액에 반영된다고 적혀 있어 카드사 기본값의 다음 달 반영을 쓰지 않았다. 신규 발급 회원은 등록월 다음 달 말까지 30~50만원 구간을 받는다. 실적 제외: 연회비, 현금서비스, 카드론, 수수료, 이자, 기프트카드와 선불카드, 충전형 교통카드와 페이머니 충전, 상품권과 선불전자지급수단, 국세, 지방세, 수도, 취소, 관리비, 도시가스, 전기, 4대보험, 스쿨뱅킹, 대학등록금.'
