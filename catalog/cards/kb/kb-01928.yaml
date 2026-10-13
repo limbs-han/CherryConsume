@@ -1,0 +1,99 @@
+schema_version: 2
+id: kb-01928
+issuer: kb
+name: KB국민 정 체크카드
+short_name: KB 정 체크
+kind: check
+product_codes:
+  - '01928'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01928', fetched_at: '2026-10-12', review_no: 200428-01318-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠질 수 있다']
+    benefits:
+      - key: department-7
+        title: 롯데·현대·신세계백화점 7% 환급할인
+        source: page
+        evidence: [롯데·현대·신세계 백화점 | 7% | 5천원 | 1만원, 이용금액 건당 3만원~10만원까지 할인 적용, 1일 1회 할인 적용]
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - amount: {min: 30000, below: 100001}
+        reward: {type: cashback, rate: 7}
+        limits:
+          - {per: day, count: 1}
+          - per: month
+            amount: {300000: 5000, 500000: 10000}
+        tiers: {from: 300000}
+      - key: homeshopping-5
+        title: GS홈쇼핑·CJ홈쇼핑·G마켓·옥션 5% 환급할인
+        source: page
+        evidence: [GS홈쇼핑·CJ홈쇼핑 / G마켓·옥션 | 5% | 5천원 | 1만원, 이용금액 건당 3만원~5만원까지 할인 적용, '1일 한도 2,500원 할인 적용']
+        target:
+          merchants: [auction, cj_onstyle, gmarket, gs_shop]
+        when:
+          - amount: {min: 30000, below: 50001}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: day, amount: 2500}
+          - per: month
+            amount: {300000: 5000, 500000: 10000}
+        tiers: {from: 300000}
+      - key: overseas-5
+        title: 해외이용 5% 캐시백
+        source: page
+        evidence: [해외이용 | 해외직구 / 해외이용 | 5% | 5천원, 이용금액 건당 3만원~10만원까지 할인 적용, 할인금액은 다음 달 둘째 주에 결제계좌로 입금]
+        target: {all: true}
+        when:
+          - region: overseas
+            amount: {min: 30000, below: 100001}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        unmodeled: [캐시백은 실적을 채운 다음 달 해외 이용분을 모아 그다음 달 둘째 주에 KB국민은행 계좌로 입금한다]
+      - key: beauty-5
+        title: 미용실·화장품 5% 환급할인
+        source: page
+        evidence: [미용실·화장품·피부미용 | 5% | - | 1만원, 이용금액 건당 3만원~10만원까지 할인 적용, '할인제외 : (피부관리전문점이 아닌) 병·의원 내 피부과, 피부관리실 등의 이용금액']
+        target:
+          categories: [beauty.cosmetics, beauty.salon]
+        when:
+          - amount: {min: 30000, below: 100001}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        unmodeled: [피부미용 업종은 담을 공통 업종이 없어 계산하지 않는다]
+      - key: transit-5
+        title: 버스·지하철·고속·시외버스 5% 할인
+        source: page
+        evidence: [전국 버스·지하철 | 5% | 1천5백원 | 월 3만원까지 할인, '청구 할인 대상: 후불교통(시내버스, 지하철)', '환급 할인 대상: 고속/시외 버스']
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, base: 30000}
+          - {per: month, amount: 1500}
+        tiers: {from: 300000}
+        unmodeled: [버스·지하철은 실제 사용일이 아니라 이용내역서에 적힌 이용일 기준으로 할인한다]
+    unmodeled: [최초 발급 후 사용등록일부터 다음 달 말일까지 실적 없이 백화점·홈쇼핑 1구간 할인을 주는 유예는 계산하지 않는다, '후불교통, 해외이용, 무승인금액, 정부지원금은 실적에서 빠진다', 월 할인한도는 본인회원 기준이다, 할인 한도는 전표 매입 순서대로 채운다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2014년 5월 28일 출시만 적었다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].benefits', question: '"건당 3만원~10만원까지 할인 적용"을 3만원 이상 10만원 이하 결제만 할인으로 읽었다. 10만원 넘는 결제의 10만원분 할인일 수도 있다', assumed: amount below 100001}
+  - {path: 'revisions[0].benefits[overseas-5].limits', question: 해외이용 월 한도 5천원이 한 칸만 적혀 있어 두 구간 모두에 적용했다, assumed: 5000}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 혜택마다 월 한도가 따로다. 해외이용 캐시백 대상에는 해외직구가 들어간다.
