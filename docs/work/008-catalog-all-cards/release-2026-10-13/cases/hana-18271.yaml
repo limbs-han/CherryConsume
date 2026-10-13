@@ -1,0 +1,28 @@
+card: hana-18271
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 통신 자동이체 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 55000, category: telecom.mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {telecom-5000: 5000}
+  calc: 5만5천원은 건당 1만원 이상이라 5,000원 정액
+- name: 실적 직전 30만원 미만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 55000, category: telecom.mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 혜택 없음
+- name: 스타벅스 5% 한도 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {coffee-5: 2000}
+  calc: 50,000원 x 5% = 2,500원이 월 한도 2,000원에 걸린다

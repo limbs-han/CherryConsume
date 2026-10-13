@@ -1,0 +1,55 @@
+card: lotte-p15883-a15883
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 구독료 8000 한도와 실적 제외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 30000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {subscription-discount: 8000}
+    counted: 0
+  calc: 한도 8,000원 안에서 구독료 할인. 할인받은 결제 전체가 실적에서 빠짐
+- name: 실적 직전 399999는 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 30000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 30000
+  calc: 40만원보다 1원 적어 할인 없음
+- name: 80만 구간 구독료가 한도보다 적으면 구독료만큼
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 9900, merchant: sk_intellix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {subscription-discount: 9900}
+  calc: 한도 12,000원보다 구독료 9,900원이 적어 9,900
+- name: 160만 구간 24000
+  prev_month_spend: 1600000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 30000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {subscription-discount: 24000}
+  calc: 160만 구간 한도 24,000
+- name: 신규 발급 특례 기간은 실적 없어도 8000
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-20T10:00, amount: 30000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {subscription-discount: 8000}
+  calc: 10월 발급이라 11월 말까지 40만 구간으로 보아 8,000
+- name: 자동납부가 아니면 할인 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 30000, merchant: sk_intellix, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부 연결 시에만 할인

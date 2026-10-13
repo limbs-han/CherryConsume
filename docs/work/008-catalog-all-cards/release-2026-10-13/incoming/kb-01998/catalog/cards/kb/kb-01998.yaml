@@ -1,0 +1,122 @@
+schema_version: 2
+id: kb-01998
+issuer: kb
+name: KB국민 가온 올포인트 체크카드
+short_name: KB 가온 올포인트 체크
+kind: check
+product_codes:
+  - '01998'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01998', fetched_at: '2026-10-12', review_no: 260522-01722-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2017-07-03'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, taxi, transit, utility.water]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax.local, utility.water]
+      unmodeled: [정부지원금 결제와 포인트리 충전금액은 적립에서 빠진다]
+    stacks:
+      - {key: base, pick: best}
+      - {key: extra, pick: best}
+    benefits:
+      - key: base-0-2
+        title: 전 가맹점 0.2% 포인트리 기본 적립
+        source: page
+        evidence: [전 가맹점 0.2% 포인트리 기본 적립, 국내/해외 모든 가맹점 포함, '실적조건 : 전월이용실적 조건 없음', '적립한도 : 제한 없음', 이용금액 건당 1천원 미만 건 적립 제외]
+        target: {all: true}
+        when:
+          - amount: {min: 1000}
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        stack: base
+      - key: cafe-bakery-0-2
+        title: 커피·제과 0.2% 추가 적립
+        source: page
+        evidence: [커피/제과아이스크림 업종 0.2% 포인트리 추가 적립, '실적조건 : 가온 올포인트 체크카드 전월이용실적 10만원 이상 시', '적립한도 : 제한 없음']
+        target:
+          categories: [cafe, restaurant.bakery]
+        when:
+          - amount: {min: 1000}
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+        unmodeled: [아이스크림 업종은 공통 업종에 없어 계산하지 않는다]
+      - key: telecom-0-2
+        title: 이동통신요금 자동이체 0.2% 추가 적립
+        source: page
+        evidence: [이동통신요금 자동이체 시 0.2% 포인트리 추가 적립, 'SKT. KT Olleh, LG U+ 이동통신요금 자동이체 시 적용(유/무선 결합 통신요금 이용시에는 할인대상에서 제외)']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+        unmodeled: [유무선 결합 통신요금은 적립에서 빠진다]
+      - key: gs25-0-2
+        title: GS25 0.2% 추가 적립
+        source: page
+        evidence: [GS25 편의점 0.2% 포인트리 추가 적립, '실적조건 : 가온 올포인트 체크카드 전월이용실적 10만원 이상 시']
+        target:
+          merchants: [gs25]
+        when:
+          - amount: {min: 1000}
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+      - key: transit-taxi-0-2
+        title: 버스·지하철·택시 0.2% 추가 적립
+        source: page
+        evidence: ['대중교통(버스, 지하철), 택시 0.2% 포인트리 추가 적립', '대중교통 적립 대상 : RF교통기관 업종(KB국민카드 가맹점 업종 기준)', '적립 제외 : 시외버스, 고속버스, 공항버스']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        when:
+          - amount: {min: 1000}
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+        unmodeled: [버스·지하철은 실제 사용일이 아니라 이용내역에 적힌 이용일 기준으로 적립한다]
+      - key: mart-0-8
+        title: 이마트·롯데마트·홈플러스 0.8% 추가 적립
+        source: page
+        evidence: [대형마트 0.8% 포인트리 추가 적립, '대상 대형마트 : 이마트, 롯데마트, 홈플러스', '실적조건 : 가온 올포인트 체크카드 전월이용실적 30만원 이상 시', '제공조건/적립한도 : 건당 3만원이상 이용 시 적립되며 이용금액 기준 월 50만원 이용금액까지 추가적립 제공', '온라인 쇼핑몰, 상품권 구매 및 건물 내 임대 매장, SSM(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼) 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+          - amount: {min: 30000}
+        reward: {type: points, program: kb_pointree, rate: 0.8}
+        limits:
+          - {per: month, base: 500000}
+        tiers: {from: 300000}
+        stack: extra
+        unmodeled: [대형마트 건물 안 임대매장은 적립에서 빠진다]
+      - key: gs-caltex-0-8
+        title: GS칼텍스 0.8% 추가 적립
+        source: page
+        evidence: [GS칼텍스 주유소 0.8% 포인트리 추가 적립, '실적조건 : 가온 올포인트 체크카드 전월이용실적 30만원 이상 시', '제공조건/적립한도 : 건당 3만원이상 이용 시 적립되며 이용금액 기준 월 30만원 이용금액까지 추가적립 제공', '적립제외 : LPG']
+        target:
+          merchants: [gs_caltex]
+        when:
+          - amount: {min: 30000}
+        reward: {type: points, program: kb_pointree, rate: 0.8}
+        limits:
+          - {per: month, base: 300000}
+        tiers: {from: 300000}
+        stack: extra
+        unmodeled: [GS칼텍스 LPG 충전은 적립에서 빠진다]
+    unmodeled: [실적은 승인금액 기준이고 해외이용금액과 무승인금액(자판기·터널통행료·기차/고속버스 취소 반환 수수료)과 정부지원금은 실적에서 빠진다, 월간 적립한도는 본인회원 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2017.07.03으로 두었다., assumed: '2017-07-03'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문은 교통이용금액을 실적에서 뺀다고만 적었다. 덜 주는 쪽으로 대중교통 전체와 택시를 실적에서 뺐다, assumed: 'transit, taxi'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 기본 0.2%와 추가 적립은 더해서 받는다. 원문 예시는 마트 3만원 결제에 기본 0.2%와 추가 0.8%로 1% 적립이다. 포인트리 1P는 1원이다.

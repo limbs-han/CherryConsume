@@ -1,0 +1,56 @@
+schema_version: 2
+id: hyundai-tre6
+issuer: hyundai
+name: the Red
+short_name: 현대 the Red
+search_names: [the Red, 더 레드, 현대카드 the Red]
+kind: credit
+product_codes: [TRE6]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 300000}
+  - {scope: global, brand: visa, amount: 300000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/260513_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Red.pdf', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-05-13
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, utility.water]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금과 후불하이패스 카드 이용 금액은 적립하지 않는다, 현대카드의 다른 할인이 적용된 결제는 적립하지 않는다, 국제브랜드 수수료와 해외서비스 수수료는 적립하지 않는다]
+    options:
+      - key: reward
+        title: 리워드 적립 방식
+        choices:
+          - {key: m_point, title: M포인트형}
+          - {key: mileage, title: 항공 마일리지형}
+        default: null
+        change: immediate
+        unsupported: [mileage]
+    benefits:
+      - key: base-m-1-5
+        title: 국내외 가맹점 1.5% M포인트 적립
+        source: manual
+        evidence: [전월 이용 금액 50만원 이상 시 국내외 가맹점 1.5% M포인트 적립, M포인트형/항공 마일리지형 중 선택하여 리워드 적립, 1회 및 연간 적립 한도 제한 없음, 매출 건별로 소수점 이하 반올림 후 적립]
+        target: {all: true}
+        when:
+          - option:
+              reward: [m_point]
+        reward: {type: points, program: hyundai_m_point, rate: 1.5, round: round}
+        tiers: {from: 500000}
+    unmodeled: [항공 마일리지형은 1, 500원당 대한항공 1마일리지(건별 소수점 이하 반올림)이지만 마일리지 가치를 정하지 않아 계산하지 않는다, 연간 보너스 바우처(10만원권 3매)는 발급 첫해 누적 100만원과 2차년도 전년도 1, 200만원 이용 조건이라 계산하지 않는다, 공항 라운지와 발레파킹은 결제 혜택이 아니다, 적립은 매출전표 접수 순서로 한다, 실적은 본인과 가족 카드를 합산한다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, M 긴급적립을 쓰면 적립 포인트가 상환에 쓰인다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북 파일 이름의 260513을 시작일로 보았다. 원문에 시행일 문구는 확인하지 못했다, assumed: '2026-05-13'}
+notes: 2026-10-13 공식 가이드북 대조. 연회비 국내전용과 국내외겸용(VISA Signature) 300,000원(기본 100,000+제휴 200,000), 가족카드 100,000원. 전월 50만 이상 국내외 1.5% M포인트 무제한, 건별 소수점 이하 반올림. 항공 마일리지형은 계산하지 않는다. 실적 제외는 카드론·연회비·공과금·상품권·선불카드뿐이고 무이자 할부와 할인 받은 결제도 실적에 든다. 적립 제외는 카드사 기본에 월세를 더했다. 신규 발급 시 수령 등록월 다음 달 이용 건까지 50만 구간.

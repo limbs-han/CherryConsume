@@ -1,0 +1,52 @@
+schema_version: 2
+id: kb-04420
+issuer: kb
+name: 제주항공 J 포인트 KB국민카드
+short_name: KB 제주항공 J포인트
+kind: credit
+product_codes:
+  - '04420'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04420', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax.local]
+    stacks:
+      - {key: main, pick: best}
+      - {key: jeju, pick: best}
+    benefits:
+      - key: jpoint-base
+        title: 1,200원당 J 포인트 10P 적립
+        source: page
+        evidence: ['제주항공 J 포인트 KB국민카드 이용금액 중 일시불, 할부원금 1,200원당 10포인트 적립', (10포인트=10원), 전월 이용실적 조건 및 월간/연간 포인트 적립 제한 금액 없으며, 카드 이용 1건당 포인트 적립 제한금액 없음]
+        target: {all: true}
+        reward:
+          type: points
+          program: jeju_air_jpoint
+          per_unit: {unit: 1200, amount: 10}
+        notes: 원문은 1,200원 미만 남는 금액을 반올림해 적립한다. 모델은 남는 금액을 버려 덜 준다.
+      - key: jpoint-jeju-air
+        title: 제주항공 이용 1,200원당 10P 추가 적립
+        source: page
+        evidence: ['항공권 구매 등 제주항공 이용시에는 이용금액 1,200원당 10포인트 추가 적립', '「제주항공 J 포인트 KB국민카드」로 제주항공에서 24만원 항공권을 구매한다면? → 4,000포인트가 적립됩니다.']
+        target:
+          merchants: [jeju_air]
+        reward:
+          type: points
+          program: jeju_air_jpoint
+          per_unit: {unit: 1200, amount: 10}
+        stack: jeju
+    unmodeled: [인천·김포공항 라운지 연 2회 무료 이용은 계산하지 않는다, '1,200원 미만 남는 금액은 반올림해 적립한다. 600원 이상 남으면 10포인트를 더 받는다', 기본 포인트리는 적립되지 않는다, 가족카드 이용분 포인트는 본인회원에게 적립된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 연회비는 기본 7천원과 제휴 1만3천원을 더한 2만원이고 면제 조건이 없다. 적립 제외는 (부분)무이자할부, 현금서비스·카드론, 지방세, 정부지원금, 대학 등록금, 수수료·이자·연체료, 연회비, 상품권·선불카드다.

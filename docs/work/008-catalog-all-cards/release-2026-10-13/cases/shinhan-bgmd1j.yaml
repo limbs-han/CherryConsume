@@ -1,0 +1,36 @@
+card: shinhan-bgmd1j
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 배달앱 2% 1회 4만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 50000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-app: 800}, counted: 50000}
+  calc: 40,000 × 2% = 800
+- name: 80만 구간 편의점 5% 건당 2천P
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 50000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience: 2000}}
+  - {payment: 1, benefits: {convenience: 1000}}
+  calc: 50,000 × 5% = 2,500이지만 건당 2,000. 20,000 × 5% = 1,000
+- name: 50만 구간 편의점 3%와 1만원 미만
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 10000, merchant: emart24, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 9999, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience: 300}}
+  - {payment: 1, benefits: {}}
+  calc: 10,000 × 3% = 300. 9,999원은 1만원 미만
+- name: 30만 직전이면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T19:00, amount: 20000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 구간

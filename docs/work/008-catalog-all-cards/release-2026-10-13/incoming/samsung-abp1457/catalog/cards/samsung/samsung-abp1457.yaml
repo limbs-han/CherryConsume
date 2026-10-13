@@ -1,0 +1,75 @@
+schema_version: 2
+id: samsung-abp1457
+issuer: samsung
+name: SC제일은행 삼성체크카드 YOUNG
+short_name: SC제일 삼성체크 YOUNG
+search_names: [SC제일 YOUNG 체크, SC제일은행 YOUNG]
+kind: check
+product_codes: [ABP1457]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1457', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoRl%2F6Fikq1M3HuEx3hGIuU%3D&sn=1', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [telecom.mobile, transit.bus_city, transit.subway]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: null
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드의 다른 할인 혜택과 중복 적용되지 않고 혜택이 큰 금액만 적용한다]
+    limits:
+      - {key: store, per: month, count: 3}
+    benefits:
+      - key: transit-10
+        title: 대중교통 10% 캐시백
+        source: manual
+        evidence: [대중교통 10% 캐시백, 대중교통 및 이동통신요금(전월 이용 총 금액)을 제외한 전월 이용금액 30만원 이상 시 제공됩니다.(월 캐시백한도 각 2, 500원), '대중교통 버스(시외와 고속버스 제외), 지하철 후불교통기능 이용건(택시 제외)']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 2500}
+        tiers: {from: 300000}
+      - key: mobile-10
+        title: 이동통신요금 10% 캐시백
+        source: manual
+        evidence: [이동통신요금 자동결제 시 10% 캐시백, 월 캐시백한도 각 2, 500원, 'SKT, KT, LG U+ 자동결제건(결합상품요금, 대리점 단말기 구매금액 및 대리점 카드 결제금액 제외)']
+        target:
+          categories: [telecom.mobile]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 2500}
+        tiers: {from: 300000}
+        unmodeled: [결합상품요금, 대리점 단말기 구매금액, 대리점 카드 결제금액은 캐시백하지 않는다]
+      - key: store-1000
+        title: 편의점·커피·제과 1,000원 캐시백
+        source: manual
+        evidence: [편의점·커피전문점·제과점 업종에서 1만원 이상 결제 시 1, 000원 캐시백, 대중교통 및 이동통신요금(전월 이용 총 금액)을 제외한 전월 이용금액 30만원 이상 시 통합 월 3회 제공됩니다., 커피 업종의 경우 상품권 구매 및 충전식 선불카드 충전건은 제외됩니다.]
+        target:
+          categories: [cafe, convenience, restaurant.bakery]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: store}
+        tiers: {from: 300000}
+        unmodeled: [백화점·할인점 안 일부 임대매장과 식품매장은 업종 구분이 되지 않아 캐시백 대상에서 빠질 수 있다]
+    unmodeled: [CGV 3, 000원 할인과 놀이공원 50%·워터파크 30% 현장할인은 직전 3개월 월평균 이용금액 30만원 이상 조건이라 계산하지 않는다, 캐시백은 매월 15일 결제계좌로 입금된다, 후불교통기능은 만 19세 이상 신청자에게 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 상품 출시일은 2016-05-30이다, assumed: '2026-10-05'}
+  - {path: status, question: 상품설명서 관리번호의 유효기간이 2023-10-31로 적혀 있다. 상품 페이지는 열려 있고 발급 중단 문구는 없어 판매 중으로 두었다, assumed: on_sale}
+notes: 2026-10-13 상품안내장(SC제일은행 삼성체크카드 YOUNG·CASHBACK·POINT 공용, 준법심의 P3121-16-1155) 대조. 연회비 없음. 후불교통은 전월 이용금액 제외라 대중교통(버스·지하철)과 이동통신요금을 실적에서 뺐다.

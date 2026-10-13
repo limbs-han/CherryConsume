@@ -1,0 +1,39 @@
+card: kb-07980
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 평일 커피 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {coffee-5: 1000}, counted: 20000}
+  calc: 수요일 20,000원 × 5% = 1,000원. 실적 제외 아님
+- name: 30만 직전 커피 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 0 구간
+- name: 주말 커피 할인 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 20000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 토요일 제외
+- name: 50만 구간 평일 제과 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: restaurant.bakery}
+  expect:
+  - {payment: 0, benefits: {dessert-5: 2500}, counted: 50000}
+  calc: 50,000원 × 5% = 2,500원
+- name: 30만 구간 지하철 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 20000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1000}, counted: 0}
+  calc: 20,000원 × 5% = 1,000원. 월 1,500원 안. 후불교통은 실적 제외

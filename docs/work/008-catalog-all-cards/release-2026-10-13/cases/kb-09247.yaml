@@ -1,0 +1,32 @@
+card: kb-09247
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 KB Pay 2만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: grocery_mart, channel: offline, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {easypay-1-5: 300}}
+  calc: 20,000원 × 1.5% = 300점
+- name: 경계 직전 499999 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: grocery_mart, channel: offline, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만 미만은 혜택 없음
+- name: 편의점 1만원 1천점
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: convenience, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-taxi-1000: 1000}}
+  calc: 건당 1만원 이상 1천점
+- name: 쿠팡 2만원 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-delivery-5: 1000}}
+  calc: 20,000원 × 5% = 1,000점

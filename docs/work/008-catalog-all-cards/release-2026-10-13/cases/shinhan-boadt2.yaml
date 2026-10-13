@@ -1,0 +1,32 @@
+card: shinhan-boadt2
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 구독요금 1만3천원 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: lg_appliance_subscription, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lg-subscription-discount: 13000}}
+  calc: 30만 구간 월 한도 13,000원. 적립은 70만 구간부터
+- name: 70만 구간 할인 1만6천원과 1만 포인트
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: lg_appliance_subscription, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lg-subscription-discount: 16000, lg-subscription-points: 10000}}
+  calc: 70만 구간 한도 16,000원, 7만원 이상 1만P
+- name: 7만원 미만은 적립 없음, 금액만큼 할인
+  prev_month_spend: 1300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: lg_appliance_subscription, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lg-subscription-discount: 15000}}
+  calc: 구독요금 15,000원 전액 할인. 7만원 미만이라 적립 없음
+- name: 30만 직전 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: lg_appliance_subscription, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만

@@ -1,0 +1,27 @@
+card: samsung-aap1752
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 통신요금 구간별 한도
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 75000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {skt-telecom: 10000}}
+  calc: 70만원 구간 한도 10,000. 75,000 결제라 한도만큼 10,000
+- name: 한도보다 적은 통신요금과 1만5천원 미만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 14999, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-11T09:00, amount: 15000, merchant: sk_broadband, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {skt-telecom: 7000}}
+  calc: 14,999원은 15,000원 미만. 15,000원은 30만 구간 한도 7,000
+- name: 실적 30만원 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-10T09:00, amount: 75000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 299,999원은 0 구간

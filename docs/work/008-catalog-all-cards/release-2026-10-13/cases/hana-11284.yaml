@@ -1,0 +1,39 @@
+card: hana-11284
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 신세계백화점 5%와 포인트 0.2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: shinsegae_department}
+  expect:
+  - payment: 0
+    benefits: {shinsegae-dept-cashback-5: 5000, shinsegae-dept-points-0-2: 200}
+  calc: 100,000원 x 5% = 5,000원, 100,000원 x 0.2% = 200포인트
+- name: 실적 직전 299999면 포인트만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: shinsegae_department}
+  expect:
+  - payment: 0
+    benefits: {shinsegae-dept-points-0-2: 200}
+  calc: 30만원보다 1원 적어 캐쉬백 0원. 포인트는 실적과 관계없음
+- name: 캐쉬백 월 3만원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1000000, merchant: shinsegae_department}
+  expect:
+  - payment: 0
+    benefits: {shinsegae-dept-cashback-5: 30000, shinsegae-dept-points-0-2: 2000}
+  calc: 1,000,000원 x 5% = 50,000원이 월 한도 30,000원에 걸림
+- name: 후불교통 월 3만원 이상 7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 29999, category: transit.subway, billing: postpaid_transit}
+  - {at: 2026-11-05T08:00, amount: 1, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {transit-cashback-7: 2100}
+  calc: 29,999원은 3만원 미만이라 0원. 합계 30,000원이 되면 30,000원 x 7% = 2,100원

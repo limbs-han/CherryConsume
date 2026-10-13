@@ -1,0 +1,77 @@
+card: hana-17582
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 전가맹점 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-0-8: 800}
+    counted: 100000
+  calc: 100,000원 x 0.8% = 800
+- name: 간편결제 온라인 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, channel: online, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {simple-pay-1-2: 1200}
+  calc: 100,000원 x 1.2% = 1,200
+- name: 쿠팡 2%와 한도
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 3000000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coupang-2: 50000}
+  calc: 3,000,000원 x 2% = 60,000이지만 월 5만원 한도
+- name: 실적 직전이면 배달 4% 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-0-8: 400}
+  calc: 40만원보다 1원 적어 기본 0.8%만
+- name: 배달 4%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-4: 2000}
+  calc: 50,000원 x 4% = 2,000
+- name: 온라인식품 4%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: kurly, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {online-food-shopping-4: 2000}
+  calc: 50,000원 x 4% = 2,000
+- name: 오픈마켓 4%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {open-market-4: 2000}
+  calc: 50,000원 x 4% = 2,000
+- name: 카카오T 앱 사전결제 4%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: kakao_t, billing: app_prepay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {taxi-app-4: 800}
+  calc: 20,000원 x 4% = 800
+- name: 택시 오프라인 4%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: taxi, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {taxi-offline-4: 800}
+  calc: 20,000원 x 4% = 800

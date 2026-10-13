@@ -1,0 +1,103 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "seoul_city_gas",
+      "name": "서울도시가스",
+      "category": "utility.gas",
+      "aliases": [
+        "서울도시가스",
+        "Seoul City Gas"
+      ]
+    },
+    "card_id": "kb-02098",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02098",
+    "evidence": "서울도시가스 요금 결제 시 최대 10% 청구 할인. 서울도시가스 공급권역: 서울시 일부 지역 및 경기도 김포시, 일산시, 파주시 전역"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "visang_onlyone",
+      "name": "비상교육 온리원",
+      "category": "education.study_material",
+      "billing": "autopay",
+      "aliases": [
+        "비상온리원",
+        "비상 온리원",
+        "비상교육 온리원"
+      ]
+    },
+    "card_id": "kb-02210",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02210",
+    "evidence": "비상온리원요금 자동납부 | 1만2천원 | 1만7천원"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ranking_dak",
+      "name": "랭킹닭컴",
+      "category": "online_shopping",
+      "aliases": [
+        "랭킹닭컴",
+        "RANKINGDAK"
+      ]
+    },
+    "card_id": "kb-04289",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04289",
+    "evidence": "30만원 이상 | 1만5천원 | 20% | 랭킹닭컴"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "jeju_air_jpoint",
+      "name": "제주항공 J 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "kb-04420",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04420",
+    "evidence": "제주항공 J 포인트는 제주항공의 Loyalty 프로그램으로 제주항공 항공권 구매시 10포인트부터 현금처럼 자유롭게 사용할 수 있습니다.(10포인트=10원)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kumon",
+      "name": "구몬학습",
+      "category": "education.study_material",
+      "billing": "autopay",
+      "aliases": [
+        "구몬학습",
+        "구몬",
+        "교원구몬"
+      ]
+    },
+    "card_id": "kb-04421",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04421",
+    "evidence": "구몬 학습지 (자동납부) | 1만 4천원 | 40만원 이상"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "smart_rental",
+      "name": "스마트렌탈",
+      "category": "other",
+      "billing": "autopay",
+      "aliases": [
+        "스마트렌탈"
+      ]
+    },
+    "card_id": "kb-04487",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04487",
+    "evidence": "스마트렌탈 렌탈료 자동이체 | 1만2천원 | 1만7천원. 스마트렌탈 고객콜센터(1644-7018)에서 자동이체 신청"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "coupang_cash",
+      "name": "쿠팡캐시",
+      "won_per_point": 1
+    },
+    "card_id": "kb-09292",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09292",
+    "evidence": "쿠팡캐시란 쿠팡, 쿠팡이츠, 쿠팡플레이 등에서 현금처럼 사용 가능한 결제 수단. 적립한도: 월 2만원"
+  }
+]

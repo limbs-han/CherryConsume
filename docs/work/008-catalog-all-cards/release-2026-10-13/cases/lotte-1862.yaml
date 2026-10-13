@@ -1,0 +1,11 @@
+card: lotte-1862
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 어디서나 1% 캐시백
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 45678, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-cashback-1: 456}}
+  calc: 45,678 × 1% = 456.78, 원 미만 버림 456

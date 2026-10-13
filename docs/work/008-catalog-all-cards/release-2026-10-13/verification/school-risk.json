@@ -1,0 +1,208 @@
+{
+  "reviewed_at": "2026-10-10",
+  "scope": "기존 카드12개와 현대카드사1개. 본인이 작성한 신규 하나카드8장은 제외",
+  "result": "문제 없음",
+  "findings": [],
+  "file_count": 13,
+  "exclusion_list_count": 21,
+  "changes": [
+    {
+      "file": "cards/hana/hana-travelog-check.yaml",
+      "path": ".revisions[0].benefits[1].target.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/hana/hana-wonder2-daily.yaml",
+      "path": ".revisions[0].benefit_exclusions.categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/hana/hana-wonder2-daily.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/hyundai/hyundai-the-green-ed4.yaml",
+      "path": ".revisions[0].benefit_exclusions.categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/ibk/ibk-narasarang.yaml",
+      "path": ".revisions[0].benefits[8].target.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/kb/kb-easy-all-titanium.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/kb/kb-my-wesh.yaml",
+      "path": ".revisions[0].benefit_exclusions.categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/kb/kb-my-wesh.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/lotte/lotte-loca-classic.yaml",
+      "path": ".revisions[0].benefit_exclusions.categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/lotte/lotte-loca-classic.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/lotte/lotte-loca365.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/nh/nh-heroes-check.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/samsung/samsung-id-on.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/samsung/samsung-id-on.yaml",
+      "path": ".revisions[0].benefits[7].target.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/samsung/samsung-id-on.yaml",
+      "path": ".revisions[0].benefits[8].target.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/samsung/samsung-id-on.yaml",
+      "path": ".revisions[0].benefits[9].target.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/samsung/samsung-id-on.yaml",
+      "path": ".revisions[0].benefits[10].target.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/shinhan/shinhan-cheoeum.yaml",
+      "path": ".revisions[0].benefit_exclusions.categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/shinhan/shinhan-cheoeum.yaml",
+      "path": ".revisions[0].spend.exclude_categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "cards/shinhan/shinhan-pointplan.yaml",
+      "path": ".revisions[0].benefit_exclusions.categories",
+      "old_retained": true,
+      "new_added": true
+    },
+    {
+      "file": "issuers/hyundai.yaml",
+      "path": ".defaults[0].benefit_exclusions.categories",
+      "old_retained": true,
+      "new_added": true
+    }
+  ],
+  "final_file_hashes": [
+    {
+      "file": "cards/hana/hana-travelog-check.yaml",
+      "sha256": "1c161384c1eb04c8c87c1c3a1ad640aa7a3d00fcee92223f4a78154610a46d0d"
+    },
+    {
+      "file": "cards/hana/hana-wonder2-daily.yaml",
+      "sha256": "f35453c0b2b36ee7cacd5408c65b7bc559b46caf969095c44375fb25f7762f72"
+    },
+    {
+      "file": "cards/hyundai/hyundai-the-green-ed4.yaml",
+      "sha256": "c95ba5af09988594e3898fdef058230c4dbb6f209bc0726f795cde81d39e801b"
+    },
+    {
+      "file": "cards/ibk/ibk-narasarang.yaml",
+      "sha256": "e04424c70fb2a71e97d57c200acf28dfaa4cd2ab92d1c2d404cc9188674ff216"
+    },
+    {
+      "file": "cards/kb/kb-easy-all-titanium.yaml",
+      "sha256": "3dc7894a9dfcd98b8b065bd131f718c4f1a24c71d1dbff0c09a3742f48f751db"
+    },
+    {
+      "file": "cards/kb/kb-my-wesh.yaml",
+      "sha256": "62d287352bb91615d61d083828e15e614e948e22ea439888e553691aff1378b7"
+    },
+    {
+      "file": "cards/lotte/lotte-loca-classic.yaml",
+      "sha256": "6930848727889f5799e5c8aa80134ebf5618c822272deb435332f5fd1657333e"
+    },
+    {
+      "file": "cards/lotte/lotte-loca365.yaml",
+      "sha256": "c7e1d24d2777b26326e4d6ef4c6dd52012f822e94e8172dbbe9481412805a00d"
+    },
+    {
+      "file": "cards/nh/nh-heroes-check.yaml",
+      "sha256": "d28b15f7a2a24ff78907d6b538b8c49351726ceb9139bc6e23fb0b52d89b22e1"
+    },
+    {
+      "file": "cards/samsung/samsung-id-on.yaml",
+      "sha256": "2cc3d11bb8c8748a55e218734d66a6d270e65c5684d7c3eaf7721da17d044fe1"
+    },
+    {
+      "file": "cards/shinhan/shinhan-cheoeum.yaml",
+      "sha256": "81fe1673767fc81c1c45b9dc7a3894885ffd21ac15da4aee99c8b8d0758e072f"
+    },
+    {
+      "file": "cards/shinhan/shinhan-pointplan.yaml",
+      "sha256": "cda4a8fdecb862d298ffbc74a8f4a93c33cd407466cd70889bf96479861c66d9"
+    },
+    {
+      "file": "issuers/hyundai.yaml",
+      "sha256": "c6e43a678eaacd94018f90eb8b0ab2a8a4a3e130241b67b4c53d1d71f0f3c916"
+    }
+  ],
+  "checks": [
+    "원래 education.school_fee 제외가 모든 위치에 유지됨",
+    "education.primary_secondary_fee만 같은 제외 목록에 추가됨",
+    "개정 날짜와 개정 수 및 금액/비율/실적/한도 변경 없음",
+    "원래 유치원 납입금 제외 범위 유지",
+    "신규 업종은 기존 학교납입금 일부이므로 옛 개정에 연결해 과거 결제도 제외",
+    "원래 문자열 업종 기억과 결제는 이름을 바꾸거나 삭제하지 않아 같은 결과 유지",
+    "카드 직접 기본값과 현대카드 기본값 상속을 함께 확인"
+  ],
+  "engine_verification": {
+    "school_cards": 14,
+    "school_cases": 14,
+    "school_mismatches": 0,
+    "existing_cards": 20,
+    "existing_cases": 281,
+    "existing_mismatches": 0
+  },
+  "risk_assessment": "초중고 업종을 새 형제로 나누면 기존 school_fee 문자열만으로는 새 업종 결제를 제외할 수 없다. 이번 연결은 이를 막는다. 옛 school_fee 값을 그대로 보존하여 유치원과 옛 초중고 기록의 제외 범위가 줄지 않는다. 카드사 혜택 변경이 아닌 업종 분류 연결이므로 새로운 시행일을 만들지 않은 것이 기존 기간 전체의 과지급 방지에 맞다."
+}

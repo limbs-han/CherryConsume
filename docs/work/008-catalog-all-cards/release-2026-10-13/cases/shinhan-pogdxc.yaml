@@ -1,0 +1,25 @@
+card: shinhan-pogdxc
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 1% 할인 실적 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T18:00, amount: 55555, category: grocery_mart}
+  expect:
+  - {payment: 0, benefits: {domestic-1: 555}}
+  calc: 55,555 x 1% = 555.55원, 원 미만 버림 555원
+- name: 해외 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  calc: 100,000 x 2% = 2,000원
+- name: 약국은 할인 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: pharmacy}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 약국 업종은 할인 제외

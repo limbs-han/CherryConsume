@@ -1,0 +1,20 @@
+card: shinhan-bobct4
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 편의점 0.4%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 50000, category: fuel, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20, fuel-convenience-0-2: 20}, counted: 10000}
+  - {payment: 1, benefits: {base-0-2: 100, fuel-convenience-0-2: 100}, counted: 50000}
+  calc: 10,000 × 0.2% = 20 두 번. 50,000 × 0.2% = 100 두 번
+- name: 경계 직전 199999 기본만
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20}, counted: 10000}
+  calc: 20만원 미만은 기본 0.2%만

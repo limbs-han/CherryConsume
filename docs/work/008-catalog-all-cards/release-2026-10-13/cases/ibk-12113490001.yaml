@@ -1,0 +1,53 @@
+card: ibk-12113490001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 후불교통 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-5: 500}}
+  calc: 10,000원 × 5% = 500원
+- name: 이동통신 5% 월 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 60000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 2000}}
+  calc: 60,000원 × 5% = 3,000원 중 월 한도 2,000원
+- name: 다이소 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {daiso-5: 1000}}
+  calc: 20,000원 × 5% = 1,000원
+- name: 쿠팡 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 10000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {coupang-5: 500}}
+  calc: 10,000원 × 5% = 500원
+- name: 배달앱 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 20000, merchant: baemin, channel: online}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 1000}}
+  calc: 20,000원 × 5% = 1,000원
+- name: 편의점 5% 월 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 30000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 1000}}
+  calc: 30,000원 × 5% = 1,500원 중 월 한도 1,000원
+- name: 경계 직전 199999 다이소
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 구간 미달

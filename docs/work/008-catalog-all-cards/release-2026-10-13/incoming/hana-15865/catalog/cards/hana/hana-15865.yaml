@@ -1,0 +1,134 @@
+schema_version: 2
+id: hana-15865
+issuer: hana
+name: 원더카드 2.0 T
+short_name: 하나 원더 T
+search_names: [원더 T, 원더카드 2.0 원더 T, 원더카드 T]
+kind: credit
+product_codes:
+  - '15865'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 19900}
+  - {scope: global, brand: mastercard, amount: 19900}
+  - {scope: global, brand: visa, amount: 19900}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41015865P&CD_PD_SEQ=15865', fetched_at: 2026-10-13, review_no: A-26-2660, review_valid_until: 2027-07-05}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-07-06
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+    limits:
+      - key: sk_shopping
+        per: month
+        amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+      - key: taxi
+        per: month
+        amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+    benefits:
+      - key: skt-comm-20-1
+        title: SKT 통신요금 20% 하나머니 적립
+        source: page
+        evidence: ['적립 대상 : SKT, SK브로드밴드, T우주 자동납부요금', '20% | 지난달 실적 40만원 이상 80만원 미만 | 8,000', '지난달 실적 80만원 이상 120만원 미만 | 12,000', '지난달 실적 120만원 이상 | 15,000', '약정금액 대납, 지점을 통한 월납, 알뜰폰, 자동이체로 납부하지 않은 금액은 서비스에서 제외됩니다.']
+        target:
+          merchants: [sk_broadband, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: hana_money, rate: 20}
+        limits:
+          - per: month
+            amount: {400000: 8000, 800000: 12000, 1200000: 15000}
+        tiers: {from: 400000}
+        unmodeled: [약정금액 대납과 지점 월납과 알뜰폰은 제외된다]
+      - key: sk-fuel-10
+        title: SK에너지 주유 10% 하나머니 적립
+        source: page
+        evidence: ['적립 대상 : SK에너지, 11번가', '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 8,000', '지난달 실적 120만원 이상 | 12,000', SK에너지 주유소 가맹점에서 오프라인으로 주유하는 결제에 한하여 서비스가 제공됩니다.]
+        target:
+          merchants: [sk_energy]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 10}
+        limits:
+          - {shared: sk_shopping}
+        tiers: {from: 400000}
+      - key: eleven-10
+        title: 11번가 10% 하나머니 적립
+        source: page
+        evidence: ['적립 대상 : SK에너지, 11번가', '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '11번가는 공식 홈페이지 및 앱 내 결제 건에 한해 서비스가 적용되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제 한 경우와 상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 서비스에서 제외됩니다.']
+        target:
+          merchants: [eleven_st]
+        when:
+          - {channel: online}
+        reward: {type: points, program: hana_money, rate: 10}
+        limits:
+          - {shared: sk_shopping}
+        tiers: {from: 400000}
+        unmodeled: [공식 홈페이지와 앱 결제만 대상이고 연결된 다른 사이트 결제와 상품권과 여행과 항공권과 티켓과 도서와 공연 매출은 제외된다]
+      - key: mart-10
+        title: 이마트·트레이더스·홈플러스·롯데마트 10% 하나머니 적립
+        source: page
+        evidence: ['적립 대상 : 이마트, 트레이더스 홀세일 클럽, 홈플러스, 롯데마트', '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 8,000', '지난달 실적 120만원 이상 | 12,000', 오프라인 결제 건에 한하여 서비스가 제공됩니다., 트레이더스 홀세일 클럽을 제외한 창고형 할인매장(롯데마트 맥스 등)과 상설·임대 매장은 서비스에서 제외됩니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+        unmodeled: [롯데마트 맥스 같은 창고형 매장과 상설 매장과 임대 매장 이용금액은 제외된다]
+      - key: transit-10
+        title: 버스·지하철 10% 하나머니 적립
+        source: page
+        evidence: ['적립 대상 : 버스, 지하철', '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 8,000', '지난달 실적 120만원 이상 | 12,000', '시외버스, 고속버스, 철도(KTX/SRT)는 서비스에서 제외됩니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: points, program: hana_money, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 12000}
+        tiers: {from: 400000}
+      - key: taxi-app-10
+        title: 카카오T·UT 앱 사전결제 10% 하나머니 적립
+        source: page
+        evidence: ['적립 대상 : 카카오T, UT, 택시업종', '10% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 8,000', '지난달 실적 120만원 이상 | 12,000', '카카오T, UT는 공식 앱에서 카드를 등록하고 미리 결제하는 방식에만 서비스가 제공되며, 현장결제 또는 나중에 결제하는 방식에는 서비스가 제외됩니다.']
+        target:
+          merchants: [kakao_t, ut]
+        when:
+          - billing: [app_prepay]
+        reward: {type: points, program: hana_money, rate: 10}
+        limits:
+          - {shared: taxi}
+        tiers: {from: 400000}
+      - key: taxi-offline-10
+        title: 택시업종 오프라인 10% 하나머니 적립
+        source: page
+        evidence: ['적립 대상 : 카카오T, UT, 택시업종', 택시 업종은 오프라인 결제 건에 한하여 서비스가 제공됩니다.]
+        target:
+          categories: [taxi]
+          exclude_merchants: [kakao_t, ut]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: hana_money, rate: 10}
+        limits:
+          - {shared: taxi}
+        tiers: {from: 400000}
+    unmodeled: [T멤버십 바코드를 쓴 11pay 오프라인 결제 20% 하나머니 적립은 T멤버십 앱 결제 수단을 입력으로 가릴 수 없어 계산하지 않는다, 무이자할부 서비스(국내 5만원 이상 2~3개월)는 계산하지 않는다, 가족카드 이용금액과 월 한도는 본인카드와 합산한다, '온가족 플러스(가족카드당 월 1만원 캐시백, 차년도 연회비 1만원 지원)는 가족카드 실적이 필요해 계산하지 않는다', 트래블로그 스위치로 해외결제를 외화 하나머니로 설정해 해외 이용하면 원더 서비스가 없다, 혜택플러스와 맞춤 혜택 조합 변경은 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의 시작일을 잠정 시작일로 둔다., assumed: '2026-07-06'}
+  - {path: 'revisions[0].benefits', question: 영역 혜택이 한 건에 겹칠 때의 처리를 원문이 적지 않았다. 대상 가맹점이 겹치지 않아 영향이 없다고 보았다., assumed: 겹침 없음}
+  - {path: 'revisions[0].limits', question: SK 주유와 11번가 한도가 같은 4천 8천 1만2천원 한도를 같이 쓰는지 따로인지 원문이 분명하지 않다., assumed: 둘이 함께 쓴다}
+  - {path: 'revisions[0].spend', question: 취소가 실적에서 빠지는 달. 원문에는 혜택을 매입 취소가 접수된 달에 차감한다는 문구만 있다., assumed: cancel_month}
+notes: 2026-10-13 공식 상품 페이지(준법심의 A-26-2660)에서 옮겼다. 원더카드 2.0의 T 맞춤 혜택 조합이다. 연회비 19,900원(기본 12,000원, 제휴 7,900원). 실적은 지난달 국내외 일시불과 할부 이용금액. 혜택은 모두 하나머니 적립이고 1하나머니는 1원이다. 서비스 받은 매출은 실적에서 빠진다. 무이자할부 결제는 적립에서 제외된다.

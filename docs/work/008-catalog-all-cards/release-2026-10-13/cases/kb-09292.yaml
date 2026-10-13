@@ -1,0 +1,18 @@
+card: kb-09292
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 쿠팡 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coupang-2: 1000}}
+  calc: 50,000원 × 2% = 1,000캐시
+- name: 일반 가맹점 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100}}
+  calc: 50,000원 × 0.2% = 100캐시

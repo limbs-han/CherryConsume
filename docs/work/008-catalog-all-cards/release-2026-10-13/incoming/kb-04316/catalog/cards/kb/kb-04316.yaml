@@ -1,0 +1,45 @@
+schema_version: 2
+id: kb-04316
+issuer: kb
+name: KB국민 더피플라이프카드
+short_name: KB 더피플라이프
+kind: credit
+product_codes:
+  - '04316'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04316', fetched_at: '2026-10-12', review_no: 제2019-C1a-10769호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.water]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    benefits:
+      - key: sangjo-autopay
+        title: 더피플라이프 상조요금 자동이체 월 1만원·1만5천원 청구할인
+        source: page
+        evidence: [더피플라이프 상조요금 자동이체 할인 1만원 1만5천원, 1구간(50만원 이상) 2구간(100만원 이상), 할인금액보다 자동이체 승인금액이 작을 경우 승인금액만큼 할인 적용됩니다., 더피플라이프 자동이체 승인 건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인 됩니다., 최초 카드 사용 등록일로부터 다음달 말일까지는 KB국민 더피플라이프 카드 실적이 없는 경우에도 1구간(전월 이용실적 50만원 이상)에 해당하는 10, 000원 청구할인 서비스가 적용됩니다.]
+        target:
+          merchants: [the_people_life]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {500000: 10000, 1000000: 15000}
+        tiers: {from: 500000}
+    unmodeled: [Mastercard 티타늄 공항 라운지와 발레파킹은 계산하지 않는다, 정부지원금은 실적에서 빠진다]
+notes: 더피플라이프 상조요금 자동이체 할인 전용 카드. 자동이체는 더피플라이프 콜센터에 따로 신청한다.

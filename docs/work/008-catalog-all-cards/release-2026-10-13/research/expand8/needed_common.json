@@ -1,0 +1,65 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "costco",
+      "name": "코스트코",
+      "category": "grocery_mart",
+      "aliases": [
+        "코스트코",
+        "Costco",
+        "코스트코 홀세일"
+      ]
+    },
+    "card_id": "hyundai-179712",
+    "source_url": "https://www.hyundaicard.com/upload/card/20261001_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EA%B5%AD%EB%AF%BC%ED%96%89%EB%B3%B5%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf",
+    "evidence": "전월 이용 금액 30만원 이상 시 의료, 온라인몰, 교육, 통신 요금, 렌탈 요금, 코스트코 5% M포인트 적립 - 코스트코(온·오프라인)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "boram_sangjo",
+      "name": "보람상조",
+      "category": "other",
+      "billing": "autopay",
+      "aliases": [
+        "보람상조"
+      ]
+    },
+    "card_id": "kb-04494",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04494",
+    "evidence": "보람상조 자동납부 청구할인 | 40만원 이상 5천원 | 80만원 이상 8천원 | 120만원 이상 1만 1천원"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "megastudy",
+      "name": "메가스터디교육",
+      "category": "education.academy",
+      "aliases": [
+        "메가스터디",
+        "엘리하이",
+        "엠베스트"
+      ]
+    },
+    "card_id": "samsung-aap1798",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoJVya%2B%2ButIYcwqk6%2FPBrUs%3D&sn=1",
+    "evidence": "메가스터디교육(엘리하이, 엠베스트, 메가스터디) 온라인 결제금액 7,000~12,000원 결제일할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "starfield",
+      "name": "스타필드",
+      "category": "other",
+      "aliases": [
+        "스타필드",
+        "스타필드 시티",
+        "STARFIELD"
+      ]
+    },
+    "card_id": "woori-104151",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104151",
+    "evidence": "스타필드 | 스타필드, 스타필드 시티 | 10%. 스타필드 마켓 등 기타 파생 브랜드 할인 제외"
+  }
+]

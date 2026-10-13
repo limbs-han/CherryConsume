@@ -1,0 +1,130 @@
+schema_version: 2
+id: woori-500043
+issuer: woori
+name: S-OIL 주유 400 AUTO 우리카드
+kind: credit
+product_codes:
+  - '500043'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500043', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-05-01'
+    source: page
+    tiers: [0, 400000, 800000, 1200000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      unmodeled: [PG사나 간편결제 전용 가맹점으로 찍히는 결제는 빠진다, 백화점 대형마트 면세점 공항 미군부대 리조트 입점 매장은 빠진다]
+    benefits:
+      - key: s-oil-fuel-120
+        title: S-OIL 주유 청구할인 리터당 120원
+        source: page
+        evidence: [40만원 이상 ~ 80만원 미만 120원 월 15000원 통합 월 4회, 1회 주유 이용금액 기준 최대 10만원까지 할인 적용, 오프라인 주유소 결제 건에 한하여 할인 제공]
+        target:
+          merchants: [s_oil]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 120}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 4}
+          - {per: month, amount: 15000}
+        tiers: {from: 400000, to: 400000}
+        unmodeled: [LPG 충전소는 제외한다, 주유 기준가는 오피넷 S-OIL 보통휘발유 공시가라 기준값과 다를 수 있다, 타 브랜드와 무폴 주유소는 제외한다]
+      - key: s-oil-fuel-150
+        title: S-OIL 주유 청구할인 리터당 150원
+        source: page
+        evidence: [80만원 이상 ~ 120만원 미만 150원 월 25000원 통합 월 4회]
+        target:
+          merchants: [s_oil]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 150}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 4}
+          - {per: month, amount: 25000}
+        tiers: {from: 800000, to: 800000}
+        unmodeled: [LPG 충전소는 제외한다, 주유 기준가는 오피넷 S-OIL 보통휘발유 공시가라 기준값과 다를 수 있다]
+      - key: s-oil-fuel-250
+        title: S-OIL 주유 청구할인 리터당 250원
+        source: page
+        evidence: [120만원 이상 ~ 200만원 미만 250원 월 35000원 통합 월 4회]
+        target:
+          merchants: [s_oil]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 250}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 4}
+          - {per: month, amount: 35000}
+        tiers: {from: 1200000, to: 1200000}
+        unmodeled: [LPG 충전소는 제외한다, 주유 기준가는 오피넷 S-OIL 보통휘발유 공시가라 기준값과 다를 수 있다]
+      - key: s-oil-fuel-400
+        title: S-OIL 주유 청구할인 리터당 400원
+        source: page
+        evidence: [200만원 이상 400원 월 45000원 통합 월 4회]
+        target:
+          merchants: [s_oil]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, per_liter: 400}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 4}
+          - {per: month, amount: 45000}
+        tiers: {from: 2000000}
+        unmodeled: [LPG 충전소는 제외한다, 주유 기준가는 오피넷 S-OIL 보통휘발유 공시가라 기준값과 다를 수 있다]
+      - key: convenience-7pct
+        title: 편의점 7% 청구할인
+        source: page
+        evidence: [CU GS25 세븐일레븐 월 할인한도 5000원, 오프라인 매장 결제 건에 한하여 할인 제공]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+      - key: coffee-7pct
+        title: 커피 7% 청구할인
+        source: page
+        evidence: [스타벅스 투썸플레이스 폴바셋 월 할인한도 5000원, 오프라인 매장 및 공식 앱 주문 결제 건 할인 제공]
+        target:
+          merchants: [paul_bassett, starbucks, twosome]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: [커피 상품권과 선불카드 구입과 충전은 제외한다]
+      - key: ott-7pct
+        title: OTT 자동납부 7% 청구할인
+        source: page
+        evidence: [넷플릭스 와우멤버십 유튜브 프리미엄 월 할인한도 5000원, 공식 홈페이지를 통한 스트리밍 구독 서비스 정기결제 건에 한하여 할인 제공]
+        target:
+          merchants: [coupang_wow, netflix, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: [1회성 구매와 앱마켓 인앱결제와 통신요금 포함 결제는 제외한다]
+    unmodeled: [S-OIL 주유 400 AUTO 우리카드로 할인받은 이용금액 전체는 실적에서 빠진다, 가족카드는 할인을 받지 못한다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내 취소가 매월 1~2일 접수되면 전월 실적에서 뺀다, 정부지원금과 공공임대료와 부동산임대료와 국가·공공기관 가맹점 이용금액과 환금성 업종과 수수료·이자·대출은 실적에서 빠진다, 할인은 거래 매입 순서대로 적용된다]
+notes: 2026-10-13 공식 상품 페이지 대조. 출시일 2026-05-01. 연회비 25000원. 주유 리터당 구간별 한도는 통합 월 4회. 신규 발급 다음 달 말까지 최저 구간. 원문 OTT 목록의 와우멤버십은 쿠팡 와우 멤버십 가맹점으로 담았다.

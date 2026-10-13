@@ -1,0 +1,32 @@
+card: ibk-12113230005
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {basic-0-2: 100}}
+  calc: 50,000원 × 0.2% = 100원
+- name: 점심 0.6%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:30, amount: 50000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {time-lunch-0-6: 300}}
+  calc: 50,000원 × 0.6% = 300원
+- name: 저녁 0.6%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 50000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {time-dinner-0-6: 300}}
+  calc: 50,000원 × 0.6% = 300원
+- name: 경계 직전 점심은 기본만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:30, amount: 50000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {basic-0-2: 100}}
+  calc: 0 구간이라 기본 0.2% 100원

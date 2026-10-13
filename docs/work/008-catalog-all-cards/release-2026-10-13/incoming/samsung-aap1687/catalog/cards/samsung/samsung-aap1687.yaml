@@ -1,0 +1,74 @@
+schema_version: 2
+id: samsung-aap1687
+issuer: samsung
+name: SK인텔릭스 삼성카드 (할부)
+short_name: SK인텔릭스
+search_names: [SK인텔릭스 할부]
+kind: credit
+product_codes: [AAP1687]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qts4wkOEMEDk4HzBkQ%2FnnbQ4%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2025-C1a-16540호}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, 다이어트할부는 할인하지 않는다]
+    limits:
+      - {key: autopay-count, per: month, count: 3}
+    stacks:
+      - {key: main}
+      - {key: monthly}
+    benefits:
+      - key: prev-spend-discount
+        title: 전월 이용금액별 월 결제일할인
+        source: manual
+        evidence: ['전월 이용금액에 따라 7,000원~13,000원 결제일할인', '30만원 이상 7,000원, 70만원 이상 10,000원, 120만원 이상 13,000원', 'SK인텔릭스 상품 할부 구매 시 해당 납부금액이 우선 차감되며, 잔여 할인금액은 해당월 회원님의 카드 결제대금에서 자동 차감']
+        target: {all: true}
+        when:
+          - month_total: {min: 1}
+        reward:
+          type: billing_discount
+          basis: month_total
+          fixed: {300000: 7000, 700000: 10000, 1200000: 13000}
+        tiers: {from: 300000}
+        stack: monthly
+        unmodeled: [원문은 그 달 이용과 관계없이 전월 실적으로 매월 주는데 앱은 그 달 결제가 있을 때 계산한다, SK인텔릭스 할부 납부금액이 먼저 차감된다]
+      - key: autopay-1000
+        title: 생활요금 자동납부 1,000원 결제일할인
+        source: manual
+        evidence: ['생활요금 자동납부 결제건별 1,000원 결제일할인', '통합 월 3회, 전월 이용금액 30만원 이상 시 제공', '1일부터 말일까지 매출전표가 접수된 자동납부건 중 10,000원 이상 결제된 건에 한함', '아파트 관리비, 4대 사회보험 건강보험, 국민연금, 고용보험, 산재보험, 통신 SKT, SK브로드밴드, KT, LG U+ 이동통신/인터넷/유선전화요금']
+        target:
+          categories: [apartment_fee, insurance.social]
+          merchants: [kt, lg_uplus, sk_broadband, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: autopay-count}
+        tiers: {from: 300000}
+        unmodeled: ['통신은 결합상품요금, 사물인터넷(IoT) 관련 요금, 휴대전화 등 단말기 구매금액 및 대리점 카드 결제건은 제외한다']
+    unmodeled: [삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다, SK인텔릭스 상품 24·36개월 무이자할부는 30만원 이상 결제 때만 쓸 수 있고 계산하지 않는다, '할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 자동납부)는 매출전표 접수 시점 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 원문에서 찾지 못했다. 출시는 2020-09-29이고 상품안내장은 2025.11판이다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits', question: 할인의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-13 상품안내장(2025.11판, 심의필 2025-C1a-16540호) 대조. 연회비는 해외겸용 Mastercard와 국내전용 모두 15,000원(기본 7,000+제휴 8,000). 월 결제일할인은 전월 이용금액 구간에 따라 7,000원, 10,000원, 13,000원이고 발급월+1개월까지는 30만원 구간을 준다. 전월 이용금액 제외는 무이자할부, 4대보험, 국세·지방세·공과금, 초중고 학교납입금, 대학 등록금, 대중교통, 택시, 아파트 관리비, 부동산 임대료, 기프트·선불카드, 상품권이다.

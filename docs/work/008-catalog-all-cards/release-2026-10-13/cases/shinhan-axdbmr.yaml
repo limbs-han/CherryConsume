@@ -1,0 +1,59 @@
+card: shinhan-axdbmr
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 네이버페이 온라인 10% 1회 5만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, category: online_shopping, channel: online, region: domestic, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {pay-online-10: 5000}}
+  calc: 50,000 x 10% = 5,000원
+- name: 요기요 간편결제 20%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 30000, merchant: yogiyo, channel: online, region: domestic, payment_method: shinhan_sol_pay}
+  expect:
+  - {payment: 0, benefits: {pay-online-10: 3000, pay-delivery-extra-10: 3000}}
+  calc: 기본 10% 3,000원과 추가 10% 3,000원
+- name: 2만원 미만 간편결제 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 19999, category: online_shopping, channel: online, region: domestic, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 1회 2만원 미만
+- name: 30만 직전 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만
+- name: 생활 한도 30만 구간 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 30000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-20: 6000}}
+  - {payment: 1, benefits: {living-20: 4000}}
+  - {payment: 2, benefits: {}}
+  calc: 6,000원 다음 남은 4,000원, 한도를 다 씀
+- name: 120만 구간 커피와 리디 월납
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: twosome, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 15000, merchant: ridi, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-20: 4000}}
+  - {payment: 1, benefits: {monthly-20: 3000}}
+  calc: 20,000 x 20% = 4,000원, 15,000 x 20% = 3,000원
+- name: 제주항공 10% 1회 30만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 400000, merchant: jeju_air, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {airline-10: 30000}}
+  calc: 300,000 x 10% = 30,000원

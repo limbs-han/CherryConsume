@@ -1,0 +1,91 @@
+schema_version: 2
+id: lotte-p13407-a13407
+issuer: lotte
+name: LOCA for Health
+kind: credit
+product_codes: [P13407-A13407]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13407-A13407', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00015_20260930_10005.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 1500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트 충전과 스마트 캐시백 신청 이용금액은 할인에서 빠진다]
+    benefits:
+      - key: medical-10
+        title: 병원·약국·동물병원 10% 결제일 할인
+        source: manual
+        evidence: [병원 병원ㆍ약국ㆍ동물병원 10% 2만원, 건당 2만원 이상 이용금액에 대해서 혜택이 제공됩니다., '산후조리원, 요양병원, 재활원, 의료재단, 보건복지협회 이용금액은 혜택이 제공되지 않습니다.']
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 20000}
+        tiers: {from: 1500000}
+        unmodeled: ['요양병원, 재활원, 의료재단, 보건복지협회는 병원 업종이어도 할인하지 않는다']
+      - key: department-5
+        title: 백화점 5% 결제일 할인
+        source: manual
+        evidence: [쇼핑 백화점 5% 1만원, 오프라인 결제 건만 혜택이 제공됩니다., '백화점, 슈퍼 내 입점한 임대매장 이용 시 혜택이 제공되지 않습니다.']
+        target:
+          categories: [department_store]
+        when:
+          - amount: {min: 20000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 1500000}
+        unmodeled: [백화점 안 임대매장은 할인하지 않는다]
+      - key: super-5
+        title: 슈퍼 5% 결제일 할인
+        source: manual
+        evidence: [슈퍼 1만원, 쇼핑 5%, 오프라인 결제 건만 혜택이 제공됩니다.]
+        target:
+          merchants: [emart_everyday, homeplus_express, lotte_super]
+        when:
+          - amount: {min: 20000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 1500000}
+        unmodeled: [원문은 롯데카드 슈퍼 업종 전체가 대상이지만 업종이 없어 대형 슈퍼 세 곳만 계산한다]
+      - key: transit-10
+        title: 버스·지하철 10% 결제일 할인
+        source: manual
+        evidence: [대중교통 버스ㆍ지하철 10% 5천원, '지하철, 시내버스 결제 건에 할인 혜택이 제공되며, 고속버스, 시외버스 이용 금액은 혜택이 제공되지 않습니다.', '지하철, 버스 이용액이 각각 결제되며(모바일 결제건 별도) 각 결제 건의 매출액이 2만원 이상인 경우 제공됩니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 1500000}
+        unmodeled: [후불교통은 한 달 이용액이 다음 달에 버스와 지하철 따로 한 건으로 청구되고 그 청구 건이 2만원 이상이어야 할인한다. 탈 때마다 기록하면 할인이 적게 계산된다]
+    unmodeled: [LOCA 시리즈 카드가 아닌 롯데카드 이용금액만 실적에서 빠져 다른 LOCA 시리즈 카드 이용금액도 실적에 합산될 수 있다. 이 카드 결제만 센다, 가족카드 이용금액과 할인한도가 본인카드와 합산된다, 해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 롯데카드의 다른 결제일 할인 혜택과 겹치면 할인이 큰 혜택 하나만 준다, 할인은 승인 시점 기준 남은 한도 안에서 준다, 이 카드로 결제하면 롯데카드가 주는 L.POINT 적립은 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2020-07-10이고 설명서는 2026년 8월 기준이다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품 페이지와 상품설명서 대조. 지난달 150만원 이상일 때만 네 영역 할인, 건당 2만원 이상. 쇼핑의 백화점과 슈퍼는 표에서 한도 칸이 따로라 각각 1만원 한도로 두었다. 신규 발급 특례는 발급일부터 다음 달 말일까지 실적과 상관없이 혜택 제공이라 150만 구간으로 넣었다.

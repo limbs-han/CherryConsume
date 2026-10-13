@@ -1,0 +1,79 @@
+card: lotte-p15657-a15657
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 배달앱 3만원 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 30000, merchant: baemin, channel: online}
+  expect:
+  - payment: 0
+    benefits: {delivery: 3000}
+  calc: 30000 x 10% = 3000
+- name: 보험 자동납부 10만원 한도 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: insurance.private, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {insurance: 5000}
+  calc: 100000 x 10% = 10000, 업종 한도 5000
+- name: 넷플릭스 13,500원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 13500, merchant: netflix, billing: subscription}
+  expect:
+  - payment: 0
+    benefits: {streaming: 1350}
+  calc: 13500 x 10% = 1350
+- name: 편의점 2만원 미만 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 19999, category: convenience, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 건당 2만원 미만
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T19:00, amount: 30000, merchant: baemin, channel: online}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만 미만
+- name: 관리비 자동납부 3만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {apartment-fee: 3000}
+  calc: 30000 x 10% = 3000
+- name: 이동통신 자동납부 두 번째는 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {mobile: 4000}
+  - payment: 1
+    benefits: {}
+  calc: 40000 x 10% = 4000, 월 1회
+- name: 지하철 한 달 접수 3만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.subway}
+  expect:
+  - payment: 0
+    benefits: {transit: 3000}
+  calc: 30000 x 10% = 3000
+- name: 편의점 2만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: convenience, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {convenience: 2000}
+  calc: 20000 x 10% = 2000

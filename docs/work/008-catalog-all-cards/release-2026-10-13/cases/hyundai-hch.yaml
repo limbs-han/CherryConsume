@@ -1,0 +1,36 @@
+card: hyundai-hch
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 80만 이상 10%, 한도 2만원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: hospital}
+  expect:
+  - {payment: 0, benefits: {edu-medical-10: 20000}, counted: 0}
+  calc: 300,000 x 10% = 30,000, 80만 구간 월 2만원
+- name: 40만 직전은 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: hospital}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 40만 미만 혜택 제외
+- name: 통신 관리비 가스 정기결제 5%, 40만 구간 통합 5천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 60000, merchant: skt, billing: autopay}
+  - {at: 2026-11-06T09:00, amount: 200000, category: apartment_fee, billing: autopay}
+  - {at: 2026-11-07T09:00, amount: 50000, category: utility.gas, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {mobile-5: 3000}, counted: 0}
+  - {payment: 1, benefits: {apartment-5: 2000}, counted: 0}
+  - {payment: 2, benefits: {}, counted: 0}
+  calc: 3,000, 남은 통합 한도 2,000, 가스는 0. 관리비와 가스는 실적 제외
+- name: 도시가스 정기결제 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-07T09:00, amount: 50000, category: utility.gas, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {gas-5: 2500}, counted: 0}
+  calc: 50,000 x 5% = 2,500

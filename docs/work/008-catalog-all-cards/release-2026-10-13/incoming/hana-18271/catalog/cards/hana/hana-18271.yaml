@@ -1,0 +1,60 @@
+schema_version: 2
+id: hana-18271
+issuer: hana
+name: 더 심플 체크카드
+short_name: 하나 더 심플 체크
+kind: check
+product_codes:
+  - '18271'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18271', fetched_at: 2026-10-13, review_no: A-25-1409}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2024-12-16
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    limits:
+      - {key: telecom, per: month, amount: 5000}
+      - {key: coffee, per: month, amount: 2000}
+    benefits:
+      - key: telecom-5000
+        title: 통신요금 자동이체 5천원 캐시백
+        source: page
+        evidence: ['통신 요금 대상 가맹점 자동이체 1만원 이상 납부 시 5천원, 지난달 실적 조건 30만원 이상 / 월 한도 5천원', 통신 서비스는 통신 요금 대상 가맹점에서 더 심플 체크카드 자동이체 요금으로 청구된 경우에 한하여 제공]
+        target:
+          categories: [telecom]
+        when:
+          - billing: [autopay]
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 5000}
+        limits:
+          - {shared: telecom}
+        tiers: {from: 300000}
+        unmodeled: [대상은 SKT, KT, LG U+, SK세븐모바일, KT스카이라이프, KT M모바일, 딜라이브, 헬로모바일, U+유모바일, LG헬로비전, HCN 등 통신 요금 대상 가맹점이다. 자동이체로 납부하지 않는 통신요금은 제외한다]
+      - key: coffee-5
+        title: 커피 5% 캐시백
+        source: page
+        evidence: ['커피 캐시백 스타벅스, 커피빈, 투썸플레이스 1만원 이상 결제 시 5%, 지난달 실적 조건 30만원 이상 / 월 한도 2천원', 커피 서비스는 공식 오프라인 매장(공식 모바일 앱 주문 포함) 결제건에 한하여 혜택이 제공]
+        target:
+          merchants: [coffee_bean, starbucks, twosome]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 300000}
+        unmodeled: [대형시설물(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트) 입점 점포와 임대매장 결제는 제외된다, 배달앱과 식당 예약앱 주문 결제는 제외된다]
+    unmodeled: ['실적 제외에 국내외 ATM 이용금액, 스쿨뱅킹, 대학원등록금이 있으나 업종으로 가릴 수 없다', 무승인 후불교통 매출은 매출이 접수된 월의 이용금액에 반영한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다., assumed: '2024-12-16'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문은 수도/전기요금과 그 외 공과금, 도시가스를 실적에서 뺀다고 적었다. 업종 하나로 맞춰 utility 전체를 뺐다.', assumed: utility 전체}
+notes: 2026-10-13 공식 상품 페이지(준법심의 A-25-1409)에서 옮겼다. 연회비 없음. 발급수수료 2,000원은 카드 수령 다음달 말일까지 1만원 이상 쓰면 돌려준다. 실적과 혜택은 일시불 기준이다. 해외 이용 수수료는 국제브랜드수수료 Mastercard 1.0%와 건당 US$0.5이며 면제 혜택은 없다.

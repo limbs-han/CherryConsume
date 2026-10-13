@@ -1,0 +1,49 @@
+schema_version: 2
+id: lotte-p15630-a15630
+issuer: lotte
+name: 렉스몬드 X DIGILOCA
+kind: credit
+product_codes: [P15630-A15630]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15630-A15630', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2024-A00030_20260501_10002.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2024-08-06'
+    source: manual
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['건강보험·국민연금·고용보험·산재보험, 정부지원금, LH·SH 공공임대료, 장애인 고용부담금, TV 수신료, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 고속도로 통행요금, 무승인전표, 관세·벌금·과태료·민원 발급 수수료·인지세·송달료, 기후동행카드 충전과 결제는 할인에서 빠진다']
+    benefits:
+      - key: all-1-2
+        title: 지난달 40만원 이상 국내외 1.2% 결제일 할인
+        source: manual
+        evidence: [40만원 이상 1.2% 국내/해외 온/오프라인에서 할인 한도 없이 혜택을 제공합니다., 렉스몬드 X DIGILOCA 카드를 최초 발급 받은 경우 사용등록월 ~ 다음 달 말일까지 지난달 이용실적에 관계없이 모든 가맹점 1.2% 할인혜택이 제공됩니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1.2}
+        tiers: {from: 400000}
+      - key: all-0-5
+        title: 지난달 40만원 미만 국내외 0.5% 결제일 할인
+        source: manual
+        evidence: [40만원 미만 0.5%, 국내/해외 온/오프라인에서 할인 한도 없이 혜택을 제공합니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+        tiers: {to: 0}
+    unmodeled: ['렉스몬드 할인 Voucher는 발급 첫해 누적 50만원과 500만원에 3만원씩, 그 뒤 해마다 1,200만원에 6만원을 주고 렉스몬드 50만원 이상 결제에 쓴다. 연간 누적 실적이라 계산하지 않는다', 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, 'LH·SH 공공임대료, 정부지원금, TV 수신료, 오토·스마트 캐시백, 포인트 충전, 고속도로 통행요금, 무승인전표, 기후동행카드, 관세·벌금·과태료·민원 발급 수수료·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 렉스몬드 X DIGILOCA가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 해외 이용과 이동통신처럼 다음 달 접수되는 결제는 롯데카드 접수일 기준으로 실적에 들어간다, 롯데카드 제공 L.POINT는 적립하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 설명서는 2026년 4월 기준이라 카드 출시일을 시행일로 두었다, assumed: '2024-08-06'}
+notes: 2026-10-12 상품 페이지와 상품설명서(2026년 4월 기준) 대조. 출시일 2024-08-06. 지난달 40만원 이상이면 1.2%, 미만이면 0.5%이고 한도 없음. 신규 발급 특례는 사용등록월부터 다음 달 말일까지 1.2%라 40만 구간으로 넣었다. 가족카드 발급 불가.

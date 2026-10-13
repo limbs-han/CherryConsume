@@ -1,0 +1,39 @@
+card: ibk-12113470003
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1-5: 1500}}
+  calc: 100,000원 × 1.5% = 1,500원
+- name: 해외 5%와 기본 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1-5: 1500, overseas-5: 5000}}
+  calc: 1,500원 + 5,000원
+- name: 쿠팡 0.5% 더하기
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {base-1-5: 1500, online-0-5: 500}}
+  calc: 1,500원 + 500원
+- name: 주유 1.5% 월 100만원까지
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 1200000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-1-5: 15000}}
+  calc: 1,000,000원까지 × 1.5% = 15,000원
+- name: 경계 직전 499999
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 없음

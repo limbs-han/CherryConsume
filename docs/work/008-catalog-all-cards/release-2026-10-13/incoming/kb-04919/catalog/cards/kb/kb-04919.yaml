@@ -1,0 +1,83 @@
+schema_version: 2
+id: kb-04919
+issuer: kb
+name: KB국민 기후동행체크카드
+short_name: KB 기후동행 체크
+kind: check
+product_codes:
+  - '04919'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04919', fetched_at: '2026-10-12', review_no: 241029-05381-PIF}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 할인하지 않는 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    limits:
+      - {key: life, per: month, amount: 4000}
+      - {key: shopping, per: month, amount: 4000}
+      - {key: leisure, per: month, amount: 4000}
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: life-2
+        title: 커피·편의점·약국·패스트푸드 2% 할인
+        source: page
+        evidence: ['생활 | 커피·음료전문점, 편의점, 약국, 패스트푸드 | 2% | 4,000원 | 건당 1만원 이상 이용 시', KB국민 기후동행 체크카드로 전월 20만원 이상 이용 시 할인 제공]
+        target:
+          categories: [cafe, convenience, pharmacy, restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: life}
+        tiers: {from: 200000}
+      - key: oliveyoung-5
+        title: 올리브영 5% 할인
+        source: page
+        evidence: ['쇼핑 | 올리브영 | 5% | 4,000원 | 오프라인 매장 및 공식 홈페이지/모바일 앱 결제 건, 백화점/대형마트 등 일부 입점 매장 제외']
+        target:
+          merchants: [olive_young]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 200000}
+      - key: movie-5
+        title: CGV·롯데시네마 5% 할인
+        source: page
+        evidence: ['여가 | 영화(CGV, 롯데시네마) | 5% | 4,000원 | 매점·관람권·상품권 및 예매대행사이트 제외']
+        target:
+          merchants: [cgv, lotte_cinema]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 200000}
+        unmodeled: [영화관 매점과 관람권·예매대행사이트 결제는 할인에서 빠진다]
+      - key: sports-2
+        title: 스포츠 업종 2% 할인
+        source: page
+        evidence: ['여가 | 스포츠 업종 | 2% | 골프장, 골프연습장, 테니스장, 수영장, 요가, 볼링장, 종합스포츠센터, 스포츠용품점, 레저용품점']
+        target:
+          categories: [sports]
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 200000}
+    unmodeled: [KB Pay 쇼핑(KB Pay 앱 쇼핑 결제) 5% 할인은 담을 가맹점이 없어 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 영역별 월 2천원을 주는 신규 특례는 계산하지 않는다, '무승인 금액(자판기·터널통행료·유료도로·기차/고속버스 취소 반환수수료), 정부지원금, 포인트리 충전금액, 해외 이용 일부는 실적에서 빠진다', 서울시 기후동행서비스는 2026-09-30 끝났다고 원문에 공지되어 있다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].limits', question: '여가 영역의 스포츠 2% 한도가 원문에 따로 적혀 있지 않다. 덜 주는 쪽으로 영화와 함께 여가 영역 월 4,000원을 쓴다고 두었다', assumed: leisure}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통요금·후불 기후동행카드 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: status, question: 서울시 기후동행서비스가 2026-09-30 끝났다는 공지가 있다. 카드 신규 발급이 계속되는지 확인해야 한다, assumed: on_sale}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다.

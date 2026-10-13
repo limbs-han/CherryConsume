@@ -1,0 +1,611 @@
+[
+  {
+    "card_id": "hyundai-12418",
+    "status": "exclude",
+    "reason": "현대중공업가족-현대카드M Edition2는 현대중공업 가족 전용이고 당월 이용금액 기준이다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260427-1513-19_%ED%98%84%EB%8C%80%EC%A4%91%EA%B3%B5%EC%97%85%20M%20Ed2_403_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-12423",
+    "status": "exclude",
+    "reason": "HYUNDAI BLUE members Family M2 Edition2 가이드북 대조. 현대차그룹 복지전용 패밀리카드다. 플래티넘서비스는 결제일 기준 당월 이용금액 50만원 이상이라 지금 모델로 맞게 못 담고 M포인트 업종 1%도 복지 대상 전용이다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_%ED%98%84%EB%8C%80%EB%B8%94%EB%A3%A8%EB%A9%A4%EB%B2%84%EC%8A%A4%20F%20M2%20Ed2_429_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-12583",
+    "status": "blocked",
+    "reason": "M·M2 Family 가이드북(13990과 같은 문서) 대조. 직전 3개월 이용금액 기준 적립률이라 지금 모델로 맞게 못 담는다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M%C2%B7M2%20F_104_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-12593",
+    "status": "blocked",
+    "reason": "현대카드M·M2 Family 가이드북(Qmembers Family와 같은 M·M2 Family 가이드북) 대조. 직전 3개월 이용금액 90만원 미만이면 일괄 0.5%로 낮추는 규칙이라 3개월 기준 실적을 지금 모델로 계산하지 못한다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M%C2%B7M2%20F_104_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-12594",
+    "status": "blocked",
+    "reason": "현대카드M BLUEmembers Family. M·M2 Family 가이드북 대조. 업종별 0.5~3% M포인트가 기본이고 직전 3개월 본인+가족 이용금액 90만원 미만이면 일괄 0.5%로 바뀐다. 3개월 이용금액 기준이라 지금 모델로 맞게 못 담는다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M%C2%B7M2%20F_104_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-13990",
+    "status": "blocked",
+    "reason": "현대카드M·M2 Family 가이드북 대조. 직전 3개월 이용금액 90만원 미만이면 0.5%로 낮추는 3개월 누적 기준이라 지금 모델로 맞게 못 담는다. 현대자동차 그룹 Family 상품",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M%C2%B7M2%20F_104_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-13995",
+    "status": "exclude",
+    "reason": "한라건설Family-현대카드M2 Platinum. 한라건설 제휴 Family 카드로 대상이 한정된다. 같은 M·M2 Family 가이드북의 적립률도 직전 3개월 이용금액 90만원 미만이면 일괄 0.5%라 지금 모델로 맞게 못 담는다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M%C2%B7M2%20F_104_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-14002",
+    "status": "exclude",
+    "reason": "후불하이패스카드는 신용카드에 붙는 고속도로 통행료 전용 부가 카드이고 자체 혜택이 없다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/%ED%9B%84%EB%B6%88%ED%95%98%EC%9D%B4%ED%8C%A8%EC%8A%A4%EC%B9%B4%EB%93%9C%20%EC%83%81%ED%92%88%EC%84%A4%EB%AA%85%EC%84%9C.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-14023",
+    "status": "blocked",
+    "reason": "현대카드M·M2 Family 가이드북 대조. 업종별 0.5~3% M포인트 적립에 직전 3개월 이용금액 90만원 미만이면 일괄 0.5%로 낮추는 추가 규칙이 있어 3개월 기준 실적을 지금 모델로 계산하지 못한다. 연회비 15,000~30,000원.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M%C2%B7M2%20F_104_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-147799",
+    "status": "blocked",
+    "reason": "대한항공카드 120 가이드북 대조. 핵심 혜택이 대한항공 마일리지 적립(국내 1천원당 1, 해외 2마일리지 등)뿐이고 마일리지의 원화 가치 문구와 point_programs 항목이 없어 담지 못한다. 연회비 12만원.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AZW-20260320-1106-30_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%8C%80%ED%95%9C%ED%95%AD%EA%B3%B5_Ed2_120_V1.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-147801",
+    "status": "blocked",
+    "reason": "대한항공카드 300 가이드북 대조. 핵심 혜택이 대한항공 마일리지 적립인데 마일리지의 원화 가치를 정하지 않았고 공통 포인트도 없다. 현대카드 trste2도 같은 이유로 마일리지형을 뺐다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AZW-20260320-1106-30_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%8C%80%ED%95%9C%ED%95%AD%EA%B3%B5_Ed2_300_V1.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "대한항공 마일리지 1마일의 원화 가치"
+    ]
+  },
+  {
+    "card_id": "hyundai-147803",
+    "status": "blocked",
+    "reason": "대한항공카드 the First Edition2 가이드북 대조. 연회비 800,000원. 혜택이 모두 대한항공 마일리지 적립(국내 1천원당 1마일, 직판 항공권 5마일, 해외·호텔·백화점·골프장 3마일)이고 원문에 마일리지의 원화 가치 문구가 없다. 연간 보너스 3만 마일리지도 연간 이용금액 조건이다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AZW-20260320-1106-30_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%8C%80%ED%95%9C%ED%95%AD%EA%B3%B5_Ed2_the%20First_V1.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-151597",
+    "status": "blocked",
+    "reason": "3 Body-A 현대카드 가이드북 대조. 기본 혜택이 대한항공 마일리지·블루멤버스 포인트·SSG MONEY 세 가지를 신청 때 고른 비율로 나눠 적립하는 방식이고, 대한항공 마일리지와 블루멤버스 포인트는 point_programs에 없으며 1마일리지·1포인트의 원화 가치 문구도 없어 담지 못한다. 연회비 30만원.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AO7-20260319-1351-97_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_3%20BODY-A_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-165918",
+    "status": "blocked",
+    "reason": "이 가이드북에 1 MR의 원화 가치 문구가 없어 다른 Amex 카드의 10원을 가져다 쓰지 않고 보류한다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/The%20Centurion%C2%AE%20Card%20%EC%83%81%ED%92%88%EC%84%A4%EB%AA%85%EC%84%9C_2603.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "연간 보너스 Luxury·Gourmet 50만원권 바우처 8매는 첫해 누적 1",
+      "000만원 전년 6",
+      "000만원 이상 연간 이용 금액 조건이라 계산하지 않는다",
+      "Concierge와 공항 라운지·발레파킹은 결제 혜택이 아니다",
+      "적립은 매출전표 접수 순서로 한다",
+      "실적은 본인과 가족 카드를 합산한다",
+      "대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 가이드북은 2026년 3월 판이라 그 전부터 혜택이 같았는지 확인하지 않았다 가정: 2026-03-01",
+      "product_codes: 상품 페이지 코드를 확인하지 않았다. 갱신 때 같은 카드를 찾으려면 현대카드 상품 코드가 필요하다 가정: 비워 둔다",
+      "revisions[0].benefits[base-mr].reward: 이 가이드북에는 1 MR 원화 가치가 없다. 다른 Amex 현대카드 가이드북의 1 MR = 10원을 공통 포인트 amex_mr 값으로 쓴다 가정: 1 MR = 10원"
+    ]
+  },
+  {
+    "card_id": "hyundai-177714",
+    "status": "ready",
+    "reason": "현대카드 하이브리드(Apple Pay Rewards) 가이드북 대조. 체크 하이브리드, 연회비 5,000원, 전월 30만 이상 Apple Pay 결제 10% 캐시백 월 한도 5천/1만(30/60만), 신규 특례를 담았고 사례가 통과한다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/20260428_%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C%20Apple%20Pay%20Rewards.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "계좌 잔액 부족 시 신용 전환 하이브리드 기능은 결제 혜택과 관계없다",
+      "캐시백은 매출전표 접수 순서로 한도를 적용",
+      "해외 Apple Pay 캐시백은 국내외겸용 카드에 한한다"
+    ],
+    "open_questions": [
+      "product_codes: 상품 코드 확인하지 못함 가정: []",
+      "revisions[0].effective_from: 시행일 확인하지 않아 수집일 가정: 2026-10-05",
+      "kind: 하이브리드 카드를 체크로 둠 가정: check"
+    ]
+  },
+  {
+    "card_id": "hyundai-181409",
+    "status": "blocked",
+    "reason": "제네시스 현대카드 가이드북 대조. 기본 1%와 주유·충전·음식점·골프 3%·15% 적립이 모두 블루멤버스 포인트인데 point_programs에 없고 포인트의 원화 가치 문구가 가이드북에 없다. 연회비 20만원.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%A0%9C%EB%84%A4%EC%8B%9C%EC%8A%A4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-18482",
+    "status": "blocked",
+    "reason": "Kia Members 신용카드 Edition2 가이드북 대조. 적립률이 당월 이용금액(결제일 주기, 전월 14일~당월 13일 같은 청구 기간) 50만·100만 구간으로 정해져 지금 모델의 전월 실적으로 맞출 수 없고, 기아멤버스 포인트는 point_programs에 없고 세이브-오토 경험 여부에 따라 적립률이 갈린다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AO7-20260409-1642-95_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EA%B8%B0%EC%95%84_Ed2_V6.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-21383",
+    "status": "blocked",
+    "reason": "Kia Members 신용카드 Edition2(Family) 가이드북 대조. 적립 기준이 당월 이용금액(결제일 청구 기준)이라 전월 실적 모델로 계산할 수 없다. 기아멤버스 포인트도 가치 문구 없음",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260409-1724-99_Kia%20Members%20F%20Ed2_135_V6_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-23483",
+    "status": "blocked",
+    "reason": "GENESIS CARD 가이드북 대조. 핵심 혜택이 블루멤버스 포인트인데 원문에 1포인트의 원화 가치가 없고 공통 포인트도 없다. 매달 Mobility/EV 모드 선택과 블루 세이브-오토도 있다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AO7-20260319-1351-97_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%A0%9C%EB%84%A4%EC%8B%9C%EC%8A%A4_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "블루멤버스 포인트 1점의 원화 가치 원문 없음"
+    ]
+  },
+  {
+    "card_id": "hyundai-28394",
+    "status": "ready",
+    "reason": "SC제일은행-현대카드X CHECK 가이드북 대조. 체크카드, 연회비 없음, 전월 100만 미만 0.3%, 이상 0.6% X캐시백(1원, 한도 없음, 건별 반올림). hyundai-28392(M CHECK) 구조와 같다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260709-1651-46_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SC_MX%20CHECK_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "대중교통·하이패스·도시가스 등 사후 승인은 매출전표 접수일 달 실적",
+      "SC제일은행 현금 인출 혜택"
+    ],
+    "open_questions": [
+      "product_codes: 상품 코드 확인 못함, 빈 목록",
+      "revisions[0].effective_from: 시행일 문구 없음, 파일 이름 20260709 가정 2026-07-09"
+    ]
+  },
+  {
+    "card_id": "hyundai-28983",
+    "status": "blocked",
+    "reason": "현대카드 M2 Edition3(Family) 가이드북 대조. 적립이 당월 이용금액(결제일 청구 기준) 50만/100만 구간이라 전월 실적 모델로 계산할 수 없다. 현대자동차 그룹 임직원 복지카드 성격",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260521-1616-52_M2%20F%20Ed3_450_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-ald",
+    "status": "ready",
+    "reason": "알파벳카드D BOLD 가이드북(0701판) 대조. 연회비 50,000원, 전월 40만 이상 일반음식점·배달 앱 10%(월 1만/2만/3만5천), 커피·편의점·대중교통 5%(영역별 5천, 통합 5천/1만/1만5천), 신규 특례, 실적 제외를 담았고 사례가 통과한다. 알파벳카드D와 한도는 같고 연회비와 연간 보너스가 다르다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ALD",
+      "https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CD%20BOLD%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "연간 보너스 일반음식점·배달 앱 5만원 이상 단일 결제 1만원 할인(월 1회 연 5회)은 발급월 기준 12개월과 2차년도 600만원 조건이라 계산하지 않는다",
+      "간편결제·PG·키오스크 결제와 입점 매장 제한, 택시 앱 결제 분류",
+      "할인 한도는 매출전표 접수 순서",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 문구 없음, 파일 이름 0701을 시작일로 둠 가정: 2026-07-01"
+    ]
+  },
+  {
+    "card_id": "hyundai-als",
+    "status": "ready",
+    "reason": "알파벳카드S BOLD 가이드북(2026년 7월) 대조. 연회비 50,000원, 전월 40만 이상 온라인몰·마트·슈퍼·백화점·아울렛 10%(통합 월 1만/2만/3만5천), 커피·편의점·대중교통 5%(영역별 5천, 통합 5천/1만/1만5천), 신규 특례, 실적 제외를 담았다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CS%20BOLD%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "연간 보너스 5만원 이상 결제 1만원 할인(월 1회 연 5회)은 발급월 기준 12개월과 2차년도 600만원 조건이라 계산하지 않는다",
+      "현대Hmall은 현대홈쇼핑과 구분되지 않아 뺐다",
+      "온라인몰 공식 앱 결제 한정, 주차장·문화센터·임대 매장 제외, 간편결제·PG·키오스크, 할인 한도는 매출전표 접수 순서, 가족카드 합산"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 문구 없음, 신규 출시일 2026-07-01 가정"
+    ]
+  },
+  {
+    "card_id": "hyundai-btcp",
+    "status": "ready",
+    "reason": "현대카드 Boutique - Copper 가이드북 대조. 연회비 80,000원, 전월 50만 이상 국내외 1.5%, 100만 이상 온라인몰 4곳·배달 앱·편의점 현장·시내버스·지하철·택시 5%(통합 월 1만 M포인트, 초과 시 1.5%). hyundai-btvv 구조와 같다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/%28%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81%29%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20Boutique%20-%20Copper_260513.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "연 1회 5만원 크레딧은 연간 이용금액 조건이라 계산하지 않는다",
+      "온라인몰 공식 앱 결제 한정, 배달원 직접 결제 제외, 간편결제·PG·키오스크",
+      "공항 라운지·발레파킹, M 긴급적립"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 문구 없음, 파일 이름 260513 가정 2026-05-13"
+    ]
+  },
+  {
+    "card_id": "hyundai-btst",
+    "status": "ready",
+    "reason": "Boutique - Satin 가이드북(260513) 대조. 연회비 80,000원, 전월 50만 이상 1.5%, 100만 이상 온라인몰 4곳·올리브영·커피 4곳·시내버스·지하철·택시 5%(통합 월 1만 M포인트), 신규 특례를 담았고 사례가 통과한다. 신세계V는 공통 가맹점이 없어 뺐다(덜 주는 쪽).",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=BTST",
+      "https://www.hyundaicard.com/upload/card/%28%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81%29%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20Boutique%20-%20Satin_260513.pdf"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "신세계V 온라인몰 5%는 공통 가맹점이 없어 계산하지 않는다",
+      "연 1회 5만원 크레딧은 연간 이용 금액 조건",
+      "입점 매장·공동가맹점·간편결제·PG 제외",
+      "적립 한도는 매출전표 접수 순서"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 확인하지 않아 수집일 가정: 2026-10-05"
+    ]
+  },
+  {
+    "card_id": "hyundai-chhhc",
+    "status": "ready",
+    "reason": "청호나이스 현대카드 가이드북(2026-04) 대조. 연회비 2만원, 전월 40만 렌탈·구독료 정기결제 월 8천/1.2만/1.6만 청구 할인. 사례 통과",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=CHHHC",
+      "https://www.hyundaicard.com/upload/card/260416_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%B2%AD%ED%98%B8%EB%82%98%EC%9D%B4%EC%8A%A4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "정기결제일 이후 납부한 건과 일반 납부 건은 할인하지 않는다",
+      "정기결제는 청호나이스 고객센터를 통해 신청한 건만 할인한다",
+      "할인은 매출전표 접수 순서로 한도를 적용한다",
+      "실적과 할인 한도는 본인과 가족 카드를 합산한다",
+      "TV 수신료·고속도로 통행료·후불하이패스는 실적에서 뺀다",
+      "대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다",
+      "현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다",
+      "월 할인 한도를 넘긴 뒤 혜택 받은 결제를 취소하면 이전 결제에 다음 달 15일경 할인한다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 가이드북은 2026년 4월 기준이다. 그 전부터 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다 가정: 2026-10-05"
+    ]
+  },
+  {
+    "card_id": "hyundai-cwyhc",
+    "status": "ready",
+    "reason": "코웨이 현대카드 가이드북 대조. 연회비 20,000원, 전월 40만 이상 코웨이 렌탈·구독료 정기결제 청구할인(월 8천/1만2천/1만6천), 할인 받은 결제는 실적 제외. hyundai-lgehc 구조와 같다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/260416_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%BD%94%EC%9B%A8%EC%9D%B4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "일반 납부 건과 정기결제일 이후 납부 건은 할인 제외",
+      "할인 한도는 매출전표 접수 순서, 가족카드 합산"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 문구 없음, 파일 이름 260416 가정 2026-04-16"
+    ]
+  },
+  {
+    "card_id": "hyundai-hcs",
+    "status": "ready",
+    "reason": "알파벳카드S 가이드북(261001) 대조. 연회비 15,000원, 전월 40만 온라인몰·마트·백화점 10%와 커피·편의점·대중교통 5%. 사례 통과",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=HCS",
+      "https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CS%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_261001.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "PG결제와 간편결제처럼 별도 가맹점번호로 승인된 결제는 할인에서 빠진다",
+      "할인은 매출전표 접수 순서로 한도를 적용한다",
+      "실적과 할인 한도는 본인과 가족 카드를 합산한다",
+      "TV 수신료·고속도로 통행료·후불하이패스는 실적에서 뺀다",
+      "대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다",
+      "현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다",
+      "월 할인 한도를 넘긴 뒤 혜택 받은 결제를 취소하면 이전 결제에 다음 달 15일경 할인한다",
+      "영역 통합 한도는 기본 혜택과 추가 혜택이 따로 쓴다",
+      "온라인몰은 공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱에서 결제하면 제외한다",
+      "네이버플러스 스토어는 naver.com 도메인으로 확인되는 가맹점만 할인한다",
+      "대형마트·슈퍼마켓·백화점·아울렛의 온라인몰·상품권·주차장·문화센터·임대 매장 이용은 할인하지 않는다",
+      "농협하나로마트 안 임대 매장·구매사업장·도매형 매장·농협몰은 할인하지 않는다",
+      "백화점·할인점·쇼핑몰 안 매장과 공동가맹점 결제는 할인하지 않는다",
+      "택시 앱 결제는 현대카드 업종 분류에 따라 할인 여부가 달라진다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 가이드북에 기준일이 없어 수집일을 시작일로 둔다 가정: 2026-10-05"
+    ]
+  },
+  {
+    "card_id": "hyundai-mcwye3",
+    "status": "blocked",
+    "reason": "coway-현대카드M Edition3 가이드북 대조. M포인트 업종별 적립이 결제일에 청구된 당월 이용금액 50만원 이상일 때만이고 100만원 이상이면 1.5배다. 청구서 기준 이용금액이라 지금 모델로 맞게 못 담는다. 코웨이 렌탈 할인도 1~36개월 차 자동납부 조건이다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260410-1723-20_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_M%20Ed3_%EC%A0%9C%ED%9C%B4%ED%86%B5%ED%95%A9_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9_%EC%BD%94%EC%9B%A8%EC%9D%B4.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-mhmfi",
+    "status": "ready",
+    "reason": "현대해상 현대카드 가이드북 대조. 연회비 30,000원, 현대해상 보험 유지 시 전월 50만 이상 월 1만2천, 100만 이상 월 1만7천 청구할인(결제 금액이 적으면 그만큼). 보험 유지를 사실 hi_insurance_kept로 묻는다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260720-1555-29_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80%ED%95%B4%EC%83%81%EC%B9%B4%EB%93%9C_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "보험 미이용 시 0.5% M포인트는 뺐다",
+      "신규 발급 시 보험 유지와 무관하게 50만 미만도 주는 특례는 뺐다",
+      "청구 할인은 본인 카드만, 한도는 매출전표 접수 순서, 가족카드 합산"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 문구 없음, 파일 이름 20260720 가정 2026-07-20"
+    ]
+  },
+  {
+    "card_id": "hyundai-mpe4",
+    "status": "ready",
+    "reason": "현대카드MM 가이드북 대조. 연회비 70,000원, 전월 50만 이상 국내외 1.5% M포인트, 100만 이상 온라인몰 7곳·일반음식점·해외 10%(통합 월 2만 M포인트, 초과 시 1.5%), 신규 특례, 실적 제외를 담았다. hyundai-m 구조와 같다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/MM%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "온라인몰은 공식 홈페이지·앱 결제만, 네이버쇼핑은 naver.com 도메인만",
+      "월 적립 한도는 본인과 가족 카드 합산",
+      "공항 라운지·발레파킹, M 긴급적립"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 가이드북에 시행일 없음, 수집일 가정 2026-10-05"
+    ]
+  },
+  {
+    "card_id": "hyundai-skihc",
+    "status": "ready",
+    "reason": "SK인텔릭스 현대카드 가이드북(260416) 대조. 연회비 20,000원, 전월 40만 이상 SK인텔릭스 렌탈·구독료 정기결제 청구 할인 월 8천/1만2천/1만6천(40/80/120만), 신규 특례, 할인받은 정기결제 실적 제외를 담았고 사례가 통과한다. 쿠쿠 현대카드와 같은 구조.",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=SKIHC",
+      "https://www.hyundaicard.com/upload/card/260416_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SK%EC%9D%B8%ED%85%94%EB%A6%AD%EC%8A%A4%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "일반 납부와 정기결제일 이후 납부는 할인하지 않는다",
+      "할인은 매출전표 접수 순서로 적용",
+      "실적과 한도는 본인+가족 합산"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 확인하지 않아 수집일 가정: 2026-10-05"
+    ]
+  },
+  {
+    "card_id": "hyundai-slhc",
+    "status": "ready",
+    "reason": "현대 햇살론카드 가이드북(2025년 4월 판) 대조. 연회비 10,000원, 전월 30만 이상 국내 가맹점 0.5% 청구 할인, 시내버스·지하철·택시·편의점 4곳·대형마트 3곳은 1%로 기본을 대신, 한도 없음, 신규 특례(발급월 다음 달까지)를 담았고 사례가 통과한다. 서민금융진흥원 보증 상품이지만 일반 상품으로 담았다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=SLHC",
+      "https://www.hyundaicard.com/upload/card/T_A9F-20250425-1110-12_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%96%87%EC%82%B4%EB%A1%A0_V2.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "서민금융진흥원 보증 조건 발급, 다른 신용카드가 있으면 신청 불가",
+      "모든 가맹점 2~3개월 무이자 할부는 할인이 아니다",
+      "대형마트 주차장·문화센터·임대매장 제외",
+      "할인은 매출전표 접수 순서"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 확인하지 않아 수집일 가정: 2026-10-05",
+      "revisions[0].benefits[base-05].reward: 할인 금액 원 미만 처리 문구 없음 가정: floor"
+    ]
+  },
+  {
+    "card_id": "hyundai-spm",
+    "status": "ready",
+    "reason": "현대카드 Summit 가이드북 대조. 연회비 200,000원, 전월 50만 이상 국내외 1.5% M포인트, 100만 이상 학원·병원·약국·국내 항공·여행사·골프 5%(통합 월 2만 M포인트, 초과 시 1.5%). 특급호텔과 유치원은 공통 업종이 넓거나 적립 제외라 뺐다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/260513_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_Summit.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "특급호텔 5%는 공통 숙박 업종이 모든 호텔을 포함해 뺐다",
+      "연간 보너스 15만원 바우처는 연간 이용금액 조건",
+      "간편결제·PG·키오스크 제외, 항공은 외국 항공사 국내 결제 포함 가능"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 문구 없음, 파일 이름 260513 가정 2026-05-13"
+    ]
+  },
+  {
+    "card_id": "hyundai-tbe4",
+    "status": "ready",
+    "reason": "the Black 가이드북과 상품 페이지 대조. 연회비 3,000,000원, 개인 M포인트형은 전월 50만 이상 국내외 1.5% M포인트 한도 없음. 대한항공 마일리지형은 가치 문구가 없어 options의 unsupported로 두고 계산하지 않는다. 법인 카드 혜택은 담지 않았다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=TBE4",
+      "https://www.hyundaicard.com/upload/card/T_AQ7-20260427-1640-22_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EB%B8%94%EB%9E%99_V3.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "개인 대한항공 마일리지형(1천원당 1마일리지)은 계산하지 않는다",
+      "법인 카드 리워드형·마일리지형",
+      "연 1회 50만원권 바우처 4매, 공항 라운지·발레파킹은 결제 혜택이 아니다"
+    ],
+    "open_questions": [
+      "status: 상품 페이지에 판매 상태 표시 없음 가정: on_sale",
+      "revisions[0].effective_from: 시행일 확인하지 않아 수집일 가정: 2026-10-05"
+    ]
+  },
+  {
+    "card_id": "hyundai-tpie3",
+    "status": "ready",
+    "reason": "the Pink Edition3 가이드북(2026-08-24판) 대조. 연회비 20만원, 전월 50만 1.5%, 100만 백화점 5%(월 5만P)·패션 5%(3만P)·온라인몰 5%(2만P). 사례 통과",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=TPIE3",
+      "https://www.hyundaicard.com/upload/card/20260824_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Pink%20Edition3.pdf"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "PG결제나 간편결제 가맹점명으로 승인된 결제는 영역 5%에서 빠지고 기본 1.5%만 적립한다",
+      "영역별 적립 한도는 본인과 가족 카드를 합산한다",
+      "적립은 결제 순서가 아니라 현대카드 매출전표 접수 순서로 한도를 쓴다",
+      "실적은 본인과 가족 카드를 합산한다",
+      "대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다",
+      "연간 보너스 바우처 15만원권은 첫해 누적 100만원 이상 다음 해부터 전년도 1",
+      "200만원 이상 조건이라 계산하지 않는다",
+      "공항 라운지와 발레파킹은 결제 혜택이 아니다",
+      "M 긴급적립은 선지급 포인트 서비스라 계산하지 않는다",
+      "백화점·아울렛의 온라인몰·주차장·문화센터·임대 매장 이용은 5%에서 빠지고 기본 1.5%만 적립한다",
+      "백화점·할인점·쇼핑몰·기차 역사 안에 입점한 오프라인 매장은 5%에서 빠지고 기본 1.5%만 적립한다",
+      "온라인은 대상점 공식 홈페이지와 앱 안의 결제만 5%이고 연결된 다른 사이트나 앱에서 결제하면 기본 1.5%만 적립한다",
+      "대상점 공식 홈페이지와 앱 안의 결제만 5%이고 연결된 다른 사이트나 앱에서 결제하면 기본 1.5%만 적립한다",
+      "대상점 공식 홈페이지와 앱 안의 결제만 5%이고 연결된 다른 사이트나 앱에서 결제하면 기본 1.5%만 적립한다",
+      "네이버플러스 스토어는 naver.com 도메인으로 확인되는 가맹점만 5%다"
+    ],
+    "open_questions": [
+      "product_codes: 상품 코드는 수집한 상품 페이지 주소의 cardWcd를 따랐다 가정: [TPIE3]"
+    ]
+  },
+  {
+    "card_id": "hyundai-tre6",
+    "status": "ready",
+    "reason": "the Red 가이드북 대조. 연회비 300,000원, 전월 50만 이상 국내외 1.5% M포인트(한도 없음), M포인트형만 담고 항공 마일리지형은 option unsupported로 뒀다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/260513_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Red.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "항공 마일리지형(1,500원당 1마일)은 마일리지 가치가 없어 계산하지 않는다",
+      "연간 보너스 바우처 10만원권 3매는 연간 이용금액 조건",
+      "공항 라운지, 발레파킹, M 긴급적립"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일 문구 없음, 파일 이름 260513 가정 2026-05-13"
+    ]
+  },
+  {
+    "card_id": "hyundai-zfe2",
+    "status": "exclude",
+    "reason": "hyundai-179408과 같은 상품. 연회비 20,000원, 5개 영역 10% 청구 할인과 한도 6천/1만원이 케이뱅크-현대카드Z family Edition2와 같다.",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZFE2",
+      "https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_Z%20family%20Ed2_260330.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-zoe2",
+    "status": "ready",
+    "reason": "현대카드 Z play 가이드북(260330) 대조. 연회비 2만원, 전월 50만 온라인몰·음식점·영화·해외·디지털 10% 월 6천/1만. 사례 통과",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZOE2",
+      "https://www.hyundaicard.com/upload/card/%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_Z%20play_260330.pdf"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "승인된 가맹점명이 PG나 간편결제 이름이면 그 결제는 할인에서 뺀다",
+      "영역별 한도와 1일 1회는 매출전표 접수 순서로 적용한다",
+      "실적과 한도는 본인과 가족 카드를 합산한다",
+      "고속도로 통행료·후불하이패스·TV 수신료는 실적에서 뺀다",
+      "대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다",
+      "현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다",
+      "네이버플러스 스토어는 naver.com 도메인으로 확인되는 가맹점만 할인한다",
+      "공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱에서 결제하면 제외한다",
+      "매점 메뉴 결제는 할인하지 않는다",
+      "온라인은 공식 홈페이지와 앱 안의 결제만 할인한다",
+      "국내외겸용 카드만 할인하고 국내전용 카드는 제외한다",
+      "국제브랜드 수수료와 해외서비스 수수료는 할인에서 뺀다",
+      "넷플릭스·유튜브 프리미엄·디즈니+는 PC 공식 홈페이지에서 결제 수단을 등록해야 할인한다",
+      "통신 요금에 합산 청구되면 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 가이드북은 2026년 3월 판이다. 그 전부터 혜택이 같았는지 확인하지 않아 수집일을 시작일로 둔다 가정: 2026-10-05",
+      "revisions[0].benefits[restaurant-10].target: 일반음식점 업종에 패스트푸드를 넣고 제과는 넣지 않았다. 현대카드 업종 분류에서 제과점이 일반음식점에 드는지 원문에 없다 가정: [restaurant.general, restaurant.fastfood]"
+    ]
+  }
+]

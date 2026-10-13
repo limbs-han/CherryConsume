@@ -1,0 +1,230 @@
+schema_version: 2
+id: hana-94334
+issuer: hana
+name: 하나 나라사랑카드(체크)
+short_name: 하나 나라사랑 체크
+search_names: [나라사랑카드 하나, 하나 나라사랑카드]
+kind: check
+product_codes:
+  - '94334'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41018813P&CD_PD_SEQ=18813', fetched_at: 2026-10-13, review_no: A-26-2543}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-06-26
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000, 200000, 300000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    facts:
+      - {key: salary_transfer, type: bool, scope: card, ask: 지난달 군 급여를 이 카드 결제계좌인 하나은행 나라사랑통장으로 받았나요}
+    limits:
+      - key: basic
+        per: month
+        amount: {100000: 5000, 200000: 10000, 300000: 20000, 500000: 30000, 1000000: 50000}
+      - {key: desire_taxi, per: month, amount: 5000}
+    benefits:
+      - key: px-30
+        title: 군마트(PX) 3만원 미만 30% 캐시백
+        source: page
+        evidence: [군마트(PX) 20~30% 캐시백 | 건당 결제금액 3만원 미만 | 30% | 일 한도 5천원 | 월 한도 1만원, 지난달 이용실적에 관계 없이 캐시백 할인 제공]
+        target:
+          merchants: [px]
+        when:
+          - amount: {below: 30000}
+        reward: {type: cashback, rate: 30}
+        limits:
+          - {per: day, amount: 5000}
+          - {per: month, amount: 10000}
+      - key: px-20
+        title: 군마트(PX) 3만원 이상 20% 캐시백
+        source: page
+        evidence: [군마트(PX) 20~30% 캐시백 | 건당 결제금액 3만원 이상 | 20% | 일 한도 2만원 | 월 한도 10만원, 지난달 이용실적에 관계 없이 캐시백 할인 제공]
+        target:
+          merchants: [px]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: day, amount: 20000}
+          - {per: month, amount: 100000}
+      - key: coupang-npay-20
+        title: 쿠팡·네이버플러스스토어 20% 캐시백
+        source: page
+        evidence: [쿠팡/네이버플러스스토어 20% 캐시백 | 할인율 20% | 일 한도 1천원 | 월 한도 3천원, 지난달 이용실적에 관계 없이 캐시백 할인 제공, '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건, 상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 서비스에서 제외됨']
+        target:
+          merchants: [coupang, naver_plus_store]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: day, amount: 1000}
+          - {per: month, amount: 3000}
+        unmodeled: [상품권과 여행과 항공권과 티켓과 도서와 공연 매출은 제외한다. 연결된 다른 사이트나 앱 결제도 제외한다]
+      - key: taxi-app-20
+        title: 카카오T 앱 사전결제 20% 캐시백
+        source: page
+        evidence: [택시 20% 캐시백 (택시 업종+카카오T(택시)) | 군 급여이체 조건 충족 시 서비스 제공, 카카오T는 공식 앱에서 카드를 등록하고 미리 결제하는 방식에서만 서비스가 제공됨, '혜택한도 : 월 5,000원', 000원]
+        target:
+          merchants: [kakao_t]
+        when:
+          - {fact: salary_transfer}
+          - billing: [app_prepay]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: desire_taxi}
+      - key: taxi-offline-20
+        title: 택시업종 오프라인 20% 캐시백
+        source: page
+        evidence: [택시 20% 캐시백 (택시 업종+카카오T(택시)) | 군 급여이체 조건 충족 시 서비스 제공, 택시 업종은 오프라인 결제 건에 한하여 서비스가 제공되며, '혜택한도 : 월 5,000원', 000원]
+        target:
+          categories: [taxi]
+          exclude_merchants: [kakao_t]
+        when:
+          - {fact: salary_transfer}
+          - {channel: offline}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: desire_taxi}
+      - key: delivery-20
+        title: 배달의민족·쿠팡이츠·요기요 20% 캐시백
+        source: page
+        evidence: [딜리버리 매월 20% 캐시백 (배달의민족/쿠팡이츠/요기요) | 군 급여이체 조건 충족 시 서비스 제공, 월 5천원 | 20%, '공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제 건은 혜택에서 제외됨']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {fact: salary_transfer}
+          - {channel: online}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: month, amount: 5000}
+        unmodeled: [국군의날과 현충일은 일 1만원 한도로 따로 준다]
+      - key: digital-10
+        title: 구독·앱 결제 10% 캐시백
+        source: page
+        evidence: [디지털라이프 10% 캐시백 (구글플레이/유튜브프리미엄/넷플릭스 등) | 군 급여이체 조건 충족 시 서비스 제공, '애플 App Store, 구글플레이, 유튜브프리미엄, 넷플릭스, 네이버플러스 멤버십, 쿠팡와우멤버십, 네이버웹툰 국내 계정을 통한 결제 시 서비스 제공', '혜택한도 : 월 2,000원', 000원]
+        target:
+          merchants: [app_store, coupang_wow, google_play, naver_plus_membership, naver_webtoon, netflix, youtube_premium]
+        when:
+          - {fact: salary_transfer}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 2000}
+        unmodeled: [앱스토어와 구글플레이는 포인트와 캐시와 머니충전과 간편결제 결제를 제외한다. 유튜브프리미엄과 네이버웹툰과 넷플릭스는 월 정기결제만 대상이고 인앱 결제는 제외한다. 네이버플러스 멤버십과 쿠팡와우멤버십은 월 정기결제만 매월 주고 연 정기결제는 한 번만 준다]
+      - key: basic-transit-20
+        title: 버스·지하철 20% 캐시백
+        source: page
+        evidence: ['대중교통 20% 캐시백 (버스/지하철) | 시외버스, 고속버스, 철도(KTX/SRT/ITX)는 서비스에서 제외됨 | 혜택한도 : 월 10,000원', 지난달 이용실적 10만원 이상 Basic 서비스]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: basic}
+          - {per: month, amount: 10000}
+        tiers: {from: 100000}
+      - key: basic-starbucks-20
+        title: 스타벅스 1만원 이상 20% 캐시백
+        source: page
+        evidence: ['스타벅스 20% 캐시백 | 건당 결제금액이 10,000원 이상인 경우에 한하여 서비스 제공 | 혜택한도 : 결제 건당 최대 4,000원', '대형시설물(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트) 입점점포 및 임대매장 결제, 배달 앱이나 식당 예약 앱을 통한 주문결제, 상품권 구입, 선불카드 및 선불전자지급수단 충전은 서비스에서 제외됨']
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: basic}
+          - {per: txn, amount: 4000}
+        tiers: {from: 100000}
+        unmodeled: [백화점과 마트와 공항 등 대형시설물 입점 점포와 임대 매장 결제는 제외한다]
+      - key: basic-restaurant-20
+        title: 아웃백·빕스 1만원 이상 20% 캐시백
+        source: page
+        evidence: ['레스토랑 20% 캐시백 (아웃백스테이크하우스/VIPS) | 건당 결제금액이 10,000원 이상인 경우에 한하여 서비스 제공 | 혜택한도 : 월 20,000원', '대형시설물 입점점포 및 임대매장 결제, 배달 앱이나 식당 예약 앱을 통한 주문결제, 상품권 구입, 선불카드 및 선불전자지급수단 충전은 서비스에서 제외됨']
+        target:
+          merchants: [outback, vips]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: basic}
+          - {per: month, amount: 20000}
+        tiers: {from: 100000}
+        unmodeled: [백화점과 마트와 공항 등 대형시설물 입점 점포와 임대 매장 결제는 제외한다]
+      - key: basic-fastfood-5
+        title: 패스트푸드 1만원 이상 5% 캐시백
+        source: page
+        evidence: ['패스트푸드 5% 캐시백 (롯데리아/맥도날드/버거킹/맘스터치 등) | 대상 가맹점 : 롯데리아/맥도날드/버거킹/맘스터치/KFC/써브웨이 | 건당 결제금액이 10,000원 이상인 경우에 한하여 서비스 제공 | 혜택한도 : 월 2,000원']
+        target:
+          merchants: [burger_king, kfc, lotteria, mcdonalds, subway]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: basic}
+          - {per: month, amount: 2000}
+        tiers: {from: 100000}
+        unmodeled: [맘스터치는 공통 가맹점에 없어 넣지 못했다, 백화점과 마트와 공항 등 대형시설물 입점 점포와 임대 매장 결제는 제외한다]
+      - key: basic-online-10
+        title: 무신사·29CM·G마켓·옥션·11번가 1만원 이상 10% 캐시백
+        source: page
+        evidence: ['온라인 쇼핑 10% 캐시백 (무신사/29CM/G마켓/옥션/11번가) | 건당 결제금액이 10,000원 이상인 경우에 한하여 서비스 제공 | 혜택한도 : 월 5,000원', '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건, 상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 서비스에서 제외됨']
+        target:
+          merchants: [auction, eleven_st, gmarket, musinsa, twentynine_cm]
+        when:
+          - amount: {min: 10000}
+          - {channel: online}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: basic}
+          - {per: month, amount: 5000}
+        tiers: {from: 100000}
+        unmodeled: [상품권과 여행과 항공권과 티켓과 도서와 공연 매출은 제외한다. 연결된 다른 사이트나 앱 결제도 제외한다]
+      - key: basic-exam-5
+        title: 어학시험 응시료 5% 캐시백
+        source: page
+        evidence: ['어학시험 응시료 5% 캐시백 (TOEIC/OPIc/TEPS/JPT/HSK) | 공식 사이트를 통한 응시료 결제에 한하여 서비스 제공 | 혜택한도 : 월 5,000원']
+        target:
+          categories: [education.exam]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: basic}
+          - {per: month, amount: 5000}
+        tiers: {from: 100000}
+      - key: basic-bookstore-5
+        title: 교보문고·알라딘 5% 캐시백
+        source: page
+        evidence: ['서점 5% 캐시백 (교보문고/알라딘) | 공식 홈페이지 및 오프라인 매장 결제 시 서비스 적용 | 혜택한도 : 월 5,000원']
+        target:
+          merchants: [aladin, kyobo_book]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: basic}
+          - {per: month, amount: 5000}
+        tiers: {from: 100000}
+      - key: basic-longhaul-5
+        title: 기차·고속버스·시외버스 5% 캐시백
+        source: page
+        evidence: ['광역교통 5% 캐시백 (기차(KTX,SRT,ITX), 고속·시외버스) | 혜택한도 : 월 2,000원', '공식 홈페이지(온라인/모바일 앱) 및 오프라인을 통한 결제 시에만 서비스가 제공되며, 여행사, 구매대행사이트, 온라인쇼핑몰(오픈마켓, 소셜 등)을 통한 결제 건은 서비스에서 제외됨']
+        target:
+          categories: [transit.bus_express, transit.bus_intercity, transit.rail]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: basic}
+          - {per: month, amount: 2000}
+        tiers: {from: 100000}
+        unmodeled: [여행사와 구매대행 사이트와 온라인 쇼핑몰을 거친 결제는 제외한다]
+    unmodeled: [CU 편의점 행사품목 10% 현장할인은 행사 품목을 결제 입력으로 가릴 수 없어 계산하지 않는다, CGV 팝콘 스몰세트 무료는 월 1회 연 6회 현물 혜택이라 계산하지 않는다, 국군 콘도 20% 캐시백과 놀이공원 이용권 50% 현장할인은 계산하지 않는다, 현역병 상해보험과 나라사랑 휴대폰케어와 트래블로그 스위치는 계산하지 않는다, 여러 장을 가져도 실적과 월 한도와 이용 횟수는 회원 단위로 합쳐 한 번만 준다, 국군의날과 현충일 특별 한도는 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다., assumed: '2026-06-26'}
+  - {path: 'revisions[0].benefits[taxi-app-20].when', question: 택시와 딜리버리와 디지털라이프는 군 급여이체 조건 충족 시 제공이라 적었다. 지난달 실적 10만원 이상으로 받는 Basic 서비스에도 같은 항목이 있어 급여이체 없이 받을 수 있는지 원문 요약이 겹친다., assumed: 급여이체가 있어야 받음}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문 실적 제외에 그 외 공과금이 들어 있어 utility 전체를 뺐다., assumed: utility 전체}
+  - {path: 'revisions[0].benefits[basic-longhaul-5].target', question: 광역교통 대상에 시외버스와 고속버스 업종 전체를 넣었다. 원문 대상은 기차와 고속시외버스다., assumed: 철도와 고속버스와 시외버스}
+notes: 2026-10-13 공식 상품 페이지(준법심의 A-26-2543)에서 옮겼다. 연회비 없음, Visa. 출시 2025-12-15. Basic 서비스는 지난달 실적 10만원 이상부터 통합 월 한도가 5천, 1만, 2만, 3만, 5만원이다. 군마트와 쿠팡 네이버플러스스토어 혜택은 실적과 관계없다. 한 사람이 여러 장을 가져도 혜택 기준은 회원 단위다. 후불교통 요금은 매출이 접수된 달의 이용금액에 들어간다.

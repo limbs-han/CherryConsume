@@ -1,0 +1,81 @@
+card: nh-f10078
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 온라인 7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-7: 3500}}
+  calc: 50,000원 x 7% = 3,500원. 월 한도 7천원 안
+- name: 실적 직전은 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원보다 1원 적다
+- name: 더블할인 14%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: musinsa, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {double-14: 2800}}
+  calc: 20,000원 x 14% = 2,800원. 월 한도 7천원 안
+- name: 생활할인 교통
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-transit-5: 75}}
+  calc: 1,500원 x 5% = 75원
+- name: 생활할인 스타벅스
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-coffee-sb-5: 500}}
+  calc: 10,000원 x 5% = 500원. 영역 한도 1천원 안
+- name: 생활할인 이디야
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: ediya, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-coffee-ediya-5: 500}}
+  calc: 10,000원 x 5% = 500원
+- name: 생활할인 커피 영역 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-coffee-sb-5: 1000}}
+  calc: 40,000원 x 5% = 2,000원이나 영역 한도 1천원
+- name: 생활할인 편의점
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-conv-5: 500}}
+  calc: 10,000원 x 5% = 500원
+- name: 생활할인 통신
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-telecom-5: 2000}}
+  calc: 50,000원 x 5% = 2,500원이나 70만 구간 영역 한도 2천원
+- name: 생활할인 배달
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-delivery-5: 500}}
+  calc: 10,000원 x 5% = 500원
+- name: 생활할인 구독
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-sub-5: 500}}
+  calc: 10,000원 x 5% = 500원

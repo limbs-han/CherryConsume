@@ -1,0 +1,20 @@
+card: lotte-1944
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 1% RR PAY 포인트
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {rrpay-1: 500}
+  calc: 50,000 x 1% = 500P
+- name: 월 한도 2만 포인트
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 3000000, category: department_store, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {rrpay-1: 20000}
+  calc: 30,000P가 월 한도 20,000P로 줄어든다

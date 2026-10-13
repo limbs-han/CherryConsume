@@ -1,0 +1,90 @@
+schema_version: 2
+id: woori-102864
+issuer: woori
+name: K-패스 우리카드
+kind: credit
+product_codes:
+  - '102864'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102864', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2024-12-30'
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - key: total
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: basic-discount
+        title: 국내 가맹점 0.3% 청구할인
+        source: page
+        evidence: [기본 할인 국내 가맹점 0.3% 청구할인, ※ 전월 국내가맹점 이용실적 40만원 이상 시 혜택 제공, 기본 할인과 생활 할인 및 대중교통 할인은 중복 제공 불가(할인금액 높은 서비스로 자동 적용), '40만원 이상 80만원 미만 5,000원, 80만원 이상 10,000원']
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.3}
+        limits:
+          - {shared: total}
+        tiers: {from: 400000}
+      - key: coffee-10
+        title: 스타벅스·폴바셋 10% 청구할인
+        source: page
+        evidence: ['생활 할인 스타벅스, 폴바셋 10% 청구할인', ※ 건당 이용금액 1만원 이상 시 제공, ※ 공식 앱을 통한 사이렌오더/크라운오더 결제 건 포함, ※ 전월 국내가맹점 이용실적 40만원 이상 시 혜택 제공]
+        target:
+          merchants: [paul_bassett, starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: total}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: convenience-10
+        title: CU·GS25 10% 청구할인
+        source: page
+        evidence: ['생활 할인 CU, GS25 10% 청구할인', ※ 건당 이용금액 1만원 이상 시 제공, ※ 오프라인 매장 결제 건에 한하여 할인 제공, ※ 전월 국내가맹점 이용실적 40만원 이상 시 혜택 제공]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: total}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: transit-10
+        title: 버스·지하철 10% 청구할인
+        source: page
+        evidence: ['대중교통 할인 버스, 지하철 10% 청구할인', 후불교통기능을 이용한 대중교통(버스, 지하철) 매출, '※ 고속버스, 시외버스, 공항버스, 공항철도(직통열차 포함) 이용금액 할인 제외', ※ 전월 국내가맹점 이용실적 40만원 이상 시 혜택 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: total}
+        tiers: {from: 400000}
+    unmodeled: [후불교통 이용금액 전체가 실적에서 빠지는데 시내버스·지하철 업종만 뺐다. 승인된 버스·지하철 결제도 빠질 수 있다, 공항버스와 공항철도 직통열차는 대중교통 할인 제외, 모바일 교통카드에 등록한 후불 이용도 할인 대상, 월 할인 한도가 영역별인지 통합인지 표가 모호해 세 혜택이 함께 쓰는 한도로 보았다, 가족카드 발급 불가, PG·간편결제 전용 가맹점 승인 건은 생활 할인 제외, 백화점·대형할인점·면세점·공항·미군부대·리조트 등 입점 매장은 생활 할인 제외, 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다, 국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다]
+open_questions:
+  - {path: 'revisions[0].limits', question: 40만원 구간 월 한도 표에서 기본 할인과 생활·대중교통 할인이 각각 5000원인지 합쳐 5000원인지 표가 모호하다, assumed: 세 혜택이 함께 월 5000원}
+  - {path: 'revisions[0].benefits', question: 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-12-30. 국내전용 연회비 1만5천원, 후불교통카드 발급 필수. 생활 할인 적용 이용금액 전체와 후불교통 이용금액 전체는 전월실적에서 빠진다.

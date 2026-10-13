@@ -1,0 +1,52 @@
+card: hana-16936
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-1: 1000}
+  calc: 100,000원 x 1% = 1,000원
+- name: 실적 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0원
+- name: 백화점 5% 한도 1만 넘으면 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {dept-5: 10000, base-1: 1000}
+  calc: 한도 10,000원이 차는 200,000원까지 5%, 나머지 100,000원 x 1% = 1,000원
+- name: 파리바게뜨 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: paris_baguette, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {bakery-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 스타벅스 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-10: 1000}
+  calc: 10,000원 x 10% = 1,000원
+- name: 후불교통 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {transit-10: 1000}
+  calc: 10,000원 x 10% = 1,000원

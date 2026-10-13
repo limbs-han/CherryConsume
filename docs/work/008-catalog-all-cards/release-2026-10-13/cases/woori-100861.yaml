@@ -1,0 +1,103 @@
+card: woori-100861
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 백화점 2% 건당 대상 5만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: lotte_department, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-dept: 1000}
+  calc: 대상 5만원 x 2% = 1,000원
+- name: 의료 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: pharmacy, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {medical-3: 900}
+  calc: 30,000원 x 3% = 900원
+- name: 언택트 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 17000, merchant: netflix, billing: subscription, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {untact-10: 1700}
+  calc: 17,000원 x 10% = 1,700원
+- name: 언택트 월 한도 3000
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: netflix, billing: subscription, region: domestic, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: netflix, billing: subscription, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {untact-10: 3000}
+  - payment: 1
+    benefits: {}
+  calc: 첫 결제 5,000원이지만 월 3,000원 한도
+- name: 해외 30만원 이상 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, category: shopping, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-2: 6000}
+  calc: 300,000원 x 2% = 6,000원
+- name: 해외 1만원 미만은 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 9999, category: shopping, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 1만원 미만
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: pharmacy, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0원
+- name: 온라인쇼핑 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-online: 200}
+  calc: 10,000원 x 2% = 200원
+- name: 통신 자동납부 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: skt, billing: autopay, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-telecom: 200}
+  calc: 10,000원 x 2% = 200원
+- name: 렌탈 정기결제 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: coway, billing: autopay, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-rental: 200}
+  calc: 10,000원 x 2% = 200원
+- name: 서점 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: kyobo_book, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {medical-study: 300}
+  calc: 10,000원 x 3% = 300원
+- name: 해외 1만원 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: shopping, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-1: 100}
+  calc: 10,000원 x 1% = 100원

@@ -1,0 +1,48 @@
+card: kb-09214
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 이마트 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-10: 5000}, counted: 0}
+  calc: 50,000원 × 10% = 5,000원. 7,000원 한도 안. 할인받은 대형마트 결제는 실적 제외
+- name: 쇼핑 한도를 마트와 백화점이 함께 쓴다
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-10: 5000}}
+  - {payment: 1, benefits: {department-10: 2000}}
+  calc: 첫 결제 5,000원 뒤 남은 공유 한도 2,000원
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만은 할인 없음
+- name: 편의점 5% 할인은 실적 포함
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: convenience, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {favorite-5: 500}, counted: 10000}
+  calc: 10,000원 × 5% = 500원. 마트·백화점 외 할인은 실적에서 빠지지 않는다
+- name: 택시 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-taxi-5: 1000}}
+  calc: 20,000원 × 5% = 1,000원
+- name: 이동통신 자동납부 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 2500}}
+  calc: 50,000원 × 5% = 2,500원. 3,000원 한도 안

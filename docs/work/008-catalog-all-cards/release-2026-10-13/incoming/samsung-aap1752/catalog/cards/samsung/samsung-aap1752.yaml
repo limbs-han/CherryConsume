@@ -1,0 +1,58 @@
+schema_version: 2
+id: samsung-aap1752
+issuer: samsung
+name: T나는혜택 삼성카드
+short_name: T나는혜택 삼성
+search_names: [T나는혜택 삼성카드, 티나는혜택 삼성카드]
+kind: credit
+product_codes: [AAP1752]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1752', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtsljDdSS8odniHlOoWAm%2B3k%3D&sn=1', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2023-01-02'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, 자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다]
+    limits:
+      - key: telecom
+        per: month
+        amount: {300000: 7000, 700000: 10000, 1200000: 13000}
+    benefits:
+      - key: skt-telecom
+        title: SKT·SK브로드밴드 통신요금 정기결제 할인
+        source: manual
+        evidence: ['통신요금 건별 15,000원 이상 정기결제 시, 전월 생활요금 정기결제 이용건수에 따라 통신요금 월 7,000원~16,000원 결제일할인', '통신 SKT, SK브로드밴드, SK 세븐모바일', '0건(통신정기결제만 이용 시) 30만원 이상 7,000원, 70만원 이상 10,000원, 120만원 이상 13,000원', '통합 월 1회 제공, 15,000원 이상 정기결제건에 할인 적용, 휴대전화 등 단말기 구매금액 및 대리점 카드 결제건 제외']
+        target:
+          merchants: [sk_broadband, skt]
+        when:
+          - billing: [autopay, subscription]
+          - amount: {min: 15000}
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {shared: telecom}
+        tiers: {from: 300000}
+        unmodeled: ['결합상품요금, 단말기 구매금액, 대리점 카드 결제건은 할인하지 않는다, SK 세븐모바일은 가맹점이 없어 담지 않았다']
+    unmodeled: ['전월 생활요금 정기결제(아파트 관리비, 4대 사회보험, 생명·손해보험, 코웨이·SK매직 렌탈, 웨이브·FLO 중 5,000원 이상) 건수가 1건, 2건, 3건 이상이면 월 할인한도가 1,000원, 2,000원, 3,000원씩 커진다. 건수를 계산하지 않아 0건 한도로만 할인한다', 'SKT 24개월 라이트할부(최소 10만원, 연 5.9%)는 할부 서비스라 계산하지 않는다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 자동납부)는 매출전표 접수일 기준이다', 후불교통기능이 탑재되어 발급된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품안내장은 2023.1판이다. 시행일을 안내장 판 월의 첫 영업일로 두었다, assumed: '2023-01-02'}
+  - {path: 'revisions[0].limits[telecom]', question: 생활요금 정기결제 건수에 따른 한도 증가를 담지 않고 0건 한도만 두었다, assumed: 0건 한도}
+notes: 2026-10-13 상품안내장(2023.1판, 심의필 제2023-C1a-00005호) 대조. 연회비 국내전용과 해외겸용 Mastercard 모두 20,000원(기본 7,000+제휴 13,000). 통신요금 할인은 정기결제 금액이 월 한도보다 적으면 결제 금액만큼 할인한다. 발급월+1개월까지는 30만원 미만이어도 30만 구간 혜택을 준다.

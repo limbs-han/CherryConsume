@@ -1,0 +1,103 @@
+schema_version: 2
+id: kb-04918
+issuer: kb
+name: KB국민 기후동행카드
+short_name: KB 기후동행
+kind: credit
+product_codes:
+  - '04918'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04918', fetched_at: '2026-10-12', review_no: 제2024-C1a-14024호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2024-11-25'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [별도 가맹점번호로 승인되는 PG와 일부 간편결제는 할인에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요?'}
+    limits:
+      - key: leisure
+        per: month
+        amount: {0: 3500, 400000: 7000}
+    benefits:
+      - key: life-5
+        title: 커피·편의점·약국·패스트푸드 5% 청구할인
+        source: page
+        evidence: ['생활 커피·음료전문점/편의점/약국/패스트푸드점 업종 5% 월 할인한도 7,000원 건당 1만원 이상 이용 시 할인 제공', '전월 이용실적 조건: KB국민 기후동행카드로 전월 40만원 이상 이용 시 제공', '실적 유예 제공: 최초 발급받은 KB국민 기후동행카드는 사용등록일(KB Pay 등 간편결제 등록 포함)로 부터 다음 달 말일까지 전월 이용실적 조건 미달 시에도 [생활/쇼핑/여가] 각 서비스 영역별 월 3,500원까지 할인서비스 제공']
+        target:
+          categories: [cafe, convenience, pharmacy, restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 3500, 400000: 7000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: olive-young-10
+        title: 올리브영 10% 청구할인
+        source: page
+        evidence: ['쇼핑 KB Pay 쇼핑, 올리브영 10% 월 할인한도 7,000원', '올리브영은 오프라인 매장 및 공식 홈페이지/모바일 앱 결제 건에 한하며, 백화점/대형마트 등 일부 입점 매장 제외']
+        target:
+          merchants: [olive_young]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 3500, 400000: 7000}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [같은 한도를 쓰는 KB Pay 앱 쇼핑 10% 할인은 담을 가맹점이 없어 계산하지 않는다]
+      - key: movie-10
+        title: CGV·롯데시네마 10% 청구할인
+        source: page
+        evidence: ['여가 영화(CGV, 롯데시네마) 10% 스포츠업종 5% 월 할인한도 7,000원', 매점·관람권·상품권 및 예매대행사이트 제외]
+        target:
+          merchants: [cgv, lotte_cinema]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: leisure}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: ['영화관 매점, 관람권, 예매대행사이트 결제는 할인에서 빠진다']
+      - key: golf-5
+        title: 골프장·골프연습장 5% 청구할인
+        source: page
+        evidence: ['스포츠 업종: 골프장·골프연습장·테니스장·수영장·요가·볼링장·종합스포츠센터·스포츠용품점·레저용품점', 여가 영역 월 할인한도 7, 000원]
+        target:
+          categories: [sports.golf]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: leisure}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        notes: 공통 스포츠 업종은 원문 대상보다 넓을 수 있어 골프만 담았다
+    unmodeled: [테니스장·수영장·요가·볼링장·종합스포츠센터·스포츠용품점·레저용품점 5% 할인은 공통 업종이 원문 범위와 맞지 않아 계산하지 않는다, '후불 기후동행카드 이용요금과 무승인전표(교통요금, 자판기, 터널통행료, 항공기내)는 실적에서 빠진다', '정부지원금(보육료, 유치원보조비, 바우처)은 실적에서 빠진다', 서울시 기후동행 정기권 서비스는 2026-09-30 종료 안내가 있다. 카드 할인 혜택과는 별개다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2024.11.25 출시만 적었다. 현재 규칙의 시작일로 잠정 적용한다., assumed: '2024-11-25'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불 기후동행 이용요금과 무승인 교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 생활, 쇼핑, 여가 세 영역은 영역마다 월 7,000원 한도다. 할인받은 결제는 금액 전체가 실적에서 빠진다. 가족카드는 발급하지 않는다.

@@ -1,0 +1,68 @@
+card: samsung-aap1837
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 백화점 10% 100만 구간 하한
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {dept-10: 5000}, counted: 50000}
+  calc: 50,000 × 10% = 5,000P. 월 한도 10,000P 안
+- name: 실적 100만 직전은 10% 없음
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 999,999원은 50만 구간이라 10% 없음
+- name: 할인점 10% 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 150000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-10: 10000}, counted: 150000}
+  calc: 150,000 × 10% = 15,000이나 월 한도 10,000P
+- name: 온라인쇼핑몰 주유 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 30000, category: fuel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-10: 2000}, counted: 20000}
+  - {payment: 1, benefits: {fuel-10: 3000}, counted: 30000}
+  calc: 20,000 × 10% = 2,000P, 30,000 × 10% = 3,000P. 영역마다 한도가 따로
+- name: 관리비 이동통신 교육 3% 통합 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 100000, category: education.academy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 100000, merchant: kyowon, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-3-bill: 1500}, counted: 50000}
+  - {payment: 1, benefits: {life-3-academy: 3000}, counted: 100000}
+  - {payment: 2, benefits: {life-3-study: 500}, counted: 100000}
+  calc: 50,000 × 3% = 1,500P, 100,000 × 3% = 3,000P, 남은 한도 500P
+- name: 실적 50만 직전은 3% 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T09:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 499,999원은 0 구간이라 3% 없음
+- name: 삼성페이 국내 오프라인 1%와 해외 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 10000, category: restaurant, channel: offline, payment_method: samsung_pay}
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {spay-1: 100}, counted: 10000}
+  - {payment: 1, benefits: {overseas-1: 1000}, counted: 100000}
+  calc: 10,000 × 1% = 100P, 100,000 × 1% = 1,000P
+- name: 삼성페이로 백화점 결제는 10%에 1% 더하기
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: lotte_department, channel: offline, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {dept-10: 5000, spay-1: 500}, counted: 50000}
+  calc: 50,000 × 10% = 5,000P에 삼성페이 1% 500P를 더해 받는다

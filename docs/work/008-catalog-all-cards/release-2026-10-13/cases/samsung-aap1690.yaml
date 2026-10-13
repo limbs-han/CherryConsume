@@ -1,0 +1,31 @@
+card: samsung-aap1690
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 직전 요기요 1%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T19:00, amount: 30000, merchant: yogiyo, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {yogiyo-1: 300}, counted: 30000}
+  calc: 30,000 × 1% = 300. 1%는 실적 인정
+- name: 30만 구간 요기요 10% 월 6천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T19:00, amount: 50000, merchant: yogiyo, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T19:00, amount: 30000, merchant: yogiyo, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {yogiyo-10: 5000}, counted: 0}
+  - {payment: 1, benefits: {yogiyo-10: 1000}}
+  calc: 50,000 × 10% = 5,000, 남은 한도 1,000. 10% 받은 결제는 실적 제외
+- name: 90만 구간 커피 편의점 다이소 스트리밍
+  prev_month_spend: 900000
+  payments:
+  - {at: 2026-11-02T09:00, amount: 100000, merchant: daiso, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 100000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-5: 5000}, counted: 0}
+  - {payment: 1, benefits: {starbucks-5: 5000}}
+  - {payment: 2, benefits: {streaming-10: 1700}, counted: 17000}
+  calc: 100,000 × 5% = 5,000 두 번으로 통합 한도 10,000. 17,000 × 10% = 1,700. 스트리밍은 실적 인정

@@ -1,0 +1,50 @@
+schema_version: 2
+id: hana-14246
+issuer: hana
+name: 하나 햇살론 카드
+short_name: 하나 햇살론
+kind: credit
+product_codes:
+  - '14246'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41014246P&CD_PD_SEQ=14246', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2026-10-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend:
+      basis: none
+      exclude_categories: []
+      month_offset: {}
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    benefits:
+      - key: domestic-07
+        title: 국내 전 가맹점 0.7% 하나머니 적립
+        source: page
+        evidence: [국내 전 가맹점 0.7% 하나머니 적립, 적립한도 없음, 소수점 이하 금액은 반올림]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: hana_money, rate: 0.7, round: round}
+      - key: pay-10
+        title: 지정 페이결제 1.0% 하나머니 적립
+        source: page
+        evidence: ['하나페이, 삼성페이, 네이버페이, 쿠페이, 11Pay, L페이, 카카오페이, SSG페이, 페이코에 카드를 등록하여 결제하는 건 1.0%', 적립 대상이 중복으로 해당되는 경우 적립률이 높은 서비스가 우선 적용]
+        target: {all: true}
+        when:
+          - region: domestic
+            payment: [coupay, eleven_pay, hana_pay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, ssg_pay]
+        reward: {type: points, program: hana_money, rate: 1.0, round: round}
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에서 현재 규칙의 시행일을 찾지 못해 확인한 날로 두었다, assumed: '2026-10-13'}
+  - {path: 'revisions[0].benefit_exclusions', question: '원문은 수도/전기요금, 도시가스, 공과금을 적립에서 뺀다. 공과금 범위를 단정할 수 없어 utility 전체를 뺐다', assumed: utility 전체}
+notes: 서민금융진흥원 보증 햇살론 카드. 국내전용. 적립 제외 매출은 국세, 지방세, 공과금, 수도/전기요금, 도시가스, 아파트관리비, 부동산 임대료, 4대보험, 초중고 납입금, 대학등록금, 스쿨뱅킹, 상품권, 선불 충전, 무이자 할부. 매건 하나의 서비스만 적용되어 높은 적립률이 우선한다.

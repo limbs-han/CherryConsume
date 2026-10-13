@@ -1,0 +1,78 @@
+schema_version: 2
+id: kb-09247
+issuer: kb
+name: KB국민 마이핏카드(적립형)
+short_name: KB 마이핏 적립형
+kind: credit
+product_codes:
+  - '09247'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09247', fetched_at: '2026-10-12', review_no: 제2024-C1a-01979호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2024-02-26'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [정부지원금 결제는 적립에서 빠진다]
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: easypay-1-5
+        title: 삼성페이·KB Pay 1.5% 포인트리 적립
+        source: page
+        evidence: ['삼성페이, LG페이,KB Pay | 1.5% | 3만점 | 건당 2만원 이상 이용 시 일 적립한도 1만점', 마이핏카드(적립형) 서비스는 전월 이용실적 50만원 이상 시 제공]
+        target: {all: true}
+        when:
+          - payment: [kb_pay, samsung_pay]
+          - amount: {min: 20000}
+        reward: {type: points, program: kb_pointree, rate: 1.5}
+        limits:
+          - {per: day, amount: 10000}
+          - {per: month, amount: 30000}
+        tiers: {from: 500000}
+        unmodeled: [LG페이는 공통 결제수단에 없어 계산하지 않는다]
+      - key: convenience-taxi-1000
+        title: 편의점·택시 건당 1천점 적립
+        source: page
+        evidence: ['편의점, 택시 | 1천점 | 3천점 | 5천점 | 건당 1만원 이상 이용 시', '편의점 : 백화점/대형마트 등 일부 입점 매장의 경우 서비스 제외']
+        target:
+          categories: [convenience, taxi]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: kb_pointree, fixed: 1000}
+        limits:
+          - per: month
+            amount: {500000: 3000, 1000000: 5000}
+        tiers: {from: 500000}
+      - key: shopping-delivery-5
+        title: 쿠팡·G마켓·배달의민족 5% 포인트리 적립
+        source: page
+        evidence: ['쿠팡, G마켓, 배달의민족 | 5% | 3천점 | 5천점 | 건당 1만원 이상 이용 시', '쿠팡, G마켓 : 상품권, 여행, 항공권, 티켓, 도서 이용금액 서비스 제외', 배달의 민족에서 '결제수단 > 다른결제수단 > 신용/체크결제'를 통해 결제 시 서비스 제공]
+        target:
+          merchants: [baemin, coupang, gmarket]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {500000: 3000, 1000000: 5000}
+        tiers: {from: 500000}
+        unmodeled: [쿠팡·G마켓의 여행·항공권·티켓·도서 결제와 배달의민족의 다른 결제수단 결제는 적립에서 빠진다]
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 없이 1구간 혜택을 주는 신규 특례는 계산하지 않는다, 간편결제 1.5%와 편의점·택시·쇼핑 적립을 함께 받는지 원문에 없어 한 결제에 큰 쪽 하나만 준다, 무승인전표(자판기·터널통행료·항공기내 이용)와 정부지원금은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날짜를 찾지 못해 심의일로 두었다. 원문 출시일은 2020.06.01이다., assumed: '2024-02-26'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 실물 없는 모바일 단독카드다. 가족카드 발급이 안 된다. 포인트리 1점은 1원이다.

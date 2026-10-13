@@ -1,0 +1,32 @@
+card: kb-09308
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 KB Pay 온라인 5%와 기본 0.1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: online_shopping, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {domestic-0-1: 50, kb-pay-online-5: 2500}, counted: 0}
+  calc: 50,000원 × 0.1% = 50원, × 5% = 2,500원. 더 되는 적립 받은 결제는 실적 제외
+- name: 20만 경계 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: online_shopping, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 20만원 미만은 적립 없음. 적립받지 않아 실적 50,000원
+- name: KB Pay 오프라인 월 한도
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: grocery_mart, channel: offline, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {domestic-0-1: 200, kb-pay-offline-5: 5000}, counted: 0}
+  calc: 200,000원 × 5% = 10,000원 중 월 한도 5,000원. 기본 200원
+- name: 실물카드 결제는 기본 0.1%만
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-0-1: 50}, counted: 50000}
+  calc: 50,000원 × 0.1% = 50원. 기본 적립만 받은 결제는 실적 인정

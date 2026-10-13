@@ -1,0 +1,63 @@
+card: woori-102869
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 30만 구간 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-60: 3229}
+  calc: 100,000원 x 60 / 1,858 = 3,229.28이라 3,229원
+- name: 주유 건당 대상금액 10만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 200000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-60: 3229}
+  calc: 대상금액 10만원까지만
+- name: 주유 100만 구간 100원 월 7천원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-100: 5382}
+  - payment: 1
+    benefits: {fuel-100: 1618}
+  calc: 첫 결제 100,000원 x 100 / 1,858 = 5,382원, 둘째는 월 7,000원 한도 남은 1,618원
+- name: 실적 직전 299999는 기본 0.2%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-02pct: 200}
+  calc: 30만원보다 1원 적어 기본 0.2%만
+- name: 스타벅스 10% 건당 천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: starbucks, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-10: 1000}
+  calc: 2,000원이지만 건당 1,000원
+- name: 후불 지하철 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: transit.subway, billing: postpaid_transit, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-10: 1000}
+  calc: 10,000원 x 10% = 1,000원
+- name: 주유 50만 구간 80원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-80: 4305}
+  calc: 100,000원 x 80 / 1,858 = 4,305.7이라 4,305원

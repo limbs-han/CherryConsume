@@ -1,0 +1,46 @@
+card: samsung-aap1909
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 입장권 팀스토어 50% 통합 한도와 실적 인정
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-02T18:00, amount: 12000, merchant: hanwha_eagles_ticket, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T18:00, amount: 20000, merchant: hanwha_eagles_store, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {eagles-ticket-50: 6000}, counted: 12000}
+  - {payment: 1, benefits: {eagles-store-50: 4000}, counted: 20000}
+  calc: 12,000 × 50% = 6,000. 팀스토어 10,000은 30만 구간 한도 10,000에서 남은 4,000. 할인 건도 실적에 들어간다
+- name: 실적 30만원 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T18:00, amount: 12000, merchant: hanwha_eagles_ticket, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 12000}
+  calc: 299,999원은 0 구간이라 할인이 없다
+- name: 60만 구간 생활 10% 철도 5% 디지털 50%
+  prev_month_spend: 650000
+  payments:
+  - {at: 2026-11-02T09:00, amount: 20000, merchant: sungsimdang, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-02T10:00, amount: 10000, merchant: starbucks, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 60000, merchant: korail, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 10900, merchant: melon, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-10: 2000}, counted: 20000}
+  - {payment: 1, benefits: {daily-10-starbucks: 1000}, counted: 10000}
+  - {payment: 2, benefits: {rail-5: 3000}, counted: 60000}
+  - {payment: 3, benefits: {digital-50: 5000}, counted: 17000}
+  - {payment: 4, benefits: {}, counted: 10900}
+  calc: 성심당 2,000, 스타벅스 사이렌오더 1,000, 코레일 3,000. 넷플릭스 8,500은 디지털 한도 5,000에 걸려 5,000이고 멜론은 한도가 다 차서 0
+- name: 쇼핑몰과 배달앱 5% 통합 한도 5천원과 해외 1.5%
+  prev_month_spend: 350000
+  payments:
+  - {at: 2026-11-02T20:00, amount: 60000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mall-5: 3000}, counted: 60000}
+  - {payment: 1, benefits: {delivery-5: 1000}, counted: 20000}
+  - {payment: 2, benefits: {overseas-1-5: 1500}, counted: 100000}
+  calc: 쿠팡 3,000. 배민 1,000. 해외 100,000 × 1.5% = 1,500

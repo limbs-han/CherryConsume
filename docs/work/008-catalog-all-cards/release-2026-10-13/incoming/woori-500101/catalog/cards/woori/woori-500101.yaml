@@ -1,0 +1,184 @@
+schema_version: 2
+id: woori-500101
+issuer: woori
+name: QWERTY 우리카드 체크
+kind: check
+product_codes:
+  - '500101'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500101', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-07-13'
+    source: page
+    tiers: [0, 200000, 500000, 700000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      unmodeled: ['정부지원금, 관세, 환금성 업종, 신차구매, 의약품 전용몰·제약회사, 우편요금·여권발급비·벌금, 국가·공공기관 가맹점 이용금액은 캐시백에서 빠진다', 백화점·대형마트·면세점·공항·미군부대·리조트·기차역 입점 임대 매장은 캐시백에서 빠진다, 다른 쿠폰과 프로모션과 중복되지 않는다]
+    limits:
+      - key: shopping-integrated
+        per: month
+        amount: {200000: 2000, 500000: 4000, 700000: 6000}
+      - key: eat-integrated
+        per: month
+        amount: {200000: 2000, 500000: 4000, 700000: 6000}
+      - key: play-integrated
+        per: month
+        amount: {200000: 3000, 500000: 6000, 700000: 9000}
+      - key: life-integrated
+        per: month
+        amount: {200000: 3000, 500000: 6000, 700000: 9000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: shopping-5
+        title: 쿠팡·무신사·지그재그 5% 캐시백
+        source: page
+        evidence: [쿠팡, 무신사, 지그재그 | 매출 건당 최대 1천원까지 캐시백 제공, '쿠팡 : 일반 결제 및 쿠페이 결제 시 캐시백 제공 (와우 멤버십 및 기타 간편결제 건 캐시백 제외)']
+        target:
+          merchants: [coupang, musinsa, zigzag]
+        when:
+          - {channel: online}
+          - payment_not: [kakao_pay, naver_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: shopping-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [쿠팡 와우 멤버십 결제는 제외, 간편결제 전용 가맹점명으로 접수되면 제외]
+      - key: eat-5
+        title: 스타벅스 사이렌오더 5% 캐시백
+        source: page
+        evidence: [스타벅스 사이렌오더 | 매출 건당 최대 1천원까지 캐시백 제공, '스타벅스 공식 앱을 통한 사이렌오더 결제 건에 한함, 스타벅스카드(e-gift카드 포함) 구매 및 충전, 백화점/대형할인점 내 매장이나 미군부대 등 임대매장 결제 건은 캐시백 제외']
+        target:
+          merchants: [starbucks]
+        when:
+          - {channel: online}
+          - payment_not: [kakao_pay, naver_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: eat-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [스타벅스카드 구매·충전과 백화점·대형할인점 내 매장과 미군부대 매장은 제외]
+      - key: delivery-5
+        title: 배달의민족·쿠팡이츠 5% 캐시백
+        source: page
+        evidence: [배달/주문 | 배달의민족, 쿠팡이츠, B마트, 마켓컬리(컬리패스) | 매출 건당 최대 1천원까지 캐시백 제공, 공식 앱 및 홈페이지를 통한 결제 건에 한하며 가맹점 직접 결제 및 상품권 구매 캐시백 제외]
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - {channel: online}
+          - payment_not: [kakao_pay, naver_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: eat-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [B마트와 마켓컬리 컬리패스는 담지 않았다, 가맹점 직접 결제와 상품권 구매는 제외]
+      - key: ott-5
+        title: 넷플릭스·멜론 5% 캐시백
+        source: page
+        evidence: [OTT | 넷플릭스, 멜론 | 매출 건당 최대 1천원까지 캐시백 제공, '넷플릭스 : 공식 앱 및 홈페이지를 통해 직접 신청한 정기결제 건에 한함, Basic, Standard, Premium 요금제에 한하여 캐시백 제공(광고형 스탠다드는 제외)', '멜론 : 공식 앱 및 홈페이지를 통해 직접 신청한 정기결제 건에 한함']
+        target:
+          merchants: [melon, netflix]
+        when:
+          - billing: [subscription]
+          - payment_not: [kakao_pay, naver_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: play-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [넷플릭스 광고형 스탠다드는 제외, 멜론 1회성 구매는 제외]
+      - key: ticket-5
+        title: 공연티켓 5% 캐시백
+        source: page
+        evidence: [공연티켓 | NOL인터파크티켓, YES24티켓, 티켓링크, 멜론티켓 | 매출 건당 최대 1천원까지 캐시백 제공, 해당 서비스는 공식 앱 및 홈페이지를 통해 예매한 경우에만 제공]
+        target:
+          merchants: [interpark_ticket, melon_ticket, ticketlink, yes24_ticket]
+        when:
+          - {channel: online}
+          - payment_not: [kakao_pay, naver_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: play-integrated}
+        tiers: {from: 200000}
+        stack: main
+      - key: transit-5
+        title: 시내버스·지하철 후불교통 5% 캐시백
+        source: page
+        evidence: [대중교통 (버스/지하철) | 시내버스, 지하철 후불교통 이용금액 | 매출 건당 최대 1천원까지 캐시백 제공, 고속버스, 시외버스, 공항버스, 공항철도(직통열차)는 캐시백 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [공항버스와 공항철도 직통열차는 제외]
+      - key: telecom-5
+        title: 이동통신 자동납부 5% 캐시백
+        source: page
+        evidence: [이동통신 | SKT, KT, LG U+, 헬로모바일, KTM모바일, U+유모바일 | 매출 건당 최대 1천원까지 캐시백 제공, 휴대전화 요금을 본 카드로 대상 통신사에 자동납부 신청 후 결제한 건에 대하여 캐시백 제공 (인터넷 / 집전화 등 결합상품은 캐시백 제외)]
+        target:
+          merchants: [hello_mobile, kt, kt_m_mobile, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [U+유모바일은 담지 않았다, 인터넷과 집전화 결합상품은 제외]
+      - key: overseas-5
+        title: 해외 5% 캐시백
+        source: page
+        evidence: [해외 | 해외 온/오프라인 가맹점 | 매출 건당 최대 1천원까지 캐시백 제공, Mastercard 브랜드만 제공(국내전용 브랜드 제공 불가)]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [Mastercard 브랜드만 제공한다, 어학시험과 겹치면 어학시험으로 적용된다]
+      - key: language-test-5
+        title: 어학시험 5% 캐시백
+        source: page
+        evidence: [어학시험 | TOEIC, OPIc, HSK, TEPS, TOEFL | 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [hsk, opic, teps, toeic]
+        when:
+          - payment_not: [kakao_pay, naver_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life-integrated}
+        tiers: {from: 200000}
+        stack: main
+        unmodeled: [TOEFL은 담지 않았다]
+    unmodeled: [간편결제 5% 캐시백과 안경점 5% 캐시백은 담지 않았다, 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 캐시백 금액은 매출표 접수일에 계좌로 들어오고 남은 통합 한도는 이월되지 않는다, 가족카드 연회비 없음]
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-07-13. 연회비 없음. 전월 국내 20만/50만/70만 이상 SHOPPING·EAT 월 한도 2천/4천/6천원, PLAY·LIFE 3천/6천/9천원. 매출 건당 최대 1천원 5% 캐시백.

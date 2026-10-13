@@ -1,0 +1,109 @@
+schema_version: 2
+id: lotte-1513
+issuer: lotte
+name: VEEX Ⅱ 롯데카드
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 9000}
+  - {scope: global, brand: visa, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+  - {scope: global, brand: amex, amount: 10000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00033_20250821_10009.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.tuition, insurance.social, tax, utility.gas]
+      unmodeled: [오토·스마트 캐시백 신청 매출과 장애인고용부담금은 적립에서 빠진다, 대학등록금은 일부만 적립에서 빠지지만 모두 뺐다, 고용보험·산재보험만 적립에서 빠지지만 4대 사회보험 업종 전체를 뺐다]
+    limits:
+      - {key: lpoint-month, per: month, amount: 100000}
+    benefits:
+      - key: pt-2-0
+        title: 건당 15만원 이상 2.0% L.POINT 적립
+        source: manual
+        evidence: [지난달 30만원 이상 이용 시 모든 업종 15만원 이상 ~ 2.0%, 월 인당 10만 포인트 한도(가족카드 포함), L.POINT 적립기준에 따라 결제금액 1천원 당 해당 적립률로 포인트가 적립됩니다.]
+        target: {all: true}
+        when:
+          - amount: {min: 150000}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 20}
+        limits:
+          - {shared: lpoint-month}
+        tiers: {from: 300000}
+      - key: pt-1-5
+        title: 건당 10만원 이상 15만원 미만 1.5% L.POINT 적립
+        source: manual
+        evidence: [10만원 이상 ~ 15만원 미만 1.5%]
+        target: {all: true}
+        when:
+          - amount: {min: 100000, below: 150000}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 15}
+        limits:
+          - {shared: lpoint-month}
+        tiers: {from: 300000}
+      - key: pt-1-0
+        title: 건당 5만원 이상 10만원 미만 1.0% L.POINT 적립
+        source: manual
+        evidence: [5만원 이상 ~ 10만원 미만 1.0%]
+        target: {all: true}
+        when:
+          - amount: {min: 50000, below: 100000}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 10}
+        limits:
+          - {shared: lpoint-month}
+        tiers: {from: 300000}
+      - key: pt-0-5
+        title: 건당 5만원 미만 0.5% L.POINT 적립
+        source: manual
+        evidence: [5만원 미만 0.5%]
+        target: {all: true}
+        when:
+          - amount: {below: 50000}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 5}
+        limits:
+          - {shared: lpoint-month}
+        tiers: {from: 300000}
+      - key: pt-0-2
+        title: 지난달 30만원 미만 0.2% L.POINT 적립
+        source: manual
+        evidence: [지난달 30만원 미만 사용 시 0.2%, 지난달 이용실적이 기준에 미달될 경우에는 적립률이 0.2%로 일괄 적용됩니다.]
+        target: {all: true}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 2}
+        limits:
+          - {shared: lpoint-month}
+        tiers: {to: 0}
+    unmodeled: [제약업종은 지난달 30만원 이상이면 건당 금액과 관계없이 1% 적립이지만 업종이 없어 건당 금액 구간으로 계산한다, 롯데시네마 1일 1회·월 5회·연 12회 1, 500원 청구할인은 연 횟수를 세는 기준이 원문에 없어 계산하지 않는다, 롯데월드 본인 종합이용권 50% 현장할인은 월 1회·연 6회이고 연 횟수 기준이 원문에 없어 계산하지 않는다, 생어거스틴 10% 결제일 할인과 박준뷰티랩·박승철헤어스투디오 현장할인은 공통 가맹점이 없어 계산하지 않는다, 롯데백화점 5% e-쿠폰과 롯데면세점 현장할인은 쿠폰과 품목 조건이라 계산하지 않는다, 'VEEX Ⅱ 롯데카드가 아닌 롯데카드 매출, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 실적과 적립한도는 본인과 가족카드를 합산한다, 건당 결제금액은 카드사 접수 금액 기준이다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 온라인 판매 목록에 상품 코드가 없어 id를 공시 색인 번호로 두었다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2017-08-25이고 설명서는 2025년 7월 기준이다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품설명서(2025년 7월 기준) 대조. 연회비 국내전용 9,000원, 해외겸용(VISA, MASTER, AMEX) 10,000원, 가족카드 면제. 지난달 30만원 이상이면 건당 금액에 따라 0.5~2.0%, 미만이면 0.2% L.POINT 적립, 월 10만 포인트 한도. 1천원 단위로 적립한다. 실적 제외 목록에 무이자할부와 공과금이 없어 실적에 넣는다. 신규 발급 특례는 최초 사용등록월 포함 다음 달 말일까지라 30만 구간이다.

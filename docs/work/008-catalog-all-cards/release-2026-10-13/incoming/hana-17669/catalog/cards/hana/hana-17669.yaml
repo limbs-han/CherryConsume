@@ -1,0 +1,40 @@
+schema_version: 2
+id: hana-17669
+issuer: hana
+name: 토스(Toss)하나카드 Ver 2.0
+short_name: 토스하나 Ver 2.0
+kind: credit
+product_codes:
+  - '17669'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41017669P&CD_PD_SEQ=17669', fetched_at: 2026-10-13, review_no: L-23-0124}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2023-06-27
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend:
+      basis: none
+      exclude_categories: []
+      exclude_applied: 0
+    benefits:
+      - key: overseas-toss-2
+        title: 해외 모든 가맹점 2% 토스 포인트 적립
+        source: page
+        evidence: [해외 모든 가맹점 2% 토스 포인트 적립 (월 1만 토스 포인트 한도), 지난달 카드 사용금액 및 이용 횟수에 관계없이 제공, 위 서비스는 국내외겸용(VISA)카드만 이용 가능, 토스 포인트 (1토스 포인트 = 1원)]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: toss_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+        unmodeled: [국내외겸용 VISA 카드로 발급한 경우만 적용된다, 토스 회원 가입과 토스 앱 설치가 필요하다, 해외 단기카드대출과 해외 현금인출 이용금액은 제외된다, 국내 결제대행사를 거치는 해외 온라인 거래는 해외 이용금액에 넣지 않는다, 적립 기준은 해외서비스수수료와 국제브랜드수수료를 포함한 최종 원화 청구금액이다]
+    unmodeled: [toss 앱에서만 신청할 수 있다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문에 현재 규칙의 시행일이 없어 카드 출시일 2023-06-27을 시작일로 두었다, assumed: '2023-06-27'}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 해외 가맹점만 2% 적립하고 국내 혜택은 없다. 지난달 실적 조건이 없다. 국내외겸용 VISA 연회비 15,000원이다. 적립 제외 매출 목록은 원문에 없다.

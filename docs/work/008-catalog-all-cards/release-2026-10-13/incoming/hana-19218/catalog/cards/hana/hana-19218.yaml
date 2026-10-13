@@ -1,0 +1,117 @@
+schema_version: 2
+id: hana-19218
+issuer: hana
+name: JADE Prime 골드클럽멤버스
+short_name: 하나 JADE Prime
+search_names: [제이드 프라임 골드클럽멤버스]
+kind: credit
+product_codes:
+  - '19218'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 295000}
+  - {scope: global, brand: visa, amount: 300000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19218', fetched_at: 2026-10-13, review_no: L-24-0078}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-06-29
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - {key: travel, per: month, amount: 50000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [digital-50, taxi-50, overseas-3, travel-3, ev-30, base-1-5, base-1]
+        spill: split
+    benefits:
+      - key: digital-50
+        title: 디지털 콘텐츠 자동납부 50% 하나머니 적립
+        source: page
+        evidence: ['디지털 컨텐츠 자동납부 시, 50% 하나머니 적립 제공 (지난달 실적 50만원 이상, 월 적립 한도 1만 하나머니)', '넷플릭스, 디즈니플러스, 유튜브 프리미엄, Wavve, 티빙, 멜론, 지니, FLO, 스포티파이 | 50% | 1만 하나머니', '자동이체 결제 건만 서비스 제공되며, 포인트, 캐시, 머니충전, 컨텐츠 개별 결제, 간편결제 및 앱스토어를 통한 결제건(인앱결제)은 서비스 제외']
+        target:
+          merchants: [disney_plus, flo, genie, melon, netflix, spotify, tving, wavve, youtube_premium]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: hana_money, rate: 50, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        unmodeled: [인앱결제와 간편결제, 컨텐츠 개별 결제는 제외된다]
+      - key: taxi-50
+        title: 택시 50% 하나머니 적립
+        source: page
+        evidence: ['택시 이용금액 50% 하나머니 적립 제공 (지난달 실적 50만원 이상, 월 적립 한도 5천 하나머니)', '택시업종, 카카오T, UT | 50% | 5천 하나머니', '카카오T와 UT의 경우 공식 앱 또는 홈페이지를 통한 택시 결제건에 한하여 서비스가 제공되며, 대리운전·퀵 서비스·주차·기차 등 택시 이외의 결제건은 서비스가 제외됨']
+        target:
+          categories: [taxi]
+        reward: {type: points, program: hana_money, rate: 50, round: round}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+      - key: overseas-3
+        title: 해외 가맹점 3% 하나머니 적립
+        source: page
+        evidence: [해외 | 해외 가맹점 | 3%, '영역별 3% 하나머니 적립 | 지난달 실적 50만원 이상, 월 통합 적립한도 5만 하나머니']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: hana_money, rate: 3, round: round}
+        limits:
+          - {shared: travel}
+        tiers: {from: 500000}
+      - key: travel-3
+        title: 항공·면세·여행 3% 하나머니 적립
+        source: page
+        evidence: ['항공 | 대한항공, 아시아나 항공, 진에어, 에어부산, 에어서울, 제주항공, 티웨이항공', '면세 | 신라면세점, 롯데면세점, 신세계면세점, 현대백화점면세점', '여행 | 하나투어, 아고다, 익스피디아, 호텔스닷컴', '항공/면세 : 공식 홈페이지(온라인/모바일앱) 및 오프라인 매장을 통한 결제 시에만 서비스 제공']
+        target:
+          merchants: [agoda, air_busan, air_seoul, asiana_airlines, expedia, hana_tour, hotels_com, hyundai_dfs, hyundai_dfs_online, jeju_air, jin_air, korean_air, lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_dfs, shinsegae_dfs_online, tway_air]
+        reward: {type: points, program: hana_money, rate: 3, round: round}
+        limits:
+          - {shared: travel}
+        tiers: {from: 500000}
+        unmodeled: [여행사와 구매대행 사이트, 온라인 쇼핑몰을 거친 결제는 제외된다]
+      - key: ev-30
+        title: EV 충전 30% 하나머니 적립
+        source: page
+        evidence: ['주유(LPG포함) 리터당 150 하나머니, EV충전 30% 하나머니 적립 (지난달 실적 50만원 이상, 월 적립 한도 1만 하나머니)', EV(전기차) 충전 가맹점 멤버십 가입 후 결제 카드로 등록 이용한 경우 또는 대상 충전 가맹점의 충전 기기 현장 결제 건에 한하여 서비스 제공]
+        target:
+          categories: [car.ev_charging]
+        reward: {type: points, program: hana_money, rate: 30, round: round}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+        unmodeled: [EV 충전 요금이 아파트 관리비 같은 다른 이용 건에 포함된 결제는 제외된다, 충전 가맹점 멤버십 등록이 필요하다]
+      - key: base-1-5
+        title: 국내외 가맹점 1.5% 하나머니 적립
+        source: page
+        evidence: [국내외가맹점 최대 1.5% 하나머니 적립, 1.5% | 200만원 이상 | 10만 하나머니, 1.0% | 200만원 미만 | 없음, 적립 영역이 중복 되는 경우 적립금액이 큰 서비스가 우선 적용 (매출 건당 하나의 서비스만 적용)]
+        target: {all: true}
+        reward: {type: points, program: hana_money, rate: 1.5, round: round}
+        limits:
+          - {per: month, amount: 100000}
+        tiers: {from: 2000000}
+      - key: base-1
+        title: 국내외 가맹점 1% 하나머니 적립
+        source: page
+        evidence: [1.0% | 200만원 미만 | 없음, '기본적립, 특별적립, 주유/EV충전 적립, 택시 50%적립, 디지털 컨텐츠 50% 적립의 월 적립 한도를 모두 소진 후, 발생하는 추가 매출 건은 1.0% 하나 머니 적립 제공']
+        target: {all: true}
+        reward: {type: points, program: hana_money, rate: 1, round: round}
+    unmodeled: [주유 리터당 150 하나머니 적립은 휘발유 고시가 기준 리터 환산이라 계산하지 않고 일반 적립률로 둔다, 연간 누적 이용금액에 따른 프리미엄 바우처와 보너스 바우처 하나머니와 공항 라운지는 계산하지 않는다, 본인카드와 가족카드 실적은 각각 산정한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다., assumed: '2026-06-29'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 국세, 지방세, 수도·전기요금 등이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다.', assumed: utility 전체}
+  - {path: 'revisions[0].benefits[ev-30].limits', question: EV 충전과 주유 적립은 월 통합 1만 하나머니인데 주유를 계산하지 않아 EV만 1만 한도로 둔다., assumed: EV만 1만}
+notes: 2026-10-13 공식 상품 페이지(준법번호 L-24-0078)에서 옮겼다. 연회비 VISA 본인 300,000원, 국내전용 본인 295,000원이며 제휴연회비는 바우처와 서비스 비용이다. 하나머니 1하나머니 = 1원, 소수점 이하 반올림. 적립 영역이 겹치면 큰 쪽 하나만 준다.

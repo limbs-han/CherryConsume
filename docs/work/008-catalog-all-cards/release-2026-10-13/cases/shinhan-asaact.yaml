@@ -1,0 +1,46 @@
+card: shinhan-asaact
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 점심 요식 5% 건당 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {dining-lunch-5: 1000}, counted: 30000}
+  calc: 30,000원 × 5% = 1,500원. 건당 최대 1,000원
+- name: 경계 직전 299999 요식 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 30만 미만은 할인과 기본적립 모두 없음
+- name: 점심 시간 밖 요식은 기본적립 0.2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T15:00, amount: 30000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-point-0-2: 60}, counted: 30000}
+  calc: 30,000원 × 0.2% = 60P
+- name: 후불교통 지하철 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-postpaid-5: 500}}
+  calc: 10,000원 × 5% = 500원
+- name: 홈쇼핑 5%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: cj_onstyle, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {homeshopping-5: 2000}, counted: 40000}
+  calc: 40,000원 × 5% = 2,000원
+- name: 해외 5% 건당 2500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: cafe, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-5: 2500}, counted: 100000}
+  calc: 100,000원 × 5% = 5,000원. 건당 최대 2,500원

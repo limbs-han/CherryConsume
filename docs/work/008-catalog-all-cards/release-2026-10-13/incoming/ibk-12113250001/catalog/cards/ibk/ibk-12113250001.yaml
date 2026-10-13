@@ -1,0 +1,96 @@
+schema_version: 2
+id: ibk-12113250001
+issuer: ibk
+name: 이사배 카드
+kind: check
+product_codes:
+  - '12113250001'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=325&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 600000: 10000}
+      - {key: cosmetic-day, per: day, count: 1}
+      - {key: salon-day, per: day, count: 1}
+    benefits:
+      - key: cosmetic-1000
+        title: 올리브영·시코르·화장품 1만원 이상 1천원 청구할인
+        source: page
+        evidence: ['H&B스토어 최대 2,000원 할인: 올리브영, 시코르, 1만원 이상 1,000원 / 2만원 이상 2,000원, 일 1회', 'Cosmetic 최대 2,000원 할인: 화장품 업종 가맹점, 1만원 이상 1,000원 / 2만원 이상 2,000원, 일 1회', 시코르 온라인몰 제외, 쇼핑/미용 할인은 전월 이용실적 구간에 따른 통합할인한도가 적용됩니다]
+        target:
+          categories: [beauty.cosmetics]
+          merchants: [chicor, olive_young]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000, below: 20000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: cosmetic-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        notes: 시코르 온라인몰만 제외인데 올리브영 온라인도 빠지도록 오프라인으로만 두었다
+      - key: cosmetic-2000
+        title: 올리브영·시코르·화장품 2만원 이상 2천원 청구할인
+        source: page
+        evidence: ['H&B스토어 최대 2,000원 할인: 올리브영, 시코르, 1만원 이상 1,000원 / 2만원 이상 2,000원, 일 1회', 'Cosmetic 최대 2,000원 할인: 화장품 업종 가맹점, 1만원 이상 1,000원 / 2만원 이상 2,000원, 일 1회', 시코르 온라인몰 제외, 쇼핑/미용 할인은 전월 이용실적 구간에 따른 통합할인한도가 적용됩니다]
+        target:
+          categories: [beauty.cosmetics]
+          merchants: [chicor, olive_young]
+        when:
+          - {channel: offline}
+          - amount: {min: 20000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: cosmetic-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        notes: 시코르 온라인몰만 제외인데 올리브영 온라인도 빠지도록 오프라인으로만 두었다
+      - key: salon-1000
+        title: 미용실·피부미용실 1만원 이상 1천원 청구할인
+        source: page
+        evidence: ['Beauty 최대 2,000원 할인: 미용실, 이용원, 네일샵, 헬스클럽 등, 1만원 이상 1,000원 / 2만원 이상 2,000원, 일 1회', BC업종 '이용원, 미용원, 피부미용실, 헬스클럽' 가맹점]
+        target:
+          categories: [beauty.salon]
+        when:
+          - amount: {min: 10000, below: 20000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: salon-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: salon-2000
+        title: 미용실·피부미용실 2만원 이상 2천원 청구할인
+        source: page
+        evidence: ['Beauty 최대 2,000원 할인: 미용실, 이용원, 네일샵, 헬스클럽 등, 1만원 이상 1,000원 / 2만원 이상 2,000원, 일 1회', BC업종 '이용원, 미용원, 피부미용실, 헬스클럽' 가맹점]
+        target:
+          categories: [beauty.salon]
+        when:
+          - amount: {min: 20000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: salon-day}
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: [헬스클럽 업종은 담을 업종이 없어 계산하지 않는다, 대형 가맹점(백화점 면세점 아울렛)은 카드서비스 명시 목록에 없으면 할인 대상에서 제외된다, 발급은 I-ONE뱅크 앱과 IBK큐브에서만 한다, 금융우대 수수료 면제와 환율 우대는 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다, assumed: '2026-10-13'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 페이지의 실적 제외 항목은 제세공과금 아파트관리비 대학등록금 상품권 학부모부담금이다. 선불 충전은 상품권 문구에 든다고 보았다, assumed: prepaid_charge}
+notes: 2026-10-13 expand21 조사. 전월 30만원 미만이면 할인이 없고 등록 후 다음 달 말까지만 5천원 한도를 준다. 올리브영과 시코르가 화장품 업종과 겹쳐 한 혜택으로 합쳤다

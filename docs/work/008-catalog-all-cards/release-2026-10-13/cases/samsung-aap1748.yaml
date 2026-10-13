@@ -1,0 +1,43 @@
+card: samsung-aap1748
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: NS홈쇼핑 10% 40만 구간 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: ns_homeshopping, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 50000, merchant: ns_homeshopping, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ns-homeshopping-10: 10000}, counted: 0}
+  - {payment: 1, benefits: {ns-homeshopping-10: 2000}, counted: 0}
+  calc: 100,000 × 10% = 10,000. 다음 5만원은 10%인 5,000이나 월 한도 12,000에서 남은 2,000
+- name: 실적 직전이면 혜택 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: ns_homeshopping, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 40만원 미만이라 혜택 없고 100,000원은 실적에 들어간다
+- name: 편의점 5% 80만 구간 한도 8천원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: cu, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 100000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-5: 5000}, counted: 0}
+  - {payment: 1, benefits: {life-5: 3000}, counted: 0}
+  calc: 5,000 뒤 남은 한도 8,000-5,000=3,000
+- name: 통신 정기결제 1천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 55000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {bill-1000: 1000}, counted: 55000}
+  calc: 1만원 이상 정기결제 건당 1,000원
+- name: 스타벅스 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-5: 500}, counted: 0}
+  calc: 10,000 × 5% = 500

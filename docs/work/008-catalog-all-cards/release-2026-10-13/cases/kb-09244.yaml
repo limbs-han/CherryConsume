@@ -1,0 +1,60 @@
+card: kb-09244
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 음식점 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 40000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {food-5: 2000}}
+  calc: 40,000원의 5% = 2,000원
+- name: 경계 직전 499999 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 40000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만원 미만은 할인 없음
+- name: 100만 구간 쿠팡 30만원 한도 1만원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-5: 10000}}
+  calc: 5% 15,000원이지만 2구간 한도 1만원
+- name: 원문 예시 G마켓 KB Pay 10만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: gmarket, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {shopping-5: 5000, kbpay-openmarket-5: 5000}}
+  calc: 특화 5% 5천원과 Plus 5% 5천원
+- name: 백화점 오프라인 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {department-5: 3000}}
+  calc: 60,000원의 5% = 3,000원
+- name: 스타벅스 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cafe-cvs-bakery-5: 1000}}
+  calc: 20,000원의 5% = 1,000원
+- name: 이동통신 자동이체 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 3000}}
+  calc: 60,000원의 5% = 3,000원
+- name: 멜론 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: melon, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {music-stay-5: 500}}
+  calc: 10,000원의 5% = 500원

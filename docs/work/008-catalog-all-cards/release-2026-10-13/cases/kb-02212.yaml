@@ -1,0 +1,53 @@
+card: kb-02212
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 두산베어스 티켓 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: doosan_bears_ticket, channel: online}
+  expect:
+  - {payment: 0, benefits: {bears-ticket-goods-10: 2000}, counted: 20000}
+  calc: 20,000 × 10% = 2,000
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: doosan_bears_ticket, channel: online}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 미만 혜택 없음
+- name: 위팬샵 한도 3천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: doosan_bears_wefan}
+  expect:
+  - {payment: 0, benefits: {bears-ticket-goods-10: 3000}}
+  calc: 5,000 중 한도 3,000
+- name: 넷플릭스 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 13500, merchant: netflix, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {ott-10: 1000}}
+  calc: 1,350 중 한도 1,000
+- name: CU 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  calc: 10,000 × 5% = 500
+- name: 쿠팡이츠 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 18000, merchant: coupang_eats, channel: online}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 900}}
+  calc: 18,000 × 5% = 900
+- name: 국세 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: tax.national}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 국세는 실적 제외

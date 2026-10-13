@@ -1,0 +1,55 @@
+card: kb-09285
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 국내 기본 0.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {basic-point-0-5: 500}, counted: 100000}
+  calc: 100,000원 × 0.5% = 500점. 실적 조건 없음
+- name: 30만 구간 마트 기본과 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: grocery_mart}
+  expect:
+  - {payment: 0, benefits: {basic-point-0-5: 500, extra-point-0-5: 500}, counted: 100000}
+  calc: 기본 500점에 추가 500점
+- name: 30만 경계 직전 마트는 기본만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: convenience}
+  expect:
+  - {payment: 0, benefits: {basic-point-0-5: 500}}
+  calc: 299,999원은 추가 적립 대상 아님
+- name: 기본과 추가 합산 월 2만점 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 2000000, category: grocery_mart}
+  - {at: 2026-11-06T10:00, amount: 100000, category: grocery_mart}
+  expect:
+  - {payment: 0, benefits: {basic-point-0-5: 10000, extra-point-0-5: 10000}}
+  - {payment: 1, benefits: {}}
+  calc: 2,000,000원 × 0.5% 두 번 = 20,000점으로 월 한도 소진. 다음 결제는 0점
+- name: 무이자할부 적립 제외 실적 포함
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: grocery_mart, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 무이자할부는 적립 제외. 실적 제외 목록에 없어 실적 인정
+- name: 시내버스 지하철 적립 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 무승인 후불대중교통 적립 제외를 지하철 업종 제외로 옮겼다. 실적 제외 목록에는 없다
+- name: 해외 결제 적립 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, region: overseas}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 기본 적립은 국내 가맹점만

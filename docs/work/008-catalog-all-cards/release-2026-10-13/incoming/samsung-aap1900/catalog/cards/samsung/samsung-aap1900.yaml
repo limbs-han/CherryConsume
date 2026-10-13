@@ -1,0 +1,89 @@
+schema_version: 2
+id: samsung-aap1900
+issuer: samsung
+name: 삼성화재 삼성카드
+short_name: 삼성화재
+search_names: [삼성화재 삼성카드, 삼성화재카드]
+kind: credit
+product_codes: [AAP1900]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1900', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtiZXE4w0dqyl6%2FhtMmjS3QM%3D&sn=1', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 적립하지 않는다, '문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 적립하지 않는다', 결제대행업체(PG)와 간편결제 가맹점으로 분류되는 결제는 적립하지 않는다]
+    options:
+      - key: insurance
+        title: 삼성화재 보험 이용 여부
+        choices:
+          - {key: held, title: 삼성화재 보험을 납입 중인 계약자다. 월 결제대금 차감을 받는다}
+          - {key: none, title: 삼성화재 보험 미이용. 국내외 가맹점 0.5% 적립을 받는다}
+        default: null
+        change: next_month
+    limits:
+      - {key: credit, per: month, count: 1}
+    benefits:
+      - key: credit-7000
+        title: 삼성화재 보험 이용 시 7,000원 결제대금 차감
+        source: manual
+        evidence: [삼성화재 보험 이용(유지) 시 7, 000/17, 000원 결제대금 차감, 전월 이용금액대별 월 혜택금액 50만원 이상 7, 000원 100만원 이상 17, 000원, 월 1회 제공, 발급월에는 결제대금 차감 혜택 미제공]
+        target: {all: true}
+        when:
+          - option:
+              insurance: [held]
+          - card_month: {min: 1}
+        reward: {type: billing_discount, fixed: 7000}
+        limits:
+          - {shared: credit}
+        tiers: {from: 500000, to: 500000}
+        unmodeled: [결제대금 차감은 결제 하나에 붙는 혜택이 아니라 월 1회 청구금액에서 빠지므로 그 달 첫 결제에 붙는 것으로 계산한다, 보험료를 납입하는 삼성화재 계약자 본인 회원에게만 준다]
+      - key: credit-17000
+        title: 삼성화재 보험 이용 시 17,000원 결제대금 차감
+        source: manual
+        evidence: [삼성화재 보험 이용(유지) 시 7, 000/17, 000원 결제대금 차감, 전월 이용금액대별 월 혜택금액 50만원 이상 7, 000원 100만원 이상 17, 000원, 월 1회 제공, 발급월에는 결제대금 차감 혜택 미제공]
+        target: {all: true}
+        when:
+          - option:
+              insurance: [held]
+          - card_month: {min: 1}
+        reward: {type: billing_discount, fixed: 17000}
+        limits:
+          - {shared: credit}
+        tiers: {from: 1000000}
+        unmodeled: [결제대금 차감은 결제 하나에 붙는 혜택이 아니라 월 1회 청구금액에서 빠지므로 그 달 첫 결제에 붙는 것으로 계산한다, 보험료를 납입하는 삼성화재 계약자 본인 회원에게만 준다]
+      - key: base-0-5
+        title: 보험 미이용 시 국내외 가맹점 0.5% 빅포인트 적립
+        source: manual
+        evidence: [삼성화재 보험 미이용(미유지) 시 적립한도 없이 국내외 가맹점 0.5% 빅포인트 적립, 전월 이용금액 50만원 이상 시 제공, 발급월은 보험 이용(유지) 여부와 관계없이 혜택 제공, 해외는 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - option:
+              insurance: [none]
+        reward: {type: points, program: samsung_bigpoint, rate: 0.5}
+        tiers: {from: 500000}
+        unmodeled: [고속버스는 차내 단말기와 고속버스 앱 결제만 적립에서 빠지지만 구분할 수 없어 고속버스 전체를 뺐다, 발급월에는 보험 이용 여부와 관계없이 0.5%를 주지만 보험 이용 선택자의 발급월 적립은 담지 않았다]
+    unmodeled: ['전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다', 결제예정금액이 월 혜택금액보다 적으면 남은 금액은 결제계좌로 입금한다, 삼성화재 보험 유지 여부는 삼성화재 고객센터에서 확인하는 값이라 사용자 선택에 맡긴다]
+open_questions:
+  - {path: annual_fees, question: '연회비 표에서 해외겸용 Mastercard와 국내전용 칸이 하나로 합쳐져 총 연회비 3만원(기본 7,000+제휴 23,000)으로 적혀 있다', assumed: 30000}
+  - {path: 'revisions[0].effective_from', question: 안내장에 판 표시나 시행일이 보이지 않아 수집일로 두었다, assumed: '2026-10-05'}
+notes: 2026-10-13 상품안내장 확인. 삼성화재 보험을 유지하면 전월 이용금액 50만원 이상 월 7,000원, 100만원 이상 월 17,000원을 결제대금에서 빼 주고, 미이용이면 50만원 이상일 때 0.5% 빅포인트다. 1포인트는 1원. 실적 제외는 4대보험, 국세·지방세·공과금, 아파트 관리비, 부동산 임대료, 유치원·초중고 납입금, 대학 등록금, 기프트·선불카드, 상품권이다. 적립 제외에는 대중교통, 택시, 고속버스, 통행료가 더 있다.

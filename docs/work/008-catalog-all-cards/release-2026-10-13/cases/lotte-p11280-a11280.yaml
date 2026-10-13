@@ -1,0 +1,32 @@
+card: lotte-p11280-a11280
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 렌탈료 20,000원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 26400, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {nexen-rental-discount: 20000}
+    counted: 0
+  calc: 26400 x 100% = 26400, 100만 구간 월 20000. 할인받은 렌탈료 전액 실적 제외
+- name: 60만 경계 직전은 30만 구간
+  prev_month_spend: 599999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 26400, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {nexen-rental-discount: 11000}
+  calc: 30만 구간 월 11000
+- name: 월 1회
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5000, merchant: nexen_tire_rental, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 26400, merchant: nexen_tire_rental, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {nexen-rental-discount: 5000}
+  - payment: 1
+    benefits: {}
+  calc: 첫 건 5000 할인, 월 1회라 둘째 건 없음

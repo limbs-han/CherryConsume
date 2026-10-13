@@ -1,0 +1,58 @@
+schema_version: 2
+id: hana-11582
+issuer: hana
+name: VIVA X 체크카드
+short_name: 하나 VIVA X 체크
+search_names: [VIVA X, 비바 엑스, 비바X]
+kind: check
+product_codes:
+  - '11582'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12519', fetched_at: 2026-10-13, review_no: A-26-0403}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-02-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+    benefits:
+      - key: domestic-cashback-0-3
+        title: 국내 가맹점 0.3% 캐쉬백
+        source: page
+        evidence: [국내 가맹점 결제 시 | 0.3% | 5만원 | 국내 가맹점 30만원 이상, 지난달 1일 ~말일까지(승인시점 기준) 국내 가맹점 이용 금액 30만원 이상시 서비스 제공, 최초 카드 사용 등록 후 다음 월 말일까지는 지난달 국내 가맹점 이용금액 30만원 미만 시에도 서비스 제공]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 0.3}
+        limits:
+          - {per: month, amount: 50000}
+        tiers: {from: 300000}
+      - key: overseas-fee-free
+        title: 해외 가맹점 국제브랜드수수료 1% 면제
+        source: page
+        evidence: [해외 가맹점 이용시 | 건당 $0.5 면제 | 이용금액의 1% 면제, 지난달 카드 이용 금액 및 이용 횟수에 관계 없이 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [건당 US$0.5 해외이용수수료 면제는 달러 정액이라 계산하지 않는다, 하나은행 결제계좌를 쓰지 않으면 해외 이용이 되지 않는다]
+    unmodeled: [교통요금 등 무승인 매입은 매출전표가 접수된 달의 이용금액에 들어간다, 국민연금·고용보험료·산재보험료·건강보험료 납부와 대학원 등록금은 실적에서 빠지지만 업종 구분이 없어 일부만 뺀다, 해외 ATM 인출 수수료 면제는 결제가 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다., assumed: '2026-02-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 공과금, 수도·전기요금, 도시가스 이용금액이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다.', assumed: utility 전체}
+  - {path: 'revisions[0].spend.exclude_applied', question: 캐쉬백을 받은 금액이 실적에서 빠지는지 원문에 없다., assumed: 실적에 넣음}
+notes: 2026-10-13 공식 상품 페이지(상세 번호 CD_PD_SEQ=12519, 목록 상품 번호 11582, 준법심의 A-26-0403)에서 옮겼다. 연회비 없음, 발급수수료 2,000원은 다음 달 말일까지 1만원 이상 쓰면 돌려준다. 실적은 국내 가맹점 이용금액만 센다. 캐쉬백은 매달 이용금액에 대해 다음 달 10영업일 안에 결제계좌로 입금한다.

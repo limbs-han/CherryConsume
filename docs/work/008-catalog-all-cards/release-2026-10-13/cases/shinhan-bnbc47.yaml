@@ -1,0 +1,109 @@
+card: shinhan-bnbc47
+cases:
+- name: 40만 구간 렌탈 5건과 통합 5건 초과
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, merchant: lg_appliance_subscription, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: coway_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: sk_magic, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cuckoo_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: bs_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-20T10:00, amount: 30000, merchant: wells, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {rental-lgcare: 3000}}
+  - {payment: 1, benefits: {rental-coway: 3000}}
+  - {payment: 2, benefits: {rental-skmagic: 3000}}
+  - {payment: 3, benefits: {rental-cuckoo: 3000}}
+  - {payment: 4, benefits: {rental-bs: 3000}}
+  - {payment: 5, benefits: {}}
+  calc: 건당 3천P. 통합 월 5건이라 여섯 번째는 0
+- name: 120만 구간 렌탈 나머지 4건 7천P
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, merchant: wellrix_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: nexen_tire_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: bodyfriend_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: wells, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {rental-wellrix: 7000}}
+  - {payment: 1, benefits: {rental-nexen: 7000}}
+  - {payment: 2, benefits: {rental-bodyfriend: 7000}}
+  - {payment: 3, benefits: {rental-wells: 7000}}
+  calc: 건당 7천P
+- name: 80만 구간 생활월납 3건 4천P
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, category: utility.gas, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-20T10:00, amount: 30000, category: utility.electricity, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-apartment: 4000}}
+  - {payment: 1, benefits: {life-mobile: 4000}}
+  - {payment: 2, benefits: {life-gas: 4000}}
+  - {payment: 3, benefits: {}}
+  calc: 건당 4천P
+- name: 40만 구간 생활월납 나머지 3건
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, category: utility.electricity, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: woongjin_thinkbig, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: yedaham, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-electricity: 2000}}
+  - {payment: 1, benefits: {life-thinkbig: 2000}}
+  - {payment: 2, benefits: {life-yedaham: 2000}}
+  calc: 건당 2천P
+- name: 40만 구간 디지털 구독 3건
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: wavve, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: watcha, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-netflix: 2000}}
+  - {payment: 1, benefits: {digital-wavve: 2000}}
+  - {payment: 2, benefits: {digital-watcha: 2000}}
+  calc: 건당 2천P
+- name: 80만 구간 디지털 구독 나머지 3건
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, merchant: melon, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: genie, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: millie, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-melon: 4000}}
+  - {payment: 1, benefits: {digital-genie: 4000}}
+  - {payment: 2, benefits: {digital-millie: 4000}}
+  calc: 건당 4천P
+- name: 실적 직전 399999는 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, merchant: sk_magic, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만
+- name: 같은 렌탈사 두 번째와 1만원 미만
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 9999, merchant: sk_magic, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: sk_magic, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: sk_magic, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {rental-skmagic: 3000}}
+  - {payment: 2, benefits: {}}
+  calc: 1만원 미만 제외. 업체별 월 1건
+- name: Plus 커피·편의점·해외 월 5만원 달성
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T10:00, amount: 30000, category: cafe, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 20000, category: cafe, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 50000, category: convenience, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {plus-cafe: 3000}}
+  - {payment: 2, benefits: {plus-convenience: 3000}}
+  - {payment: 3, benefits: {plus-overseas: 2000}}
+  calc: 커피 누적 5만원이 되는 결제에 3천P, 편의점 3천P, 해외 2천P

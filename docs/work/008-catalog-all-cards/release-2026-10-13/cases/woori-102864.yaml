@@ -1,0 +1,52 @@
+card: woori-102864
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 기본 0.3% 한도 5천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {basic-discount: 300}
+  calc: 100,000원 x 0.3% = 300원
+- name: 실적 직전 399999
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만원보다 1원 적어 할인 0원
+- name: 스타벅스 10% 한도 5천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-10: 5000}
+  calc: 60,000원 x 10% = 6,000원이 40만 구간 월 한도 5,000원에 걸림
+- name: 80만 구간 한도 만원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-10: 6000}
+  calc: 60,000원 x 10% = 6,000원 이고 80만 구간 월 한도 10,000원 안
+- name: 편의점 10% 오프라인
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {convenience-10: 2000}
+  calc: 20,000원 x 10% = 2,000원
+- name: 후불교통 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-10: 150}
+  calc: 1,500원 x 10% = 150원

@@ -1,0 +1,176 @@
+schema_version: 2
+id: samsung-aap1895
+issuer: samsung
+name: 트라이플러스 삼성카드
+short_name: 트라이플러스 삼성
+search_names: [TRI+ 삼성카드, 트라이플러스, 트라이플러스 삼성카드]
+kind: credit
+product_codes: [AAP1895]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1895', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtuSesCItYiBCA%2BcophPICH4%3D&sn=1', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-03-26'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, 결제대행업체(PG)와 간편결제 전용 가맹점으로 분류되는 결제는 할인하지 않는다]
+    limits:
+      - {key: happy-fnb, per: month, amount: 10000}
+      - {key: hy, per: month, amount: 10000}
+      - key: bills
+        per: month
+        amount: {400000: 4000, 800000: 8000}
+      - key: shop
+        per: month
+        amount: {400000: 4000, 800000: 8000}
+      - key: edu
+        per: month
+        amount: {400000: 4000, 800000: 8000}
+    benefits:
+      - key: happy-order-20
+        title: 해피오더 20% 할인
+        source: manual
+        evidence: [해피오더/F&B 20% 결제일할인, 해피오더 해피오더, 통합 월 할인한도 10, 000원, 전월 이용금액 40만원 이상 시 제공, '해피오더는 공식 홈페이지/앱, 해피포인트 앱을 통한 결제건에 한함']
+        target:
+          merchants: [happy_order]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: happy-fnb}
+        tiers: {from: 400000}
+      - key: fnb-20
+        title: F&B 20% 할인
+        source: manual
+        evidence: [해피오더/F&B 20% 결제일할인, 'F&B 파리바게뜨, 배스킨라빈스, 던킨, 파스쿠찌, 쉐이크쉑, 파리크라상', 통합 월 할인한도 10, 000원, 전월 이용금액 40만원 이상 시 제공, 'F&B는 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette, paris_croissant, pascucci, shake_shack]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: happy-fnb}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: hy-subscription-20
+        title: hy 프레시 매니저 정기결제 20% 할인
+        source: manual
+        evidence: [hy 정기결제/일반결제 20% 결제일할인, 정기결제 프레시 매니저 정기/약정구독, hy프레딧 몰 정기/약정구독 및 프레딧 멤버십 자동 연장 결제건, 통합 월 할인한도 10, 000원, 전월 이용금액 40만원 이상 시 제공, '정기결제는 hy프레딧 몰 공식 홈페이지/앱, 프레시 매니저를 통한 결제건에 한함']
+        target:
+          merchants: [hy_fredit_mall, hy_fresh_manager]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: hy}
+        tiers: {from: 400000}
+      - key: hy-fredit-20
+        title: hy프레딧 몰 일반결제 20% 할인
+        source: manual
+        evidence: [hy 정기결제/일반결제 20% 결제일할인, 일반결제 hy프레딧 몰 정기결제 외 주문 결제건, 통합 월 할인한도 10, 000원, 전월 이용금액 40만원 이상 시 제공, '일반결제는 hy프레딧 몰 공식 홈페이지/앱을 통한 결제건에 한하며, 멤버십 선물하기는 제외']
+        target:
+          merchants: [hy_fredit_mall]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: hy}
+        tiers: {from: 400000}
+        unmodeled: [멤버십 선물하기는 할인하지 않는다]
+      - key: bills-5
+        title: 아파트 관리비·통신 정기결제 5% 할인
+        source: manual
+        evidence: [아파트 관리비/통신 정기결제 시 5% 결제일할인, '아파트 관리비 아파트 관리비, 이동통신 SKT/KT/LG U+/알뜰폰(SK텔링크, KT스카이라이프, KT M모바일, 헬로모바일, 미디어로그) 이동통신요금, 인터넷, 유선통신 SK브로드밴드/KT/KT스카이라이프/LG U+ 인터넷/유선통신요금', '전월 이용금액대별 통합 월 할인한도 40만원 이상 4,000원, 80만원 이상 8,000원', '알뜰폰은 결합상품요금, 휴대폰 등 단말기 구매금액 및 대리점 카드 결제건 제외', '인터넷, 유선통신은 사물인터넷(IoT) 관련 요금, 휴대폰 등 단말기 구매금액 및 대리점 카드 결제건 제외']
+        target:
+          categories: [apartment_fee]
+          merchants: [hello_mobile, kt, kt_m_mobile, kt_skylife, lg_uplus, media_log, sk_broadband, sk_telink, skt]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: bills}
+        tiers: {from: 400000}
+        unmodeled: [결합상품요금, 사물인터넷(IoT) 요금, 단말기 구매금액, 대리점 카드 결제건은 할인하지 않는다]
+      - key: online-shop-5
+        title: 온라인쇼핑몰 5% 할인
+        source: manual
+        evidence: [온라인쇼핑몰/할인점 5% 결제일할인, 온라인쇼핑몰 쿠팡, 네이버플러스 스토어, SSG.COM, G마켓, 옥션, 11번가, 컬리, 삼성카드 쇼핑, '전월 이용금액대별 통합 월 할인한도 40만원 이상 4,000원, 80만원 이상 8,000원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, kurly, naver_plus_store, samsung_card_shopping, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shop}
+        tiers: {from: 400000}
+      - key: mart-5
+        title: 할인점 5% 할인
+        source: manual
+        evidence: [온라인쇼핑몰/할인점 5% 결제일할인, 할인점 이마트, 트레이더스 홀세일 클럽, 롯데마트, 농협 하나로마트, '전월 이용금액대별 통합 월 할인한도 40만원 이상 4,000원, 80만원 이상 8,000원', '할인점은 오프라인 결제건에 한하며, 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼 등), 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [emart, lotte_mart, nh_hanaro_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: shop}
+        tiers: {from: 400000}
+        unmodeled: [임대매장과 쇼핑 외 결제(상품권, 주차장 등)는 할인하지 않는다]
+      - key: edu-academy-5
+        title: 학원·학습지 5% 할인
+        source: manual
+        evidence: [학원/학습지/인터넷강의/온라인서점 5% 결제일할인, 학원 입시/보습/외국어/예체능 학원, 학습지 웅진씽크빅, 교원, 대교, 한솔교육, '전월 이용금액대별 통합 월 할인한도 40만원 이상 4,000원, 80만원 이상 8,000원', 학원은 오프라인 결제건에 한함]
+        target:
+          categories: [education.academy, education.study_material]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: edu}
+        tiers: {from: 400000}
+        unmodeled: [학습지는 온라인 결제도 할인 대상이지만 앱은 오프라인 입력만 할인한다]
+      - key: edu-online-5
+        title: 인터넷강의·온라인서점 5% 할인
+        source: manual
+        evidence: [학원/학습지/인터넷강의/온라인서점 5% 결제일할인, '인터넷강의 이투스, 메가스터디교육(메가스터디, 엠베스트, 엘리하이), 대성마이맥, 천재교과서(밀크T)', '온라인서점 YES24, 알라딘, 교보문고', '전월 이용금액대별 통합 월 할인한도 40만원 이상 4,000원, 80만원 이상 8,000원', 인터넷강의는 초/중/고 교육과정 관련 공식 홈페이지/앱을 통한 결제건에 한함, '온라인서점은 공식 홈페이지/앱을 통한 결제건에 한하며, 캐시충전건, 구글플레이, 앱스토어 등을 통한 결제건(인앱 결제) 제외']
+        target:
+          merchants: [aladin, kyobo_book, megastudy, yes24]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: edu}
+        tiers: {from: 400000}
+        unmodeled: [이투스, 대성마이맥, 천재교과서(밀크T)는 가맹점 목록에 없어 담지 않았다, 캐시충전건과 인앱 결제는 할인하지 않는다]
+      - key: overseas-1
+        title: 해외 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 가맹점 1% 결제일할인', 해외 온라인 거래 시 국내 전자지급결제대행업체(PG)를 통해 결제되는 경우 국내 가맹점으로 분류되어 할인 대상에서 제외, 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+    unmodeled: ['아모레퍼시픽 온라인몰(아모레몰, 이니스프리, 오설록) 이용 시 10% 뷰티포인트 적립과 해피오더, F&B, hy 1%·그 외 국내 가맹점 0.1% 뷰티포인트 적립은 안내장에 뷰티포인트의 원화 가치가 없어 담지 않았다', 많이 쓸수록 5%~20% 추가 할인은 당월 이용금액 40만원 이상과 당월 이용 영역 개수로 정해 다음 달 결제대금에서 차감한다. 전월 이용금액 구간으로 계산하는 이 앱 모델에 맞지 않아 담지 않았다, 삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제)는 매출전표 접수일 기준이다', 후불교통기능이 탑재되어 발급된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 원문에서 찾지 못했다. 안내장 유의사항에 카드 신규 출시일이 2026년 3월 26일로 적혀 있다, assumed: '2026-03-26'}
+  - {path: 'revisions[0].limits[happy-fnb]', question: '해피오더와 F&B, hy 정기결제와 일반결제가 각자 통합 월 할인한도 10,000원이라고 적혀 있어 같은 한도를 함께 쓰는지 따로 쓰는지 불분명하다', assumed: 월 한도 10000원을 함께 씀}
+  - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+notes: 2026-10-13 상품안내장 대조. 연회비 해외겸용 VISA와 국내전용 모두 15,000원(기본 7,000+제휴 8,000). 해피오더, F&B, hy 서비스는 전월 이용금액 40만원 이상일 때 월 한도 10,000원이고 발급월+1개월까지는 40만원 구간을 준다. 아파트·통신·쇼핑·교육 5% 할인은 40만원 이상 4,000원, 80만원 이상 8,000원이다.

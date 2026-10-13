@@ -1,0 +1,44 @@
+schema_version: 2
+id: lotte-p14357-a14357
+issuer: lotte
+name: 카버스엔로카
+kind: credit
+product_codes: [P14357-A14357]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14357-A14357_230421.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2023-03-06'
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+    facts:
+      - {key: carbus_plan_unused, type: bool, scope: card, ask: 지금 카버스 플랜할인을 쓰지 않고 있나요}
+    benefits:
+      - key: all-1
+        title: 플랜할인 미이용 시 국내외 1% 결제일 할인
+        source: manual
+        evidence: [플랜할인 미이용 시 어디서나 1% 결제일 할인, 30만원 이상 국내외 가맹점 1% 결제일 할인 할인한도 없음, 카버스 플랜할인 이용 시 국내외 가맹점 1% 결제일 할인 서비스는 적용되지 않습니다., 카버스엔로카 카드를 최초 발급받은 경우 카드발급일~다음 달 말일까지 이용 실적에 관계없이 혜택이 제공됩니다.]
+        target: {all: true}
+        when:
+          - {fact: carbus_plan_unused}
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 300000}
+    unmodeled: [카버스 플랜할인은 카버스에서 30만원 이상 이용 후 직접 신청하는 선할인으로 계산하지 않는다. 플랜할인 적용 매출은 실적에서 빠진다, '결제일 할인 제외 목록이 원문에서 상품권 구매와 무승인 전표 사이가 끊겨 있어 실적 제외 목록처럼 대중교통, 택시, 고속버스를 할인에서도 뺐다', 롯데카드의 다른 서비스와 겹치면 할인이 큰 혜택 하나만 준다, '포인트 충전, 오토·스마트 캐시백 신청 이용금액, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적과 할인에서 빠진다', 카버스엔로카가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다]
+open_questions: []
+notes: 2026-10-12 상품설명서(2023년 3월 기준, 여신금융협회 심의필 제2023-C1a-02655호) 대조. 플랜할인을 쓰는 동안 1% 할인이 없어 플랜할인을 쓰지 않는지 사용자에게 묻고, 답하지 않으면 할인하지 않는다. 가족카드 발급 불가. L.POINT 적립 없음.

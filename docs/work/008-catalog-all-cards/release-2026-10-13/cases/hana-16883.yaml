@@ -1,0 +1,61 @@
+card: hana-16883
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 7 UniMile
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {domestic-7: 140}
+  calc: 30,000원 / 1,500 = 20단위 x 7 = 140
+- name: 30만 직전 저비용항공사는 국내 7
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: jeju_air, channel: online}
+  expect:
+  - payment: 0
+    benefits: {domestic-7: 140}
+  calc: 30만원 미만이라 여행 45는 없고 국내 7
+- name: 30만 저비용항공사 45
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: jeju_air, channel: online}
+  expect:
+  - payment: 0
+    benefits: {lcc-45: 900}
+  calc: 20단위 x 45 = 900
+- name: 해외 35
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {travel-35-overseas: 700}
+    counted: 0
+  calc: 20단위 x 35 = 700. 적립 받은 해외 매출은 실적에서 빠져 0
+- name: 면세점 35
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: lotte_dfs, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {travel-35-dutyfree: 700}
+  calc: 20단위 x 35 = 700
+- name: 여행사 35
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: agoda, channel: online}
+  expect:
+  - payment: 0
+    benefits: {travel-35-agency: 700}
+  calc: 20단위 x 35 = 700
+- name: 온라인 쇼핑 15
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {shopping-15: 300}
+  calc: 20단위 x 15 = 300

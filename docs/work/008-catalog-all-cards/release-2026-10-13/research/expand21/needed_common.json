@@ -1,0 +1,50 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "natural_dream",
+      "name": "자연드림",
+      "category": "grocery_mart",
+      "aliases": [
+        "아이쿱 자연드림",
+        "iCOOP 자연드림",
+        "자연드림 매장"
+      ]
+    },
+    "card_id": "ibk-12112730108",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0108&pageId=CA01010000",
+    "evidence": "자연드림 이용금액 7% 청구할인(온·오프라인 포함)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kt_wiz_park",
+      "name": "수원 케이티 위즈파크",
+      "category": "sports",
+      "aliases": [
+        "케이티 위즈파크",
+        "수원KT위즈파크",
+        "KT위즈파크"
+      ]
+    },
+    "card_id": "ibk-12112730297",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0297&pageId=CA01010000",
+    "evidence": "수원 케이티 위즈파크 입장권 3천원 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "kt_wiz_park_shop",
+      "name": "수원 케이티 위즈파크 야구용품점",
+      "category": "sports",
+      "aliases": [
+        "위즈파크 야구용품점",
+        "kt wiz 샵",
+        "KT위즈 샵"
+      ]
+    },
+    "card_id": "ibk-12112730297",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0297&pageId=CA01010000",
+    "evidence": "위즈파크 내 야구용품점 10% 할인"
+  }
+]

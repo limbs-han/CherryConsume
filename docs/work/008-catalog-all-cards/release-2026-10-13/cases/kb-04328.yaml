@@ -1,0 +1,49 @@
+card: kb-04328
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 쿠쿠렌탈 자동이체
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cuckoo_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cuckoo-rental-autopay-discount: 10000}, counted: 30000}
+  calc: 50만 구간 월 10,000원
+- name: 50만 경계 직전
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cuckoo_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만 미만은 할인 없음
+- name: 100만 구간
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cuckoo_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cuckoo-rental-autopay-discount: 15000}}
+  calc: 100만 구간 15,000원
+- name: 신규 유예 1구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: cuckoo_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cuckoo-rental-autopay-discount: 10000}}
+  calc: 유예기간 1구간 10,000원
+- name: 후불교통 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 후불교통요금은 실적 제외
+- name: 철도는 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 철도 승차권은 실적 제외 목록에 없다

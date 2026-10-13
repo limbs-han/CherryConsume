@@ -1,0 +1,28 @@
+card: hana-17669
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 해외 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-toss-2: 2000}
+  calc: 100,000원 x 2% = 2,000토스 포인트
+- name: 월 한도 1만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 700000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-toss-2: 10000}
+  calc: 700,000원 x 2% = 14,000이 월 한도 10,000에 걸림
+- name: 국내는 혜택 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 국내 결제는 대상 아님

@@ -1,0 +1,74 @@
+card: ibk-12112730297
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-60: 3000}}
+  calc: 92,900원 / 1,858원 = 50리터 x 60원 = 3,000원
+- name: 마트 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  calc: 100,000원까지 x 5% = 5,000원
+- name: 쿠팡 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-20: 4000}}
+  calc: 20,000원 x 20% = 4,000원
+- name: 영화 8천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 14000, merchant: cgv}
+  expect:
+  - {payment: 0, benefits: {movie-8000: 8000}}
+  calc: 1만원 이상 정액 8,000원
+- name: 외식 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: outback}
+  expect:
+  - {payment: 0, benefits: {dining-20: 10000}}
+  calc: 50,000원 x 20% = 10,000원
+- name: 불고기브라더스 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 24000, merchant: bulgogi_brothers}
+  expect:
+  - {payment: 0, benefits: {bulgogi-20: 6000}}
+  calc: 현장할인이라 결제액 24,000원은 할인 전 30,000원. 30,000원 x 20% = 6,000원
+- name: 커피 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {coffee-20: 2000}}
+  calc: 10,000원 x 20% = 2,000원
+- name: 위즈파크 입장권
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: kt_wiz_park}
+  expect:
+  - {payment: 0, benefits: {wizpark-3000: 3000}}
+  calc: 정액 3,000원
+- name: 야구용품점 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: kt_wiz_park_shop}
+  expect:
+  - {payment: 0, benefits: {wizpark-shop-10: 5000}}
+  calc: 50,000원 x 10% = 5,000원
+- name: 기본 적립 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {top-point-0-2: 200}}
+  calc: 100,000원 x 0.2% = 200원

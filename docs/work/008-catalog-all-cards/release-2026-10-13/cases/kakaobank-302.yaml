@@ -1,0 +1,18 @@
+card: kakaobank-302
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 5만원 이상 최소 캐시백
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {random-cashback: 300}}
+  calc: 5만원 이상이라 300원
+- name: 5만원 미만은 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 49999, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 5만원보다 1원 적다

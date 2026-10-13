@@ -1,0 +1,121 @@
+schema_version: 2
+id: nh-f20617
+issuer: nh
+name: NH FIT 기본교통 체크카드
+short_name: FIT 기본교통 체크
+kind: check
+product_codes:
+  - '90010607'
+  - F20617
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010607', fetched_at: 2026-10-13, review_no: 2026-2372, review_valid_until: 2028-12-31}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-03-23
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG와 간편결제 전용 가맹점으로 승인되는 건은 적립에서 빠질 수 있다, 백화점·지하철 역사 등 입점 편의점·커피·베이커리 매장은 빠질 수 있다, 포인트로 결제한 금액과 가상화폐 거래소 이용금액은 실적에서 빠진다]
+    limits:
+      - {key: overseas_cb_limit, per: month, amount: 100000}
+      - {key: category_cb_limit, per: month, amount: 30000}
+    benefits:
+      - key: overseas-cashback-2
+        title: 해외 이용액 2% 캐시백
+        source: page
+        evidence: [해외 이용액의 2% 캐시백, 전월 이용실적 20만원 이상 시 제공, 건당 1만원 이상 이용액에 대해 제공, '제공한도 : 월 10만원 (결제일에 일괄 입금)']
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: overseas_cb_limit}
+        tiers: {from: 200000}
+      - key: cashback-shop-movie
+        title: 하나로마트·농협몰·영화 캐시백
+        source: page
+        evidence: [10대 업종 캐시백, '제공한도 : 월 3만원 (결제일에 일괄 입금)', '쇼핑 | 하나로마트, 농협몰 | 전월실적 20만원 이상 ~ 50만원 미만 : 0.5% 전월실적 50만원 이상 : 1.0%', '영화 | CGV, 롯데시네마, 메가박스']
+        target:
+          merchants: [cgv, lotte_cinema, megabox, nh_hanaro_mart, nh_mall]
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: category_cb_limit}
+        tiers: {from: 200000}
+      - key: cashback-offline
+        title: 편의점·H&B·커피·베이커리·면세점 캐시백
+        source: page
+        evidence: ['편의점 | GS25, CU, 세븐일레븐', H&B | 올리브영, '커피 | 스타벅스, 투썸플레이스, 이디야', '베이커리 | 파리바게뜨, 뚜레쥬르, 베스킨라빈스', 해외관련 | 면세점, 편의점, H&B, 면세점, 베이커리, 커피는 현장결제만 적용]
+        target:
+          categories: [travel.duty_free]
+          merchants: [baskin_robbins, cu, ediya, gs25, olive_young, paris_baguette, seven_eleven, starbucks, tous_les_jours, twosome]
+        when:
+          - {channel: offline}
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: category_cb_limit}
+        tiers: {from: 200000}
+      - key: cashback-book
+        title: 온라인도서 캐시백
+        source: page
+        evidence: ['온라인도서 | 알라딘, 교보문고(온라인)', 온라인도서는 공식 홈페이지·앱 결제만]
+        target:
+          merchants: [aladin, kyobo_book]
+        when:
+          - {channel: online}
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: category_cb_limit}
+        tiers: {from: 200000}
+      - key: cashback-transit
+        title: 후불 버스·지하철 캐시백
+        source: page
+        evidence: ['대중교통 | 버스, 지하철(후불교통)', 대중교통은 실물카드(후불교통 RF) 이용 시만 제공, 시외·고속버스 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: category_cb_limit}
+        tiers: {from: 200000}
+      - key: cashback-telecom
+        title: 이동통신 자동납부 캐시백
+        source: page
+        evidence: ['통신 | SKT, KT, LGU+ (알뜰폰 제외)', 통신은 이동통신요금 자동납부 건만 제공]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: category_cb_limit}
+        tiers: {from: 200000}
+    unmodeled: [국제공항 라운지와 해외 ATM 수수료 면제와 놀이공원 할인은 계산하지 않는다, '해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다', 최초 발급 카드의 해외 캐시백 실적 면제는 계산하지 않는다, 공항리무진 후불교통은 담을 업종이 없어 뺐다]
+open_questions:
+  - {path: 'revisions[0].benefits[cashback-shop-movie].reward', question: 10대 업종 캐시백에 건당 최소금액 문구가 없다, assumed: 최소금액 없음}
+  - {path: 'revisions[0].benefits[cashback-shop-movie].tiers', question: 20만원과 50만원 구간 문구가 표의 쇼핑 행에만 있다. 나머지 업종도 같다고 보았다, assumed: 같은 구간}
+  - {path: 'revisions[0].effective_from', question: 시행일은 신규 출시일 2026-03-23으로 두었다, assumed: '2026-03-23'}
+notes: 2026-10-13 상품 페이지(준법감시인 심의필 2026-2372)를 대조했다. 후불교통은 실적에서 빠지지 않고 합산된다. 10대 업종은 조건이 달라 혜택 다섯으로 나누고 월 3만원 한도를 함께 쓴다.

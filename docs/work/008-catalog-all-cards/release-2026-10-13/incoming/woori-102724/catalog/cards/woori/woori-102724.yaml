@@ -1,0 +1,43 @@
+schema_version: 2
+id: woori-102724
+issuer: woori
+name: 넥센타이어 우리카드 Ⅱ
+kind: credit
+product_codes:
+  - '102724'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102724', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2023-12-07'
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: autopay-discount
+        title: 넥센타이어 렌탈요금 자동납부 청구할인
+        source: page
+        evidence: ['30만원 이상 ~ 70만원 미만 | 10,000원 | 넥센타이어 렌탈요금 자동납부 필수', '70만원 이상 ~ 120만원 미만 | 15,000원', '120만원 이상 | 20,000원', 넥센타이어 렌탈요금 자동납부 이용 시에만 적용되며 자동납부가 아닌 일반결제는 할인 적용 불가]
+        target:
+          merchants: [nexen_tire_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 10000, 700000: 15000, 1200000: 20000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [가족카드는 청구할인을 받지 못한다]
+    unmodeled: [가족카드 전월 이용실적은 본인카드와 합산한다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 정부지원금과 공공임대료와 부동산임대료와 국가·공공기관 가맹점 이용금액과 수수료·이자·대출은 실적에서 빠진다, 할인은 거래 매입 순서대로 적용된다]
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2023-12-07. 연회비 15,000원. 전월 국내외 30만/70만/120만 이상 월 할인한도 1만/1만5천/2만원. 할인받을 금액보다 승인금액이 적으면 승인금액만큼 할인한다. 넥센타이어 우리카드 Ⅱ로 할인받은 이용금액 전체는 실적에서 빠진다. 신규 발급 다음 달 말까지 최저 구간.

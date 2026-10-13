@@ -1,0 +1,75 @@
+card: samsung-aap1764
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 하한에서 영역별 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: cj_onstyle, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T21:00, amount: 20000, merchant: olive_young, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: tous_les_jours, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 100000, merchant: vips, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T13:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-06T13:00, amount: 20000, merchant: tving, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cjonstyle-7: 7000}, counted: 100000}
+  - {payment: 1, benefits: {oliveyoung-10: 2000}}
+  - {payment: 2, benefits: {tous-10: 2000}}
+  - {payment: 3, benefits: {vips-20: 20000}}
+  - {payment: 4, benefits: {cgv-4k: 4000}}
+  - {payment: 5, benefits: {tving-30: 5000}}
+  calc: 100,000 x 7% = 7,000. 20,000 x 10% = 2,000 두 번. 100,000 x 20% = 20,000. CGV 15,000원은 1만원 이상 2만원 미만이라 4,000. 티빙 20,000 x 30% = 6,000이나 월 한도 5,000
+- name: 배달앱 편의점 이동통신 5% 통합 월 5천원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 20000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 1000}, counted: 0}
+  - {payment: 1, benefits: {convenience-5: 500}, counted: 0}
+  - {payment: 2, benefits: {telecom-5: 2500}, counted: 0}
+  - {payment: 3, benefits: {convenience-5: 1000}, counted: 0}
+  calc: 1,000 + 500 + 2,500 + 1,000 = 5,000으로 통합 한도를 딱 채움. 5% 할인을 받은 금액은 실적에서 빠져 0
+- name: 한도 직후 CJ온스타일 월 5만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 1000000, merchant: cj_onstyle, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cjonstyle-7: 50000}}
+  calc: 1,000,000 x 7% = 70,000이나 월 한도 50,000
+- name: 실적 299999면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: cj_onstyle, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 30만원 미만은 구간 0이라 혜택 없음
+- name: 신규 발급 다음 달까지 30만 구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: cj_onstyle, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cjonstyle-7: 7000}}
+  calc: 10월 발급이라 11월 말까지 30만 구간. 7,000
+- name: 신규 특례 끝난 달은 실적 미달이면 없음
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-15'
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: cj_onstyle, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 9월 발급 특례는 10월 말까지
+- name: CGV 2만원 이상 8천원과 월 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 25000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-10T20:00, amount: 25000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cgv-8k: 8000}}
+  - {payment: 1, benefits: {}}
+  calc: 2만원 이상이라 8,000. 같은 달 두 번째는 월 1회를 써서 0

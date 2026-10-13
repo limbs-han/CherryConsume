@@ -1,0 +1,128 @@
+schema_version: 2
+id: hana-16883
+issuer: hana
+name: Mile1 하나카드
+short_name: 하나 Mile1
+search_names: [마일원, 마일원 하나카드]
+kind: credit
+product_codes:
+  - '16883'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: unionpay, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16883', fetched_at: 2026-10-13, review_no: L-26-0547}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2023-06-20
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - {key: travel, per: month, amount: 100000}
+      - {key: shopping, per: month, amount: 20000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [lcc-45, travel-35-overseas, travel-35-dutyfree, travel-35-agency, shopping-15, domestic-7]
+        spill: split
+    benefits:
+      - key: lcc-45
+        title: 저비용항공사 1,500원당 45 UniMile 적립
+        source: page
+        evidence: ['여행(특별) | 6대 저비용항공사 | 제주항공, 진에어, 티웨이, 이스타, 에어서울, 에어부산 | 1,500원당 45 UniMile | 통합 10만 UniMile | 지난달 실적 30만원', '6대 저비용항공사: 공식 홈페이지(PC/모바일 앱), 오프라인(공항, 고객 서비스센터 등) 결제 시 서비스 제공, 여행사, 구매대행 사이트, 온라인 쇼핑몰(오픈마켓, 소셜 등)을 통한 결제 시 서비스에서 제외']
+        target:
+          merchants: [air_busan, air_seoul, eastar_jet, jeju_air, jin_air, tway_air]
+        reward:
+          type: points
+          program: unimile
+          per_unit: {unit: 1500, amount: 45}
+        limits:
+          - {shared: travel}
+        tiers: {from: 300000}
+        unmodeled: [공식 홈페이지와 앱 또는 공항과 고객센터 오프라인 결제만 제공한다. 여행사와 구매대행 사이트와 온라인 쇼핑몰을 거친 결제는 제외한다.]
+      - key: travel-35-overseas
+        title: 해외 가맹점 1,500원당 35 UniMile 적립
+        source: page
+        evidence: ['여행(특별) | 해외 | 해외 전가맹점 | 1,500원당 35 UniMile | 통합 10만 UniMile | 지난달 실적 30만원', '실적 제외 대상: 여행 영역 중 해외 매출 서비스 적립 적용받은 매출']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward:
+          type: points
+          program: unimile
+          per_unit: {unit: 1500, amount: 35}
+        limits:
+          - {shared: travel}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: travel-35-dutyfree
+        title: 지정 면세점 1,500원당 35 UniMile 적립
+        source: page
+        evidence: ['면세점 | 신라면세점, 신세계면세점, 롯데면세점, 현대백화점면세점 | 1,500원당 35 UniMile | 통합 10만 UniMile | 지난달 실적 30만원']
+        target:
+          merchants: [hyundai_dfs, hyundai_dfs_online, lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_dfs, shinsegae_dfs_online]
+        reward:
+          type: points
+          program: unimile
+          per_unit: {unit: 1500, amount: 35}
+        limits:
+          - {shared: travel}
+        tiers: {from: 300000}
+      - key: travel-35-agency
+        title: 여행사 1,500원당 35 UniMile 적립
+        source: page
+        evidence: ['여행사/온라인여행대행사 | 하나투어, agoda, Expedia, hotels.com | 1,500원당 35 UniMile | 통합 10만 UniMile | 지난달 실적 30만원']
+        target:
+          merchants: [agoda, expedia, hana_tour, hotels_com]
+        reward:
+          type: points
+          program: unimile
+          per_unit: {unit: 1500, amount: 35}
+        limits:
+          - {shared: travel}
+        tiers: {from: 300000}
+      - key: shopping-15
+        title: 온라인 쇼핑 1,500원당 15 UniMile 적립
+        source: page
+        evidence: ['일상 | 온라인 쇼핑 | 네이버플러스 스토어, 쿠팡, SSG닷컴, 11번가, GS SHOP, 티몬 | 1,500원당 15 UniMile | 2만 UniMile | 지난달 실적 없음', '일상 > 온라인 쇼핑 영역 중 상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 서비스 제외', 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건은 서비스 제외]
+        target:
+          merchants: [coupang, eleven_st, gs_shop, naver_plus_store, ssg_com, tmon]
+        when:
+          - {channel: online}
+        reward:
+          type: points
+          program: unimile
+          per_unit: {unit: 1500, amount: 15}
+        limits:
+          - {shared: shopping}
+        unmodeled: [상품권과 여행과 항공권과 티켓과 도서와 공연 매출은 제외한다. 연결된 다른 사이트나 앱에서 결제한 건도 제외한다.]
+      - key: domestic-7
+        title: 국내 가맹점 1,500원당 7 UniMile 적립
+        source: page
+        evidence: ['일반 | 국내 | 국내 가맹점 | 1,500원당 7 UniMile | 없음 | 없음']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward:
+          type: points
+          program: unimile
+          per_unit: {unit: 1500, amount: 7}
+    unmodeled: [인천공항 라운지 무료 입장은 월 1회와 연 2회이고 UnionPay 서비스라 계산하지 않는다, 초과 위탁수하물 5kg 무료와 위탁수하물 우선처리는 계산하지 않는다, 적립 대상이 겹치면 적립률이 높은 서비스 하나만 적용한다, UniMile은 6대 저비용항공사 공식 홈페이지에서 하나페이로 전액 사용할 때만 쓸 수 있다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다., assumed: '2023-06-20'}
+  - {path: 'revisions[0].benefits[travel-35-overseas].exclude_applied', question: 원문 실적 제외는 여행 영역 중 해외 매출 서비스 적립 적용받은 매출이다. 해외 가맹점 혜택만 실적에서 뺀다., assumed: 해외 혜택만 제외}
+  - {path: 'revisions[0].benefits[domestic-7].when', question: 국내 가맹점 적립이 지난달 실적 조건 없이 모든 국내 매출에 붙는다고 읽었다., assumed: 실적 조건 없음}
+notes: 2026-10-13 공식 상품 페이지(준법심의 L-26-0547)에서 옮겼다. 연회비 국내전용과 국내외겸용 모두 20,000원. 1 UniMile은 1원이다. 적립은 1,500원 단위당이며 남는 금액은 버린다. 여행 영역은 지난달 30만원 이상이어야 하고 최초 사용 등록 다음달 말일까지는 30만원으로 본다.

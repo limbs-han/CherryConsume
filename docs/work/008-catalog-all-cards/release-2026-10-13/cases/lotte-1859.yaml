@@ -1,0 +1,28 @@
+card: lotte-1859
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈료 할인 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 50000, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {rental-discount: 13000}
+  calc: 30만 구간 한도 13000원
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 50000, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만
+- name: 150만 구간 한도
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 50000, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {rental-discount: 25000}
+  calc: 150만 구간 한도 25000원

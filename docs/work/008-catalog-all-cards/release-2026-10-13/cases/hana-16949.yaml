@@ -1,0 +1,94 @@
+card: hana-16949
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-05: 50}
+    counted: 10000
+  calc: 10,000원 x 0.5% = 50원. 0.5% 혜택은 실적에 들어감
+- name: 쿠팡 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coupang-2: 200}
+    counted: 0
+  calc: 10,000원 x 2% = 200원. 2% 받은 매출은 실적에서 빠짐
+- name: 업종 통합 한도 5만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 3000000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {mart-2: 50000}
+  calc: 3,000,000원 x 2% = 60,000원이 통합 한도 50,000원에 걸림
+- name: 하나페이 5% 40만 구간 한도 4천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: hana_pay}
+  expect:
+  - payment: 0
+    benefits: {pay-hana-5: 4000}
+  calc: 100,000원 x 5% = 5,000원이 40만 구간 월 한도 4,000원에 걸림
+- name: 간편결제 5% 실적 직전
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {base-05: 50}
+  calc: 40만원보다 1원 적어 5% 없이 기본 0.5%만 받음
+- name: 네이버페이 온라인 120만 구간 한도 1만
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, category: online_shopping, channel: online, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {pay-online-5: 10000}
+  calc: 300,000원 x 5% = 15,000원이 120만 구간 월 한도 10,000원에 걸림
+- name: 롯데백화점 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {dept-2: 200}
+  calc: 10,000원 x 2% = 200원
+- name: GS SHOP 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: gs_shop, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {homeshopping-2: 200}
+  calc: 10,000원 x 2% = 200원
+- name: 롯데슈퍼 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: lotte_super, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {super-2: 200}
+  calc: 10,000원 x 2% = 200원
+- name: CU 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {cvs-2: 200}
+  calc: 10,000원 x 2% = 200원
+- name: 파리바게뜨 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: paris_baguette, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {bakery-2: 200}
+  calc: 10,000원 x 2% = 200원

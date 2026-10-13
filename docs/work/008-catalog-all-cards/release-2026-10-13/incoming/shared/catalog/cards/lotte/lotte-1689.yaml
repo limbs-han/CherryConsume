@@ -1,0 +1,37 @@
+schema_version: 2
+id: lotte-1689
+issuer: lotte
+name: 롯데백화점 AVENUEL BLACK카드
+search_names: [AVENUEL ORANGE, AVENUEL PURPLE]
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 50000}
+  - {scope: global, brand: mastercard, amount: 50000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00016_20260801_10005.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-03-14'
+    source: manual
+    tiers: [0]
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: ['장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 고속도로 통행요금, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원 발급 수수료, 관세 납부, 인지세, 송달료, 이자와 각종 수수료는 적립에서 빠진다']
+    benefits:
+      - key: lpoint-0-5
+        title: 국내외 가맹점 0.5% L.POINT 적립
+        source: manual
+        evidence: [국내외 가맹점 0.5% L.POINT 적립, '지난달 이용금액 관계없이, 적립한도 없이 국내외 가맹점 0.5% 적립', 'L.POINT 적립기준에 따라 결제금액 1천원당 해당 적립률로 포인트 적립이 되며, 1천원 미만 금액은 절사됩니다.']
+        target: {all: true}
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 5}
+    unmodeled: [현장에서 할인된 금액은 적립 기준 금액에 들어가지 않는다. 앱은 기록된 결제 금액으로 적립한다, 가족카드 이용금액의 포인트는 본인 회원에게 합산 적립된다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 판매 카드 목록과 공시 목록에 상품 코드가 없어 id를 공시 색인 번호로 두었다. 롯데백화점 AVENUEL 등급 고객에게만 발급하는지 확인한다, assumed: '[]'}
+notes: 2026-10-11 상품설명서(2026년 8월 기준, 여신금융협회 심의필 제2026-C1a-13317호) 대조. 국내외 가맹점 0.5% L.POINT 적립, 실적 조건과 한도 없음, 1천원 미만 절사라 1천원당 5포인트로 옮겼다. 연회비 국내전용과 해외겸용(MASTER) 50,000원, 가족카드 연회비 없음. 출시일 2021-03-14.

@@ -1,0 +1,55 @@
+card: kb-09180
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 주말 매장 10% 한도 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 150000, merchant: lotte_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-offline-10: 10000}, counted: 0}
+  calc: 2026-11-07은 토요일. 15,000원 중 월 한도 10,000원. 할인받은 결제는 실적 제외
+- name: 평일 매장은 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: lotte_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 150000}
+  calc: 2026-11-05는 목요일. 매장은 주말만
+- name: 90만 구간 평일 롯데마트몰 10%
+  prev_month_spend: 900000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: lotte_mart, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-online-10: 25000}}
+  calc: 30,000원 중 월 한도 25,000원
+- name: 5만원 미만은 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 49999, merchant: lotte_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 5만원 이상만
+- name: 경계 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-07T10:00, amount: 100000, merchant: lotte_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 미만 할인 없음
+- name: 커피와 택시
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cafe-5: 500}}
+  - {payment: 1, benefits: {taxi-5: 1000}}
+  calc: 10,000원 × 5% = 500원. 20,000원 × 5% = 1,000원
+- name: CGV 온라인 예매 3,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {movie-3500: 3500}, counted: 0}
+  calc: 승인건당 3,500원. 할인받은 이용건은 실적에서 빠진다

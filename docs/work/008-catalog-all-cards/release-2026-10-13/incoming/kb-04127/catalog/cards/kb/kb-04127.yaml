@@ -1,0 +1,73 @@
+schema_version: 2
+id: kb-04127
+issuer: kb
+name: 국민연금증 KB국민카드
+short_name: KB 국민연금증
+kind: credit
+product_codes:
+  - '04127'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 7000}
+  - {scope: global, brand: mastercard, amount: 7000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04127', fetched_at: '2026-10-12', review_no: 230418-01298-MLG}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: prev_calendar_month}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 전용 가맹점이나 일부 간편결제 전용 가맹점번호로 승인된 결제는 적립에서 빠질 수 있다]
+    stacks:
+      - {key: main, pick: best}
+      - {key: extra, pick: best}
+    benefits:
+      - key: pointree-0-3
+        title: 국내외 가맹점 0.3% 포인트리 기본 적립
+        source: page
+        evidence: ['기본 적립 : 국내·외 가맹점 이용 시 0.3% 적립', 전월 이용실적 및 적립한도 없으며, '[포인트리 적립 제외 대상] 무이자할부 이용금액, 취소금액, 단기카드대출(현금서비스), 장기카드대출(카드론), 국세, 지방세, 각종 공과금(전기/수도 등), 아파트 관리비, 정부지원금(보육료/유치원 보조비/바우처 이용금액 등), 초·중·고 학교 납입금 전체 (수업료/교육비/현장학습비/급식비), 대학(대학원)등록금, 4대 사회보험료(건강/연금/고용/산재), 각종 수수료 및 이자, 연체료, 연회비, 상품권 및 선불카드(선불전자지급수단 포함) 구입·충전금액, 신차구매청구(환급)할인 전표', KB국민카드 포인트리 1점은 1원과 가치가 동일합니다.]
+        target:
+          exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, insurance.social, tax, utility]
+          all: true
+        reward: {type: points, program: kb_pointree, rate: 0.3}
+        unmodeled: [정부지원금 결제와 신차구매청구(환급)할인 전표는 적립에서 빠진다]
+      - key: extra-category-0-3
+        title: 외식·커피·대중교통·택시·의료·백화점·골프 0.3% 추가 적립
+        source: page
+        evidence: ['추가 적립 : 6대 업종·가맹점 이용 시 0.3% 적립', '① 외식 | 음식 (일반음식점, 한식, 중식, 일식, 양식, 패밀리레스토랑 등 업종), 커피 (커피전문점 업종)', '② 교통 | 대중교통(버스, 지하철 업종), 택시 업종 (단, 시외버스/고속버스 제외)', '④ 의료 | 병원(종합병원, 일반·치과·한방병원 등 병·의원 업종), 약국업종', '⑤ 쇼핑 | 백화점 업종, 3대 대형마트(이마트, 홈플러스, 롯데마트)', '⑥ 특화 | 목욕탕, 찜질방, 골프장, 골프연습장, 안경점 업종']
+        target:
+          categories: [cafe, department_store, hospital, pharmacy, restaurant.general, sports.golf, taxi, transit.bus_city, transit.subway]
+        reward: {type: points, program: kb_pointree, rate: 0.3}
+        stack: extra
+        unmodeled: [목욕탕·찜질방·안경점 업종 추가 적립은 담을 업종이 없어 계산하지 않는다]
+      - key: extra-mart-0-3
+        title: 이마트·홈플러스·롯데마트 0.3% 추가 적립
+        source: page
+        evidence: ['⑤ 쇼핑 | 백화점 업종, 3대 대형마트(이마트, 홈플러스, 롯데마트)', '쇼핑 영역 3대 대형마트(이마트, 홈플러스, 롯데마트)의 경우 온라인쇼핑몰, 임대 매장의 경우 적립 불가']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 0.3}
+        stack: extra
+        unmodeled: [대형마트 임대 매장은 추가 적립에서 빠진다]
+      - key: extra-telecom-0-3
+        title: 이동통신요금 자동납부 0.3% 추가 적립
+        source: page
+        evidence: ['③ 통신 | 이동통신요금(SKT, KT, LGU+) 자동납부']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 0.3}
+        stack: extra
+    unmodeled: ['연간 결제납부실적 1,000만원 이상부터 2만~7만 포인트리를 다음 해 2월에 주는 연간 리워드는 계산하지 않는다', 국민연금증 기능이 있는 카드로 국민연금 수급자 대상 상품으로 보인다. 발급 대상은 원문에서 확인하지 못했다, 적립 포인트는 본인회원 포인트에 가족카드 이용분과 함께 쌓인다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2023.02.22 출시와 2023.04.18 심의필만 적었다. 현재 규칙 시작일을 몰라 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지로 대조했다. 기본 0.3%와 6대 업종 0.3% 추가 적립은 함께 받는다. 전월 실적 조건과 적립한도가 없다. 연회비 표 제목이 toss KB국민카드로 적혀 있지만 국내전용과 국내외겸용 모두 7천원이다. 국민연금증 KB국민카드만 가진 회원이 연간 10만원 이상 쓰면 다음 해 연회비를 면제한다.

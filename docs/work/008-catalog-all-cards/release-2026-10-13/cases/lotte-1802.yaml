@@ -1,0 +1,58 @@
+card: lotte-1802
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 일반 결제 1%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {cb-special: 500}
+    counted: 50000
+  calc: 50,000 × 1% = 500
+- name: 실적 직전 399999는 0.7%
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {cb-basic: 350}
+  calc: 50,000 × 0.7% = 350
+- name: 지하철 50% 그룹 한도 5천원과 실적 제외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 12000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {life-transit: 5000}
+    counted: 0
+  calc: 12,000 × 50% = 6,000이나 그룹 한도 5,000. 라이프 캐시백 건은 실적 제외
+- name: 넷플릭스 정기결제 30%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 13500, merchant: netflix, billing: subscription, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {life-streaming: 4050}
+  calc: 13,500 × 30% = 4,050
+- name: 발급 첫 달은 기본 0.7%만
+  prev_month_spend: 400000
+  holder: {started_on: '2026-11-01'}
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {cb-basic: 350}
+  calc: card_month 0이라 특별 캐시백 없음
+- name: CGV 30%와 스트리밍 그룹 한도 공유
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 13500, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-06T19:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {life-streaming: 4050}
+  - payment: 1
+    benefits: {life-cgv: 950}
+  calc: 넷플릭스 4,050 뒤 스트리밍 그룹 남은 한도 950. CGV 15,000 × 30% = 4,500이나 950이고 1% 150보다 커서 950

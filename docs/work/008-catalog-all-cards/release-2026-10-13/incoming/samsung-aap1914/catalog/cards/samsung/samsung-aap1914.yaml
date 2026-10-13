@@ -1,0 +1,181 @@
+schema_version: 2
+id: samsung-aap1914
+issuer: samsung
+name: 삼성 SFC iD SELECT UP 카드
+short_name: 삼성 SFC iD SELECT UP
+search_names: [SFC iD SELECT UP, SFC 아이디 셀렉트 업]
+kind: credit
+product_codes: [AAP1914]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 18000}
+  - {scope: global, brand: visa, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1914', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmc0SLDAXWvZWFP6kVqAPN0%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2026-C1a-05942호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-04-21'
+    source: manual
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, '고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다', 가맹점 정보가 결제대행업체나 간편결제 전용 가맹점으로 확인되는 결제는 할인하지 않는다]
+    options:
+      - key: select
+        title: SELECT 서비스
+        choices:
+          - {key: medical, title: 의료 20% 할인}
+          - {key: life, title: 생활 영역 10% 할인}
+        change: next_month
+    limits:
+      - key: select
+        per: month
+        amount: {500000: 7000, 1000000: 10000, 1500000: 15000}
+      - {key: leisure, per: month, amount: 500000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [medical-20, insurance-10, fuel-10, mobile-10, leisure-golf-2, leisure-duty-free-2, leisure-2, shopping-1, shopping-online-1, domestic-0-5]
+        spill: none
+    benefits:
+      - key: medical-20
+        title: '[의료] 병원·약국 20% 할인'
+        source: manual
+        evidence: [의료 20% 할인, '병/의원, 약국, 요양병원, 한방병원, 한의원, 동물병원 20% 결제일할인', '전월 이용금액대별 통합 월 할인한도 50만원 이상 7,000원 100만원 이상 10,000원 150만원 이상 15,000원', '오프라인 결제건에 한하며, 보건소는 제외']
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        when:
+          - option:
+              select: [medical]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: select}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        unmodeled: [보건소는 할인하지 않는다]
+      - key: insurance-10
+        title: '[생활] 보험 10% 할인'
+        source: manual
+        evidence: [생활 영역 10% 할인, 보험/주유/이동통신 10% 결제일할인, '보험 생명보험, 손해보험(자동차보험, 화재보험, 운전자보험, 상해보험 등)', '전월 이용금액대별 통합 월 할인한도 50만원 이상 7,000원 100만원 이상 10,000원 150만원 이상 15,000원']
+        target:
+          categories: [insurance.private]
+        when:
+          - option:
+              select: [life]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: select}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        unmodeled: [보험사 정책에 따라 신용카드로 보험료 납부가 제한될 수 있다]
+      - key: fuel-10
+        title: '[생활] 주유 10% 할인'
+        source: manual
+        evidence: ['주유 SK에너지, GS칼텍스, HD현대오일뱅크, S-OIL', 주유는 LPG충전소 제외]
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        when:
+          - option:
+              select: [life]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: select}
+        tiers: {from: 500000}
+        exclude_applied: 1
+        unmodeled: [LPG충전소는 할인하지 않는다]
+      - key: mobile-10
+        title: '[생활] 이동통신 10% 할인'
+        source: manual
+        evidence: [이동통신 SKT/KT/LG U+ 이동통신요금 정기결제건, 이동통신은 알뜰폰 제외]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - option:
+              select: [life]
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: select}
+        tiers: {from: 500000}
+        exclude_applied: 1
+      - key: leisure-golf-2
+        title: 골프 2% 할인
+        source: manual
+        evidence: [여가 2% 할인, 전월 이용금액 관계없이 골프/항공/면세점/철도/공연 2% 결제일할인, '골프 골프장, 골프연습장', '통합 월 할인한도 : 50만원', 골프는 오프라인 결제건에 한함]
+        target:
+          categories: [sports.golf]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: leisure}
+      - key: leisure-duty-free-2
+        title: 면세점 2% 할인
+        source: manual
+        evidence: [면세점 신라/롯데/신세계/동화/HDC신라/JDC(제주)/JTO(제주)면세점, '통합 월 할인한도 : 50만원', '면세점은 국내 오프라인 매장 및 공식 홈페이지/앱(내국인 전용)을 통한 결제건에 한하며, 임대매장 및 해외 오프라인 매장은 제외']
+        target:
+          merchants: [lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_dfs, shinsegae_dfs_online]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: leisure}
+        unmodeled: [동화면세점, HDC신라면세점, 제주 JDC·JTO 면세점은 담지 않았다, 임대매장은 할인하지 않는다]
+      - key: leisure-2
+        title: 항공·철도·공연 2% 할인
+        source: manual
+        evidence: ['항공 대한항공, 제주항공, 진에어, 티웨이항공', '철도 철도(KTX, SRT 포함)', 공연 NOL 티켓, '통합 월 할인한도 : 50만원', '항공은 공식 홈페이지/앱을 통한 결제건에 한하며, 다른 여행사, 항공권 구매 대행 사이트를 통한 결제건은 제외', 공연은 공식 홈페이지/앱을 통한 결제건에 한함]
+        target:
+          categories: [transit.rail]
+          merchants: [interpark_ticket, jeju_air, jin_air, korean_air, tway_air]
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: leisure}
+        unmodeled: [항공과 공연은 공식 홈페이지·앱 결제만 할인하고 다른 여행사나 대행 사이트 결제는 제외한다]
+      - key: shopping-1
+        title: 백화점·할인점·프리미엄 아울렛 1% 할인
+        source: manual
+        evidence: [쇼핑 1% 할인, '전월 이용금액 관계없이, 할인한도 없이 백화점/할인점/온라인 쇼핑몰/홈쇼핑/신선식품쇼핑몰/프리미엄 아울렛 1% 결제일할인', '백화점 신세계백화점, 롯데백화점, 현대백화점, 갤러리아백화점', '할인점 이마트, 트레이더스 홀세일 클럽, 롯데마트, 농협 하나로마트', '프리미엄 아울렛 신세계사이먼 프리미엄 아울렛, 현대프리미엄아울렛, 롯데프리미엄아울렛', '백화점/프리미엄 아울렛은 오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외', '할인점은 오프라인 결제건에 한하며, 기업형 슈퍼마켓, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [emart, galleria, hyundai_department, hyundai_premium_outlet, lotte_department, lotte_mart, lotte_premium_outlet, nh_hanaro_mart, shinsegae_department, shinsegae_premium_outlet, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [쇼핑 외 결제(상품권, 주차장 등)와 임대매장은 할인하지 않는다, 기업형 슈퍼마켓은 할인하지 않는다]
+      - key: shopping-online-1
+        title: 온라인쇼핑몰·홈쇼핑·신선식품 1% 할인
+        source: manual
+        evidence: ['온라인쇼핑몰 쿠팡, 네이버플러스 스토어, SSG.COM, 삼성카드 쇼핑', '홈쇼핑 GS SHOP, CJ온스타일, 롯데홈쇼핑, 현대홈쇼핑, NS홈쇼핑', '신선식품쇼핑몰 컬리, 오아시스마켓', 홈쇼핑은 공식 홈페이지/앱/ARS를 통한 결제건에 한함, 오아시스마켓 온라인은 오아시스마켓 공식 홈페이지/앱을 통한 결제건에 한함]
+        target:
+          merchants: [cj_onstyle, coupang, gs_shop, hyundai_homeshopping, kurly, lotte_homeshopping, naver_plus_store, ns_homeshopping, oasis_market, samsung_card_shopping, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1}
+        unmodeled: [오아시스마켓 오프라인 매장은 담지 않았다]
+      - key: domestic-0-5
+        title: 국내 가맹점 0.5% 할인
+        source: manual
+        evidence: [국내 가맹점 0.5% 할인, '전월 이용금액 관계없이, 할인한도 없이 국내 가맹점 0.5% 결제일할인', '대중교통(후불교통기능/모바일교통기능 결제건), 택시, 고속버스(차내 단말기 및 고속버스 앱 결제), 고속도로 통행요금 납부건은 할인 제외']
+        target:
+          exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+          all: true
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+    unmodeled: ['할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다, '해외수수료 할인(브랜드사수수료 1.1%, 해외이용수수료 0.2%)은 수수료 계산이라 담지 않았다', 병원·약국 건별 5만원 이상 2~3개월 무이자할부는 계산하지 않는다, 선택 옵션 할인과 여가 2%는 통합 월 한도를 넘으면 국내 가맹점 0.5%만 받는다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].benefits[mobile-10].when', question: 원문은 정기결제라고만 적어 자동납부와 정기결제를 모두 대상으로 두었다, assumed: 'autopay, subscription'}
+notes: 2026-10-13 상품안내장(2026.5판, 심의필 2026-C1a-05942호) 대조. 출시 2026-04-21. 연회비 해외겸용 VISA 18,000원(기본 7,000+제휴 11,000). 국내전용도 같은 금액으로 보았다. SELECT 서비스는 의료 20%와 생활 영역 10% 중 하나를 고르고 전월 이용금액 50만·100만·150만원 구간에 월 7,000·10,000·15,000원 통합 한도다. 쇼핑 1%, 여가 2%, 국내 0.5%는 한도 없이 또는 월 50만원 한도로 받고 서로 겹치지 않는다. 의료 20%와 생활 10%를 받은 이용금액은 전월 실적에서 빠진다. 발급월+1개월까지는 50만 구간 혜택.

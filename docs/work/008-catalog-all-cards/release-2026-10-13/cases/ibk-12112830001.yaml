@@ -1,0 +1,32 @@
+card: ibk-12112830001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: kt 통신 30만원 구간 7천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: kt}
+  expect:
+  - {payment: 0, benefits: {kt-telecom-7k: 7000}}
+  calc: 30만 구간 정액 7,000원
+- name: kt 통신 70만원 구간 1만5천원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: kt}
+  expect:
+  - {payment: 0, benefits: {kt-telecom-15k: 15000}}
+  calc: 70만 구간 정액 15,000원
+- name: 29만원은 통신할인 없음
+  prev_month_spend: 290000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: kt}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만
+- name: 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 92900, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-60: 3000}}
+  calc: 92,900원 ÷ 1,858원 = 50리터 × 60원 = 3,000원

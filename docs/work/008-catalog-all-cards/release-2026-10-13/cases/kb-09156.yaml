@@ -1,0 +1,46 @@
+card: kb-09156
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 평일 음식점 기본과 외식 추가
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20, dining-cafe-0-2: 20}, counted: 10000}
+  calc: 기본 20점과 외식 20점
+- name: 경계 직전 99999
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 10만 미만 적립 없음
+- name: 토요일 일반 가맹점 주말 추가
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 50000, category: other, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100, weekend-0-2: 100}}
+  calc: 2026-11-07은 토요일. 기본 100점과 주말 100점
+- name: 택시 추가와 실적 포함
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: taxi, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 40, transit-taxi-0-2: 40}, counted: 20000}
+  calc: 40점씩
+- name: 통신 자동납부 추가
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100, telecom-0-2: 100}}
+  calc: 100점씩
+- name: 지하철 실적 제외
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20, transit-taxi-0-2: 20}, counted: 0}
+  calc: 교통은 실적 제외. 적립은 20점씩

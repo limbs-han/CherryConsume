@@ -1,0 +1,36 @@
+card: lotte-1727
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 0.5% 적립
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {lpoint-0-5: 275}
+  calc: 1천원 단위 55개 × 5P = 275P
+- name: 경계 직전 499999 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원 미만은 혜택 없음
+- name: 스타벅스 50% 한도 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-50: 10000}
+  calc: 30,000원 × 50% = 15,000원, 월 한도 10,000원. 결제일 할인과 적립의 중복 여부가 원문에 없어 할인만 준다
+- name: 넷플릭스 30% 한도 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 13500, merchant: netflix, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {streaming-30: 4050}
+  calc: 13,500원 × 30% = 4,050원. 적립과 중복하지 않는다

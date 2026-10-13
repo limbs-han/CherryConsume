@@ -1,0 +1,724 @@
+[
+  {
+    "card_id": "lotte-1357",
+    "status": "blocked",
+    "reason": "구도일+100 롯데카드. 핵심 혜택이 S-OIL 주유 리터당 80~100 S-OIL주유포인트 적립인데 원문에 1포인트의 원화 가치 문구가 없고 공통 포인트에도 없다. 나머지는 쿠폰·현장할인 부가 혜택이다",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2013-A00015_20250728_10008.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1414",
+    "status": "blocked",
+    "reason": "E1 LPG 롯데카드. 핵심 혜택이 E1 LPG 충전소 리터당 87포인트 등 E1 오렌지포인트 적립인데 원문에 1포인트의 원화 가치 문구가 없고 공통 포인트에도 없다. LPG 업종도 없다",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2014-A00026_20260115_10011.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1471",
+    "status": "ready",
+    "reason": "LG헬로비전 롯데카드. 상품설명서(2026년 8월 기준) 대조. 연회비 국내 1만, 해외 1.2만. 지난달 30·70·100만원 이상이면 LG헬로비전 유선·알뜰폰 자동이체 요금을 월 11,000·15,000·20,000원까지 할인. 신규 발급 특례 30만 구간, 할인받은 매출 실적 제외. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2016-A00112_20260907_10011.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "LG헬로비전 렌탈요금 자동이체도 할인 대상이지만 가맹점이 없어 계산하지 않는다",
+      "할인받은 LG헬로비전 롯데카드 매출과 다른 카드 매출은 실적에서 빠진다",
+      "현금서비스·카드론·이자·수수료는 실적에서 빠진다",
+      "가족카드 이용금액이 실적에 합산된다"
+    ],
+    "open_questions": [
+      "현행 조건의 시행일을 찾지 못해 카드 출시일로 두었다. 설명서는 2026년 8월 기준이다",
+      "상품 페이지와 상품 코드를 찾지 못해 색인 번호 id를 그대로 썼다"
+    ]
+  },
+  {
+    "card_id": "lotte-1472",
+    "status": "ready",
+    "reason": "OIL KING SK 롯데카드. 상품설명서(2021년 9월 기준) 대조. 지난달 50/100/150만원 이상 SK주유소 리터당 150/200/300원 청구할인, 월 한도 1.5만/2.5만/4만원, 통합 월 4회, 1회 10만원까지, 할인받은 매출 실적 제외, 신규 사용등록 특례 50만 구간. 상품 페이지와 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00006_20210930_10006.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "LPG 제외를 가려내지 않음",
+      "리터 환산은 SK에너지 고시 휘발유가 기준"
+    ],
+    "open_questions": [
+      "2021년 9월 뒤 조건 변경 여부",
+      "상품 코드와 신규 발급 여부"
+    ]
+  },
+  {
+    "card_id": "lotte-1513",
+    "status": "ready",
+    "reason": "VEEX Ⅱ 롯데카드. 상품설명서(2025년 7월) 대조. 연회비 국내 9천, 해외 1만. 지난달 30만 이상 건당 5만 미만 0.5%, 5~10만 1.0%, 10~15만 1.5%, 15만 이상 2.0%, 30만 미만 0.2% L.POINT, 1천원 단위, 월 10만P. 실적 제외는 다른 롯데카드·현금서비스·연회비·수수료뿐이라 무이자도 실적에 넣음. 롯데시네마·롯데월드는 연 횟수 기준 불명이라 뺌. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00033_20250821_10009.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "제약업종 1%",
+      "롯데시네마 1,500원(연 12회)",
+      "롯데월드 50%(연 6회)",
+      "생어거스틴·박준뷰티랩·박승철 할인",
+      "롯데백화점 쿠폰·면세점 할인",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "상품 코드 없음",
+      "시행일을 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-1516",
+    "status": "ready",
+    "reason": "Smart Living 에브리바디 롯데카드. 상품설명서(2021년 9월 기준, 공시 최신) 대조. 연회비 국내 1.2만, 해외 1.5만. 바디프랜드 렌탈료 자동이체 청구할인 30·70·120만 구간 1.3만·1.7만·2.3만(렌탈료까지). 할인 받은 렌탈료 전액 실적 제외. 실적 제외 목록에 무이자·공과금이 없어 실적에 넣음. 에브리알은 가맹점이 없어 뺌. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00043_20210930_10010.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "에브리알 렌탈료 미계산",
+      "다른 청구할인과 중복 불가",
+      "가족카드 합산",
+      "현금서비스 등 실적 제외"
+    ],
+    "open_questions": [
+      "상품 코드 없음",
+      "설명서가 2021년 9월 기준이라 이후 변경 여부 미확인"
+    ]
+  },
+  {
+    "card_id": "lotte-1646",
+    "status": "exclude",
+    "reason": "GS&POINT 롯데카드(상품 코드 P12663-A12663). 상품 페이지에 신규·갱신 발급이 중단되었다고 적혀 있다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P12663-A12663",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P12663-A12663_241125.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1653",
+    "status": "blocked",
+    "reason": "LOCA PLATINUM 마일리지형. 핵심 혜택이 SKYPASS 마일리지(지난달 150만 미만 1,500원당 1마일, 이상 1,000원당 1마일)인데 공통 point_programs에 대한항공 마일리지가 없다. 연간 특급호텔 이용권은 연간 누적 실적 조건. 연회비 10만 확인",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00023_20260929_10005.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13473-a13473",
+    "draft_card_id": "lotte-1664",
+    "status": "blocked",
+    "reason": "롤라카드 연회비 1만5천원. 핵심 혜택은 롯데 그룹사 7% 롤라머니(1머니=1원)인데 실적이 롯데 그룹사가 아닌 가맹점 이용금액만이라 롯데 그룹사 30여 곳을 실적에서 빼야 한다. 실적 규칙에 가맹점 단위 제외가 없어 롯데 결제가 실적을 채워 혜택이 부풀 수 있다. 판매 목록의 상품 코드로 id를 바꿨다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13473-A13473",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00026_20260903_10008.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1666",
+    "status": "ready",
+    "reason": "LOCA Lite. 상품설명서(2021년 9월 기준) 대조. 연회비 1,000원, 국내외 0.7% 결제일 할인 실적 조건과 한도 없음. 교통·세금·공과금·무이자할부 등 할인 제외. 상품 코드와 현재 판매 여부는 확인하지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00031_20211101_10005.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다",
+      "시외버스는 원문이 대중교통(버스)라고만 적어 덜 주는 쪽으로 할인에서 뺐다"
+    ],
+    "open_questions": [
+      "상품 페이지와 상품 코드를 찾지 못했고 공시 설명서가 2021년 11월 것이 마지막이다. 판매 중인지 확인이 필요하다"
+    ]
+  },
+  {
+    "card_id": "lotte-1693",
+    "status": "ready",
+    "reason": "LOCA X Special SE. 상품설명서(2026년 8월 기준) 대조. 제휴 렌탈사 렌탈료 자동이체를 30/70/150만 구간 월 1만/1.5만/2.5만원 한도로 결제일 할인, 신규 발급 특례 30만 구간, 할인받은 결제 실적 제외. 제휴사 60여 곳 중 공통 가맹점에 있는 18곳만 넣었다. 장기할부 캐시백은 unmodeled. 판매 목록에서 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00022_20260916_10007.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "제휴사 중 가맹점이 없는 엘지케어솔루션·모두렌탈·휴테크·쿠첸·세스코 등과 엘지헬로비전은 할인 계산 안 함",
+      "장기할부 캐시백",
+      "할인받지 않은 제휴사 이용금액의 실적 제외"
+    ],
+    "open_questions": [
+      "시행일",
+      "상품 코드와 신규 발급 여부"
+    ]
+  },
+  {
+    "card_id": "lotte-1741",
+    "status": "ready",
+    "reason": "LOCA X 세라젬. 상품설명서(2025년 6월 기준) 대조. 연회비 2만. 지난달 30·70·150만원 이상이면 세라젬 구독료 자동납부 월 10,000·15,000·25,000원까지 할인. 장기할부 캐시백은 36개월 정액 지급이라 뺐다. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00054_20250704_10002.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "세라젬 이용금액 전체가 실적에서 빠지지만 할인받은 구독료만 뺀다. 세라젬 장기 할부를 기록하면 실적이 실제보다 크게 잡힐 수 있다",
+      "장기할부 캐시백 10,000·15,000·25,000원은 세라젬 10만원 이상 24·36개월 장기할부 다음 달부터 36개월차까지 매월 26일 지급이라 계산하지 않는다. 구독료 할인과 함께 받지 못한다",
+      "롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다",
+      "오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 자동차 환경개선 부담금, 포인트 충전, 현금서비스·카드론·이자·수수료는 실적에서 빠진다",
+      "LOCA X 세라젬이 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다",
+      "해외 이용과 후불교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다"
+    ],
+    "open_questions": [
+      "현행 조건의 시행일을 찾지 못해 카드 출시일로 두었다. 설명서는 2025년 6월 기준이다",
+      "상품 페이지와 상품 코드를 찾지 못해 색인 번호 id를 그대로 썼다"
+    ]
+  },
+  {
+    "card_id": "lotte-1752",
+    "status": "ready",
+    "reason": "대한민국 국가대표 카드. 상품설명서(2026년 8월 기준) 대조. 실적 조건 없이 국내외 1% L.POINT 적립(1천원당 10P), 월 최대 10만P. 연회비 2만원. 판매 목록에서 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2022-A00004_20260929_10002.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "MASTER WORLD 서비스",
+      "현장할인 금액 적립 제외"
+    ],
+    "open_questions": [
+      "시행일",
+      "상품 코드와 신규 발급 여부"
+    ]
+  },
+  {
+    "card_id": "lotte-p13998-a13998",
+    "draft_card_id": "lotte-1765",
+    "status": "blocked",
+    "reason": "LOCA X 웰릭스렌탈. 상품 페이지에 신규 발급 중단. 렌탈료 자동납부 결제일 할인(30만 1만, 70만 1만5천, 150만 2만5천)은 담을 수 있으나 웰릭스렌탈 이용금액 전체를 실적에서 빼야 하는데 가맹점 단위 실적 제외가 없어 30만 경계 근처에서 할인이 더 붙는다. 장기할부 캐시백도 계산 불가. 공시 PDF 이름의 상품 코드로 id를 바꿨다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13998-A13998",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13998-A13998.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1774",
+    "status": "exclude",
+    "reason": "LOCA 태그그립 카드(P14083-A14083). LOCA LIKIT 소지자만 받는 그립톡형 후불교통 카드로 혜택은 LOCA LIKIT 설명서를 따른다. 상품 페이지에 신규·갱신 발급이 중단되었다고 적혀 있다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14083-A14083",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14083-A14083.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1784",
+    "status": "ready",
+    "reason": "KT Super DC 롯데카드. 상품설명서(2025년 6월, 이미지 PDF) 대조. 연회비 국내 2.3만, 해외 2.5만. KT 유무선 통신요금 자동이체 결제일 할인 30·70·120만 구간 통신기기 할부 이용 시 1만·1.5만·2만, 미이용 시 7천원. 할부 이용 여부는 사실로 묻고 답이 없으면 7천원. 신규 사용등록일~다음 달 말일 30만 구간. KT 통신요금 실적 제외는 가맹점 단위 제외가 없어 통신요금 업종 전체를 실적에서 뺐다(덜 주는 쪽). 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00011_20250707_10004.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "KT 통신요금 대신 통신요금 업종 전체 실적 제외",
+      "다른 롯데카드 이용금액, 오토캐시백, 무승인전표 등 실적 제외",
+      "실적·한도 가족카드 합산",
+      "다른 결제일 할인과 겹치면 큰 것 하나",
+      "할부 완납 다음 날부터 미이용 할인"
+    ],
+    "open_questions": [
+      "상품 코드 없음",
+      "시행일을 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-1802",
+    "status": "ready",
+    "reason": "나무 롯데카드. 상품설명서(2023년 1월 심의) 대조. 연회비 2만. 지난달 40만 미만 0.7%, 이상 1.0% 캐시백 한도 없음, 라이프 캐시백 버스·지하철 50%, 넷플릭스·디즈니+ 정기결제·CGV 30% 그룹별 월 5천·합계 1만, 중복 없이 큰 것 하나. 발급 첫 달은 0.7%만. 라이프 캐시백 건 실적 제외, 버스·택시·고속버스·통행료 실적 제외. 스타벅스 사이렌오더 50%는 매장 결제와 가를 수 없어 뺌. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00001_20221025_10001.pdf"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "스타벅스 사이렌오더 50%",
+      "넷플릭스 등 통신요금 합산청구·앱마켓 제외",
+      "나무증권 계좌 개설 필요",
+      "다른 롯데카드 이용금액 등 실적·캐시백 제외"
+    ],
+    "open_questions": [
+      "상품 코드 없음",
+      "설명서 출시일·기준월이 비어 시행일을 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-1836",
+    "status": "blocked",
+    "reason": "LOCA 더하기 카드(Prime M). 혜택이 모두 SKYPASS 마일리지 적립(1천원당 1~1.5마일)인데 원문에 마일리지 원화 가치 문구가 없고 공통 포인트에도 없다",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00015_20260923_10003.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1868",
+    "status": "blocked",
+    "reason": "Triple in LOCA 연회비 2만원. 5개 생활업종 중 3개를 1~3순위로 골라 지난달 실적(40만·80만·120만)에 따라 순위대로 업종당 1만원 할인한다. 순위 선택 조합을 options로 담기 어렵고 렌탈 업종이 공통 업종에 없다. 상품 코드를 찾지 못했다",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/LOCA_TRIPLE_IN_241119_OL_s.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1944",
+    "status": "ready",
+    "reason": "RROUND PAY X 디지로카. 상품설명서(2025년 8월 기준) 대조. 연회비 3만, 실적 조건 없이 1% RR PAY 포인트 월 2만P(1P=1원). RROUND PAY 결제 2%는 결제수단이 없어 1%로만 계산. 공통 포인트 rround_pay_point 필요. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00014_20251201_10001.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "RROUND PAY로 결제하면 2% 적립(월 1만원 한도)이지만 결제수단 RROUND PAY가 없어 1% 적립으로 계산한다. 실제보다 적게 계산된다",
+      "적립 한도는 매출전표가 롯데카드에 접수된 달 기준이라 월말 결제는 다음 달 한도로 적립될 수 있다",
+      "RR PAY 포인트 미리적립(선지급) 서비스는 갚아야 할 부채라 계산하지 않는다",
+      "롯데카드의 다른 포인트 적립 혜택과 겹치면 큰 혜택 하나만 준다",
+      "RR PAY 포인트는 RROUND 앱과 RROUND PAY 결제에만 쓸 수 있다"
+    ],
+    "open_questions": [
+      "상품 페이지와 상품 코드를 찾지 못해 색인 번호 id를 그대로 썼다",
+      "공통 포인트 rround_pay_point(RROUND PAY 포인트 1P=1원)가 필요하다. needed/lotte-1944.json에 제안했다"
+    ]
+  },
+  {
+    "card_id": "lotte-c01278-a01278",
+    "status": "blocked",
+    "reason": "SUPER PLUS 체크카드 연회비 3천원. 롯데슈퍼·외식 5~10% 캐시백의 구간과 한도를 전전월 이용실적으로 정한다. 지금 실적 모델은 지난달 기준뿐이라 맞게 계산할 수 없다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C01278-A01278",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2010-A00022_20250519_10005.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-c11885-a11885",
+    "status": "blocked",
+    "reason": "경차 smart 롯데 체크카드. 상품 페이지와 안내장(2021년 9월 기준) 확인. 핵심인 경차 유류세 환급은 정부 환급이고, 리터당 40원 캐시백은 주유금액에서 유류세 환급액을 뺀 금액에 40원/SK 고시가 비율을 곱해 지금 모델로 하면 더 준다. 경차 소유 1가구 1차량 전용이다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C11885-A11885",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/C11885-A11885.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-c12667-a12667",
+    "status": "ready",
+    "reason": "LIKIT all 체크카드 연회비 0원. 국내 0.2% 캐시백과 지난달 30만 이상 주말·공휴일 0.2% 추가. lotte-c15817-a15817 기본교통 카드와 혜택은 같지만 실적·캐시백 제외에 교통이 없어 다른 상품으로 담았다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12667-A12667",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00014_20260715_10004.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "오토·스마트 캐시백 신청 매출, 포인트 충전 등 제외",
+      "다른 캐시백과 겹치면 큰 혜택 하나",
+      "가족카드 실적 합산"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from 시행일 미확인, 원문 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-p00276-b01417",
+    "status": "blocked",
+    "reason": "DC Sweet 롯데카드. 상품 페이지와 상품설명서(2021년 9월 기준) 확인. 핵심 Sweet 할인 10·20·30% 구간이 전월 청구서상 이용금액이라 billing_cycle이 필요하고, 건당 1.5만원과 연 12만원 한도도 연 기준이 원문에 없다. 나머지는 롯데카드 기본 서비스뿐이라 빼면 카드가 크게 약해 보인다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P00276-B01417",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P00276-B01417.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "청구서 기준 실적 지원 필요"
+    ]
+  },
+  {
+    "card_id": "lotte-p02117-a02117",
+    "status": "blocked",
+    "reason": "B롯데카드. 핵심 혜택 SK브로드밴드 통신료 월 1만/2만원 할인의 실적이 \"전월 청구서상 B롯데카드 이용금액\"이라 결제일 기준 이용기간 실적(billing_cycle)이다. 지금 모델이 받지 않는다. 판매 카드 목록에는 있다",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2011-A00053_20250728_10007.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13212-a13212",
+    "status": "blocked",
+    "reason": "E-POINT 롯데카드. 핵심 혜택이 이용금액 1천원당 E-POINT 10포인트(이랜드리테일 월 15만P, 그외 15만P)인데 상품 페이지와 설명서에 1포인트의 원화 가치 문구가 없어 포인트를 더할 수 없다. 연회비 1.5만 확인",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13212-A13212",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00008_20250917_10004.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13399-a13399",
+    "status": "ready",
+    "reason": "LOCA for Auto. 상품 페이지와 상품설명서(2026년 8월 기준) 대조. 연회비 2만, 지난달 150만원 이상일 때 4대 정유사 리터당 100원(월 이용금액 30만원까지), 편의점·배달앱 건당 1만원 이상 5% 각 월 5천원. 자동차보험 연 1회 1만원은 연 기준이 원문에 없어 뺐다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13399-A13399",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00017_20260930_10005.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "자동차보험 건당 30만원 이상 결제 시 1만원 할인은 연 1회인데 발급일 기준인지 달력 연도 기준인지 원문에 없어 계산하지 않는다",
+      "일부 PG 결제는 할인에서 빠진다",
+      "LOCA 시리즈 카드가 아닌 롯데카드 이용금액만 실적에서 빠져 다른 LOCA 시리즈 카드 이용금액도 실적에 합산될 수 있다. 이 카드 결제만 센다",
+      "가족카드 이용금액과 할인한도가 본인카드와 합산된다",
+      "해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다",
+      "오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 현금서비스·카드론·이자·수수료는 실적에서 빠진다",
+      "롯데카드의 다른 결제일 할인 혜택과 겹치면 할인이 큰 혜택 하나만 준다",
+      "할인은 승인 시점 기준 남은 한도 안에서 준다",
+      "리터는 SK㈜ 지정고시 휘발유가로 환산한다. 앱은 공통 기름값 기준값으로 환산한다",
+      "LPG 충전은 할인하지 않는다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13407-a13407",
+    "status": "ready",
+    "reason": "LOCA for Health 연회비 2만원. 지난달 150만 이상, 건당 2만원 이상. 병원·약국·동물병원 10% 월 2만원, 백화점 오프라인 5% 월 1만원, 슈퍼 오프라인 5% 월 1만원, 버스·지하철 10% 월 5천원. 슈퍼는 업종이 없어 이마트에브리데이·홈플러스익스프레스·롯데슈퍼만 대상(덜 주는 쪽)",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13407-A13407",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00015_20260930_10005.pdf"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "요양병원·재활원·의료재단 등 병원 업종 일부 제외",
+      "백화점·슈퍼 임대매장 제외",
+      "후불교통은 월 합산 청구 건이 2만원 이상이어야 할인",
+      "다른 LOCA 시리즈 카드 이용금액도 실적에 합산될 수 있음"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from 시행일 미확인, 원문 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-p13561-a13561",
+    "status": "ready",
+    "reason": "LOCA MONEY 카드 연회비 2만원. 실적·한도 없이 국내외 로카코인 1% 적립. 로카코인은 결제대금 납부 시 1P 0.5원, 대출 이자 납부 시 1원이라 낮은 0.5원으로 새 포인트 lotte_loca_coin을 needed에 제안",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13561-A13561",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00044_20260921_10005.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "지난달 평균 현금서비스·카드론 잔액 300만 이상이면 특별 2% 적립. 대출 잔액 입력이 없어 기본 1%로 계산",
+      "로카코인 1P 가치는 쓰는 곳에 따라 0.5원과 1원"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from 시행일 미확인, 원문 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-p13586-a13586",
+    "status": "ready",
+    "reason": "LOCA 100. 상품 페이지 대조. 연회비 2만. 지난달 75만 미만 0.5%, 이상 1.0% 한도 없음, 온라인 1.5%(75만 이상, 월 1만) 중 큰 할인 하나. 신규 발급일~다음 달 말일 75만 구간. 대중교통·택시·고속버스·통행료는 실적과 할인 제외. Flex Voucher는 연간 누적 실적이라 뺌",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13586-A13586"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "Flex Voucher(연간 누적 실적)",
+      "온라인 쇼핑 업종 아닌 온라인 결제 미계산",
+      "다른 롯데카드 이용금액 등 실적 제외",
+      "한도 가족카드 합산",
+      "다른 결제일 할인과 겹치면 큰 것 하나"
+    ],
+    "open_questions": [
+      "시행일을 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-p13834-a13834",
+    "status": "blocked",
+    "reason": "LOCA X 웰스. 웰스·교원라이프 렌탈료 자동납부 결제일 할인 30·70·150만 구간 1만·1.5만·2.5만은 담을 수 있으나, 원문이 제휴사(웰스·교원라이프·스마트36) 이용금액 전체를 실적에서 빼는데 실적 규칙에 가맹점 단위 제외가 없고 두 가맹점 업종이 other라 업종으로도 못 뺀다. 할인 받지 않은 렌탈료와 장기할부가 실적에 잡혀 구간이 부풀 수 있다. spend에 가맹점 제외가 생기면 바로 ready 가능. 웰스 장기할부 캐시백(36개월)도 담지 못한다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13834-A13834",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00028_20260916_10006.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13840-a13840",
+    "status": "ready",
+    "reason": "LOCA X 현대큐밍. 상품설명서(2026년 8월 기준) 대조. lotte-p13828-a13828 BS RENTAL과 같은 구조로 현대큐밍 렌탈료 자동납부 30/70/150만 구간 월 1만/1.5만/2.5만원 한도 결제일 할인, 신규 발급 특례 30만 구간, 할인받은 결제 실적 제외. 장기할부 캐시백은 unmodeled. 판매 목록에 P13840-A13840 있음",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00033_20260916_10004.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "장기할부 캐시백",
+      "할인받지 않은 현대큐밍 이용금액 실적 제외"
+    ],
+    "open_questions": [
+      "시행일"
+    ]
+  },
+  {
+    "card_id": "lotte-p13955-a13955",
+    "status": "ready",
+    "reason": "LOCA LIKIT Shop. 상품 페이지와 상품설명서(2026년 3월 기준) 대조. 지난달 40만원 이상 쿠팡·SSG.COM·티몬, GS25·CU·세븐일레븐, 쿠팡 로켓와우·네이버플러스 멤버십, 미용실 60% 결제일 할인, 통합 월 13,000원. 할인받은 이용금액 실적 전액 제외. 연회비 1만원",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13955-A13955",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00045_20260331_10003.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "백화점·할인점·쇼핑몰 입점 미용실 제외",
+      "가족카드 한도 합산"
+    ],
+    "open_questions": [
+      "시행일을 원문 확인일로 두었다"
+    ]
+  },
+  {
+    "card_id": "lotte-p14034-a14034",
+    "status": "blocked",
+    "reason": "LOCA in MEGACITY. 오프라인 쇼핑 5%가 부산·울산·경남 주소 가맹점 조건이라 결제 입력으로 가릴 수 없고, 롯데월드 부산·스카이라인루지 부산·롯데자이언츠 가맹점도 없다. 남는 것은 온라인 쇼핑 5%(월 1만)뿐이라 크게 약해 보인다. LOCA in BUSAN과 같은 판단",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2022-A00007_20260930_10004.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p14113-a14113",
+    "status": "ready",
+    "reason": "LG전자 X LOCA 플랜+. 상품 페이지와 상품설명서(2022년 7월 기준) 대조. 플랜할인 미이용 시 지난달 30만원 이상 국내외 1% 결제일 할인, 한도 없음. 플랜할인은 옵션으로 두고 계산하지 않는다(lotte-p14381-a14381과 같은 처리). 연회비 국내 15,000원 해외 17,000원. 상품 코드 P14113-A14113으로 id 변경",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14113-A14113",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14113-A14113_220913.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "LG전자 플랜할인 30만원 선할인과 20개월 미청구, 플랜할인 이용 중 실적별 캐시백 5천/1만원은 계산하지 않는다"
+    ],
+    "open_questions": [
+      "시행일을 출시일 2022-07-08로 두었다"
+    ],
+    "draft_card_id": "lotte-1772"
+  },
+  {
+    "card_id": "lotte-p14445-a14445",
+    "status": "ready",
+    "reason": "KT DC PLUS 롯데카드 연회비 2만원. 지난달 40만 이상 KT 통신요금 자동납부 월 1만원, 80만 이상 1만3천원까지 청구금액 전액 결제일 할인. 2023-10 이후 발급자는 KT 통신료가 실적에서 빠지는데 가맹점 단위 실적 제외가 없어 통신요금 업종 전체를 실적에서 뺐다(덜 주는 쪽)",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14445-A14445",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00022_20250707_10004.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "KT 외 통신요금도 실적에서 빠져 실적이 적게 잡힌다",
+      "2023-10-01 이전 발급자의 KT 통신료 실적 포함은 계산하지 않는다",
+      "가족카드 합산, 다른 결제일 할인과 중복 시 큰 혜택 하나"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from 시행일 미확인, 원문 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-p14447-a14447",
+    "status": "ready",
+    "reason": "Toss Mobile x LOCA. 상품 페이지 대조. 연회비 2만. 지난달 30·70·150만원 이상이면 토스모바일 자동납부 요금을 발급월 포함 24개월까지 월 10,000·15,000·20,000원, 25개월부터 7,000원까지 할인. 신규 발급 특례 30만 구간",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14447-A14447"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "신규 발급 특례는 원문이 사용 등록일부터라 앱은 발급일부터 세어 등록이 늦으면 특례 기간이 실제보다 짧다",
+      "롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다",
+      "정부지원금, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다",
+      "Toss Mobile x LOCA가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다",
+      "이동통신 자동납부는 롯데카드 접수일 기준으로 할인과 실적에 들어간다",
+      "할인은 승인 시점 기준 남은 한도 안에서 준다"
+    ],
+    "open_questions": [
+      "현행 조건의 시행일을 찾지 못해 카드 출시일로 두었다. 상품 페이지 심의는 2024년 10월이다"
+    ]
+  },
+  {
+    "card_id": "lotte-p14826-a14826",
+    "status": "ready",
+    "reason": "Mobile X LOCA SE. 상품 페이지와 설명서 대조. 연회비 2만. SKT·KT·LG U+·알뜰폰 이동통신 자동납부 결제일 할인, 30·70·150만 구간 발급월 포함 24개월 1만·1.5만·2만, 그 뒤 7천원. 할인 건 실적 제외, 대중교통·택시·고속버스·통행료 실적 제외. 신규 사용등록일~다음 달 말일 30만 구간",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14826-A14826",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00037_20260907_10003.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "인터넷·TV 결합상품 제외",
+      "공통 가맹점 없는 알뜰폰 미계산",
+      "24개월을 카드 시작 달부터 셈",
+      "다른 롯데카드 이용금액 등 실적 제외",
+      "다른 결제일 할인과 겹치면 큰 것 하나"
+    ],
+    "open_questions": [
+      "시행일을 확인일로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-p15494-a15494",
+    "status": "ready",
+    "reason": "동양생명 보험엔로카. 상품 페이지와 상품설명서(2024년 5월 기준) 대조. 연회비 2만. 지난달 30·70·150만원 이상이면 동양생명 보험료 자동이체 월 13,000·16,000·25,000원까지 할인, 할인받은 보험료 실적 제외, 신규 발급 특례 30만 구간. 라이나생명 보험엔로카와 대상이 다른 상품. 공통 가맹점 dongyang_life 필요",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15494-A15494",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P15494-A15494.pdf"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "간편결제로 낸 보험료는 할인하지 않는다",
+      "롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다",
+      "정부지원금, TV 수신료, 포인트 충전, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다",
+      "동양생명 보험엔로카가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다",
+      "할인은 승인 시점 기준 남은 한도 안에서 준다"
+    ],
+    "open_questions": [
+      "공통 가맹점 dongyang_life(동양생명)가 필요하다. needed/lotte-p15494-a15494.json에 제안했다"
+    ],
+    "draft_card_id": "lotte-1886"
+  },
+  {
+    "card_id": "lotte-p15584-a15584",
+    "status": "ready",
+    "reason": "디지로카 Las Vegas. 상품설명서(2026년 8월 기준) 대조. 실적 조건 없이 건당 10만 미만 0.5%, 10~30만 1%, 30~50만 1.5%, 50만 이상 2% 결제일 할인, 월 통합 한도 10만원. 연회비 2만원",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2024-A00018_20260928_10003.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "건당 금액은 롯데카드 접수 금액 기준",
+      "가족카드 한도 합산"
+    ],
+    "open_questions": [
+      "시행일"
+    ]
+  },
+  {
+    "card_id": "lotte-p15590-a15590",
+    "status": "blocked",
+    "reason": "디지로카 Auto 연회비 3만원. 주유 리터당 100·150원 캐시백 구간을 이번 달 1일~말일 이용실적으로 정한다. 지금 실적 모델은 지난달 기준뿐이라 계산할 수 없다. 주유 이용금액도 실적에서 빠진다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15590-A15590",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2024-A00023_20260710_10003.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p15614-a15614",
+    "status": "blocked",
+    "reason": "디지로카 Edu. 학원·유치원 캐시백(3%·월 3만, 7%·월 5만)이 이번 달 1일~말일 이용금액(50만·100만) 기준인데 실적 규칙에 이번 달 기준이 없다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15614-A15614",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2024-A00020_20260601_10002.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p15672-a15672",
+    "status": "blocked",
+    "reason": "DIGILOCA SKYPASS 연회비 2만원. 혜택이 대한항공 SKYPASS 마일리지 적립(국내 1천원당 1마일, 해외 2마일)뿐인데 공통 포인트에 마일리지가 없고 원문에 1마일의 원화 가치 문구가 없다. 탈회 시 1마일 20원 청구 문구는 가치가 아니다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15672-A15672",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00003_20260820_10002.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p15787-a15787",
+    "status": "ready",
+    "reason": "디지로카 Link. 상품 페이지 대조(설명서 PDF는 그림). 연회비 3만. 기본 혜택만 담았다. 지난달 50만원 이상이면 국내외 1.2%(월 1만), 마트·슈퍼 오프라인 3%(월 5천), 커피·편의점 5%(합산 월 5천), 한도 초과나 50만원 미만은 0.5%. 가족회원 수가 필요한 Link 혜택과 연간 보너스 캐시백은 뺐다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15787-A15787"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "Link 혜택(지난달 이 카드를 쓴 본인·가족회원 2명 이상이고 합산 100만원 이상이면 1.5%·5%·7%, 3명 이상 150만원 이상이면 2%·7%·10%)은 가족회원 이용을 알 수 없어 계산하지 않는다. 기본 혜택만 계산해 실제보다 적을 수 있다",
+      "보너스 캐시백(연간 이용회원수와 연간 실적 4,000만·6,000만원 이상 시 5만·10만원)은 발급일 기준 연간 누적이라 계산하지 않는다",
+      "일부 PG 결제는 커피·편의점 할인에서 빠진다",
+      "결제일 할인은 겹치지 않고 할인 금액이 큰 혜택 하나만 준다",
+      "롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다",
+      "본인과 가족회원의 이용금액과 할인한도가 합산된다",
+      "해외 이용과 이동통신처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 실적과 할인에 들어간다",
+      "마트·슈퍼 안 임대매장은 할인하지 않는다",
+      "백화점·할인점·쇼핑몰 안 커피 매장은 할인하지 않는다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p15861-a15861",
+    "status": "ready",
+    "reason": "YBM X 디지로카. 상품설명서(2026년 4월 기준) 대조. 지난달 50/100/150만 구간 YBM 20%(한도 7천/1.2만/3.5만), 편의점 오프라인 10%(5천/7천/1만), 쿠팡·네이버스마트스토어·올리브영·다이소·무신사 10%(5천/7천/1만). 할인받은 YBM 실적 제외. 판매 목록의 디자인만 다른 P15861과 P15862 두 코드를 한 파일에 넣고 id 변경. YBM은 TOEIC 접수와 YBM NET만 가맹점이 있어 넣었다",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00007_20260629_10001.pdf"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "YBM어학원·인강·연수원 등 가맹점 없는 YBM 계열",
+      "PG·간편결제 가맹점 접수 제외",
+      "입점매장 제외"
+    ],
+    "open_questions": [],
+    "draft_card_id": "lotte-1957"
+  },
+  {
+    "card_id": "lotte-p15909-a15909",
+    "status": "blocked",
+    "reason": "T 라이트 롯데카드. 캐시백이 결제 한 건에 붙지 않는 월 정액(지난달 50/100만 구간 8천/1만원)이고 전월 말일 T 라이트 할부 잔액 유무로 정해져 지금 모델로 담을 수 없다. kb-01508 같은 판정",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15909-A15909",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2026-A00019_20260831_10001.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  }
+]

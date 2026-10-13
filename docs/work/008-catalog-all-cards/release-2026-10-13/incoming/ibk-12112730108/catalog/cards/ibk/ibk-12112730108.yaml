@@ -1,0 +1,121 @@
+schema_version: 2
+id: ibk-12112730108
+issuer: ibk
+name: 자연드림IBK카드
+kind: credit
+product_codes:
+  - '12112730108'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: bc, amount: 2000}
+  - {scope: global, brand: visa, amount: 5000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0108&pageId=CA01010000', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, gift_card, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {fuel-60: 0}
+      from: registration
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 700000: 20000, 1500000: 40000}
+    benefits:
+      - key: natural-dream-7
+        title: 자연드림 7% 청구할인
+        source: page
+        evidence: ['특화서비스: 자연드림 이용금액 7% 청구할인(온·오프라인 포함)', '전월 30만원 이상 월간 통합할인한도 1만원, 70만원 이상 2만원, 150만원 이상 4만원']
+        target:
+          merchants: [natural_dream]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: fuel-60
+        title: 주유 리터당 60원 청구할인
+        source: page
+        evidence: [전 주유소 리터당 60원 할인(LPG 포함), '통합 1일 1회, 월 2회, 회당 주유금액 10만원 한도']
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+        tiers: {from: 300000}
+        notes: 원문은 리터 환산 기준을 적지 않았다. 앱은 reference.yaml 기름값을 쓴다
+      - key: online-20
+        title: 쿠팡·티몬·위메프 20% 청구할인
+        source: page
+        evidence: ['쇼핑/미용: 쿠팡, 티몬, 위메프 결제 20% 할인', '통합 1일 1회, 월 3회, 1회 2만원 한도']
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: dining-20
+        title: 패밀리레스토랑 20% 청구할인
+        source: page
+        evidence: ['아웃백, 빕스, 블랙스미스, 토다이, TGIF, 애슐리 20% 할인', '월 1회, 1회 10만원 한도, 전월 150만원 이상이면 월 2회']
+        target:
+          merchants: [ashley, blacksmith, outback, tgif, todai, vips]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - per: month
+            count: {300000: 1, 1500000: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 아울렛 입점 매장은 제외]
+      - key: bulgogi-20
+        title: 불고기브라더스 20% 현장할인
+        source: page
+        evidence: ['불고기브라더스 20% 현장할인: 월 1회, 1회 10만원 한도', 통합 한도와 별도로 최대 2만원 추가 할인]
+        target:
+          merchants: [bulgogi_brothers]
+        reward: {type: onsite_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 아울렛 입점 매장은 제외]
+      - key: coffee-20
+        title: 주요 커피전문점 20% 청구할인
+        source: page
+        evidence: ['스타벅스, 커피빈, 카페베네, 탐앤탐스, 할리스, 엔제리너스, 달.콤 20% 할인', '통합 1일 1회, 월 3회, 1회 2만원 한도']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, dalkomm, hollys, starbucks, tom_n_toms]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 아울렛 입점 매장은 제외]
+    unmodeled: [영화관 8천원 청구할인은 통합 월 1회 연 6회이고 연 횟수의 기준이 발급일인지 달력 연도인지 원문에 없어 계산하지 않는다, TOP포인트 기본 0.2% 적립과 사용기간별 추가 적립은 할인 적용 거래와 주유 제외 조건을 담을 수 없어 계산하지 않는다, 놀이공원 할인은 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다, 금융 수수료 면제와 환율 우대는 계산하지 않는다, 가족카드 이용실적은 본인 실적과 합산하지 않고 카드별로 본다, 간편결제는 할인이 제공되지 않을 수 있다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다, assumed: '2026-10-13'}
+  - {path: 'revisions[0].new_card.tier_by_benefit', question: 신규 기간 통합할인한도만 적고 주유 할인이 실적과 무관하게 제공되는지는 원문에 없어 주지 않는다, assumed: 0}
+  - {path: annual_fees, question: 'BC글로벌 연회비 2,000원을 해외겸용 BC 브랜드로 옮겼다', assumed: global bc}
+notes: 2026-10-13 expand21 조사. 통합할인한도는 자연드림, 영화, 외식, 커피, 소셜커머스가 함께 쓰고 불고기브라더스와 주유는 한도 밖이다

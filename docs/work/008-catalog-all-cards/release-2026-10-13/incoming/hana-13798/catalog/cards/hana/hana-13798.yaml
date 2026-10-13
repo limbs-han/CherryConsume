@@ -1,0 +1,106 @@
+schema_version: 2
+id: hana-13798
+issuer: hana
+name: Young Hana+ 체크카드
+short_name: 하나 Young Hana+ 체크
+kind: check
+product_codes:
+  - '13798'
+  - '94080'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41013798P&CD_PD_SEQ=13798', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2021-06-14
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    limits:
+      - key: integrated
+        per: month
+        amount: {100000: 3000, 300000: 10000, 600000: 20000}
+    benefits:
+      - key: pay-cashback-0-5
+        title: 페이결제 0.5% 캐시백
+        source: page
+        evidence: [각종 페이 결제 시 0.5% 캐시백, '하나페이, 삼성페이, 네이버페이, 쿠페이, 11Pay, L페이, 카카오페이, SSG페이, 페이코에 카드를 등록하여 결제', 캐시백 지급률 0.5% | 페이결제는 실적 구간별 별도 한도 없음 | 통합 캐시백 한도는 페이결제, 편의점, 딜리버리, 대중교통, 커피 통합 적용]
+        target: {all: true}
+        when:
+          - payment: [coupay, eleven_pay, hana_pay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, ssg_pay]
+        reward: {type: cashback, rate: 0.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 100000}
+      - key: convenience-5
+        title: 편의점 5% 캐시백
+        source: page
+        evidence: ['편의점 | GS25, CU, 이마트24, 세븐일레븐 | 5% | 1천원 2천원 4천원 | 건당 1만원 이상', 통합 캐시백 한도는 페이결제, 편의점, 딜리버리, 대중교통, 커피 통합 적용]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+          - per: month
+            amount: {100000: 1000, 300000: 2000, 600000: 4000}
+        tiers: {from: 100000}
+      - key: delivery-5
+        title: 배달의민족·요기요 5% 캐시백
+        source: page
+        evidence: ['딜리버리 | 배달의 민족, 요기요 | 5% | 1천원 2천원 4천원 | 건당 2만원 이상', 통합 캐시백 한도는 페이결제, 편의점, 딜리버리, 대중교통, 커피 통합 적용]
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+          - per: month
+            amount: {100000: 1000, 300000: 2000, 600000: 4000}
+        tiers: {from: 100000}
+      - key: transit-10
+        title: 버스·지하철 월 3만원 이상 10% 캐시백
+        source: page
+        evidence: ['대중교통 | 버스, 지하철 | 10% | 1천원 2천원 4천원 | 월 3만원 이상', '대중교통 캐시백 대상 : 시내버스, 마을버스, 광역버스, 공항버스, 지하철, 공항철도', '대중교통 캐시백 제외대상 : 시외버스, 고속버스', 대중교통 캐시백 서비스는 매달 1일부터 말일까지 대중교통 이용 합계금액이 3만원 이상인 경우 캐시백 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - month_total: {min: 30000}
+        reward: {type: cashback, basis: month_total, rate: 10}
+        limits:
+          - {shared: integrated}
+          - per: month
+            amount: {100000: 1000, 300000: 2000, 600000: 4000}
+        tiers: {from: 100000}
+        unmodeled: [공항철도는 대상이지만 업종으로 가리지 못해 넣지 않았다, 무승인 후불교통은 매출이 접수된 달의 이용금액에 반영한다]
+      - key: coffee-20
+        title: 스타벅스·투썸플레이스 20% 캐시백
+        source: page
+        evidence: ['커피 | 스타벅스, 투썸플레이스 | 20% | 1천원 2천원 4천원 | 건당 1만원 이상', 통합 캐시백 한도는 페이결제, 편의점, 딜리버리, 대중교통, 커피 통합 적용]
+        target:
+          merchants: [starbucks, twosome]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: integrated}
+          - per: month
+            amount: {100000: 1000, 300000: 2000, 600000: 4000}
+        tiers: {from: 100000}
+    unmodeled: [캐시백률이 높은 서비스 하나만 건당 적용한다, 페이결제 외 캐시백 대상 가맹점에서 간편결제로 결제해 가맹점명이 페이 이름으로 잡히면 페이결제 캐시백만 준다, 국내외 ATM 이용금액은 실적과 캐시백에서 빠진다, 실적은 일시불 이용금액 기준이다, 발급수수료 2000원은 카드 수령 다음 달 말일까지 1만원 이상 쓰면 돌려준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 원문 신규출시일 2021-06-14를 잠정 시작일로 둔다., assumed: '2021-06-14'}
+  - {path: 'revisions[0].spend', question: 원문 실적은 국내외 일시불 이용금액 기준이다. 체크카드라 할부가 없다고 보고 일시불만 센다., assumed: 체크 결제 전부}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 없음. 모바일 전용 카드이고 발급수수료 2,000원이 있다. 캐시백은 지난달 실적 10만, 30만, 60만원 구간에 따라 통합 월 3천, 1만, 2만원 한도이고 편의점, 딜리버리, 대중교통, 커피는 구간별 1천, 2천, 4천원 한도도 따로 있다. 캐시백 소수점 이하는 절사한다. 초안의 대중교통 대상 업종에서 고속버스 제외를 뺐다. 이미 대상이 시내버스와 지하철뿐이라서다. 금쪽이 Young Hana+ 체크카드(94080)는 혜택이 같은 상품이라 이 카드로 등록한다.

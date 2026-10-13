@@ -1,0 +1,143 @@
+schema_version: 2
+id: samsung-aap1816
+issuer: samsung
+name: 신세계 신백리워드 SFC 삼성카드
+short_name: 신백리워드 SFC 삼성
+search_names: [신백리워드 SFC, 신세계 SFC 삼성카드, 신세계 신백리워드 SFC 삼성카드]
+kind: credit
+product_codes: [AAP1816]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1816', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtr2j1%2Bfm3GROO1l7f0rpCVU%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2024-C1a-11453호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2024-09-19'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 적립하지 않는다, 자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 적립하지 않는다]
+    facts:
+      - {key: emart-prev-200k, type: bool, scope: card, ask: '전월에 이마트, 트레이더스, 이마트 에브리데이 오프라인 매장 이용금액이 20만원 이상이었나요'}
+    limits:
+      - {key: emart-month, per: month, count: 1}
+      - {key: cgv-month, per: month, count: 1}
+    benefits:
+      - key: base-wd
+        title: 평일 0.5% 신백리워드 적립
+        source: manual
+        evidence: [국내외 가맹점 0.5%~3% 신백리워드 포인트 적립, '전월 이용금액에 관계없이, 적립한도 없이 국내외 가맹점 적립', '적립률 평일(월~금요일) 0.5%, 주말(토/일요일) 1%', 그 외 가맹점(해외 포함), 해외는 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: points, program: shinbaek_reward, rate: 0.5}
+      - key: base-we
+        title: 주말 1% 신백리워드 적립
+        source: manual
+        evidence: [국내외 가맹점 0.5%~3% 신백리워드 포인트 적립, '적립률 평일(월~금요일) 0.5%, 주말(토/일요일) 1%', 그 외 가맹점(해외 포함)]
+        target: {all: true}
+        when:
+          - day:
+              in: [sat, sun]
+        reward: {type: points, program: shinbaek_reward, rate: 1}
+      - key: area1-wd
+        title: 평일 백화점·음식점·주유 1% 신백리워드 적립
+        source: manual
+        evidence: [국내외 가맹점 0.5%~3% 신백리워드 포인트 적립, '적립률 평일 1%, 주말 2%', '백화점 신세계백화점, 음식점 한식, 양식, 일식, 중식, 뷔페, 패밀리레스토랑, 간이음식점, 패스트푸드, 주유 주유소', '백화점은 오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외', 음식점은 오프라인 결제건에 한함, 주유는 LPG충전소 포함]
+        target:
+          categories: [fuel, restaurant.fastfood, restaurant.general]
+          merchants: [shinsegae_department]
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+          - {channel: offline}
+        reward: {type: points, program: shinbaek_reward, rate: 1}
+        unmodeled: [백화점의 쇼핑 외 결제(상품권, 주차장 등)와 임대매장은 적립하지 않는다]
+      - key: area1-we
+        title: 주말 백화점·음식점·주유 2% 신백리워드 적립
+        source: manual
+        evidence: [국내외 가맹점 0.5%~3% 신백리워드 포인트 적립, '적립률 평일 1%, 주말 2%', '백화점 신세계백화점, 음식점 한식, 양식, 일식, 중식, 뷔페, 패밀리레스토랑, 간이음식점, 패스트푸드, 주유 주유소', '백화점은 오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외', 음식점은 오프라인 결제건에 한함, 주유는 LPG충전소 포함]
+        target:
+          categories: [fuel, restaurant.fastfood, restaurant.general]
+          merchants: [shinsegae_department]
+        when:
+          - day:
+              in: [sat, sun]
+          - {channel: offline}
+        reward: {type: points, program: shinbaek_reward, rate: 2}
+        unmodeled: [백화점의 쇼핑 외 결제(상품권, 주차장 등)와 임대매장은 적립하지 않는다]
+      - key: area15-wd
+        title: 평일 대중교통·택시·제과·편의점 1.5% 신백리워드 적립
+        source: manual
+        evidence: [국내외 가맹점 0.5%~3% 신백리워드 포인트 적립, '적립률 평일 1.5%, 주말 3%', '대중교통 버스, 지하철, 택시, 제과 아이스크림 파리바게뜨, 배스킨라빈스, 던킨, 편의점 CU', '대중교통은 오프라인 결제건에 한하며, 시외/고속버스는 제외', '제과, 아이스크림/편의점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+          merchants: [baskin_robbins, cu, dunkin, paris_baguette]
+        when:
+          - day:
+              in: [mon, tue, wed, thu, fri]
+          - {channel: offline}
+        reward: {type: points, program: shinbaek_reward, rate: 1.5}
+        unmodeled: [백화점·할인점·쇼핑몰 안 임대매장은 적립하지 않는다]
+      - key: area15-we
+        title: 주말 대중교통·택시·제과·편의점 3% 신백리워드 적립
+        source: manual
+        evidence: [국내외 가맹점 0.5%~3% 신백리워드 포인트 적립, '적립률 평일 1.5%, 주말 3%', '대중교통 버스, 지하철, 택시, 제과 아이스크림 파리바게뜨, 배스킨라빈스, 던킨, 편의점 CU', '대중교통은 오프라인 결제건에 한하며, 시외/고속버스는 제외', '제과, 아이스크림/편의점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+          merchants: [baskin_robbins, cu, dunkin, paris_baguette]
+        when:
+          - day:
+              in: [sat, sun]
+          - {channel: offline}
+        reward: {type: points, program: shinbaek_reward, rate: 3}
+        unmodeled: [백화점·할인점·쇼핑몰 안 임대매장은 적립하지 않는다]
+      - key: emart-6000
+        title: 이마트 6,000원 할인
+        source: manual
+        evidence: [이마트 6, 000원 할인, '이마트/트레이더스 홀세일 클럽/이마트 에브리데이/일렉트로마트/노브랜드에서 건별 10만원 이상 결제 시 6,000원 결제일할인', 통합 월 1회 제공, 전월 이마트/트레이더스 홀세일 클럽/이마트 에브리데이/일렉트로마트/노브랜드 오프라인 매장 일시불 및 할부 이용금액 20만원 이상 시 제공, 오프라인 결제건에 한하며 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외, 할인이 적용된 결제건은 신백리워드 포인트 적립 불가]
+        target:
+          merchants: [emart, emart_everyday, traders]
+        when:
+          - {fact: emart-prev-200k}
+          - {channel: offline}
+          - amount: {min: 100000}
+        reward: {type: billing_discount, fixed: 6000}
+        limits:
+          - {shared: emart-month}
+        unmodeled: [일렉트로마트와 노브랜드 매장은 가맹점 목록에 없어 담지 않았다, 무이자할부 결제는 할인 대상이지만 앱은 할인하지 않는다, 쇼핑 외 결제(상품권, 주차장 등)와 임대매장은 할인하지 않는다]
+      - key: cgv-3000
+        title: CGV 3,000원 할인
+        source: manual
+        evidence: [CGV 3, 000원 할인, 'CGV 영화 티켓 건별 5,000원 이상 결제 시 3,000원 결제일할인', 월 1회 제공, 전월 이용금액 30만원 이상 시 제공, 오프라인 결제 및 공식 홈페이지/앱을 통한 결제건에 한함, 할인이 적용된 결제건은 신백리워드 포인트 적립 불가]
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 5000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {shared: cgv-month}
+        tiers: {from: 300000}
+    unmodeled: ['놀이공원(에버랜드, 롯데월드, 서울랜드, 대전오월드, 이월드, 경주월드) 자유이용권 50% 현장할인과 워터파크(캐리비안 베이, 캘리포니아비치, 중흥골드스파, 디오션리조트, 워터파크 스파밸리) 입장권 30% 현장할인은 전월 이용금액 30만원 이상 조건에 통합 일 1회, 연 5회(1월 1일~12월 31일)라 담지 않았다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, 신백리워드 포인트는 매월 매출전표 접수분을 다음 달 18일에 신백리워드로 전환한다, '이마트 6,000원 할인과 CGV 할인이 적용된 결제는 신백리워드를 적립하지 않는다', 후불교통기능이 탑재되어 발급된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 원문에서 찾지 못했다. 상품안내장은 2024.9판이고 심의필 날짜는 2024-09-19이다, assumed: '2024-09-19'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 전월 이용금액 제외 대상이 CGV 안내에 적혀 있지 않아 적립 제외 대상 목록으로 대신했다, assumed: 적립 제외 대상과 같음}
+  - {path: 'revisions[0].benefits', question: 적립과 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].benefits[area1-wd].when', question: 평일과 주말 구분에서 공휴일을 어느 쪽으로 세는지 적혀 있지 않다, assumed: 요일만 따른다}
+notes: 2026-10-13 상품안내장(2024.9판, 심의필 제2024-C1a-11453호) 대조. 연회비 해외겸용 Mastercard와 국내전용 모두 20,000원(기본 7,000+제휴 13,000). 신백리워드는 10신백리워드 단위로 쓰고 1신백리워드는 1원이다.

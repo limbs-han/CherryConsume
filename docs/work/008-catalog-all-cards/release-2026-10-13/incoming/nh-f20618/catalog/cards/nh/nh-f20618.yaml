@@ -1,0 +1,65 @@
+schema_version: 2
+id: nh-f20618
+issuer: nh
+name: 올바른이음체크카드
+short_name: 올바른이음 체크
+kind: check
+product_codes:
+  - '90010610'
+  - F20618
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010610', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·대형마트 안 임대 매장과 PG·간편결제 가맹점은 적립에서 빠진다, 카드 사용등록 월에는 혜택이 없고 다음 달부터 적용된다]
+    limits:
+      - {key: ieum, per: month, amount: 3000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [ieum-0-5, base-0-2]
+        spill: split
+    benefits:
+      - key: base-0-2
+        title: 국내외 기본 0.2% NH포인트
+        source: page
+        evidence: [기본적립 0.2% 전월실적 조건과 한도가 없습니다, 국내·외 가맹점 적립]
+        target: {all: true}
+        reward: {type: points, program: nh_point, rate: 0.2}
+        stack: main
+      - key: ieum-0-5
+        title: 이음서비스 0.5% NH포인트
+        source: page
+        evidence: [이음서비스 영역별 0.5% 적립, '교통: KTX, SRT, 고속버스', '먹거리: 하나로마트, 하나로클럽', '숙박: 익스피디아, 호텔스닷컴, 에어비앤비, 여기어때, 야놀자', 전월실적 30만원 이상 월 통합 적립한도 3천 NH포인트, 한도를 소진하면 기본·우대적립이 적용됩니다]
+        target:
+          categories: [transit.bus_express]
+          merchants: [expedia, hotels_com, nh_hanaro_mart, srt, yanolja, yeogi_eottae]
+        reward: {type: points, program: nh_point, rate: 0.5}
+        limits:
+          - {shared: ieum}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: [KTX는 코레일 가맹점이 일반열차까지 넓어 뺐다, 농업 영역과 NH여행과 에어비앤비는 가맹점이 없어 뺐다]
+    unmodeled: [우대적립 0.2%는 지역농협 조합원만이고 하나로 고객 0.1%는 우수고객 등급이라 계산하지 않는다, 프리미엄 공항 라운지 연 1회 무료는 담을 가맹점이 없어 계산하지 않는다, 해외 이용금액과 무승인 후불교통은 매출표 접수일 기준으로 실적에 넣는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 수집일로 두었다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[ieum-0-5]', question: 이음서비스 적립이 기본 0.2%를 대신하는지 더해 받는지 원문에 분명하지 않다, assumed: 기본 0.2%를 대신해 0.5%만 받음}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 0원이고 후불교통 기능이 있다. 이음서비스 한도를 넘으면 기본적립으로 돌아간다.

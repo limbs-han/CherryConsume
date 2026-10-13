@@ -1,0 +1,27 @@
+card: hyundai-spm
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 국내외 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-15: 1500}, counted: 100000}
+  calc: 100,000 x 1.5% = 1,500. 100만 미만이라 5%는 없다
+- name: 50만 직전은 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 50만 미만 혜택 제외
+- name: 100만 구간 학원 5%, 한도 넘으면 1.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: education.academy}
+  - {at: 2026-11-06T10:00, amount: 500000, category: hospital}
+  expect:
+  - {payment: 0, benefits: {area-5: 15000}, counted: 300000}
+  - {payment: 1, benefits: {area-5: 5000, base-15: 6000}, counted: 500000}
+  calc: 300,000 x 5% = 15,000. 월 한도 20,000에서 남은 5,000은 5%로 100,000분이고 나머지 400,000은 1.5% = 6,000

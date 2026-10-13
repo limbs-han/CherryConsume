@@ -1,0 +1,45 @@
+card: hyundai-ampte2
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 1,000원당 1 MR 50만 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 15500, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-mr: 16}, counted: 15500}
+  calc: 15,500 x 0.1% = 15.5의 소수점 이하 반올림 16 MR
+- name: 전월 50만원 직전이면 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 15500, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 15500}
+  calc: 50만 미만이라 기본과 추가 혜택 모두 없음
+- name: 해외 5 MR과 월 한도 넘은 금액은 1 MR
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 3050000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-area: 500}, counted: 100000}
+  - {payment: 1, benefits: {overseas-area: 14500, base-mr: 150}, counted: 3050000}
+  calc: 100,000 x 5/1000 = 500 MR. 다음 결제는 남은 한도 14500 MR을 2,900,000원으로 채우고 나머지 150,000원은 1,000원당 1 MR
+- name: 국내 항공사와 면세점 5 MR
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-06T12:00, amount: 50000, category: travel.airline, payment_method: physical_card}
+  - {at: 2026-11-07T12:00, amount: 30000, category: travel.duty_free, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {travel-area: 250}, counted: 50000}
+  - {payment: 1, benefits: {duty-free-area: 150}, counted: 30000}
+  calc: 50,000 x 5/1000 = 250 MR, 30,000 x 5/1000 = 150 MR
+- name: 간편결제 항공권과 호텔은 기본 1 MR
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-08T12:00, amount: 50000, category: travel.airline, payment_method: naver_pay}
+  - {at: 2026-11-09T12:00, amount: 100000, category: travel.hotel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-mr: 50}, counted: 50000}
+  - {payment: 1, benefits: {base-mr: 100}, counted: 100000}
+  calc: 간편결제는 기본 혜택 대상. 특급호텔 영역은 담지 않아 숙박은 1 MR

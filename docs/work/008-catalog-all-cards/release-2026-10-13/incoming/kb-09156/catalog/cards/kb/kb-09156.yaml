@@ -1,0 +1,91 @@
+schema_version: 2
+id: kb-09156
+issuer: kb
+name: KB국민 가온 체크카드
+short_name: KB 가온 체크
+kind: check
+product_codes:
+  - '09156'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09156', fetched_at: '2026-10-12', review_no: 260522-01722-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [gift_card, prepaid_charge, transit]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+    stacks:
+      - {key: main, pick: best}
+      - {key: extra, pick: best}
+    benefits:
+      - key: base-0-2
+        title: 모든 가맹점 0.2% 포인트리 기본적립
+        source: page
+        evidence: [기본적립 | 모든 가맹점 | 0.2% | 해외이용금액 포함, 전월 이용실적 10만원 이상일 때 제공, '적립 제외: 지방세, 정부지원금, 대학(대학원) 등록금, 각종 수수료 및 이자, 연체료, 상품권 및 선불카드 구입·충전금액, 취소금액']
+        target:
+          exclude_categories: [education.tuition, tax.local]
+          all: true
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        unmodeled: [정부지원금 결제는 적립에서 빠진다]
+      - key: weekend-0-2
+        title: 주말·공휴일 0.2% 추가적립
+        source: page
+        evidence: ['추가적립 | 주말·공휴일 (모든 가맹점) | 0.2% | 대중교통(버스·지하철), 이동통신요금 자동납부, 해외이용금액 제외. 택시는 적립 가능']
+        target:
+          exclude_categories: [education.tuition, tax.local, telecom.mobile, transit.bus_city, transit.subway]
+          all: true
+        when:
+          - day:
+              in: [sat, sun]
+              holidays: include
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+      - key: dining-cafe-0-2
+        title: 외식·커피 0.2% 추가적립
+        source: page
+        evidence: ['추가적립 | 외식/커피 | 0.2% | 음식점: 일반음식점, 한식, 중식, 일식, 양식, 뷔페, 패밀리레스토랑 / 커피: 커피전문점 업종']
+        target:
+          categories: [cafe, restaurant.general]
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+      - key: transit-taxi-0-2
+        title: 버스·지하철·택시 0.2% 추가적립
+        source: page
+        evidence: ['추가적립 | 대중교통/택시 | 0.2% | 대중교통은 RF교통기관 업종 기준. 시외버스, 고속버스, 공항버스 제외']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+        unmodeled: [대중교통 적립은 실제 이용일이 아니라 이용내역서에 적힌 이용일 기준으로 적용된다]
+      - key: telecom-0-2
+        title: 이동통신요금 자동납부 0.2% 추가적립
+        source: page
+        evidence: ['추가적립 | 이동통신요금 | 0.2% | SKT, KT, LG U+ 요금 자동납부 등록 필요']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 0.2}
+        tiers: {from: 100000}
+        stack: extra
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 없이 추가적립을 주는 신규 특례는 계산하지 않는다, 정부지원금과 무승인금액(자판기·터널통행료·기차/고속버스 취소 반환 수수료)은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].stacks', question: 추가적립 영역 여럿에 동시에 해당하는 결제(주말 외식 등)가 각각 0.2%를 받는지 원문이 밝히지 않았다. 덜 주는 쪽으로 추가적립은 하나만 받게 두었다, assumed: extra}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 실적 제외 '교통이용금액'을 교통 업종 전체로 옮겼다. 택시는 남겼다, assumed: transit}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 기본적립 0.2%와 추가적립 0.2%를 다른 묶음에 두어 더해 받는다.

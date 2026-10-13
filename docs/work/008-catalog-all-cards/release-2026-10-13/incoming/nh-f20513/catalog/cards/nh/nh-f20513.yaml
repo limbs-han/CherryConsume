@@ -1,0 +1,83 @@
+schema_version: 2
+id: nh-f20513
+issuer: nh
+name: zgm.고향으로체크카드
+short_name: zgm 고향으로 체크
+kind: check
+product_codes:
+  - '90010461'
+  - F20513
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010461', fetched_at: 2026-10-13, review_valid_until: 2027-06-30}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·대형마트·할인점·역사 입점 매장과 별도 가맹점번호로 승인되는 PG·간편결제는 적립에서 빠질 수 있다, 포인트 결제분과 가상화폐 거래소 이용금액은 실적에서 빠진다, 다른 NH농협카드 혜택과 겹치면 큰 혜택 하나만 받는다]
+    facts:
+      - {key: hometown_donor, type: bool, scope: user, ask: 고향사랑기부제 기부 뒤 우대 기간 안에 있나요}
+    limits:
+      - {key: donor, per: month, amount: 3000}
+    stacks:
+      - {key: main}
+      - {key: weekend}
+      - {key: donor}
+    benefits:
+      - key: base-0-2
+        title: 국내외 기본 0.2% NH포인트 적립
+        source: page
+        evidence: [평일(월~금) 국내/해외 이용가맹점 0.2% NH포인트 기본적립, 전월실적 조건과 적립한도 없음]
+        target: {all: true}
+        reward: {type: points, program: nh_point, rate: 0.2}
+      - key: weekend-domestic-0-2
+        title: 주말 국내 0.2% NH포인트 추가
+        source: page
+        evidence: [주말(토·일) 국내 0.4%, 주말 국내 추가 0.2%는 전월실적 20만원 이상이면 적용되며 적립한도 없음, 카드사용 등록 일로부터 그 다음달 말일까지는 전월실적 미달시에도 서비스가 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - day:
+              in: [sat, sun]
+        reward: {type: points, program: nh_point, rate: 0.2}
+        tiers: {from: 200000}
+        stack: weekend
+      - key: donor-weekend-extra-0-2
+        title: 고향사랑 기부자 주말 오프라인 0.2% 추가
+        source: page
+        evidence: [고향사랑 우대 서비스, 주말 전국 오프라인 가맹점 이용 시 0.2% 추가 적립(주말 총 0.6%), 전월실적 20만원 이상 월 통합적립한도 3천 포인트, '적립 서비스 제외대상 + 인터넷쇼핑몰, 홈쇼핑, 전자상거래업종, 전화요금']
+        target:
+          exclude_categories: [online_shopping, telecom]
+          all: true
+        when:
+          - {fact: hometown_donor}
+          - {region: domestic}
+          - {channel: offline}
+          - day:
+              in: [sat, sun]
+        reward: {type: points, program: nh_point, rate: 0.2}
+        limits:
+          - {shared: donor}
+        tiers: {from: 200000}
+        stack: donor
+        unmodeled: [홈쇼핑 가맹점은 업종이 없어 제외하지 못했다]
+    unmodeled: [해외 이용금액과 무승인 결제는 매출표 접수일 기준으로 실적에 넣는다, 우대 적립은 이용월 다음 달 15일 이후 한꺼번에 적립된다, 기부 이력은 고향사랑e음에서 확인되며 사용자가 직접 입력한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 확인한 날로 두었다, assumed: '2026-10-13'}
+  - {path: 'revisions[0].benefits[weekend-domestic-0-2].when', question: 주말에 공휴일이 들어가는지 문구가 없다, assumed: 요일만 본다}
+  - {path: 'revisions[0].new_card', question: 신규 특례 문구가 주말 기본 추가 적립 옆에 있다. 기부자 우대에도 같은지 문구가 없다, assumed: 같은 구간 20만원}
+notes: 2026-10-13 상품 페이지(준법감시인 심의필 2026.07.01~2027.06.30)를 대조했다. 고향사랑 특화 체크카드이고 연회비 없음. 평일 0.2%, 주말 국내 0.4%, 기부자는 주말 오프라인에 0.2%를 더 받아 총 0.6%다.

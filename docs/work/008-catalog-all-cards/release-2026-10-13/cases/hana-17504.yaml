@@ -1,0 +1,245 @@
+card: hana-17504
+cases:
+- name: digital-content-50 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: disney_plus
+    billing: autopay
+  expect:
+  - payment: 0
+    benefits:
+      digital-content-50: 5000
+  calc: 10000 곱하기 50% = 5000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: coffee-50 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-50: 5000
+  calc: 10000 곱하기 50% = 5000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: taxi-50 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: kakao_t
+  expect:
+  - payment: 0
+    benefits:
+      taxi-50: 5000
+  calc: 10000 곱하기 50% = 5000. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: base-1 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+  expect:
+  - payment: 0
+    benefits:
+      base-1: 100
+  calc: 10000 곱하기 1% = 100. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: special-overseas 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    region: overseas
+  expect:
+  - payment: 0
+    benefits:
+      special-overseas: 150
+  calc: 10000 곱하기 1.5% = 150. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: special-airline 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: asiana_airlines
+  expect:
+  - payment: 0
+    benefits:
+      special-airline: 150
+  calc: 10000 곱하기 1.5% = 150. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: special-dutyfree 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: lotte_dfs_online
+  expect:
+  - payment: 0
+    benefits:
+      special-dutyfree: 150
+  calc: 10000 곱하기 1.5% = 150. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: special-travel 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: agoda
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      special-travel: 150
+  calc: 10000 곱하기 1.5% = 150. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: special-hana-tour-offline 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: hana_tour
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      special-hana-tour-offline: 150
+  calc: 10000 곱하기 1.5% = 150. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: special-shopping-online 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: coupang
+    channel: online
+  expect:
+  - payment: 0
+    benefits:
+      special-shopping-online: 120
+  calc: 10000 곱하기 1.2% = 120. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: special-shopping-offline 대상 거래 양수 검증
+  prev_month_spend: 500000
+  holder: {}
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    payment_method: physical_card
+    category: other
+    merchant: altteul_fuel
+    channel: offline
+  expect:
+  - payment: 0
+    benefits:
+      special-shopping-offline: 120
+  calc: 10000 곱하기 1.2% = 120. 이 검증은 미지원 핵심조건을 검증하지 않는다.
+- name: 50만원 실적 경계 499999
+  prev_month_spend: 499999
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      base-1: 100
+  calc: 50만원 경계에서 특별 적립 또는 1% 할인 자격이 바뀐다.
+- name: 50만원 실적 경계 500000
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-50: 5000
+  calc: 50만원 경계에서 특별 적립 또는 1% 할인 자격이 바뀐다.
+- name: 신규 다음달까지 50만원 실적 면제
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-09-01'
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: other
+    payment_method: physical_card
+    merchant: starbucks
+  expect:
+  - payment: 0
+    benefits:
+      coffee-50: 5000
+  calc: 신규 다음달 말일까지는 전월 실적 50만원을 충족한 것으로 적용한다.
+- name: 오프라인 신라면세점 1.5%
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: travel.duty_free
+    region: domestic
+    channel: offline
+    payment_method: physical_card
+    merchant: shilla_dfs
+  expect:
+  - payment: 0
+    benefits:
+      special-dutyfree: 150
+  calc: 오프라인 신라면세점 1.5%
+- name: 택시앱 이름이어도 기차 결제는 50% 제외
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 10000
+    category: transit.rail
+    region: domestic
+    channel: offline
+    payment_method: physical_card
+    merchant: kakao_t
+  expect:
+  - payment: 0
+    benefits:
+      base-1: 100
+  calc: 택시앱 이름이어도 기차 결제는 50% 제외
+- name: 해외 특별적립 월 공유 10만원 한도
+  prev_month_spend: 500000
+  payments:
+  - at: 2026-10-12T12:00
+    amount: 8000000
+    category: other
+    region: overseas
+    channel: offline
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      special-overseas: 100000
+  calc: 해외 특별적립 월 공유 10만원 한도

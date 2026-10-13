@@ -1,0 +1,47 @@
+card: nh-f20513
+holder:
+  started_on: '2026-01-01'
+  facts: {hometown_donor: true}
+cases:
+- name: 평일 국내 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 100,000원 x 0.2% = 200원
+- name: 평일 해외 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 100,000원 x 0.2% = 200원
+- name: 토요일 국내 20만 구간 기본 0.2%에 추가 0.2%와 기부자 0.2%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 100000, category: other, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200, weekend-domestic-0-2: 200, donor-weekend-extra-0-2: 200}}
+  calc: 100,000원 x 0.2% = 200원씩 셋
+- name: 토요일 20만 미만은 기본만
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-07T10:00, amount: 100000, category: other, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 구간 미달이라 기본 0.2%만
+- name: 토요일 해외는 기본만
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 해외는 주말 추가가 없다
+- name: 기부자 한도 3천
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-07T10:00, amount: 2000000, category: other, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 4000, weekend-domestic-0-2: 4000, donor-weekend-extra-0-2: 3000}}
+  calc: 2,000,000원 x 0.2% = 4,000원, 기부자 몫은 월 한도 3,000원

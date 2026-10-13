@@ -1,0 +1,39 @@
+[
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "rround_pay_point",
+      "name": "RROUND PAY 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "lotte-1944",
+    "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00014_20251201_10001.pdf",
+    "evidence": "RR PAY 포인트 1P = 1원이며, L.POINT를 포함한 모든 포인트로 전환은 되지 않습니다."
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "lotte_loca_coin",
+      "name": "롯데카드 로카코인",
+      "won_per_point": 0.5
+    },
+    "card_id": "lotte-p13561-a13561",
+    "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00044_20260921_10005.pdf",
+    "evidence": "로카코인 1P 당 1원으로 전환되며, 단기카드대출(현금서비스) 및 장기카드대출(카드론) 이용 시 발생하는 이자를 납부할 수 있습니다. 로카코인 1P 당 0.5원으로 전환되며, 롯데카드 결제대금을 납부할 수 있습니다. 결제대금 납부 가치인 0.5원으로 둔다"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "dongyang_life",
+      "name": "동양생명",
+      "category": "insurance.private",
+      "aliases": [
+        "동양생명",
+        "동양생명보험"
+      ]
+    },
+    "card_id": "lotte-p15494-a15494",
+    "source_url": "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15494-A15494",
+    "evidence": "동양생명 보험엔로카로 동양생명 보험료 자동이체 연결 시에만 결제일 할인 혜택을 받으실 수 있습니다."
+  }
+]

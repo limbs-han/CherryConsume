@@ -1,0 +1,20 @@
+card: lotte-p15494-a15494
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 150만 구간 동양생명 자동이체 한도 25000
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 80000, merchant: dongyang_life, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {dongyang-insurance-discount: 25000}
+  calc: 150만 구간 월 한도 25,000
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 80000, merchant: dongyang_life, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 할인 없음

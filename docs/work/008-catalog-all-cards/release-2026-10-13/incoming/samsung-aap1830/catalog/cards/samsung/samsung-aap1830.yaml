@@ -1,0 +1,111 @@
+schema_version: 2
+id: samsung-aap1830
+issuer: samsung
+name: K-패스 삼성카드
+short_name: K-패스 삼성
+search_names: [K-패스 삼성카드, K패스 삼성카드, 케이패스 삼성카드]
+kind: credit
+product_codes: [AAP1830]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1830', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtm6gfSJg2Zrshv3zEpt3zsI%3D&sn=1', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2024-04-11'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드의 다른 할인 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, 자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다]
+    limits:
+      - key: coffee
+        per: month
+        amount: {400000: 4000, 800000: 8000}
+      - key: digital
+        per: month
+        amount: {400000: 4000, 800000: 8000}
+      - key: online
+        per: month
+        amount: {400000: 4000, 800000: 8000}
+    benefits:
+      - key: transit-10
+        title: 대중교통 10% 할인
+        source: manual
+        evidence: [대중교통 10% 결제일할인, '대중교통 버스, 지하철', '전월 이용금액 40만원 이상 5,000원, 80만원 이상 10,000원', '오프라인 결제건에 한하며, 시외/고속버스는 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {400000: 5000, 800000: 10000}
+        tiers: {from: 400000}
+      - key: coffee-starbucks-20
+        title: 스타벅스 20% 할인
+        source: manual
+        evidence: [커피전문점 20% 결제일할인, '스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '전월 이용금액 40만원 이상 4,000원, 80만원 이상 8,000원', '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외(단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공)']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: coffee-other-20
+        title: 이디야·투썸·커피빈·블루보틀 20% 할인
+        source: manual
+        evidence: [커피전문점 20% 결제일할인, '스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '전월 이용금액 40만원 이상 4,000원, 80만원 이상 8,000원', 오프라인 결제건에 한하며]
+        target:
+          merchants: [blue_bottle, coffee_bean, ediya, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: digital-20
+        title: 디지털콘텐츠·멤버십 정기결제 20% 할인
+        source: manual
+        evidence: [디지털콘텐츠/멤버십 정기결제 시 20% 결제일할인, '디지털콘텐츠 넷플릭스, 디즈니+, 웨이브, 유튜브프리미엄, 티빙, 멜론', '멤버십 쿠팡 와우 멤버십, 네이버플러스 멤버십', '전월 이용금액 40만원 이상 4,000원, 80만원 이상 8,000원', '디지털콘텐츠는 구글플레이, 앱스토어 등을 통한 결제건(인앱 결제) 제외']
+        target:
+          merchants: [coupang_wow, disney_plus, melon, naver_plus_membership, netflix, tving, wavve, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: digital}
+        tiers: {from: 400000}
+        unmodeled: [디지털콘텐츠의 구글플레이·앱스토어 인앱 결제는 할인하지 않는다]
+      - key: online-3
+        title: 온라인쇼핑몰·온라인패션몰 3% 할인
+        source: manual
+        evidence: [온라인쇼핑몰/온라인패션몰 3% 결제일할인, '온라인쇼핑몰 쿠팡, SSG.COM, G마켓, 옥션, 11번가, 삼성카드 쇼핑', '온라인패션몰 무신사, W컨셉', '전월 이용금액 40만원 이상 4,000원, 80만원 이상 8,000원']
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, musinsa, samsung_card_shopping, ssg_com, wconcept]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: online}
+        tiers: {from: 400000}
+    unmodeled: [특수 소재 카드는 신청 때 발급수수료 5, 000원을 받고 일반 카드와 동시에 쓸 수 없다, 전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제)는 매출전표 접수일 기준이다, 삼성카드의 다른 결제일할인 혜택과 중복 적용되지 않고 큰 금액만 적용한다, 후불교통기능이 탑재되어 발급된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 출시일은 2024-04-11이고 상품안내장은 2024.4판이다. 출시일을 시행일로 두었다, assumed: '2024-04-11'}
+notes: 2026-10-13 상품안내장(2024.4판, 여신금융협회 심의필 제2024-C1a-04005호) 대조. 연회비 국내전용과 해외겸용 Mastercard 모두 10,000원(기본 7,000+제휴 3,000). 실적 제외는 4대보험, 국세·지방세·공과금, 아파트관리비, 부동산 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권이다. 발급월+1개월까지는 전월 실적이 40만원 미만이어도 40만원 구간 혜택을 준다.

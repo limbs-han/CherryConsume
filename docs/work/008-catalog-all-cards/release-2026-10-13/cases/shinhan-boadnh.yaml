@@ -1,0 +1,36 @@
+card: shinhan-boadnh
+holder:
+  started_on: '2026-01-01'
+  options: [{option: plus_service, choice: none, effective_from: '2026-01-01'}]
+cases:
+- name: 50만 구간 LG전자 3%와 생활 적립
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 1000000, merchant: lg_bestshop, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 10000, merchant: twosome, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-10T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lg-3: 30000}}
+  - {payment: 1, benefits: {dept-mart-1: 1000}}
+  - {payment: 2, benefits: {coffee-5: 500}}
+  - {payment: 3, benefits: {coffee-offline-5: 500}}
+  - {payment: 4, benefits: {telecom-5: 3000}}
+  calc: 100만 × 3% = 30,000. 이마트 1% 1,000. 커피 각 500. SKT 6만 × 5% = 3,000. 생활 합계 5,000으로 월 1만 안
+- name: 30만 구간 생활 월 8천 한도, LG전자는 50만부터
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, merchant: lg_bestshop, payment_method: physical_card}
+  - {at: 2026-11-10T09:00, amount: 200000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {telecom-5: 8000}}
+  calc: 30만 구간은 LG전자 적립 없음. 20만 × 5% = 10,000이지만 월 8,000
+- name: 경계 직전 299999 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-10T09:00, amount: 60000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 적립 없음

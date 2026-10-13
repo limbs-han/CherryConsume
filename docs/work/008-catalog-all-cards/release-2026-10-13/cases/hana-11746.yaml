@@ -1,0 +1,78 @@
+card: hana-11746
+holder:
+  started_on: '2026-01-01'
+  facts: {hana_bank_account: true}
+cases:
+- name: 30만 직전이면 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0
+- name: 지역쇼핑 주유 합쳐 2만 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 300000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: gs_caltex}
+  expect:
+  - payment: 0
+    benefits: {region-shopping-points: 15000}
+    counted: 0
+  - payment: 1
+    benefits: {fuel-points: 5000}
+    counted: 0
+  calc: 백화점 30만원 15,000, 주유 30만원 15,000이지만 통합 2만에 5천 남음. 둘 다 실적에서 빠짐
+- name: 온라인쇼핑 10만원마다 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 99999, merchant: coupang, channel: online}
+  - {at: 2026-11-05T10:00, amount: 1, merchant: gmarket, channel: online}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {online-shopping-points: 5000}
+  calc: 합계 10만원에서 5천
+- name: 버스 10만원 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {commute-points: 5000}
+  calc: 10만원 5천
+- name: 통신 자동이체 10만원 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {autopay-bills-points: 5000}
+  calc: 10만원 5천
+- name: 해외 10만원 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-points: 5000}
+  calc: 10만원 5천
+- name: 60만 구간 아파트관리비
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {apartment-points: 5000}
+    counted: 0
+  calc: 10만원 이상 5천
+- name: 스타벅스 4천원 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 5000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {coffee-discount: 4000}
+  calc: 4천원 이상 결제하면 4천원

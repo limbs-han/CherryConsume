@@ -1,0 +1,46 @@
+schema_version: 2
+id: lotte-1471
+issuer: lotte
+name: LG헬로비전 롯데카드
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 12000}
+  - {scope: global, brand: amex, amount: 12000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2016-A00112_20260907_10011.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2017-01-11'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: hellovision-telecom
+        title: LG헬로비전 통신요금 자동이체 결제일 할인
+        source: manual
+        evidence: ['30만원 이상~70만원 미만 11,000원', '70만원 이상~100만원 미만 15,000원', '100만원 이상 20,000원', '유선(인터넷, 케이블TV, 집전화), 알뜰폰 및 LG헬로비전 렌탈요금 자동이체 납부 시 자동이체되는 통신요금에 한하여 할인이 제공됩니다.', 할인금액이 청구되는 통신요금보다 클 경우 해당 청구금액(통신요금)까지만 할인됩니다.]
+        target:
+          merchants: [hello_mobile, lg_hellovision]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 11000, 700000: 15000, 1000000: 20000}
+        tiers: {from: 300000}
+    unmodeled: [LG헬로비전 렌탈요금 자동이체도 할인 대상이지만 가맹점이 없어 계산하지 않는다, 할인받은 LG헬로비전 롯데카드 매출과 다른 카드 매출은 실적에서 빠진다, 현금서비스·카드론·이자·수수료는 실적에서 빠진다, 가족카드 이용금액이 실적에 합산된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 카드 출시일로 두었다. 설명서는 2026년 8월 기준이다, assumed: '2017-01-11'}
+  - {path: product_codes, question: 상품 페이지와 상품 코드를 찾지 못해 색인 번호 id를 그대로 썼다}
+notes: 2026-10-12 상품설명서(2026년 8월 기준) 대조. 출시일 2017-01-11. 할인액이 요금보다 크면 요금까지만이라 100% 할인에 월 한도로 적었다. 신규 발급 특례는 사용 등록 달의 다음 달 말일까지 11,000원 한도라 30만 구간으로 넣었다. 실적 제외 목록에 세금, 공과금, 무이자 할부가 없어 연회비만 넣었다.

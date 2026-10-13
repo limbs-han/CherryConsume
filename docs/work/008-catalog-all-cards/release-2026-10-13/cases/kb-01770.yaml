@@ -1,0 +1,53 @@
+card: kb-01770
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 병원 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-5: 500}}
+  calc: 10,000 × 5% = 500점
+- name: 경계 직전 299999 병원 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 미만은 혜택 없음
+- name: 50만 구간 이마트 10만원 오프라인
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 4000}}
+  calc: 5,000점 중 50만 구간 한도 4,000점
+- name: 30만 구간 GS홈쇼핑 4만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: gs_shop, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {homeshopping-5: 2000}}
+  calc: 40,000 × 5% = 2,000점. 30만 구간 한도 2,000점
+- name: 30만 구간 SK주유소 3만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {sk-fuel-5: 1500}}
+  calc: 30,000 × 5% = 1,500점
+- name: 30만 구간 골프 2만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: sports.golf, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {golf-5: 1000}}
+  calc: 20,000 × 5% = 1,000점
+- name: 30만 구간 보험료 10만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: insurance.private, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {insurance-2000: 2000}}
+  calc: 건당 10만원 이상 2,000점

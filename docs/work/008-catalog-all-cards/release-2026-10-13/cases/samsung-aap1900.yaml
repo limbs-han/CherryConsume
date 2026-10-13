@@ -1,0 +1,36 @@
+card: samsung-aap1900
+holder:
+  started_on: '2026-01-01'
+  options: [{option: insurance, choice: held, effective_from: '2026-01-01'}]
+cases:
+- name: 보험 이용 100만원 이상 17,000원 차감
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {credit-17000: 17000}, counted: 50000}
+  calc: 100만원 구간이라 월 17,000원. 한 달 한 번
+- name: 보험 이용 50만원 이상 7,000원 차감, 100만원 직전
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {credit-7000: 7000}, counted: 50000}
+  calc: 999,999원은 50만 구간이라 7,000원
+- name: 50만원 직전이면 혜택 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 499,999원은 0 구간이라 혜택 없음
+- name: 보험 미이용 50만원 이상 0.5% 적립
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: insurance, choice: none, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 250}, counted: 50000}
+  calc: 50,000 × 0.5% = 250P

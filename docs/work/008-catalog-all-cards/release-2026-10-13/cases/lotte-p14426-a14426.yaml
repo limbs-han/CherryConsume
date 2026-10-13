@@ -1,0 +1,22 @@
+card: lotte-p14426-a14426
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: plan, choice: none, effective_from: '2026-01-01'}
+cases:
+- name: 플랜할인 미이용 1% 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {lpoint-1: 555}
+  calc: 55500 × 1% = 555
+- name: 실적 1원 모자라면 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만

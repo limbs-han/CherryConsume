@@ -1,0 +1,164 @@
+schema_version: 2
+id: ibk-12112730297
+issuer: ibk
+name: 참! 좋은 kt wiz 카드(신용)
+kind: credit
+product_codes:
+  - '12112730297'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: unionpay, amount: 2000}
+  - {scope: global, brand: visa, amount: 5000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0297&pageId=CA01010000', fetched_at: 2026-10-13, review_no: 제2025-8017호, review_valid_until: 2028-11-20}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2025-11-25
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [fuel, gift_card, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: receipt}
+    benefit_exclusions:
+      categories: [gift_card]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 10000, 700000: 20000, 1500000: 40000}
+    benefits:
+      - key: top-point-0-2
+        title: TOP포인트 0.2% 적립
+        source: page
+        evidence: [리워드 TOP포인트 적립 기본 0.2%, '제외 항목: 주유(유류·LPG), 무이자할부, 제세공과금, 상품권 구입, 교통카드 이용액', 할인서비스가 적용된 거래는 적립 제외]
+        target:
+          exclude_categories: [fuel, tax, transit.bus_city, transit.subway, utility]
+          all: true
+        when:
+          - {interest_free: false}
+        reward: {type: points, program: bc_top_point, rate: 0.2}
+      - key: fuel-60
+        title: 주유 리터당 60원 청구할인
+        source: page
+        evidence: [교통/통신 주유 할인 전 주유소 리터당 60원 할인 (LPG 포함), '통합 1일 1회, 월 2회, 회당 10만원 한도', 전월 국내 가맹점 이용실적 30만원 이상 필요]
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        notes: 원문은 리터 환산 기준을 적지 않는다. 앱은 reference.yaml 기름값을 쓴다. 주유가 월간 통합할인한도에 들어가는지 원문이 분명하지 않아 함께 쓰는 쪽으로 뒀다
+      - key: mart-5
+        title: 대형마트 5% 청구할인
+        source: page
+        evidence: ['쇼핑/미용 대형마트 5% 할인 (이마트, 홈플러스, 롯데마트, 농협하나로클럽)', '통합 월 1회, 1회 10만원 한도', 도시형 슈퍼마켓과 인터넷(PG) 결제는 제외]
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [농협은 하나로클럽만 대상이고 일반 하나로마트는 원문에 없다]
+      - key: online-20
+        title: 쿠팡·티몬·위메프 20% 청구할인
+        source: page
+        evidence: ['소셜커머스 20% 할인 (쿠팡, 티몬, 위메프)', '통합 1일 1회, 월 3회, 1회 2만원 한도', 상품권 구매는 할인 제외]
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: movie-8000
+        title: 영화관 8천원 청구할인
+        source: page
+        evidence: [공연/문화 영화 할인 전국 영화관 및 인터넷 예매 8천원 할인, '통합 월 1회, 연 6회, 1만원 이상 결제 시 적용', BC가맹점 업종이 영화관으로 등록된 곳에 한함]
+        target:
+          categories: [movie]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 8000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: dining-20
+        title: 패밀리레스토랑 20% 청구할인
+        source: page
+        evidence: ['카페/외식 패밀리레스토랑 20% 할인 (아웃백, 빕스, 블랙스미스, 토다이, TGIF, 애슐리)', '통합 월 1회, 1회 10만원 한도이며 최대 2만원 할인', 전월 150만원 이상이면 월 2회]
+        target:
+          merchants: [ashley, blacksmith, outback, tgif, todai, vips]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - per: month
+            count: {300000: 1, 1500000: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: bulgogi-20
+        title: 불고기브라더스 20% 현장할인
+        source: page
+        evidence: [불고기브라더스 20% 현장할인, '월 1회, 1회 10만원 한도, 최대 2만원', 월간 통합할인한도와 별도로 적용]
+        target:
+          merchants: [bulgogi_brothers]
+        reward: {type: onsite_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+      - key: coffee-20
+        title: 주요 커피전문점 20% 청구할인
+        source: page
+        evidence: ['주요 커피전문점 20% 할인 (스타벅스, 커피빈, 카페베네, 탐앤탐스, 할리스, 엔제리너스, 달.콤)', '1일 1회, 월 3회, 1회 2만원 한도']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, dalkomm, hollys, starbucks, tom_n_toms]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: wizpark-3000
+        title: 수원 케이티 위즈파크 입장권 3천원 청구할인
+        source: page
+        evidence: [특화서비스 수원 케이티 위즈파크 입장권 3천원 할인, '카드당 1일 1회 1매, 월 횟수 제한 없음', 전월 실적과 무관하며 월간 통합할인한도 밖에서 적용]
+        target:
+          merchants: [kt_wiz_park]
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {per: day, count: 1}
+        unmodeled: [1매 기준과 장애인석 제외는 계산하지 않는다]
+      - key: wizpark-shop-10
+        title: 위즈파크 야구용품점 10% 청구할인
+        source: page
+        evidence: [위즈파크 내 야구용품점 10% 할인, '통합 월 1회, 연 6회, 1회 10만원 한도(최대 1만원)', 월간 통합할인한도에 포함되며 원정팀 매장은 제외]
+        target:
+          merchants: [kt_wiz_park_shop]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+          - {shared: integrated}
+        tiers: {from: 300000}
+    unmodeled: ['놀이공원 할인은 서울랜드, 에버랜드, 롯데월드, 한국민속촌, 이월드 본인 자유이용권 50% 등이고 통합 월 1회, 연 2회다. 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다', TOP포인트 추가 적립 0.1%와 0.2%는 카드 사용기간과 전년도 이용실적이 필요해 계산하지 않는다, 백화점과 할인점·아울렛 입점 매장은 제외될 수 있다, 가족카드 이용실적은 본인 실적과 합산하지 않고 카드별로 본다]
+open_questions:
+  - {path: 'revisions[0].benefits[top-point-0-2]', question: 할인서비스가 적용된 거래는 적립에서 빼고 큰 쪽 하나만 받는 것으로 같은 묶음에 뒀다, assumed: main}
+  - {path: 'revisions[0].benefits[fuel-60]', question: 주유가 월간 통합할인한도에 들어가는지 원문에 없다, assumed: 함께 쓴다}
+notes: 2026-10-13 expand21 조사. 기본 0.2% 적립은 할인을 받은 거래에는 없어 할인과 같은 묶음에 둔다. 위즈파크 입장권과 야구용품점 가맹점은 공통 파일에 없어 needed로 제안한다

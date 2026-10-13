@@ -1,0 +1,144 @@
+card: kb-04124
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 A팩 OTT 넷플릭스 1만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: a, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: netflix, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-ott-50: 5000}}
+  calc: 10,000원 기준 5,000원, 월 한도 안
+- name: 20만 구간 A팩 앱스토어 1만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: a, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: app_store, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-app-30: 3000}}
+  calc: 10,000원 기준 3,000원, 월 한도 안
+- name: 20만 구간 A팩 PC방 1만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: a, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: pc_room, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-pcroom-20: 2000}}
+  calc: 10,000원 기준 2,000원, 월 한도 안
+- name: 20만 구간 A팩 택시 1만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: a, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: taxi, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-taxi-rail-20: 2000}}
+  calc: 10,000원 기준 2,000원, 월 한도 안
+- name: 20만 구간 A팩 CU KB Pay 1만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: a, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {cvs-kbpay-20: 2000}}
+  calc: 10,000원 기준 2,000원, 월 한도 안
+- name: 20만 구간 A팩 CGV 2만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: a, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: cgv, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-movie-4000: 4000}}
+  calc: 20,000원 기준 4,000원, 월 한도 안
+- name: 20만 구간 B팩 쿠팡와우 7890원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: b, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 7890, merchant: coupang_wow, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-membership-50: 3945}}
+  calc: 7,890원 기준 3,945원, 월 한도 안
+- name: 20만 구간 B팩 SKT 자동납부 5만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: b, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-telecom-30: 5000}}
+  calc: 50,000원 기준 5,000원, 월 한도 안
+- name: 20만 구간 B팩 무신사 1만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: b, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: musinsa, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-fashion-online-20: 2000}}
+  calc: 10,000원 기준 2,000원, 월 한도 안
+- name: 20만 구간 B팩 올리브영 5천원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: b, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-oliveyoung-20: 1000}}
+  calc: 5,000원 기준 1,000원, 월 한도 안
+- name: 20만 구간 B팩 배민 1만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: b, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-delivery-20: 2000}}
+  calc: 10,000원 기준 2,000원, 월 한도 안
+- name: 20만 구간 B팩 아웃백 3만원
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: b, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: outback, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-date-4000: 4000}}
+  calc: 30,000원 기준 4,000원, 월 한도 안
+- name: 경계 직전 199999 B팩 무신사 할인 없음
+  prev_month_spend: 199999
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: b, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: musinsa, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만 미만 할인 없음
+- name: A팩인데 무신사 할인 없음
+  prev_month_spend: 200000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pack, choice: a, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: musinsa, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 고른 팩만 할인

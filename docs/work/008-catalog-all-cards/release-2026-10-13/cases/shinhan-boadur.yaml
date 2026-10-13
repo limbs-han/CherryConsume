@@ -1,0 +1,34 @@
+card: shinhan-boadur
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈 자동납부 한도 1만3천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 35000, merchant: coway_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coway-rental: 13000}, counted: 0}
+  calc: 35,000원 중 월 한도 13,000원 할인. 할인 받은 거래는 실적 제외
+- name: 30만 직전 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T09:00, amount: 35000, merchant: coway_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 35000}
+  calc: 30만원 미만
+- name: 150만 구간 한도 3만 두 건
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 20000, merchant: coway_rental, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 20000, merchant: coway_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coway-rental: 20000}}
+  - {payment: 1, benefits: {coway-rental: 10000}}
+  calc: 첫 건 전액 20,000, 둘째 건 남은 한도 10,000
+- name: 70만 구간 한도 1만7천
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 30000, merchant: coway_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coway-rental: 17000}}
+  calc: 월 한도 17,000

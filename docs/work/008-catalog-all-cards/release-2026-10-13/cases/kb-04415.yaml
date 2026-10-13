@@ -1,0 +1,55 @@
+card: kb-04415
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 현대백화점 1.5% 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T15:00, amount: 1000000, merchant: hyundai_department, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {hpoint-base-0-5: 5000, hpoint-hyundai-1: 10000}, counted: 1000000}
+  calc: 원문 예시대로 100만원 이용 시 기본 5,000P와 추가 10,000P
+- name: 30만 구간 카페 5%와 할인 건 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-5: 1000}, counted: 0}
+  calc: 20,000 × 5% = 1,000. 할인 매출은 실적과 적립에서 빠진다
+- name: 30만 직전이면 카페도 0.5% 적립
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {hpoint-base-0-5: 100}, counted: 20000}
+  calc: 할인이 없어 20,000 × 0.5% = 100P
+- name: 1만원 미만은 할인 없이 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 9000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {hpoint-base-0-5: 45}, counted: 9000}
+  calc: 9,000 × 0.5% = 45P
+- name: 30만 구간 통합 월 1만원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 150000, category: fuel, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, category: education.academy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekly-5: 7500}, counted: 0}
+  - {payment: 1, benefits: {monthly-5: 2500}, counted: 0}
+  calc: 150,000 × 5% = 7,500, 100,000 × 5% = 5,000이나 남은 2,500
+- name: 60만 구간 미용실 5%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 300000, category: beauty.salon, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {monthly-5: 15000}, counted: 0}
+  calc: 300,000 × 5% = 15,000. 60만 구간 한도 2만원 안
+- name: CGV 온라인 예매 3,500원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 15000, merchant: cgv, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {movie-3500: 3500}, counted: 0}
+  calc: 건당 3,500원

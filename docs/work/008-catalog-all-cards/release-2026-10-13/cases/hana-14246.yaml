@@ -1,0 +1,20 @@
+card: hana-14246
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 일반 0.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {domestic-07: 70}
+  calc: 10,000원 x 0.7% = 70하나머니
+- name: 페이결제 1.0%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: restaurant.general, payment_method: kakao_pay}
+  expect:
+  - payment: 0
+    benefits: {pay-10: 100}
+  calc: 10,000원 x 1.0% = 100하나머니. 높은 적립률 하나만 받는다

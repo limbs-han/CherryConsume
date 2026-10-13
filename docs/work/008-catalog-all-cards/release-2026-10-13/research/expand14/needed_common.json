@@ -1,0 +1,68 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "the_people_life",
+      "name": "더피플라이프",
+      "billing": "autopay",
+      "category": "other",
+      "aliases": [
+        "더피플라이프",
+        "더피플라이프 상조",
+        "THE PEOPLE LIFE"
+      ]
+    },
+    "card_id": "kb-04316",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04316",
+    "evidence": "더피플라이프 상조요금 자동이체 할인 1만원 1만5천원. 더피플라이프 카드로 더피플라이프 상조요금 자동이체 등록 시에만 제공"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "milk_t",
+      "name": "밀크T",
+      "billing": "autopay",
+      "category": "education.study_material",
+      "aliases": [
+        "밀크T",
+        "밀크T아이",
+        "밀크T초등",
+        "밀크T중고등"
+      ]
+    },
+    "card_id": "kb-04320",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04320",
+    "evidence": "밀크T 학습비 자동이체 시 전월 실적에 따라 청구 할인 (밀크T아이: 1522-6002/ 밀크T초등: 1577-1533/ 밀크T중고등: 1522-5533)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "interpark_ticket",
+      "name": "인터파크티켓",
+      "category": "other",
+      "aliases": [
+        "인터파크티켓",
+        "NOL 티켓",
+        "INTERPARK TICKET"
+      ]
+    },
+    "card_id": "kb-09570",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09570",
+    "evidence": "[취향] 오늘의집/29CM/인터파크티켓/티켓링크 10% 청구할인. combined/common-evidence.json의 kb-01914 제안과 같은 key"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ticketlink",
+      "name": "티켓링크",
+      "category": "other",
+      "aliases": [
+        "티켓링크",
+        "TICKETLINK"
+      ]
+    },
+    "card_id": "kb-09570",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09570",
+    "evidence": "[취향] 오늘의집/29CM/인터파크티켓/티켓링크 10% 청구할인. combined/common-evidence.json의 woori-102495 제안과 같은 key"
+  }
+]

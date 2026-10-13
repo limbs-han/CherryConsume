@@ -1,0 +1,102 @@
+schema_version: 2
+id: nh-f20585
+issuer: nh
+name: NH트래블리체크카드
+short_name: NH트래블리 체크
+kind: check
+product_codes:
+  - '90010517'
+  - F20585
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010517', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      unmodeled: ['가상화폐 거래소, 현금서비스, 카드론, 수수료, 이자, 연체료, 포인트 결제분은 캐시백에서 빠진다', '백화점, 대형마트, 할인점(아울렛), 역사 입점 매장과 별도 가맹점번호로 승인되는 PG·간편결제는 캐시백에서 빠질 수 있다']
+    stacks:
+      - {key: main}
+    benefits:
+      - key: base-0-2
+        title: 국내 가맹점 0.2% 캐시백
+        source: page
+        evidence: ['기본 캐시백 | 국내 가맹점 0.2%, NH페이 이용 국내 온라인 결제 0.3%', 한도 없음, 전월실적 조건 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 0.2}
+        stack: main
+      - key: base-nhpay-0-3
+        title: NH페이 국내 온라인 0.3% 캐시백
+        source: page
+        evidence: ['기본 캐시백 | 국내 가맹점 0.2%, NH페이 이용 국내 온라인 결제 0.3%']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - {channel: online}
+          - payment: [nh_pay]
+        reward: {type: cashback, rate: 0.3}
+        stack: main
+      - key: daily-convenience-0-6
+        title: 편의점 0.6% 캐시백
+        source: page
+        evidence: ['특별 캐시백(일상 가맹점) | 국내 편의점, 커피전문점, 대중교통 0.6%', 편의점·커피전문점은 오프라인 직접 결제에만 적용, 특별 캐시백 대상 가맹점에서는 기본 혜택이 제공되지 않으며 두 혜택은 중복되지 않습니다]
+        target:
+          categories: [convenience]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: cashback, rate: 0.6}
+        stack: main
+      - key: daily-coffee-0-6
+        title: 커피전문점 0.6% 캐시백
+        source: page
+        evidence: ['특별 캐시백(일상 가맹점) | 국내 편의점, 커피전문점, 대중교통 0.6%', 편의점·커피전문점은 오프라인 직접 결제에만 적용(스타벅스는 사이렌오더 포함)]
+        target:
+          categories: [cafe]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: cashback, rate: 0.6}
+        stack: main
+      - key: daily-starbucks-0-6
+        title: 스타벅스 사이렌오더 포함 0.6% 캐시백
+        source: page
+        evidence: ['특별 캐시백(일상 가맹점) | 국내 편의점, 커피전문점, 대중교통 0.6%', 편의점·커피전문점은 오프라인 직접 결제에만 적용(스타벅스는 사이렌오더 포함)]
+        target:
+          merchants: [starbucks]
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 0.6}
+        stack: main
+      - key: daily-transit-0-6
+        title: 후불 대중교통 0.6% 캐시백
+        source: page
+        evidence: ['특별 캐시백(일상 가맹점) | 국내 편의점, 커피전문점, 대중교통 0.6%', 대중교통 혜택은 후불교통카드 발급 시에만 제공되며, 공항리무진, 공항·고속·시외버스, 철도(KTX/SRT), 통행료는 제외됩니다]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+          - billing: [postpaid_transit]
+          - payment_not: [mobile_tmoney]
+        reward: {type: cashback, rate: 0.6}
+        stack: main
+    unmodeled: [해외 가맹점과 해외 ATM의 국제브랜드수수료와 해외서비스수수료 면제는 수수료 혜택이라 계산하지 않는다, 마스터 트래블 리워드(MTR) 가맹점별 최대 10% 캐시백은 가맹점별 방식이 달라 계산하지 않는다, 공항 라운지 연 1회는 전월실적 30만원 이상이고 결제 혜택이 아니라 계산하지 않는다, 발급 대상은 만 12세 이상이고 외국인과 가족카드는 발급되지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 수집일로 두었다., assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[base-0-2].reward', question: 캐시백 원 미만 처리 문구가 없다., assumed: floor}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 없음. 국내 캐시백은 한도와 전월실적 조건이 없다. 특별 캐시백 대상 가맹점은 기본 혜택이 없어 같은 묶음에서 큰 쪽만 받는다.

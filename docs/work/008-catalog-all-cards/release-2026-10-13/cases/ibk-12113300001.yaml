@@ -1,0 +1,50 @@
+card: ibk-12113300001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 70만 구간 국내 1%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, category: restaurant, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 500}}
+  calc: 50,000 × 1% = 500P
+- name: 70만 직전은 적립 없음
+  prev_month_spend: 699999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, category: restaurant, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간은 혜택 없음
+- name: 주유 1.5%와 해외 2%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: fuel, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-1-5: 1500}}
+  - {payment: 1, benefits: {double-2: 2000}}
+  calc: 100,000 × 1.5% = 1,500P, 100,000 × 2% = 2,000P
+- name: 커피 10% 할인 월 4천원 한도와 포인트 제외
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 30000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 2000}}
+  - {payment: 1, benefits: {coffee-10: 2000}}
+  calc: 20,000 × 10% = 2,000. 30,000 × 10% = 3,000이나 월 4천원 한도에 남은 2,000. 특별할인 가맹점은 포인트 제외
+- name: 백화점 5만원 이상 5%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T15:00, amount: 60000, merchant: lotte_department, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {dept-mart-5: 3000}}
+  calc: 60,000 × 5% = 3,000
+- name: 온라인몰 3만원 이상 5%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T21:00, amount: 40000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-5: 2000}}
+  calc: 40,000 × 5% = 2,000. 쿠팡은 포인트 제외

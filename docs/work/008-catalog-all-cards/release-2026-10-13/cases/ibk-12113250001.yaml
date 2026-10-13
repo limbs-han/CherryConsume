@@ -1,0 +1,48 @@
+card: ibk-12113250001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 올리브영 1만원 이상 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: olive_young, channel: offline}
+  expect:
+  - {payment: 0, benefits: {cosmetic-1000: 1000}}
+  calc: 1만원 이상 2만원 미만 1,000원
+- name: 올리브영 2만원 이상 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 25000, merchant: olive_young, channel: offline}
+  expect:
+  - {payment: 0, benefits: {cosmetic-2000: 2000}}
+  calc: 2만원 이상 2,000원
+- name: 미용실 1만원 이상 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, category: beauty.salon}
+  expect:
+  - {payment: 0, benefits: {salon-1000: 1000}}
+  calc: 1만원 이상 2만원 미만 1,000원
+- name: 미용실 2만원 이상 2천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: beauty.salon}
+  expect:
+  - {payment: 0, benefits: {salon-2000: 2000}}
+  calc: 2만원 이상 2,000원
+- name: 하루 1회
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 30000, category: beauty.salon}
+  - {at: 2026-11-04T15:00, amount: 30000, category: beauty.salon}
+  expect:
+  - {payment: 0, benefits: {salon-2000: 2000}}
+  - {payment: 1, benefits: {}}
+  calc: 일 1회라 둘째는 없음
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 25000, merchant: olive_young, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 구간 미달

@@ -1,0 +1,55 @@
+card: kb-09381
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 1구간 리터당 150원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: sk_energy, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-150: 7500}}
+  calc: 92900 / 1858 = 50L x 150 = 7500
+- name: 주유 4구간 리터당 300원
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: gs_caltex, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-300: 15000}}
+  calc: 50L x 300 = 15000
+- name: 차량정비 10% 2구간 월 2만원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, category: car.car_repair}
+  - {at: 2026-11-06T10:00, amount: 100000, category: car.parking}
+  expect:
+  - {payment: 0, benefits: {car-service-10: 15000}}
+  - {payment: 1, benefits: {car-service-10: 5000}}
+  calc: 150000 x 10% = 15000, 남은 한도 5000
+- name: 40만 경계 직전
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: car.car_wash}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만 할인 없음
+- name: 후불교통 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무승인전표(대중교통) 실적 제외
+- name: 주유 2구간 리터당 200원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: s_oil, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-200: 10000}}
+  calc: 50L x 200 = 10000
+- name: 주유 3구간 리터당 250원
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: hd_oilbank, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-250: 12500}}
+  calc: 50L x 250 = 12500

@@ -1,0 +1,50 @@
+schema_version: 2
+id: kb-04418
+issuer: kb
+name: KB국민 SK인텔릭스 올림카드
+short_name: KB SK인텔릭스 올림
+kind: credit
+product_codes:
+  - '04418'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04418', fetched_at: '2026-10-12', review_no: 제2025-C1a-14505호}
+  - {id: mobile, kind: product_page, url: 'https://m.kbcard.com/c/04418', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: intellix-subscription
+        title: SK인텔릭스 구독료 자동이체 청구할인
+        source: page
+        evidence: ['SK인텔릭스 구독료 청구할인: 전월 30만원 이상 1만 1천원, 70만원 이상 1만 5천원, 100만원 이상 2만원', 승인금액이 할인한도보다 작으면 승인금액만큼 할인합니다. 여러 건은 월 한도 내에서 합산합니다., 구독료 자동이체 신청 시에만 적용]
+        target:
+          merchants: [sk_intellix]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 11000, 700000: 15000, 1000000: 20000}
+        tiers: {from: 300000}
+    unmodeled: ['메가박스·CGV 영화 1매당 3,500원 할인은 데스크톱 페이지(공식 홈페이지 예매)와 모바일 페이지(인터파크 예매)의 대상이 달라 계산하지 않는다', '롯데월드·에버랜드 50%, 캐리비안베이 30% 현장할인은 이용권 종류와 매수 조건이라 계산하지 않는다', 최초 사용등록일부터 다음 달 말일까지 실적 없이 구독료 1만 1천원 할인을 주는 신규 특례는 계산하지 않는다, 정부지원금과 무승인전표(대중교통·자판기·터널이용료·항공기내 이용)는 실적에서 빠진다, 기본 포인트리는 적립되지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지와 모바일 페이지를 직접 받아 대조했다. 연회비는 모바일 페이지 표의 합계를 따랐다. 할인받은 결제는 금액 전체가 실적에서 빠진다.

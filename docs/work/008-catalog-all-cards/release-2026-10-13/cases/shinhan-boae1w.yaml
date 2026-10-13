@@ -1,0 +1,41 @@
+card: shinhan-boae1w
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 120만 구간 SKT 자동납부 1만원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 70000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {skt-autopay: 10000}, counted: 70000}
+  calc: 120만 구간 월 한도 10,000원
+- name: 30만 구간 편의점과 스타벅스 5% 통합 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {tlife-offline: 1000}, counted: 20000}
+  - {payment: 1, benefits: {tlife-cafe-oliveyoung: 4000}, counted: 100000}
+  calc: 20,000 × 5% = 1,000. 100,000 × 5% = 5,000 중 남은 통합 한도 4,000
+- name: 넷플릭스 정기결제 5%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {tlife-subscription: 850}, counted: 17000}
+  calc: 17,000 × 5% = 850
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 30만원 미만 할인 없음
+- name: 배민 앱 결제 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 30000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {tlife-baemin: 1500}, counted: 30000}
+  calc: 30,000 × 5% = 1,500

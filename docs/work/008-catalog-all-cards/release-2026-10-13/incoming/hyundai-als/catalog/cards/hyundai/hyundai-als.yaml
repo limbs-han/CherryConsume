@@ -1,0 +1,114 @@
+schema_version: 2
+id: hyundai-als
+issuer: hyundai
+name: 알파벳카드S BOLD
+short_name: 현대 알파벳S BOLD
+search_names: [Alphabet S BOLD, 알파벳 카드 S 볼드, 알파벳카드S BOLD]
+kind: credit
+product_codes: [ALS]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 50000}
+  - {scope: global, brand: visa, amount: 50000}
+  - {scope: global, brand: amex, amount: 50000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CS%20BOLD%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-07-01
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [현대카드의 다른 할인이 적용된 결제는 할인에서 뺀다]
+    limits:
+      - key: base-10
+        per: month
+        amount: {400000: 10000, 800000: 20000, 1200000: 35000}
+      - key: extra-5
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 15000}
+    benefits:
+      - key: online-10
+        title: 온라인몰 10% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 40만원 이상 시 온라인몰, 대형마트, 슈퍼마켓, 백화점, 프리미엄 아울렛 10% 청구 할인, '온라인몰 : 네이버플러스 스토어, 쿠팡, SSG.COM, G마켓, 옥션, 11번가, 롯데ON, 컬리, CJ온스타일, 현대Hmall, GS SHOP', '전월 이용 금액별 할인 한도 - 40만원 이상 80만원 미만 : 대상 영역 통합해 월 1만원 - 80만원 이상 120만원 미만 : 대상 영역 통합해 월 2만원 - 120만원 이상 : 대상 영역 통합해 월 3만 5천원', 쿠팡의 경우 쿠팡이츠 결제 건은 기본 혜택 제외]
+        target:
+          merchants: [auction, cj_onstyle, coupang, eleven_st, gmarket, gs_shop, kurly, lotte_on, naver_plus_store, ssg_com]
+          exclude_merchants: [coupang_eats]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: base-10}
+        tiers: {from: 400000}
+        unmodeled: [온라인몰은 대상점 공식 홈페이지와 앱 안의 결제만 할인하고 연결된 다른 사이트나 앱 결제는 뺀다, 네이버플러스 스토어는 naver.com 도메인 가맹점만 할인한다, 현대Hmall은 현대홈쇼핑과 구분되지 않아 담지 않았다]
+      - key: offline-10
+        title: 대형마트·슈퍼마켓·백화점·프리미엄 아울렛 10% 청구 할인
+        source: manual
+        evidence: ['대형마트 : 이마트, 농협하나로마트, 롯데마트', '슈퍼마켓 : 이마트 에브리데이, GS THE FRESH, 롯데슈퍼', '백화점 : 현대백화점, 롯데백화점, 신세계백화점, 갤러리아백화점', '프리미엄 아울렛 : 현대 프리미엄 아울렛, 롯데 프리미엄 아울렛, 신세계사이먼 프리미엄 아울렛', '대형마트, 슈퍼마켓, 백화점, 프리미엄 아울렛의 경우 온라인몰, 상품권 구매 금액, 주차장, 문화센터, 임대 매장 이용 금액은 기본 혜택 제외']
+        target:
+          merchants: [emart, emart_everyday, galleria, gs_the_fresh, hyundai_department, hyundai_premium_outlet, lotte_department, lotte_mart, lotte_premium_outlet, lotte_super, nh_hanaro_mart, shinsegae_department, shinsegae_premium_outlet]
+        when:
+          - {region: domestic, channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: base-10}
+        tiers: {from: 400000}
+        unmodeled: [주차장·문화센터·임대 매장 결제와 농협하나로마트 안 임대 매장·구매사업장·도매형 매장·농협몰은 할인하지 않는다]
+      - key: cafe-5
+        title: 커피전문점 5% 청구 할인
+        source: manual
+        evidence: [전월 이용 금액 40만원 이상 시 커피전문점, 편의점, 대중교통 5% 청구 할인, '커피전문점 : 스타벅스, 투썸플레이스, 폴바셋, 이디야커피, 메가MGC커피', '전월 이용 금액별 할인 한도 - 40만원 이상 80만원 미만 : 영역별 월 5천원, 대상 영역 통합해 월 5천원 - 80만원 이상 120만원 미만 : 영역별 월 5천원, 대상 영역 통합해 월 1만원 - 120만원 이상 : 영역별 월 5천원, 대상 영역 통합해 월 1만 5천원']
+        target:
+          merchants: [ediya, mega_coffee, paul_bassett, starbucks, twosome]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 안 매장과 공동가맹점 결제는 할인하지 않는다]
+      - key: convenience-5
+        title: 편의점 5% 청구 할인
+        source: manual
+        evidence: ['편의점 : GS25, CU, 세븐일레븐, 이마트24', 편의점은 현장 결제 건에 한해 추가 혜택 적용되며 앱에서 결제한 경우 제외]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {region: domestic, channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+      - key: transit-5
+        title: 시내버스·지하철·택시 5% 청구 할인
+        source: manual
+        evidence: ['대중교통 : 시내버스, 지하철, 택시', 시외버스 및 고속버스 결제 건은 추가 혜택 제외, 택시 앱 이용 시 현대카드에 등록된 가맹점 및 업종 분류 기준에 따라 추가 혜택 적용]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: extra-5}
+        tiers: {from: 400000}
+        unmodeled: [택시 앱 결제는 현대카드 업종 분류에 따라 할인 여부가 달라진다]
+    unmodeled: [연간 보너스 온라인몰·대형마트·슈퍼마켓·백화점·프리미엄 아울렛 5만원 이상 단일 결제 1만원 청구 할인(월 1회 연 5회)은 카드 발급월부터 센 12개월 단위와 2차년도 전년도 이용금액 600만원 조건을 담지 못해 계산하지 않는다, 인천공항 라운지와 발레파킹(전월 50만원 이상 연 2회)은 결제 혜택이 아니다, 간편결제·PG·키오스크처럼 별도 가맹점번호로 승인되거나 PG·간편결제 가맹점명으로 찍힌 결제는 할인하지 않는다, 할인은 매출전표 접수 순서로 한도를 적용한다, 실적과 할인 한도는 본인과 가족 카드를 합산한다, 후불하이패스와 고속도로 통행료는 실적에서 뺀다, 국제브랜드 수수료와 해외서비스 수수료는 실적에 넣지 않는다, 대중교통·정기결제 등 사후 승인 가맹점과 해외 이용 금액은 매출일자 달의 실적으로 센다, 현대카드의 다른 청구 할인과 겹치면 큰 쪽 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 가이드북은 2026년 7월 기준이고 카드 신규 출시일 2026-07-01을 시작일로 두었다, assumed: '2026-07-01'}
+notes: 2026-10-13 공식 가이드북(2026년 7월 기준) 대조. 연회비 국내전용과 국내외겸용(Visa/Amex Platinum) 50,000원(기본 20,000+제휴 30,000), 가족카드 20,000원. 전월 40만 이상 온라인몰·대형마트·슈퍼마켓·백화점·프리미엄 아울렛 10%를 영역 통합 월 1만·2만·3만5천원(40만·80만·120만) 한도로 담았다. 커피전문점·편의점·대중교통 5%는 영역별 월 5천원에 세 영역 합쳐 5천·1만·1만5천원이다. 국내 가맹점만. 원문에 끝수 처리가 없어 원 미만 버림. 실적은 전월 1일~말일 일시불과 할부이고 공과금 등, 무이자 할부, 이 카드 혜택을 받은 결제 전체를 뺀다. 취소는 승인월에서 빼고 해외는 취소 달에서 뺀다. 신규 발급 시 수령 등록월 다음 달 이용 건까지 40만 미만도 40만 구간 한도로 준다. 온라인몰 영역을 대형마트·백화점과 갈라 마트·백화점은 현장 결제만 담았다. 할인 제외는 상품권·선불카드와 다른 현대카드 할인·무이자 할부뿐이다.

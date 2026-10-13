@@ -1,0 +1,47 @@
+schema_version: 2
+id: ibk-12112840001
+issuer: ibk
+name: 참! 좋은 글로벌 체크카드[개인]
+kind: check
+product_codes:
+  - '12112840001'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+  - {scope: global, brand: mastercard, amount: 3000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=284&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefits:
+      - key: overseas-1-5
+        title: 해외 가맹점 1.5% 캐시백
+        source: page
+        evidence: ['해외 가맹점 캐시백: 이용금액의 1.5%', 1회 승인금액이 USD 10 이상일 때만 제공, 해당 카드 결제일에 결제계좌로 입금]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 15000}
+        reward: {type: billing_discount, rate: 1.5}
+        unmodeled: [원문 조건은 1회 승인금액 USD 10 이상이다. 환율에 따라 달라 원화 1만 5천원 이상으로 근사했다. 해외 결제에 0.8%를 더 주는 이벤트는 담지 않았다]
+      - key: domestic-0-1
+        title: 국내 가맹점 0.1% 캐시백
+        source: page
+        evidence: ['국내 가맹점 캐시백: 이용금액의 0.1%', 건별 1만원 이상일 때 제공, '제세공과금, 상품권, 후불교통 이용금액은 제외']
+        target:
+          exclude_categories: [gift_card, tax, transit.bus_city, transit.subway, utility]
+          all: true
+        when:
+          - {region: domestic}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 0.1}
+    unmodeled: [국내 혜택의 제세공과금 제외는 세금과 공공요금 업종으로 옮겼고 후불교통 유료도로는 담을 업종이 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 조사일로 뒀다, assumed: '2026-10-13'}
+  - {path: 'revisions[0].benefits[overseas-1-5].when', question: 해외 1회 승인금액 USD 10 이상을 원화 15000원으로 근사했다, assumed: 15000}
+notes: 2026-10-13 expand21 조사. 연회비는 VISA 3000원 일시중단이라 담지 않았다. 연회비 면제 조건 연 300만원 이용

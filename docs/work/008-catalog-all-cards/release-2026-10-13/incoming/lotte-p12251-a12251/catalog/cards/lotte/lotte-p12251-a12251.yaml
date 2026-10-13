@@ -1,0 +1,43 @@
+schema_version: 2
+id: lotte-p12251-a12251
+issuer: lotte
+name: 청호나이스 스페셜 롯데카드
+kind: credit
+product_codes: [P12251-A12251]
+status: discontinued
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P12251-A12251', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P12251-A12251_241024.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2018-04-02'
+    source: manual
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, tax]
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: rental-discount
+        title: 청호나이스 렌탈료 자동이체 결제일 할인
+        source: manual
+        evidence: ['30만원 이상 13,000원', '70만원 이상 17,000원', '120만원 이상 23,000원', 청호나이스 스페셜 롯데카드로 청호나이스 가전제품 렌탈료 자동이체 연결 시에만 할인혜택을 받으실 수 있습니다., 렌탈료가 렌탈료 할인금액보다 적을 경우 렌탈료 만큼만 결제일 할인이 적용됩니다., '자동이체 필수, 월 1회']
+        target:
+          merchants: [chungho_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 700000: 17000, 1200000: 23000}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+    unmodeled: [청호나이스 24·36개월 장기 할부 이용금액은 실적에서 빠지지만 결제 입력으로 가려내지 않는다. 장기 할부를 기록하면 실적이 실제보다 크게 잡힐 수 있다, '장기 할부 캐시백 13,000·17,000·23,000원은 40만원 이상 장기 할부 이용 뒤 매월 말일 지급이라 계산하지 않는다. 렌탈료 할인과 함께 쓰지 못한다', 롯데카드의 다른 결제일 할인과 겹치지 않는다, 현금서비스·카드론·이자·수수료는 실적에서 빠진다, 청호나이스 스페셜 롯데카드가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 할인은 승인 시점 기준 남은 한도 안에서 준다, 롯데카드 제공 L.POINT는 적립하지 않는다]
+notes: 2026-10-12 상품 페이지와 상품설명서(2024년 9월 기준, 출시일 2018-04-02) 대조. 상품 페이지에 신규 발급 중단이 적혀 있어 status를 discontinued로 두었다. 실적 제외는 국세·지방세·아파트관리비·연회비와 대출, 이자, 수수료, 장기 할부, 렌탈료 할인 받은 결제뿐이라 대중교통과 무이자 할부는 실적에 넣었다. 신규 발급 특례는 카드 사용 등록일부터 다음 달 말일까지 13,000원 할인이라 30만 구간으로 넣었다. 청호나이스 X LOCA(lotte-p15683-a15683)와 다른 상품이다. 앞 조사 id lotte-1541을 상품 코드 id로 바꿨다.

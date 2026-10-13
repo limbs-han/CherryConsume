@@ -1,0 +1,36 @@
+card: lotte-p13399-a13399
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 150만 구간 주유 리터당 100원
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-100: 5000}
+  calc: 92,900 / 1,858 = 50리터 x 100 = 5,000
+- name: 실적 직전 1499999는 할인 없음
+  prev_month_spend: 1499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 150만원보다 1원 적어 할인 없음
+- name: 편의점 1만원 이상 오프라인 5%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {cvs-5: 600}
+  calc: 12,000 x 5% = 600
+- name: 배달앱 1만원 이상 온라인 5%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-5: 1000}
+  calc: 20,000 x 5% = 1,000

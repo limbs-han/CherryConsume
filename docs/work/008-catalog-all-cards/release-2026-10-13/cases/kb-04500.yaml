@@ -1,0 +1,25 @@
+card: kb-04500
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 리터당 80원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 18580, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-80: 800}, counted: 18580}
+  calc: 18,580원 ÷ 1,858원 = 10리터 × 80원 = 800원
+- name: 에버랜드 20%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: everland}
+  expect:
+  - {payment: 0, benefits: {amusement-20: 10000}, counted: 50000}
+  calc: 50,000원 × 20% = 10,000원
+- name: 스포츠 10%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: sports}
+  expect:
+  - {payment: 0, benefits: {sports-10: 3000}, counted: 30000}
+  calc: 30,000원 × 10% = 3,000원

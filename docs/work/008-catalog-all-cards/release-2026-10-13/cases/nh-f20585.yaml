@@ -1,0 +1,46 @@
+card: nh-f20585
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 기본 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: shopping.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 100,000원 x 0.2% = 200원
+- name: 편의점 0.6%는 기본 대신
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-convenience-0-6: 60}}
+  calc: 10,000원 x 0.6% = 60원. 기본 0.2%는 겹치지 않는다
+- name: 커피 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: ediya, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-coffee-0-6: 60}}
+  calc: 10,000원 x 0.6% = 60원
+- name: 스타벅스 앱 결제도 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-starbucks-0-6: 60}}
+  calc: 10,000원 x 0.6% = 60원
+- name: 후불 지하철 0.6%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-transit-0-6: 60}}
+  calc: 10,000원 x 0.6% = 60원
+- name: NH페이 국내 온라인 0.3%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: shopping.general, channel: online, payment_method: nh_pay}
+  expect:
+  - {payment: 0, benefits: {base-nhpay-0-3: 300}}
+  calc: 100,000원 x 0.3% = 300원

@@ -1,0 +1,51 @@
+card: samsung-aap1896
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 롯데홈쇼핑 7% 구간 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 100000, merchant: lotte_homeshopping, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 200000, merchant: lotte_homeshopping, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {homeshopping-7: 7000}}
+  - {payment: 1, benefits: {homeshopping-7: 8000}}
+  calc: 100,000 x 7% = 7,000. 다음은 14,000이나 한도 15,000 중 남은 8,000
+- name: 실적 40만원 직전이면 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-02T08:00, amount: 100000, merchant: lotte_homeshopping, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 399,999원은 0 구간
+- name: 할인점과 주유 5% 통합 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 80000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 60000, merchant: gs_caltex, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 4000}}
+  - {payment: 1, benefits: {fuel-5: 1000}}
+  calc: 80,000 x 5% = 4,000. 주유 3,000이나 한도 5,000 중 남은 1,000
+- name: 의료 10%와 커피 편의점 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 30000, category: hospital, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 20000, merchant: starbucks, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 40000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-10: 3000}}
+  - {payment: 1, benefits: {coffee-starbucks-10: 2000}}
+  - {payment: 2, benefits: {coffee-conv-10: 3000}}
+  calc: 30,000 x 10% = 3,000. 스타벅스 2,000. 편의점 4,000이나 통합 한도 5,000 중 남은 3,000
+- name: 배달앱과 디지털콘텐츠 20%와 해외 1.5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 10000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 17000, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 100000, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-20: 2000}}
+  - {payment: 1, benefits: {digital-20: 3000}}
+  - {payment: 2, benefits: {overseas-1-5: 1500}}
+  calc: 10,000 x 20% = 2,000. 17,000 x 20% = 3,400이나 통합 한도 5,000 중 남은 3,000. 해외 1,500

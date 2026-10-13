@@ -1,0 +1,19 @@
+card: hyundai-tre6
+holder:
+  started_on: '2026-01-01'
+  options: [{option: reward, choice: m_point, effective_from: '2026-01-01'}]
+cases:
+- name: 50만 이상 M포인트형 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-m-1-5: 1500}, counted: 100000}
+  calc: 100,000 x 1.5% = 1,500. 적립은 실적에서 빼지 않는다
+- name: 50만 직전은 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 50만 미만 혜택 제외

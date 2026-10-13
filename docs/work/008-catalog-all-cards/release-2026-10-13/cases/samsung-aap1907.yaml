@@ -1,0 +1,39 @@
+card: samsung-aap1907
+holder:
+  started_on: '2026-01-01'
+  options: [{option: rental, choice: none, effective_from: '2026-01-01'}]
+cases:
+- name: 렌탈 미이용 주유 10% 30만 구간 월 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 70000, category: fuel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-10: 5000}, counted: 70000}
+  calc: 70,000 × 10% = 7,000이나 30만 구간 한도 5,000
+- name: 30만 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 70000, category: fuel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간
+- name: 편의점 커피 10% 70만 구간 통합 월 7천원과 스타벅스 사이렌오더
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 50000, merchant: mega_coffee, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 30000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {conv-coffee-10: 5000}}
+  - {payment: 1, benefits: {starbucks-10: 2000}}
+  calc: 50,000 × 10% = 5,000. 스타벅스 3,000이나 남은 한도 2,000
+- name: 렌탈 이용 120만 구간 렌탈료 1만6천원 월 1회와 주유 할인 없음
+  prev_month_spend: 1200000
+  holder:
+    options: [{option: rental, choice: using, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T09:00, amount: 40000, merchant: nexen_tire_rental, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 70000, category: fuel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {rental: 16000}}
+  - {payment: 1, benefits: {}}
+  calc: 120만 구간 16,000원. 렌탈 이용 중에는 주유 10% 없음

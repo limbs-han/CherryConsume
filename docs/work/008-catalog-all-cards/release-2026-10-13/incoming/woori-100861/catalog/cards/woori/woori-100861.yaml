@@ -1,0 +1,189 @@
+schema_version: 2
+id: woori-100861
+issuer: woori
+name: 국민행복 체크카드S2
+kind: check
+product_codes:
+  - '100861'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100861', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [정부지원금, 교통카드 구매와 충전금액, 매출취소금액, 다른 우리카드 혜택을 받은 매출은 캐시백 제외]
+    limits:
+      - key: shopping
+        per: month
+        amount: {300000: 4000, 600000: 8000, 900000: 16000}
+      - key: medical
+        per: month
+        amount: {300000: 3000, 600000: 6000, 900000: 12000}
+      - key: untact
+        per: month
+        amount: {300000: 3000, 600000: 6000, 900000: 12000}
+      - {key: overseas, per: month, amount: 10000}
+      - key: total
+        per: month
+        amount: {300000: 20000, 600000: 30000, 900000: 50000}
+    benefits:
+      - key: shopping-dept
+        title: 백화점·대형마트 2% 캐시백
+        source: page
+        evidence: [쇼핑/생활 업종 2% 캐시백, 백화점 롯데 신세계 현대 갤러리아, 대형마트 이마트 롯데마트 트레이더스 롯데마트맥스, 결제 건당 최대 캐시백 대상 금액 5만원, 쇼핑/생활 월 한도 30만원 4000원 60만원 8000원 90만원 16000원]
+        target:
+          merchants: [emart, galleria, hyundai_department, lotte_department, lotte_mart, lotte_mart_max, shinsegae_department, traders]
+        when:
+          - {channel: offline}
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [백화점·대형마트의 온라인 결제와 임대매장과 주차장 이용금액 제외. 다른 우리카드 혜택을 적용받은 매출 제외]
+      - key: shopping-online
+        title: 온라인쇼핑 2% 캐시백
+        source: page
+        evidence: [쇼핑/생활 업종 2% 캐시백, 온라인쇼핑 쿠팡 11번가 롯데홈쇼핑 G마켓 옥션 인터파크 롯데ON, 결제 건당 최대 캐시백 대상 금액 5만원]
+        target:
+          merchants: [auction, coupang, gmarket, interpark, lotte_homeshopping, lotte_on]
+        when:
+          - {channel: online}
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [11번가는 가맹점이 없어 담지 않았다. 다른 우리카드 혜택을 적용받은 매출 제외]
+      - key: shopping-telecom
+        title: 이동통신 자동납부 2% 캐시백
+        source: page
+        evidence: [쇼핑/생활 업종 2% 캐시백, 이동통신 SKT KT LG U+, 정기결제 이용건에 한하여 캐시백 적용, 휴대전화 요금을 본 카드로 자동납부 신청 후 결제한 건]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [인터넷과 집전화 결합상품 제외. 생활월납 도시가스요금과 전기요금은 가맹점이 없어 담지 않았다]
+      - key: shopping-rental
+        title: 렌탈 정기결제 2% 캐시백
+        source: page
+        evidence: [쇼핑/생활 업종 2% 캐시백, 렌탈 코웨이 LG전자 가전구독 SK매직 쿠쿠홈시스 청호나이스 현대렌탈케어 바디프랜드 넥센타이어, 정기결제 이용건에 한하여 캐시백 적용]
+        target:
+          merchants: [bodyfriend_rental, chungho_rental, coway, cuckoo_rental, hyundai_rental_service, lg_appliance_subscription, nexen_tire_rental, sk_magic]
+        when:
+          - billing: [autopay, subscription]
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [정기결제 이용건만. 현대렌탈케어는 현대렌탈서비스 가맹점으로 담았다]
+      - key: medical-3
+        title: 의료·보육 3% 캐시백
+        source: page
+        evidence: [의료(임신·출산) / 보육(교육) 업종 3% 캐시백, 병·의원(동물병원 포함) 산후조리원 약국 어린이집 유치원, 결제 건당 최대 캐시백 대상 금액 5만원, 의료 보육 월 한도 30만원 3000원 60만원 6000원 90만원 12000원]
+        target:
+          categories: [education.kindergarten, hospital, pharmacy]
+        when:
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: medical}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [병·의원·산후조리원·약국·어린이집·유치원은 정부지원금을 뺀 이용금액만. 산후조리원과 어린이집은 업종이 없어 담지 않았다]
+      - key: medical-study
+        title: 학습지·서점·학원 3% 캐시백
+        source: page
+        evidence: [의료(임신·출산) / 보육(교육) 업종 3% 캐시백, 학습지 웅진 씽크빅 교원 빨간펜 대교눈높이 한솔교육 윤선생, 교육 학원 서점 교보문고 영풍문고 알라딘중고서점, 학원은 오프라인 결제 시에만 제공]
+        target:
+          merchants: [daekyo, hansol_education, kyobo_book, kyowon, woongjin_thinkbig, youngpoong_book]
+        when:
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: medical}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [윤선생과 알라딘중고서점은 가맹점이 없어 담지 않았다. 학원 업종은 오프라인만이고 학원 전체가 대상이라 담지 않았다]
+      - key: untact-10
+        title: 언택트 라이프 10% 캐시백
+        source: page
+        evidence: [언택트 라이프 업종 10% 캐시백, 영상 넷플릭스 웨이브 티빙 유튜브 프리미엄, 음원 멜론 지니뮤직 유튜브 뮤직, 전자도서 교보문고 SAM YES24 북클럽, 멤버십 네이버플러스 컬리멤버스, 언택트 라이프 월 한도 30만원 3000원 60만원 6000원 90만원 12000원]
+        target:
+          merchants: [genie, kurly_members, kyobo_sam, melon, naver_plus_membership, netflix, tving, wavve, yes24_crema_club, youtube_premium]
+        when:
+          - billing: [subscription]
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: untact}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [정기결제만이고 대상 가맹점 공식 홈페이지나 앱에서 직접 신청한 건만. 구글플레이·앱스토어와 1회성 구매와 앱마켓 결제 제외. 넷플릭스는 Basic·Standard·Premium 요금제만. 유튜브 뮤직은 가맹점이 없어 담지 않았다]
+      - key: overseas-1
+        title: 해외 건당 1만원 이상 30만원 미만 1% 캐시백
+        source: page
+        evidence: [해외가맹점(해외직구 포함) 이용금액 1~2% 캐시백, 1만원 이상 30만원 미만 1%, 이용횟수 제한 없이 월 최대 1만원, Mastercard 브랜드만 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 10000, below: 300000}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: overseas}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [Mastercard 해외겸용만. 국내전용 BC는 해외 캐시백이 없다. 해외 매출 접수일 기준]
+      - key: overseas-2
+        title: 해외 건당 30만원 이상 2% 캐시백
+        source: page
+        evidence: [해외가맹점(해외직구 포함) 이용금액 1~2% 캐시백, 30만원 이상 2%, 이용횟수 제한 없이 월 최대 1만원, Mastercard 브랜드만 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 300000}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {shared: overseas}
+          - {shared: total}
+        tiers: {from: 300000}
+        unmodeled: [Mastercard 해외겸용만. 국내전용 BC는 해외 캐시백이 없다. 해외 매출 접수일 기준]
+    unmodeled: [체크카드 소액신용결제는 월 최대 30만원 한도 안 신용 일시불이며 신용카드 실적으로 산정된다. 국민행복카드 바우처는 카드사 부가서비스가 아니다. 가족카드 발급 불가]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일은 2021-03-02이다., assumed: '2026-10-05'}
+notes: 2026-10-13 공식 상품 페이지 대조. 통합 월 캐시백 한도는 영역별 한도와 함께 적용된다. 해외 캐시백은 영역 한도 1만원이 따로 있다.

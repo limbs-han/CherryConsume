@@ -1,0 +1,143 @@
+schema_version: 2
+id: nh-f10727
+issuer: nh
+name: NH 모두의카드(신용)
+short_name: 모두의카드 신용
+kind: credit
+product_codes:
+  - '90010471'
+  - F10727
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 13000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010471', fetched_at: 2026-10-13, review_valid_until: 2027-08-31}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·대형마트·역사 등 입점 매장은 할인에서 빠질 수 있다, PG와 간편결제 건은 할인에서 빠질 수 있다, 다른 NH농협카드 혜택과 겹치면 큰 혜택 하나만 받는다, 포인트 결제분과 가상화폐 거래소 이용금액은 실적에서 빠진다]
+    limits:
+      - key: mobility
+        per: month
+        amount: {400000: 10000, 800000: 20000}
+      - key: life1
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+      - {key: coffee, per: month, amount: 2000, count: 2}
+      - {key: convenience, per: month, amount: 1000}
+    benefits:
+      - key: mobility-transport-10
+        title: 버스·지하철·택시·철도 10% 청구할인
+        source: page
+        evidence: [모빌리티 서비스 10% 청구할인, '대상: 버스, 지하철, 택시(일반 및 카카오T), 철도(일반, KTX, SRT)', '전월실적 40만원 이상 ~ 80만원 미만 월 통합 할인한도 1만원, 80만원 이상 2만원']
+        target:
+          categories: [taxi, transit.bus_city, transit.rail, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: mobility}
+        tiers: {from: 400000}
+      - key: mobility-socar-10
+        title: 쏘카 10% 청구할인
+        source: page
+        evidence: [모빌리티 서비스 10% 청구할인, '대상: 렌터카 및 카셰어링(렌터카, 쏘카, 그린카)', '전월실적 40만원 이상 ~ 80만원 미만 월 통합 할인한도 1만원, 80만원 이상 2만원']
+        target:
+          merchants: [socar]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: mobility}
+        tiers: {from: 400000}
+        unmodeled: [렌터카와 그린카는 가맹점 키가 없어 뺐다]
+      - key: mobility-ev-10
+        title: 환경부 전기차 충전 10% 청구할인
+        source: page
+        evidence: [모빌리티 서비스 10% 청구할인, '대상: 전기차 충전(환경부 공공 급속충전기 등)', '전월실적 40만원 이상 ~ 80만원 미만 월 통합 할인한도 1만원, 80만원 이상 2만원']
+        target:
+          merchants: [me_ev_charger]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: mobility}
+        tiers: {from: 400000}
+        unmodeled: [환경부 외 충전기는 대상 범위가 불분명해 뺐다]
+      - key: life-telecom-5
+        title: 이동통신요금 5% 청구할인
+        source: page
+        evidence: [라이프 서비스 ① 5% 청구할인, 이동통신요금 SKT KT LGU+ 자동납부 시 할인 제공 월 1회, '전월실적 40만원 이상 ~ 80만원 미만 월 통합 할인한도 5천원, 80만원 이상 1만원']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life1}
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+      - key: life-market-delivery-5
+        title: 오픈마켓·배달앱 5% 청구할인
+        source: page
+        evidence: [라이프 서비스 ① 5% 청구할인, '오픈마켓(쿠팡, 11번가, G마켓, 옥션, 농협몰)', '배달앱(배달의민족, 요기요)', '전월실적 40만원 이상 ~ 80만원 미만 월 통합 할인한도 5천원, 80만원 이상 1만원']
+        target:
+          merchants: [auction, baemin, coupang, eleven_st, gmarket, nh_mall, yogiyo]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life1}
+        tiers: {from: 400000}
+      - key: life-olive-5
+        title: 올리브영 5% 청구할인
+        source: page
+        evidence: [라이프 서비스 ① 5% 청구할인, H&B(뷰티) 올리브영, 커피전문점 편의점 스포츠 올리브영 할인은 오프라인 현장 결제만 해당, '전월실적 40만원 이상 ~ 80만원 미만 월 통합 할인한도 5천원, 80만원 이상 1만원']
+        target:
+          merchants: [olive_young]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life1}
+        tiers: {from: 400000}
+      - key: life-coffee-10
+        title: 커피전문점 10% 청구할인
+        source: page
+        evidence: [라이프 서비스 ② 커피전문점 10% 청구할인 월 2천원 월 2회, '스타벅스, 이디야, 커피빈, 투썸플레이스', 건당 1만원 이상 결제, 전월실적 40만원 이상]
+        target:
+          merchants: [coffee_bean, ediya, starbucks, twosome]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 400000}
+        unmodeled: [스타벅스 사이렌오더는 앱 결제여도 받지만 온라인 결제로 기록하면 계산하지 않는다]
+      - key: life-convenience-10
+        title: 편의점 10% 청구할인
+        source: page
+        evidence: [라이프 서비스 ② 편의점 10% 청구할인 월 1천원, GS25 CU, 건당 1만원 이상 결제, 전월실적 40만원 이상]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: convenience}
+        tiers: {from: 400000}
+    unmodeled: ['해외 이용금액, 교통카드 이용금액, 통신료 자동이체금액은 매출표 접수일 기준으로 실적에 넣는다', 스포츠 시설 5% 할인은 업종 범위가 넓어 뺐다, K-패스 환급은 국토교통부 사업이라 계산하지 않는다, 가족카드는 발급되지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 확인한 날로 두었다, assumed: '2026-10-13'}
+  - {path: 'revisions[0].benefits[mobility-transport-10]', question: 버스 지하철 택시 할인이 후불교통 실물카드 결제에만 붙는지 문구를 찾지 못했다, assumed: 결제 방식 조건 없음}
+  - {path: 'revisions[0].limits[coffee]', question: 커피와 편의점의 월 횟수 문구가 커피에만 있다, assumed: 편의점은 횟수 제한 없음}
+notes: 2026-10-13 상품 페이지(준법감시인 심의필 2026.09.09~2027.08.31)를 대조했다. 연회비는 국내전용 13000원 해외겸용 VISA 15000원이다.

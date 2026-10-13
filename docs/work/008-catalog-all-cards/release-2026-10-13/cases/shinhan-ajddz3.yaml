@@ -1,0 +1,57 @@
+card: shinhan-ajddz3
+cases:
+- name: 30만 구간 ECO Life 영역 한도 1만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: socar, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 30000, merchant: kurly, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 30000, category: car.ev_charging, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 10000, merchant: millie, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {eco-mobility-10: 5000}}
+  - {payment: 1, benefits: {eco-market-10: 3000}}
+  - {payment: 2, benefits: {eco-ev-10: 2000}}
+  - {payment: 3, benefits: {}}
+  calc: 5,000 + 3,000 = 8,000. 전기차 3,000 중 남은 2,000. 밀리는 한도를 다 써 0
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: socar, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만
+- name: Healthy와 Daily Vibe
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: sports, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 100000, merchant: musinsa, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: subway, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T14:00, amount: 20000, merchant: olive_young, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T15:00, amount: 10000, merchant: google_play, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {healthy-fitness-10: 5000}}
+  - {payment: 1, benefits: {healthy-sportswear-10: 5000}}
+  - {payment: 2, benefits: {}}
+  - {payment: 3, benefits: {daily-store-10: 1000}}
+  - {payment: 4, benefits: {daily-oliveyoung-10: 2000}}
+  - {payment: 5, benefits: {daily-appstore-10: 1000}}
+  calc: Healthy 70만 구간 한도 1만을 5,000+5,000으로 채워 써브웨이 0. Daily Vibe 1,000+2,000+1,000
+- name: 월요일 후불교통 1천원 일 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  - {at: 2026-11-02T18:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {monday-transit-1000: 1000}}
+  - {payment: 1, benefits: {}}
+  calc: 2026-11-02는 월요일. 하루 1회 1,000원
+- name: 밀리의서재와 써브웨이 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9900, merchant: millie, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: subway, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {eco-paperless-10: 990}}
+  - {payment: 1, benefits: {healthy-greenfood-10: 1000}}
+  calc: 9,900 x 10% = 990. 10,000 x 10% = 1,000

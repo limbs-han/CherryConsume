@@ -1,0 +1,742 @@
+[
+  {
+    "card_id": "ibk-12112000271",
+    "status": "blocked",
+    "reason": "마일리지 1마일의 원화 가치 문구가 없고 전월실적 구간도 원문에 없다. 연회비 100만원 프리미엄 서비스 중심",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=200&PDCD=0271&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112110001",
+    "status": "exclude",
+    "reason": "기업 지정자카드(다이아몬드). 법인 전용",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=121&PDCD=10001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112340007",
+    "status": "exclude",
+    "reason": "약국·병원 사업자용 기업공용 카드",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=234&PDCD=0007&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112390006",
+    "status": "blocked",
+    "reason": "TOP포인트 OK캐쉬백 주유할인 중 택1이고 선택에 따라 실적 산정이 달라진다. 포인트 가치 문구 없음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=239&PDCD=0006&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112390009",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=239&PDCD=0009&pageId=CA01010000"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "CGV 현장할인은 연 6회 한도의 기준 연도를 원문이 밝히지 않아 계산하지 않는다",
+      "롯데렌터카 할인과 항공 숙박 할인과 면세점 쿠폰은 계산하지 않는다",
+      "놀이공원 할인은 발급월에 제공하지 않고 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다",
+      "탄소포인트 에코마일리지 적립과 ATM 수수료 면제와 환전 우대는 결제 혜택이 아니라 계산하지 않는다",
+      "가족카드 이용실적은 본인 실적과 합산하지 않는다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다",
+      "페이지가 전월 실적 제외 항목을 따로 적지 않아 다른 IBK 체크카드처럼 공과금 상품권 세금 관리비를 뺐다"
+    ]
+  },
+  {
+    "card_id": "ibk-12112470001",
+    "status": "exclude",
+    "reason": "하이패스 전용 카드. 일반 결제 차단, 통행료 할인은 도로공사 제공이라 계산할 카드 혜택 없음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=247&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112730108",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0108&pageId=CA01010000"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "영화관 8천원 청구할인은 통합 월 1회 연 6회이고 연 횟수의 기준이 발급일인지 달력 연도인지 원문에 없어 계산하지 않는다",
+      "TOP포인트 기본 0.2% 적립과 사용기간별 추가 적립은 할인 적용 거래와 주유 제외 조건을 담을 수 없어 계산하지 않는다",
+      "놀이공원 할인은 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다",
+      "금융 수수료 면제와 환율 우대는 계산하지 않는다",
+      "가족카드 이용실적은 본인 실적과 합산하지 않고 카드별로 본다",
+      "간편결제는 할인이 제공되지 않을 수 있다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다",
+      "신규 기간 통합할인한도만 적고 주유 할인이 실적과 무관하게 제공되는지는 원문에 없어 주지 않는다",
+      "BC글로벌 연회비 2,000원을 해외겸용 BC 브랜드로 옮겼다"
+    ]
+  },
+  {
+    "card_id": "ibk-12112730297",
+    "status": "ready",
+    "reason": "개인 신용. 주유·마트·쿠팡·영화·외식·불고기·커피·위즈파크 담음. 기본 TOP포인트 0.2%",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0297&pageId=CA01010000"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "놀이공원",
+      "TOP포인트 추가 적립",
+      "입점 매장 제외",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "top-point-0-2를 할인과 같은 묶음에 둠",
+      "주유 통합한도 포함 여부 불명"
+    ]
+  },
+  {
+    "card_id": "ibk-12112730298",
+    "status": "ready",
+    "reason": "개인 카드. 이어서 확인, 검증 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0298&pageId=CA01010000"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "영화 연 횟수",
+      "놀이공원",
+      "kt wiz 야구 할인",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "시행일 추정",
+      "국내만 실적",
+      "수령일 기준"
+    ]
+  },
+  {
+    "card_id": "ibk-12112730537",
+    "status": "exclude",
+    "reason": "산업단지 중소기업 근무 만 34세 이하 청년 근로자만 발급하는 전용 카드",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=273&PDCD=0537&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112830001",
+    "status": "ready",
+    "reason": "개인 신용. kt 통신 7천/1.5만, 주유 리터당 60원. 영화 외식 연 횟수 한도는 기준일 불명이라 뺌",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=283&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "영화 외식 놀이공원 할인",
+      "kt 자동이체 신청"
+    ],
+    "open_questions": [
+      "통신 실적과 주유 제외를 덜 주는 쪽으로 통일",
+      "수령 후 다음 달 일부 혜택 제공은 뺌",
+      "시행일 추정"
+    ]
+  },
+  {
+    "card_id": "ibk-12112840001",
+    "status": "ready",
+    "reason": "개인 체크. 해외 1.5%(USD10 이상을 15000원으로 근사), 국내 0.1%(건별 1만원 이상)",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=128&PDCD=40001&pageId=CA01010000"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "해외 0.8% 추가 이벤트"
+    ],
+    "open_questions": [
+      "USD 10 최소를 원화 15000원으로 근사"
+    ]
+  },
+  {
+    "card_id": "ibk-12112870001",
+    "status": "blocked",
+    "reason": "모바일쿠폰이 실적 구간별 6천/1만/2만/4만원이고 전환 대상과 현금 가치가 분리되지 않아 금액 모델 불가",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=128&PDCD=70001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112930001",
+    "status": "blocked",
+    "reason": "국민행복카드. 국가바우처 결합과 A/B/C형 선택, 어린이집·병원 등 업종 다수 혜택으로 지금 모델로 안전하게 못 담음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=129&PDCD=30001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12112940001",
+    "status": "ready",
+    "reason": "개인 체크. 편의점·올리브영·다이소 5%, 온라인 10%, 카카오페이 15%, 실적 20만/50만/100만",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=294&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "겹치면 큰 할인 하나 적용 가정",
+      "최소 결제금액"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113000002",
+    "status": "ready",
+    "reason": "개인 용인시민카드 체크. 신용판 구조에 한도 5천/1만/2만, 외식 150만 구간 월 2회. 영화 연 6회 기준 불명이라 뺌",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=130&PDCD=00002&pageId=CA01010000"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "CGV·롯데시네마 2천원(연 6회 기준 연도 불명)",
+      "놀이공원 할인",
+      "용인시 시설 할인",
+      "가족카드 실적 별도"
+    ],
+    "open_questions": [
+      "후불교통 실적 제외를 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "ibk-12113010002",
+    "status": "ready",
+    "reason": "개인 체크. 영화 4천원, 커피 20% 담음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=301&PDCD=0002&pageId=CA01010000"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "해외 1% 캐시백(건당 50달러 이상)",
+      "온라인 토익·도서 4천원 할인",
+      "놀이공원",
+      "금융우대·보험·청소년 할인"
+    ],
+    "open_questions": [
+      "effective_from 심의일로 둠",
+      "커피 1회 2만원 한도를 이용금액으로 봄"
+    ]
+  },
+  {
+    "card_id": "ibk-12113040001",
+    "status": "exclude",
+    "reason": "기업공용 후불하이패스 주유 카드. 할인·적립 숫자도 없음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=130&PDCD=40001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113060001",
+    "status": "blocked",
+    "reason": "kt텔레캅 서비스 자동이체 월 5천원·1만원 청구할인이 핵심인데 대상 가맹점과 적용 조건이 불분명해 담지 못한다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=306&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113070001",
+    "status": "blocked",
+    "reason": "그린카드 v2 핵심 혜택이 월 합산 1만원 이상 대중교통 이용 조건, 업종별 월 적립 한도, 녹색제품·에코머니 가맹점 적립이라 지금 모델로 맞게 못 담는다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=307&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113090001",
+    "status": "ready",
+    "reason": "개인 카드. 이어서 확인, 검증 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=309&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "놀이공원",
+      "금융우대",
+      "간편결제 제외 가능",
+      "백화점 입점 매장"
+    ],
+    "open_questions": [
+      "국내만 실적",
+      "시행일 추정",
+      "후불교통 제외를 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "ibk-12113090002",
+    "status": "ready",
+    "reason": "개인 체크. 통합한도 30만 5천/50만 1만, 편의점·올리브영·쿠팡/티몬/위메프·영화·커피·후불교통 100원 담음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=130&PDCD=90002&pageId=CA01010000"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "금융우대서비스",
+      "놀이공원 할인",
+      "후불교통 환승 제외",
+      "국가·공공기관 실적 제외"
+    ],
+    "open_questions": [
+      "후불교통 실적 제외를 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "ibk-12113090424",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=309&PDCD=0424&pageId=CA01010000"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "놀이공원 할인과 금융우대는 계산하지 않는다",
+      "가족카드 실적은 본인과 합산하지 않는다",
+      "간편결제 결제는 할인이 제공되지 않을 수 있다"
+    ],
+    "open_questions": [
+      "상품 페이지에 연회비 금액이 적혀 있지 않아 연회비 칸을 비웠다",
+      "현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다",
+      "통합할인한도가 후불교통 할인에도 걸리는지 원문이 분명하지 않아 걸리는 쪽으로 두었다"
+    ]
+  },
+  {
+    "card_id": "ibk-12113090660",
+    "status": "exclude",
+    "reason": "ibk-12113090852와 같은 상품. 후불교통 100원, 편의점·올리브영 5%, 쿠팡·티몬·위메프 10%, 영화 4천원, 커피 10%, 통합한도 5천/1만이 같다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=309&PDCD=0660&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113090884",
+    "status": "ready",
+    "reason": "개인 체크. 통합한도 30만 5천/50만 1만, 편의점·올리브영·쿠팡·영화·커피·후불교통 100원 담음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=130&PDCD=90884&pageId=CA01010000"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "금융우대서비스",
+      "놀이공원 할인",
+      "후불교통 환승 제외",
+      "국가·공공기관 실적 제외"
+    ],
+    "open_questions": [
+      "후불교통 실적 제외를 시내버스·지하철 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "ibk-12113100001",
+    "status": "blocked",
+    "reason": "연간 누적 이용금액 구간별 정액 캐시백이 핵심 혜택이고 연 누적을 모델로 못 담음",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=131&PDCD=00001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113100120",
+    "status": "blocked",
+    "reason": "12개월 누적 이용금액 구간별 정액 캐시백이라 연간 누적을 담을 수 없다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=310&PDCD=0120&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113140001",
+    "status": "blocked",
+    "reason": "한 결제가 지정금액에 따라 신용 0.6% 또는 체크 0.3%로 갈려 결제 입력으로 구분할 수 없다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=314&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113180001",
+    "status": "exclude",
+    "reason": "기업공용 체크카드(사용자지정카드)",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=318&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113220001",
+    "status": "ready",
+    "reason": "개인 신용. 후불교통 택시 통신 5%, 온라인 5천원, 해외 5%, 스타벅스 2천원. 통합한도 구간별",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=322&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "페이코 올리브영 엘롯데 등 키 없음",
+      "무이자할부 실적 제외",
+      "금융우대"
+    ],
+    "open_questions": [
+      "쇼핑 한도를 온라인과 해외가 공유로 둠",
+      "USD 10을 2만원으로 근사",
+      "시행일 추정"
+    ]
+  },
+  {
+    "card_id": "ibk-12113230001",
+    "status": "exclude",
+    "reason": "ibk-12113230006과 같은 상품. 기본 0.2%와 점심·저녁 0.6% 캐시백이 같다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=323&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113230005",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=323&PDCD=0005&pageId=CA01010000"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "자동이체·정기 납부 가맹점과 교통요금은 비씨카드 매입 처리 시각으로 타임캐시백을 판단한다",
+      "캐시백은 비씨카드에 등록된 가맹점 업종 기준이다",
+      "금융우대 수수료 면제와 환율 우대는 결제 혜택이 아니라 계산하지 않는다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다"
+    ]
+  },
+  {
+    "card_id": "ibk-12113230007",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=323&PDCD=0007&pageId=CA01010000"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "자동이체·정기 납부 가맹점과 교통요금은 비씨카드 매입 처리 시각으로 타임캐시백을 판단한다",
+      "캐시백은 비씨카드에 등록된 가맹점 업종 기준이다",
+      "금융우대 수수료 면제와 환율 우대는 결제 혜택이 아니라 계산하지 않는다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다"
+    ]
+  },
+  {
+    "card_id": "ibk-12113240001",
+    "status": "exclude",
+    "reason": "기업 지정자카드 파이팅코리아플러스. 법인 전용",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=132&PDCD=40001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113250001",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=325&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "헬스클럽 업종은 담을 업종이 없어 계산하지 않는다",
+      "대형 가맹점(백화점 면세점 아울렛)은 카드서비스 명시 목록에 없으면 할인 대상에서 제외된다",
+      "발급은 I-ONE뱅크 앱과 IBK큐브에서만 한다",
+      "금융우대 수수료 면제와 환율 우대는 계산하지 않는다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다",
+      "페이지의 실적 제외 항목은 제세공과금 아파트관리비 대학등록금 상품권 학부모부담금이다. 선불 충전은 상품권 문구에 든다고 보았다"
+    ]
+  },
+  {
+    "card_id": "ibk-12113260001",
+    "status": "exclude",
+    "reason": "파이팅코리아 기업카드 전용",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=326&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113280001",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=328&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "기업형 슈퍼마켓과 이동통신 외 통신요금은 대상이 아니다",
+      "6대 영역 이용금액이 같으면 매출일이 빠른 쇼핑 병원 통신 마트 음식점 교통 순으로 영역을 정한다",
+      "무이자할부 변형 포함 건은 캐시백에서 빠진다",
+      "가족카드 실적은 카드별로 본다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시작일을 찾지 못해 준법감시인 심의일로 두었다"
+    ]
+  },
+  {
+    "card_id": "ibk-12113290001",
+    "status": "ready",
+    "reason": "개인 청소년 체크. 라이프 500원, 온라인서점·학원 1천원, 실적 10만/20만/30만",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=329&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "공차·쥬씨",
+      "독서실",
+      "발급대상"
+    ],
+    "open_questions": [
+      "신규 카드 구간 한도 금액 불명 100000으로 둠"
+    ]
+  },
+  {
+    "card_id": "ibk-12113330001",
+    "status": "exclude",
+    "reason": "기업카드 전용(기업공용, 법인 회원)",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=333&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113330002",
+    "status": "exclude",
+    "reason": "기업공용 EV 충전·주유전용 기업카드. 기존 기업회원 추가발급만 가능",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=333&PDCD=0002&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113360001",
+    "status": "exclude",
+    "reason": "기업공용 B-Point 기업카드. 사업자 기준 실적",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=336&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113360043",
+    "status": "exclude",
+    "reason": "기업공용 카드로 더블랙레이블 임직원 전용",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=133&PDCD=60043&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113380007",
+    "status": "blocked",
+    "reason": "카카오페이포인트 1포인트 원화 가치 문구가 원문에 없다. 적립 전부가 카카오페이포인트",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=338&PDCD=0007&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113380016",
+    "status": "exclude",
+    "reason": "ibk-12113380012와 같은 상품",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=133&PDCD=80016&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113410001",
+    "status": "exclude",
+    "reason": "기업체크카드(기업공용) 전용",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=341&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113430001",
+    "status": "blocked",
+    "reason": "에코머니 적립이 핵심인데 1포인트 원화 가치 문구가 원문에 없다. 친환경차 40%, 대중교통 10% 등 전부 포인트",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=343&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113440001",
+    "status": "blocked",
+    "reason": "대한항공·아시아나 마일리지 적립이 핵심 혜택인데 항공 마일리지는 포인트 프로그램에 없고 1마일의 원화 가치 문구도 없다. 스타벅스 4천원 할인만 담으면 카드가 실제와 크게 다르다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=344&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113470001",
+    "status": "blocked",
+    "reason": "IBK포인트 건당 결제금액 구간 적립이 핵심이나 포인트 1점의 원화 가치 문구가 원문에 없다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=347&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113470002",
+    "status": "ready",
+    "reason": "개인 체크. 기본 0.2%, 커피 6%(20만 월 5천P, 50만 월 8천P). IBK포인트 1P=1원 원문 확인",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=347&PDCD=0002&pageId=CA01010000"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "국가·공공기관 가맹점 실적 제외",
+      "커피 입점 매장 제외",
+      "팀 홀튼 더벤티 하삼동커피 키 없음"
+    ],
+    "open_questions": [
+      "시행일 추정",
+      "사용등록 특례를 등록일 기준으로 옮김"
+    ]
+  },
+  {
+    "card_id": "ibk-12113470003",
+    "status": "ready",
+    "reason": "개인 신용. IBK포인트 1P=1원 약관 확인. 기본 1.5%, 해외 5%(월 15000P), 온라인 0.5%(월 1만P), 주유 월 100만원 인정",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=134&PDCD=70003&pageId=CA01010000"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "국가·공공기관 가맹점 제외"
+    ],
+    "open_questions": [
+      "온라인 쇼핑 월 1만P 한도를 영역 전체로 둠",
+      "시행일 추정"
+    ]
+  },
+  {
+    "card_id": "ibk-12113490001",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 검증과 사례 통과",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=349&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "국가·공공기관·공공단체 가맹점 이용금액은 실적에서 빠진다",
+      "간편결제 결제는 할인이 제공되지 않을 수 있다",
+      "쿠팡과 배달앱은 공식 앱이나 홈페이지 결제만 대상이다"
+    ],
+    "open_questions": [
+      "현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다",
+      "원문은 사용 등록일 이후 다음 월말까지 통합 월 할인한도 5천원을 기본 제공한다고 적었다. 20만원 구간과 같다고 보았다"
+    ]
+  },
+  {
+    "card_id": "ibk-12113500001",
+    "status": "blocked",
+    "reason": "대한항공 마일리지 적립(3천원당 1마일)이 핵심이고 마일 1개의 원화 가치 문구가 없어 포인트를 만들 수 없다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=350&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113550001",
+    "status": "exclude",
+    "reason": "개인사업자 전용 신용카드(발급대상 기업, 지정자카드)",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=355&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  }
+]

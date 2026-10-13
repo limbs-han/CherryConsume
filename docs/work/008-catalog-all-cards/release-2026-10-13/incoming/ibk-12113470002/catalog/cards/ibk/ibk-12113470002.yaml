@@ -1,0 +1,58 @@
+schema_version: 2
+id: ibk-12113470002
+issuer: ibk
+name: IBK포인트(체크)
+kind: check
+product_codes:
+  - '12113470002'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=347&PDCD=0002&pageId=CA01010000', fetched_at: 2026-10-13, review_no: 제2025-8631호, review_valid_until: 2028-12-11}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2025-12-16
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+    limits:
+      - key: coffee-cap
+        per: month
+        amount: {200000: 5000, 500000: 8000}
+    stacks:
+      - {key: main}
+      - {key: coffee}
+    benefits:
+      - key: base-0-2
+        title: 기본 0.2% IBK포인트 적립
+        source: page
+        evidence: [국내·외 가맹점 이용금액의 0.2% 적립, 전월 이용금액과 한도 제한 없음, IBK포인트 1포인트는 1원의 가치]
+        target: {all: true}
+        reward: {type: points, program: ibk_point, rate: 0.2}
+      - key: coffee-6
+        title: 커피전문점 6% IBK포인트 적립
+        source: page
+        evidence: [커피 전문점 6% 적립, '전월 20만원 이상 월 5천 포인트, 50만원 이상 월 8천 포인트', 커피 브랜드 공식앱 온라인 결제와 현장결제에 한함, 기본 서비스와 추가 서비스는 함께 적립]
+        target:
+          merchants: [angel_in_us, coffee_bean, compose_coffee, ediya, hollys, mega_coffee, paik_coffee, pascucci, paul_bassett, starbucks, tom_n_toms, twosome]
+        reward: {type: points, program: ibk_point, rate: 6}
+        limits:
+          - {shared: coffee-cap}
+        tiers: {from: 200000}
+        stack: coffee
+        unmodeled: [백화점·대형할인점·아울렛 입점 매장은 제외, 팀 홀튼 더벤티 하삼동커피는 가맹점 키가 없어 담지 않았다]
+    unmodeled: [국가·공공기관·공공단체가 개설한 가맹점 이용금액은 실적에서 빠지지만 담을 업종이 없다, 후불교통 기능은 있으나 실적 제외 여부가 원문에 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 준법감시인 심의일로 뒀다, assumed: '2025-12-16'}
+  - {path: 'revisions[0].new_card', question: 사용등록일부터 다음 월말까지 20만원 구간으로 본다는 문구를 등록일 기준으로 옮겼다, assumed: registration}
+notes: 2026-10-13 expand21 조사. 커피 6% 적립은 기본 0.2%에 더해 받는다

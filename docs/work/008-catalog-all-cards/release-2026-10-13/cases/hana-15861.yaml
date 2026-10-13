@@ -1,0 +1,69 @@
+card: hana-15861
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.5% 청구할인은 실적 조건 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other}
+  expect:
+  - payment: 0
+    benefits: {general-0-5: 500}
+    counted: 100000
+  calc: 100,000원 x 0.5% = 500원. 0.5% 이하로 할인받은 매출은 실적에 들어간다
+- name: 40만 구간 시작 주유 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: sk_energy, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {fuel-5: 2500}
+  calc: 50,000원 x 5% = 2,500원이 40만 구간 한도 4,000원 안
+- name: 실적 직전 399999는 기본 0.5%만
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: sk_energy, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {general-0-5: 250}
+  calc: 40만원보다 1원 적어 5%는 0원이고 기본 50,000원 x 0.5% = 250원
+- name: 40만 구간 주유 한도 4천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: gs_caltex, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {fuel-5: 4000}
+  calc: 100,000원 x 5% = 5,000원이 40만 구간 한도 4,000원에 걸림
+- name: 80만 구간 마트 한도 8천
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 200000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {mart-5: 8000}
+  calc: 200,000원 x 5% = 10,000원이 80만 구간 한도 8,000원에 걸림
+- name: 40만 구간 커피 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {coffee-5: 5000}
+  calc: 100,000원 x 5% = 5,000원이 40만 구간 한도 8,000원 안
+- name: 하나Pay 5% 한도 4천
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, payment_method: hana_pay}
+  expect:
+  - payment: 0
+    benefits: {simple-pay-5: 4000}
+  calc: 100,000원 x 5% = 5,000원이 40만 구간 한도 4,000원에 걸림
+- name: 미용실 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: beauty.salon, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {beauty-pet-5: 4000}
+  calc: 100,000원 x 5% = 5,000원이 40만 구간 한도 4,000원에 걸림

@@ -1,0 +1,73 @@
+schema_version: 2
+id: lotte-1472
+issuer: lotte
+name: OIL KING SK 롯데카드
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00006_20210930_10006.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2021-09-30'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, tax]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    limits:
+      - key: fuel
+        per: month
+        amount: {500000: 15000, 1000000: 25000, 1500000: 40000}
+        count: 4
+    benefits:
+      - key: sk-fuel-150
+        title: SK주유소 리터당 150원 청구할인
+        source: manual
+        evidence: [지난달 이용금액 50만원 이상 100만원 미만 할인액 리터당 150원 월 할인한도 15000원, '통합 월4회, 1회 주유금액 10만원까지 할인 적용', 할인대상 유종은 휘발유 경유 등유이며 LPG는 제외됩니다.]
+        target:
+          merchants: [sk_energy]
+        reward: {type: billing_discount, per_liter: 150}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 500000, to: 500000}
+        exclude_applied: 1
+      - key: sk-fuel-200
+        title: SK주유소 리터당 200원 청구할인
+        source: manual
+        evidence: [지난달 이용금액 100만원 이상 150만원 미만 할인액 리터당 200원 월 할인한도 25000원, '통합 월4회, 1회 주유금액 10만원까지 할인 적용']
+        target:
+          merchants: [sk_energy]
+        reward: {type: billing_discount, per_liter: 200}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 1000000, to: 1000000}
+        exclude_applied: 1
+      - key: sk-fuel-300
+        title: SK주유소 리터당 300원 청구할인
+        source: manual
+        evidence: [지난달 이용금액 150만원 이상 할인액 리터당 300원 월 할인한도 40000원, '통합 월4회, 1회 주유금액 10만원까지 할인 적용']
+        target:
+          merchants: [sk_energy]
+        reward: {type: billing_discount, per_liter: 300}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 1500000}
+        exclude_applied: 1
+    unmodeled: [LPG 충전은 할인에서 빠지지만 SK주유소 결제에서 가려내지 않는다, 리터는 SK에너지 지정고시 휘발유 가격으로 환산하고 경유와 등유도 휘발유 가격으로 환산한다, SK주유소 할인은 승인 순서대로 적용하고 SK셀프주유소는 매입 시점에 적용한다, 할인받은 SK주유소 매출은 실적에서 빠진다, '관세, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 가족카드 이용금액도 본인 실적에 더한다, 다른 청구할인과 겹치면 할인금액이 큰 서비스 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품설명서가 2021년 9월 기준이다. 그 뒤 바뀐 조건이 있는지 상품 페이지를 찾지 못해 확인하지 못했다, assumed: '2021-09-30'}
+  - {path: product_codes, question: '롯데카드 판매 카드 목록(일반, 제휴)에서 상품 코드를 찾지 못해 공시 색인 번호 id를 그대로 두었다. 지금도 신규 발급하는지 확인한다', assumed: '[]'}
+notes: 2026-10-12 상품설명서(2021년 9월 기준) 대조. 출시일 2017-02-22. 지난달 50만·100만·150만원 이상이면 SK주유소 리터당 150·200·300원 청구할인, 월 한도 15,000·25,000·40,000원, 통합 월 4회, 1회 주유금액 10만원까지. 신규 발급 특례는 카드 사용 등록일부터 다음 달 말일까지 리터당 150원과 한도 15,000원이라 50만 구간으로 넣었다. 실적 제외 문구에 무이자할부가 없지만 카드사 기본값대로 실적에서 뺐다. 실적이 적게 잡히는 쪽이다. 롯데카드 L.POINT 적립은 주지 않는다.

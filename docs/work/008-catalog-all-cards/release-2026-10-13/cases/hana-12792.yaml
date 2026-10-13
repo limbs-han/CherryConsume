@@ -1,0 +1,52 @@
+card: hana-12792
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 어린이집 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: childcare}
+  - {at: 2026-11-05T12:00, amount: 30000, category: childcare}
+  expect:
+  - payment: 0
+    benefits: {childcare-10k: 10000}
+    counted: 0
+  - payment: 1
+    benefits: {}
+  calc: 월 1회 1만원. 어린이집 이용금액은 실적 제외
+- name: 실적 직전 499999
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 50만원 미만이라 할인 없음
+- name: 스타벅스 10%와 병원 5% 통합 한도 1만
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: starbucks}
+  - {at: 2026-11-05T12:00, amount: 200000, category: hospital}
+  expect:
+  - payment: 0
+    benefits: {cafe-10: 5000}
+    counted: 0
+  - payment: 1
+    benefits: {hospital-pharmacy-5: 5000}
+  calc: 50,000원 x 10% = 5,000원. 200,000원 x 5% = 10,000원이 남은 통합 한도 5,000원에 걸림
+- name: 통합 월 5회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-01T12:00, amount: 5000, category: pharmacy}
+  - {at: 2026-11-02T12:00, amount: 5000, category: pharmacy}
+  - {at: 2026-11-03T12:00, amount: 5000, category: pharmacy}
+  - {at: 2026-11-04T12:00, amount: 5000, category: pharmacy}
+  - {at: 2026-11-05T12:00, amount: 5000, category: pharmacy}
+  - {at: 2026-11-06T12:00, amount: 5000, category: pharmacy}
+  expect:
+  - payment: 4
+    benefits: {hospital-pharmacy-5: 250}
+  - payment: 5
+    benefits: {}
+  calc: 5,000원 x 5% = 250원씩 5회까지. 6번째는 0원

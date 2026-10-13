@@ -1,0 +1,137 @@
+schema_version: 2
+id: hana-17582
+issuer: hana
+name: 원더 K리그 축덕카드
+short_name: 하나 원더 K리그 축덕
+search_names: [K리그 축덕카드, 원더카드 K리그, 축덕카드]
+kind: credit
+product_codes:
+  - '17582'
+status: on_sale
+annual_fees:
+  - {scope: global, amount: 19900}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41017582P&CD_PD_SEQ=17582', fetched_at: 2026-10-13, review_no: A-25-0405, review_valid_until: 2026-03-09}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2025-03-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+    limits:
+      - key: taxi
+        per: month
+        amount: {400000: 4000, 800000: 8000, 1200000: 10000}
+    benefits:
+      - key: all-0-8
+        title: 전가맹점 0.8% 청구할인
+        source: page
+        evidence: ['전가맹점 | 할인 대상 : 국내·외 모든 결제 시', 0.8% | 없음 | 없음, '단, 서비스 받은 매출 중 전가맹점 서비스영역 1.0% 이하 및 간편결제 서비스영역에서 1.2% 이하로 서비스 받은 매출은 실적에 포함됩니다.']
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.8}
+        exclude_applied: 0
+      - key: simple-pay-1-2
+        title: 하나페이·간편결제 온라인 1.2% 청구할인
+        source: page
+        evidence: ['간편결제 | 하나페이 모든결제 / 삼성페이, 네이버페이, 카카오페이, SSG페이, 페이코, 쿠페이, SK pay에 카드를 등록하여 온라인 가맹점에서 결제하는 건', 1.2% | 없음 | 없음, '하나페이를 제외한 다른 간편결제 시 모바일 단말을 이용한 삼성페이 오프라인 결제, 네이버페이 오프라인 결제 등 오프라인 가맹점에서의 결제는 서비스에서 제외됩니다.']
+        target: {all: true}
+        when:
+          - any_of:
+              - payment: [hana_pay]
+              - channel: online
+                payment: [coupay, kakao_pay, naver_pay, payco, samsung_pay, ssg_pay]
+        reward: {type: billing_discount, rate: 1.2}
+        exclude_applied: 0
+      - key: coupang-2
+        title: 쿠팡 2% 청구할인
+        source: page
+        evidence: [쿠팡 | 2% | 없음 | 통합 5만원, '할인 대상 : 쿠팡', '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건은 서비스에서 제외됩니다.', '상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 서비스에서 제외됩니다.']
+        target:
+          merchants: [coupang]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {per: month, amount: 50000}
+        unmodeled: [상품권과 여행과 항공권과 티켓과 도서와 공연 매출은 제외한다. 연결된 다른 사이트나 앱 결제도 제외한다]
+      - key: delivery-4
+        title: 배달의민족·요기요·쿠팡이츠 4% 청구할인
+        source: page
+        evidence: ['딜리버리 | 할인 대상 : 배달의민족, 요기요, 쿠팡이츠', '4% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 6,000', '지난달 실적 120만원 이상 | 10,000', '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 음식점 직접 결제 건은 서비스에서 제외됩니다.']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 4}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 6000, 1200000: 10000}
+        tiers: {from: 400000}
+      - key: online-food-shopping-4
+        title: 컬리·SSG·롯데ON·더현대닷컴 4% 청구할인
+        source: page
+        evidence: ['온라인식품&쇼핑 | 할인 대상 : 컬리, SSG.COM, 롯데ON, 더현대닷컴', '4% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 8,000', '지난달 실적 120만원 이상 | 10,000', '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건은 서비스에서 제외됩니다.']
+        target:
+          merchants: [kurly, lotte_on, ssg_com, the_hyundai_com]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 4}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 10000}
+        tiers: {from: 400000}
+        unmodeled: [상품권과 여행과 항공권과 티켓과 도서와 공연 매출은 제외한다. 롯데ON과 더현대닷컴은 몰 이동으로 다른 쇼핑몰에서 결제하면 제외한다]
+      - key: open-market-4
+        title: G마켓·옥션·11번가·인터파크·위메프·티몬 4% 청구할인
+        source: page
+        evidence: ['오픈마켓 | 할인 대상 : G마켓, 옥션, 11번가, 인터파크, 위메프, 티몬', '4% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 8,000', '지난달 실적 120만원 이상 | 10,000', '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건은 서비스에서 제외됩니다.']
+        target:
+          merchants: [auction, eleven_st, gmarket, interpark, tmon, wemakeprice]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 4}
+        limits:
+          - per: month
+            amount: {400000: 4000, 800000: 8000, 1200000: 10000}
+        tiers: {from: 400000}
+        unmodeled: [상품권과 여행과 항공권과 티켓과 도서와 공연 매출은 제외한다. 연결된 다른 사이트나 앱 결제도 제외한다]
+      - key: taxi-app-4
+        title: 카카오T·UT 앱 사전결제 4% 청구할인
+        source: page
+        evidence: ['택시 | 할인 대상 : 카카오T, UT, 택시업종', '4% | 지난달 실적 40만원 이상 80만원 미만 | 4,000', '지난달 실적 80만원 이상 120만원 미만 | 8,000', '지난달 실적 120만원 이상 | 10,000', '카카오T, UT는 공식 앱에서 카드를 등록하고 미리 결제하는 방식에만 서비스가 제공되며 현장결제 또는 나중에 결제하는 방식에는 서비스가 제외됩니다.']
+        target:
+          merchants: [kakao_t, ut]
+        when:
+          - billing: [app_prepay]
+        reward: {type: billing_discount, rate: 4}
+        limits:
+          - {shared: taxi}
+        tiers: {from: 400000}
+      - key: taxi-offline-4
+        title: 택시업종 오프라인 4% 청구할인
+        source: page
+        evidence: ['택시 | 할인 대상 : 카카오T, UT, 택시업종', 택시 업종은 오프라인 결제 건에 한하여 서비스가 제공됩니다.]
+        target:
+          categories: [taxi]
+          exclude_merchants: [kakao_t, ut]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 4}
+        limits:
+          - {shared: taxi}
+        tiers: {from: 400000}
+    unmodeled: [슈퍼마켓(GS슈퍼, 롯데슈퍼, 이마트에브리데이, 홈플러스익스프레스, 노브랜드) 항목은 원문 표에 할인율이 비어 있어 계산하지 않는다, 무이자할부 서비스(국내 5만원 이상 2~3개월)는 계산하지 않는다, 가족카드 이용금액과 월별 할인한도는 본인카드와 합산한다, 혜택플러스와 맞춤 혜택 조합 변경은 계산하지 않는다, SK pay는 결제수단 목록에 없어 간편결제 대상에 넣지 못했다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 준법심의 시작일을 잠정 시작일로 둔다., assumed: '2025-03-10'}
+  - {path: 'sources[0]', question: 상품 페이지의 준법심의 유효기간이 2026-03-09로 지났다. 페이지 내용이 현재와 같은지 원문만으로 알 수 없다., assumed: 페이지 내용 그대로}
+  - {path: 'revisions[0].benefits', question: 영역 혜택이 한 건에 겹칠 때의 처리를 원문이 적지 않았다. 한 건에 가장 큰 혜택 하나만 준다., assumed: 가장 큰 혜택 하나}
+  - {path: 'revisions[0].benefits[coupang-2].limits', question: 쿠팡 2% 한도는 통합 5만원이다. 슈퍼마켓과 함께 쓰는 한도로 읽지만 슈퍼마켓을 넣지 않아 쿠팡만 월 5만원으로 둔다., assumed: 쿠팡 월 5만원}
+notes: 2026-10-13 공식 상품 페이지(준법심의 A-25-0405)에서 옮겼다. 원더카드의 K리그 축덕 맞춤 혜택 조합이다. 연회비 국내외겸용 19,900원(기본 12,000원, 제휴 7,900원). 제휴연회비는 혜택플러스를 고르면 붙는다. 실적은 지난달 국내외 일시불과 할부 이용금액. 서비스 받은 매출은 실적에서 빠지지만 전가맹점 1.0% 이하와 간편결제 1.2% 이하로 받은 매출은 실적에 들어간다. 초안의 전가맹점 월 5만원 한도는 원문에 없어 뺐다.

@@ -1,0 +1,126 @@
+schema_version: 2
+id: samsung-aap1773
+issuer: samsung
+name: 삼성 iD PET 카드
+short_name: iD PET
+search_names: [iD PET, 삼성 iD PET, 삼성카드 iD PET, 아이디 펫]
+kind: credit
+product_codes: [AAP1773]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1773', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoMknQMkPnMZbWd1stD0YOE%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2022-C1a-07471호}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: '2022-09-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - key: pet
+        per: month
+        amount: {400000: 10000, 800000: 30000, 1200000: 50000}
+      - key: pay
+        per: month
+        amount: {400000: 3000, 800000: 6000, 1200000: 10000}
+      - {key: overseas, per: month, amount: 100}
+      - {key: streaming, per: month, amount: 5000}
+      - {key: coffee-cvs, per: month, amount: 5000}
+    benefits:
+      - key: pet-vet-30
+        title: 동물병원 30% 할인
+        source: manual
+        evidence: [동물병원/반려동물쇼핑몰 30% 결제일할인, '전월 이용금액대별 통합 월 할인한도 40만원 이상 10,000원, 80만원 이상 30,000원, 120만원 이상 50,000원', 동물병원은 오프라인 결제건에 한함, 전월 이용금액 제외 대상 삼성 iD PET 카드의 동물병원/반려동물쇼핑몰 30% 할인 혜택이 제공된 전체 이용금액]
+        target:
+          categories: [pet.vet]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: pet}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: online-pay-5
+        title: 온라인 간편결제 5% 할인
+        source: manual
+        evidence: [온라인 간편결제 5% 결제일할인, '삼성페이, 네이버페이, 카카오페이, PAYCO, 스마일페이, coupay, SSGPAY, L.PAY', '전월 이용금액대별 통합 월 할인한도 40만원 이상 3,000원, 80만원 이상 6,000원, 120만원 이상 10,000원', '국내 온라인 가맹점에 한하며, 오프라인 매장 결제건(바코드, QR코드, 스마트폰 NFC 등)은 제외']
+        target: {all: true}
+        when:
+          - payment: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay]
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: pay}
+        tiers: {from: 400000}
+      - key: overseas-1-5
+        title: 해외 1.5% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 해외 1.5% 결제일할인', 해외 가맹점 및 해외 직접구매 이용건, '통합 월 할인한도 : 100원', 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: overseas}
+      - key: streaming-10
+        title: 스트리밍 10% 할인
+        source: manual
+        evidence: [스트리밍 이용료 정기결제 시 10% 결제일할인, '스트리밍 넷플릭스, 웨이브, 티빙, 왓챠, 멜론, FLO', '통합 월 할인한도 : 5,000원', 전월 이용금액 40만원 이상 시 제공, 앱스토어를 통한 결제건(인앱 결제) 제외]
+        target:
+          merchants: [flo, melon, netflix, tving, watcha, wavve]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: streaming}
+        tiers: {from: 400000}
+        unmodeled: [앱스토어를 통한 인앱 결제는 할인하지 않는다]
+      - key: coffee-cvs-1000
+        title: 커피전문점·편의점 1,000원 할인
+        source: manual
+        evidence: ['커피전문점/편의점 건별 1만원 이상 결제 시 1,000원 결제일할인', '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', '통합 월 할인한도 : 5,000원', 전월 이용금액 40만원 이상 시 제공, '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [blue_bottle, coffee_bean, cu, ediya, emart24, gs25, ministop, seven_eleven, twosome]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: coffee-cvs}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: starbucks-1000
+        title: 스타벅스 1,000원 할인
+        source: manual
+        evidence: [커피전문점 스타벅스, '단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공', '건별 1만원 이상 결제 시 1,000원 결제일할인']
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: coffee-cvs}
+        tiers: {from: 400000}
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+    unmodeled: ['할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제건)는 매출전표 접수 시점 기준이다', '반려동물쇼핑몰 30% 할인(삼성카드 쇼핑 반려생활관, 강아지대통령, 고양이대통령, 어바웃펫, 베이컨박스, 하림펫푸드, 놀로 스토어)은 공통 가맹점이 없어 담지 않았다', '손해보험 10% 할인(펫보험, 자동차보험 등 모든 손해보험)은 손해보험만 가리키는 공통 업종이 없어 담지 않았다', 고용부담금은 실적에서 빼야 하나 담을 업종이 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2022.9)의 첫날로 두었다. 상품 출시일은 2022-08-02다, assumed: '2022-09-01'}
+  - {path: 'revisions[0]', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].spend.interest_free', question: 무이자할부의 실적 처리가 상품안내장에 없다. 할인 제외 대상에만 적혀 있다, assumed: count}
+notes: 2026-10-13 상품안내장(2022.9판, 심의필 2022-C1a-07471호) 대조. 연회비 해외겸용 Mastercard 15,000원(기본 7,000+제휴 8,000), 국내전용 없음. 후불교통 기능 탑재. 동물병원 30% 혜택이 제공된 이용금액은 실적에서 뺀다. 발급월+1개월까지는 전월 40만원 미만이어도 40만원 구간 혜택을 준다. 삼성카드의 다른 결제일할인과 겹치면 큰 것 하나만 준다.

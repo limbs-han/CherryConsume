@@ -1,0 +1,28 @@
+card: lotte-1471
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 헬로비전 자동이체 한도 11000
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 33000, merchant: lg_hellovision, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {hellovision-telecom: 11000}
+  calc: 30만 구간 월 한도 11,000
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 33000, merchant: lg_hellovision, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 할인 없음
+- name: 100만 구간 헬로모바일 요금이 한도보다 적으면 요금만큼
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 18000, merchant: hello_mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {hellovision-telecom: 18000}
+  calc: 한도 20,000보다 요금 18,000이 적어 18,000

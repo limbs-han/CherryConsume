@@ -1,0 +1,76 @@
+card: kb-07634
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 주유 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-5: 1000}, counted: 0}
+  calc: 20000 x 5% = 1000. 할인받은 결제는 실적 제외
+- name: 40만 구간 주유 한도 2000
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-5: 2000}}
+  calc: 5000원이지만 월 한도 2000원
+- name: 40만 경계 직전 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 40만원 미만 할인 없음
+- name: 160만 구간 커피 한도 1만
+  prev_month_spend: 1600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: cafe}
+  expect:
+  - {payment: 0, benefits: {cafe-5: 10000}}
+  calc: 15000원이지만 한도 10000원
+- name: 80만 구간 통신 자동납부
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, category: telecom.mobile, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 3000}}
+  calc: 60000 x 5% = 3000, 한도 4000원 안
+- name: 학원 영화 OTT 백화점 각각
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: education.academy}
+  - {at: 2026-11-05T11:00, amount: 20000, category: movie}
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: netflix}
+  - {at: 2026-11-05T13:00, amount: 20000, category: department_store, channel: offline}
+  expect:
+  - {payment: 0, benefits: {academy-5: 1000}}
+  - {payment: 1, benefits: {movie-5: 1000}}
+  - {payment: 2, benefits: {ott-5: 1000}}
+  - {payment: 3, benefits: {shopping-5: 1000}}
+  calc: 각 5%
+- name: 신규 유예 40만 미만 한도 1000
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: fuel}
+  expect:
+  - {payment: 0, benefits: {fuel-5: 1000}}
+  calc: 유예기간 40만원 미만은 한도 1000원
+- name: 후불교통 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 무승인 RF후불교통은 지하철 업종 제외로 실적 0원
+- name: 일반 승인 철도 실적 포함
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.rail}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 철도는 실적에 남긴다

@@ -1,0 +1,39 @@
+card: ibk-12112390009
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: TOP포인트 0.1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {top-point-0-1: 50}}
+  calc: 50,000원 × 0.1% = 50포인트
+- name: TOP포인트 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 500000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {top-point-0-2: 1000}}
+  calc: 500,000원 × 0.2% = 1,000포인트
+- name: TOP포인트 0.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 2000000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {top-point-0-5: 10000}}
+  calc: 2,000,000원 × 0.5% = 10,000포인트
+- name: 불고기브라더스 20% 월 1만원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: bulgogi_brothers, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {bulgogi-20: 10000}}
+  calc: 할인 뒤 80,000원은 할인 전 100,000원. 20% = 20,000원 중 월 한도 10,000원
+- name: 경계 직전 199999 불고기브라더스
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 80000, merchant: bulgogi_brothers, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {top-point-0-1: 80}}
+  calc: 구간 미달이라 포인트만

@@ -1,0 +1,32 @@
+card: lotte-c12667-a12667
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 평일 0.2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-cashback-0-2: 100}}
+  calc: 2026-11-04 수요일. 50,000 × 0.2% = 100
+- name: 30만 구간 주말 0.2% 더하기
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-cashback-0-2: 100, weekend-cashback-0-2: 100}}
+  calc: 2026-11-07 토요일. 100 + 100
+- name: 30만 직전이면 주말 추가 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-07T12:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-cashback-0-2: 100}}
+  calc: 0 구간은 기본 0.2%만
+- name: 지하철은 캐시백과 실적에 들어감
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-cashback-0-2: 3}, counted: 1500}
+  calc: 1,500 × 0.2% = 3. 교통은 제외 목록에 없다

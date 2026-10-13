@@ -1,0 +1,52 @@
+card: hana-15859
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 전가맹점 0.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {general-0-7: 700}
+  calc: 100,000원 x 0.7% = 700
+- name: 하나페이 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: hana_pay}
+  expect:
+  - payment: 0
+    benefits: {simple-pay-1-2: 1200}
+  calc: 100,000원 x 1.2% = 1,200
+- name: 쿠팡 온라인 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coupang-2: 2000}
+  calc: 100,000원 x 2% = 2,000
+- name: 이마트 오프라인 2% 한도 5만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 3000000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {mart-2: 50000}
+  calc: 3,000,000원 x 2% = 60,000원이 통합 한도 50,000원에 걸림
+- name: 파리바게트 오프라인 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: paris_baguette, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {bakery-2: 200}
+  calc: 10,000원 x 2% = 200
+- name: 지하철 3%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-3: 300}
+  calc: 10,000원 x 3% = 300

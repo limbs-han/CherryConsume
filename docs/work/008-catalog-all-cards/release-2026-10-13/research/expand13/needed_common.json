@@ -1,0 +1,81 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "claude",
+      "name": "Claude",
+      "category": "streaming",
+      "aliases": [
+        "Claude",
+        "CLAUDE.AI",
+        "ANTHROPIC"
+      ]
+    },
+    "card_id": "shinhan-axpe17",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/2013453_2207.html",
+    "evidence": "AI 10% (ChatGPT, Claude). AI 서비스는 서비스별 공식 웹사이트를 통해 AI를 구독한 경우에만 서비스가 제공"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "top_mart",
+      "name": "탑마트",
+      "category": "grocery_mart",
+      "aliases": [
+        "탑마트",
+        "TOP마트"
+      ]
+    },
+    "card_id": "shinhan-bcaazx",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1187935_2207.html",
+    "evidence": "마트 10% 할인(이마트, 홈플러스, 롯데마트, 메가마트, 탑마트)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "ridi",
+      "name": "리디",
+      "category": "streaming",
+      "aliases": [
+        "리디",
+        "RIDI",
+        "리디북스"
+      ]
+    },
+    "card_id": "shinhan-bgod9l",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1221538_2206.html",
+    "evidence": "도서 | 리디북스"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "aliexpress",
+      "name": "알리익스프레스",
+      "category": "online_shopping",
+      "aliases": [
+        "알리익스프레스",
+        "AliExpress",
+        "aliexpress.com"
+      ]
+    },
+    "card_id": "shinhan-boadp9",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/credit/1231466_2207.html",
+    "evidence": "알리익스프레스 국내 / 해외 배송상품 10% 결제일 할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "don_quijote",
+      "name": "돈키호테",
+      "category": "other",
+      "aliases": [
+        "돈키호테",
+        "DON QUIJOTE",
+        "ドン・キホーテ"
+      ]
+    },
+    "card_id": "shinhan-bubdrh",
+    "source_url": "https://www.shinhancard.com/pconts/html/card/apply/check/1232877_2206.html",
+    "evidence": "일본 여행 서비스 돈키호테 50% 할인. 일본 내 오프라인 가맹점에 한해 적용"
+  }
+]

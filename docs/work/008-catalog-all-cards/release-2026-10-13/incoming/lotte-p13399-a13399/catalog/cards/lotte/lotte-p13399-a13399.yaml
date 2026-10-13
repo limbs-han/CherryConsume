@@ -1,0 +1,71 @@
+schema_version: 2
+id: lotte-p13399-a13399
+issuer: lotte
+name: LOCA for Auto
+kind: credit
+product_codes: [P13399-A13399]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13399-A13399', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00017_20260930_10005.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2020-07-10'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 1500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트 충전과 스마트 캐시백 신청 이용금액은 할인에서 빠진다]
+    benefits:
+      - key: fuel-100
+        title: 4대 정유사 주유 리터당 100원 결제일 할인
+        source: manual
+        evidence: [주유 SK 에너지ㆍS-OILㆍGS칼텍스ㆍ현대오일뱅크 100원/L 월 이용금액 30만원까지, SK㈜ 지정고시 휘발유 가격 기준으로 혜택이 제공됩니다., LPG 충전소 이용금액은 혜택이 제공되지 않습니다., '지난달 1일 ~ 말일까지 150만원 이상 (본인, 가족카드 합산) 이용 시 혜택이 제공됩니다.']
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: billing_discount, per_liter: 100}
+        limits:
+          - {per: month, base: 300000}
+        tiers: {from: 1500000}
+        unmodeled: [리터는 SK㈜ 지정고시 휘발유가로 환산한다. 앱은 공통 기름값 기준값으로 환산한다, LPG 충전은 할인하지 않는다]
+      - key: cvs-5
+        title: GS25·CU·세븐일레븐 5% 결제일 할인
+        source: manual
+        evidence: [편의점 GS25ㆍCUㆍ세븐일레븐 5% 월 5천원, 오프라인 결제 시에만 혜택이 제공됩니다., 건당 1만원 이상 결제 건에 대해 혜택이 제공됩니다.]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - channel: offline
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 1500000}
+      - key: delivery-5
+        title: 배달의민족·요기요 5% 결제일 할인
+        source: manual
+        evidence: [배달앱 배달의민족ㆍ요기요 5% 월 5천원, 건당 1만원 이상 결제 건에 대해 혜택이 제공됩니다., 공식 앱을 통한 결제 시 혜택이 제공되며 가맹점 직접 결제 건은 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - channel: online
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 1500000}
+    unmodeled: [자동차보험 건당 30만원 이상 결제 시 1만원 할인은 연 1회인데 발급일 기준인지 달력 연도 기준인지 원문에 없어 계산하지 않는다, 일부 PG 결제는 할인에서 빠진다, LOCA 시리즈 카드가 아닌 롯데카드 이용금액만 실적에서 빠져 다른 LOCA 시리즈 카드 이용금액도 실적에 합산될 수 있다. 이 카드 결제만 센다, 가족카드 이용금액과 할인한도가 본인카드와 합산된다, 해외 이용과 대중교통 같은 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 롯데카드의 다른 결제일 할인 혜택과 겹치면 할인이 큰 혜택 하나만 준다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+notes: 2026-10-12 상품 페이지와 상품설명서(2026년 8월 기준) 대조. 출시일 2020-07-10. 지난달 150만원 이상일 때만 할인. 신규 발급 특례는 발급일부터 다음 달 말일까지 실적과 상관없이 혜택 제공이라 150만 구간으로 넣었다. 자동차보험 연 1회 할인은 연 기준이 원문에 없어 뺐다.

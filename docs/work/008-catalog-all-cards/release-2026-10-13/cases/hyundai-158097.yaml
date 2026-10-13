@@ -1,0 +1,38 @@
+card: hyundai-158097
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 10만 이상 스타벅스와 지하철 2%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5500, merchant: starbucks}
+  - {at: 2026-11-05T18:00, amount: 1550, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {teens-basic-2: 110}, counted: 5500}
+  - {payment: 1, benefits: {teens-basic-2: 31}, counted: 1550}
+  calc: 5,500 x 2% = 110, 1,550 x 2% = 31
+- name: 편의점은 현장 결제만
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline}
+  - {at: 2026-11-05T11:00, amount: 10000, merchant: gs25, channel: online}
+  expect:
+  - {payment: 0, benefits: {teens-convenience-2: 200}, counted: 10000}
+  - {payment: 1, benefits: {}, counted: 10000}
+  calc: 현장 10,000 x 2% = 200, 온라인은 할인 없음
+- name: 통합 월 5천원 한도
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: kfc}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: seven_eleven, channel: offline}
+  expect:
+  - {payment: 0, benefits: {teens-basic-2: 4000}, counted: 200000}
+  - {payment: 1, benefits: {teens-convenience-2: 1000}, counted: 100000}
+  calc: 4,000원 뒤 남은 1,000원만
+- name: 10만 직전은 할인 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5500, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}, counted: 5500}
+  calc: 10만 미만 할인 제외

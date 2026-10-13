@@ -1,0 +1,104 @@
+schema_version: 2
+id: woori-500002
+issuer: woori
+name: 카드의정석2 원더라이프 CHECK
+kind: check
+product_codes:
+  - '500002'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500002', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-03-20'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      unmodeled: ['정부지원금, 관세, 환금성 업종, 신차구매, 의약품 전용몰·제약회사, 우편요금·여권발급비·벌금, 국가·공공기관 가맹점 이용금액은 캐시백에서 빠진다', 다른 쿠폰과 할인 프로모션과 중복되지 않는다]
+    limits:
+      - {key: special-10, per: month, amount: 10000}
+      - {key: special-20, per: month, amount: 20000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: basic-0-2
+        title: 국내외 가맹점 0.2% 캐시백
+        source: page
+        evidence: [국내외 가맹점 0.2% 캐시백, 전월 국내외 가맹점 이용실적 관계없이 캐시백 제공 (월 캐시백한도 제한 없음), '특별캐시백과 중복 적용이 불가하며, 특별캐시백 서비스 우선 적용']
+        target: {all: true}
+        reward: {type: cashback, rate: 0.2}
+        stack: main
+      - key: special-online-0-5
+        title: 쿠팡·G마켓·옥션·TV홈쇼핑 0.5% 캐시백
+        source: page
+        evidence: [온라인쇼핑 | 쿠팡/G마켓/옥션 | 0.5% | 통합 1만원, TV홈쇼핑 | CJ온스타일/GS SHOP현대홈쇼핑/롯데홈쇼핑/신세계쇼핑, 공식 홈페이지 또는 앱을 통한 온라인 결제 건에 한하여 혜택 제공]
+        target:
+          merchants: [auction, cj_onstyle, coupang, gmarket, gs_shop, hyundai_homeshopping, lotte_homeshopping]
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 0.5}
+        limits:
+          - {shared: special-10}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: ['멤버십, 구독, OTT 등 물품배송 외 결제는 캐시백 제외', 신세계쇼핑은 공통 가맹점이 없어 담지 않았다, TV홈쇼핑 셋톱박스·IPTV 간편결제는 캐시백 제외]
+      - key: special-life-0-5
+        title: 편의점·대형마트 0.5% 캐시백
+        source: page
+        evidence: [생활/편의 | 편의점 · 슈퍼 · 대형마트 업종 | 0.5%, 대상 업종 가맹점의 오프라인 매장에서 상품 구매 시에만 혜택 제공, '대상 업종 외 유사업종 가맹점(창고형매장, 기업형 슈퍼마켓 등) 결제 건은 혜택 제공 불가']
+        target:
+          categories: [convenience]
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: cashback, rate: 0.5}
+        limits:
+          - {shared: special-10}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: [슈퍼 업종과 그 밖의 대형마트는 공통 업종이 창고형 매장과 기업형 슈퍼마켓까지 넓어 이마트·홈플러스·롯데마트만 담았다, '주차료, 전기차충전, 멤버십가입, 문화센터와 입점·임대 매장은 캐시백 제외']
+      - key: special-medical-0-5
+        title: 병원·약국·동물병원 0.5% 캐시백
+        source: page
+        evidence: [건강/의료 | 병원 · 의원 · 한방병원 · 한의원 · 동물병원 · 약국 업종 | 0.5%, 대상 업종 가맹점에서 오프라인 신용카드 일반 결제 건에 한하여 혜택 제공]
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: cashback, rate: 0.5}
+        limits:
+          - {shared: special-10}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: ['병원비, 진료비, 약제비만 캐시백하고 주차장, 매점, 의료물품, 입점·임대 매장은 제외']
+      - key: special-fuel-1
+        title: 주유소·LPG충전소 1% 캐시백
+        source: page
+        evidence: [주유 | 주유소 · LPG충전소 업종 | 1% | 통합 2만원, 대상 업종 가맹점에서 오프라인 신용카드 일반 결제 건에 한하여 혜택 제공]
+        target:
+          categories: [fuel]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: special-20}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: [부탄가스와 바이오매스 등 기타 가스·석유사업 결제는 캐시백 제외]
+    unmodeled: [가족카드는 발급하지 않는다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, '공공임대료, 관세, 환금성 업종, 신차구매, 의약품 전용몰·제약회사, 국가·공공기관 가맹점 이용금액은 실적에서 빠진다', 신규 특례는 처음 발급받은 경우만이다, 보험 동양생명 카드납부 1%는 담지 않았다, 레저/여가 헬스장·사우나·찜질방 1%는 공통 업종이 넓어 계산하지 않는다, PG·간편결제 가맹점명으로 접수되면 특별캐시백에서 빠진다, 특별캐시백 한도가 남았어도 같은 결제의 기본 0.2%가 더 크면 기본 0.2%를 준다]
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-03-20. 연회비 없음. 기본 국내외 0.2% 실적·한도 없음. 전월 국내외 30만 이상 특별캐시백 온라인쇼핑·TV홈쇼핑·생활편의·건강의료 0.5% 통합 월 1만원, 보험·레저·주유 1% 통합 월 2만원. 특별과 기본은 한 결제에 하나만이고 큰 쪽을 준다. 한도를 넘은 다음 결제부터 기본 0.2%.

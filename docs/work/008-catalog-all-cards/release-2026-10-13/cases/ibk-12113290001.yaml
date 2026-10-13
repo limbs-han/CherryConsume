@@ -1,0 +1,32 @@
+card: ibk-12113290001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 편의점 500원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-500: 500}}
+  calc: 5천원 이상 정액 500원
+- name: 실적 직전 10만원 미만
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 전월 10만원 미만이면 할인 없음
+- name: 온라인서점 1000원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: yes24, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {study-bookstore-1000: 1000}}
+  calc: 1만원 이상 정액 1000원
+- name: 학원 1000원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, category: education.academy, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {study-academy-1000: 1000}}
+  calc: 1만원 이상 정액 1000원

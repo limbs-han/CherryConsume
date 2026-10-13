@@ -1,0 +1,113 @@
+schema_version: 2
+id: nh-f20106
+issuer: nh
+name: NH FIT 체크할인형(경남FC)
+short_name: NH FIT 체크 경남FC
+kind: check
+product_codes:
+  - '90010153'
+  - F20106
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010153', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [편의점·커피·베이커리는 지하철 역사, 백화점, 아울렛 입점 매장이 빠진다, 일부 간편결제 이용 건은 빠진다, 다른 NH농협카드 혜택과 겹치면 큰 혜택 하나만 준다]
+    limits:
+      - key: total
+        per: month
+        amount: {200000: 10000, 800000: 20000, 1200000: 30000}
+    benefits:
+      - key: cashback-store
+        title: 10대 업종 캐시백 현장 가맹점
+        source: page
+        evidence: [10대 업종 캐시백, '전월실적 20만원 이상 ~50만원 미만 : 0.5%', '전월실적 50만원 이상 : 1.0%', 편의점 H&B 면세점 베이커리는 현장결제에만 적용, 커피는 식음료 현장결제 시 적용, 제공한도 월 3만원 결제일에 일괄 입금, 최초 발급카드의 경우 카드사용등록 후 익월 말일까지는 전월실적에 상관없이 0.5%]
+        target:
+          categories: [travel.duty_free]
+          merchants: [baskin_robbins, cu, ediya, gs25, olive_young, paris_baguette, seven_eleven, starbucks, tous_les_jours, twosome]
+        when:
+          - {channel: offline}
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: total}
+        tiers: {from: 200000}
+        unmodeled: [원문 표는 쇼핑 업종 행에만 구간별 비율이 읽혀 나머지 업종도 같다고 보았다, 스타벅스 사이렌오더는 대상인데 현장 조건 때문에 앱 결제는 계산하지 않는다]
+      - key: cashback-general
+        title: 10대 업종 캐시백 쇼핑·영화·온라인도서
+        source: page
+        evidence: [10대 업종 캐시백, '전월실적 20만원 이상 ~50만원 미만 : 0.5%', '전월실적 50만원 이상 : 1.0%', 쇼핑 하나로마트 하나로클럽 농협몰, 영화 CGV 롯데시네마 메가박스, 온라인도서 인터파크도서 알라딘 교보문고(온라인), 제공한도 월 3만원]
+        target:
+          merchants: [aladin, cgv, interpark_book, lotte_cinema, megabox, nh_hanaro_mart, nh_mall]
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: total}
+        tiers: {from: 200000}
+        unmodeled: [교보문고는 온라인 결제만 대상이라 뺐다, 영화는 현장과 공식 홈페이지·앱 결제만 대상이다]
+      - key: cashback-telecom
+        title: 10대 업종 캐시백 통신요금
+        source: page
+        evidence: [10대 업종 캐시백, '전월실적 20만원 이상 ~50만원 미만 : 0.5%', '전월실적 50만원 이상 : 1.0%', 통신 SKT KT LGU+ 이동통신요금 자동납부 건만 제공 알뜰폰 제외]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: total}
+        tiers: {from: 200000}
+      - key: cashback-transit
+        title: 10대 업종 캐시백 대중교통
+        source: page
+        evidence: [10대 업종 캐시백, '전월실적 20만원 이상 ~50만원 미만 : 0.5%', '전월실적 50만원 이상 : 1.0%', 대중교통 버스 지하철 실물카드 후불교통(RF) 이용 시 제공 시외·고속버스 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward:
+          type: cashback
+          rate: {200000: 0.5, 500000: 1}
+        limits:
+          - {shared: total}
+        tiers: {from: 200000}
+      - key: overseas-cashback-2
+        title: 해외 이용 2% 캐시백
+        source: page
+        evidence: [해외 이용액의 2% 캐시백, 해외 이용 혜택 월 10만원 한도, 전월 이용실적 20만원 이상 시 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: month, amount: 100000}
+        tiers: {from: 200000}
+    unmodeled: [전국 주요 놀이공원 현장할인은 월 1회 연 6회 한도의 연 기준이 발급일인지 달력 연도인지 원문에 없어 뺐다, 경남FC 홈구장 입장권 1천원 할인은 티켓링크 결제 중 경남FC 입장권만 대상이라 뺐다, 경남FC 메가스토어 5~10% 현장할인은 품목별이라 뺐다, 공항 라운지와 해외 ATM 수수료 면제는 결제 계산이 아니라 뺐다, 해외 이용은 매출표 접수일 기준으로 실적에 들어간다, 가족카드는 발급되지 않는다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 10대 업종 중 쇼핑 외 업종의 구간별 비율이 원문 표에서 읽히지 않는다, assumed: 쇼핑과 같은 0.5%와 1.0%}
+  - {path: 'revisions[0].limits[total]', question: 10대 업종 월 3만원 한도와 월간 통합 할인한도 1만 2만 3만원의 관계가 원문에 분명하지 않다, assumed: 통합한도 구간을 10대 업종 한도로 씀. 20만원 이상 80만원 미만은 1만원}
+  - {path: 'revisions[0].benefits[overseas-cashback-2]', question: 해외 2% 캐시백에 건당 최소금액이 있는지 원문에 없다, assumed: 없음}
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 수집일로 두었다, assumed: '2026-10-05'}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 체크카드 연회비 없음. 같은 페이지의 신용 변형은 nh-f10083이다.

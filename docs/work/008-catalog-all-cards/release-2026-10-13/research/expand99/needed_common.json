@@ -1,0 +1,90 @@
+[
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "costco_reward_point",
+      "name": "코스트코 리워드 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "hyundai-139504",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AWO-20260312-1311-23_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%BD%94%EC%8A%A4%ED%8A%B8%EC%BD%94%20%EB%A6%AC%EC%9B%8C%EB%93%9C%20Ed2_V4.pdf",
+    "evidence": "적립된 코스트코 리워드 포인트가 9,876 포인트인 경우, 바우처 9,880원 제공 / 1차년도 적립 포인트 : 2,500 포인트, 2차년도 적립 포인트 : 1,500 포인트, 2차년도에 제공되는 바우처 금액 : 4,000원"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "cj_olive_point",
+      "name": "올리브 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "hyundai-181108",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AZA-20260709-1425-77_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%98%AC%EB%A6%AC%EB%B8%8C%EC%98%81%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C%20Plus_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "전체 이용 금액 또는 일부 취소 후 올리브영 현대카드 Plus 해지를 요청한 경우 1 올리브 포인트=1원으로 환산되어 현금으로 청구되며, 청구 금액 완납 시 해지 가능"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "ssg_money",
+      "name": "SSG MONEY",
+      "won_per_point": 1
+    },
+    "card_id": "hyundai-27380",
+    "source_url": "https://www.hyundaicard.com/upload/card/T_AZX-20260320-1452-98_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SSG%20ed2_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf",
+    "evidence": "매달 SSG MONEY 3,900원 제공 / SSG MONEY란? SSG.COM은 물론 전국 이마트, 신세계백화점, 스타벅스 등 SSGPAY 온·오프라인 가맹점에서 현금처럼 사용하실 수 있는 결제 수단입니다"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "amex_mr",
+      "name": "American Express 멤버십 리워즈",
+      "won_per_point": 10
+    },
+    "card_id": "hyundai-amgle2",
+    "source_url": "https://www.hyundaicard.com/upload/card/AMEX_Ed2_Gold_2603.pdf",
+    "evidence": "카드 해지 시 서비스 제공에 소요된 비용 공제 후 일할 계산하여 연회비 환불 (1 MR = 10원)"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "air_money",
+      "name": "Air Money",
+      "won_per_point": 1
+    },
+    "card_id": "ibk-12113300001",
+    "source_url": "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=330&PDCD=0001&pageId=CA01010000",
+    "evidence": "전 세계 항공사의 항공권 구입, 여행상품 및 골프장 그린피 결제, TOP포인트 전환 등에 사용할 수 있는 Air Money 포인트 적립(1포인트=1원)"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "h_point",
+      "name": "H.Point",
+      "won_per_point": 1
+    },
+    "card_id": "kb-04415",
+    "source_url": "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04415",
+    "evidence": "H.Point는 현대백화점그룹 통합 멤버십 포인트로 1p=1원 이며, 추가적립은 기본적립과 별개로 적립됩니다."
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "travel_wallet_point",
+      "name": "트래블월렛 트래블 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "lotte-p15732-a15732",
+    "source_url": "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00008_20250603_10001.pdf",
+    "evidence": "트래블 포인트란? 트래블월렛 하이브리드 롯데카드 이용 시 적립되는 포인트로 트래블페이 충전 시 사용 가능합니다. ※ 적립/사용단위 : 1포인트 = 1원"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "musinsa_money",
+      "name": "무신사머니",
+      "won_per_point": 1
+    },
+    "card_id": "samsung-aap1911",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtirrHgGvgzb%2B5%2BFC76c8MI4%3D&sn=1",
+    "evidence": "무신사머니리워드는 ‘무신사머니 포인트’로 자동 전환 후 무신사 홈페이지 또는 앱에서 조회 및 사용 가능 (1 무신사머니리워드=1 무신사머니 포인트의 가치) ... 무신사머니 포인트는 무신사페이먼츠가 운영/관리하며, 무신사페이먼츠가 지정한 사용처에서 사용 가능 (1 무신사머니 포인트=1원의 가치)"
+  }
+]

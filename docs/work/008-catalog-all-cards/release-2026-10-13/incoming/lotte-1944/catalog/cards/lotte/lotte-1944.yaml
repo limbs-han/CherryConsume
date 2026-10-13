@@ -1,0 +1,37 @@
+schema_version: 2
+id: lotte-1944
+issuer: lotte
+name: RROUND PAY X 디지로카
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: visa, amount: 30000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00014_20251201_10001.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-08-20'
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: original_month}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['정부지원금, TV 수신료, 오토·스마트 캐시백과 오토 할부서비스 이용금액, 장애인 고용부담금, 포인트 충전, 티머니 인증, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 기후동행카드 충전과 결제는 적립에서 빠진다']
+    benefits:
+      - key: rrpay-1
+        title: RROUND PAY 외 결제 1% RR PAY 포인트 적립
+        source: manual
+        evidence: ['RROUND PAY 외 결제 1% 20,000원 지난달 실적조건 없음', 'RR PAY 포인트 1P = 1원이며, L.POINT를 포함한 모든 포인트로 전환은 되지 않습니다.', 해외 이용금액은 롯데카드에 접수되는 현지 매출일자를 기준으로 'RROUND PAY 외 결제' 적립률과 한도가 적용됩니다.]
+        target: {all: true}
+        reward: {type: points, program: rround_pay_point, rate: 1}
+        limits:
+          - {per: month, amount: 20000}
+    unmodeled: [RROUND PAY로 결제하면 2% 적립(월 1만원 한도)이지만 결제수단 RROUND PAY가 없어 1% 적립으로 계산한다. 실제보다 적게 계산된다, 적립 한도는 매출전표가 롯데카드에 접수된 달 기준이라 월말 결제는 다음 달 한도로 적립될 수 있다, RR PAY 포인트 미리적립(선지급) 서비스는 갚아야 할 부채라 계산하지 않는다, 롯데카드의 다른 포인트 적립 혜택과 겹치면 큰 혜택 하나만 준다, RR PAY 포인트는 RROUND 앱과 RROUND PAY 결제에만 쓸 수 있다]
+open_questions:
+  - {path: product_codes, question: 상품 페이지와 상품 코드를 찾지 못해 색인 번호 id를 그대로 썼다}
+  - {path: 'revisions[0].benefits[rrpay-1].reward.program', question: 공통 포인트 rround_pay_point(RROUND PAY 포인트 1P=1원)가 필요하다. needed/lotte-1944.json에 제안했다}
+notes: 2026-10-12 상품설명서(2025년 8월 기준) 대조. 출시일 2025-08-20. 실적 조건 없이 RROUND PAY 외 결제 1% 월 2만 포인트 한도. RROUND PAY 결제 2%는 결제수단이 없어 1%로만 계산한다.

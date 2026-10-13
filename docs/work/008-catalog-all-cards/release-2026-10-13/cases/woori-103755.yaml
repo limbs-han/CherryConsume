@@ -1,0 +1,52 @@
+card: woori-103755
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 이마트 오프라인 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-10: 3000}, counted: 0}
+  calc: 30,000원 × 10% = 3,000원. 영역 한도 4,000원 안. 할인받은 결제는 실적 전액 제외
+- name: 경계 직전 499999는 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 50만 미만이라 할인 없음. 실적 30,000원
+- name: 스타벅스 영역 한도 4천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 4000}, counted: 0}
+  calc: 5,000원 중 50만 구간 영역 한도 4,000원
+- name: 쿠팡 2만원 미만 제외와 200만 구간
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 19999, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 200000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {}, counted: 19999}
+  - {payment: 1, benefits: {online-shopping-10: 12000}, counted: 0}
+  calc: 19,999원은 건당 2만원 미만. 200,000원 × 10% = 20,000원 중 200만 구간 한도 12,000원
+- name: 병원 오프라인 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: hospital, channel: offline}
+  expect:
+  - {payment: 0, benefits: {hospital-10: 4000}, counted: 0}
+  calc: 40,000원 × 10% = 4,000원. 100만 구간 한도 6,000원 안
+- name: 배달앱·교육·주유 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 25000, merchant: baemin, channel: online}
+  - {at: 2026-11-06T10:00, amount: 30000, category: education.academy, channel: offline}
+  - {at: 2026-11-07T10:00, amount: 30000, merchant: sk_energy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {delivery-10: 2500}, counted: 0}
+  - {payment: 1, benefits: {education-10: 3000}, counted: 0}
+  - {payment: 2, benefits: {fuel-10: 3000}, counted: 0}
+  calc: 각 10%. 영역 한도 4,000원 안

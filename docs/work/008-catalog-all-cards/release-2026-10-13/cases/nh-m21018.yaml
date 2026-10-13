@@ -1,0 +1,32 @@
+card: nh-m21018
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20}}
+  calc: 10,000원 x 0.2% = 20원
+- name: 하나로마트 30만 구간 총 1.2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: nh_hanaro_mart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200, hanaro-extra: 1000}}
+  calc: 100,000원 x 0.2% = 200원, 추가 1.0% = 1,000원
+- name: 10만 구간 추가 0.5%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: nh_mall, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200, hanaro-extra: 500}}
+  calc: 추가 0.5% = 500원
+- name: 실적 직전은 추가 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: nh_hanaro_mart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 10만원보다 1원 적어 기본만

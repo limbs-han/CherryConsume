@@ -1,0 +1,180 @@
+schema_version: 2
+id: lotte-p13686-a13686
+issuer: lotte
+name: 카카오뱅크 롯데카드
+kind: credit
+product_codes: [P13686-A13686, P13984-A13984]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13686-A13686', fetched_at: '2026-10-11'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13686-A13686_4.pdf', fetched_at: '2026-10-11'}
+checked_at: '2026-10-11'
+revisions:
+  - effective_from: '2021-05-15'
+    source: page
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express, utility]
+    limits:
+      - {key: total, per: month, amount: 300000}
+      - {key: special, per: month, amount: 30000}
+      - {key: g-pay-delivery, per: month, amount: 5000}
+      - {key: g-mobility, per: month, amount: 5000}
+      - {key: g-shop-stay, per: month, amount: 5000}
+    benefits:
+      - key: basic-0-5
+        title: 국내외 모든 가맹점 0.5% 캐시백
+        source: page
+        evidence: [기본 캐시백, 실적조건 없음 |, 0.5% |, 국내외 온·오프라인 결제 시 |, 카카오뱅크 롯데카드를 발급받은 첫달에는 캐시백 서비스가 제공되지 않으며]
+        target: {all: true}
+        when:
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 0.5}
+        limits:
+          - {shared: total}
+      - key: sp-streaming
+        title: 스트리밍 정기결제 5% 캐시백
+        source: page
+        evidence: [특별 캐시백, 40만원 이상 |, 5% |, 스페셜 가맹점에서 건당 1만원 이상 결제 시 |, '특별 캐시백 한도 : 스페셜 가맹점 그룹별 5천원, 월 3만원', '넷플릭스, 왓챠, 유튜브 프리미엄, 티빙, 와인앤모어 |', '스트리밍: 서비스 대상 가맹점 공식 홈페이지 및 앱을 통하여 신청한 정기결제(자동납부) 이용 건에 한하여 혜택이 제공됩니다.']
+        target:
+          merchants: [netflix, tving, watcha, youtube_premium]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay, subscription]
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+        unmodeled: [같은 그룹의 와인앤모어는 공통 가맹점이 없어 계산하지 않는다]
+      - key: sp-kakaopay
+        title: 카카오페이 결제 5% 캐시백
+        source: page
+        evidence: ['카카오페이 결제, 배달의 민족, 요기요, 쿠팡이츠 |']
+        target: {all: true}
+        when:
+          - amount: {min: 10000}
+          - payment: [kakao_pay]
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: g-pay-delivery}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+      - key: sp-delivery
+        title: 배달의민족·요기요·쿠팡이츠 5% 캐시백
+        source: page
+        evidence: ['카카오페이 결제, 배달의 민족, 요기요, 쿠팡이츠 |', '카카오T/쏘카/배달/숙박/무신사스토어, 마켓컬리: 서비스 대상 가맹점 공식 홈페이지 및 앱을 통한 카드결제 시 혜택이 제공되며']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - amount: {min: 10000}
+          - {channel: online}
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: g-pay-delivery}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+      - key: sp-mobility
+        title: 카카오T·쏘카 5% 캐시백
+        source: page
+        evidence: ['카카오T, 쏘카, 대중교통(버스, 지하철) |', '카카오T/쏘카/배달/숙박/무신사스토어, 마켓컬리: 서비스 대상 가맹점 공식 홈페이지 및 앱을 통한 카드결제 시 혜택이 제공되며']
+        target:
+          merchants: [kakao_t, socar]
+        when:
+          - amount: {min: 10000}
+          - {channel: online}
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: g-mobility}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+        unmodeled: [같은 그룹의 대중교통 버스·지하철 일반 결제도 대상이지만 건당 1만원 이상 조건과 후불교통 구분이 불분명해 계산하지 않는다]
+      - key: sp-food
+        title: 스타벅스·블루보틀·버거킹·서브웨이·쉐이크쉑 5% 캐시백
+        source: page
+        evidence: ['스타벅스, 블루보틀', '버거킹, 서브웨이, 쉐이크쉑', '와인/푸드/편의점: 오프라인 현장 결제 건에 한해 제공되며']
+        target:
+          merchants: [blue_bottle, burger_king, shake_shack, starbucks, subway]
+        when:
+          - amount: {min: 10000}
+          - {channel: offline}
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+      - key: sp-convenience
+        title: CU·GS25·세븐일레븐 5% 캐시백
+        source: page
+        evidence: ['CU, GS25, 세븐일레븐 |', '와인/푸드/편의점: 오프라인 현장 결제 건에 한해 제공되며']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - amount: {min: 10000}
+          - {channel: offline}
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+      - key: sp-shop-online
+        title: 무신사스토어·마켓컬리·여기어때·야놀자 5% 캐시백
+        source: page
+        evidence: ['무신사스토어, 마켓컬리', '롯데·신세계·현대 아울렛, 이마트, 홈플러스, 여기어때, 야놀자', '카카오T/쏘카/배달/숙박/무신사스토어, 마켓컬리: 서비스 대상 가맹점 공식 홈페이지 및 앱을 통한 카드결제 시 혜택이 제공되며']
+        target:
+          merchants: [kurly, musinsa, yanolja, yeogi_eottae]
+        when:
+          - amount: {min: 10000}
+          - {channel: online}
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: g-shop-stay}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+      - key: sp-shop-offline
+        title: 아울렛·이마트·홈플러스 5% 캐시백
+        source: page
+        evidence: ['롯데·신세계·현대 아울렛, 이마트, 홈플러스, 여기어때, 야놀자', '오프라인 쇼핑(롯데·신세계·현대아울렛·이마트·홈플러스) : 오프라인 현장 결제 건에만 혜택이 제공되며']
+        target:
+          merchants: [emart, homeplus, hyundai_premium_outlet, lotte_premium_outlet, shinsegae_premium_outlet]
+        when:
+          - amount: {min: 10000}
+          - {channel: offline}
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: g-shop-stay}
+          - {shared: special}
+          - {shared: total}
+        tiers: {from: 400000}
+        unmodeled: [아울렛과 마트 안 임대 매장과 상품권·주차장 같은 쇼핑 외 결제는 캐시백에서 빠진다]
+    unmodeled: [특별 캐시백과 기본 캐시백은 중복되지 않고 캐시백이 큰 쪽 하나만 준다, 캐시백 혜택을 받은 결제는 실적에서 빠진다, 발급받은 첫 달에는 캐시백이 없다. 카드를 쓰기 시작한 달을 첫 달로 본다, 카카오T를 뺀 택시 이용금액은 캐시백에서 빠진다. 카카오T 택시는 특별 캐시백 대상이지만 기본 캐시백은 계산하지 않는다, '와인·푸드·편의점은 아울렛, 편의점, 백화점, 할인점 등에 입점한 매장 결제는 빠진다', 이 카드가 아닌 롯데카드 이용금액은 실적과 캐시백에서 빠진다, '도시가스비, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적과 캐시백에서 빠진다', 해외 이용금액과 무승인 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다, 캐시백은 매출전표 접수월 기준으로 다음 달 20일에 준다]
+notes: 2026-10-11 상품 페이지와 상품설명서(2023년 5월 기준) 대조. 출시일 2021-05-15. 카카오뱅크 앱에서만 신청한다. 특별 캐시백은 그룹마다 월 5천원, 합계 월 3만원이고 전체 캐시백은 월 30만원이다. 스트리밍과 와인은 한 그룹이고 와인앤모어가 없어 스트리밍만 넣었다. 아울렛은 프리미엄아울렛 가맹점으로 좁혀 넣었다. 실적 제외 목록에 대중교통(버스, 지하철)과 택시가 있어 실적에서 뺐다. 상품 코드 P13984-A13984 페이지는 혜택이 같은 상품이라 이 카드로 등록한다.

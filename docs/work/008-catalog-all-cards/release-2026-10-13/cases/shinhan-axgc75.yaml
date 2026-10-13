@@ -1,0 +1,54 @@
+card: shinhan-axgc75
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 넷플릭스 정기결제 30% 한도 5천
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 17000, merchant: netflix, channel: online, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 17000, merchant: youtube_premium, channel: online, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-30: 5000}}
+  - {payment: 1, benefits: {}}
+  calc: 17,000 x 30% = 5,100이나 월 5,000
+- name: 50만 직전 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T09:00, amount: 17000, merchant: netflix, channel: online, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만원 미만
+- name: 배민 15% 월 2회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T19:00, amount: 20000, merchant: yogiyo, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-15: 3000}}
+  - {payment: 1, benefits: {delivery-15: 3000}}
+  - {payment: 2, benefits: {}}
+  calc: 20,000 x 15% = 3,000 두 번, 세 번째는 횟수 초과
+- name: 쿠팡 5만원 이상 2,500P
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 49999, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-shopping-2500: 2500}}
+  - {payment: 1, benefits: {}}
+  calc: 5만원 이상만 2,500P
+- name: 구글플레이 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: google_play, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {home-game-10: 1000}}
+  calc: 10,000 x 10% = 1,000
+- name: 오늘의집 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: ohouse, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {home-interior-10: 3000}}
+  calc: 30,000 x 10% = 3,000

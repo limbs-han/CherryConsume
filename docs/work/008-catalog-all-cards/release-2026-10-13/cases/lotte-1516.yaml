@@ -1,0 +1,38 @@
+card: lotte-1516
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈료 1만3천원 할인과 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 39900, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {bodyfriend-rental: 13000}
+    counted: 0
+  calc: 한도 13,000. 할인 받은 렌탈료 전액 실적 제외
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 39900, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 39900
+  calc: 30만원보다 1원 적어 할인 없음
+- name: 120만 구간 2만3천원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 39900, merchant: bodyfriend_rental, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {bodyfriend-rental: 23000}
+  calc: 39,900원 중 한도 23,000
+- name: 자동이체가 아니면 할인 없음
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 39900, merchant: bodyfriend_rental, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동이체 건만 할인

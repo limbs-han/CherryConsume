@@ -1,0 +1,98 @@
+schema_version: 2
+id: samsung-aap1748
+issuer: samsung
+name: NS홈쇼핑 삼성카드
+short_name: NS홈쇼핑 삼성
+search_names: [NS홈쇼핑 삼성, NS홈쇼핑카드, 엔에스홈쇼핑 삼성카드]
+kind: credit
+product_codes: [AAP1748]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1748', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtl1xNXmB%2Fyj1HLwX1SUW6G4%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2021-C1a-10111호}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: '2022-08-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - key: ns
+        per: month
+        amount: {400000: 12000, 800000: 18000, 1200000: 25000}
+      - key: life
+        per: month
+        amount: {400000: 6000, 800000: 8000, 1200000: 12000}
+    benefits:
+      - key: ns-homeshopping-10
+        title: NS홈쇼핑 10% 할인
+        source: manual
+        evidence: [NS홈쇼핑 10% 결제일할인, '전월 이용금액대별 월 할인한도 40만원 이상 12,000원, 80만원 이상 18,000원, 120만원 이상 25,000원', 공식 홈페이지·앱·ARS를 통한 결제건에 한함]
+        target:
+          merchants: [ns_homeshopping]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: ns}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [공식 홈페이지·앱·ARS를 통한 결제건에 한한다]
+      - key: life-5
+        title: 주유·커피·제과·편의점·생활잡화 5% 할인
+        source: manual
+        evidence: [주유·커피전문점·제과점·편의점·생활잡화 5% 결제일할인, '주유 SK에너지, GS칼텍스, S-OIL', '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 카페베네, 탐앤탐스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋, 블루보틀', '제과점 파리바게뜨, 뚜레쥬르, 던킨', '편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24', 생활잡화 다이소, '전월 이용금액대별 통합 월 할인한도 40만원 이상 6,000원, 80만원 이상 8,000원, 120만원 이상 12,000원', '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외', 주유는 LPG충전소 제외]
+        target:
+          merchants: [angel_in_us, artisee, blue_bottle, cafe_bene, coffee_bean, cu, daiso, dunkin, ediya, emart24, gs25, gs_caltex, hollys, ministop, paris_baguette, pascucci, paul_bassett, s_oil, seven_eleven, sk_energy, tom_n_toms, tous_les_jours, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다, LPG충전소는 할인하지 않는다]
+      - key: starbucks-5
+        title: 스타벅스 5% 할인
+        source: manual
+        evidence: [커피전문점 스타벅스, '단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+      - key: bill-1000
+        title: 생활요금 정기결제 1,000원 할인
+        source: manual
+        evidence: ['생활요금 정기결제 10,000원 이상 결제건별 1,000원 결제일할인', '아파트 관리비, 4대 사회보험(건강보험, 국민연금, 고용보험, 산재보험), 통신 SKT, SK브로드밴드, KT, LG U+ 이동통신/인터넷/유선전화요금', 통합 월 3회 제공, '1일부터 말일까지 매출전표가 접수된 정기결제건 중 10,000원 이상 결제건에 한함', '통신은 결합상품요금, 사물인터넷(IoT) 관련 요금, 휴대전화 등 단말기 구매금액 및 대리점 카드 결제건 제외']
+        target:
+          categories: [apartment_fee, insurance.social]
+          merchants: [kt, lg_uplus, sk_broadband, skt]
+        when:
+          - billing: [autopay, subscription]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 3}
+        tiers: {from: 400000}
+        unmodeled: [통신은 결합상품요금, 사물인터넷 요금, 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다]
+    unmodeled: ['할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다', 삼성카드의 다른 결제일할인과 겹치면 할인 금액이 큰 것 하나만 준다, 건강보험 등 고용부담금과 장애인 고용부담금은 실적에서 빼야 하나 담을 업종이 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2022.8)의 첫날로 두었다, assumed: '2022-08-01'}
+  - {path: 'revisions[0]', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].spend.interest_free', question: 무이자할부 실적 처리가 상품안내장에 없다, assumed: count}
+notes: 2026-10-13 상품안내장(2022.8판, 심의필 2021-C1a-10111호) 대조. 연회비 해외겸용 Mastercard 10,000원(기본 7,000+제휴 3,000), 국내전용 없음. 후불교통 기능 탑재. 실적 제외는 4대보험, 고용부담금, 세금과 공과금, 학교납입금, 등록금, 대중교통, 택시, 아파트 관리비, 임대료, 기프트·선불카드, 상품권이다. 할인 받은 결제도 실적에 넣는다. 발급월+1개월까지는 전월 40만원 미만이어도 40만원 구간 혜택을 준다.

@@ -1,0 +1,68 @@
+card: woori-500043
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 편의점 7%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: cu, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {convenience-7pct: 700}
+  calc: 10,000원 x 7% = 700원
+- name: 커피 7%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-7pct: 700}
+  calc: 10,000원 x 7% = 700원
+- name: OTT 정기결제
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 17000, merchant: netflix, billing: subscription, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {ott-7pct: 1190}
+  calc: 17,000원 x 7% = 1,190원
+- name: 실적 직전 편의점
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: cu, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만원 미만이라 할인 0원
+- name: S-OIL 주유 120원 구간
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: s_oil, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {s-oil-fuel-120: 3229}
+  calc: 50,000원 x 120 / 1,858 = 3,229원
+- name: S-OIL 주유 150원 구간
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: s_oil, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {s-oil-fuel-150: 4036}
+  calc: 50,000원 x 150 / 1,858 = 4,036원
+- name: S-OIL 주유 250원 구간
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: s_oil, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {s-oil-fuel-250: 6727}
+  calc: 50,000원 x 250 / 1,858 = 6,727원
+- name: S-OIL 주유 400원 구간
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: s_oil, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {s-oil-fuel-400: 10764}
+  calc: 50,000원 x 400 / 1,858 = 10,764원

@@ -1,0 +1,112 @@
+schema_version: 2
+id: hana-16728
+issuer: hana
+name: 국민연금증 연금하나카드
+short_name: 하나 연금하나
+search_names: [국민연금증 하나카드, 연금하나카드]
+kind: credit
+product_codes:
+  - '16728'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 5000}
+  - {scope: global, amount: 5000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16728', fetched_at: 2026-10-13, review_no: L-26-0399}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2023-05-02
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - {key: transit, per: month, amount: 10000}
+      - {key: medical, per: month, amount: 10000}
+      - {key: store, per: month, amount: 5000}
+      - {key: fuel, per: month, amount: 5000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: transit-5000
+        title: 대중교통 월 1만원 이상 5천원 캐시백
+        source: page
+        evidence: [대중교통 월 합산금액 1만원 이상~2만원 미만 시 5천원 캐시백, '국내 시내버스, 마을버스, 광역버스, 지하철, 공항철도 (택시/시외버스/고속버스 제외) | 1만원 이상 2만원 미만 | 전월 실적 30만원 이상 | 5천원 | 월 캐시백 한도 1만원']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - month_total: {min: 10000}
+        reward: {type: cashback, basis: month_total, fixed: 5000}
+        limits:
+          - {shared: transit}
+        tiers: {from: 300000}
+        unmodeled: [공항철도는 업종으로 가릴 수 없어 계산하지 않는다]
+      - key: transit-10000
+        title: 대중교통 월 2만원 이상 1만원 캐시백
+        source: page
+        evidence: [대중교통 월 합산금액 2만원 이상 시 1만원 캐시백 (월 최대 1만원), '국내 시내버스, 마을버스, 광역버스, 지하철, 공항철도 (택시/시외버스/고속버스 제외) | 2만원 이상 | 전월 실적 30만원 이상 | 1만원 | 월 캐시백 한도 1만원']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - month_total: {min: 20000}
+        reward: {type: cashback, basis: month_total, fixed: 10000}
+        limits:
+          - {shared: transit}
+        tiers: {from: 300000}
+        unmodeled: [공항철도는 업종으로 가릴 수 없어 계산하지 않는다]
+      - key: small-medical-1000
+        title: 소액 의료 1만원 이하 결제 1천원 캐시백
+        source: page
+        evidence: [소액 의료 1만원 이하 결제 시 1천원 캐시백 (월 최대 1만원), 국내 병원 업종/약국 | 1만원 이하 결제건 (최소 1천원 이상) | 전월 실적 30만원 이상 | 1천원 | 월 캐시백 한도 1만원]
+        target:
+          categories: [hospital, pharmacy]
+        when:
+          - {region: domestic}
+          - amount: {min: 1000, below: 10001}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: medical}
+        tiers: {from: 300000}
+        unmodeled: [대상 가맹점은 하나카드 가맹점 분류상 병원 업종과 약국으로 등록된 곳에 한한다]
+      - key: store-5
+        title: SSM·편의점 5% 캐시백
+        source: page
+        evidence: ['SSM/편의점 | 이마트 에브리데이, 롯데슈퍼, 홈플러스 익스프레스, GS 슈퍼, GS25, CU, 세븐일레븐 | 전월 실적 30만원 이상 | 5% | 월 5천원', '서비스 제외대상 SSM / 편의점 : 온라인몰 이용금액, 백화점/쇼핑몰/마트 등 입점 점포 이용금액']
+        target:
+          merchants: [cu, emart_everyday, gs25, gs_the_fresh, homeplus_express, lotte_super, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: store}
+        tiers: {from: 300000}
+        unmodeled: [백화점 쇼핑몰 마트 등 입점 점포 이용금액은 제외된다]
+      - key: fuel-5
+        title: SK주유소 5% 캐시백
+        source: page
+        evidence: [주유 | SK주유소(LPG충전소 제외) | 전월 실적 30만원 이상 | 5% | 월 5천원, 주유 서비스 받으신 사용금액은 지난달 실적에서 제외됩니다]
+        target:
+          merchants: [sk_energy]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: fuel}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [LPG충전소 이용금액은 제외된다]
+    unmodeled: [영화 5천원 캐시백은 분기별 1회와 연 최대 4회 한도의 기준 시점이 원문에 없어 담지 못했다, 본인카드와 가족카드의 실적과 캐시백 한도는 합산한다, 아이행복 정부지원금은 실적에서 빠진다, 무승인 후불교통 매출은 매출이 접수된 달의 이용금액에 들어간다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다., assumed: '2023-05-02'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문은 공과금(전기요금 포함)과 도시가스, 아파트관리비를 실적에서 뺀다고 적었다. 업종 하나로 맞춰 utility 전체를 뺐다.', assumed: utility 전체}
+  - {path: 'revisions[0].benefits[small-medical-1000]', question: 소액 의료 캐시백의 병원 업종에 동물병원이나 요양병원이 드는지 원문에 없다., assumed: 병원과 약국 업종만}
+notes: 2026-10-13 공식 상품 페이지(준법심의 L-26-0399)에서 옮겼다. 연회비 5,000원. 대중교통과 소액 의료 캐시백은 이번 달 합산 기준이고 지난달 실적 30만원 이상이다. 영화 5천원 캐시백(분기별 1회, 연 최대 4회)은 넣지 않았다.

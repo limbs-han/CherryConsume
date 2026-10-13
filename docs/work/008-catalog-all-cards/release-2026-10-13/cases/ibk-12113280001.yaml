@@ -1,0 +1,75 @@
+card: ibk-12113280001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: dining 1위 영역 기본과 추가 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dining-1: 1000, dining-top-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원, 1위 영역 추가 1% = 1,000원
+- name: shopping 1위 영역 기본과 추가 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {shopping-1: 1000, shopping-top-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원, 1위 영역 추가 1% = 1,000원
+- name: mart 1위 영역 기본과 추가 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: emart, channel: offline}
+  expect:
+  - {payment: 0, benefits: {mart-1: 1000, mart-top-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원, 1위 영역 추가 1% = 1,000원
+- name: telecom 1위 영역 기본과 추가 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {telecom-1: 1000, telecom-top-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원, 1위 영역 추가 1% = 1,000원
+- name: hospital 1위 영역 기본과 추가 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: hospital, channel: offline}
+  expect:
+  - {payment: 0, benefits: {hospital-1: 1000, hospital-top-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원, 1위 영역 추가 1% = 1,000원
+- name: transit 1위 영역 기본과 추가 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: transit.subway, channel: offline}
+  expect:
+  - {payment: 0, benefits: {transit-1: 1000, transit-top-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원, 1위 영역 추가 1% = 1,000원
+- name: fuel 1위 영역 기본과 추가 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: fuel, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-1: 1000, fuel-top-1: 1000}}
+  calc: 100,000원 × 1% = 1,000원, 1위 영역 추가 1% = 1,000원
+- name: 주유 월 50만원 상한
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 600000, category: fuel, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fuel-1: 5000, fuel-top-1: 5000}}
+  calc: 상한 500,000원 × 1% = 5,000원, 1위 추가도 5,000원
+- name: 병원 1위가 아니면 추가 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, channel: offline}
+  - {at: 2026-11-04T13:00, amount: 50000, category: hospital, channel: offline}
+  expect:
+  - {payment: 1, benefits: {hospital-1: 500}}
+  calc: 병원 50,000원 × 1% = 500원. 음식점이 1위라 병원 추가는 없음
+- name: 경계 직전 499999
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 실적 미달

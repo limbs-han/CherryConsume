@@ -1,0 +1,80 @@
+card: hana-4986
+holder:
+  started_on: '2026-01-01'
+  facts: {hana_bank_account: true}
+cases:
+- name: 30만 구간 지역쇼핑 10만원마다 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 99999, merchant: lotte_super, channel: offline}
+  - {at: 2026-11-05T10:00, amount: 1, merchant: lotte_super, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {regional-money: 5000}
+  calc: 합계 99,999원은 0, 100,000원이 되면 5천
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: lotte_super, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0
+- name: 주유는 지역쇼핑과 합쳐 월 2만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 300000, merchant: gs_caltex}
+  expect:
+  - payment: 0
+    benefits: {fuel-money: 15000}
+  calc: 300,000원이면 15,000하나머니. 월 통합 2만 한도 안
+- name: 온라인쇼핑 한도 1만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 500000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {online-money: 10000}
+  calc: 500,000원이면 25,000이지만 월 최대 1만
+- name: 통신 자동이체 10만원 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {life-autopay-money: 5000}
+  calc: 10만원 5천
+- name: 지하철 후불교통 10만원 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {life-transit-money: 5000}
+  calc: 10만원 5천
+- name: 60만 구간 아파트관리비 자동이체 5천
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 150000, category: apartment_fee, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {apartment-money: 5000}
+  calc: 10만원 이상 자동이체 월 1회 5천
+- name: 해외 10만원마다 5천 한도 1만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 300000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-money: 10000}
+  calc: 300,000원이면 15,000이지만 월 최대 1만
+- name: 커피 4천원 청구할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6000, merchant: starbucks, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {coffee-4000: 4000}
+  calc: 4천원 이상 결제하면 4천원

@@ -1,0 +1,68 @@
+card: hana-19218
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 시작 넷플릭스 자동납부 50%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 17000, merchant: netflix, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {digital-50: 8500}
+  calc: 17,000원 x 50% = 8,500원
+- name: 50만 직전은 택시도 기본 1%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {base-1: 100}
+  calc: 50만원보다 1원 적어 택시 50%는 없고 10,000원 x 1% = 100원
+- name: 50만 구간 택시 50%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {taxi-50: 5000}
+  calc: 10,000원 x 50% = 5,000원
+- name: 해외 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-3: 3000}
+  calc: 100,000원 x 3% = 3,000원
+- name: 대한항공 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: korean_air}
+  expect:
+  - payment: 0
+    benefits: {travel-3: 3000}
+  calc: 100,000원 x 3% = 3,000원
+- name: EV 충전 30%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: car.ev_charging}
+  expect:
+  - payment: 0
+    benefits: {ev-30: 6000}
+  calc: 20,000원 x 30% = 6,000원
+- name: 200만 구간 시작 기본 1.5%
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other}
+  expect:
+  - payment: 0
+    benefits: {base-1-5: 1500}
+  calc: 100,000원 x 1.5% = 1,500원
+- name: 200만 직전은 1%
+  prev_month_spend: 1999999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other}
+  expect:
+  - payment: 0
+    benefits: {base-1: 1000}
+  calc: 100,000원 x 1% = 1,000원

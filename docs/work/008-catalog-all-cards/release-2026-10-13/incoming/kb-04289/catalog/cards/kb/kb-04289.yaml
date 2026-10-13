@@ -1,0 +1,85 @@
+schema_version: 2
+id: kb-04289
+issuer: kb
+name: 랭킹닭컴 신용카드
+short_name: KB 랭킹닭컴
+kind: credit
+product_codes:
+  - '04289'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04289', fetched_at: '2026-10-12', review_no: 220519-01492-HPP}
+  - {id: manual, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/04289__prdctOpmn_20220523.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.water]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행 가맹점, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    benefits:
+      - key: rankingdak-20
+        title: 랭킹닭컴 20% 청구할인
+        source: page
+        evidence: [30만원 이상 | 1만5천원 | 20% | 랭킹닭컴, 60만원 이상 | 2만5천원, 랭킹닭컴 할인서비스의 경우 구매중개를 통한 타 사이트 구매시 할인서비스 제외]
+        target:
+          merchants: [ranking_dak]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - per: month
+            amount: {300000: 15000, 600000: 25000}
+        tiers: {from: 300000}
+        unmodeled: [구매중개를 거친 다른 사이트 구매는 빠진다]
+      - key: golf-5
+        title: 골프장·골프연습장 5% 청구할인
+        source: page
+        evidence: [30만원 이상 | 1만원 | 5% | 건당 1만원 이상 이용시, 골프(연습)장 업종은 KB국민카드에 등록된 가맹점 업종 분류 기준을 따름]
+        target:
+          categories: [sports.golf]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000, to: 300000}
+      - key: golf-10
+        title: 골프장·골프연습장 10% 청구할인
+        source: page
+        evidence: [60만원 이상 | 2만원 | 10%, 건당 1만원 이상 이용시]
+        target:
+          categories: [sports.golf]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 20000}
+        tiers: {from: 600000}
+      - key: ott-10
+        title: 넷플릭스·디즈니플러스·웨이브 10% 청구할인
+        source: page
+        evidence: ['30만원 이상 | 5천원 | 10% | 넷플릭스, 디즈니플러스, 웨이브', 공식 홈페이지 및 모바일(App)을 통한 정기결제 시 제공, 간편결제(Pay) 또는 구글 플레이스토어 및 앱스토어를 통한 인앱 결제건 등은 할인 제외]
+        target:
+          merchants: [disney_plus, netflix, wavve]
+        when:
+          - payment: [physical_card]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        unmodeled: [앱스토어 인앱 결제는 빠진다]
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 30만원 미만이어도 30만원 구간 할인을 주는 신규 특례는 계산하지 않는다, 전월 실적은 가족카드 이용을 포함한다, 무승인전표(대중교통·공항버스·자판기·터널통행료·항공기내 이용)와 정부지원금은 실적에서 빠진다, 할인받은 이용건 전체가 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].benefits[golf-5].target', question: 원문 골프장·골프연습장 업종을 공통 업종 sports.golf로 옮겼다. 공통 업종에 골프용품점이 들어가면 넓어진다, assumed: sports.golf}
+notes: 2026-10-12 KB국민카드 상품 페이지와 상품설명서 PDF를 받아 대조했다. 실적 제외 목록은 상품설명서에서 옮겼다. 연회비는 기본 7천원과 제휴 8천원을 더한 1만5천원이다.

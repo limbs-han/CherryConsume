@@ -1,0 +1,134 @@
+schema_version: 2
+id: ibk-12113090001
+issuer: ibk
+name: 일상의 기쁨카드(신용)
+kind: credit
+product_codes:
+  - '12113090001'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: unionpay, amount: 10000}
+  - {scope: global, brand: visa, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=309&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-13, review_no: 제2026-6584호, review_valid_until: 2029-08-09}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-08-18
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, gift_card, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card]
+    limits:
+      - key: integrated
+        per: month
+        amount: {500000: 20000, 700000: 30000, 1000000: 40000}
+    benefits:
+      - key: transit-200
+        title: 버스·지하철 건당 200원 청구할인
+        source: page
+        evidence: ['버스, 지하철 이용건당 200원 할인', 후불교통카드로 이용한 건에 한함, 매출표 접수일 기준으로 월 최대 2천원 할인]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, fixed: 200}
+        limits:
+          - {per: month, amount: 2000}
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: fuel-60
+        title: 주유 리터당 60원 청구할인
+        source: page
+        evidence: [전 주유소 리터당 60원 할인, '1일 1회, 월 2회, 1회 주유금액 10만원 한도 (LPG포함)']
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        notes: 원문은 정유사 고시 휘발유가로 리터를 환산한다. 앱은 reference.yaml 기름값을 쓴다
+      - key: convenience-10
+        title: 편의점·올리브영 10% 청구할인
+        source: page
+        evidence: ['GS25, CU, 세븐일레븐, 올리브영 10% 할인', '통합 1일 1회, 월 2회, 1회 이용금액 1만원 한도']
+        target:
+          merchants: [cu, gs25, olive_young, seven_eleven]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: mart-5
+        title: 대형마트 5% 청구할인
+        source: page
+        evidence: ['이마트, 홈플러스, 롯데마트 5% 할인', '월 1회, 1회 이용금액 10만원 한도', 도시형 슈퍼마켓 및 인터넷(PG업체)을 통해 결제하는 경우 할인 제공하지 않습니다]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: online-20
+        title: 쿠팡·티몬·위메프 20% 청구할인
+        source: page
+        evidence: ['쿠팡, 티몬, 위메프 20% 할인', '1일 1회, 월 2회, 1회 이용금액 2만원 한도']
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 500000}
+      - key: movie-10000
+        title: CGV·롯데시네마·메가박스 1만원 청구할인
+        source: page
+        evidence: ['CGV, 롯데시네마, 메가박스 1만원 할인', '통합 월 1회, 연 12회, 건당 1만원 이상 결제 시', 예매 대행 사이트를 통한 예매 시 할인 제외]
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [예매 대행 사이트 예매는 할인에서 빠진다]
+      - key: coffee-20
+        title: 주요 커피전문점 20% 청구할인
+        source: page
+        evidence: ['스타벅스, 커피빈, 카페베네, 탐앤탐스, 엔젤리너스, 투썸플레이스, 할리스, 달콤커피 20% 할인', '1일 1회, 월 2회, 1회 이용금액 2만원 한도']
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, dalkomm, hollys, starbucks, tom_n_toms, twosome]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 500000}
+        unmodeled: [백화점과 아울렛 입점 매장은 제외될 수 있음]
+    unmodeled: [놀이공원 서비스는 월 1회 연 2회 자유이용권 50% 현장할인 등이고 자유이용권 여부를 결제로 알 수 없어 계산하지 않는다. 통합할인한도 밖이다, 'IBK 이체와 타행 ATM 수수료 면제, 환전 우대는 계산하지 않는다', 할인서비스는 각종 간편결제로 결제되면 제공되지 않을 수 있다, 할인은 비씨카드에 등록된 가맹점 업종 기준이다]
+open_questions:
+  - {path: 'revisions[0].spend.regions', question: 전월 이용금액이 국내 가맹점만인지 상품 페이지에 적히지 않았다. 설명서 PDF가 이미지라 읽지 못했다. 덜 주는 쪽으로 국내만 센다, assumed: '[domestic]'}
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다, assumed: '2026-08-18'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 후불교통 제외를 시내버스와 지하철 업종 제외로 옮겼다. 후불교통 이용분은 승인된 버스·지하철 결제까지 빠질 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-13 expand21 조사. 금융우대와 놀이공원을 뺀 모든 할인이 통합할인한도를 같이 쓴다. 사용등록일부터 다음 월말까지는 실적과 관계없이 통합한도 2만원이다

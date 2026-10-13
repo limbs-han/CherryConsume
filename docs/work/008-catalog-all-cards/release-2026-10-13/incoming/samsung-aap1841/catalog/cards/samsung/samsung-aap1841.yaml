@@ -1,0 +1,78 @@
+schema_version: 2
+id: samsung-aap1841
+issuer: samsung
+name: 삼성전자 AI 구독 삼성카드
+short_name: 삼성전자 AI 구독
+search_names: [삼성 AI 구독 삼성카드, 삼성전자 AI 구독 카드]
+kind: credit
+product_codes: [AAP1841]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: jcb, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1841', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtiYRkkmsP7JOVl13dbLDs8g%3D&sn=1', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 500000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {digital-30: 500000}
+      from: issue
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, 결제대행업체(PG)와 간편결제 전용 가맹점으로 승인된 결제는 할인하지 않는다]
+    stacks:
+      - {key: sub}
+      - {key: digital}
+    benefits:
+      - key: samsung-sub
+        title: 삼성전자 구독요금 정기결제 할인
+        source: manual
+        evidence: ['삼성전자 구독요금 정기결제 시 13,000~23,000원 결제일할인', '전월 이용금액대별 통합 월 할인한도 30만원 이상 13,000원, 70만원 이상 17,000원, 120만원 이상 23,000원', 삼성전자 구독요금을 2건 이상 정기결제 시에도 혜택은 통합 월 할인한도 내에서 제공, 결제금액이 할인금액보다 적을 경우 결제금액만큼 할인 적용]
+        target:
+          merchants: [samsung_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 700000: 17000, 1200000: 23000}
+        tiers: {from: 300000}
+        stack: sub
+        unmodeled: [삼성스토어·삼성닷컴에서 구독 제품을 산 뒤 삼성닷컴 홈페이지로 정기결제를 신청한 구독요금만 할인한다, 일반 결제건(1회성 구매)은 할인하지 않는다]
+      - key: digital-30
+        title: 디지털콘텐츠 정기결제 30% 할인
+        source: manual
+        evidence: [디지털콘텐츠 정기결제 시 30% 결제일할인, '디지털콘텐츠 넷플릭스, 디즈니+, 웨이브, 유튜브 프리미엄, 티빙, 멜론, FLO', 통합 월 할인한도 5, 000원, 전월 이용금액 50만원 이상 시 제공, 발급월+1개월까지는 전월 이용금액 50만원 미만 시에도 제공, 구글플레이 앱스토어 등을 통한 결제건(인앱 결제) 제외]
+        target:
+          merchants: [disney_plus, flo, melon, netflix, tving, wavve, youtube_premium]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        stack: digital
+        unmodeled: [구글플레이와 앱스토어를 통한 인앱 결제는 할인하지 않는다]
+    unmodeled: [삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다, '할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 원문에서 찾지 못했다. 상품 페이지가 열려 있어 수집일로 두었다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits', question: 할인의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-13 상품안내장 대조. 연회비 해외겸용 Mastercard·JCB와 국내전용 모두 20,000원(기본 7,000+제휴 13,000). 삼성전자 구독요금 할인은 전월 이용금액 30만원 이상 13,000원, 70만원 이상 17,000원, 120만원 이상 23,000원이고 할인금액보다 결제금액이 적으면 결제금액만큼만 할인한다. 디지털콘텐츠 30%는 전월 50만원 이상, 발급월+1개월까지는 실적 없이도 월 5,000원 한도로 준다. 전월 이용금액에서 무이자할부, 4대보험, 국세·지방세·공과금, 아파트 관리비, 임대료, 학교납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권은 제외한다.

@@ -1,0 +1,32 @@
+card: kb-04320
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 밀크T 자동이체 3만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: milk_t, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {milkt-autopay: 12000}, counted: 0}
+  calc: 30만 구간 월 할인 12,000원. 할인받은 건은 실적 제외
+- name: 70만 구간 밀크T 자동이체 3만원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: milk_t, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {milkt-autopay: 17000}, counted: 0}
+  calc: 70만 구간 월 할인 17,000원
+- name: 승인금액이 작으면 승인금액까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: milk_t, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {milkt-autopay: 9000}, counted: 0}
+  calc: 원문 예시. 자동이체 9,000원이면 9,000원 할인
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: milk_t, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 유예기간이 아니면 30만원 미만은 할인 없음

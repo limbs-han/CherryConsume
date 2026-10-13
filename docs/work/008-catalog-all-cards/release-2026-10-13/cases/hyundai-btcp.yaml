@@ -1,0 +1,43 @@
+card: hyundai-btcp
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 국내외 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-15: 1500}, counted: 100000}
+  calc: 100,000 x 1.5% = 1,500. 100만 미만이라 5%는 없다
+- name: 50만 직전은 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 50만 미만 혜택 제외
+- name: 100만 구간 온라인몰과 배달 앱 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: musinsa, channel: online}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: baemin, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-5: 5000}, counted: 100000}
+  - {payment: 1, benefits: {delivery-5: 1000}, counted: 20000}
+  calc: 100,000 x 5% = 5,000. 20,000 x 5% = 1,000. 월 한도 10,000 안
+- name: 100만 구간 편의점 현장과 택시 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 20000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}, counted: 10000}
+  - {payment: 1, benefits: {transit-5: 1000}, counted: 20000}
+  calc: 10,000 x 5% = 500. 20,000 x 5% = 1,000
+- name: 한도 넘으면 1.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 400000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-5: 10000, base-15: 3000}, counted: 400000}
+  calc: 월 한도 10,000은 5%로 200,000분이고 나머지 200,000은 1.5% = 3,000

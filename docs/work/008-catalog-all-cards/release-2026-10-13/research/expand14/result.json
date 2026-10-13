@@ -1,0 +1,927 @@
+[
+  {
+    "card_id": "kb-01770",
+    "status": "ready",
+    "reason": "병원약국·마트홈쇼핑·SK주유·골프 5% 포인트리(2천~6천점), 보험료 10만원 이상 2천점, 전월 30만",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01770"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "사우나·목욕탕·찜질방 5%는 업종이 없어 뺌"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-01772",
+    "status": "ready",
+    "reason": "Liiv M 자동이체 10%(3천/6천), 11번가·야놀자·CU 3% 통합 2천/4천, 전월 30만",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01772"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "정부지원금·포인트리 충전 실적 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-01898",
+    "status": "exclude",
+    "reason": "kb-01664와 같은 상품(노리 체크카드 KB스타뱅킹 디자인, 혜택·연회비 같음)",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01898"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-01966",
+    "status": "exclude",
+    "reason": "학생증 겸용 체크카드라 학교 전용 상품이다. 세로형_퍼플 디자인판이고 혜택 문구는 주니어스타체크카드 것을 그대로 쓴다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01966"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-01998",
+    "status": "ready",
+    "reason": "연회비 없는 체크. 기본 0.2%와 10만·30만 구간 추가 적립 확인. 교통이용금액 실적 제외는 대중교통 전체와 택시로 덜 주게 옮김",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01998"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "실적은 승인금액 기준이고 해외이용금액과 무승인금액(자판기·터널통행료·기차/고속버스 취소 반환 수수료)과 정부지원금은 실적에서 빠진다",
+      "월간 적립한도는 본인회원 기준이다",
+      "cafe-bakery-0-2: 아이스크림 업종은 공통 업종에 없어 계산하지 않는다",
+      "telecom-0-2: 유무선 결합 통신요금은 적립에서 빠진다",
+      "transit-taxi-0-2: 버스·지하철은 실제 사용일이 아니라 이용내역에 적힌 이용일 기준으로 적립한다",
+      "mart-0-8: 대형마트 건물 안 임대매장은 적립에서 빠진다",
+      "gs-caltex-0-8: GS칼텍스 LPG 충전은 적립에서 빠진다",
+      "정부지원금 결제와 포인트리 충전금액은 적립에서 빠진다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2017.07.03으로 두었다.",
+      "revisions[0].spend.exclude_categories: 원문은 교통이용금액을 실적에서 뺀다고만 적었다. 덜 주는 쪽으로 대중교통 전체와 택시를 실적에서 뺐다"
+    ]
+  },
+  {
+    "card_id": "kb-02249",
+    "status": "ready",
+    "reason": "HCN 자동납부 30만 1만2천원·70만 1만7천원 한도 내 전액 할인, 할인받은 건 실적 제외",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02249"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "정부지원금 실적 제외",
+      "가족카드 실적 합산"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-03537",
+    "status": "exclude",
+    "reason": "라이프샵여행 전용 선불카드다. 일반 결제 혜택이 없고 페이지에 혜택 표가 없다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=03537"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-03610",
+    "status": "blocked",
+    "reason": "실적이 전월 이용금액이 아니라 전월 결제(청구)금액 기준이고, 가입 후 90일 특례와 학원 할인 연간 300만원 이용 한도가 있어 지금 모델로 실적 계산을 맞게 못 한다. 대구북구사랑 등 지자체별 기부 카드다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=03610"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04120",
+    "status": "ready",
+    "reason": "연회비 없는 병역 의무자용 체크. PX 5~20%, 통합한도 10만~100만 구간, 교통 20%와 생활 할인 확인. 후불교통 실적 제외는 시내버스·지하철 업종 제외",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04120"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "군 KT공중전화 요금 자동이체 10% 할인은 담을 가맹점이 없어 계산하지 않는다",
+      "GS리테일 POP 서비스와 KB손해보험 단체보험·경조사·금융수수료 면제는 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 통합할인한도 1만원 안에서 할인하는 신규 특례는 계산하지 않는다",
+      "무승인 거래(철도반환수수료 등)와 해외이용금액과 정부지원금은 실적에서 빠진다",
+      "통합할인한도와 실적은 나라사랑 일반형·ROTC형 같은 계열 카드와 합산한다",
+      "transit-city-20: 버스·지하철은 실제 사용일이 아니라 명세서에 적힌 이용일 기준으로 할인한다",
+      "cgv-35: 인터넷 예매는 CGV 직영 홈페이지와 앱 결제만 할인한다. 매점 결제는 빠진다",
+      "starbucks-20: 백화점·대형마트 입점 스타벅스는 할인에서 빠질 수 있다",
+      "family-restaurant-20: 백화점·대형할인점 입점 매장은 할인에서 빠진다",
+      "amusement-50: 현장 매표 결제만 할인한다. 매점과 식당 결제는 빠질 수 있다",
+      "exam-2000: 단체 요청으로 따로 운영되는 특별시험 응시료는 빠진다",
+      "telecom-2500: 유무선 통신요금 통합청구 자동이체는 할인에서 빠진다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2015.12.21로 두었다.",
+      "revisions[0].limits[px]: 원문 표가 3만원 이상 구간들에 월 최대 5만원을 적었다. 덜 주는 쪽으로 3만원 미만 구간도 같은 5만원 한도를 함께 쓴다고 두었다",
+      "revisions[0].spend.exclude_categories: 원문의 후불교통이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다"
+    ]
+  },
+  {
+    "card_id": "kb-04122",
+    "status": "exclude",
+    "reason": "ROTC 후보생 전용 나라사랑카드(ROTC형)",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04122"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04124",
+    "status": "ready",
+    "reason": "A팩/B팩 택1, 전월 20만원, 영역별 한도",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04124"
+    ],
+    "case_count": 14,
+    "unmodeled": [
+      "노래방 할인은 업종이 없어 뺌",
+      "실적유예 50% 한도 특례 미반영",
+      "Youth Club 멤버십 프로모션(~2026-12-31) 미반영"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04316",
+    "status": "ready",
+    "reason": "더피플라이프 상조 자동이체 50만 1만원·100만 1만5천원 한도 내 전액 할인",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04316"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "Mastercard 티타늄 서비스 미계산"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04320",
+    "status": "ready",
+    "reason": "밀크T 학습비 자동이체 30만 구간 1만2천원, 70만 구간 1만7천원 청구할인을 공식 페이지와 대조했다. 새 가맹점 milk_t 필요",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04320"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "정부지원금과 공항버스·자판기·터널이용료·항공기내 무승인전표 실적 제외",
+      "가족카드 실적·한도 합산",
+      "밀크T 고객센터 자동이체 별도 신청"
+    ],
+    "open_questions": [
+      "시행일을 출시일 2022-07-22로 둠",
+      "무승인 대중교통 실적 제외를 시내버스·지하철 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "kb-04418",
+    "status": "ready",
+    "reason": "핵심인 SK인텔릭스 구독료 자동이체 할인을 담았다. 영화와 놀이공원 할인은 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04418",
+      "https://m.kbcard.com/c/04418"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "메가박스·CGV 영화 1매당 3,500원 할인은 데스크톱 페이지(공식 홈페이지 예매)와 모바일 페이지(인터파크 예매)의 대상이 달라 계산하지 않는다",
+      "롯데월드·에버랜드 50%, 캐리비안베이 30% 현장할인은 이용권 종류와 매수 조건이라 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 구독료 1만 1천원 할인을 주는 신규 특례는 계산하지 않는다",
+      "정부지원금과 무승인전표(대중교통·자판기·터널이용료·항공기내 이용)는 실적에서 빠진다",
+      "기본 포인트리는 적립되지 않는다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다.",
+      "원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다"
+    ]
+  },
+  {
+    "card_id": "kb-04431",
+    "status": "ready",
+    "reason": "GS SHOP 12%와 생활 영역 할인을 공식 페이지 숫자로 담았다. 문화센터 등 일부 업종만 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04431"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 서비스를 주는 신규 특례는 계산하지 않는다",
+      "정부지원금(보육료·유치원보조비·바우처)과 무승인전표(공항버스·자판기·터널이용료·기내 이용)는 실적에서 빠진다",
+      "할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다",
+      "대형마트 건물 내 임대매장 결제는 할인에서 빠진다",
+      "문화센터와 종합스포츠센터·테니스장·수영장·요가·볼링장 업종은 담을 업종이 없어 계산하지 않는다. 스포츠 업종 전체는 스포츠용품점까지 넓어 골프만 담았다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2020.12.16 출시만 적었다.",
+      "원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+      "대형마트/이동통신, 커피/편의점/택시, 미용실 등 영역이 원문 표 한 줄에 한도 하나로 적혀 있어 영역 안 대상들이 한도를 함께 쓴다고 두었다"
+    ]
+  },
+  {
+    "card_id": "kb-04452",
+    "status": "ready",
+    "reason": "연회비 4만원. 30만·60만 구간 병원·약국 5%, 주유 리터당 60원, 마트 5%, 6대 영역 1%, 음식 5%, 해외 2% 확인. 반려동물 10%는 업종이 동물병원과 안 나뉘어 뺌",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04452"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "6대 영역 적립은 결제계좌를 KB골든라이프 연금우대통장으로 등록하면 2%인데 1%로만 계산한다",
+      "6대 영역 중 건강관리(종합스포츠센터·레포츠클럽)는 담을 업종이 없어 계산하지 않는다",
+      "골든라이프 드림투어·국카mall 10% 할인은 담을 가맹점이 없어 계산하지 않는다",
+      "반려동물 업종(펫샵·동물검사소·약품·장례) 10% 할인은 공통 업종이 동물병원과 나뉘지 않아 계산하지 않는다",
+      "연간 결제납부실적 700만원 이상이면 포인트리 1만점을 주는 연간 리워드는 연간 누적이라 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 1구간 혜택을 주는 신규 특례는 계산하지 않는다",
+      "공항 라운지·발레파킹 같은 티타늄 서비스는 계산하지 않는다",
+      "정부지원금과 무승인전표는 실적에서 빠진다",
+      "fuel-60: 리터는 GS칼텍스 본사 고시 휘발유가로 환산한다. 앱은 공통 기름값 기준값으로 환산한다",
+      "mart-5: 대형마트 건물 안 임대매장은 할인에서 빠진다",
+      "transit-1: 버스·지하철은 실제 사용일이 아니라 명세서에 적힌 이용일 기준으로 적립한다",
+      "food-5: 휴게음식점 가운데 패스트푸드·제과로 기록된 결제는 계산하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 상품설명서 심의일로 두었다. 원문 출시일은 2016.01.29이다.",
+      "revisions[0].spend.exclude_categories: 원문의 대중교통 이용 등 무승인전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다"
+    ]
+  },
+  {
+    "card_id": "kb-04460",
+    "status": "exclude",
+    "reason": "현역 군 간부·군무원·국방부 공무원 전용 카드",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04460"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04906",
+    "status": "ready",
+    "reason": "H.Point 0.2% 기본, 현대백화점 0.5% 추가(월 3만점), 파리바게뜨·스타벅스·CGV·올리브영 5% 환급할인(30만 1천원, 50만 3천원)을 공식 페이지와 대조했다. 원문에 1p=1원",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04906"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "정부지원금·포인트 충전·무승인금액 실적 제외",
+      "생활할인 받은 결제는 H.Point 제외를 같은 묶음 큰 쪽으로 처리",
+      "현대백화점그룹 다른 계열사와 임대매장",
+      "CGV 매점 제외",
+      "PG·입점 매장 제외"
+    ],
+    "open_questions": [
+      "시행일을 심의일 2020-04-28로 둠",
+      "교통이용금액 실적 제외를 시내버스·지하철 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "kb-04918",
+    "status": "ready",
+    "reason": "40만원 이상 시 생활 5%(건당 1만원 이상), 올리브영 10%, 영화 10%·골프 5% 영역별 월 7천원(유예 3,500원)을 공식 페이지와 대조했다. 할인받은 건은 실적 제외",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04918"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "KB Pay 앱 쇼핑 10%는 가맹점이 없어 뺌",
+      "골프 외 스포츠 업종 5%는 공통 업종 범위가 달라 뺌",
+      "영화관 매점·예매대행 제외",
+      "후불 기후동행 이용요금·무승인전표·정부지원금 실적 제외",
+      "기후동행 정기권 서비스 2026-09-30 종료 안내"
+    ],
+    "open_questions": [
+      "시행일을 출시일 2024-11-25로 둠",
+      "후불 기후동행·무승인 교통요금 실적 제외를 시내버스·지하철 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "kb-04919",
+    "status": "ready",
+    "reason": "생활 2%, 올리브영 5%, 영화 5%, 스포츠 2%를 담았다. KB Pay 쇼핑 5%는 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04919"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "KB Pay 쇼핑(KB Pay 앱 쇼핑 결제) 5% 할인은 담을 가맹점이 없어 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 영역별 월 2천원을 주는 신규 특례는 계산하지 않는다",
+      "무승인 금액(자판기·터널통행료·유료도로·기차/고속버스 취소 반환수수료), 정부지원금, 포인트리 충전금액, 해외 이용 일부는 실적에서 빠진다",
+      "서울시 기후동행서비스는 2026-09-30 끝났다고 원문에 공지되어 있다",
+      "영화관 매점과 관람권·예매대행사이트 결제는 할인에서 빠진다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다.",
+      "여가 영역의 스포츠 2% 한도가 원문에 따로 적혀 있지 않다. 덜 주는 쪽으로 영화와 함께 여가 영역 월 4,000원을 쓴다고 두었다",
+      "원문의 후불교통요금·후불 기후동행카드 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+      "서울시 기후동행서비스가 2026-09-30 끝났다는 공지가 있다. 카드 신규 발급이 계속되는지 확인해야 한다"
+    ]
+  },
+  {
+    "card_id": "kb-07986",
+    "status": "ready",
+    "reason": "연회비 없는 체크. kb-07964 노리2 KB Pay와 일상 혜택이 같고 KB Pay 추가 할인 대신 PC방 10%·패스트푸드 1천원이 있는 다른 상품. 통합한도 20만~80만 구간 확인",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07986"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "무승인금액(자판기·터널통행료·기차/고속버스 취소 반환 수수료)과 정부지원금과 포인트리 충전금액은 실적에서 빠진다. 해외 이용액은 매입 완료월 실적에 넣는다",
+      "노리2 KB Pay·Global과 실적과 한도를 합산하지 않는다",
+      "culture-10: 인터파크 공연 티켓 예매만 할인한다",
+      "movie-4000: CGV 매점 결제는 할인에서 빠진다",
+      "amusement-15000: 놀이공원 매점 결제는 할인에서 빠진다",
+      "PG·간편결제 전용 가맹점과 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2023.06.23으로 두었다.",
+      "revisions[0].limits[integrated]: 원문 통합할인한도표는 20만원 이상부터다. 실적 조건 없는 커피 할인만 받는 20만원 미만 구간은 커피 월 한도 3천원으로 두었다",
+      "revisions[0].spend.exclude_categories: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다"
+    ]
+  },
+  {
+    "card_id": "kb-07998",
+    "status": "exclude",
+    "reason": "kb-07964와 같은 상품. 노리2 체크카드의 학생증 겸용판이고 혜택표가 같다. 학교 학생증 발급이 필요한 상품이다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07998"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09064",
+    "status": "ready",
+    "reason": "kb-09065 티타늄과 같은 구조에 연회비와 Shopping 한도(1만·1만5천·2만점)만 다르게 담았다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09064"
+    ],
+    "case_count": 11,
+    "unmodeled": [
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 50만원 구간 혜택을 주는 신규 특례는 계산하지 않는다",
+      "정부지원금(보육료·유치원보조비·바우처)과 무승인전표(자판기·터널통행료·항공기내 이용)는 실적에서 빠진다",
+      "적립 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다",
+      "온라인쇼핑몰과 소셜커머스의 상품권·여행·항공권·티켓·도서와 별도 팝업사이트 결제는 적립에서 빠진다",
+      "대형마트 임대매장 결제는 적립에서 빠진다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2021.06.24 출시만 적었다.",
+      "원문의 실적 제외 '교통요금'이 후불교통만인지 교통 전체인지 분명하지 않다. 덜 주는 쪽으로 교통 업종 전체를 실적에서 뺐다. 택시는 남겼다."
+    ]
+  },
+  {
+    "card_id": "kb-09085",
+    "status": "exclude",
+    "reason": "지방보조금 보탬e 전용 체크카드(보조사업자용)",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09085"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09118",
+    "status": "ready",
+    "reason": "40만·80만·120만 구간 전기차 충전·철도 10%(Mobility 한도 7천/1만/1만5천), 초록마을 20%(Shopping 한도 따로), OTT 정기결제 1천점을 공식 페이지와 대조했다. 원문에 포인트리 1점=1원",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09118"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "버스·지하철 10%는 이용대금명세서 기재일 기준이라 뺌",
+      "공유 모빌리티·올가·플리츠마마·파타고니아·트리플래닛·굿윌스토어는 가맹점이 없어 뺌",
+      "모바일 단독카드 1천점",
+      "기부 포인트",
+      "수소차 충전소",
+      "정부지원금 실적 제외"
+    ],
+    "open_questions": [
+      "시행일을 심의일 2023-01-04로 둠"
+    ]
+  },
+  {
+    "card_id": "kb-09124",
+    "status": "ready",
+    "reason": "이동통신 10%와 1st·2nd 선택서비스를 options로 담았다. 정육점·서점·독서실 등 일부 업종만 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09124",
+      "https://m.kbcard.com/c/09124"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "최초 사용등록일부터 다음 달 말일까지 1구간 서비스를 주는 신규 특례는 계산하지 않는다",
+      "전월실적 35만원 이상 40만원 미만 고객이 신청하는 전월실적 채워드림(월 1회·연 2회)은 계산하지 않는다",
+      "정부지원금과 무승인전표(자판기·터널이용료·항공기내 이용)는 실적에서 빠진다",
+      "할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다",
+      "인터넷·IPTV 결합상품 요금은 할인에서 빠진다",
+      "백화점 임대매장 결제는 할인에서 빠진다",
+      "정육점과 서점은 담을 업종이 없어 계산하지 않는다",
+      "동네상권 업종의 온라인 결제와 배달앱 배달현장 결제는 할인에서 빠진다",
+      "인터파크·티켓링크는 공연 예매만, 영화관은 현장구매만 대상이다. 공연장·전시장·경기장 현장구매는 담을 업종이 없어 계산하지 않는다",
+      "독서실은 담을 업종이 없어 계산하지 않는다",
+      "한약방과 건강식품점은 담을 업종이 없어 계산하지 않는다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2022.12.26 출시만 적었다.",
+      "원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+      "데스크톱 페이지가 기존 보유 고객의 재발급 신청만 된다고 안내한다. 신규 발급이 끝났는지 확인해야 한다"
+    ]
+  },
+  {
+    "card_id": "kb-09126",
+    "status": "blocked",
+    "reason": "핵심 혜택이 대한항공 마일리지 적립인데 공통 포인트에 대한항공 마일리지가 없고 원문에 1마일의 원화 가치 문구가 없다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09126"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09127",
+    "status": "ready",
+    "reason": "연회비 80만원. 국내 1%(월 30만점), 해외 3%, 백화점·골프 100만원 이상 5만점(연 2회) 확인. 500만원 초과 1.2%는 1%로만 계산",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09127"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "골프클럽 이용권·호텔 멤버십·항공권 할인 쿠폰(연 1회 택1)과 공항 라운지 같은 Amex 서비스는 계산하지 않는다",
+      "특별 적립을 받은 결제는 국내 1% 적립에서 빠져 둘 중 큰 쪽 하나만 준다",
+      "무승인전표(교통요금·자판기·터널통행료·항공기내 이용)는 적립에서 빠진다",
+      "domestic-1: 한 달 회수금액 500만원 초과분의 1.2% 적립은 1%로만 계산한다",
+      "정부지원금 결제와 쿠폰 이용금액은 적립에서 빠진다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2023.06.08로 두었다.",
+      "revisions[0].benefits[special-50000].limits: 특별 적립 연 2회가 달력 연도인지 연회비 약정연도인지 원문에 없다. 달력 연도로 두었다"
+    ]
+  },
+  {
+    "card_id": "kb-09128",
+    "status": "blocked",
+    "reason": "핵심 혜택이 대한항공 마일리지 적립인데 원문에 1마일의 원화 가치가 없고 포인트 프로그램도 없다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09128"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09129",
+    "status": "ready",
+    "reason": "국내 1%, 항공·면세점·골프장·호텔 1% 추가, 해외 3% 포인트리 적립(실적·한도 없음)과 연회비 200만원을 공식 페이지와 대조했다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09129"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "연간 이용실적 조건 쿠폰 2가지",
+      "골프백·의료동행·밀리의서재 100% 청구할인",
+      "롯데호텔 객실·F&B 할인과 발레파킹",
+      "라운지·Visa Infinite 서비스",
+      "신차구매 청구할인 전표 적립 제외",
+      "정부지원금 적립 제외"
+    ],
+    "open_questions": [
+      "시행일을 심의일 2026-04-09로 둠"
+    ]
+  },
+  {
+    "card_id": "kb-09138",
+    "status": "ready",
+    "reason": "기본 1%, 생활 4영역 추가 0.2%, Flex 분기 1회, 카 라이프를 담았다. 쿠폰과 라운지는 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09138"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "연 1회 쿠폰(포인트리 8만점·롯데백화점 상품권 8만원·CGV 씨네드쉐프 9만원 중 택1)과 공항 라운지·발레파킹·금융 수수료 면제는 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 할인을 주는 신규 특례는 계산하지 않는다",
+      "정부지원금과 무승인전표(자판기·터널 이용료·항공기내 이용)는 실적에서 빠진다",
+      "할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다",
+      "정부지원금 결제와 신차구매청구(환급)할인 전표는 할인에서 빠진다",
+      "시내버스·지하철은 후불교통만 빠지지만 덜 주는 쪽으로 업종 전체를 뺐다",
+      "스타벅스 사이렌오더도 대상이지만 온라인 결제로 기록되면 계산하지 않는다",
+      "독서실은 담을 업종이 없어 계산하지 않는다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다.",
+      "원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+      "원문 표가 주차 행에만 월 1만원을 적고 세차 행에는 한도를 적지 않았다. 덜 주는 쪽으로 주차와 세차가 월 1만원을 함께 쓴다고 두었다"
+    ]
+  },
+  {
+    "card_id": "kb-09139",
+    "status": "blocked",
+    "reason": "HERITAGE Classic(스카이패스형) 연회비 15만7천원. 핵심 혜택이 대한항공 마일리지(국내외 1,500원당 1마일, 생활 4개 영역 2마일, 전월 50만원 이상)인데 공통 point_programs에 대한항공 마일리지가 없고 원화 가치 문구도 없다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09139"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09156",
+    "status": "ready",
+    "reason": "기본 0.2%와 추가 0.2%(주말·외식·교통·통신)를 담았다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09156"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 추가적립을 주는 신규 특례는 계산하지 않는다",
+      "정부지원금과 무승인금액(자판기·터널통행료·기차/고속버스 취소 반환 수수료)은 실적에서 빠진다",
+      "정부지원금 결제는 적립에서 빠진다",
+      "대중교통 적립은 실제 이용일이 아니라 이용내역서에 적힌 이용일 기준으로 적용된다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다.",
+      "추가적립 영역 여럿에 동시에 해당하는 결제(주말 외식 등)가 각각 0.2%를 받는지 원문이 밝히지 않았다. 덜 주는 쪽으로 추가적립은 하나만 받게 두었다",
+      "원문의 실적 제외 '교통이용금액'을 교통 업종 전체로 옮겼다. 택시는 남겼다"
+    ]
+  },
+  {
+    "card_id": "kb-09157",
+    "status": "exclude",
+    "reason": "kb-09162와 같은 상품. 공식 페이지의 혜택, 연회비, 실적 제외 문구가 KB ALL point 09162 페이지와 같다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09157"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09166",
+    "status": "ready",
+    "reason": "30만원 이상 시 국내 0.2% 기본, 주말·음식커피·택시·이동통신 0.2% 추가, 해외 1% 캐시백을 공식 페이지와 대조했다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09166"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "버스·지하철 0.2% 추가 할인은 이용내역서 기재일 기준이라 뺌",
+      "정부지원금·무승인금액 실적 제외",
+      "PG·입점 매장 제외"
+    ],
+    "open_questions": [
+      "시행일을 심의일 2026-05-22로 둠",
+      "교통이용금액 실적 제외를 시내버스·지하철 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "kb-09167",
+    "status": "ready",
+    "reason": "국내 0.3%, 쇼핑·여행 0.7% 추가(20만), 해외 1% 기본·1% 추가(20만)·1% 특별(50만, 이용금액 50만원까지)을 공식 페이지와 대조했다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09167"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "이하넥스·아이포터 배송료 5% 할인은 가맹점이 없어 뺌",
+      "정부지원금·무승인 전표 실적 제외",
+      "해외 매입 지연 시 적용 월 변경"
+    ],
+    "open_questions": [
+      "시행일을 심의일 2018-10-02로 둠",
+      "무승인 대중교통 실적 제외를 시내버스·지하철 업종 제외로 옮김"
+    ]
+  },
+  {
+    "card_id": "kb-09243",
+    "status": "ready",
+    "reason": "Easy pick 티타늄(kb-09251)과 같은 구조, 연회비 2만원, 구간 50만·100만, 한도 5천·1만점, Pick 8개, 알뜰폰 제외",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09243"
+    ],
+    "case_count": 15,
+    "unmodeled": [
+      "Pick 차량정비 미지원",
+      "제과 영역 아이스크림 업종 미반영"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "현재 규칙 시작일 미확인",
+        "assumed": "2026-10-12"
+      }
+    ]
+  },
+  {
+    "card_id": "kb-09244",
+    "status": "ready",
+    "reason": "50만·100만 구간 음식·쇼핑(백화점 포함)·커피편의점제과 5%(각 5천/1만), 이동통신·음원숙박앱·KB Pay 오픈마켓 5%(각 5천)를 공식 페이지와 대조했다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09244"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "버스·지하철 5%는 이용대금명세서 기재일 기준이라 뺌",
+      "오픈마켓 상품권·여행·항공권·티켓·도서 제외",
+      "배민·컬리 결제수단 조건",
+      "데일리호텔 가맹점 없음",
+      "PG·입점 매장 제외",
+      "정부지원금 실적 제외"
+    ],
+    "open_questions": [
+      "시행일을 출시일 2019-06-27로 둠"
+    ]
+  },
+  {
+    "card_id": "kb-09246",
+    "status": "ready",
+    "reason": "주유 리터당 150점, 차량관리 5%, 생활 정액 적립, 기본 0.2%를 담았다. 자동차보험 1만점은 뺐다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09246"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "자동차보험 건당 10만원 이상 1만점(연 1회)은 자동차보험만 가릴 업종이 없어 계산하지 않는다",
+      "발레파킹과 공항 라운지 같은 티타늄 서비스는 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 50만원 구간을 주는 신규 특례는 계산하지 않는다",
+      "정부지원금(보육료·유치원보조비·바우처)과 무승인전표(자판기·터널통행료·항공기내 이용)는 실적에서 빠진다",
+      "제과·편의점·올리브영의 백화점·대형마트 입점 매장은 적립에서 빠진다",
+      "적립 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다",
+      "정부지원금 결제는 적립에서 빠진다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다.",
+      "원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다",
+      "전 가맹점 0.2%가 주유·차량관리·생활 적립과 겹쳐 쌓이는지 원문이 밝히지 않았다. 덜 주는 쪽으로 같은 묶음에서 큰 것 하나만 받게 두었다",
+      "모바일 단독카드 연회비를 원문에서 찾지 못했다"
+    ]
+  },
+  {
+    "card_id": "kb-09247",
+    "status": "ready",
+    "reason": "연회비 3만원 모바일 단독. 50만·100만 구간, 간편결제 1.5%(건당 2만원, 일 1만점, 월 3만점), 편의점·택시 1천점, 쿠팡·G마켓·배민 5% 확인. 후불교통 실적 제외는 시내버스·지하철 업종 제외",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09247"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 1구간 혜택을 주는 신규 특례는 계산하지 않는다",
+      "간편결제 1.5%와 편의점·택시·쇼핑 적립을 함께 받는지 원문에 없어 한 결제에 큰 쪽 하나만 준다",
+      "무승인전표(자판기·터널통행료·항공기내 이용)와 정부지원금은 실적에서 빠진다",
+      "easypay-1-5: LG페이는 공통 결제수단에 없어 계산하지 않는다",
+      "shopping-delivery-5: 쿠팡·G마켓의 여행·항공권·티켓·도서 결제와 배달의민족의 다른 결제수단 결제는 적립에서 빠진다",
+      "정부지원금 결제는 적립에서 빠진다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 심의일로 두었다. 원문 출시일은 2020.06.01이다.",
+      "revisions[0].spend.exclude_categories: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다"
+    ]
+  },
+  {
+    "card_id": "kb-09248",
+    "status": "ready",
+    "reason": "네 영역 5% 할인과 영역별 구간 한도를 담았다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09248"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "최초 사용등록일부터 다음 달 말일까지 30만원 구간을 주는 신규 특례는 계산하지 않는다",
+      "정부지원금(보육료·유치원보조비·바우처)과 무승인전표(자판기·터널통행료·항공기내 이용)는 실적에서 빠진다",
+      "할인 한도는 본인회원 기준이고 전표 매입 순서대로 채운다",
+      "스타벅스 사이렌오더 선물하기와 선불 충전은 할인에서 빠진다",
+      "쿠팡·G마켓의 상품권·여행·항공권·티켓·도서 결제는 할인에서 빠진다",
+      "배달의민족은 결제수단에서 다른결제수단의 신용/체크결제로 결제해야 할인된다"
+    ],
+    "open_questions": [
+      "현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다.",
+      "원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다"
+    ]
+  },
+  {
+    "card_id": "kb-09253",
+    "status": "ready",
+    "reason": "연회비 3만원. 50만·100만·150만 구간 통신 1만원당 1,500원, 선택서비스 택2 5%(여섯 조합 옵션), Easy ring+ 확인. 0.3% 리워드는 누적이라 뺌",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09253"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "당월 인정실적 150만원 초과 이용금액의 0.3%를 다음 달 포인트리로 주는 Easy ring 리워드는 한 달 누적 초과분이라 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 50만원 구간 혜택을 주는 신규 특례는 계산하지 않는다",
+      "공항 라운지·발레파킹 같은 티타늄 서비스는 계산하지 않는다",
+      "무승인전표(자판기·터널통행료·항공기내 이용)와 정부지원금은 실적에서 빠진다",
+      "telecom-1500: SKT·KT·LG U+ 망을 쓰는 알뜰폰 요금은 할인에서 빠진다",
+      "select-online-5: 온라인쇼핑의 여행·항공권·티켓·도서 결제와 별도 팝업사이트 결제는 할인에서 빠진다",
+      "select-mart-5: 대형마트 건물 안 임대매장은 할인에서 빠진다",
+      "select-cafe-5: 아이스크림 업종은 공통 업종에 없어 계산하지 않는다",
+      "PG 전용 가맹점 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2020.04.21로 두었다.",
+      "revisions[0].spend.exclude_categories: 원문은 교통요금을 실적에서 뺀다고만 적었다. 덜 주는 쪽으로 철도와 고속·시외버스를 포함한 대중교통 전체를 실적에서 뺐다"
+    ]
+  },
+  {
+    "card_id": "kb-09267",
+    "status": "ready",
+    "reason": "연회비 3만원. 50만·100만·150만 구간 전기차 충전 50%, 초록마을 5%, SSG.COM·쿠팡 5% 확인. 교통요금 실적 제외는 대중교통 전체로 덜 주게 옮김",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09267"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "모바일단독카드 이용 시 월 1회 1천점 적립(Plastic free)은 발급 형태를 알 수 없어 계산하지 않는다",
+      "기부생활은 고른 기부율(0·1·3·5·10%)만큼 적립 포인트리를 기부포인트리로 나누고 카드사가 같은 만큼 더 준다. 기부포인트리는 기부에만 쓰여 기부율 0%로 계산한다",
+      "최초 사용등록일부터 다음 달 말일까지 실적 없이 50만원 구간 친환경생활 혜택을 주는 신규 특례는 계산하지 않는다",
+      "공항 라운지·발레파킹 같은 티타늄 서비스는 계산하지 않는다",
+      "무승인전표(자판기·터널통행료·항공기내 이용)와 정부지원금은 실적에서 빠진다",
+      "ev-charging-50: 수소차 충전소는 공통 업종에 없어 전기차 충전 업종으로 기록된 결제만 계산한다",
+      "green-market-5: 올가홀푸드와 바이올가는 공통 가맹점에 없어 계산하지 않는다",
+      "eco-packaging-5: SSG.COM·쿠팡의 여행·항공권·티켓·도서 결제와 별도 팝업사이트 결제는 적립에서 빠진다",
+      "PG 전용 가맹점 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 적립에서 빠질 수 있다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2020.11.30으로 두었다.",
+      "revisions[0].spend.exclude_categories: 원문은 교통요금을 실적에서 뺀다고만 적었다. 덜 주는 쪽으로 철도와 고속·시외버스를 포함한 대중교통 전체를 실적에서 뺐다"
+    ]
+  },
+  {
+    "card_id": "kb-09297",
+    "status": "ready",
+    "reason": "국내 1%·해외 2% 한도 없음(전월 40만), 자동납부 멤버십 50%·OTT 10%·통신 5% 통합 월 5천원",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09297"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "분기 400만원 이상 1만점 보너스는 분기 누적이라 뺌",
+      "실적유예기간 자동납부 2,500원 한도 미반영",
+      "Mastercard 티타늄 서비스 미계산"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09298",
+    "status": "ready",
+    "reason": "연회비 5만원. 40만·80만 구간 KB Pay 10%, 음식점·편의점 10%, 통신 10%, OTT 30%, 건강 5%, 여가 5%, 주차·세차 10% 확인. 할인 받은 결제 실적 제외",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09298"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "연간 이용실적 600만원 이상이면 다음 해 포인트리 2만점이나 롯데시네마 관람권 2매를 주는 쿠폰 서비스는 연간 누적이라 계산하지 않는다",
+      "최초 사용등록일부터 다음 달 말일까지 1구간 한도의 50%만 주는 신규 특례는 계산하지 않는다",
+      "공항 라운지·발레파킹 같은 Mastercard 서비스는 계산하지 않는다",
+      "스포츠 업종 중 골프 외 업종(스포츠용품점·테니스장·볼링장·스키장·수영장·종합스포츠센터·요가)은 담을 업종이 없어 계산하지 않는다",
+      "무승인전표(자판기·터널통행료·항공기내 이용)와 정부지원금은 실적에서 빠진다",
+      "kbpay-10: 통신·구독 할인과 겹치지 않게 통신요금과 구독·스트리밍 업종 결제는 KB Pay 할인에서 뺐다",
+      "dining-convenience-10: 음식점 업종은 오프라인 결제만 계산한다",
+      "leisure-online-5: 온라인몰의 여행·티켓·도서·배달·멤버십 구독료와 외부 제휴몰·팝업사이트 결제는 할인에서 빠진다",
+      "정부지원금 결제와 신차구매 청구(환급) 할인 전표는 할인에서 빠진다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2025.04.22로 두었다.",
+      "revisions[0].limits[telecom-ott]: 원문 표가 이동통신요금과 OTT에 월 5천원과 건당 2천5백원 한도를 한 칸으로 적었다. 덜 주는 쪽으로 둘이 한도 하나를 함께 쓰고 OTT에도 건당 한도를 둔다고 두었다",
+      "revisions[0].spend.exclude_categories: 원문의 RF후불교통요금 무승인전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다"
+    ]
+  },
+  {
+    "card_id": "kb-09305",
+    "status": "ready",
+    "reason": "주중 1.2%·커피편의점자동납부 1.5%, 주말 1.5%·면세점 3%, 월 50만점, 전월 50만원",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09305"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "주말 골프장·호텔 3%는 공통 업종이 넓어 기본 1.5%로 계산",
+      "도시가스 자동납부 1.5%는 공과금 적립 제외와 겹쳐 뺌",
+      "연 1회 쿠폰과 전용 서비스 미계산"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "현재 규칙 시작일 미확인",
+        "assumed": "2026-10-12"
+      }
+    ]
+  },
+  {
+    "card_id": "kb-09306",
+    "status": "blocked",
+    "reason": "BeV Ⅴ카드(스카이패스형) 연회비 30만원. 핵심 혜택이 대한항공 마일리지(1,500원당 평일 1.2~1.5마일, 주말 1.5~3마일, 전월 50만원 이상, 결제일 합산 반올림)인데 공통 point_programs에 대한항공 마일리지가 없고 원화 가치 문구도 없다. 마일리지를 빼면 카드가 크게 약해 보인다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09306"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09311",
+    "status": "exclude",
+    "reason": "kb-09312와 같은 상품. 제네시스용과 기아용만 다르고 연회비 2,000원과 하이패스 0.1% 적립이 같다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09311"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09313",
+    "status": "exclude",
+    "reason": "kb-09312와 같은 상품. e hi-pass 카드 기아차판과 차량 제조사만 다르고 연회비 2,000원, 하이패스 0.1% 포인트리 적립이 같다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09313"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09340",
+    "status": "ready",
+    "reason": "연회비 7천원. 모임 영역 0.4%와 그 외 0.2% 청구할인, 통합 월 5만원, 실적 조건 없음 확인",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09340"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "모임 영역의 골프 외 스포츠 업종(종합스포츠센터·수영장·테니스장·볼링장·당구장·스키장·스포츠용품점·레저용품점)과 스터디카페(독서실 업종)는 담을 업종이 없어 0.2%로 계산한다",
+      "연간 결제실적 300만원 이상이면 포인트리 7천점을 주는 연간 리워드는 연간 누적이라 계산하지 않는다",
+      "할인 한도는 본인회원 기준이고 가족카드 이용분과 함께 쓴다",
+      "moim-openmarket-0-4: 오픈마켓의 여행·항공권·티켓·도서 결제와 별도 팝업 사이트 결제는 0.4% 할인에서 빠진다",
+      "정부지원금 결제와 신차구매 청구(환급) 할인 전표는 할인에서 빠진다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09570",
+    "status": "ready",
+    "reason": "국내 0.5% 무조건 + KB Pay 선택 영역 10%(건당 5천, 월 7천/1만2천)",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09570"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "데일리 스탬프 실적 채워드림은 앱 접속 일수라 뺌",
+      "실적유예 3,500원 특례 미반영",
+      "KB Pay 쇼핑 가맹점 없음",
+      "아이스크림 업종 없음"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09923",
+    "status": "exclude",
+    "reason": "kb-my-wesh와 같은 상품. 저장소 catalog/cards/kb/kb-my-wesh.yaml이 이미 제휴코드 09923을 product_codes에 담고 있다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09923"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-09924",
+    "status": "ready",
+    "reason": "1st 선택(마트·백화점·동네) 5%, 2nd 선택(둘이·자녀·돌봄) 10%를 options로, 구간 한도 8천~3만원과 7천~1만5천원, 이동통신 10% 5천원을 공식 페이지와 대조했다. 할인받은 건 실적 제외",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09924"
+    ],
+    "case_count": 11,
+    "unmodeled": [
+      "5월 2nd 한도 2배",
+      "전월실적 채워드림",
+      "공연장·전시장·경기장과 온라인 티켓 공연 예매",
+      "정육점·서점·독서실·한약방·건강식품점 업종 없음",
+      "임대매장·영화관 매점 제외",
+      "결합상품 제외",
+      "정부지원금·무승인전표 실적 제외",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "시행일을 출시일 2022-12-26으로 둠",
+      "RF후불교통 무승인 실적 제외를 시내버스·지하철 업종 제외로 옮김"
+    ]
+  }
+]

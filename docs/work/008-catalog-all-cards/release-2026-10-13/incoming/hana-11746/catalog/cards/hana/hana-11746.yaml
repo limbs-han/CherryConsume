@@ -1,0 +1,166 @@
+schema_version: 2
+id: hana-11746
+issuer: hana
+name: 하나멤버스 1Q 카드 Special Auto
+short_name: 하나 1Q Special Auto
+kind: credit
+product_codes:
+  - '11746'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 8000}
+  - {scope: global, brand: visa, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41011746P&CD_PD_SEQ=11746', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2019-11-27
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, department_store, fuel, gift_card, grocery_mart, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    facts:
+      - {key: hana_bank_account, type: bool, scope: card, ask: 이 카드 결제계좌가 하나은행 계좌인가요}
+    limits:
+      - {key: region_fuel, per: month, amount: 20000}
+      - {key: online, per: month, amount: 10000}
+      - {key: commute, per: month, amount: 10000}
+      - {key: overseas, per: month, amount: 10000}
+    benefits:
+      - key: region-shopping-points
+        title: 지역쇼핑 10만원마다 5천 하나머니
+        source: page
+        evidence: ['지역쇼핑 | 홈플러스 익스프레스, 이마트 에브리데이, 롯데슈퍼, GS슈퍼, 신세계 백화점, 롯데백화점, 현대백화점, AK플라자, NC백화점, NC아울렛, NC WAVE, 갤러리아, 대구백화점, 대동백화점, 동아백화점, 세이백화점, 태평백화점, Y-마트, 메가마트, 서원유통 | 이번 달 합산 이용금액이 10만원이 될 때마다 5천 하나머니 적립 | 지역쇼핑/주유 통합 월 최대 2만 하나머니', '지역쇼핑 : 온라인몰 이용금액, 상품권 및 기프트카드 구매, 선불카드 충전금액 및 임대매장 이용금액 제외', 지난달 실적 30만원 이상 시 제공]
+        target:
+          exclude_categories: [gift_card, prepaid_charge]
+          merchants: [ak_plaza, daegu_department, dong_a_department, emart_everyday, galleria, homeplus_express, hyundai_department, lotte_department, lotte_super, mega_mart, shinsegae_department, ymart]
+        when:
+          - {channel: offline}
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: region_fuel}
+        tiers: {from: 300000}
+        unmodeled: [GS슈퍼와 NC백화점과 NC아울렛과 NC WAVE와 대동백화점과 세이백화점과 태평백화점과 서원유통은 공통 가맹점에 없어 넣지 못했다, 임대매장 매출은 제외한다]
+      - key: fuel-points
+        title: 주유 10만원마다 5천 하나머니
+        source: page
+        evidence: ['주유(LPG충전 포함) | SK에너지, GS칼텍스, S-Oil, 현대오일뱅크, 알뜰주유소 | 이번 달 합산 이용금액이 10만원이 될 때마다 5천 하나머니 적립 | 지역쇼핑/주유 통합 월 최대 2만 하나머니', 지난달 실적 30만원 이상 시 제공]
+        target:
+          merchants: [altteul_fuel, gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: region_fuel}
+        tiers: {from: 300000}
+      - key: online-shopping-points
+        title: 온라인쇼핑 10만원마다 5천 하나머니
+        source: page
+        evidence: ['온라인쇼핑 | G마켓, 옥션, 11번가, 쇼핑엔티, 쿠팡, 공영홈쇼핑(공영쇼핑), 티몬, GS SHOP, 롯데홈쇼핑, 현대홈쇼핑(Hmall), CJ ONSTYLE, NS홈쇼핑, 홈앤쇼핑 | 이번 달 합산 이용금액이 10만원이 될 때마다 5천 하나머니 적립 | 월 최대 1만 하나머니', '온라인쇼핑 : 상품권 구매 제외', 지난달 실적 30만원 이상 시 제공]
+        target:
+          exclude_categories: [gift_card]
+          merchants: [auction, cj_onstyle, coupang, eleven_st, gmarket, gs_shop, home_and_shopping, hyundai_homeshopping, lotte_homeshopping, ns_homeshopping, public_homeshopping, shopping_ntv, tmon]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: online}
+        tiers: {from: 300000}
+      - key: commute-points
+        title: 버스·지하철·택시 10만원마다 5천 하나머니
+        source: page
+        evidence: ['통신/교통/자동이체 | 대중교통(버스, 지하철), 택시 | 이번 달 합산 이용금액이 10만원이 될 때마다 5천 하나머니 적립 | 월 최대 1만 하나머니', '교통 : 시내버스, 마을버스, 광역버스, 공항버스, 지하철, 공항철도, 택시 (시외버스, 고속버스 제외)', 지난달 실적 30만원 이상 시 제공]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: commute}
+        tiers: {from: 300000}
+        unmodeled: [공항철도는 적립 대상이지만 업종으로 가리지 못해 넣지 않았다, 무승인 교통 매출은 매출이 접수된 달에 센다]
+      - key: autopay-bills-points
+        title: 통신·전기·가스 자동이체 10만원마다 5천 하나머니
+        source: page
+        evidence: ['통신/교통/자동이체 | SKT, SKB, KT, LGU+, 전기요금, 도시가스요금 | 이번 달 합산 이용금액이 10만원이 될 때마다 5천 하나머니 적립 | 월 최대 1만 하나머니', '통신 : SKT, SKB, KT, LGU+ 자동이체 통신요금', '전기요금 : 한국전력공사 자동이체 요금 (아파트, 빌라, 연립, 다세대, 상가 등 일괄 납부 단체 요금 제외)', '가스요금 : 각 지역 도시가스사업자 자동이체 요금', 지난달 실적 30만원 이상 시 제공]
+        target:
+          categories: [utility.electricity, utility.gas]
+          merchants: [kt, lg_uplus, sk_broadband, skt]
+        when:
+          - billing: [autopay]
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: commute}
+        tiers: {from: 300000}
+        unmodeled: [교통과 자동이체는 한 영역으로 합쳐 10만원마다 주지만 여기서는 둘로 나눠 합계해 덜 줄 수 있다, 전기요금의 일괄 납부 단체 요금은 제외한다]
+      - key: overseas-points
+        title: 해외 10만원마다 5천 하나머니
+        source: page
+        evidence: [해외 | 해외 모든 가맹점 | 이번달 합산 이용금액이 10만원이 될 때마다 5천 하나머니 적립 | 월 최대 1만 하나머니, 지난달 실적 30만원 이상 시 제공, '국내외겸용카드(Visa, Mastercard)로 이용 시 제공']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward:
+          type: points
+          basis: month_total
+          program: hana_money
+          per_unit: {unit: 100000, amount: 5000}
+        limits:
+          - {shared: overseas}
+        tiers: {from: 300000}
+        unmodeled: [국내외겸용 Visa나 Mastercard로 이용할 때만 제공한다. 국내전용 카드는 해외 이용이 없다]
+      - key: apartment-points
+        title: 아파트관리비 자동이체 10만원 이상 5천 하나머니
+        source: page
+        evidence: [아파트관리비 자동이체 결제시 월 1회 5천 하나머니 적립, 지난달 실적 60만원 이상 시 제공, 아파트관리비 자동이체 금액 10만원 이상시 5천 하나머니 적립 | 월 최대 5천 하나머니]
+        target:
+          categories: [apartment_fee]
+        when:
+          - billing: [autopay]
+          - amount: {min: 100000}
+        reward: {type: points, program: hana_money, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 600000}
+      - key: coffee-discount
+        title: 하나은행 결제계좌 스타벅스·커피빈 월 1회 4,000원 청구할인
+        source: page
+        evidence: ['하나은행 결제계좌 이용고객 월1회 커피 할인 | 스타벅스, 커피빈 | 4천원 이상 결제하면 4천원 청구할인 | 월 1회', 지난달 실적 30만원 이상시 제공, 지난달 말일 기준 하나은행 결제계좌 여부를 확인하여 서비스 제공]
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - {fact: hana_bank_account}
+          - amount: {min: 4000}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: [상품권 구매와 백화점과 마트 입점 점포 결제는 제외한다]
+    unmodeled: ['본인카드와 모바일카드와 가족카드의 실적, 적립한도, 할인횟수를 합산한다', 아이행복 정부지원금은 실적에서 빠진다, 무승인 매출은 매출이 접수된 달에 센다, 적립은 이용한 달의 다음 달 7영업일 이내에 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 원문에 신규 출시일 2019-11-27이 있어 잠정 시작일로 둔다., assumed: '2019-11-27'}
+  - {path: 'revisions[0].benefits[region-shopping-points].when', question: 지역쇼핑에서 온라인몰 이용금액만 빠진다고 읽어 오프라인 결제만 대상으로 했다., assumed: 오프라인만}
+  - {path: 'revisions[0].new_card', question: 아파트관리비 적립이 신규 특례에서 60만원 기준을 받는지 원문에 없다., assumed: 30만원 기준이라 아파트관리비 적립 없음}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문 실적 제외는 지역쇼핑과 주유 적립 대상 가맹점이다. 가맹점만 뺄 수 없어 백화점과 마트와 주유 업종 전체를 빼 실적이 적게 잡힌다., assumed: 세 업종 전체 제외}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문 실적 제외는 공과금과 도시가스다. 전기와 수도가 공과금에 드는지 원문만으로 단정할 수 없어 utility 전체를 뺐다., assumed: utility 전체}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 국내전용 8,000원, 국내외겸용 10,000원. 하나머니 1하나머니 = 1원. 영역별 이번 달 합산 이용금액이 10만원이 될 때마다 5천 하나머니라 달 합계 보상으로 넣었다. 지역쇼핑과 주유는 월 2만 하나머니를 같이 쓴다. 지역쇼핑과 주유 가맹점 이용금액은 적립을 받지 못해도 지난달 실적에서 빠진다. 초안의 통신과 교통 묶음을 교통과 자동이체로 나눠 key commute-points는 교통만 남겼다.

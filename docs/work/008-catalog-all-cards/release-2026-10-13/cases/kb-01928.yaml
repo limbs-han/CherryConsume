@@ -1,0 +1,46 @@
+card: kb-01928
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 백화점 7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: lotte_department, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {department-7: 3500}, counted: 50000}
+  calc: 50,000원 × 7% = 3,500원
+- name: 30만 직전 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: lotte_department, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 0 구간
+- name: 50만 구간 G마켓 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {homeshopping-5: 2000}, counted: 40000}
+  calc: 40,000원 × 5% = 2,000원
+- name: 해외 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-5: 3000}, counted: 0}
+  calc: 60,000원 × 5% = 3,000원. 해외 이용은 실적 제외
+- name: 50만 구간 미용실 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, category: beauty.salon, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {beauty-5: 2000}, counted: 40000}
+  calc: 40,000원 × 5% = 2,000원
+- name: 30만 구간 지하철 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 20000, category: transit.subway}
+  expect:
+  - {payment: 0, benefits: {transit-5: 1000}, counted: 0}
+  calc: 20,000원 × 5% = 1,000원. 후불교통은 실적 제외

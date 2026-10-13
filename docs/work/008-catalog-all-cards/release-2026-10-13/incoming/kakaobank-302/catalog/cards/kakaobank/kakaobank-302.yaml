@@ -1,0 +1,36 @@
+schema_version: 2
+id: kakaobank-302
+issuer: kakaobank
+name: 카카오뱅크 모임 체크카드
+short_name: 카카오 모임 체크
+kind: check
+product_codes:
+  - '302'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.kakaobank.com/products/moimcheckcard', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-01-01
+    source: page
+    tiers: [0]
+    benefits:
+      - key: random-cashback
+        title: 5만원 이상 랜덤 캐시백
+        source: page
+        evidence: [국내외 5만원 이상 결제 시 300원 또는 3, 000원 랜덤 캐시백, 가맹점별 1일 1회, 2026.01.01~2026.12.31]
+        target: {all: true}
+        when:
+          - amount: {min: 50000}
+        reward: {type: cashback, fixed: 300}
+        limits:
+          - {per: day, count: 1}
+        valid_from: 2026-01-01
+        valid_until: 2026-12-31
+        unmodeled: [원문은 300원 또는 3000원을 무작위로 주고 확률은 없어 덜 주는 300원만 계산한다, 가맹점별 하루 1회인데 가맹점 구분 없이 하루 1회로 셈]
+        notes: 모임통장을 가진 만 17세 이상. 해외겸용 마스터카드만 발급
+open_questions:
+  - {path: 'revisions[0].benefits[random-cashback].reward', question: 300원과 3000원이 나오는 확률이 원문에 없다, assumed: 300원}
+  - {path: 'revisions[0].effective_from', question: 이 캐시백 행사 시작일을 시행일로 썼다. 카드 출시일은 2024-03-25, assumed: '2026-01-01'}

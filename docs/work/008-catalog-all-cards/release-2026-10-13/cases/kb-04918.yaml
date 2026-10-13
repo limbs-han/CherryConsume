@@ -1,0 +1,46 @@
+card: kb-04918
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 편의점 2만원 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: convenience, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-5: 1000}, counted: 0}
+  calc: 20,000원의 5% = 1,000원. 할인받은 건은 실적 제외
+- name: 편의점 1만원 미만은 할인 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 9000, category: convenience, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9000}
+  calc: 건당 1만원 이상만 할인
+- name: 경계 직전 399999 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: convenience, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만은 할인 없음
+- name: 올리브영 10만원 한도 7천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: olive_young, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {olive-young-10: 7000}}
+  calc: 10% 10,000원이지만 월 한도 7,000원
+- name: CGV 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {movie-10: 3000}}
+  calc: 30,000원의 10% = 3,000원
+- name: 골프장 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: sports.golf, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {golf-5: 5000}}
+  calc: 100,000원의 5% = 5,000원

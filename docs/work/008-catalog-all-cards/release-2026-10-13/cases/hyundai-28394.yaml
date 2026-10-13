@@ -1,0 +1,18 @@
+card: hyundai-28394
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 미만이면 0.3%
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-03: 300}, counted: 100000}
+  calc: 100,000 x 0.3% = 300
+- name: 100만 이상이면 0.6%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {high-06: 600}, counted: 100000}
+  calc: 100,000 x 0.6% = 600

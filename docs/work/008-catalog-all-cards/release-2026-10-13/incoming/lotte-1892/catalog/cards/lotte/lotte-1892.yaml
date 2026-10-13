@@ -1,0 +1,44 @@
+schema_version: 2
+id: lotte-1892
+issuer: lotte
+name: 웅진프리드라이프 상조엔로카
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2024-A00019_20251028_10002.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2024-06-10'
+    source: manual
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefits:
+      - key: sangjo-cashback
+        title: 웅진프리드라이프 상조 월납입금 자동납부 캐시백
+        source: manual
+        evidence: ['30만원 이상 13,000원', '70만원 이상 16,000원', '150만원 이상 25,000원', 웅진프리드라이프 상조엔로카로 상조 월납입금 자동납부 연결 시에만 캐시백 혜택을 받으실 수 있습니다., '캐시백은 월 캐시백 횟수 제한 없이, 총 캐시백 한도 금액 안에서 혜택이 제공됩니다.', '웅진프리드라이프 상조엔로카를 최초 발급한 고객의 경우 카드 발급일로부터 다음 달 말일까지 이용실적에 관계 없이 13,000원 제공됩니다.']
+        target:
+          merchants: [preedlife]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 700000: 16000, 1500000: 25000}
+        tiers: {from: 300000}
+    unmodeled: [캐시백은 지난달 실적을 채우면 이번 달 27일에 준다. 상조 납입금이 한도보다 적을 때 납입금만큼만 주는지는 원문에 없어 납입금을 넘지 않게 계산한다, 간편결제(PAY)로 낸 상조 월납입금은 캐시백하지 않는다, '정부지원금, TV 수신료, 포인트 충전, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료, 기후동행카드 충전과 결제는 실적에서 빠진다', 웅진프리드라이프 상조엔로카가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 해외 이용과 이동통신처럼 다음 달 접수되는 결제는 롯데카드 접수일 기준으로 실적에 들어가 이용한 달과 다를 수 있다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 판매 카드 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다, assumed: '[]'}
+  - {path: 'revisions[0].benefits[sangjo-cashback].target', question: 공통 가맹점 preedlife(프리드라이프)가 필요하다. needed/lotte-1892.json에 제안했다}
+notes: 2026-10-12 상품설명서(2025년 10월 기준, 여신금융협회 심의필 제2025-C1a-15569호) 대조. 출시일 2024-06-10. 예다함 상조엔로카(lotte-p15623-a15623)와 같은 틀이다. 신규 발급 특례는 발급일부터 다음 달 말일까지 13,000원이라 30만 구간으로 넣었다. 대중교통(시내·광역·시외버스, 지하철), 택시, 고속버스는 실적에서 모두 빠진다. 가족카드는 발급하지 않는다.

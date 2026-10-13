@@ -1,0 +1,70 @@
+schema_version: 2
+id: ibk-12112940001
+issuer: ibk
+name: 카카오페이 체크카드
+kind: check
+product_codes:
+  - '12112940001'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=294&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-13, review_no: 제2024-3801호, review_valid_until: 2027-06-27}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2024-06-28
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.tuition, gift_card, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 200000, from: receipt}
+    benefit_exclusions:
+      categories: [gift_card]
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000, 500000: 10000, 1000000: 20000}
+    benefits:
+      - key: offline-5
+        title: 편의점·올리브영·다이소 5% 청구할인
+        source: page
+        evidence: ['오프라인 쇼핑 5% 청구할인 편의점(CU, GS25, 세븐일레븐, 미니스톱), 올리브영, 다이소', '통합 월 2회, 월간 통합할인한도 내 제공', 상품권 구매금액은 제외]
+        target:
+          merchants: [cu, daiso, gs25, ministop, olive_young, seven_eleven]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: online-10
+        title: G마켓·옥션·11번가·쿠팡·위메프·티몬 10% 청구할인
+        source: page
+        evidence: ['온라인 쇼핑 10% 청구할인 G마켓, 옥션, 11번가, 쿠팡, 위메프, 티몬', '통합 월 2회, 월간 통합할인한도 내 제공', 상품권 구매금액은 제외]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: kakaopay-15
+        title: 카카오페이 결제 15% 청구할인
+        source: page
+        evidence: [카카오페이 15% 청구할인 카카오페이 가맹점, '카카오페이 결제수단 이용분 대상, 통합 월 2회, 월간 통합할인한도 내 제공', 상품권 구매금액은 제외]
+        target: {all: true}
+        when:
+          - payment: [kakao_pay]
+        reward: {type: billing_discount, rate: 15}
+        limits:
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [카카오페이 가맹점 목록은 카카오톡 앱에서 확인하는 것이라 카카오페이로 결제한 모든 건을 대상으로 본다]
+    unmodeled: [여러 할인이 겹치면 계산된 할인액이 큰 서비스 하나만 적용한다고 보고 같은 묶음에 둔다, 최소 결제금액은 원문 요약에 없다, 후불교통은 선택 서비스이고 할인은 없다]
+notes: 2026-10-13 expand21 조사. 세 할인이 같은 묶음이라 겹치면 가장 큰 하나만 받는다

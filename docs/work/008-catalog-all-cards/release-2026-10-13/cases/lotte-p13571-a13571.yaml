@@ -1,0 +1,50 @@
+card: lotte-p13571-a13571
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 커피 5천원 2번 째는 50만 구간 한도에 막힘
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, merchant: starbucks, amount: 12000, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, merchant: starbucks, amount: 12000, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee: 5000}
+  - payment: 1
+    benefits: {}
+  calc: 50만 구간 커피 한도 5000원
+- name: 커피 1만원 미만은 할인 없음
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, merchant: starbucks, amount: 9999, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 건당 1만원 이상만
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, merchant: gs25, amount: 15000, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원 미만
+- name: 배달 1천원과 편의점 1천원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T19:00, merchant: baemin, amount: 20000, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, merchant: cu, amount: 10000, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery: 1000}
+  - payment: 1
+    benefits: {convenience: 1000}
+  calc: 건당 1천원 정액
+- name: 넷플릭스 정기결제 50% 한도 5천원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T09:00, merchant: netflix, amount: 17000, billing: subscription, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {streaming: 5000}
+  calc: 17000 x 50% = 8500이나 100만 구간 한도 5000

@@ -1,0 +1,34 @@
+card: lotte-p12921-a12921
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 롯데ON 온라인 3% 건당 2천 포인트
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: lotte_on, channel: online}
+  - {at: 2026-11-06T12:00, amount: 100000, merchant: lotte_on, channel: online}
+  expect:
+  - {payment: 0, benefits: {lotteon-3pct: 1500}}
+  - {payment: 1, benefits: {lotteon-3pct: 2000}}
+  calc: 50,000 × 3% = 1,500. 100,000 × 3% = 3,000이지만 건당 2,000
+- name: 일반 가맹점 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {basic-0-5pct: 150}}
+  calc: 30,000 × 0.5% = 150
+- name: 30만 직전이면 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: starbucks}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 299,999원은 0 구간
+- name: 무이자할부는 적립 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 300000, category: other, installment_months: 3, interest_free: true}
+  expect:
+  - {payment: 0, benefits: {}, counted: 300000}
+  calc: 모든 가맹점 무이자 이용금액은 적립 제외. 실적 제외 목록에는 없어 실적은 넣는다

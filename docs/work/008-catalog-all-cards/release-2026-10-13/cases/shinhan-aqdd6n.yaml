@@ -1,0 +1,31 @@
+card: shinhan-aqdd6n
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 0.5%와 교통 일 100원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, category: restaurant, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  - {at: 2026-11-03T19:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-cashback: 50}, counted: 10000}
+  - {payment: 1, benefits: {transit-daily: 100}, counted: 0}
+  - {payment: 2, benefits: {}, counted: 0}
+  calc: 10,000 × 0.5% = 50. 교통은 하루 100원 한 번
+- name: 넷플릭스 1만원까지
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-subscription: 10000}, counted: 17000}
+  calc: 17,000원 중 월 1만원
+- name: 30만 직전 0.2%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, category: restaurant, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 9000, merchant: youtube_premium, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-cashback: 20}, counted: 10000}
+  - {payment: 1, benefits: {}, counted: 9000}
+  calc: 10,000 × 0.2% = 20. 유튜브는 기본 캐시백 제외이고 30만 미만이라 구독 캐시백도 없음

@@ -1,0 +1,11 @@
+card: kb-09052
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 부가서비스 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: toss_pay}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 부가서비스가 없는 카드라 혜택 0원

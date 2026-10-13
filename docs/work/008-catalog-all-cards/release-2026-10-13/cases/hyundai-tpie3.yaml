@@ -1,0 +1,50 @@
+card: hyundai-tpie3
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 이상 기본 1.5% 반올림
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4639, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-15: 70}, counted: 4639}
+  calc: 가이드북 예시 4,639 x 1.5% = 69.58 반올림 70
+- name: 100만 직전 백화점은 1.5%
+  prev_month_spend: 999999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: hyundai_department, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-15: 1500}, counted: 100000}
+  calc: 100만 미만이라 추가 혜택 없이 100,000 x 1.5% = 1,500
+- name: 100만 이상 백화점 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: hyundai_department, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dept-5: 5000}, counted: 100000}
+  calc: 100,000 x 5% = 5,000
+- name: 백화점 한도 5만 넘으면 1.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1100000, merchant: lotte_department, channel: offline}
+  expect:
+  - {payment: 0, benefits: {dept-5: 50000, base-15: 1500}, counted: 1100000}
+  calc: 1,000,000 x 5% = 50,000 (월 한도), 남은 100,000 x 1.5% = 1,500
+- name: 패션 온라인 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: wconcept, channel: online}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: musinsa, channel: offline}
+  expect:
+  - {payment: 0, benefits: {fashion-5-online: 5000}, counted: 100000}
+  - {payment: 1, benefits: {fashion-5-any: 5000}, counted: 100000}
+  calc: 각 100,000 x 5% = 5,000. 두 혜택이 월 한도 3만 M포인트를 함께 쓴다
+- name: 온라인몰 5%와 쿠팡이츠는 1.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: coupang_eats, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-5: 5000}, counted: 100000}
+  - {payment: 1, benefits: {base-15: 150}, counted: 10000}
+  calc: 쿠팡 100,000 x 5% = 5,000. 쿠팡이츠는 기본 10,000 x 1.5% = 150

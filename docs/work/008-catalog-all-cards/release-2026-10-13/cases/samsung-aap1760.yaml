@@ -1,0 +1,61 @@
+card: samsung-aap1760
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: GS25 5% 한도 뒤 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 150000, merchant: gs_the_fresh, payment_method: physical_card}
+  - {at: 2026-11-05T20:00, amount: 100000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {gs-5-10: 5000}, counted: 100000}
+  - {payment: 1, benefits: {gs-5-10: 5000}, counted: 150000}
+  - {payment: 2, benefits: {gs-1: 1000}, counted: 100000}
+  calc: 5,000 뒤 7,500이나 한도 10,000에서 남은 5,000. 한도를 다 쓴 다음 결제는 1%
+- name: 60만 구간 GS25 10%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {gs-5-10: 10000}, counted: 100000}
+  calc: 100,000 × 10% = 10,000
+- name: 실적 직전이면 1%만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {gs-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {}, counted: 10000}
+  calc: 30만원 미만이라 GS25는 1%. 스타벅스 할인은 없다
+- name: 커피 배달앱 통합 한도 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 20000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-10: 2000}}
+  - {payment: 1, benefits: {delivery-10: 1000}}
+  calc: 2,000 뒤 2,000이나 통합 한도 3,000에서 남은 1,000
+- name: 디지털콘텐츠 30% 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 17000, merchant: netflix, channel: online, billing: subscription, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-30: 3000}}
+  calc: 17,000 × 30% = 5,100이나 한도 3,000
+- name: 해외 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}, counted: 100000}
+  calc: 100,000 × 1% = 1,000
+- name: 커피전문점 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 10000, merchant: ediya, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 1000}}
+  calc: 10,000 × 10% = 1,000

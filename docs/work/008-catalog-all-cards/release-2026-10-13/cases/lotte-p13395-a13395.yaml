@@ -1,0 +1,44 @@
+card: lotte-p13395-a13395
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 마트 10% 일 5천
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, merchant: emart, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {mart-10: 5000}
+  calc: 80000 x 10% = 8000, 일 5000
+- name: 온라인쇼핑 10%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: coupang, channel: online}
+  expect:
+  - payment: 0
+    benefits: {online-10: 3000}
+  calc: 30000 x 10% = 3000
+- name: 홈쇼핑 10%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: gs_shop}
+  expect:
+  - payment: 0
+    benefits: {homeshopping-10: 4000}
+  calc: 40000 x 10% = 4000
+- name: 편의점 10%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 8000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {convenience-10: 800}
+  calc: 8000 x 10% = 800
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 1499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 8000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 150만 미만

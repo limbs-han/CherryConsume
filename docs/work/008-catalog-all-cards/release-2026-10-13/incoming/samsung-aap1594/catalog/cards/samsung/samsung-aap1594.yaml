@@ -1,0 +1,109 @@
+schema_version: 2
+id: samsung-aap1594
+issuer: samsung
+name: 전우사랑 패밀리 삼성카드
+short_name: 전우사랑 패밀리
+search_names: [전우사랑 삼성카드, 전우사랑 패밀리]
+kind: credit
+product_codes: [AAP1594]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1594', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoce30ZaUaZlJahmbI6s3IY%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2019-C1a-10734호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - payment: [mobile_tmoney]
+      categories: [car.toll, education.tuition, gift_card, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액, 다이어트할부, 문자알림서비스, 스마트오토서비스 이용금액은 적립하거나 할인하지 않는다]
+    stacks:
+      - key: main
+        pick: priority
+        order: [movie-5000, mobile-2000, mart-fuel-online-1-5, food-1, overseas-1, base-0-5]
+        spill: none
+    benefits:
+      - key: movie-5000
+        title: 영화 12,000원 이상 5,000원 할인
+        source: manual
+        evidence: ['영화 티켓 12,000원 이상 결제 시 5,000원 결제일할인(청구할인)', '영화 CGV, 롯데시네마, 메가박스 통합 월 할인횟수 1회', 오프라인 일반 결제 및 공식 홈페이지·앱을 통한 결제건에 한해 혜택이 제공됩니다., 전월 이용금액 30만원 이상 시 제공됩니다., 발급월+1개월까지는 전월 이용금액에 관계없이 혜택이 제공됩니다.]
+        target:
+          categories: [movie]
+        when:
+          - amount: {min: 12000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+      - key: mobile-2000
+        title: 이동통신요금 5만원 이상 자동납부 2,000원 할인
+        source: manual
+        evidence: ['이동통신요금 50,000원 이상 자동납부 시 2,000원 결제일할인(청구할인)', '이동통신 SKT, KT, LG U+ 이동통신요금 자동납부건 통합 월 할인횟수 1회', 전월 이용금액 30만원 이상 시 제공됩니다., 발급월+1개월까지는 전월 이용금액에 관계없이 혜택이 제공됩니다.]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 50000}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+        unmodeled: ['결합상품요금, 휴대전화 단말기 구매금액, 대리점 카드 결제건은 할인하지 않는다']
+      - key: mart-fuel-online-1-5
+        title: 할인점·주유·온라인쇼핑몰 1.5% 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 할인점·주유·온라인쇼핑몰 1.5% 빅포인트 적립', '할인점 이마트, 이마트 트레이더스, 홈플러스, 롯데마트', 주유 모든 주유소, '온라인쇼핑몰 삼성카드 쇼핑, G마켓, 옥션, 11번가, 인터파크, 쿠팡, 티몬, 위메프', '할인점의 경우 온라인몰도 포함되며 기업형 슈퍼마켓, 쇼핑 외 결제건, 할인점 내 임대매장은 제외', 주유의 경우 LPG충전소도 포함]
+        target:
+          categories: [fuel]
+          merchants: [auction, coupang, eleven_st, emart, gmarket, homeplus, interpark, lotte_mart, samsung_card_shopping, tmon, traders, wemakeprice]
+        reward: {type: points, program: samsung_bigpoint, rate: 1.5}
+        unmodeled: [상품권·주차장 같은 쇼핑 외 결제와 할인점 안 임대매장은 적립하지 않는다]
+      - key: food-1
+        title: 음식점·병원·약국 1% 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 음식점·병원·약국·해외 1% 빅포인트 적립', '음식점 한식, 양식, 일식, 중식, 뷔페, 패밀리레스토랑, 간이음식점, 패스트푸드', '병원, 약국 양방 병원, 한방 병원, 약국', 음식점·병원·약국의 경우 오프라인 일반 결제건에 한해 혜택이 제공됩니다., 병원의 경우 요양병원 보건소는 제외됩니다.]
+        target:
+          categories: [hospital, pharmacy, restaurant.fastfood, restaurant.general]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        unmodeled: [요양병원과 보건소 결제는 적립하지 않는다]
+      - key: overseas-1
+        title: 해외 1% 적립
+        source: manual
+        evidence: [음식점·병원·약국·해외 1% 빅포인트 적립, 해외 해외 가맹점 및 해외 직접구매 이용건]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+      - key: base-0-5
+        title: 국내 가맹점 0.5% 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 국내 가맹점 기본 0.5% 빅포인트 적립']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: samsung_bigpoint, rate: 0.5}
+    unmodeled: [삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다, 할인과 적립은 승인 시점 기준이고 해외 결제와 무승인 결제는 매출전표 접수 시점 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 원문에서 찾지 못했다. 상품안내장은 2022.7판이다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits', question: 적립과 할인의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: status, question: 상품 페이지에 판매 상태 문구가 없어 색인 값 on_sale을 두었다. 발급 대상 제한은 안내장과 페이지에 적혀 있지 않았다, assumed: on_sale}
+notes: 2026-10-13 상품안내장(2022.7판, 심의필 제2019-C1a-10734호) 대조. 연회비 해외겸용 Mastercard·VISA와 국내전용 모두 20,000원(기본 7,000+제휴 13,000). 가족카드 없음. 적립은 전월 이용금액과 관계없다. 영화 5,000원과 이동통신 2,000원은 전월 이용금액 30만원 이상(아파트 관리비 제외)에 월 1회이고 발급월+1개월까지는 실적과 관계없이 준다. 할인을 받은 결제는 적립에서 빠진다.

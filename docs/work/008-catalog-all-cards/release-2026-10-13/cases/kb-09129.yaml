@@ -1,0 +1,32 @@
+card: kb-09129
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 국내 음식점 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-1: 1000}}
+  calc: 100,000원의 1% = 1,000P
+- name: 국내 호텔 기본과 특화 추가
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 300000, category: travel.hotel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-1: 3000, special-1: 3000}}
+  calc: 1% 3,000P와 1% 3,000P
+- name: 해외 3%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-3: 3000}}
+  calc: 100,000원의 3% = 3,000P
+- name: 아파트관리비는 국내 적립 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: apartment_fee, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 국내 적립 제외 대상

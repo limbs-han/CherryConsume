@@ -1,0 +1,34 @@
+card: hyundai-mpe4
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 국내외 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-all-1-5: 1500}, counted: 100000}
+  calc: 100,000 x 1.5% = 1,500. 100만 미만이라 10%는 없다
+- name: 50만 직전은 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 50만 미만 혜택 제외
+- name: 100만 구간 일반음식점과 쿠팡 10%, 한도 넘으면 1.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, category: restaurant.general}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-dining-overseas-10: 15000}, counted: 150000}
+  - {payment: 1, benefits: {online-dining-overseas-10: 5000, base-all-1-5: 750}, counted: 100000}
+  calc: 150,000 x 10% = 15,000. 월 한도 20,000에서 남은 5,000만 10%이고 나머지 50,000은 1.5% = 750
+- name: 100만 구간 해외 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-10: 10000}, counted: 100000}
+  calc: 100,000 x 10% = 10,000

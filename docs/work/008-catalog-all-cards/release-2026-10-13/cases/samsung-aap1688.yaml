@@ -1,0 +1,57 @@
+card: samsung-aap1688
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 쇼핑 7% 영역 한도와 통합 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 100000, merchant: shinsegae_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shop-dept-7: 4000}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {}}
+  calc: 100,000 x 7% = 7,000이나 쇼핑 영역 한도 4,000. 이후 쇼핑은 한도 소진
+- name: 실적 30만원 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-02T08:00, amount: 30000, merchant: gs_caltex, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 299,999원은 0 구간
+- name: 보육 7%와 생활요금 7%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 50000, merchant: gs_caltex, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 100000, category: hospital, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 100000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {care-fuel-7: 3500}}
+  - {payment: 1, benefits: {care-medical-7: 4500}}
+  - {payment: 2, benefits: {bills-autopay-7: 7000}}
+  calc: 60만 구간 보육 한도 8,000. 50,000 x 7% = 3,500. 병원은 7,000이나 남은 4,500. 생활요금 100,000 x 7% = 7,000이고 영역 한도 8,000 안
+- name: 스트리밍 3,000원과 해외 1.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 4999, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 17000, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 100000, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {streaming-3000: 3000}}
+  - {payment: 2, benefits: {overseas-1-5: 1500}}
+  calc: 4,999원은 5,000원 미만. 17,000원 정기결제는 3,000원. 해외 100,000 x 1.5% = 1,500
+- name: 할인점과 온라인몰, 학원과 보험
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-02T08:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T08:00, amount: 50000, merchant: gmarket, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 100000, category: education.academy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T08:00, amount: 100000, category: insurance.private, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shop-mart-7: 7000}}
+  - {payment: 1, benefits: {shop-online-7: 3500}}
+  - {payment: 2, benefits: {care-edu-7: 7000}}
+  - {payment: 3, benefits: {bills-insurance-7: 7000}}
+  calc: 100만 구간 영역 한도 16,000과 통합 40,000 안. 100,000 x 7% = 7,000, 50,000 x 7% = 3,500

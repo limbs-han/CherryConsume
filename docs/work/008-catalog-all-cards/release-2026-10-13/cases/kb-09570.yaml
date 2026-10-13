@@ -1,0 +1,104 @@
+card: kb-09570
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 G마켓 KB Pay 3만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: shopping, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {shopping-10: 3000, base-0-5: 150}, counted: 0}
+  calc: 선택 10% 3,000원과 기본 0.5% 150원 중복. 선택 할인 건은 실적 제외
+- name: 40만 구간 CU KB Pay 1만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: convenience, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {convenience-10: 1000, base-0-5: 50}, counted: 0}
+  calc: 선택 10% 1,000원과 기본 0.5% 50원 중복. 선택 할인 건은 실적 제외
+- name: 40만 구간 스타벅스 KB Pay 1만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: coffee, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 1000, base-0-5: 50}, counted: 0}
+  calc: 선택 10% 1,000원과 기본 0.5% 50원 중복. 선택 할인 건은 실적 제외
+- name: 40만 구간 올리브영 KB Pay 2만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: life, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: olive_young, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {life-oliveyoung-10: 2000, base-0-5: 100}, counted: 0}
+  calc: 선택 10% 2,000원과 기본 0.5% 100원 중복. 선택 할인 건은 실적 제외
+- name: 40만 구간 다이소몰 KB Pay 2만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: life, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: daiso, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {life-daiso-10: 2000, base-0-5: 100}, counted: 0}
+  calc: 선택 10% 2,000원과 기본 0.5% 100원 중복. 선택 할인 건은 실적 제외
+- name: 40만 구간 패스트푸드 KB Pay 1만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: bakery, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.fastfood, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {bakery-fastfood-10: 1000, base-0-5: 50}, counted: 0}
+  calc: 선택 10% 1,000원과 기본 0.5% 50원 중복. 선택 할인 건은 실적 제외
+- name: 40만 구간 오늘의집 KB Pay 3만원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: taste, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: ohouse, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {taste-10: 3000, base-0-5: 150}, counted: 0}
+  calc: 선택 10% 3,000원과 기본 0.5% 150원 중복. 선택 할인 건은 실적 제외
+- name: 80만 구간 G마켓 10만원 건당 한도
+  prev_month_spend: 800000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: shopping, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {shopping-10: 5000, base-0-5: 500}, counted: 0}
+  calc: 10% 10,000원 중 건당 한도 5,000원. 기본 0.5% 500원
+- name: 경계 직전 399999 선택 할인 없음
+  prev_month_spend: 399999
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: shopping, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 500}}
+  calc: 40만 미만은 기본 0.5%만
+- name: KB Pay 아닌 결제는 기본만
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: shopping, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 150}}
+  calc: 선택 할인은 KB Pay만

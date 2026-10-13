@@ -1,0 +1,57 @@
+card: hana-11321
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 평일 점심 음식점 7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {lunch-cashback: 700}
+    counted: 0
+  calc: 10,000원 x 7% = 700원. 캐쉬백 받은 결제는 실적에서 빠진다
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 10000
+  calc: 30만원보다 1원 적어 캐쉬백 0원
+- name: 30만 구간 한도 5천과 60만 구간 한도 1만
+  prev_month_spend: 599999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: cafe}
+  expect:
+  - payment: 0
+    benefits: {lunch-cashback: 5000}
+  calc: 100,000원 x 7% = 7,000원이 30만 구간 월 한도 5,000원에 걸림
+- name: 60만 구간 한도 1만
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 200000, category: convenience}
+  expect:
+  - payment: 0
+    benefits: {lunch-cashback: 10000}
+  calc: 200,000원 x 7% = 14,000원이 60만 구간 월 한도 10,000원에 걸림
+- name: 건당 5천원 미만과 점심 밖
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 4999, category: restaurant.general}
+  - {at: 2026-11-04T14:00, amount: 10000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 4,999원은 최소 금액 미달, 14:00은 시간 밖이라 0원
+- name: 해외 1% 면제
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-fee-free: 1000}
+  calc: 100,000원 x 1% = 1,000원. 실적과 관계없이 준다

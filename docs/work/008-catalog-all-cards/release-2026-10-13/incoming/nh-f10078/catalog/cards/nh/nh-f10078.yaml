@@ -1,0 +1,169 @@
+schema_version: 2
+id: nh-f10078
+issuer: nh
+name: 별다줄카드
+short_name: 별다줄
+kind: credit
+product_codes:
+  - '90010137'
+  - F10078
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, brand: visa, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010137', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·쇼핑몰 안 임대 매장은 할인에서 빠진다, 다른 청구할인과 겹치면 큰 혜택 하나만 준다, 가맹점명이 해당 업체가 아니거나 일부 간편결제를 쓰면 빠질 수 있다]
+    limits:
+      - key: online
+        per: month
+        amount: {300000: 7000, 700000: 14000, 1500000: 20000}
+      - key: area-transit
+        per: month
+        amount: {300000: 1000, 700000: 2000}
+      - key: area-coffee
+        per: month
+        amount: {300000: 1000, 700000: 2000}
+      - key: area-conv
+        per: month
+        amount: {300000: 1000, 700000: 2000}
+      - key: area-telecom
+        per: month
+        amount: {300000: 1000, 700000: 2000}
+      - key: area-delivery
+        per: month
+        amount: {300000: 1000, 700000: 2000}
+      - key: area-sub
+        per: month
+        amount: {300000: 1000, 700000: 2000}
+    benefits:
+      - key: online-7
+        title: 국내 온라인 7% 청구할인
+        source: page
+        evidence: [기본할인 국내 온라인 가맹점 7% 청구할인 더블할인 생활할인 대상 제외, '기본+더블 통합 월할인한도 30만원 이상 7천원, 70만원 이상 1만4천원, 150만원 이상 2만원']
+        target:
+          categories: [online_shopping]
+          exclude_merchants: [ably, coupang_eats, coupang_wow, disney_plus, kream, musinsa, netflix, ohouse, tving, yanolja, yeogi_eottae, youtube_premium, zigzag]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {shared: online}
+        tiers: {from: 300000}
+        unmodeled: [국내 온라인 전자상거래 업종 전체로 보고 온라인 쇼핑 업종에 걸었다, 더블할인 대상 중 가맹점이 없는 업체도 7%만 받는다]
+      - key: double-14
+        title: 더블할인 14% 청구할인
+        source: page
+        evidence: [더블할인 FLEX RE-SELL FUN 지정 가맹점 온라인 결제 14% 청구할인, 'FLEX 무신사 지그재그 에이블리 머스트잇 트렌비 발란, RE-SELL 솔드아웃 크림 번개장터 중고나라, FUN 야놀자 여기어때 오늘의집', 공식 홈페이지/앱 온라인 결제에만 적용 상품권·현금성 상품 제외]
+        target:
+          merchants: [ably, kream, musinsa, ohouse, yanolja, yeogi_eottae, zigzag]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 14}
+        limits:
+          - {shared: online}
+        tiers: {from: 300000}
+        unmodeled: [머스트잇 트렌비 발란 솔드아웃 번개장터 중고나라는 가맹점이 없어 뺐다]
+      - key: life-transit-5
+        title: 생활할인 버스·지하철 5%
+        source: page
+        evidence: ['교통 | 버스, 지하철 | 실물카드(후불교통 RF) 이용 시 적용, 시외·고속버스 제외', '생활할인 6대 업종 5% 청구할인 영역별 월 할인한도 30만원 이상 1천원, 70만원 이상 2천원']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: area-transit}
+        tiers: {from: 300000}
+      - key: life-coffee-sb-5
+        title: 생활할인 스타벅스 5%
+        source: page
+        evidence: [커피 | 스타벅스(사이렌오더 포함) | 식음료 구매만 적용, '생활할인 6대 업종 5% 청구할인 영역별 월 할인한도 30만원 이상 1천원, 70만원 이상 2천원']
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: area-coffee}
+        tiers: {from: 300000}
+      - key: life-coffee-ediya-5
+        title: 생활할인 이디야 5%
+        source: page
+        evidence: [커피 | 이디야(현장결제) | 식음료 구매만 적용, '생활할인 6대 업종 5% 청구할인 영역별 월 할인한도 30만원 이상 1천원, 70만원 이상 2천원']
+        target:
+          merchants: [ediya]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: area-coffee}
+        tiers: {from: 300000}
+      - key: life-conv-5
+        title: 생활할인 편의점 5%
+        source: page
+        evidence: ['편의점 | GS25, CU, 세븐일레븐 | 현장결제만 적용', '생활할인 6대 업종 5% 청구할인 영역별 월 할인한도 30만원 이상 1천원, 70만원 이상 2천원']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: area-conv}
+        tiers: {from: 300000}
+      - key: life-telecom-5
+        title: 생활할인 이동통신요금 5%
+        source: page
+        evidence: ['통신 | SKT, KT, LG U+ | 이동통신요금 자동납부건만 적용, 알뜰폰 제외', '생활할인 6대 업종 5% 청구할인 영역별 월 할인한도 30만원 이상 1천원, 70만원 이상 2천원']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: area-telecom}
+        tiers: {from: 300000}
+      - key: life-delivery-5
+        title: 생활할인 배달앱 5%
+        source: page
+        evidence: ['배달 | 배달의 민족, 요기요, 쿠팡이츠 | 대상 가맹점 공식 앱에서 신용카드로 결제할 때만 적용', '생활할인 6대 업종 5% 청구할인 영역별 월 할인한도 30만원 이상 1천원, 70만원 이상 2천원']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: area-delivery}
+        tiers: {from: 300000}
+      - key: life-sub-5
+        title: 생활할인 구독 5%
+        source: page
+        evidence: ['구독 | 쿠팡 와우멤버십, 유튜브 프리미엄, 넷플릭스, 티빙, 디즈니플러스 | 공식 홈페이지/앱에서 정기결제할 때만 적용, 1회성 결제와 인앱결제 제외', '생활할인 6대 업종 5% 청구할인 영역별 월 할인한도 30만원 이상 1천원, 70만원 이상 2천원']
+        target:
+          merchants: [coupang_wow, disney_plus, netflix, tving, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: area-sub}
+        tiers: {from: 300000}
+    unmodeled: [국제공항 라운지 연 2회와 놀이공원 현장할인은 연 기준이 발급일인지 달력 연도인지 원문에 없고 현장 할인이라 뺐다, 구독 중 네이버 멤버십 플러스는 가맹점이 없어 뺐다, 모바일카드는 연회비가 다르다, 가족카드 발급이 가능하다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 수집일로 두었다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[online-7].target', question: 국내 온라인 전자상거래 업종 범위를 원문이 가맹점 목록으로 적지 않았다, assumed: 온라인 쇼핑 업종}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비는 일반카드 기준이다. 모바일카드는 국내전용 6000원, 겸용 8000원이다. 기본할인과 더블할인은 같은 월 한도를 쓰고 생활할인은 영역마다 한도가 따로다.

@@ -1,0 +1,452 @@
+[
+  {
+    "card_id": "kakaobank-302",
+    "status": "ready",
+    "reason": "연회비 없음. 5만원 이상 랜덤 캐시백(300원 또는 3000원)에서 300원만 계산",
+    "source_urls": [
+      "https://www.kakaobank.com/products/moimcheckcard"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "300원 또는 3000원 무작위 중 300원만 계산",
+      "가맹점별 하루 1회를 가맹점 구분 없이 하루 1회로 셈"
+    ],
+    "open_questions": [
+      "랜덤 캐시백 확률 원문에 없음, 300원으로 가정",
+      "행사 시작일 2026-01-01을 시행일로 씀"
+    ]
+  },
+  {
+    "card_id": "kakaobank-304",
+    "status": "exclude",
+    "reason": "카드 상품이 아니라 카카오뱅크 체크카드를 앱카드로 등록해 쓰는 서비스 안내서",
+    "source_urls": [
+      "https://og.kakaobank.io/view/072dfe1e-dadc-4303-a299-1b73ea460aca"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-100639",
+    "status": "exclude",
+    "reason": "인천광역시 거주 2자녀 이상 가정 전용 체크카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010044"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-100640",
+    "status": "exclude",
+    "reason": "충청남도 거주 다자녀 가정 전용",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010045"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-100687",
+    "status": "exclude",
+    "reason": "제주특별자치도 거주 다자녀 가정 전용",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010049"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-100688",
+    "status": "exclude",
+    "reason": "제주특별자치도 거주 2자녀 이상 가정 전용 체크카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010050"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-102974",
+    "status": "exclude",
+    "reason": "전라북도 거주 2자녀 이상 가정 전용",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010211"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-170338",
+    "status": "exclude",
+    "reason": "충청북도 거주 2자녀 이상 가정 전용 체크카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010538"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-176222",
+    "status": "blocked",
+    "reason": "A·B·C 서비스 유형 선택형이고 유형별 통합한도 표와 병원·어린이집·놀이시설 등 가맹점이 확인되지 않아 맞게 담지 못함",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90000319"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-176455",
+    "status": "exclude",
+    "reason": "경상남도 거주 다자녀 가정 전용",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010001"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-176497",
+    "status": "exclude",
+    "reason": "경상남도 거주 다자녀 가정 전용",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010002"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-31343",
+    "status": "blocked",
+    "reason": "적립이 NH포인트가 아니라 NH머니이고 원문에 1머니의 원화 가치 문구가 없다. 선불형 카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010516"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f10078",
+    "status": "ready",
+    "reason": "온라인 7%, 더블 14%, 생활할인 6영역",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010137"
+    ],
+    "case_count": 11,
+    "unmodeled": [
+      "라운지",
+      "놀이공원",
+      "네이버 멤버십 및 일부 더블 가맹점"
+    ],
+    "open_questions": [
+      "온라인 업종 범위"
+    ]
+  },
+  {
+    "card_id": "nh-f10083",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 놀이공원, 경남FC 입장권·메가스토어 혜택은 뺌",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010152"
+    ],
+    "case_count": 12,
+    "unmodeled": [
+      "놀이공원 연 6회 연 기준 불명으로 뺌",
+      "경남FC 입장권 3천원은 티켓링크 전체가 대상이 될 수 있어 뺌",
+      "메가스토어 품목별 할인 뺌",
+      "주유 1회 10만원 이내"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].benefits[overseas-2].tiers",
+        "question": "해외 2%에 전월실적 조건 여부",
+        "assumed": "30만 구간부터"
+      }
+    ]
+  },
+  {
+    "card_id": "nh-f10727",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 스포츠, 렌터카, 그린카 뺌",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010471"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "스포츠 시설과 렌터카·그린카 뺌",
+      "K-패스 환급 계산 안 함"
+    ],
+    "open_questions": [
+      {
+        "path": "benefits[mobility-transport-10]",
+        "question": "후불교통 결제 조건 여부",
+        "assumed": "조건 없음"
+      }
+    ]
+  },
+  {
+    "card_id": "nh-f10787",
+    "status": "blocked",
+    "reason": "온·오프라인 서비스 가맹점 이용액이 실적에 50%만 반영되고 구간별 온라인/오프라인 한도가 따로라 모델로 맞게 못 담음. 후불 기후동행도 2026-09-30 종료",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010526"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "실적 50% 반영 가맹점"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f10804",
+    "status": "exclude",
+    "reason": "소방청·시도 소방본부 소속 직원 전용 카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010600"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20008",
+    "status": "exclude",
+    "reason": "nh-f20016과 같은 상품",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010036"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20010",
+    "status": "exclude",
+    "reason": "nh-f20531와 같은 상품",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010133"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20106",
+    "status": "ready",
+    "reason": "10대 업종 캐시백, 해외 2%를 담음",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010153"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "놀이공원 현장할인",
+      "경남FC 입장권·메가스토어",
+      "라운지"
+    ],
+    "open_questions": [
+      "쇼핑 외 업종 비율",
+      "10대 업종 한도와 통합한도 관계"
+    ]
+  },
+  {
+    "card_id": "nh-f20109",
+    "status": "blocked",
+    "reason": "핵심 혜택 GS ALL 포인트 2% 적립인데 원문에 포인트의 원화 가치 문구가 없다",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010163"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      {
+        "path": "point_programs",
+        "question": "GS ALL 포인트 1포인트 원화 가치",
+        "assumed": "없음"
+      }
+    ]
+  },
+  {
+    "card_id": "nh-f20513",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 기부자 우대는 fact hometown_donor",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010461"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "홈쇼핑 가맹점 제외 못함",
+      "기부 이력은 사용자 입력"
+    ],
+    "open_questions": [
+      {
+        "path": "benefits[weekend-domestic-0-2].when",
+        "question": "주말 공휴일 포함 여부",
+        "assumed": "요일만"
+      }
+    ]
+  },
+  {
+    "card_id": "nh-f20585",
+    "status": "ready",
+    "reason": "캐시백 0.2/0.3/0.6%. 수수료 면제, MTR, 라운지는 뺌",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010517"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "해외 수수료 면제",
+      "MTR 최대 10%",
+      "라운지"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20598",
+    "status": "exclude",
+    "reason": "경상남도교육청 다자녀 지원사업 전용",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010539"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20607",
+    "status": "exclude",
+    "reason": "경상남도교육청 직업계고 위탁학생 교육비 지원 전용 카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010564"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20617",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 10대 업종은 조건별 혜택 다섯으로 나눔",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010607"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "라운지, 해외 ATM 수수료, 놀이공원 뺌",
+      "공항리무진 후불교통 뺌",
+      "최초 발급 해외 캐시백 실적 면제 뺌"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].benefits[cashback-*]",
+        "question": "10대 업종 건당 최소금액과 구간 문구",
+        "assumed": "최소금액 없음, 모든 업종 20만/50만 구간"
+      }
+    ]
+  },
+  {
+    "card_id": "nh-f20618",
+    "status": "ready",
+    "reason": "기본 0.2%와 이음서비스 0.5%",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010610"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "우대적립",
+      "라운지",
+      "KTX"
+    ],
+    "open_questions": [
+      "이음이 기본을 대신하는지"
+    ]
+  },
+  {
+    "card_id": "nh-f20629",
+    "status": "blocked",
+    "reason": "혜택 표가 평탄화돼 읽혀 뷰티 할인율과 한도 소속, 디지털 콘텐츠 한도 구간이 확인되지 않는다",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010618"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-m21012",
+    "status": "blocked",
+    "reason": "전월실적 계산 시 할인 대상 가맹점 이용액은 절반만 반영된다는 규칙과 발급 시 선택서비스 1택",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90000359"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-m21015",
+    "status": "blocked",
+    "reason": "적립 포인트의 종류와 1점 원화 가치 문구가 원문에 없다",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90000378"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      {
+        "path": "benefits",
+        "question": "콕체크 적립 포인트 종류와 1점 가치",
+        "assumed": "없음"
+      }
+    ]
+  },
+  {
+    "card_id": "nh-m21018",
+    "status": "ready",
+    "reason": "기본 0.2%와 농협판매장 추가 적립",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010011"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "라운지",
+      "OK캐쉬백"
+    ],
+    "open_questions": [
+      "시행일"
+    ]
+  },
+  {
+    "card_id": "nh-n20017",
+    "status": "exclude",
+    "reason": "내일배움카드 훈련생 전용",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010029"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-p21030",
+    "status": "exclude",
+    "reason": "보조사업 수행 단체·사업자 전용 국고보조금 카드이고 혜택이 없다",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90000369"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  }
+]

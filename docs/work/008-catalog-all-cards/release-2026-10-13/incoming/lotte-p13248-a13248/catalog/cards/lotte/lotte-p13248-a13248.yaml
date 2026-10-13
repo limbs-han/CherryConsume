@@ -1,0 +1,43 @@
+schema_version: 2
+id: lotte-p13248-a13248
+issuer: lotte
+name: 롯데카드 TELLO SE
+kind: credit
+product_codes: [P13248-A13248]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+  - {scope: global, brand: amex, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13248-A13248', fetched_at: '2026-10-05'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00006_20250731_10002.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-07-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, telecom, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefits:
+      - key: skt-billing-discount
+        title: SKT 통신요금 자동납부 8,000~13,000원 결제일 할인
+        source: manual
+        evidence: ['40만원 이상~80만원 미만 8,000원', '80만원 이상 13,000원', '통신요금 결제일 할인은 SKT 유·무선 구분 없이 적용되며, SKT 통신요금 자동납부 건만 할인 혜택이 제공됩니다.', 통신요금이 할인금액보다 적을 경우 통신요금만큼 할인됩니다., '롯데카드 TELLO SE를 최초 카드발급 후 카드사용등록일~다음 달 말일까지 지난달(1일~말일) 이용실적 40만원 미만 시에도 8,000원 결제일 할인을 제공합니다.']
+        target:
+          merchants: [skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {400000: 8000, 800000: 13000}
+        tiers: {from: 400000}
+    unmodeled: [실적에서는 SKT 통신요금만 빠지지만 업종으로 가를 수 없어 이동통신과 인터넷·TV 요금 전체를 실적에서 뺐다. 실제보다 실적이 적게 잡힐 수 있다, '정부지원금(보육료, 육아학비), 장애인 고용부담금, 현금서비스·카드론·연체이자·각종 수수료는 실적에서 빠진다', 'TELLO 할부(SKT 제품 24·36개월 할부, 이자율 5.5~6.9%)는 계산하지 않는다', 롯데카드 TELLO SE로 결제하면 롯데카드가 주는 L.POINT 적립은 없다, 가족카드 이용금액은 본인 실적과 할인 한도에 합산한다]
+notes: 2026-10-12 상품설명서(2025년 7월 기준, 여신금융협회 심의필 제2025-C1a-10593호) 대조. 출시일 2020-03-06. 연회비 국내전용과 해외겸용(MASTER, AMEX) 25,000원, 가족카드 연회비 없음. 지난달 40만원 이상 8,000원, 80만원 이상 13,000원 SKT 자동납부 결제일 할인. 신규 발급 특례는 카드사용등록일부터 다음 달 말일까지 8,000원이라 40만 구간으로 넣었다. 대중교통과 택시는 실적 제외 목록에 없어 실적에 넣었다. 시행일은 설명서 기준월로 추정했다.

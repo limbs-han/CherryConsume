@@ -1,0 +1,64 @@
+card: hyundai-179712
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 이상 기본 0.5% 반올림
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4639, category: cafe}
+  expect:
+  - {payment: 0, benefits: {base-05: 23}, counted: 4639}
+  calc: 가이드북 예시 4,639 x 0.5% = 23.19 반올림 23
+- name: 30만 직전은 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: hospital}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 30만 미만 혜택 제외
+- name: 병원 5% 영역 한도 3천, 넘으면 미적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: hospital}
+  - {at: 2026-11-06T10:00, amount: 40000, category: pharmacy}
+  expect:
+  - {payment: 0, benefits: {medical-5: 2000}, counted: 40000}
+  - {payment: 1, benefits: {medical-5: 1000}, counted: 40000}
+  calc: 40,000 x 5% = 2,000. 의료 영역 월 3천이라 둘째는 1,000만
+- name: 쿠팡, 학원 방문, 통신 자동납부, 코스트코 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 20000, category: education.academy, channel: offline}
+  - {at: 2026-11-07T10:00, amount: 40000, merchant: skt, billing: autopay}
+  - {at: 2026-11-08T10:00, amount: 50000, merchant: costco}
+  - {at: 2026-11-09T10:00, amount: 30000, merchant: coway, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {online-5: 1000}, counted: 20000}
+  - {payment: 1, benefits: {academy-5: 1000}, counted: 20000}
+  - {payment: 2, benefits: {telecom-5: 2000}, counted: 40000}
+  - {payment: 3, benefits: {costco-5: 2500}, counted: 50000}
+  - {payment: 4, benefits: {rental-5: 1500}, counted: 30000}
+  calc: 각 5%. 합계 8,000으로 통합 1만 안
+- name: 통합 1만 넘으면 미적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: coupang, channel: online}
+  - {at: 2026-11-06T10:00, amount: 60000, category: hospital}
+  - {at: 2026-11-07T10:00, amount: 60000, merchant: costco}
+  - {at: 2026-11-08T10:00, amount: 60000, merchant: skt, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {online-5: 3000}, counted: 60000}
+  - {payment: 1, benefits: {medical-5: 3000}, counted: 60000}
+  - {payment: 2, benefits: {costco-5: 3000}, counted: 60000}
+  - {payment: 3, benefits: {telecom-5: 1000}, counted: 60000}
+  calc: 영역별 3천씩 9천을 쓰고 남은 통합 한도 1천
+- name: 어린이집 5%, 학원과 교육 영역 3천 함께
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: childcare}
+  - {at: 2026-11-06T10:00, amount: 40000, category: education.academy, channel: offline}
+  expect:
+  - {payment: 0, benefits: {education-5: 2000}, counted: 40000}
+  - {payment: 1, benefits: {academy-5: 1000}, counted: 40000}
+  calc: 40,000 x 5% = 2,000. 교육 영역 월 3천이라 학원은 1,000

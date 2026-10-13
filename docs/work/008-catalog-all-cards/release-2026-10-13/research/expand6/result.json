@@ -1,0 +1,945 @@
+[
+  {
+    "card_id": "hana-11442",
+    "status": "exclude",
+    "reason": "hana-11321와 같은 상품. 목록 번호 11442의 상세 번호 11879 공식 페이지가 VIVA+ 체크카드 혜택 그대로(연회비 면제, 평일 11~14시 음식점·커피·편의점 5천원 이상 7%, 30만 월 5천·60만 월 1만, 해외 국제브랜드수수료 1% 면제, 같은 실적 제외)에 Allpoint 제휴 ATM 출금 수수료 면제만 더했다. 결제 계산은 같다. 상품 코드 11442를 hana-11321에 더하면 된다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41011879P&CD_PD_SEQ=11879"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "Allpoint 제휴 ATM 출금 수수료 면제는 결제가 아니다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16759",
+    "status": "blocked",
+    "reason": "Club Leaders 8 카드(연회비 해외겸용 80만원). 핵심 혜택이 대한항공 마일리지(1,500원당 1마일, 전월 50만 이상 국내 의료·해외·면세/항공 1,500원당 2마일, 월 결제금액 100만원 한도)인데 공통 point_programs에 대한항공 마일리지가 없다. 나머지는 바우처·라운지라 핵심을 빼면 카드가 비어 blocked. 마일리지는 청구금액 정상 납부 기준이고 무이자할부 제외",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41016759P&CD_PD_SEQ=16759"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "Golf & Culture 바우처 골프장·골프연습장 오프라인, 인터파크티켓 10만원 이상 5만원 청구할인 월 1회·연 4회(카드 발급월 기준 연차, 가족카드 합산)",
+      "Travel & Family 바우처, 라운지, 메탈 플레이트"
+    ],
+    "open_questions": [
+      "특별 적립 월 결제금액 100만원 한도가 세 영역 통합인지 영역별인지 원문이 불명확"
+    ]
+  },
+  {
+    "card_id": "hyundai-139504",
+    "status": "blocked",
+    "reason": "코스트코 리워드 현대카드 Edition2 가이드북 확인. 연회비 2만원, 전월 50만 이상 1%, 코스트코 최대 3%. 혜택 전부가 코스트코 리워드 포인트(연 1회 바우처)인데 point_programs에 없고 코스트코 가맹점도 없어 blocked",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AWO-20260312-1311-23_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%BD%94%EC%8A%A4%ED%8A%B8%EC%BD%94%20%EB%A6%AC%EC%9B%8C%EB%93%9C%20Ed2_V4.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-20884",
+    "status": "ready",
+    "reason": "kt-현대카드M Edition3(청구할인형2.0) 가이드북(2026년 6월) 대조. 연회비 3만원. kt 자동이체 청구할인 1~36개월 차 전월 100만 22,000원·150만 40,000원(100만 미만 없음), 37개월 차부터 30만 6,000원을 한 혜택의 월 한도 구간표와 최초 발급 사실(kt_m3v2_first_issue)로 담았다. hyundai-20883 방식. 신규 발급 2개월 22,000원 특례는 재발급 제외를 담지 못해 뺐다(덜 주는 쪽). 기본 M포인트는 결제일 청구액 기준이라 뺐다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260403-1734-28_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_KT_M%20Ed3_%EC%B2%AD%EA%B5%AC2.0_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "신규 발급 2개월 전월 무관 22,000원 특례",
+      "기본 M포인트(결제일 청구 당월 이용금액 기준)",
+      "GS칼텍스·신차 특별 적립, 제휴몰 추가 적립",
+      "kt 라이트할부 실적 제외",
+      "후불하이패스 실적 제외"
+    ],
+    "open_questions": [
+      "시행일 수집일로 둠",
+      "취소 승인월로 둠"
+    ]
+  },
+  {
+    "card_id": "hyundai-25183",
+    "status": "exclude",
+    "reason": "Hyundai Mobility카드(Family)는 가이드북에 현대자동차 임직원 사원증 카드로 적혀 있다. 직원 전용이고 혜택도 블루멤버스 포인트라 담을 프로그램이 없다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_A3W-20260323-1320-78_%ED%98%84%EB%8C%80%EB%AA%A8%EB%B9%8C%EB%A6%AC%ED%8B%B0_178_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-26395",
+    "status": "blocked",
+    "reason": "Hyundai Mobility카드(상용차) 가이드북 확인. 연회비 3만원. 핵심 혜택이 블루멤버스 포인트 적립(우대 주유소 경유·LPG 리터당 25~85P, 일반 0.2%, 신차 1.5%)인데 point_programs에 블루멤버스가 없다. 리터당 15원 할인만 남기면 카드가 크게 약해 보여 blocked",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AO7-20260319-1351-97_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%98%84%EB%8C%80_%EC%83%81%EC%9A%A9%EC%B0%A8_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-27380",
+    "status": "blocked",
+    "reason": "SSG.COM카드 Edition2 가이드북 확인. 연회비 1만원, 전월 30만 이상 SSG.COM 7%(월 1만), 그 외 0.5%, 클럽 가입 시 월 3,900원. 혜택 전부가 SSG MONEY인데 point_programs에 없어 blocked. 초안은 M포인트로 잘못 적었다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AZX-20260320-1452-98_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SSG%20ed2_V2_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hyundai-alt",
+    "status": "ready",
+    "reason": "알파벳카드T BOLD 가이드북(2026년 7월) 대조. 연회비 5만원(Amex). 실적·한도 없이 국내 0.7%, 해외 2% 청구할인. 출시일 2026-07-01을 시작일로 두었다. 연간 5만원 보너스와 수수료 100% 할인은 뺐다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CT%20BOLD%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "해외 연간 5만원 보너스 할인(카드 연도, 2차년도 600만원 조건)",
+      "해외 수수료 100% 할인",
+      "국내 승인 해외 간편결제 제외",
+      "다른 청구할인과 중복 불가",
+      "라운지·발레파킹"
+    ],
+    "open_questions": [
+      "원 미만 처리"
+    ]
+  },
+  {
+    "card_id": "hyundai-cckhc",
+    "status": "ready",
+    "reason": "쿠쿠 현대카드 가이드북(2026년 4월) 대조. 연회비 2만원. 쿠쿠 렌탈·구독료 정기결제 청구할인 전월 40만 8천원, 80만 1만2천원, 120만 1만6천원(결제액까지). 할인 건 실적 제외, 신규 등록 다음 달까지 40만 구간",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/260416_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%BF%A0%EC%BF%A0%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "정기결제일 이후 납부 제외",
+      "매출전표 접수 순서",
+      "가족 합산",
+      "후불하이패스 실적 제외"
+    ],
+    "open_questions": [
+      "시행일 수집일로 둠"
+    ]
+  },
+  {
+    "card_id": "hyundai-crmhc",
+    "status": "ready",
+    "reason": "세라젬 현대카드 가이드북(2026년 7월) 대조. 연회비 2만원. 세라젬 렌탈·구독료 정기결제 청구할인 전월 40만 8천원, 80만 1만2천원, 120만 1만6천원. 쿠쿠 카드와 같은 구조. 세라젬 렌탈 가맹점을 needed/hyundai-crmhc.json에 제안",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260512-1100-12_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%EC%84%B8%EB%9D%BC%EC%A0%AC%20%ED%98%84%EB%8C%80%EC%B9%B4%EB%93%9C_V7_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "정기결제일 이후 납부 제외",
+      "매출전표 접수 순서",
+      "가족 합산",
+      "후불하이패스 실적 제외"
+    ],
+    "open_questions": [
+      "시행일 수집일로 둠"
+    ]
+  },
+  {
+    "card_id": "hyundai-hct",
+    "status": "ready",
+    "reason": "알파벳카드T 가이드북(2026년 3월) 대조. 연회비 1.5만원(Visa). 실적·한도 없이 국내 0.7%, 해외 2% 청구할인. 출시일 2025-07-17을 시작일로 두었다. 수수료 100% 할인은 뺐다",
+    "source_urls": [
+      "https://www.hyundaicard.com/upload/card/%EC%95%8C%ED%8C%8C%EB%B2%B3%EC%B9%B4%EB%93%9CT%20%EC%83%81%ED%92%88%20%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_0701.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "해외 수수료 100% 할인",
+      "국내 승인 해외 간편결제 제외",
+      "다른 청구할인과 중복 불가"
+    ],
+    "open_questions": [
+      "원 미만 처리"
+    ]
+  },
+  {
+    "card_id": "hyundai-mcje2",
+    "status": "ready",
+    "reason": "The CJ-현대카드M Edition2. 상품 페이지와 M·M2 Edition2 제휴통합 가이드북 대조. 연회비 국내 1.5만, 해외겸용 2만. VIPS 20% 현장할인(일 1회, 1회 20만원), 올리브영·투썸·뚜레쥬르 10% 현장할인, CJ ONSTYLE 5% 청구할인(월 3만원). 전월 조건이 CGV에만 적혀 있어 덜 주는 쪽으로 모든 할인에 전월 10만원을 두고 질문으로 남겼다. CGV 티켓 할인은 공통 가맹점이 매점까지 넓어 뺐다. M포인트는 결제일 청구액 기준이라 뺐다",
+    "source_urls": [
+      "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=MCJE2",
+      "https://www.hyundaicard.com/upload/card/T_AOB-20260410-1723-20_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_CJ%20M%20Ed2_V3.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "더플레이스 등 CJ 외식 6곳과 더방 할인(가맹점 없음)",
+      "CGV 티켓 3천원 할인",
+      "입점 매장·특별 할인 제외",
+      "The CJ적립금",
+      "기본 M포인트"
+    ],
+    "open_questions": [
+      "CJ 할인 전체에 전월 10만원 조건이 있는지",
+      "시행일 수집일로 둠",
+      "취소 승인월로 둠"
+    ]
+  },
+  {
+    "card_id": "ibk-12112000240",
+    "status": "blocked",
+    "reason": "개인 신용(연회비 1.5만원). 유일한 혜택이 국내외 1,500원당 대한항공 1마일리지인데 공통 point_programs에 대한항공 마일리지가 없다. ibk-12113020001과 같은 이유",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=200&PDCD=0240&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "대한항공 마일리지 포인트 프로그램과 1마일 원화 가치"
+    ]
+  },
+  {
+    "card_id": "ibk-12112040499",
+    "status": "exclude",
+    "reason": "발급대상 기업공용. 아파트 관리사무소 전기료 결제전용 체크카드",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=204&PDCD=0499&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113230006",
+    "status": "ready",
+    "reason": "개인 체크. 국내외 전 가맹점 0.2% 캐시백(실적·한도 없음), 전월 30만원 이상이면 점심 12~14시·저녁 18~20시 국내 전 가맹점 0.6% 캐시백(기본 대신, 한도 없음). 신규 등록 다음 달까지 30만 구간",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=323&PDCD=0006&pageId=CA01010000"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "자동이체·교통요금은 비씨 매입 시각으로 타임캐시백 판단",
+      "금융우대 수수료 면제",
+      "비씨 등록 업종 기준"
+    ],
+    "open_questions": [
+      "시작일을 심의일 2026-03-13으로 둠"
+    ]
+  },
+  {
+    "card_id": "ibk-12113300001",
+    "status": "blocked",
+    "reason": "개인 신용카드(연회비 22만원). 초안의 커피·온라인·백화점 할인은 원문에 없다. 핵심 혜택은 Air Money 포인트 기본 1%, 주유·전기차충전·호텔·면세점 1.5%, 해외 2%(전월 70만원 이상, 특별·더블 월 10만P)인데 공통 point_programs에 Air Money가 없다. 1포인트=1원이라고 원문에 적혀 있어 air_money를 더하면 담을 수 있다",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=330&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "바우처 연 1회와 공항라운지 등 프리미엄 서비스"
+    ],
+    "open_questions": [
+      "Air Money 포인트 프로그램 키 추가 필요(1P=1원)"
+    ]
+  },
+  {
+    "card_id": "ibk-12113310001",
+    "status": "ready",
+    "reason": "개인 신용. 웰릭스렌탈 자동납부 렌탈료 전액 청구할인, 월 한도 30만 1.2만/70만 1.7만원. 간편결제·무이자할부 제외. 교통카드요금 실적 제외는 시내버스·지하철 업종 제외로 옮김. 신규 수령 다음 달까지 30만 구간",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=331&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "웰릭스렌탈 자동납부 별도 신청",
+      "비씨 등록 가맹점 기준",
+      "가족카드 실적 미합산"
+    ],
+    "open_questions": [
+      "교통카드요금 실적 제외를 bus_city·subway로 옮김",
+      "시작일을 심의일 2024-03-14로 둠"
+    ]
+  },
+  {
+    "card_id": "ibk-12113370001",
+    "status": "exclude",
+    "reason": "발급대상 기업(지정자카드). B-Mileage 대한항공 마일리지 기업카드",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=337&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "ibk-12113510001",
+    "status": "exclude",
+    "reason": "발급대상 기업공용. B-GLOBAL 기업 체크카드",
+    "source_urls": [
+      "https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=351&PDCD=0001&pageId=CA01010000"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-01560",
+    "status": "ready",
+    "reason": "민 체크. 공식 페이지로 연회비 없음, 30/50만 통합한도 1만/2만, 혜택 5개 대조. 후불교통 실적 제외는 시내버스·지하철 업종 제외로 옮겼다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01560"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "30일 신규 유예",
+      "CU포인트 3% 적립(공통 포인트 없음)",
+      "스피드메이트",
+      "동일계열카드 실적 합산",
+      "무승인·정부지원금 실적 제외"
+    ],
+    "open_questions": [
+      "시행일 추정",
+      "후불교통 실적 제외를 시내버스·지하철 업종 제외로"
+    ]
+  },
+  {
+    "card_id": "kb-01690",
+    "status": "ready",
+    "reason": "직장인보너스 체크. 공식 페이지로 연회비 없음, 20/30/50/100만 통합한도 5천/1만/2만/5만, 혜택 10개 대조. 후불교통 실적 제외는 시내버스·지하철 업종 제외로 옮겼다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01690"
+    ],
+    "case_count": 12,
+    "unmodeled": [
+      "60일 신규 유예",
+      "스피드메이트·SK렌터카",
+      "동일계열카드 실적 합산",
+      "무승인·정부지원금 실적 제외",
+      "공항버스 제외",
+      "해피포인트 다른 가맹점(리나스 등)"
+    ],
+    "open_questions": [
+      "시행일 추정",
+      "후불교통 실적 제외를 시내버스·지하철 업종 제외로",
+      "보험료에 4대보험 포함 여부, 민간 보험만으로 둠",
+      "주말에 공휴일 포함 여부, 토·일만으로 둠"
+    ]
+  },
+  {
+    "card_id": "kb-01897",
+    "status": "exclude",
+    "reason": "kb-01664와 같은 상품. KB스타뱅킹 디자인 노리 체크카드로 혜택, 통합한도, 실적 제외가 같다(심의필 260522-01722-HPP). 상품 코드 01897을 kb-01664에 더하면 된다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01897"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04163",
+    "status": "exclude",
+    "reason": "경기과학기술대학교 학생증 노리체크카드. 학교 전용",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04163"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04211",
+    "status": "exclude",
+    "reason": "인덕대학교 학생증 노리체크카드. 학교 전용",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04211"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "kb-04361",
+    "status": "ready",
+    "reason": "이마트II KB국민카드(옐로우) 신용. 공식 페이지로 연회비 1만5천원, 50/100만 구간, 이마트·트레이더스 20/30%, 스타벅스 5/10%, 생활업종 5/10%, OTT 10% 대조. 무승인 대중교통 실적 제외는 시내버스·지하철 업종 제외로 옮겼다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04361"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "패밀리레스토랑·골프(연습)장 생활업종(공통 업종 없음)",
+      "신세계포인트 적립",
+      "신규 유예",
+      "입점·임대매장 제외",
+      "무승인·정부지원금 실적 제외"
+    ],
+    "open_questions": [
+      "시행일 추정",
+      "무승인 대중교통 실적 제외를 시내버스·지하철 업종 제외로",
+      "부분 무이자할부를 무이자할부로 봄"
+    ]
+  },
+  {
+    "card_id": "kb-07550",
+    "status": "blocked",
+    "reason": "KB국민 리멤버카드. 공식 상품 페이지에 연회비 없음과 주요거래조건 PDF 링크만 있고 혜택 내용이 없다. 모바일 페이지도 내용이 없고 img2.kbcard.com PDF는 robots.txt가 막아 받지 않았다. 초안 혜택은 다른 카드 문구가 섞여 쓸 수 없다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07550",
+      "https://img2.kbcard.com/obj/contents/download/Terms_sheet_persnal_MERGE_07550.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "공식 혜택 원문 확보 필요. 판매 중인지도 확인 필요"
+    ]
+  },
+  {
+    "card_id": "kb-09252",
+    "status": "blocked",
+    "reason": "KB국민 Easy link 티타늄카드. 핵심인 자동납부 캐시백(자동납부 2건 이상 5천원, 4건 이상 1만원)과 선택팩 우대 한도(자동납부 2건 이상이면 한도 두 배)가 그 달 자동납부 건수에 달려 있어 지금 모델로 계산할 수 없다. 빼면 카드가 크게 약해 보인다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09252"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "자동납부 등록 건수 조건 지원 필요"
+    ]
+  },
+  {
+    "card_id": "kb-09659",
+    "status": "blocked",
+    "reason": "KB 틴업 체크카드. 전월 말일 만 나이 구간(7~15세 실적 없음, 16~18세 10만원, 19세 이상 20만원)에 따라 실적 조건과 혜택 영역이 달라진다. 나이가 해마다 바뀌어 영구 답으로 둘 수 없고, 19세 이상만 담으면 주 대상인 청소년에게 혜택이 0으로 보인다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09659"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "만 나이 구간 계산 지원 필요"
+    ]
+  },
+  {
+    "card_id": "kb-09780",
+    "status": "exclude",
+    "reason": "kb-my-wesh와 같은 상품. KB YOU Wish 카드(2026-04-15 출시)는 My WE:SH의 서비스 이름만 위시 베이직·위시 픽으로 바꾼 것이고 비율, 한도(건당 2,500원, 통신·OTT 5천원 공유, 픽 5천/5천/1만, 영화 연 4회 2만원), 생일 달 두 배, 전월실적 채워드림, 40만원 실적, 실적·할인 제외, 연회비 1만5천원(모바일 9천원)이 같다. 상품 코드 09780과 검색 이름 YOU Wish를 kb-my-wesh에 더하면 된다",
+    "source_urls": [
+      "https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09780"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-1652",
+    "status": "ready",
+    "reason": "LOCA PLATINUM 할인형. 상품설명서 대조. 연회비 10만원, 지난달 150만원 미만 0.5%, 이상 1.0% 한도 없음, 신규 발급 특례 150만 구간. LOCA CLASSIC과 할인 규칙은 같지만 연회비와 SPECIAL GIFT가 다른 상품. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00022_20260929_10005.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "SPECIAL GIFT 특급호텔 5만원 이용권(연간 실적 조건)",
+      "다른 LOCA 시리즈 실적 합산, 가족카드 합산",
+      "무승인 결제 접수일 기준 실적",
+      "오토·스마트 캐시백, 장애인 고용부담금 제외"
+    ],
+    "open_questions": [
+      "상품 코드 없음. 판매 목록에 없어 공시 색인 번호 id 유지"
+    ]
+  },
+  {
+    "card_id": "lotte-1787",
+    "status": "ready",
+    "reason": "SK 롯데체크카드. 상품설명서(2025년 9월 기준) 대조. 연회비 없음, 지난달 20만원 이상(주유 제외), SK주유소 리터당 40원(일 2회, 주유금액 일 15만·월 30만, 초과 시 미할인), 롯데시네마 1,500원(일1·월5·연12회), 롯데리아·엔제리너스 1,000원당 50원. 상품 코드를 찾지 못해 id 유지",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2011-A00008_20251015_10004.pdf"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "주유 누적 한도 일부 남은 결제는 남은 만큼 계산",
+      "LPG 제외, SK 고시가 대신 전국 평균가",
+      "생어거스틴 10%, 나뚜루, 롯데백화점 쿠폰, 롯데ON 할인 미계산"
+    ],
+    "open_questions": [
+      "상품 코드 없음",
+      "실적 제외 목록이 없어 주유·세금·상품권·선불 충전만 뺐다",
+      "롯데리아·엔제리너스 할인 한도와 실적 조건 불명확. 20만 구간, 한도 없음으로 둠"
+    ]
+  },
+  {
+    "card_id": "lotte-1863",
+    "status": "blocked",
+    "reason": "디지로카 Monaco. 쿠팡·네이버페이·11번가·G마켓·옥션·SSG.COM 이용금액 전체가 실적에서 빠지는데 실적 제외는 업종만 담을 수 있다. 100만원 실적 구간 하나로 온라인쇼핑·배달·통신·스트리밍 혜택이 갈려 실적이 부풀면 혜택이 커진다. lotte-p14728-a14728(디지로카 Paris)과 같은 사유. 온라인쇼핑 추가 3%도 지난달 멤버십 결제에 따라 달마다 바뀐다",
+    "source_urls": [
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00034_20260928_10004.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "상품 코드 없음. 판매 목록에 없음"
+    ]
+  },
+  {
+    "card_id": "lotte-p11864-a11864",
+    "status": "ready",
+    "reason": "웅진씽크빅 롯데카드. 상품 페이지 대조. 웅진씽크빅 자동이체 월 1회 30·60·120·200만 구간 12,000·16,000·20,000·30,000원(결제액이 적으면 결제액), 롯데마트 60만 이상 5% 5만원 이상 건당 5천 월 2회. 할인받은 이용금액 전체 실적 제외. 신규 발급 특례 자동이체 30만 구간, 롯데마트 제공",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P11864-A11864",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2017-A00031_20261002_10011.pdf"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "자동이체 대상은 북클럽·씽크빅 학습지",
+      "롯데마트 온라인몰",
+      "가족카드 합산",
+      "다른 청구할인 행사와 중복 시 큰 것"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p11881-a11881",
+    "status": "blocked",
+    "reason": "경차 smart 롯데카드. 통합할인한도가 지난달 이용금액의 5%라 고정 금액이나 구간표로 맞게 담을 수 없다. 주유 할인도 유류세 환급 뒤 금액에 기준유가로 정한 할인율을 곱하는 방식이고 경차 소유자 전용이다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P11881-A11881",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P11881-A11881.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13391-a13391",
+    "status": "ready",
+    "reason": "LOCA for Coffee. 상품설명서(2026년 9월 심의) 대조. 지난달 150만원 이상, 스타벅스·폴바셋·빽다방·투썸 50% 월 1만, 스트리밍 정기결제 20% 월 1만, 시내버스·지하철·택시 10% 월 5천, 배민·요기요 10% 월 5천, 쿠팡·SSG닷컴·컬리 5% 월 5천. 신규 발급 특례 150만 구간",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13391-A13391",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00016_20260930_10005.pdf"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "PG 결제 제외",
+      "다른 LOCA 실적 합산, 가족카드 합산",
+      "무승인 결제 접수일 기준"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13719-a13719",
+    "status": "blocked",
+    "reason": "LOCA in BUSAN. 아울렛·이케아·마트 10%, 통행료 30%, 공항버스·공항철도가 모두 부산·경남 주소 가맹점 조건이라 지금 결제 입력으로 가릴 수 없다. 이 조건을 빼면 전국 롯데마트·이마트에 10%를 주게 되고, 혜택을 빼면 음식점·카페 5%만 남아 카드가 크게 약해 보인다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13719-A13719",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00021_20260930_10005.pdf"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13727-a13727",
+    "draft_card_id": "lotte-1695",
+    "status": "ready",
+    "reason": "이지웰 X LOCA. 상품 페이지 대조. 국내외 75만 미만 0.5%, 이상 1.0%(대중교통·통신 자동납부 제외), 이지웰 복지몰 40만 이상 4% 월 1만, 20만 이상 버스·지하철·택시 5% 월 1만 일 5천, 이동통신 자동납부 1천원. 이지웰 복지몰 가맹점은 needed에 제안",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13727-A13727",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13727-A13727_210930.pdf"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "공항버스·공항철도 교통 할인",
+      "결합상품 통신 제외",
+      "다른 롯데카드 실적 제외, 무승인 결제 접수일 기준"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p13810-a13810",
+    "draft_card_id": "lotte-1716",
+    "status": "ready",
+    "reason": "네이버페이 쇼핑엔로카. 상품 페이지 대조. 연회비 1만원, 장기할부 미이용 회원 지난달 30만원 이상 국내외 1% 네이버페이 포인트 한도 없음. 장기할부 이용 회원 월 정액 적립은 결제 단위가 아니라 선택지만 두고 계산하지 않음",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13810-A13810",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P13810-A13810.pdf"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "장기할부 이용 회원 월 10,000·15,000포인트",
+      "네이버장기할부와 다른 롯데카드 이용금액 실적 제외",
+      "가족카드 합산, 무승인 결제 접수일 기준"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "lotte-p15754-a15754",
+    "status": "ready",
+    "reason": "에듀윌X디지로카. 상품 페이지와 상품설명서 대조. 40·80만 구간, 교육 10% 1만·1.5만, 커피·편의점·쇼핑 10% 각 4천·8천. 교육은 에듀윌(needed 제안)과 교보문고·영풍문고만 계산(덜 주는 쪽). 할인받은 이용금액 실적 제외, 대중교통·택시 실적 제외. 신규 발급 특례 40만 구간. 같은 이름 상품 코드 P15756-A15756, P15758-A15758이 판매 목록에 있다",
+    "source_urls": [
+      "https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15754-A15754",
+      "https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2025-A00012_20250825_10001.pdf"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "독서실·문구점과 다른 서점 업종",
+      "백화점·쇼핑몰 입점 커피, 다이소 입점매장 제외",
+      "네이버페이 제외 결제",
+      "다른 롯데카드 실적 제외"
+    ],
+    "open_questions": [
+      "생활업종 표의 할인율 칸이 비어 있어 상품 페이지 머리의 커피·편의점·쇼핑 10%를 따랐다"
+    ]
+  },
+  {
+    "card_id": "nh-f20080",
+    "status": "exclude",
+    "reason": "SOHO 다사로이체크카드. 공식 페이지에 개인사업자전용 상품으로 적혀 있다",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010120"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20587",
+    "status": "ready",
+    "reason": "공식 상품 페이지(심의필 2026-3845)로 연회비 0원, 20만 이상 평일 0.5%·주말 1%(커피·편의점·영화·온라인쇼핑·배달앱 14개 가맹점), 30만 이상 1.5%(교통·해외 일시불·어학시험·서점·인터파크티켓·미용실·올리브영 오프라인), 30만 이상 유튜브·넷플릭스·앱스토어·구글플레이 5%, 통합 월 3만포인트를 확인했다. 초안은 커피만 담았고 나머지를 모두 더했다. Triple·Bonus는 등록 달 제외라 신규 특례 0",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010521"
+    ],
+    "case_count": 12,
+    "unmodeled": [
+      "KTX는 코레일 공통 가맹점이 다른 열차까지 포함해 뺐다",
+      "종합스포츠센터·요가·수영·문화센터 1.5%는 공통 스포츠 업종이 넓어 뺐다",
+      "역사·백화점·아울렛·쇼핑몰 입점 매장 제외",
+      "커피 앱 결제·상품권 제외, 영화 매점·예매대행 제외",
+      "다른 NH 혜택과 겹치면 큰 것 하나",
+      "PG·간편결제 업종 불명 시 제외",
+      "무승인·해외 결제는 매출표 접수월 실적",
+      "전월 50만 라운지 연 1회"
+    ],
+    "open_questions": [
+      "시행일을 몰라 신규출시일 2024-08-19로 둠",
+      "Triple·Bonus 신규 특례 없음으로 봄"
+    ]
+  },
+  {
+    "card_id": "nh-f20604",
+    "status": "exclude",
+    "reason": "발급대상이 서울특별시교육청 소속 공무원 및 직원, 학교 전직원인 단체 전용 카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010569"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "nh-f20605",
+    "status": "blocked",
+    "reason": "세종시 이응패스·여민전 지역화폐 통합 체크카드(여민전 앱 가입 필수, 세종여민전 체크와 중복 발급 불가). 전월실적이 국내 일시불 이용금액만이라 할부를 실적에서 빼는 칸이 없어 실적이 부풀고, 0.3·0.4% 우대 적립은 하나로가족고객(은행/농·축협)만 받는다. 지역 카드라 exclude로 볼 수도 있다",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010565"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "여민전 가입이 세종 시민만 가능한지 확인하지 못했다"
+    ]
+  },
+  {
+    "card_id": "nh-f20613",
+    "status": "exclude",
+    "reason": "NH대한민국히어로카드는 소방관 전용(수파자 소방관 복지 플랫폼을 통해 발급)인 단체 전용 카드",
+    "source_urls": [
+      "https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010599"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1653",
+    "status": "ready",
+    "reason": "상품설명서 2023.6판 대조. 다이소 2~4천원, 커피·배달앱 2천원, 할인점·온라인·편의점·의료·다이소몰 1%",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1653",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtjupZY7B%2FhwyJAUGVXAndak%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "다이소 멤버십 포인트 0.5% 포인트 종류 없음",
+      "임대매장 제외"
+    ],
+    "open_questions": [
+      "시행일 추정 2023-06-01",
+      "커피·배달앱 횟수 통합으로 둠",
+      "다이소몰을 daiso 온라인으로 봄"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1711",
+    "status": "ready",
+    "reason": "상품설명서 2022.8판 대조. 주유 리터당 할인은 자동납부 0건 기준 금액(60·80·100원)만 담아 덜 주는 쪽",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1711",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtr6Azu1ROn6%2FN48R7Xd1r5E%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "전월 생활요금 자동납부 1건 이상 시 리터당 20원 추가",
+      "LPG 제외",
+      "고속도로 통행요금 등 할인 제외",
+      "자체 가맹점번호 간편결제 제외"
+    ],
+    "open_questions": [
+      "시행일 추정 2022-08-01",
+      "자동납부 건수 0건 기준 리터당 금액",
+      "원 미만 버림"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1724",
+    "status": "blocked",
+    "reason": "삼성 모바일플러스카드. 모든 혜택이 삼성전자 포인트 적립인데 공통 포인트 종류에 없다. point_programs에 삼성전자 포인트(가치 확인 필요)를 더하면 담을 수 있다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1724",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpXeUVLruZzN4QNYiuMbUmk%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1737",
+    "status": "ready",
+    "reason": "상품설명서 2022.8판 대조. 쇼핑·생활편의·의료 7%/15%, 스트리밍 30%",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1737",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlApeiruG3KmfLVqS2l0zuA%3D&sn=1"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "임대매장 제외",
+      "랄라블라 가맹점 없음",
+      "햇살론 보증 대상만 발급, 해외 결제 불가"
+    ],
+    "open_questions": [
+      "시행일 추정 2022-08-01",
+      "영역별 한도로 둠(세 영역 통합 여부 원문 불명)",
+      "원 미만 버림"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1753",
+    "status": "ready",
+    "reason": "상품설명서 2025.9판 대조. 주유 1만원 정액(월 1~3회), 대중교통·택시 10%",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1753",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtqNZWamwea5CrcSizMQXx2Y%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "전기차 충전 10% 업종 없음",
+      "주차장·대리운전, 고속도로 통행료, 스타벅스 DT 30% 담지 않음",
+      "차량 점검 서비스",
+      "LPG 제외"
+    ],
+    "open_questions": [
+      "시행일 추정 2025-09-02",
+      "국내전용 연회비 2만원으로 봄",
+      "원 미만 버림"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1819",
+    "status": "blocked",
+    "reason": "이마트신세계 삼성카드. 핵심 이마트 6,000원 할인이 이마트 계열 오프라인 전월 이용액 20만원이라는 별도 실적을 쓰고, S-OIL 적립은 직전 3개월 평균 조건이라 지금 모델로 맞게 계산할 수 없다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1819",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtgVVVfEKQWV8CR4RcFj%2FDzk%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1825",
+    "status": "blocked",
+    "reason": "삼성 iD PLUG-IN 카드. 핵심 혜택 전기차 충전요금 20%/40%를 담을 업종이 없어 빼면 카드가 크게 약해 보인다. 전기차 충전 업종이 생기면 담을 수 있다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1825",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtkAmOLGY1JJa6ARpu35M5cM%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1845",
+    "status": "blocked",
+    "reason": "AI 구독 클럽 삼성카드. 핵심 혜택이 삼성전자 AI 구독 클럽 장기무이자할부 이용 중인 달마다 1.3~2.3만원 결제대금 차감이라 결제 단위로 계산할 수 없다. 디지털콘텐츠 30%만으로는 카드가 크게 약해 보인다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1845",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtj9i2sPoEpCyqcwgvBwDZ3U%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1876",
+    "status": "ready",
+    "reason": "상품설명서 2025.8판 대조. SELECT 1·2 옵션, 생활 5%, 디지털 50%, 해외 2%",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1876",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpcB%2BzFi3OWFsF1q9dKR1r4%3D&sn=1"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "교육 10%의 학원과 인터넷강의는 담지 않음",
+      "와인앤모어 가맹점 없음",
+      "통신 결합상품 등 제외",
+      "임대매장 제외"
+    ],
+    "open_questions": [
+      "관리비·통신 정기결제를 autopay와 subscription으로 둠",
+      "원 미만 버림"
+    ]
+  },
+  {
+    "card_id": "samsung-abp0288",
+    "status": "blocked",
+    "reason": "신세계 삼성애니패스포인트 체크카드. 빅포인트 0.2~0.8%가 연간 이용금액 300만원 누적 달성 뒤 두 배이고, 이마트 캐시백 등 부가혜택이 직전 3개월 월평균 30만원 조건이라 지금 모델로 계산할 수 없다. 안내장은 abp1333과 함께 쓴다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP0288",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlSeY%2FzA7kEk7wiNRb6uZJA%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-100895",
+    "status": "exclude",
+    "reason": "woori-102717 카드의정석 I&U+와 혜택 숫자가 같아 같은 상품으로 본다. 상품 코드를 그 카드에 더한다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100895"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "Two-in-One 체크매출 0.3% 캐시백",
+      "LPG 제외",
+      "커피 입점 매장과 상품권 제외",
+      "교통카드·통신료는 매출표 접수일 기준 실적",
+      "1~2일 접수 취소는 전월 실적에서 차감",
+      "이제너두 복지몰 서비스는 제휴사 제공"
+    ],
+    "open_questions": [
+      "effective_from: 시행일을 찾지 못해 출시일 2021-03-12",
+      "0.7%와 생활밀착 중복 불가 시 큰 쪽 하나로 가정",
+      "원 미만 처리 문구 없음, 내림 가정"
+    ]
+  },
+  {
+    "card_id": "woori-103438",
+    "status": "exclude",
+    "reason": "오설록농장 개인형복지카드(체크). 단체 임직원 복지 전용. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103438"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-103483",
+    "status": "ready",
+    "reason": "연회비 3만원, 출시 2025-07-17. 전월 국내외 50/100만 이상 갤러리아 백화점·몰 5/7% 월 1만/2만원, 50만 이상 KTX·SRT·카카오T 온라인·배민·쿠팡이츠(건당 2만원 이상)·넷플릭스·티빙·유튜브 프리미엄 3% 통합 월 1만원, 국내외 1% 월 3만원(갤러리아 제외, 생활과 큰 쪽 하나). 갤러리아 이용 실적 제외는 백화점 업종 전체 제외로 덜 주는 쪽으로 담았다. 초안의 현장할인 2개는 원문 조건을 담을 수 없어 뺐다. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103483"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "갤러리아 실적 제외를 백화점 업종 전체 제외로 대신",
+      "갤러리아 백화점 5% 현장할인(직전 3개월 구매 이력, 월 3회)",
+      "갤러리아 문화센터 5% 현장할인",
+      "무이자·장기할부",
+      "PG·일부 간편결제와 입점매장 제외",
+      "생활 영역 세부 제외(카카오T 택시 외, 배달 커머스, 통신요금 포함 OTT)",
+      "VISA Platinum 서비스"
+    ],
+    "open_questions": [
+      "new_card 기준일: 등록일과 사용개시일 중 빠른 날인데 등록일로 둠",
+      "1% 할인 제외 목록을 모든 혜택 제외로 씀",
+      "원 미만 처리 문구 없음, 내림 가정"
+    ]
+  },
+  {
+    "card_id": "woori-103684",
+    "status": "exclude",
+    "reason": "한국기상산업기술원 개인형복지카드(체크). 단체 임직원 복지 전용. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103684"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-103734",
+    "status": "exclude",
+    "reason": "woori-500055와 같은 상품. 카드의정석 EVERYDAY CHECK로 기본 0.2%, 우리WON페이 0.5%, 커피·쇼핑·교통·주유 1%, 영역 3천/6천원·통합 1만/2만원 구성이 같다. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103734"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-103773",
+    "status": "exclude",
+    "reason": "카드의정석 WELFARE 계열 서울경제진흥원 임직원 전용 개인형 복지카드. 직원 전용. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103773"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104166",
+    "status": "exclude",
+    "reason": "카드의정석 WELFARE 계열 스크린에스피이코리아 전용 개인형 복지카드. 직원 전용. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104166"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500041",
+    "status": "exclude",
+    "reason": "카드의정석 WELFARE 계열 대한체육회 임직원 전용 개인형 복지카드. 직원 전용. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500041"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500094",
+    "status": "exclude",
+    "reason": "카드의정석 WELFARE 계열 DL에프앤씨 임직원 전용 개인형 복지카드. 직원 전용. 2026-10-11 우리카드 사이트 정기 점검이라 2026-10-05 브라우저 수집 원문(bronze raw)으로 대조",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500094"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  }
+]

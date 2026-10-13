@@ -1,0 +1,47 @@
+card: lotte-p14826-a14826
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 24개월 이내 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {mobile-first-24m: 10000}
+    counted: 0
+  calc: 한도 10,000 안에서 전액 할인이라 10,000. 할인 건은 실적 제외
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 55000
+  calc: 30만원보다 1원 적어 할인 없음
+- name: 150만 구간 알뜰폰 요금이 한도보다 적으면 요금만큼
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 16500, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {mobile-first-24m: 16500}
+  calc: 한도 20,000보다 요금 16,500이 적어 16,500
+- name: 25번째 달부터 7천원
+  prev_month_spend: 700000
+  holder: {started_on: '2024-10-15'}
+  payments:
+  - {at: 2026-10-20T10:00, amount: 55000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {mobile-after-24m: 7000}
+  calc: 2024년 10월이 0번째 달이라 2026년 10월은 24번째로 25개월째. 7,000
+- name: 자동납부가 아니면 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 55000, merchant: lg_uplus, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부 건만 할인

@@ -1,0 +1,141 @@
+schema_version: 2
+id: samsung-aap1741
+issuer: samsung
+name: 신세계 아울렛 BENEFIT 삼성카드
+short_name: 신세계 아울렛 BENEFIT
+search_names: [신세계 아울렛 BENEFIT 삼성카드, 신세계 아울렛 삼성카드, 신세계사이먼 삼성카드]
+kind: credit
+product_codes: [AAP1741]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1741', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnn%2FQeRAq3lUAChQ9ts%2BYWw%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2021-C1a-08774호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2021-09-15'
+    source: manual
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [car.toll, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '문자알림서비스, 스마트오토서비스 이용금액은 할인하지 않는다', '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - key: outlet
+        per: month
+        amount: {400000: 15000, 800000: 30000, 1200000: 50000}
+      - key: mart
+        per: month
+        amount: {400000: 7000, 800000: 15000, 1200000: 30000}
+      - {key: coffee, per: month, amount: 10000}
+      - {key: delivery, per: month, amount: 10000}
+      - {key: overseas, per: month, amount: 500000}
+    stacks:
+      - {key: discount, pick: best, spill: none}
+    benefits:
+      - key: outlet-10
+        title: 신세계사이먼 프리미엄 아울렛 10% 할인
+        source: manual
+        evidence: [신세계사이먼 프리미엄 아울렛 10% 결제일할인, '전월 이용금액대별 월 할인한도 40만원 이상 15,000원, 80만원 이상 30,000원, 120만원 이상 50,000원', '오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [shinsegae_simon]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: outlet}
+        tiers: {from: 400000}
+        stack: discount
+        unmodeled: [쇼핑 외 결제(상품권, 주차장 등)와 임대매장은 할인하지 않는다]
+      - key: mart-7
+        title: 이마트 할인점·슈퍼마켓·편의점 7% 할인
+        source: manual
+        evidence: [할인점·슈퍼마켓·편의점 7% 결제일할인, '할인점 이마트, 이마트 트레이더스, 슈퍼마켓 이마트 에브리데이, 편의점 이마트24', '전월 이용금액대별 통합 월 할인한도 40만원 이상 7,000원, 80만원 이상 15,000원, 120만원 이상 30,000원', '할인점, 슈퍼마켓은 오프라인 결제건에 한하며, 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          merchants: [emart, emart24, emart_everyday, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {shared: mart}
+        tiers: {from: 400000}
+        stack: discount
+        unmodeled: [쇼핑 외 결제(상품권, 주차장 등)와 임대매장은 할인하지 않는다]
+      - key: coffee-10
+        title: 커피전문점·제과점 10% 할인
+        source: manual
+        evidence: [커피전문점·제과점 10% 결제일할인, '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋, 블루보틀 제과점 파리바게뜨, 뚜레쥬르, 던킨', '통합 월 할인한도 : 10,000원', 전월 이용금액 40만원 이상 시 제공, '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외(단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공)']
+        target:
+          merchants: [angel_in_us, artisee, blue_bottle, coffee_bean, dunkin, ediya, hollys, paris_baguette, pascucci, paul_bassett, tous_les_jours, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 400000}
+        stack: discount
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: coffee-starbucks-10
+        title: 스타벅스 10% 할인
+        source: manual
+        evidence: ['단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공', '통합 월 할인한도 : 10,000원', 전월 이용금액 40만원 이상 시 제공]
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 400000}
+        stack: discount
+        unmodeled: [임대매장은 할인하지 않는다]
+      - key: delivery-10
+        title: 배달앱 10% 할인
+        source: manual
+        evidence: ['배달앱 10% 결제일할인 배달의민족, 요기요', '통합 월 할인한도 : 10,000원', 전월 이용금액 40만원 이상 시 제공, '공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: delivery}
+        tiers: {from: 400000}
+        stack: discount
+        unmodeled: [가맹점에 직접 결제한 건은 할인하지 않는다]
+      - key: simplepay-1
+        title: 온라인 간편결제 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 온라인 간편결제 1% 결제일할인', '삼성페이, 네이버페이, 카카오페이, PAYCO, 스마일페이, coupay, SSGPAY, L.PAY', '국내 온라인 가맹점에 한하며, 오프라인 매장 결제건(바코드, QR코드, 스마트폰 NFC 등)은 제외']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - {channel: online}
+          - payment: [coupay, kakao_pay, l_pay, naver_pay, payco, samsung_pay, smile_pay, ssg_pay]
+        reward: {type: billing_discount, rate: 1}
+        stack: discount
+      - key: overseas-1-5
+        title: 해외 1.5% 할인
+        source: manual
+        evidence: [전월 이용금액에 관계없이 해외 1.5% 결제일할인, 해외 가맹점 및 해외 직접구매 이용건, '통합 월 할인한도 : 50만원', 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: overseas}
+        stack: discount
+    unmodeled: [신세계백화점 제휴 서비스(신세계포인트 적립 등)는 계산하지 않는다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다]
+open_questions:
+  - {path: annual_fees, question: '연회비 표의 국내전용 칸이 비어 있어 해외겸용 Mastercard 20,000원(기본 7,000+제휴 13,000)만 적었다', assumed: global only}
+  - {path: status, question: 상품 페이지가 자바스크립트로 그려져 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+  - {path: 'revisions[0].benefits', question: 할인 혜택이 서로 중복 적용되지 않고 큰 금액만 적용된다는 문구를 한 묶음에 큰 쪽 하나만 주는 것으로 옮겼다. 한도가 따로인 항목은 한도를 각각 두었다, assumed: pick best}
+notes: 2026-10-13 상품안내장(2021.10판, 심의필 제2021-C1a-08774호) 확인. 2021-09-15 출시. 연회비 해외겸용 Mastercard 20,000원. 아울렛 10%, 이마트 계열 7%, 커피·제과 10%, 배달앱 10%는 전월 40만원 이상일 때 월 한도가 구간별이고 간편결제 1%와 해외 1.5%는 실적 없이 받는다. 실적 제외는 4대보험, 공과금, 초중고 납입금, 등록금, 대중교통, 택시, 아파트 관리비, 임대료, 기프트·선불카드, 상품권이다. 상품안내장이 2021년판이라 이후 개정은 확인하지 못했다.

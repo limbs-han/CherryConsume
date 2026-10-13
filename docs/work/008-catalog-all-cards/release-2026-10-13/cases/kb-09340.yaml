@@ -1,0 +1,46 @@
+card: kb-09340
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 일반 가맹점 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: grocery_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 100,000원 × 0.2% = 200원
+- name: 음식점 오프라인 0.4%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {moim-dining-0-4: 200}}
+  calc: 50,000원 × 0.4% = 200원. 0.2%를 대신한다
+- name: G마켓 KB Pay 0.4%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {moim-openmarket-0-4: 120}}
+  calc: 30,000원 × 0.4% = 120원
+- name: 커피전문점 오프라인 0.4%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {moim-cafe-0-4: 40}}
+  calc: 10,000원 × 0.4% = 40원
+- name: CU 오프라인 0.4%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {moim-convenience-0-4: 40}}
+  calc: 10,000원 × 0.4% = 40원
+- name: 골프장 0.4%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T12:00, amount: 200000, category: sports.golf, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {moim-golf-0-4: 800}}
+  calc: 200,000원 × 0.4% = 800원

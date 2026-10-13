@@ -1,0 +1,53 @@
+card: lotte-p14042-a14042
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 미만 기본 0.5%
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-0-5: 500}
+  calc: 100,000원 × 0.5% = 500원
+- name: 40만 이상 특별 1%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {special-1: 1000}
+  calc: 100,000원 × 1% = 1,000원
+- name: 지하철 50%와 넷플릭스 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.subway, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {life-transit-50: 750}
+  - payment: 1
+    benefits: {life-streaming-10: 3000}
+  calc: 1,500원 × 50% = 750원. 넷플릭스 30,000원 × 10% = 3,000원. 함께 쓰는 한도 1만원 안
+- name: 네이버페이 5% 한도 소진 뒤 0.5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: other, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {life-pay-5: 10000, life-over-pay-0-5: 500}
+  calc: 200,000원 × 5% = 10,000원에서 한도 1만원이 찬다. 남은 100,000원 × 0.5% = 500원
+- name: 쿠팡 온라인 10%, 와우 10%, 사이렌오더 50% 뒤 한도 초과 0.5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 7890, merchant: coupang_wow, channel: online, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 20000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {life-delivery-10: 2000}
+  - payment: 1
+    benefits: {life-membership-10: 789}
+  - payment: 2
+    benefits: {life-coffee-50: 7211, life-over-0-5: 27}
+  calc: 2,000원 + 789원 = 2,789원 사용. 남은 한도 7,211원은 14,422원 × 50%. 남은 5,578원 × 0.5% = 27.89를 버림해 27원

@@ -1,0 +1,901 @@
+[
+  {
+    "card_id": "hana-10024",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 판매 종료로 보인다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=10024"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-11282",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 판매 종료로 보인다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11282"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-11376",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11376"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-11415",
+    "status": "blocked",
+    "reason": "리틀프렌즈 체크카드의 편의점 서점 베이커리 캐시백이 모두 월 2회 연 6회 한도다. 연 횟수 기준일이 원문에 없고 혜택이 전부라 뺄 수 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=10538"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-11582",
+    "status": "ready",
+    "reason": "VIVA X 체크 상품 페이지 대조. 국내 0.3% 캐쉬백, 30만 구간",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=12519"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "교통요금 등 무승인 매입은 매출전표가 접수된 달의 이용금액에 들어간다",
+      "국민연금·고용보험료·산재보험료·건강보험료 납부와 대학원 등록금은 실적에서 빠지지만 업종 구분이 없어 일부만 뺀다",
+      "해외 ATM 인출 수수료 면제는 결제가 아니라 계산하지 않는다",
+      "overseas-fee-free: 건당 US$0.5 해외이용수수료 면제는 달러 정액이라 계산하지 않는다",
+      "overseas-fee-free: 하나은행 결제계좌를 쓰지 않으면 해외 이용이 되지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. (가정: 2026-02-12)",
+      "revisions[0].spend.exclude_categories: 원문 실적 제외는 공과금, 수도·전기요금, 도시가스 이용금액이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다. (가정: utility 전체)",
+      "revisions[0].spend.exclude_applied: 캐쉬백을 받은 금액이 실적에서 빠지는지 원문에 없다. (가정: 실적에 넣음)"
+    ]
+  },
+  {
+    "card_id": "hana-11607",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 판매 종료로 보인다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=11607"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-11746",
+    "status": "ready",
+    "reason": "공식 상품 페이지(A-26-0740)에서 옮김. 연회비 8,000/10,000. 영역별 10만원마다 5천 하나머니, 30만 구간, 아파트관리비 60만 구간",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41011746P&CD_PD_SEQ=11746"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "GS슈퍼 NC백화점 NC아울렛 NC WAVE 대동 세이 태평백화점 서원유통은 공통 가맹점에 없어 뺌",
+      "교통과 자동이체 합산을 둘로 나눠 덜 줄 수 있음",
+      "임대매장 제외",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "시행일 잠정 2019-11-27",
+      "지역쇼핑 온라인몰 제외를 오프라인만으로 해석",
+      "실적 제외를 백화점 마트 주유 업종 전체로 넓게 뺌"
+    ]
+  },
+  {
+    "card_id": "hana-12258",
+    "status": "blocked",
+    "reason": "CLUB Primus Skypass는 대한항공 마일리지 적립이 핵심 혜택인데 원문에 1마일리지의 원화 가치 문구가 없어 포인트를 새로 더할 수 없다. 상세 페이지는 상품 번호 12258로 열리지 않고 목록 페이지만 나온다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&CD_PD_SEQ=9727"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-126",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 판매 종료로 보인다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=126"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-13798",
+    "status": "ready",
+    "reason": "공식 상품 페이지(A-26-0578)에서 옮김. 연회비 없음. 지난달 실적 10만/30만/60만 구간 통합 월 캐시백 한도 3천/1만/2만, 페이 0.5%, 편의점 5%, 배달 5%, 대중교통 10%, 커피 20%",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41013798P&CD_PD_SEQ=13798"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "캐시백률이 높은 서비스 하나만 건당 적용(기본 최대 하나 규칙)",
+      "간편결제로 결제해 가맹점명이 페이 이름이면 페이 캐시백만",
+      "공항철도는 업종으로 가릴 수 없어 뺌",
+      "ATM 이용금액 실적 제외"
+    ],
+    "open_questions": [
+      "시행일 잠정 2021-06-14",
+      "체크카드라 일시불만 센다고 보고 체크 결제 전부를 실적에 넣음"
+    ]
+  },
+  {
+    "card_id": "hana-13912",
+    "status": "blocked",
+    "reason": "스카이패스 마일리지 적립이 핵심이고 마일리지 원화 가치가 원문에 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=13912"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-14246",
+    "status": "ready",
+    "reason": "0.7% 하나머니, 페이 1.0%",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=14246"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "서민금융진흥원 보증 햇살론 카드"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-15124",
+    "status": "blocked",
+    "reason": "스카이패스 마일리지 적립 카드. 원문의 적립 단위가 항공 마일리지라 1마일의 원화 가치 문구가 없다. 포인트 가치 문구가 없으면 blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15124"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-15859",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 사례 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15859"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "가족카드의 한도는 본인카드와 합산한다",
+      "해외결제를 외화 하나머니로 설정하면 원더 서비스가 제공되지 않고 해외 이용 수수료를 면제한다. 해외 수수료 면제는 계산하지 않는다",
+      "온가족 플러스 캐시백은 가족카드 실적과 연속 이용 조건이라 계산하지 않는다",
+      "국내 5만원 이상 결제 2~3개월 무이자 할부는 계산하지 않는다",
+      "상품권 여행 항공권 티켓 도서 공연 매출은 제외되고 공식 홈페이지와 앱 결제만 대상이다",
+      "롯데 빅마켓 등 트레이더스를 뺀 창고형 할인매장과 상설 임대 매장은 제외된다",
+      "카페노티드는 가맹점 목록에 없다",
+      "백화점 할인점 아울렛 쇼핑몰 휴게소 공항 호텔 리조트 역사 마트 입점 점포와 임대매장은 제외된다",
+      "배달앱과 식당 예약앱 주문과 미리 결제하는 방식은 제외된다"
+    ],
+    "open_questions": [
+      "현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다.",
+      "전가맹점 0.7%와 간편결제 1.2%와 업종별 2% 3%가 한 결제에 겹치면 더해 받는지 원문에 적혀 있지 않다.",
+      "쿠팡 마트 베이커리 대중교통의 할인한도가 통합 5만원으로 한 번만 적혀 있다. 한도를 넘은 금액에 전가맹점 0.7%가 붙는지 원문에 없다.",
+      "이 카드의 혜택은 지난달 실적 조건이 없다. 실적 제외 목록은 참고로만 옮겼다."
+    ]
+  },
+  {
+    "card_id": "hana-15861",
+    "status": "ready",
+    "reason": "원더카드 2.0 HAPPY 상품 페이지 대조",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15861"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "가족카드 이용금액과 월별 할인한도는 본인카드와 합산된다",
+      "트래블로그 스위치로 해외결제를 외화 하나머니로 설정해 해외 이용하면 원더 서비스가 없다",
+      "온가족 플러스(가족카드당 월 1만원 캐시백, 연 1만원 연회비 지원)는 가족카드 이용 실적이 필요해 계산하지 않는다",
+      "mart-5: 상설 매장과 임대 매장 이용금액은 제외된다",
+      "coffee-5: 백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트 입점 점포와 임대 매장은 제외된다",
+      "coffee-5: 배달앱이나 식당 예약앱을 통한 주문 결제, 상품권 구입, 선불카드 충전은 제외된다",
+      "beauty-pet-5: 대형시설물 입점 점포와 임대 매장, 네이버 예약과 카카오 헤어 같은 별도 앱 결제는 제외된다"
+    ],
+    "open_questions": [
+      "revisions[0].spend: 취소가 실적에서 빠지는 달. 원문에는 혜택을 매입 취소가 접수된 달에 차감한다는 문구만 있다 (가정: cancel_month)",
+      "revisions[0].benefits: 원문은 결제 한 건에 영역 혜택이 여럿 겹칠 때의 처리를 적지 않았다. 한 건에 가장 큰 혜택 하나만 준다 (가정: 가장 큰 혜택 하나)",
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의 시작일을 잠정 시작일로 둔다. (가정: 2026-07-06)",
+      "revisions[0].benefits[beauty-pet-5].target: 원문 대상은 미용업종이다. 화장품 업종은 넣지 않고 미용실만 넣었다. (가정: 미용실과 동물병원)"
+    ]
+  },
+  {
+    "card_id": "hana-15865",
+    "status": "ready",
+    "reason": "공식 상품 페이지(A-26-2660)에서 옮김. 원더카드 2.0 T 조합. 연회비 19,900. 40만/80만/120만 구간 하나머니 적립",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41015865P&CD_PD_SEQ=15865"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "T멤버십 바코드 11pay 오프라인 20% 적립",
+      "무이자할부 서비스",
+      "온가족 플러스",
+      "혜택플러스와 조합 변경",
+      "가족카드 합산"
+    ],
+    "open_questions": [
+      "시행일 잠정 2026-07-06",
+      "SK주유와 11번가가 한도를 함께 쓰는지 분명하지 않아 함께 쓰는 쪽",
+      "취소 실적 처리 달"
+    ]
+  },
+  {
+    "card_id": "hana-16350",
+    "status": "exclude",
+    "reason": "등유나눔카드 체크카드. 상품 페이지에 계산할 결제 혜택이 없고 취약계층 등유 지원용이다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16350"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16728",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 사례 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16728"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "영화 5천원 캐시백은 분기별 1회와 연 최대 4회 한도의 기준 시점이 원문에 없어 담지 못했다",
+      "본인카드와 가족카드의 실적과 캐시백 한도는 합산한다",
+      "아이행복 정부지원금은 실적에서 빠진다",
+      "무승인 후불교통 매출은 매출이 접수된 달의 이용금액에 들어간다",
+      "공항철도는 업종으로 가릴 수 없어 계산하지 않는다",
+      "공항철도는 업종으로 가릴 수 없어 계산하지 않는다",
+      "대상 가맹점은 하나카드 가맹점 분류상 병원 업종과 약국으로 등록된 곳에 한한다",
+      "백화점 쇼핑몰 마트 등 입점 점포 이용금액은 제외된다",
+      "LPG충전소 이용금액은 제외된다"
+    ],
+    "open_questions": [
+      "현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다.",
+      "원문은 공과금(전기요금 포함)과 도시가스, 아파트관리비를 실적에서 뺀다고 적었다. 업종 하나로 맞춰 utility 전체를 뺐다.",
+      "소액 의료 캐시백의 병원 업종에 동물병원이나 요양병원이 드는지 원문에 없다."
+    ]
+  },
+  {
+    "card_id": "hana-16761",
+    "status": "blocked",
+    "reason": "Club Leaders 5는 대한항공 마일리지 적립이 핵심이고 마일리지 원화 가치가 원문에 없어 담을 수 없다. 나머지는 바우처와 라운지",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16761"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16763",
+    "status": "blocked",
+    "reason": "대한항공 마일리지 적립이 핵심 혜택인데 원문에 마일리지 1개의 원화 가치 문구가 없어 포인트를 더할 수 없다. 비마일리지 혜택은 바우처와 라운지뿐이다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16763"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16787",
+    "status": "ready",
+    "reason": "트래블로그 신용 상품 페이지 대조. 실적 구간 없음, 하나머니 1%/1.3%/3%",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16787"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "국내외 ATM 이용금액과 해외 하나머니 이용금액은 적립에서 빠진다",
+      "해외 이용수수료와 ATM 인출 수수료 면제는 외화 하나머니 결제 설정에서만 되며 계산하지 않는다",
+      "air-duty-travel-3: 여행사와 구매대행 사이트",
+      "air-duty-travel-3: 온라인 쇼핑몰(오픈마켓",
+      "air-duty-travel-3: 소셜)을 거친 결제와 PG 하위몰 결제는 3%가 아니라 전가맹점 적립률이 적용된다",
+      "air-duty-travel-3: 국제선 항공은 국내 출발 왕복이고 원화로 구매한 경우만 적립된다",
+      "air-duty-travel-3: 면세점과 여행은 상품권 구매와 충전",
+      "air-duty-travel-3: 대형시설 입점 점포 이용이 빠진다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. (가정: 2026-02-09)",
+      "revisions[0].options[overseas_pay].default: 발급 때 해외결제는 외화 하나머니 결제로 자동 설정되지만 사용자 설정을 알 수 없다. 설정이 없으면 해외 적립을 주지 않는다. (가정: 설정 없음)"
+    ]
+  },
+  {
+    "card_id": "hana-16883",
+    "status": "ready",
+    "reason": "공식 상품 페이지(L-26-0547)에서 옮김. 연회비 2만원. 1,500원당 UniMile. 새 포인트 unimile 필요",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16883"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "라운지 무료 입장",
+      "위탁수하물 서비스",
+      "적립 대상이 겹치면 높은 서비스 하나만",
+      "UniMile 사용처 제한",
+      "저비용항공사 여행사 경유 결제 제외"
+    ],
+    "open_questions": [
+      "시행일 잠정",
+      "해외 적립 매출만 실적 제외로 해석",
+      "국내 7 UniMile에 실적 조건 없음으로 해석"
+    ]
+  },
+  {
+    "card_id": "hana-16909",
+    "status": "blocked",
+    "reason": "대한항공 마일리지 적립 카드. 원문의 적립 단위가 항공 마일리지라 1마일의 원화 가치 문구가 없다. 포인트 가치 문구가 없으면 blocked",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16909"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16911",
+    "status": "blocked",
+    "reason": "Club Leaders 15는 대한항공 마일리지 1,500원당 1~2마일리지가 핵심 혜택인데 원문에 마일리지의 원화 가치 문구가 없어 포인트를 새로 더할 수 없다. 연회비 150만원",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41016911P&CD_PD_SEQ=16911"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16936",
+    "status": "ready",
+    "reason": "1% 기본과 백화점 베이커리 5%, 스타벅스 후불교통 10% 캐시백",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16936"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "하나증권 계좌 결제 전용",
+      "대형시설물 입점점포 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16949",
+    "status": "ready",
+    "reason": "0.5% 기본, 2% 업종 통합 5만, 5% 간편결제 구간 한도",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16949"
+    ],
+    "case_count": 11,
+    "unmodeled": [
+      "온가족 플러스와 혜택플러스 제외",
+      "노브랜드와 카페노티드 가맹점 없어 뺌",
+      "입점 매장과 상품권 등 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-16952",
+    "status": "ready",
+    "reason": "더 심플 월납요금 청구할인 10000/15000",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16952"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "본인카드와 가족카드 이용금액은 각각 산정한다",
+      "교통요금 등 무승인 매입은 매출전표가 접수된 달의 이용금액에 들어간다",
+      "monthly-bill-discount: 월납 요금은 각 대상 가맹점에 자동이체로 등록한 경우만 할인된다",
+      "monthly-bill-discount: 알뜰폰과 LG전자 렌탈, 대상 가맹점 상세(하나카드 홈페이지 공지사항)의 다른 월납 가맹점은 가맹점 키가 없어 계산하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. (가정: 2026-04-20)",
+      "revisions[0].spend.exclude_categories: 원문 실적 제외는 공과금, 수도·전기요금, 도시가스, 아파트관리비 등이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다. (가정: utility 전체)",
+      "revisions[0].benefits[monthly-bill-discount].target: 월납요금 대상 가맹점이 \"등\"으로 끝나 전체 목록을 확인하지 못했다. 원문에 이름이 적힌 가맹점만 넣었다. (가정: 이름이 적힌 가맹점만)"
+    ]
+  },
+  {
+    "card_id": "hana-17016",
+    "status": "ready",
+    "reason": "후불교통 10%와 올리브영 다이소 스타벅스 10%",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17016"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "K-패스 지역 주민 신청 조건",
+      "무승인 후불교통 매출 접수월 이동"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-17582",
+    "status": "ready",
+    "reason": "공식 상품 페이지(A-25-0405)에서 옮김. 원더 K리그 축덕 조합. 연회비 19,900. 전가맹점 0.8%, 간편결제 1.2%, 쿠팡 2%, 딜리버리 4% 등",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41017582P&CD_PD_SEQ=17582"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "슈퍼마켓 항목은 할인율이 비어 뺌",
+      "무이자할부",
+      "혜택플러스",
+      "가족카드 합산",
+      "SK pay는 결제수단 목록에 없음"
+    ],
+    "open_questions": [
+      "시행일 잠정 2025-03-10",
+      "페이지 준법심의 유효기간이 2026-03-09로 지났음",
+      "겹칠 때 가장 큰 혜택 하나"
+    ]
+  },
+  {
+    "card_id": "hana-17669",
+    "status": "ready",
+    "reason": "해외 2% 토스 포인트 월 1만 한도. toss_point 포인트 필요",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17669"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "국내외겸용 VISA 카드만 적용",
+      "토스 회원 필요",
+      "현금서비스와 현금인출 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-17770",
+    "status": "ready",
+    "reason": "공식 상품 페이지(L-24-0077)에서 옮김. 연회비 595,000/600,000. 특별적립 월 10만, 주유 월 2만 하나머니, 기본 1%와 200만 이상 1.5%",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41017770P&CD_PD_SEQ=17770"
+    ],
+    "case_count": 11,
+    "unmodeled": [
+      "프리미엄 바우처와 보너스 바우처는 연간 이용 조건이라 계산하지 않음",
+      "공항 라운지와 주차 서비스",
+      "가족카드 실적과 한도 합산",
+      "적립 영역이 겹치면 큰 서비스 하나만 지급",
+      "항공 면세 여행은 공식 홈페이지 직접 결제만"
+    ],
+    "open_questions": [
+      "시행일을 찾지 못해 출시일을 잠정으로 둠",
+      "특별 주유 한도 소진 뒤 200만원 이상 회원의 기본 적립률"
+    ]
+  },
+  {
+    "card_id": "hana-17771",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 사례 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17771"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "프리미엄 바우처는 본인에게 연 1회 택1이다. 첫해 발급 후 200만원 이용, 이후 직전 1년 2,400만원 이용이 필요하다. 해외·항공·면세·여행 60만원 청구할인이나 특급호텔 숙박 패키지다.",
+      "호텔 다이닝 20만원 현장할인과 골프·프리미엄 아울렛 50% 할인 보너스 바우처는 연간 누적 실적 조건이라 계산하지 않는다",
+      "전세계 공항라운지는 본인·가족·동반자 통합 연 10회, 일 3회다.",
+      "무료 주차 월 2회와 VISA Infinite 발렛파킹은 계산하지 않는다",
+      "가족카드의 전월 실적과 한도는 본인카드와 합산한다",
+      "적립 영역이 겹치면 적립금액이 큰 서비스 하나만 준다",
+      "해외 매출은 최종 원화 청구금액으로 적립한다",
+      "리터는 SK에너지 고시 휘발유가로 환산한다. 앱은 공통 기름값 기준값으로 환산한다",
+      "EV 충전 50% 적립은 대상 충전소 목록을 가맹점으로 담을 수 없어 계산하지 않는다",
+      "공식 홈페이지와 앱 또는 오프라인 매장에서 직접 결제한 건만 제공한다. 여행사와 구매대행 사이트와 온라인 쇼핑몰을 거친 결제는 제외한다.",
+      "공식 홈페이지와 앱 또는 오프라인 매장에서 직접 결제한 건만 제공한다. 여행사와 구매대행 사이트와 온라인 쇼핑몰을 거친 결제는 제외한다.",
+      "지정 업체 공식 홈페이지와 앱에서 직접 결제한 건만 제공한다. 몰 이동 결제는 제외한다."
+    ],
+    "open_questions": [
+      "현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다.",
+      "영역별 3% 적립 한도가 상세에는 월 통합 20만 하나머니, 요약에는 10만 하나머니로 다르게 적혀 있다.",
+      "특별·주유 한도를 다 쓴 결제에 200만원 이상 회원이 1.5% 기본적립을 받는지, 원문 문장대로 1.0%만 받는지 불명확하다.",
+      "원문에 하나머니 반올림 문구가 없다."
+    ]
+  },
+  {
+    "card_id": "hana-18243",
+    "status": "blocked",
+    "reason": "카카오페이포인트 적립이 핵심인데 카카오페이포인트의 원화 가치 문구가 원문에 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18243"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-18271",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 사례 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18271"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "실적 제외에 국내외 ATM 이용금액, 스쿨뱅킹, 대학원등록금이 있으나 업종으로 가릴 수 없다",
+      "무승인 후불교통 매출은 매출이 접수된 월의 이용금액에 반영한다",
+      "대상은 SKT",
+      "KT",
+      "LG U+",
+      "SK세븐모바일",
+      "KT스카이라이프",
+      "KT M모바일",
+      "딜라이브",
+      "헬로모바일",
+      "U+유모바일",
+      "LG헬로비전",
+      "HCN 등 통신 요금 대상 가맹점이다. 자동이체로 납부하지 않는 통신요금은 제외한다",
+      "대형시설물(백화점",
+      "할인점",
+      "아울렛",
+      "쇼핑몰",
+      "휴게소",
+      "공항",
+      "호텔",
+      "리조트",
+      "역사",
+      "마트) 입점 점포와 임대매장 결제는 제외된다",
+      "배달앱과 식당 예약앱 주문 결제는 제외된다"
+    ],
+    "open_questions": [
+      "현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다.",
+      "원문은 수도/전기요금과 그 외 공과금, 도시가스를 실적에서 뺀다고 적었다. 업종 하나로 맞춰 utility 전체를 뺐다."
+    ]
+  },
+  {
+    "card_id": "hana-18394",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 사례 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=18394"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "가족카드의 지난달 실적과 적립 한도는 본인카드와 합산한다",
+      "적립 대상이 겹치면 적립률이 높은 서비스 하나만 준다",
+      "아파트관리비 전기요금 가스요금은 하나카드 자동납부 등록이 가능한 가맹점만 대상이고 관리사무소 일괄 납부 건은 제외된다",
+      "전기요금과 가스요금은 가정용과 일부 영업용만 대상이다",
+      "하나손해보험 삼성화재 DB손해보험 롯데손해보험 한화손해보험과 그 밖의 손해보험 업종은 가맹점 목록에 없어 담지 못했다",
+      "대교뉴이프 인지케어와 신체케어 결제 건은 담지 못했다",
+      "요양병원 요양 보육 복지시설 한약방 동물병원 등 병원과 약국 업종에 들지 않는 의료업은 계산하지 않는다",
+      "공식 홈페이지와 앱 또는 영화관 오프라인 결제만 대상이고 구매대행 사이트와 온라인 쇼핑몰 관람권과 외부 사이트 결제는 제외된다",
+      "마트와 슈퍼마켓은 오프라인 결제만 대상이다. 앱은 업종 기준으로 계산하므로 온라인 마트 결제가 섞일 수 있다",
+      "상설 임대매장은 제외된다",
+      "쿠팡과 네이버쇼핑은 공식 홈페이지 결제만 대상이고 상품권 여행 항공권 티켓 도서 공연 매출은 제외된다"
+    ],
+    "open_questions": [
+      "현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다.",
+      "SAVING, CARE, LIFE 표마다 월 통합 적립 한도가 적혀 있고 안내문에는 영역별 월 적립한도라고도 적혀 있다. 영역마다 따로인지 하나를 함께 쓰는지 불명확하다.",
+      "실적 제외에 서비스(할인/적립) 받은 전체 매출 제외와 SAVING CARE LIFE 적립 받은 매출 제외가 함께 적혀 있다. 0.8%와 1% 적립 매출도 제외인지 불명확하다.",
+      "원문은 수도/전기요금과 그 외 공과금, 도시가스를 실적에서 뺀다고 적었다. 업종 하나로 맞춰 utility 전체를 뺐다."
+    ]
+  },
+  {
+    "card_id": "hana-19064",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 판매 종료로 보인다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19064"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-19150",
+    "status": "blocked",
+    "reason": "MOVING카드 ONLINE의 핵심이 3일 연속 이용 시 2배 적립이라 연속 이용 일수를 담을 수 없고 빼면 혜택이 절반 이하로 보인다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19150"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-19218",
+    "status": "ready",
+    "reason": "JADE Prime 상품 페이지 대조. 주유 리터당 적립과 바우처 제외",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19218"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "주유 리터당 150 하나머니 적립은 휘발유 고시가 기준 리터 환산이라 계산하지 않고 일반 적립률로 둔다",
+      "연간 누적 이용금액에 따른 프리미엄 바우처와 보너스 바우처 하나머니와 공항 라운지는 계산하지 않는다",
+      "본인카드와 가족카드 실적은 각각 산정한다",
+      "digital-50: 인앱결제와 간편결제",
+      "digital-50: 컨텐츠 개별 결제는 제외된다",
+      "travel-3: 여행사와 구매대행 사이트",
+      "travel-3: 온라인 쇼핑몰을 거친 결제는 제외된다",
+      "ev-30: EV 충전 요금이 아파트 관리비 같은 다른 이용 건에 포함된 결제는 제외된다",
+      "ev-30: 충전 가맹점 멤버십 등록이 필요하다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다. (가정: 2026-06-29)",
+      "revisions[0].spend.exclude_categories: 원문 실적 제외는 국세, 지방세, 수도·전기요금 등이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다. (가정: utility 전체)",
+      "revisions[0].benefits[ev-30].limits: EV 충전과 주유 적립은 월 통합 1만 하나머니인데 주유를 계산하지 않아 EV만 1만 한도로 둔다. (가정: EV만 1만)"
+    ]
+  },
+  {
+    "card_id": "hana-19227",
+    "status": "blocked",
+    "reason": "삼성월렛 포인트 적립이 핵심인데 삼성월렛 포인트의 원화 가치 문구가 원문에 없다. 하나머니로 적립되는 경우는 예외 처리",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=19227"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-207",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=207"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-267",
+    "status": "blocked",
+    "reason": "공식 상품 주소가 카드 목록 페이지로만 열려 상세 원문을 못 열었다. 검색으로도 공식 상세를 못 찾았다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=267"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-3154",
+    "status": "exclude",
+    "reason": "후불하이패스 카드는 신용판매 기능이 없는 고속도로 통행료 전용 카드이고 카드사 혜택이 없어 계산할 것이 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&CD_PD_SEQ=3154"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-4986",
+    "status": "ready",
+    "reason": "공식 상품 페이지 확인, 사례 통과",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=4986"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "본인카드와 모바일카드와 가족카드의 실적, 적립한도, 할인횟수를 합산한다",
+      "무승인 매출은 매출이 접수된 달의 실적에 들어간다",
+      "아이행복 정부지원금은 실적에서 빠진다",
+      "실적에서 지역쇼핑 가맹점 이용금액이 빠지지만 가맹점 단위로 가릴 수 없어 백화점과 마트 업종 전체를 뺐다",
+      "NC백화점 NC아울렛 NC WAVE 대동백화점 세이백화점 태평백화점 서원유통은 가맹점 목록에 없어 담지 못했다",
+      "임대매장 매출은 제외된다",
+      "전기요금은 한국전력공사 자동이체만 대상이고 아파트 빌라 연립 다세대 상가 등 일괄 납부 단체 요금은 제외된다",
+      "공항버스와 공항철도는 업종으로 가릴 수 없어 계산하지 않는다",
+      "통신 전기 도시가스 자동이체와 교통은 이번 달 합산 이용금액을 합쳐 10만원마다 주지만 여기서는 따로 합쳐 덜 줄 수 있다",
+      "백화점과 마트 입점 점포 결제는 제외된다"
+    ],
+    "open_questions": [
+      "현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다.",
+      "원문은 지역쇼핑과 주유 가맹점 이용금액, 공과금, 도시가스를 실적에서 뺀다고 적었다. 지역쇼핑 가맹점을 업종으로 가릴 수 없어 백화점과 마트 업종 전체를, 공과금은 utility 전체를 뺐다.",
+      "통신 교통 자동이체 적립은 영역 이용금액을 합쳐 10만원마다 주는지 원문에 영역별 합산 방법이 없다."
+    ]
+  },
+  {
+    "card_id": "hana-759",
+    "status": "blocked",
+    "reason": "CLUB1카드 200은 연회비 200만원 VVIP 카드로 별도 자격 심사가 있고 원문에 계산할 수 있는 적립률이나 할인율이 없다(마일리지, 호텔, 컨시어지 등 서비스)",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=759"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-7968",
+    "status": "blocked",
+    "reason": "1Q Special+는 지역쇼핑·주유·온라인쇼핑 등 영역별 이번 달 합산 이용금액 10만원 이상일 때 하나머니를 주는 구조라 이번 달 누적 달성 뒤 적용을 담을 수 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=7968"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-8317",
+    "status": "blocked",
+    "reason": "HANA Mile 적립 카드. 원문의 1 HANA Mile=11원은 결제대금 차감에만 적용하고 항공사 전환 가치는 다르다. 적립 가치를 정할 수 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=8317"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-8551",
+    "status": "blocked",
+    "reason": "우대 서비스가 최근 3개월 연속 매달 10만원 이상 이용이라는 연속 사용 기준이라 지금 모델로 맞게 셀 수 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=8551"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-8553",
+    "status": "blocked",
+    "reason": "#tag1카드 Navy는 최근 3개월 연속 월 10만원 이상 이용 여부로 일반과 우대 할인율이 갈리고 통합 할인한도가 실적 구간별이라 연속 사용 이력을 지금 모델로 계산할 수 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&CD_PD_SEQ=8553"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-9400",
+    "status": "ready",
+    "reason": "Mega 체크 상품 페이지 대조",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=4882"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "SKT, KT, LG U+ 자동이체 이동통신요금 월 1회 적립(5만원 이상 10만원 미만 3,000하나머니, 10만원 이상 5,000하나머니)은 계산하지 않는다. 이 자동이체 금액은 실적에서도 빠진다",
+      "본인카드와 가족카드의 사용금액과 적립한도는 각각 산정한다",
+      "아이행복 정부지원금은 실적에서 빠진다",
+      "life-200: 적립 대상 업종은 하나카드 기준에 따른다. 요식은 일반음식점과 패스트푸드만 넣었고 제과점과 카페는 넣지 않았다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. (가정: 2026-02-10)",
+      "revisions[0].spend.exclude_categories: 원문 실적 제외는 \"공과금, 도시가스 이용금액\"이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다. (가정: utility 전체)",
+      "revisions[0].tiers: 다른 하나멤버스 Mega 체크카드 페이지에는 실적 기준이 20만원으로 적힌 곳이 있다고 한다. 이 페이지는 25만원이다. (가정: 25만원)",
+      "revisions[0].benefits[life-200].target: 요식, 온라인쇼핑 업종 범위를 하나카드 기준으로 단정할 수 없다. 요식은 커피 업종을 생활밀착으로 보지 않은 원문 예시에 맞춰 일반음식점과 패스트푸드만 넣었다. (가정: 일반음식점, 패스트푸드)",
+      "revisions[0].benefit_exclusions: 상품권, 선불카드 충전 매출이 적립에서 빠지는지 원문에 없다. (가정: 적립에서 뺌)"
+    ]
+  },
+  {
+    "card_id": "hana-94080",
+    "status": "exclude",
+    "reason": "hana-13798와 같은 상품",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=16143"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-94130",
+    "status": "ready",
+    "reason": "국민연금증 1Q 체크 상품 페이지 대조",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=16734"
+    ],
+    "case_count": 11,
+    "unmodeled": [
+      "본인카드(모바일카드 포함)와 가족카드의 사용금액, 적립한도, 적립횟수를 합산한다",
+      "아이행복 정부지원금은 실적에서 빠진다",
+      "요약에 적힌 생활밀착업종 2만원당 200하나머니, 그 외 업종 100하나머니, 이동통신요금 자동이체 적립은 상세 조건이 없어 계산하지 않는다",
+      "transit-5: 공항버스는 적립 대상이지만 업종으로 가리지 못해 시내버스로 넣어야 계산된다",
+      "transit-5: 철도는 코레일과 SRT 현장, 공식 홈페이지, 앱 결제만 대상이고 여행사와 편의점 승차권 판매대리점 결제는 제외된다"
+    ],
+    "open_questions": [
+      "revisions[0].spend.exclude_categories: 원문 실적 제외는 \"대중교통 전체 사용금액, 공과금, 도시가스 이용금액\"이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다. (가정: utility 전체)",
+      "revisions[0].effective_from: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다. (가정: 2023-04-19)",
+      "revisions[0].benefits: 요약 문구의 생활밀착업종 2만원당 200하나머니, 그 외 업종 100하나머니, 이동통신요금 자동이체 적립은 상세 표에 대상과 한도가 없다. (가정: 넣지 않음)",
+      "annual_fees: 브랜드 표기가 페이지에 없어 국내전용 0원만 적었다. (가정: 국내전용 0원)"
+    ]
+  },
+  {
+    "card_id": "hana-94210",
+    "status": "blocked",
+    "reason": "K리그 축덕 Young Hana 체크카드 with OKcashbag의 하나머니 적립 중 스타벅스 외식 영화 쇼핑 어학 통신이 모두 월 1회 연 6회 한도다. 연 횟수를 발급일 기준으로 셀지 달력 연도로 셀지 원문에 없고 핵심 혜택이라 뺄 수 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=10208"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-94234",
+    "status": "blocked",
+    "reason": "대한항공 마일리지 적립 카드로 원화 가치 문구가 없고, 공식 상세 페이지가 카드 목록 페이지로만 열려 원문을 못 열었다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=94234"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-94235",
+    "status": "blocked",
+    "reason": "트래블로그 PRESTIGE 신용카드는 대한항공 마일리지 1,500원당 1마일리지가 핵심 혜택인데 원문에 마일리지의 원화 가치 문구가 없어 포인트를 새로 더할 수 없다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41017886P&CD_PD_SEQ=17886"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-94334",
+    "status": "ready",
+    "reason": "공식 상품 페이지(A-26-2543)에서 옮김. 연회비 없음 Visa. 군마트 PX 20~30%, 쿠팡과 네이버플러스스토어 20%, 급여이체 택시 배달 디지털, 실적 10만 이상 Basic 통합 한도",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41018813P&CD_PD_SEQ=18813"
+    ],
+    "case_count": 16,
+    "unmodeled": [
+      "CU 행사품목 10% 현장할인",
+      "CGV 팝콘 무료",
+      "국군 콘도",
+      "놀이공원 50%",
+      "상해보험 휴대폰케어 트래블로그 스위치",
+      "국군의날과 현충일 특별 한도",
+      "맘스터치는 공통 가맹점에 없음"
+    ],
+    "open_questions": [
+      "시행일 잠정 2026-06-26",
+      "택시 배달 디지털을 급여이체가 있어야 받는 것으로 해석",
+      "utility 전체를 실적 제외",
+      "광역교통 대상 업종"
+    ]
+  },
+  {
+    "card_id": "hana-9892",
+    "status": "blocked",
+    "reason": "대한항공 마일리지 적립이 핵심 혜택인데 원문에 마일리지 1개의 원화 가치 문구가 없어 포인트를 더할 수 없다. 비마일리지 혜택은 바우처와 라운지뿐이다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=9892"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "hana-9911",
+    "status": "blocked",
+    "reason": "대한항공 마일리지 적립이 핵심 혜택인데 원문에 마일리지 1개의 원화 가치 문구가 없어 포인트를 더할 수 없다. 비마일리지 혜택은 바우처와 라운지뿐이다",
+    "source_urls": [
+      "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=9911"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  }
+]

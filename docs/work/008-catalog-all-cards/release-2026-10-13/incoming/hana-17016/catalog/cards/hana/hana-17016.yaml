@@ -1,0 +1,93 @@
+schema_version: 2
+id: hana-17016
+issuer: hana
+name: K-패스 하나 신용카드
+short_name: 하나 K-패스
+kind: credit
+product_codes:
+  - '17016'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 17000}
+  - {scope: global, brand: mastercard, amount: 17000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41017016P&CD_PD_SEQ=17016', fetched_at: 2026-10-13, review_no: A-26-0405}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2026-02-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+    limits:
+      - {key: drugstore-month, per: month, amount: 10000}
+      - {key: drugstore-day, per: day, amount: 1000}
+    benefits:
+      - key: transit-10
+        title: 버스·지하철 후불교통 10% 청구할인
+        source: page
+        evidence: ['버스,지하철 10% 월 1만원 월 2만원', 대중교통으로 이용한 후불교통카드 매출 건에 한해 할인 제공, '시외버스, 고속버스, 티머니/캐시비 등 교통카드 충전금액은 서비스 제외', 지난달 실적 50만원 이상 100만원 이상]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {region: domestic}
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {500000: 10000, 1000000: 20000}
+        tiers: {from: 500000}
+      - key: olive-young-10
+        title: 올리브영 10% 청구할인
+        source: page
+        evidence: ['올리브영, 다이소 10% 일 1천원 월 1만원', 국내 가맹점 이용 건에 한해 청구할인 서비스 제공, 지난달 실적 50만원 이상]
+        target:
+          merchants: [olive_young]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: drugstore-month}
+          - {shared: drugstore-day}
+        tiers: {from: 500000}
+        unmodeled: [백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 호텔, 리조트, 공항, 역사 입점 점포와 임대 매장은 제외된다, 배달앱 등을 통한 주문 결제는 제외된다]
+      - key: daiso-10
+        title: 다이소 오프라인 10% 청구할인
+        source: page
+        evidence: ['올리브영, 다이소 10% 일 1천원 월 1만원', 다이소는 오프라인 결제건에 한하여 서비스 제공, 지난달 실적 50만원 이상]
+        target:
+          merchants: [daiso]
+        when:
+          - {region: domestic}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: drugstore-month}
+          - {shared: drugstore-day}
+        tiers: {from: 500000}
+        unmodeled: [백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 호텔, 리조트, 공항, 역사 입점 점포와 임대 매장은 제외된다, 배달앱 등을 통한 주문 결제는 제외된다]
+      - key: coffee-10
+        title: 스타벅스·커피빈 10% 청구할인
+        source: page
+        evidence: ['스타벅스,커피빈 10% 월 5천원', 국내 가맹점 이용 건에 한해 청구할인 서비스 제공, 지난달 실적 50만원 이상]
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        unmodeled: [백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 호텔, 리조트, 공항, 역사 입점 점포와 임대 매장은 제외된다, 배달앱 등을 통한 주문 결제는 제외된다]
+    unmodeled: [K-패스 사업 참여 지역 주민등록 거주자만 신청할 수 있다, 후불교통 실적 중 승인 시점이 아니라 매출 접수월에 반영되는 무승인 거래의 월 이동은 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 준법심의일 2026-02-12를 현재 규칙의 시작일로 보았다. 원문에 시행일은 없다, assumed: '2026-02-12'}
+  - {path: 'revisions[0].spend', question: '원문은 수도/전기요금, 그외 공과금, 도시가스를 실적에서 뺀다. 공과금 범위를 단정할 수 없어 utility 전체를 뺐다', assumed: utility 전체}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 17,000원. 혜택 받은 매출을 실적에서 빼는 문구는 없다. 지난달 실적은 1일부터 말일 승인 기준이다. 후불교통 같은 무승인 거래는 매출 접수월 이용금액에 넣는다.

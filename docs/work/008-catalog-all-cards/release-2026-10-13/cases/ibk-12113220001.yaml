@@ -1,0 +1,60 @@
+card: ibk-12113220001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 택시 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {taxi-5: 500}}
+  calc: 10,000원 × 5% = 500원
+- name: 통신 5% 한도 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 120000, merchant: skt}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 5000}}
+  calc: 6,000원 중 30만 구간 한도 5,000원
+- name: 온라인 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 25000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-5k: 5000}}
+  calc: 2만원 이상이라 5,000원
+- name: 온라인 2만원 미만 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 19000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 2만원 미만
+- name: 해외 5% 건당 5천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, region: overseas}
+  expect:
+  - {payment: 0, benefits: {overseas-5: 5000}}
+  calc: 10,000원 중 건당 5,000원. 60만 구간 한도 10,000원 안
+- name: 스타벅스 사이렌오더 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6000, merchant: starbucks, channel: online}
+  expect:
+  - {payment: 0, benefits: {starbucks-2k: 2000}}
+  calc: 4천원 이상이라 2,000원
+- name: 29만원 실적은 혜택 없음
+  prev_month_spend: 290000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만
+- name: 후불교통 버스 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-5: 75}}
+  calc: 1,500원 × 5% = 75원

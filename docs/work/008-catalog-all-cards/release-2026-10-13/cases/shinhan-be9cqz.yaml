@@ -1,0 +1,25 @@
+card: shinhan-be9cqz
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 투썸 20% 1만원까지
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: twosome, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {twosome-20: 2000}, counted: 15000}
+  calc: 1만원 × 20% = 2,000원. 한도 3,000원 안
+- name: 경계 직전 299999 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: twosome, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 15000}
+  calc: 30만 미만
+- name: 넷플릭스 1천원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 13500, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-1k: 1000}, counted: 13500}
+  calc: 정액 1,000원

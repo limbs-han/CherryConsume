@@ -1,0 +1,20 @@
+card: lotte-1892
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 70만 구간 상조 납입 16,000원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 39000, merchant: preedlife, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {sangjo-cashback: 16000}
+  calc: 70만 구간 월 16000
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 39000, merchant: preedlife, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만 미만

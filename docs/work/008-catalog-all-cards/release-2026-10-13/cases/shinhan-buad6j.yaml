@@ -1,0 +1,23 @@
+card: shinhan-buad6j
+cases:
+- name: 30만 구간 국내 0.7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-point-0-7: 700}}
+  calc: 100,000 x 0.7% = 700P
+- name: 실적 직전 299999는 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만
+- name: 해외 일시불 1.7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-point-1-7: 1700}}
+  calc: 100,000 x 1.7% = 1,700P

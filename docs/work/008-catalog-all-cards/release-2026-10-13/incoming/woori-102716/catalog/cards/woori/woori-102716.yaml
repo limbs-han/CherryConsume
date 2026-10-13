@@ -1,0 +1,196 @@
+schema_version: 2
+id: woori-102716
+issuer: woori
+name: 카드의정석 오하CHECK
+kind: check
+product_codes:
+  - '102716'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102716', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000, 700000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_express, utility]
+      unmodeled: [정부지원금, 매출취소금액, 다른 우리카드 이벤트 혜택 적용 매출은 이벤트별 조건에 따라 제외]
+    limits:
+      - key: shopping
+        per: month
+        amount: {200000: 2000, 500000: 4000, 700000: 6000}
+      - key: eat
+        per: month
+        amount: {200000: 2000, 500000: 4000, 700000: 6000}
+      - key: play
+        per: month
+        amount: {200000: 3000, 500000: 6000, 700000: 9000}
+      - key: life
+        per: month
+        amount: {200000: 3000, 500000: 6000, 700000: 9000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [pay-5, shopping-5, coffee-5, delivery-5, ott-5, ticket-5, transit-5, telecom-5, exam-5, overseas-5]
+        spill: none
+    benefits:
+      - key: pay-5
+        title: 간편결제 5% 캐시백
+        source: page
+        evidence: [오늘 하루 SHOPPING 5% 캐시백 서비스, 간편결제 네이버페이·우리WON페이, 매출 건당 최대 1천원까지 캐시백 제공, SHOPPING 월 한도 20만원 2천원 50만원 4천원 70만원 6천원]
+        target: {all: true}
+        when:
+          - {channel: online}
+          - payment: [naver_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: shopping}
+        tiers: {from: 200000}
+        unmodeled: [페이에 본 카드를 등록해 온라인 업종에서 쓴 경우만]
+      - key: shopping-5
+        title: 온라인 쇼핑 5% 캐시백
+        source: page
+        evidence: [오늘 하루 SHOPPING 5% 캐시백 서비스, 온라인 쇼핑 쿠팡 무신사 지그재그, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [coupang, musinsa, zigzag]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: shopping}
+        tiers: {from: 200000}
+        unmodeled: [쿠팡 와우 멤버십과 기타 간편결제 제외. 무신사·지그재그는 공식 앱과 홈페이지 결제만. 안경점 5% 캐시백은 안경점 업종이 없어 담지 않았다]
+      - key: coffee-5
+        title: 스타벅스 사이렌오더 5% 캐시백
+        source: page
+        evidence: [오늘 하루 EAT 5% 캐시백 서비스, 커피 스타벅스 사이렌오더, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [starbucks]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: eat}
+        tiers: {from: 200000}
+        unmodeled: [스타벅스 공식 앱 사이렌오더만. 스타벅스카드 구매·충전과 백화점·대형할인점·미군부대 임대매장 제외]
+      - key: delivery-5
+        title: 배달 5% 캐시백
+        source: page
+        evidence: [오늘 하루 EAT 5% 캐시백 서비스, 배달/주문 배달의민족 쿠팡이츠 B마트 마켓컬리, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [baemin, coupang_eats, kurly]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: eat}
+        tiers: {from: 200000}
+        unmodeled: [공식 앱과 홈페이지 결제만. 가맹점 직접결제와 상품권 구매 제외. 마켓컬리는 컬리패스 멤버십 자동납부 월 1회만]
+      - key: ott-5
+        title: OTT 5% 캐시백
+        source: page
+        evidence: [오늘 하루 PLAY 5% 캐시백 서비스, OTT 넷플릭스 멜론, 매출 건당 최대 1천원까지 캐시백 제공, PLAY 월 한도 20만원 3천원 50만원 6천원 70만원 9천원]
+        target:
+          merchants: [melon, netflix]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - billing: [subscription]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: play}
+        tiers: {from: 200000}
+        unmodeled: [공식 앱과 홈페이지에서 직접 신청한 정기결제만. 넷플릭스는 Basic·Standard·Premium 요금제만이고 광고형 스탠다드 제외]
+      - key: ticket-5
+        title: 공연티켓 5% 캐시백
+        source: page
+        evidence: [오늘 하루 PLAY 5% 캐시백 서비스, 공연티켓 인터파크티켓 YES24티켓 티켓링크 멜론티켓, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [interpark_ticket, melon_ticket, ticketlink, yes24_ticket]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: play}
+        tiers: {from: 200000}
+        unmodeled: [공식 앱과 홈페이지 예매만]
+      - key: transit-5
+        title: 후불 시내버스·지하철 5% 캐시백
+        source: page
+        evidence: [오늘 하루 LIFE 5% 캐시백 서비스, 대중교통 시내버스 지하철 후불교통 이용금액, 매출 건당 최대 1천원까지 캐시백 제공, LIFE 월 한도 20만원 3천원 50만원 6천원 70만원 9천원]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life}
+        tiers: {from: 200000}
+        unmodeled: [고속버스·시외버스·공항버스·공항철도 직통열차 제외]
+      - key: telecom-5
+        title: 이동통신 자동납부 5% 캐시백
+        source: page
+        evidence: [오늘 하루 LIFE 5% 캐시백 서비스, 이동통신 SKT KT LG U+ 헬로모바일 KTM모바일 U+유모바일, 매출 건당 최대 1천원까지 캐시백 제공]
+        target:
+          merchants: [hello_mobile, kt, kt_m_mobile, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life}
+        tiers: {from: 200000}
+        unmodeled: [휴대전화 요금 자동납부만. 인터넷·집전화 결합상품 제외. U+유모바일은 가맹점이 없어 담지 않았다]
+      - key: exam-5
+        title: 어학시험 5% 캐시백
+        source: page
+        evidence: [오늘 하루 LIFE 5% 캐시백 서비스, 어학시험 TOEIC OPIc HSK TEPS TOEFL, 매출 건당 최대 1천원까지 캐시백 제공, 해외와 어학시험 매출이 중복되는 경우 어학시험 서비스로 캐시백 적용]
+        target:
+          merchants: [toeic]
+        when:
+          - payment_not: [naver_pay, woori_won_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life}
+        tiers: {from: 200000}
+        unmodeled: [OPIc·HSK·TEPS·TOEFL은 가맹점이 없어 담지 않았다]
+      - key: overseas-5
+        title: 해외 5% 캐시백
+        source: page
+        evidence: [오늘 하루 LIFE 5% 캐시백 서비스, 해외 온/오프라인 가맹점, 매출 건당 최대 1천원까지 캐시백 제공, MasterCard브랜드만 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: life}
+        tiers: {from: 200000}
+        unmodeled: [Mastercard 해외겸용 카드만. 국내전용 브랜드는 해외 캐시백이 없다]
+    unmodeled: [체크카드 소액신용결제는 월 최대 30만원 한도 안 신용 일시불. 간편결제로 승인되면 간편결제 서비스가 먼저 적용된다. 해외 캐시백은 카드 결제일에 입금된다. 잔여 한도는 이월하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일은 2023-07-20이다., assumed: '2026-10-05'}
+notes: 2026-10-13 공식 상품 페이지 대조. 월 한도 표는 페이지의 이미지에서 읽었다. 영역별 월 한도는 영역 안 혜택이 함께 쓴다.

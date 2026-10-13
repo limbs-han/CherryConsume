@@ -1,0 +1,65 @@
+card: hana-9400
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 25만 구간 시작 생활밀착 65000원
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 65000, category: fuel}
+  - {at: 2026-11-04T13:00, amount: 21000, category: cafe}
+  expect:
+  - payment: 0
+    benefits: {life-200: 600}
+  - payment: 1
+    benefits: {other-100: 100}
+  calc: 65,000원을 2만원으로 나눈 몫 3 x 200 = 600. 21,000원은 몫 1 x 100 = 100
+- name: 실적 직전 249999
+  prev_month_spend: 249999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 65000, category: fuel}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 25만원보다 1원 적어 0원
+- name: 2만원 경계
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 19999, category: department_store}
+  - {at: 2026-11-04T12:30, amount: 20000, category: department_store}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {life-200: 200}
+  calc: 19,999원은 몫 0이라 0원. 20,000원은 몫 1 x 200 = 200
+- name: 월 통합 한도 10만
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000000, category: grocery_mart}
+  - {at: 2026-11-05T12:00, amount: 40000, category: cafe}
+  expect:
+  - payment: 0
+    benefits: {life-200: 100000}
+  - payment: 1
+    benefits: {}
+  calc: 10,000,000원은 몫 500 x 200 = 100,000으로 한도에 닿고 다음 결제는 0원
+- name: 해외와 국세는 적립 제외
+  prev_month_spend: 250000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  - {at: 2026-11-04T13:00, amount: 100000, category: tax}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 해외 매출과 국세는 적립 대상이 아니다
+- name: 신규 특례 기간 안
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-04T12:00, amount: 40000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {life-200: 400}
+  calc: 10월 사용 등록이면 11월 말까지 25만 구간으로 보아 몫 2 x 200 = 400

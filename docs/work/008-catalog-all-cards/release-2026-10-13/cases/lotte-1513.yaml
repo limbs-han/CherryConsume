@@ -1,0 +1,43 @@
+card: lotte-1513
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 15만원 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 150500, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {pt-2-0: 3000}
+    counted: 150500
+  calc: 1천원 단위 150 × 20 = 3,000P
+- name: 실적 직전 299999는 0.2%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 150500, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {pt-0-2: 300}
+  calc: 150 × 2 = 300P
+- name: 건당 금액 구간
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 149999, merchant: lotte_mart, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: lotte_mart, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 49999, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {pt-1-5: 2235}
+  - payment: 1
+    benefits: {pt-1-0: 500}
+  - payment: 2
+    benefits: {pt-0-5: 245}
+  calc: 149 × 15 = 2,235. 50 × 10 = 500. 49 × 5 = 245
+- name: 무이자할부는 적립 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 200000, merchant: lotte_mart, installment_months: 3, interest_free: true, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 무이자할부 적립 제외

@@ -1,0 +1,48 @@
+card: hana-11582
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 시작 국내 0.3% 캐쉬백
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other}
+  expect:
+  - payment: 0
+    benefits: {domestic-cashback-0-3: 300}
+  calc: 100,000원 x 0.3% = 300원
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 캐쉬백 0원
+- name: 월 한도 5만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000000, category: other}
+  - {at: 2026-11-05T12:00, amount: 100000, category: other}
+  expect:
+  - payment: 0
+    benefits: {domestic-cashback-0-3: 50000}
+  - payment: 1
+    benefits: {}
+  calc: 20,000,000원 x 0.3% = 60,000원이 월 한도 50,000원에 걸리고 다음 결제는 0원
+- name: 해외 국제브랜드수수료 1% 면제는 실적과 관계없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {overseas-fee-free: 1000}
+  calc: 100,000원 x 1% = 1,000원. 해외 이용금액은 캐쉬백 대상이 아니다
+- name: 신규 특례 기간 안
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: other}
+  expect:
+  - payment: 0
+    benefits: {domestic-cashback-0-3: 300}
+  calc: 10월 사용 등록이면 11월 말까지 30만 구간으로 보아 300원

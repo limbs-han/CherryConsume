@@ -1,0 +1,46 @@
+card: kb-09305
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 화요일 식당 10만원 1.2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekday-base-1-2: 1200}}
+  calc: 2026-11-03 화요일. 100,000 × 1.2% = 1,200점
+- name: 경계 직전 499999 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만 미만 적립 없음
+- name: 50만 구간 수요일 카페 1만원 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekday-daily-1-5: 150}}
+  calc: 10,000 × 1.5% = 150점
+- name: 50만 구간 목요일 관리비 자동납부 20만원 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 200000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekday-autopay-1-5: 3000}}
+  calc: 200,000 × 1.5% = 3,000점
+- name: 50만 구간 토요일 식당 10만원 1.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekend-base-1-5: 1500}}
+  calc: 2026-11-07 토요일. 100,000 × 1.5% = 1,500점
+- name: 50만 구간 금요일 면세점 10만원 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-06T12:00, amount: 100000, category: travel.duty_free, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {weekend-dutyfree-3: 3000}}
+  calc: 100,000 × 3% = 3,000점

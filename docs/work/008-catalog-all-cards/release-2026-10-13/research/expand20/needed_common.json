@@ -1,0 +1,24 @@
+[
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "unimile",
+      "name": "UniMile",
+      "won_per_point": 1
+    },
+    "card_id": "hana-16883",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16883",
+    "evidence": "1 UniMile 은 1원과 동등한 가치를 가지며"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "toss_point",
+      "name": "토스 포인트",
+      "won_per_point": 1
+    },
+    "card_id": "hana-17669",
+    "source_url": "https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17669",
+    "evidence": "적립기준 : 토스 포인트 (1토스 포인트 = 1원)"
+  }
+]

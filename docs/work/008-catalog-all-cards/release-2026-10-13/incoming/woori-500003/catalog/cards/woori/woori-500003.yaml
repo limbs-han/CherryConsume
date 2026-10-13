@@ -1,0 +1,113 @@
+schema_version: 2
+id: woori-500003
+issuer: woori
+name: 카드의정석2 TEEN WAY
+kind: credit
+product_codes:
+  - '500003'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 2000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500003', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-06-26'
+    source: page
+    tiers: [0, 100000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: teen-total
+        per: month
+        amount: {0: 3000, 100000: 6000}
+      - key: teen-cvs
+        per: month
+        amount: {0: 1000, 100000: 2000}
+      - key: teen-cafe
+        per: month
+        amount: {0: 1000, 100000: 2000}
+      - key: teen-fastfood
+        per: month
+        amount: {0: 1000, 100000: 2000}
+    benefits:
+      - key: convenience-low
+        title: 편의점 1% 청구할인
+        source: page
+        evidence: ['편의점 CU, GS25, 이마트24, 세븐일레븐', '전월 국내 가맹점 이용 실적 10만원 미만 | 1% | 영역별 1,000원 | 통합 월 3,000원']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: teen-cvs}
+          - {shared: teen-total}
+        tiers: {from: 0, to: 0}
+      - key: convenience-high
+        title: 편의점 3% 청구할인
+        source: page
+        evidence: ['편의점 CU, GS25, 이마트24, 세븐일레븐', '전월 국내 가맹점 이용 실적 10만원 이상 | 3% | 영역별 2,000원 | 통합 월 6,000원']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: teen-cvs}
+          - {shared: teen-total}
+        tiers: {from: 100000}
+      - key: coffee-low
+        title: 커피 1% 청구할인
+        source: page
+        evidence: ['커피 메가MGC커피, 컴포즈커피, 빽다방, 이디야커피, 투썸플레이스, 스타벅스', '10만원 미만 | 1% | 영역별 1,000원 | 통합 월 3,000원']
+        target:
+          merchants: [compose_coffee, ediya, mega_coffee, paik_coffee, starbucks, twosome]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: teen-cafe}
+          - {shared: teen-total}
+        tiers: {from: 0, to: 0}
+      - key: coffee-high
+        title: 커피 3% 청구할인
+        source: page
+        evidence: ['커피 메가MGC커피, 컴포즈커피, 빽다방, 이디야커피, 투썸플레이스, 스타벅스', '10만원 이상 | 3% | 영역별 2,000원 | 통합 월 6,000원']
+        target:
+          merchants: [compose_coffee, ediya, mega_coffee, paik_coffee, starbucks, twosome]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: teen-cafe}
+          - {shared: teen-total}
+        tiers: {from: 100000}
+      - key: fastfood-low
+        title: 패스트푸드 1% 청구할인
+        source: page
+        evidence: ['패스트푸드 맥도날드, 롯데리아, 버거킹, 맘스터치, 서브웨이', '10만원 미만 | 1% | 영역별 1,000원 | 통합 월 3,000원']
+        target:
+          merchants: [burger_king, lotteria, mcdonalds, moms_touch, subway]
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: teen-fastfood}
+          - {shared: teen-total}
+        tiers: {from: 0, to: 0}
+      - key: fastfood-high
+        title: 패스트푸드 3% 청구할인
+        source: page
+        evidence: ['패스트푸드 맥도날드, 롯데리아, 버거킹, 맘스터치, 서브웨이', '10만원 이상 | 3% | 영역별 2,000원 | 통합 월 6,000원']
+        target:
+          merchants: [burger_king, lotteria, mcdonalds, moms_touch, subway]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: teen-fastfood}
+          - {shared: teen-total}
+        tiers: {from: 100000}
+    unmodeled: [본인회원 부모가 신청하고 만 12~18세 자녀에게 발급하는 가족 신용카드다, 월 이용한도 기본 10만원이며 일시불만 가능하다, PG나 간편결제 전용 가맹점으로 결제하면 할인 제외, 신차구매와 의약품 전용몰과 환금성 업종과 부동산임대료와 LH/SH 공공임대료는 실적 제외인데 담지 못했다, 후불교통 이용금액은 매출표 접수일 기준으로 가족회원 월 실적에 포함된다, 국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다, 신규 특례는 최초 발급 카드에만 주고 시작일은 사용등록일과 사용개시일 중 빠른 날이다, 고속버스는 시외버스까지 실적 제외인데 고속·시외 모두 한 업종으로 뺐다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 확인했다. 상품 출시일 2026-06-26. 금융혁신지원특별법에 따른 혁신금융서비스 상품이다. 가족카드 실적과 한도는 본인카드와 별도다.

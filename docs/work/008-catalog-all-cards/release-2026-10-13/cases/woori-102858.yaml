@@ -1,0 +1,28 @@
+card: woori-102858
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 300000원 구간 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: bodyfriend_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {autopay-discount: 10000}
+  calc: 100,000원 자동납부가 30만 구간 월 한도 10,000원에 걸림
+- name: 1200000원 구간 한도
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: bodyfriend_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {autopay-discount: 20000}
+  calc: 120만 구간 월 한도 20,000원
+- name: 실적 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: bodyfriend_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만이라 0원

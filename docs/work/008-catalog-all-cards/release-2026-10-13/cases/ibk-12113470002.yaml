@@ -1,0 +1,32 @@
+card: ibk-12113470002
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 100,000원 × 0.2% = 200원
+- name: 커피 6% 20만 구간
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200, coffee-6: 5000}}
+  calc: 6,000원 중 20만 구간 한도 5,000원. 기본 200원
+- name: 커피 6% 50만 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 400, coffee-6: 8000}}
+  calc: 12,000원 중 50만 구간 한도 8,000원. 기본 400원
+- name: 19만원은 커피 혜택 없음
+  prev_month_spend: 190000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20}}
+  calc: 20만원 미만이라 커피 6% 없음. 기본 20원

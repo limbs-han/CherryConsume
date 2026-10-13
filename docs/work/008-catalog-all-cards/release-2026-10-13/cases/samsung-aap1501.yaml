@@ -1,0 +1,54 @@
+card: samsung-aap1501
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 대중교통 1,000원당 100원과 30만 구간 하한
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20500, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {public-transport-10: 2000}, counted: 0}
+  calc: 20,500원은 1,000원 단위 20개라 20 × 100 = 2,000원
+- name: 실적 30만원 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 299,999원은 0 구간이라 할인 없음
+- name: CU 1,500원당 200원과 월 한도 4,000원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 15000, merchant: cu, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cu-20: 2000}, counted: 0}
+  - {payment: 1, benefits: {cu-20: 2000}, counted: 0}
+  calc: 15,000 / 1,500 = 10 × 200 = 2,000원. 둘째는 4,000원 한도의 남은 2,000원
+- name: 음식점 1만원 이상 1,000원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-03T19:00, amount: 9999, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {restaurant-10: 1000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 9999}
+  calc: 10,000원 이상이면 1,000원. 9,999원은 할인 없음이라 실적 인정
+- name: 배달의민족 1만5천원 이상 2,000원과 월 3회
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T19:00, amount: 15000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 14999, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {baemin-20: 2000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 14999}
+  calc: 15,000원 이상 2,000원. 14,999원은 없음
+- name: 신규 발급 다음 달까지는 30만 구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+  payments:
+  - {at: 2026-11-03T12:00, amount: 15000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cu-20: 2000}, counted: 0}
+  calc: 10월 발급이라 11월 말까지 30만 구간. 2,000원

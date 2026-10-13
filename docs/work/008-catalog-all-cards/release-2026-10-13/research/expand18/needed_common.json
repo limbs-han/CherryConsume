@@ -1,0 +1,49 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "e1_charging",
+      "name": "E1 충전소",
+      "category": "fuel",
+      "aliases": [
+        "E1충전소",
+        "E1 LPG",
+        "이원 충전소"
+      ]
+    },
+    "card_id": "woori-103564",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103564",
+    "evidence": "E1 충전소 (LPG, 수소, 전기) 10% 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "dongyang_life",
+      "name": "동양생명",
+      "category": "insurance.private",
+      "aliases": [
+        "동양생명",
+        "동양생명보험"
+      ]
+    },
+    "card_id": "woori-104137",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104137",
+    "evidence": "동양생명 보험료 자동납부 시 실적별 월 할인한도 내 청구할인"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "zb1_plus_chat",
+      "name": "ZB1 Plus Chat",
+      "category": "other",
+      "billing": "subscription",
+      "aliases": [
+        "ZB1 Plus Chat",
+        "ZB1 플러스챗"
+      ]
+    },
+    "card_id": "woori-500047",
+    "source_url": "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500047",
+    "evidence": "ZB1 Plus Chat 구독형 정기결제 청구할인"
+  }
+]

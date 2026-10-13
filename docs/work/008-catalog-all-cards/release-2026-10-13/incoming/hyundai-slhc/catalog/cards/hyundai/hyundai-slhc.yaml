@@ -1,0 +1,78 @@
+schema_version: 2
+id: hyundai-slhc
+issuer: hyundai
+name: 현대 햇살론카드
+short_name: 현대 햇살론
+search_names: [햇살론카드, 현대 햇살론카드, 현대카드 햇살론]
+kind: credit
+product_codes: [SLHC]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=SLHC', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_A9F-20250425-1110-12_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_%ED%96%87%EC%82%B4%EB%A1%A0_V2.pdf', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      interest_free: exclude
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금은 할인에서 뺀다, 현대카드의 다른 할인 서비스를 이용한 결제는 할인에서 뺀다]
+    stacks:
+      - key: main
+        pick: priority
+        order: [life-transit-1, life-convenience-1, life-mart-1, base-05]
+        spill: none
+    benefits:
+      - key: life-transit-1
+        title: 시내버스·지하철·택시 1% 청구 할인
+        source: manual
+        evidence: [생활 편의 영역 이용금액의 1% 청구 할인, '대중교통 : 시내버스, 지하철, 택시', 전월 이용금액 30만원 이상 시 혜택 제공, 기본 할인과 중복 적용 불가, 할인 횟수 제한 및 한도 없음]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 300000}
+      - key: life-convenience-1
+        title: 편의점 1% 청구 할인
+        source: manual
+        evidence: ['편의점 : CU, GS25, 세븐일레븐, 이마트24', 생활 편의 영역 이용금액의 1% 청구 할인, 전월 이용금액 30만원 이상 시 혜택 제공, 기본 할인과 중복 적용 불가, 할인 횟수 제한 및 한도 없음]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 300000}
+      - key: life-mart-1
+        title: 대형마트 1% 청구 할인
+        source: manual
+        evidence: ['대형마트 : 이마트, 홈플러스, 롯데마트', '온라인몰, 주차장, 문화센터, 임대매장, 기업형 슈퍼마켓(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼 등) 이용금액 및 상품권 구매금액 제외', 생활 편의 영역 이용금액의 1% 청구 할인, 전월 이용금액 30만원 이상 시 혜택 제공]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 300000}
+        unmodeled: [대형마트 주차장·문화센터·임대매장 결제는 할인하지 않는다]
+      - key: base-05
+        title: 국내 가맹점 0.5% 청구 할인
+        source: manual
+        evidence: [전월 이용금액 30만원 이상 시 국내 가맹점 이용금액의 0.5% 청구 할인, 할인 횟수 제한 및 한도 없음, 생활 편의 영역 할인은 기본 할인보다 우선 적용되며 중복 적용 불가]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+        tiers: {from: 300000}
+    unmodeled: [서민금융진흥원 보증 조건으로 발급하며 다른 신용카드가 있으면 신청할 수 없다, 모든 가맹점 2~3개월 무이자 할부(5만원 이상)는 할인이 아니라 계산하지 않는다, 할인은 매출전표 접수 순서로 적용한다, 대중교통·도시가스 등 사후 승인 가맹점은 매출전표 접수일 달의 실적으로 센다, 유흥업종·사행업종·상품권·PC방·골프장 같은 가맹점은 이용할 수 없다, 고속도로 통행요금은 실적에서 뺀다]
+open_questions:
+  - {path: product_codes, question: 상품 페이지 주소의 cardWcd를 상품 코드로 보았다, assumed: '[SLHC]'}
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 수집일을 시작일로 둔다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].benefits[base-05].reward', question: 할인 금액의 원 미만을 어떻게 처리하는지 공식 문구에 없다, assumed: floor}
+notes: 2026-10-13 공식 가이드북(2025년 4월 판) 대조. 연회비 국내전용 10,000원, 가족카드 없음, 서민금융진흥원 보증 상품. 전월 30만 이상 국내 가맹점 0.5% 청구 할인이고 시내버스·지하철·택시·편의점 4곳·대형마트 3곳은 1%로 기본 할인을 대신한다. 할인 횟수와 한도는 없다. 실적 제외는 연회비, 공과금, 전기·도시가스·관리비, 학교 납입금, 선불카드, 사회보험, 고속도로·고속버스, 무이자 할부다. 취소는 승인월에서 뺀다. 신규 발급은 발급월 다음 달 이용 건까지 30만 미만도 할인한다.

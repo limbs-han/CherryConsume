@@ -1,0 +1,57 @@
+card: samsung-aap1913
+holder:
+  started_on: '2026-01-01'
+  options: [{option: select, choice: medical, effective_from: '2026-01-01'}]
+cases:
+- name: 의료 20%와 50만 구간 한도 7천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 30000, category: hospital, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 30000, category: pharmacy, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-20: 6000}, counted: 0}
+  - {payment: 1, benefits: {medical-20: 1000}, counted: 0}
+  calc: 30,000 × 20% = 6,000. 둘째는 한도 7,000원의 남은 1,000원
+- name: 실적 50만원 직전이면 국내 0.5%만
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 30000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 150}, counted: 30000}
+  calc: 499,999원은 0 구간이라 의료 할인 없음. 30,000 × 0.5% = 150
+- name: 백화점 1%와 철도 2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 50000, category: transit.rail, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-offline-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {leisure-2: 1000}, counted: 50000}
+  calc: 백화점 100,000 × 1% = 1,000. 철도 50,000 × 2% = 1,000
+- name: 생활 옵션 주유 10%
+  prev_month_spend: 1000000
+  holder:
+    options: [{option: select, choice: life, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-fuel-10: 5000}, counted: 0}
+  calc: 50,000 × 10% = 5,000. 100만 구간 한도 10,000원 안
+- name: 생활 옵션 보험과 이동통신 정기결제 10%
+  prev_month_spend: 500000
+  holder:
+    options: [{option: select, choice: life, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T12:00, amount: 30000, category: insurance.private, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 50000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-insurance-10: 3000}, counted: 0}
+  - {payment: 1, benefits: {life-telecom-10: 4000}, counted: 0}
+  calc: 보험 30,000 × 10% = 3,000. 이동통신 50,000 × 10% = 5,000이나 50만 구간 한도 7,000원의 남은 4,000원
+- name: 온라인쇼핑 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-online-1: 1000}, counted: 100000}
+  calc: 100,000 × 1% = 1,000

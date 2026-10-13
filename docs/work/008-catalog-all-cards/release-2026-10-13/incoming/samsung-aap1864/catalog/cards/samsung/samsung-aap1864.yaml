@@ -1,0 +1,104 @@
+schema_version: 2
+id: samsung-aap1864
+issuer: samsung
+name: KTX 삼성카드
+short_name: KTX
+search_names: [KTX 삼성카드, KTX카드, 케이티엑스 삼성카드]
+kind: credit
+product_codes: [AAP1864]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1864', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtprloyan%2Fs%2FDT5yR2lgNTnM%3D&sn=1', fetched_at: 2026-10-13}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2025-04-28'
+    source: manual
+    tiers: [0, 400000, 800000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 적립하지 않는다, '문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 적립하지 않는다', '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 적립하지 않는다']
+    limits:
+      - key: korail-5
+        per: month
+        amount: {400000: 10000, 800000: 15000, 1500000: 30000}
+    stacks:
+      - {key: korail}
+      - {key: life}
+    benefits:
+      - key: base-0-5
+        title: 국내외 가맹점 0.5% KTX 마일리지 포인트 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 국내외 가맹점 0.5% KTX 마일리지 포인트 기본 적립', 해외는 해외겸용카드에 한해 제공]
+        target: {all: true}
+        reward: {type: points, program: ktx_mileage, rate: 0.5}
+        unmodeled: [고속버스는 차내 단말기와 고속버스 앱 결제만 적립에서 빠지지만 구분할 수 없어 고속버스 전체를 뺐다]
+      - key: korail-5
+        title: 한국철도공사 5% KTX 마일리지 포인트 추가 적립
+        source: manual
+        evidence: [한국철도공사 가맹점 이용 시 5% KTX 마일리지 포인트 추가 적립, 전월 이용금액 40만원 이상 시 제공, 통합 월 추가 적립한도 초과 시 기본 0.5% 적립만 적용, 한국철도공사 가맹점 결제건에 한함(철도승차권 반환수수료 및 SRT 결제건 제외), '전월 이용금액 제외 대상: ‘한국철도공사 5% KTX 마일리지 포인트 추가 적립’ 대상 가맹점 이용금액']
+        target:
+          merchants: [korail]
+        reward: {type: points, program: ktx_mileage, rate: 5}
+        limits:
+          - {shared: korail-5}
+        tiers: {from: 400000}
+        stack: korail
+        exclude_applied: 1
+        unmodeled: [철도승차권 반환수수료는 적립하지 않는다]
+      - key: life-cafe-cvs-0-5
+        title: 커피전문점·편의점 0.5% KTX 마일리지 포인트 추가 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 커피전문점/편의점/할인점/택시 0.5% KTX 마일리지 포인트 추가 적립', '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 커피빈, 블루보틀', '편의점 CU, GS25, 세븐일레븐, 이마트24, StoryWay', '커피전문점/편의점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [blue_bottle, coffee_bean, cu, ediya, emart24, gs25, seven_eleven, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: ktx_mileage, rate: 0.5}
+        stack: life
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 적립하지 않는다, StoryWay 편의점은 담지 않았다]
+      - key: life-starbucks-0-5
+        title: 스타벅스 0.5% KTX 마일리지 포인트 추가 적립
+        source: manual
+        evidence: ['단, 스타벅스의 경우, 사이렌오더 결제건도 혜택 제공']
+        target:
+          merchants: [starbucks]
+        reward: {type: points, program: ktx_mileage, rate: 0.5}
+        stack: life
+        unmodeled: [임대매장은 적립하지 않는다]
+      - key: life-mart-0-5
+        title: 할인점 0.5% KTX 마일리지 포인트 추가 적립
+        source: manual
+        evidence: ['할인점 이마트, 트레이더스 홀세일 클럽, 롯데마트, 농협 하나로마트', '할인점은 온라인몰도 포함되며, 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼), 쇼핑 외 결제건(상품권, 주차장 등), 임대매장은 제외']
+        target:
+          exclude_categories: [gift_card]
+          merchants: [emart, lotte_mart, nh_hanaro_mart, traders]
+        reward: {type: points, program: ktx_mileage, rate: 0.5}
+        stack: life
+        unmodeled: [임대매장과 주차장 결제는 적립하지 않는다]
+      - key: life-taxi-0-5
+        title: 택시 0.5% KTX 마일리지 포인트 추가 적립
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 적립한도 없이 커피전문점/편의점/할인점/택시 0.5% KTX 마일리지 포인트 추가 적립']
+        target:
+          categories: [taxi]
+        reward: {type: points, program: ktx_mileage, rate: 0.5}
+        stack: life
+    unmodeled: [적립은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다, KTX 마일리지 포인트는 코레일멤버십 회원이 아니면 전환되지 않는다]
+open_questions:
+  - {path: annual_fees, question: '연회비 표에 국내전용 칸 금액이 따로 보이지 않아 해외겸용 Mastercard와 같은 20,000원(기본 7,000+제휴 13,000)으로 두었다', assumed: 20000}
+  - {path: status, question: 상품 페이지가 자바스크립트로 그려져 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-13 상품안내장(2025.5판, 여신금융협회 심의필 제2025-C1a-05833호) 확인. 2025-04-28 출시. KTX 마일리지 포인트 1포인트는 KTX 마일리지 1이고 1 KTX 마일리지는 1원. 기본 0.5%는 한도 없이 모든 가맹점, 한국철도공사 5%는 전월 40만원 이상일 때 월 한도 1만P, 80만원 이상 1.5만P, 150만원 이상 3만P, 생활 필수 영역 0.5%는 실적과 한도 없이 더해 받는다. 한국철도공사 5% 대상 이용금액은 전월 실적에서 빠진다.

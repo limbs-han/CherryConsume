@@ -1,0 +1,54 @@
+card: shinhan-bdbdma
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 학원비 3% 한도 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 200000, category: education.academy, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 200000, category: education.academy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {academy: 6000}, counted: 0}
+  - {payment: 1, benefits: {academy: 4000}, counted: 0}
+  calc: 200,000 × 3% = 6,000. 두 번째 6,000은 남은 한도 4,000. 학원비는 실적 제외
+- name: 200만 구간 학원비 10% 한도 9만원
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 1000000, category: education.academy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {academy: 90000}}
+  calc: 1,000,000 × 10% = 100,000이지만 한도 90,000
+- name: 30만 직전이면 학원비 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 200000, category: education.academy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만 구간
+- name: 50만 구간 할인점, 병원, 정기결제
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 150000, category: hospital, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-1: 500}, counted: 50000}
+  - {payment: 1, benefits: {medical-1: 1500}}
+  - {payment: 2, benefits: {regular-1: 500}, counted: 0}
+  calc: 50,000 × 1% = 500. 150,000 × 1% = 1,500. 통신은 남은 기준 금액 50,000 × 1% = 500. 통신요금은 실적 제외
+- name: 메가박스 7천원 할인 월 1회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 8000, merchant: megabox, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 8000, merchant: megabox, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {megabox-7000: 7000}}
+  - {payment: 1, benefits: {}}
+  calc: 할인 전 15,000원에서 7,000원 할인. 두 번째는 월 1회 초과
+- name: 49만 9999원이면 생활비 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만원 미만 구간

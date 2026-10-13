@@ -1,0 +1,48 @@
+card: hana-16728
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 대중교통 월 2만원 이상 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 19999, category: transit.subway}
+  - {at: 2026-11-05T08:00, amount: 1, category: transit.bus_city}
+  expect:
+  - payment: 0
+    benefits: {transit-5000: 5000}
+  - payment: 1
+    benefits: {transit-10000: 5000}
+  calc: 합계 19,999원은 5천원. 합계 20,000원이 되면 1만원이 되어 새로 5천원 더
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 20000, category: transit.subway}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0
+- name: 소액 의료 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, category: pharmacy}
+  expect:
+  - payment: 0
+    benefits: {small-medical-1000: 1000}
+  calc: 1만원 이하 결제 건당 1천원
+- name: 편의점 5% 한도 5천
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 200000, merchant: gs25, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {store-5: 5000}
+  calc: 200,000원 x 5% = 10,000원이 월 한도 5,000원에 걸림
+- name: SK주유소 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: sk_energy}
+  expect:
+  - payment: 0
+    benefits: {fuel-5: 2500}
+    counted: 0
+  calc: 50,000원 x 5% = 2,500원. 주유 캐시백을 받은 결제는 실적에서 빠져 0원

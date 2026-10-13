@@ -1,0 +1,101 @@
+card: samsung-aap1914
+holder:
+  started_on: '2026-01-01'
+  options: [{option: select, choice: medical, effective_from: '2026-01-01'}]
+cases:
+- name: 의료 20% 50만 구간 월 7천원 한도와 소진 뒤 0.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 30000, category: hospital, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 10000, category: pharmacy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 10000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-20: 6000}, counted: 0}
+  - {payment: 1, benefits: {medical-20: 1000}, counted: 0}
+  - {payment: 2, benefits: {domestic-0-5: 50}, counted: 10000}
+  calc: 30,000 x 20% = 6,000. 약국 10,000 x 20% = 2,000이나 남은 한도 1,000. 한도를 다 쓴 다음 건은 국내 0.5% 50. 20% 할인 건은 실적 제외
+- name: 의료 20% 100만 구간 월 1만원 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-20: 10000}}
+  calc: 100,000 x 20% = 20,000이나 100만원 구간 한도 10,000
+- name: 의료 옵션이면 보험 주유 이동통신은 0.5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-0-5: 500}, counted: 100000}
+  calc: 의료 옵션에서 주유는 국내 0.5% 500
+- name: 생활 영역 10% 150만 구간 월 1만5천원 통합 한도
+  prev_month_spend: 1500000
+  holder:
+    options: [{option: select, choice: life, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: insurance.private, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 60000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {insurance-10: 5000}, counted: 0}
+  - {payment: 1, benefits: {fuel-10: 6000}, counted: 0}
+  - {payment: 2, benefits: {mobile-10: 4000}, counted: 0}
+  calc: 5,000 + 6,000 후 남은 한도 15,000 - 11,000 = 4,000. 이동통신 50,000 x 10% = 5,000이나 4,000
+- name: 생활 영역 100만 구간 한도 소진 뒤 0.5%
+  prev_month_spend: 1000000
+  holder:
+    options: [{option: select, choice: life, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T10:00, amount: 200000, merchant: gs_caltex, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-10: 10000}}
+  - {payment: 1, benefits: {domestic-0-5: 500}, counted: 100000}
+  calc: 200,000 x 10% = 20,000이나 한도 10,000. 다음 건은 0.5% 500
+- name: 쇼핑 1% 오프라인과 온라인 한도 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {shopping-online-1: 1000}, counted: 100000}
+  calc: 실적과 무관하게 100,000 x 1% = 1,000 두 건
+- name: 여가 2% 골프 면세점 항공 철도 공연
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, category: sports.golf, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: shilla_dfs, region: domestic, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 500000, merchant: korean_air, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: korail, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {leisure-golf-2: 2000}}
+  - {payment: 1, benefits: {leisure-duty-free-2: 2000}}
+  - {payment: 2, benefits: {leisure-2: 10000}}
+  - {payment: 3, benefits: {leisure-2: 1000}}
+  calc: 100,000 x 2% = 2,000 두 건, 500,000 x 2% = 10,000, 50,000 x 2% = 1,000
+- name: 국내 0.5%와 해외는 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, category: restaurant, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-0-5: 500}, counted: 100000}
+  - {payment: 1, benefits: {}, counted: 100000}
+  calc: 국내 100,000 x 0.5% = 500. 해외는 할인 없음
+- name: 실적 499999면 의료 20% 없고 0.5%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 30000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-0-5: 150}, counted: 30000}
+  calc: 50만원 미만이라 선택 서비스 없음. 0.5% 150
+- name: 신규 발급 다음 달까지 50만 구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+  payments:
+  - {at: 2026-11-03T10:00, amount: 30000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-20: 6000}}
+  calc: 10월 발급이라 11월 말까지 50만 구간. 30,000 x 20% = 6,000

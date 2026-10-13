@@ -1,0 +1,30 @@
+card: lotte-1652
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 150만 미만 0.5%
+  prev_month_spend: 1499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {all-0-5: 500}
+    counted: 100000
+  calc: 100000 x 0.5% = 500
+- name: 150만 이상 1%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - payment: 0
+    benefits: {all-1-0: 1000}
+  calc: 100000 x 1% = 1000
+- name: 무이자할부는 할인 없음
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: online_shopping, installment_months: 3, interest_free: true}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 무이자할부는 할인과 실적 모두 제외

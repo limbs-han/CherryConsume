@@ -1,0 +1,69 @@
+schema_version: 2
+id: samsung-aap1709
+issuer: samsung
+name: 웰스 삼성카드 (할부)
+short_name: 웰스 삼성 할부
+search_names: [웰스 라이트할부 삼성카드, 웰스 삼성카드 할부, 웰스 할부카드]
+kind: credit
+product_codes: [AAP1709]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1709', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmS3qjuToLdgiZsWiVUmVfw%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2021-C1a-01736호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2022-08-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    benefits:
+      - key: wells-discount
+        title: 웰스 7,000~13,000원 할인
+        source: manual
+        evidence: [전월 이용금액에 따라 7, 000원~13, 000원 결제일할인, '전월 이용금액대별 월 할인금액 30만원 이상 7,000원, 70만원 이상 10,000원, 120만원 이상 13,000원', 삼성카드 결제대금 할인은 매월 3일에 적용, '웰스 상품 할부 구매 시 해당 납부금액이 우선 차감되며, 잔여 할인금액은 해당월 회원님의 카드 결제대금에서 자동 차감']
+        target:
+          merchants: [wells]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, count: 1}
+          - per: month
+            amount: {300000: 7000, 700000: 10000, 1200000: 13000}
+        tiers: {from: 300000}
+        unmodeled: [원문이 할인 대상 결제를 웰스 상품 할부 구매 납부금액이라고만 적어 웰스 결제 한 건에 월 1회 구간별 금액까지 깎는 것으로 옮겼다. 남은 할인금액을 그달 카드 결제대금에서 빼 주는 부분은 계산하지 않는다, 웰스 24·36개월 라이트할부는 할부수수료율이 정해진 별도 서비스라 계산하지 않는다]
+      - key: living-1000
+        title: 생활요금 자동납부 1,000원 할인
+        source: manual
+        evidence: ['생활요금 자동납부 10,000원 이상 결제건별 1,000원 결제일할인', '아파트 관리비, 4대 사회보험(건강보험, 국민연금, 고용보험, 산재보험)', '통신 SKT, SK브로드밴드, KT, LG U+ 이동통신/인터넷/유선전화요금', 통합 월 3회 제공, 전월 이용금액 30만원 이상 시 제공, '자동납부건 중 10,000원 이상 결제된 건에 한함', 무이자할부 결제건 제외]
+        target:
+          categories: [apartment_fee, insurance.social]
+          merchants: [kt, lg_uplus, sk_broadband, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 3}
+        tiers: {from: 300000}
+        unmodeled: ['통신의 결합상품요금, 사물인터넷 요금, 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다']
+    unmodeled: ['할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2022.8)의 첫날로 두었다. 출시일은 2021-02-24다, assumed: '2022-08-01'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].benefits[wells-discount]', question: 7천~1만3천원 할인이 어떤 결제에 붙는지 원문에 자동납부 같은 조건이 없다. 웰스 결제 한 건이면 붙는 것으로 보았다, assumed: wells 결제 월 1회}
+notes: 2026-10-13 상품안내장(2022.8판, 심의필 2021-C1a-01736호) 대조. 출시 2021-02-24. 연회비 해외겸용 VISA·국내전용 모두 15,000원(기본 7,000+제휴 8,000). 웰스 24·36개월 라이트할부는 별도 할부 서비스다. 웰스 할인은 매월 3일 적용되고 월 1회 구간별 정액이다. 발급월+1개월까지는 30만 구간 혜택. 같은 웰스 삼성카드(AAP1708)는 렌탈료 자동납부 할인이라 다른 상품이다.

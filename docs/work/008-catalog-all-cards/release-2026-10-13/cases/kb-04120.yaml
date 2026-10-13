@@ -1,0 +1,65 @@
+card: kb-04120
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 PX 10만원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: px, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: px, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 50000, merchant: px, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-08T10:00, amount: 80000, merchant: px, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {px-100k: 20000}}
+  - {payment: 1, benefits: {px-under-30k: 1000}}
+  - {payment: 2, benefits: {px-30k: 2500}}
+  - {payment: 3, benefits: {px-70k: 8000}}
+  calc: 20%, 10% 건당 1천원, 5%, 10%. 합 31,500원은 5만원 안
+- name: 10만 구간 버스 지하철 통합한도
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-city-20: 5000}}
+  calc: 6,000원 중 10만 구간 통합한도 5,000원
+- name: 경계 직전 99999 교통 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 10만 미만은 통합한도가 없다
+- name: 100만 구간 여러 할인
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: transit.bus_express, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 30000, merchant: cgv, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 15000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T13:00, amount: 60000, merchant: outback, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T14:00, amount: 60000, merchant: everland, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T15:00, amount: 30000, merchant: kyobo_book, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T16:00, amount: 52500, merchant: toeic, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T17:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T18:00, amount: 40000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-intercity-20: 4000}}
+  - {payment: 1, benefits: {cgv-35: 7000}}
+  - {payment: 2, benefits: {starbucks-20: 3000}}
+  - {payment: 3, benefits: {family-restaurant-20: 10000}}
+  - {payment: 4, benefits: {amusement-50: 25000}}
+  - {payment: 5, benefits: {kyobo-5: 1000}}
+  - {payment: 6, benefits: {}}
+  - {payment: 7, benefits: {}}
+  - {payment: 8, benefits: {}}
+  calc: 4,000 + 7,000(2만원까지) + 3,000 + 10,000(5만원까지) + 25,000(5만원까지) + 1,000 = 50,000원으로 통합한도 5만원을 다 써 뒤는 0원
+- name: 30만 구간 어학시험 통신 쇼핑
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T16:00, amount: 52500, merchant: toeic, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T17:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T18:00, amount: 60000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {exam-2000: 2000}}
+  - {payment: 1, benefits: {telecom-2500: 2500}}
+  - {payment: 2, benefits: {shopping-5: 2500}}
+  calc: 2,000원, 2,500원, 5만원까지 5% 2,500원. 합 7,000원은 30만 구간 통합한도 2만원 안

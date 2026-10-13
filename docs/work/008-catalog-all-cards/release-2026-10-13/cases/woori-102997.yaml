@@ -1,0 +1,31 @@
+card: woori-102997
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 1.2% 청구할인
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-1-2pct: 1200}
+  calc: 100,000원 x 1.2% = 1,200원
+- name: 월 대상액 300만원 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 3000000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 1000000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-1-2pct: 36000}
+  - payment: 1
+    benefits: {}
+  calc: 월 300만원까지 36,000원이고 넘는 결제는 0원
+- name: 실적 직전
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원 미만이라 0원

@@ -1,0 +1,104 @@
+schema_version: 2
+id: hana-16936
+issuer: hana
+name: 하나증권 캐시백 투자 카드
+short_name: 하나증권 캐시백
+kind: credit
+product_codes:
+  - '16936'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41016936P&CD_PD_SEQ=16936', fetched_at: 2026-10-13, review_no: A-26-0399}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2026-02-12
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - {key: base-month, per: month, amount: 100000}
+      - {key: dept-month, per: month, amount: 10000}
+      - {key: bakery-month, per: month, amount: 10000}
+      - {key: coffee-month, per: month, amount: 10000}
+      - {key: transit-month, per: month, amount: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [dept-5, bakery-5, coffee-10, transit-10, base-1]
+        spill: split
+    benefits:
+      - key: dept-5
+        title: 백화점 5% 캐시백
+        source: page
+        evidence: ['백화점 (롯데백화점, 현대백화점, 신세계백화점) ※오프라인 결제 시 5% 1만원', 지난달 실적 30만원 이상]
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: dept-month}
+        tiers: {from: 300000}
+        unmodeled: [상설·임대 매장은 제외된다]
+      - key: bakery-5
+        title: 베이커리 5% 캐시백
+        source: page
+        evidence: ['베이커리 (파리바게뜨, 뚜레쥬르) ※오프라인 결제 시 5% 1만원', 지난달 실적 30만원 이상]
+        target:
+          merchants: [paris_baguette, tous_les_jours]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: bakery-month}
+        tiers: {from: 300000}
+        unmodeled: [백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트 등 대형시설물 입점점포와 임대매장은 제외된다]
+      - key: coffee-10
+        title: 스타벅스 10% 캐시백
+        source: page
+        evidence: [커피 (스타벅스) ※상품권 구매 및 충전 제외 10% 1만원, 지난달 실적 30만원 이상]
+        target:
+          merchants: [starbucks]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: coffee-month}
+        tiers: {from: 300000}
+        unmodeled: [백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트 등 대형시설물 입점점포와 임대매장은 제외된다]
+      - key: transit-10
+        title: 버스·지하철 후불교통 10% 캐시백
+        source: page
+        evidence: [대중교통 (버스/지하철 후불교통카드 이용 시) ※시외/고속버스 제외 10% 1만원, 지난달 실적 30만원 이상]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: transit-month}
+        tiers: {from: 300000}
+      - key: base-1
+        title: 국내외 가맹점 1% 캐시백
+        source: page
+        evidence: [국내외 가맹점 ※캐시백 받은 백화점/베이커리/커피/대중교통 매출 제외 30만원 이상 1% 10만원, 백화점/베이커리/커피/대중교통 월 캐시백 한도 초과한 이후 매출건에 대해 국내외 가맹점 캐시백서비스 제공]
+        target: {all: true}
+        reward: {type: cashback, rate: 1}
+        limits:
+          - {shared: base-month}
+        tiers: {from: 300000}
+    unmodeled: [하나증권 계좌만 결제계좌로 지정할 수 있다, 후불교통 무승인 거래는 매출 접수월 이용금액에 반영된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 준법심의일 2026-02-12를 현재 규칙의 시작일로 보았다. 원문에 시행일은 없다, assumed: '2026-02-12'}
+  - {path: 'revisions[0].spend', question: 원문 실적 제외는 공과금 범위를 단정할 수 없어 utility 전체와 apartment_fee를 뺐다, assumed: utility 전체}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 15,000원. 백화점 베이커리 커피 대중교통은 각각 월 한도 1만원이고 한도를 넘은 매출은 1% 기본 캐시백으로 간다. 하나증권 계좌 결제 전용이다.

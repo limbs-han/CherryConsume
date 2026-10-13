@@ -1,0 +1,60 @@
+card: hana-18394
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 아파트관리비 자동이체 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {saving-autopay-10: 3000}
+  calc: 30,000원 x 10% = 3,000
+- name: 50만 직전 관리비는 기본 0.8%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {domestic-0-8: 240}
+  calc: 50만원 미만이라 10%는 없고 국내 0.8%
+- name: 현대해상 10% 한도 5천
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: hyundai_marine, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {saving-insurance-10: 5000, domestic-0-8: 400}
+  calc: 10% 한도 5,000원은 50,000원까지. 남은 50,000원 x 0.8% = 400
+- name: 약국 오프라인 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: pharmacy, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {care-10: 2000}
+  calc: 20,000원 x 10% = 2,000
+- name: CGV 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 14000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {life-10: 1400}
+  calc: 14,000원 x 10% = 1,400
+- name: 쿠팡 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-1: 500}
+  calc: 50,000원 x 1% = 500
+- name: 기본 0.8%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {domestic-0-8: 400}
+  calc: 50,000원 x 0.8% = 400

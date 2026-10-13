@@ -1,0 +1,20 @@
+card: shinhan-plbcy4
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: SOL페이 0.3%와 그 밖의 결제 0.2%, 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, category: cafe, channel: offline, payment_method: shinhan_sol_pay}
+  - {at: 2026-11-03T11:00, amount: 10000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-sol-0-3: 30}, counted: 10000}
+  - {payment: 1, benefits: {daily-0-2: 20}, counted: 10000}
+  calc: 10,000 × 0.3% = 30, 10,000 × 0.2% = 20
+- name: 해외 일시불 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, region: overseas, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-0-2: 200}, counted: 100000}
+  calc: 100,000 × 0.2% = 200

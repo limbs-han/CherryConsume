@@ -1,0 +1,36 @@
+card: kb-09231
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 간편결제 20% 일 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, category: restaurant.general, payment_method: kakao_pay}
+  - {at: 2026-11-06T10:00, amount: 10000, category: restaurant.general, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {pay: 5000}, counted: 0}
+  - {payment: 1, benefits: {pay: 2000}, counted: 0}
+  calc: 6,000원 중 일 한도 5,000원. 다음 날 2,000원은 월 한도 7,000원 중 남은 2,000원
+- name: 80만 구간 간편결제 40%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {pay: 4000}}
+  calc: 10,000원 × 40% = 4,000원
+- name: 경계 직전 399999는 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 40만 미만은 할인 없음
+- name: 실물 카드 편의점과 버스
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 20000, category: transit.bus_city, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cvs-10: 1000}}
+  - {payment: 1, benefits: {transit-10: 2000}, counted: 0}
+  calc: GS25 1,000원. 버스 2,000원

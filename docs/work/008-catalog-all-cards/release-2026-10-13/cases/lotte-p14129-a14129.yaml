@@ -1,0 +1,85 @@
+card: lotte-p14129-a14129
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 가맹점 1% 할인
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart}
+  expect:
+  - payment: 0
+    benefits: {payment-date-discount-1: 500}
+  calc: 50,000 × 1% = 500. 실적 조건 없음
+- name: 해외 가맹점 1% 할인
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 120000, category: other, region: overseas}
+  expect:
+  - payment: 0
+    benefits: {payment-date-discount-1: 1200}
+  calc: 해외도 국내외 가맹점 대상. 120,000 × 1% = 1,200
+- name: 원 미만 버림
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12345, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {payment-date-discount-1: 123}
+  calc: 12,345 × 1% = 123.45, 원 미만 버림 123
+- name: 한도 없음 큰 금액
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5000000, category: department_store}
+  - {at: 2026-11-06T10:00, amount: 5000000, category: department_store}
+  expect:
+  - payment: 0
+    benefits: {payment-date-discount-1: 50000}
+  - payment: 1
+    benefits: {payment-date-discount-1: 50000}
+  calc: 한도 없음. 각 5,000,000 × 1% = 50,000
+- name: 유이자 할부는 전체 금액 할인
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: department_store, installment_months: 3}
+  expect:
+  - payment: 0
+    benefits: {payment-date-discount-1: 3000}
+  calc: 할부는 이용일 기준 전체 금액. 300,000 × 1% = 3,000
+- name: 무이자할부 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: department_store, installment_months: 3, interest_free: true}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 모든 무이자할부 이용금액은 할인 제외
+- name: 세금 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: tax.local}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 지방세는 할인 제외
+- name: 대중교통과 택시 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.subway}
+  - {at: 2026-11-05T11:00, amount: 15000, category: taxi}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 지하철, 택시는 할인 제외
+- name: 상품권과 아파트관리비 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: gift_card.voucher}
+  - {at: 2026-11-05T11:00, amount: 200000, category: apartment_fee}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {}
+  calc: 상품권 구매, 아파트관리비는 할인 제외

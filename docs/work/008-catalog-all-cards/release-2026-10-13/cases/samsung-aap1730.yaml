@@ -1,0 +1,58 @@
+card: samsung-aap1730
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 많이 쓰는 영역 백화점 5%와 0.5% 중복
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T15:00, amount: 60000, merchant: shinsegae_department, payment_method: physical_card}
+  - {at: 2026-11-04T15:00, amount: 100000, merchant: lotte_department, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {department-5: 3000, base-0-5: 300}, counted: 60000}
+  - {payment: 1, benefits: {department-5: 2000, base-0-5: 500}, counted: 100000}
+  calc: 60,000 × 5% = 3,000과 0.5% 300. 다음 5,000이나 40만 구간 한도 남은 2,000과 0.5% 500
+- name: 40만 직전이면 0.5%만
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T15:00, amount: 60000, merchant: shinsegae_department, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 300}, counted: 60000}
+  calc: 0 구간이라 5% 없음
+- name: 할인점이 1위면 슈퍼마켓은 0.5%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T15:00, amount: 80000, merchant: emart, payment_method: physical_card}
+  - {at: 2026-11-04T15:00, amount: 20000, merchant: lotte_super, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 4000, base-0-5: 400}}
+  - {payment: 1, benefits: {base-0-5: 100}}
+  calc: 80,000 × 5% = 4,000. 슈퍼마켓은 1위 영역이 아니라 0.5% 100
+- name: 주유·통신·관리비 0.5%에 2% 추가 통합 월 5천P
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 100000, category: fuel, payment_method: physical_card}
+  - {at: 2026-11-10T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-11T09:00, amount: 200000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-12T09:00, amount: 50000, category: fuel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-2: 2000, base-0-5: 500}}
+  - {payment: 1, benefits: {telecom-2: 1200, base-0-5: 300}}
+  - {payment: 2, benefits: {apartment-2: 1800, base-0-5: 1000}, counted: 200000}
+  - {payment: 3, benefits: {base-0-5: 250}}
+  calc: 2,000, 1,200, 남은 한도 1,800. 기본 0.5%는 따로. 한도 소진 뒤 주유는 0.5% 250
+- name: 40만 직전이면 주유도 0.5%와 택시 제외
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 100000, category: fuel, payment_method: physical_card}
+  - {at: 2026-11-07T09:00, amount: 10000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 500}}
+  - {payment: 1, benefits: {}, counted: 0}
+  calc: 0 구간은 추가 적립 없음. 택시는 적립과 실적 제외
+- name: 슈퍼마켓만 쓰면 슈퍼마켓 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T15:00, amount: 30000, merchant: gs_the_fresh, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {super-5: 1500, base-0-5: 150}}
+  calc: 30,000 × 5% = 1,500과 0.5% 150

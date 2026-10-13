@@ -1,0 +1,117 @@
+schema_version: 2
+id: kb-01770
+issuer: kb
+name: KB국민 골든대로 체크카드
+short_name: KB 골든대로 체크
+kind: check
+product_codes:
+  - '01770'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01770', fetched_at: '2026-10-12', review_no: 260522-01722-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      exclude_applied: 0
+    new_card:
+      until: next_month_end
+      tier: 300000
+      tier_by_benefit: {insurance-2000: 0}
+      from: registration
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 적립에서 빠진다']
+    limits:
+      - key: mart-homeshopping
+        per: month
+        amount: {300000: 2000, 500000: 4000}
+    benefits:
+      - key: medical-5
+        title: 병원·약국 5% 포인트리 적립
+        source: page
+        evidence: [병원/약국 5% 2천점 4천점 이용금액 건당 5천원 이상 시, 1구간 (30만원 이상~50만원 미만) 2구간 (50만원 이상)]
+        target:
+          categories: [hospital, pharmacy]
+        when:
+          - amount: {min: 5000}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 2000, 500000: 4000}
+        tiers: {from: 300000}
+      - key: mart-5
+        title: 이마트·롯데마트·홈플러스 5% 포인트리 적립
+        source: page
+        evidence: ['3대 대형마트 (이마트, 롯데마트, 홈플러스)/홈쇼핑(GS, CJ ) 2천점 4천점 이용금액 건당 3만원 이상 시', '대형마트 적립 제외 : 인터넷 쇼핑몰, 상품권 구매, 건물내 임대매장, SSM(이마트 에브리데이,홈플러스 익스프레스, 롯데슈퍼) 이용금액 적립 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - channel: offline
+            amount: {min: 30000}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - {shared: mart-homeshopping}
+        tiers: {from: 300000}
+        unmodeled: [대형마트 건물 안 임대매장은 빠진다]
+      - key: homeshopping-5
+        title: GS·CJ 홈쇼핑 5% 포인트리 적립
+        source: page
+        evidence: ['3대 대형마트 (이마트, 롯데마트, 홈플러스)/홈쇼핑(GS, CJ ) 2천점 4천점 이용금액 건당 3만원 이상 시']
+        target:
+          merchants: [cj_onstyle, gs_shop]
+        when:
+          - amount: {min: 30000}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - {shared: mart-homeshopping}
+        tiers: {from: 300000}
+      - key: sk-fuel-5
+        title: SK주유소 5% 포인트리 적립
+        source: page
+        evidence: [SK주유소 5% 2천점 4천점 이용금액 건당 3만원 이상 시 적립, '적립 제외 : 충전소 이용 시 적립 제외']
+        target:
+          merchants: [sk_energy]
+        when:
+          - amount: {min: 30000}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 2000, 500000: 4000}
+        tiers: {from: 300000}
+        unmodeled: [SK 가스 충전소 이용은 빠진다]
+      - key: golf-5
+        title: 골프 5% 포인트리 적립
+        source: page
+        evidence: ['골프(연습장 포함)/ 사우나(목욕탕,찜질방) 5% 3천점 6천점', 골프(연습장 포함) 이용금액 건당 2만원 이상 시 적립]
+        target:
+          categories: [sports.golf]
+        when:
+          - amount: {min: 20000}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 3000, 500000: 6000}
+        tiers: {from: 300000}
+        unmodeled: [사우나·목욕탕·찜질방 5% 적립은 같은 한도를 쓰지만 업종이 없어 담지 않았다]
+      - key: insurance-2000
+        title: 보험료 건당 10만원 이상 2천점 적립
+        source: page
+        evidence: ['보험료 (생명,손해, 기타 보험) 2천점 2천점 이용금액 건당 10만원 이상 시 2천점 적립', 실적유예기간 미적용(전월이용실적 충족 시에만 제공)]
+        target:
+          categories: [insurance.private]
+        when:
+          - amount: {min: 100000}
+        reward: {type: points, program: kb_pointree, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+    unmodeled: [사우나·목욕탕·찜질방 5% 적립은 업종이 없어 담지 않았다, 정부지원금과 포인트리 충전금액은 실적에서 빠진다]
+notes: 체크카드. 혜택은 전월 30만원 이상부터. 사우나 적립은 업종이 없어 뺐다.

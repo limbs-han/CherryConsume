@@ -1,0 +1,119 @@
+schema_version: 2
+id: kb-04292
+issuer: kb
+name: KB국민카드 KaPick
+short_name: KB KaPick
+kind: credit
+product_codes:
+  - '04292'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+  - {scope: domestic, brand: local, form: mobile, amount: 9000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04292', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.water]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 결제대행 가맹점과 간편결제 가맹점명으로 승인된 결제는 할인에서 빠진다]
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: online-10
+        title: 옥션·G마켓·11번가 10% 청구할인
+        source: page
+        evidence: ['옥션, G마켓, 11번가 | 기본 청구 할인 | 10% | 5천원 | 1만원', '온라인 쇼핑에서 KB Pay로 결제 시 5% 추가 청구 할인, 타 간편결제 이용 시 할인 제외', '상품권, 여행, 항공권, 티켓, 도서, 별도 팝업 사이트 제외']
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - payment: [kb_pay, physical_card]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {300000: 5000, 700000: 10000}
+        tiers: {from: 300000}
+        unmodeled: ['상품권, 여행, 항공권, 티켓, 도서, 별도 팝업 사이트 결제는 빠진다']
+      - key: online-kbpay-5
+        title: 옥션·G마켓·11번가 KB Pay 5% 추가 청구할인
+        source: page
+        evidence: [KB Pay 추가 청구 할인 | 5% | 5천원 | 5천원, 온라인 쇼핑에서 KB Pay로 결제 시 5% 추가 청구 할인]
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - payment: [kb_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        stack: kbpay
+        unmodeled: ['상품권, 여행, 항공권, 티켓, 도서, 별도 팝업 사이트 결제는 빠진다']
+      - key: offline-5
+        title: 마트·백화점·편의점 오프라인 5% 청구할인
+        source: page
+        evidence: ['롯데마트, 홈플러스, 롯데백화점, GS프레쉬, 롯데슈퍼, 홈플러스익스프레스, GS25, CU | 5% | 5천원 | 1만원', '백화점/대형마트 등 일부 입점 매장 제외, 오프라인 매장 일반결제건에 한함']
+        target:
+          merchants: [cu, gs25, gs_the_fresh, homeplus, homeplus_express, lotte_department, lotte_mart, lotte_super]
+        when:
+          - channel: offline
+            payment: [physical_card]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 5000, 700000: 10000}
+        tiers: {from: 300000}
+        unmodeled: [백화점·대형마트 안 일부 입점 매장은 빠진다]
+      - key: telecom-5
+        title: 이동통신요금 자동납부 5% 청구할인
+        source: page
+        evidence: ['SKT, KT, LG U+, Liiv M | 5% | 5천원 | 5천원', '인터넷, IPTV 등 결합상품 제외']
+        target:
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        unmodeled: [인터넷·IPTV 결합상품 요금은 빠진다]
+      - key: ott-30
+        title: OTT 정기결제 30% 청구할인
+        source: page
+        evidence: ['넷플릭스, 유튜브 프리미엄, 웨이브, 티빙, 디즈니 플러스 | 30% | 5천원 | 5천원', 공식 홈페이지를 통한 정기 결제 이용 건에 한함, 간편 결제 또는 인앱 결제 건 등은 제외]
+        target:
+          merchants: [disney_plus, netflix, tving, wavve, youtube_premium]
+        when:
+          - payment: [physical_card]
+            billing: [subscription]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+      - key: movie-20
+        title: CGV·롯데시네마·메가박스 20% 청구할인
+        source: page
+        evidence: ['CGV,롯데시네마, 메가박스 | 20% | 3천원 | 3천원', '매점, 관람권(상품권)구입, 예매대행사이트는 제외']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        unmodeled: [매점 이용과 예매대행 사이트 결제는 빠진다]
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 없이 할인을 주는 신규 특례는 생애 최초 본인 발급만 받으므로 계산하지 않는다, '정부지원금, 무승인전표(공항버스·자판기·터널통행료·항공기내 이용), 수수료·이자·연체료는 실적에서 빠진다', 할인 한도는 본인회원 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 연회비는 기본 7천원과 제휴 8천원, 모바일 단독은 기본 1천원과 제휴 8천원이다. GS프레쉬는 GS더프레시 가맹점으로 담았다.

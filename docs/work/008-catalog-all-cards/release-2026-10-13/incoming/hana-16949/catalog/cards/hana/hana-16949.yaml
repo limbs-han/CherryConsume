@@ -1,0 +1,163 @@
+schema_version: 2
+id: hana-16949
+issuer: hana
+name: 원더카드 2.0 HAPPY+ (HAPPY 플러스)
+short_name: 원더카드 2.0 HAPPY+
+kind: credit
+product_codes:
+  - '16949'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 19900}
+  - {scope: global, brand: visa, amount: 19900}
+  - {scope: global, brand: mastercard, amount: 19900}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41016949P&CD_PD_SEQ=16949', fetched_at: 2026-10-13, review_no: A-26-2660}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2026-07-06
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+    limits:
+      - {key: sector-month, per: month, amount: 50000}
+      - key: pay-month
+        per: month
+        amount: {400000: 4000, 800000: 6000, 1200000: 10000}
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: base-05
+        title: 국내외 가맹점 0.5% 청구할인
+        source: page
+        evidence: [국내·외 결제 시 0.5% 청구할인, 실적기준 없음, 할인한도 없음]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+      - key: coupang-2
+        title: 쿠팡 2% 청구할인
+        source: page
+        evidence: [쿠팡 2% 청구할인, 공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공, 실적기준 없음 통합 5만원]
+        target:
+          merchants: [coupang]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: sector-month}
+        exclude_applied: 1
+        unmodeled: [상품권, 여행, 항공권, 티켓, 도서, 공연 매출은 제외된다, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우는 제외된다]
+      - key: dept-2
+        title: 백화점 2% 청구할인
+        source: page
+        evidence: [신세계백화점, 현대백화점, 더현대, 롯데백화점 2% 청구할인, 오프라인 결제 건에 한하여 서비스가 제공, 실적기준 없음 통합 5만원]
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: sector-month}
+        exclude_applied: 1
+        unmodeled: [상설 및 임대 매장은 제외된다]
+      - key: mart-2
+        title: 마트 2% 청구할인
+        source: page
+        evidence: [이마트, 트레이더스 홀세일 클럽, 홈플러스, 롯데마트 2% 청구할인, 오프라인 결제 건에 한하여 서비스가 제공, 실적기준 없음 통합 5만원]
+        target:
+          merchants: [emart, homeplus, lotte_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: sector-month}
+        exclude_applied: 1
+        unmodeled: [트레이더스 홀세일 클럽을 제외한 창고형 할인매장과 상설 임대 매장은 제외된다]
+      - key: homeshopping-2
+        title: 홈쇼핑 2% 청구할인
+        source: page
+        evidence: ['GS, 롯데, 현대, CJ, NS, 홈앤쇼핑, 공영홈쇼핑 2% 청구할인', 공식 홈페이지(온라인/모바일 앱) 및 TV홈쇼핑을 통한 결제 시에만 서비스가 제공, 실적기준 없음 통합 5만원]
+        target:
+          merchants: [cj_onstyle, gs_shop, home_and_shopping, hyundai_homeshopping, lotte_homeshopping, ns_homeshopping, public_homeshopping]
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: sector-month}
+        exclude_applied: 1
+      - key: super-2
+        title: 슈퍼마켓 2% 청구할인
+        source: page
+        evidence: ['GS THE FRESH, 롯데슈퍼, 이마트에브리데이, 홈플러스익스프레스, 노브랜드 2% 청구할인', 오프라인 결제건에 한하여 서비스가 제공, 실적기준 없음 통합 5만원]
+        target:
+          merchants: [emart_everyday, gs_the_fresh, homeplus_express, lotte_super]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: sector-month}
+        exclude_applied: 1
+        unmodeled: [노브랜드는 담을 가맹점이 없어 뺐다]
+      - key: cvs-2
+        title: 편의점 2% 청구할인
+        source: page
+        evidence: ['CU, GS25, 세븐일레븐, 이마트24 2% 청구할인', 오프라인 결제건에 한하여 서비스가 제공, 실적기준 없음 통합 5만원]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: sector-month}
+        exclude_applied: 1
+        unmodeled: [백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트 대형시설물 입점점포와 임대 매장은 제외된다]
+      - key: bakery-2
+        title: 베이커리 2% 청구할인
+        source: page
+        evidence: ['파리바게트, 뚜레쥬르, 아티제, 파리크라상, 카페노티드, 던킨도너츠 2% 청구할인', 오프라인 결제건에 한하여 서비스가 제공, 실적기준 없음 통합 5만원]
+        target:
+          merchants: [artisee, dunkin, paris_baguette, paris_croissant, tous_les_jours]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: sector-month}
+        exclude_applied: 1
+        unmodeled: [카페노티드는 담을 가맹점이 없어 뺐다, 백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트 대형시설물 입점점포와 임대 매장은 제외된다, 배달앱이나 식당 예약앱 등을 통한 주문 결제와 미리 결제하는 방식은 제외된다]
+      - key: pay-hana-5
+        title: 하나페이 5% 청구할인
+        source: page
+        evidence: [할인대상 하나페이 모든결제 5%, 지난달 실적 40만원 이상 80만원 미만 4000원 80만원 이상 120만원 미만 6000원 120만원 이상 10000원]
+        target: {all: true}
+        when:
+          - payment: [hana_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: pay-month}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: pay-online-5
+        title: 간편결제 온라인 5% 청구할인
+        source: page
+        evidence: ['삼성페이, 네이버페이, 카카오페이, SSG페이, 페이코, 쿠페이, 11 pay에 카드를 등록하여 온라인 가맹점에서 결제하는 건 5%', 하나페이를 제외한 다른 간편결제 시 오프라인 가맹점에서의 결제는 서비스에서 제외, 지난달 실적 40만원 이상 80만원 미만 4000원 80만원 이상 120만원 미만 6000원 120만원 이상 10000원]
+        target: {all: true}
+        when:
+          - {channel: online}
+          - payment: [coupay, eleven_pay, kakao_pay, naver_pay, payco, samsung_pay, ssg_pay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: pay-month}
+        tiers: {from: 400000}
+        exclude_applied: 1
+    unmodeled: [온가족 플러스, 혜택플러스와 트래블 스위치는 계산하지 않는다, 카드 신청 시 고르는 맞춤혜택조합 중 HAPPY+ 조합만 담았다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 준법심의 기간 시작일 2026-07-06을 현재 규칙의 시작일로 보았다. 원문에 시행일은 없다, assumed: '2026-07-06'}
+  - {path: 'revisions[0].spend', question: 원문 실적 제외의 수도요금과 공과금 범위를 단정할 수 없어 utility 전체를 뺐다, assumed: utility 전체}
+  - {path: 'revisions[0].stacks', question: '2% 업종 할인, 5% 간편결제 할인, 0.5% 기본 할인이 겹치는지 원문에 없다. 결제 하나에 가장 큰 하나만 받는 것으로 두었다', assumed: 가장 큰 하나}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 19,900원은 기본 12,000원에 혜택플러스 제휴연회비 7,900원을 더한 값이다. 사용자가 하나페이에서 조합을 바꿀 수 있다. 서비스 받은 매출은 실적에서 빠지되 기본 0.5%만 받은 매출은 실적에 남는다.

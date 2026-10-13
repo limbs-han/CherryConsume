@@ -1,0 +1,36 @@
+card: shinhan-ba9bma
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 올리브영 10% 1회 최대 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 8000, merchant: olive_young, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: olive_young, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {olive-young-10: 800}}
+  - {payment: 1, benefits: {olive-young-10: 1000}}
+  calc: 8,000원 × 10% = 800원. 30,000원 × 10% = 3,000원이지만 1회 최대 1,000원
+- name: 경계 직전 199999 캐시백 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 8000, merchant: olive_young, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만은 혜택 없음
+- name: 20만 구간 VIPS와 투썸 통합한도 5천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: vips, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: twosome, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {vips-10: 5000}}
+  - {payment: 1, benefits: {}}
+  calc: VIPS 5,000원으로 통합한도 5,000원을 다 써서 투썸은 0원
+- name: 50만 구간 투썸 10%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-06T10:00, amount: 9000, merchant: twosome, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {twosome-touslesjours-10: 900}}
+  calc: 9,000원 × 10% = 900원

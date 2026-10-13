@@ -1,0 +1,29 @@
+card: shinhan-boac5c
+holder:
+  started_on: '2026-01-01'
+  options: [{option: light_installment, choice: none, effective_from: '2026-01-01'}]
+cases:
+- name: 미이용 70만 구간 5천원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {skt-telecom: 5000}, counted: 60000}
+  calc: 미이용 회원 70만 구간 월 한도 5,000원
+- name: 라이트할부 이용 30만 구간 1만원
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: light_installment, choice: using, effective_from: '2026-01-01'}]
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-10T09:00, amount: 8000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {skt-telecom: 8000}, counted: 8000}
+  calc: 요금 8,000원이 한도 10,000원보다 적어 요금만큼 할인
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-10T09:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 60000}
+  calc: 30만원 미만 할인 없음

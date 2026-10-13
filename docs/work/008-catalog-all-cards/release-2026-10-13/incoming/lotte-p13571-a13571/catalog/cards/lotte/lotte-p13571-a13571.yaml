@@ -1,0 +1,88 @@
+schema_version: 2
+id: lotte-p13571-a13571
+issuer: lotte
+name: 뱅크샐러드 빨대카드
+kind: credit
+product_codes: [P13571-A13571]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13571-A13571', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2021-01-25'
+    source: page
+    tiers: [0, 500000, 1000000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    benefits:
+      - key: coffee
+        title: 스타벅스·투썸플레이스·폴바셋 5천원 결제일 할인
+        source: page
+        evidence: ['스타벅스, 투썸플레이스, 폴바셋 5천원 결제일 할인', 건당 1만원 이상 이용 시 할인 혜택이 제공됩니다., 현장 결제 건에 한해 제공되며, '커피 5,000원 15,000원 25,000원']
+        target:
+          merchants: [paul_bassett, starbucks, twosome]
+        when:
+          - amount: {min: 10000}
+          - {channel: offline}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - per: month
+            amount: {500000: 5000, 1000000: 15000, 1500000: 25000}
+        tiers: {from: 500000}
+      - key: delivery
+        title: 배달의민족·요기요 1천원 결제일 할인
+        source: page
+        evidence: ['배달의민족, 요기요 1천원 결제일 할인', 건당 1만원 이상 이용 시 할인 혜택이 제공됩니다., '공식 홈페이지 및 앱을 통한 결제 시 할인 혜택이 제공되며, 가맹점 직접 결제 건은 할인 혜택이 제공되지 않습니다.', '배달앱 2,000원 5,000원 10,000원']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - per: month
+            amount: {500000: 2000, 1000000: 5000, 1500000: 10000}
+        tiers: {from: 500000}
+      - key: streaming
+        title: 넷플릭스·유튜브·왓챠·멜론 50% 결제일 할인
+        source: page
+        evidence: ['넷플릭스, 유튜브, 왓챠, 멜론 50% 결제일 할인', 공식 홈페이지 및 앱을 통해 직접 신청한 정기결제(자동이체) 이용 건만 혜택이 제공되며, 앱마켓(구글플레이/앱스토어 등) 결제와 같이 가맹점 구분이 불가한 경우에는 혜택이 제공되지 않습니다., '스트리밍 2,000원 5,000원 10,000원']
+        target:
+          merchants: [melon, netflix, watcha, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - per: month
+            amount: {500000: 2000, 1000000: 5000, 1500000: 10000}
+        tiers: {from: 500000}
+      - key: convenience
+        title: GS25·CU·세븐일레븐 1천원 결제일 할인
+        source: page
+        evidence: ['GS25, CU, 세븐일레븐 1천원 결제일 할인', 건당 1만원 이상 이용 시 할인 혜택이 제공됩니다, '편의점 5,000원 5,000원 5,000원']
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+    unmodeled: [백화점과 마트 등에 입점한 커피 매장에서는 할인이 안 될 수 있다, 스트리밍 할인은 통신요금 합산 청구와 앱마켓 결제에는 주지 않는다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, 실적과 할인한도는 본인과 가족카드를 합산한다, '포인트 충전, 오토·스마트 캐시백 신청 이용금액, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 뱅크샐러드 빨대카드가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 할인은 승인 시점 기준 남은 한도 안에서 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품 페이지에 출시일이 없어 초안의 시행일을 그대로 두었다, assumed: '2021-01-25'}
+  - {path: 'revisions[0].spend.cancellation', question: 상품 페이지는 지난달 매출 취소 시 지난달 실적이 바뀔 수 있다고만 적어 롯데 기본값인 원래 승인 달 기준을 썼다, assumed: original_month}
+notes: 2026-10-12 롯데카드 상품 페이지 대조. 상품설명서 PDF 주소를 찾지 못했다. 대중교통(버스) 실적 제외는 시외버스까지 뺐다. 실적이 적게 잡히는 쪽이다.

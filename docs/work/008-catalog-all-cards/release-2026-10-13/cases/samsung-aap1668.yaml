@@ -1,0 +1,43 @@
+card: samsung-aap1668
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 온라인 쇼핑 5%와 30만 구간 한도 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 60000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-5: 3000}, counted: 0}
+  - {payment: 1, benefits: {online-5: 2000}, counted: 0}
+  calc: 60,000 × 5% = 3,000. 둘째는 한도 5,000원의 남은 2,000원
+- name: 오프라인 쇼핑 5%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {offline-5: 5000}, counted: 0}
+  calc: 100,000 × 5% = 5,000. 60만 구간 한도 8,000원 안
+- name: 실적 30만원 직전이면 쇼핑 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 60000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 60000}
+  calc: 299,999원은 0 구간
+- name: 스트리밍 6천원 이상 정기결제 3,000원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 17000, merchant: netflix, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 7000, merchant: tving, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {streaming-3000: 3000}, counted: 17000}
+  - {payment: 1, benefits: {}, counted: 7000}
+  calc: 월 1회라 첫 결제만 3,000원
+- name: 해외 1.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1-5: 1500}, counted: 100000}
+  calc: 100,000 × 1.5% = 1,500. 실적과 관계없음

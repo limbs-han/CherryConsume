@@ -1,0 +1,43 @@
+card: samsung-aap1687
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 하한 월 할인 7천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {prev-spend-discount: 7000}, counted: 20000}
+  calc: 전월 30만원 이상 7,000원
+- name: 70만 구간 1만원과 120만 구간 1만 3천원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {prev-spend-discount: 10000}, counted: 20000}
+  calc: 전월 70만원 이상 10,000원
+- name: 120만 구간 1만 3천원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {prev-spend-discount: 13000}, counted: 20000}
+  calc: 전월 120만원 이상 13,000원
+- name: 실적 30만원 직전이면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 299,999원은 0 구간
+- name: 생활요금 자동납부 1만원 이상 1,000원과 월 3회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 10000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 9999, merchant: kt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {prev-spend-discount: 7000, autopay-1000: 1000}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 9999}
+  - {payment: 2, benefits: {autopay-1000: 1000}, counted: 50000}
+  calc: 1만원 이상 자동납부 건마다 1,000원. 9,999원은 할인 없음. 아파트 관리비는 실적 제외

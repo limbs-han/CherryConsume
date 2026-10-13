@@ -1,0 +1,139 @@
+schema_version: 2
+id: samsung-aap1760
+issuer: samsung
+name: 우리동네GS 삼성카드
+short_name: 우리동네GS 삼성
+search_names: [우리동네GS, 우리동네GS 삼성카드, 우리동네지에스 삼성카드]
+kind: credit
+product_codes: [AAP1760]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: visa, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1760', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtsbIJdijZfBEoLXEDuZVL4Y%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2026-C1a-02838호}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: '2026-03-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    limits:
+      - key: gs
+        per: month
+        amount: {300000: 10000}
+      - {key: cafe-delivery, per: month, amount: 3000}
+      - {key: digital, per: month, amount: 3000}
+    stacks:
+      - key: gs
+        pick: priority
+        order: [gs-5-10, gs-1]
+        spill: none
+      - {key: other}
+    benefits:
+      - key: gs-5-10
+        title: GS25·GS THE FRESH 5% 10% 할인
+        source: manual
+        evidence: [GS25 1%/5%/10% 결제일할인, GS THE FRESH 1%/5%/10% 결제일할인, '전월 이용금액 30만원 미만 1%, 30만원 이상 5%, 60만원 이상 10%', 할인한도 10, 000원, 5%/10% 할인한도 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용, 'GS25 오프라인 매장, 우리동네GS 앱 내 우리동네편의점GS25', 'GS THE FRESH 오프라인 매장, 우리동네GS 앱 내 우리동네마트GS THE FRESH', '쇼핑 외 결제건(상품권, 편의점 택배 등) 및 백화점, 할인점, 쇼핑몰 등의 임대매장 제외']
+        target:
+          merchants: [gs25, gs_the_fresh]
+        reward:
+          type: billing_discount
+          rate: {300000: 5, 600000: 10}
+        limits:
+          - {shared: gs}
+        tiers: {from: 300000}
+        stack: gs
+        unmodeled: [상품권과 편의점 택배 등 쇼핑 외 결제, 백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+        notes: GS25와 GS THE FRESH의 한도가 따로인지 함께인지 적혀 있지 않아 함께 쓰는 한도로 두었다
+      - key: gs-1
+        title: GS25·GS THE FRESH 1% 할인
+        source: manual
+        evidence: [전월 이용금액 30만원 미만 1% 할인, 5%/10% 할인한도 월 할인한도 초과 시 다음 결제건부터 1% 할인 적용]
+        target:
+          merchants: [gs25, gs_the_fresh]
+        reward: {type: billing_discount, rate: 1}
+        stack: gs
+        unmodeled: [상품권과 편의점 택배 등 쇼핑 외 결제, 백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: coffee-10
+        title: 커피전문점 10% 할인
+        source: manual
+        evidence: [커피전문점/배달앱 10% 결제일할인, '커피전문점 스타벅스, 이디야커피, 투썸플레이스, 카페베네, 탐앤탐스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋, 블루보틀', 통합 월 할인한도 3, 000원, 전월 이용금액 30만원 이상 시 제공, '커피전문점은 오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [angel_in_us, artisee, blue_bottle, cafe_bene, coffee_bean, ediya, hollys, pascucci, paul_bassett, tom_n_toms, twosome]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: cafe-delivery}
+        tiers: {from: 300000}
+        stack: other
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다]
+      - key: starbucks-10
+        title: 스타벅스 10% 할인
+        source: manual
+        evidence: [커피전문점 스타벅스, 스타벅스의 경우 사이렌오더 결제건도 혜택 제공, 통합 월 할인한도 3, 000원]
+        target:
+          merchants: [starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: cafe-delivery}
+        tiers: {from: 300000}
+        stack: other
+        unmodeled: [매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다]
+      - key: delivery-10
+        title: 배달앱 10% 할인
+        source: manual
+        evidence: [커피전문점/배달앱 10% 결제일할인, 배달앱 배달의민족 요기요, 통합 월 할인한도 3, 000원, 배달앱은 공식 홈페이지/앱을 통한 결제건에 한하며 가맹점 직접 결제건은 제외]
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: cafe-delivery}
+        tiers: {from: 300000}
+        stack: other
+      - key: digital-30
+        title: 디지털콘텐츠 30% 할인
+        source: manual
+        evidence: [디지털콘텐츠 이용료 정기결제 시 30% 결제일할인, '넷플릭스, 디즈니+, 왓챠, 웨이브, 유튜브 프리미엄, 티빙, 멜론, FLO', 통합 월 할인한도 3, 000원, 전월 이용금액 30만원 이상 시 제공, '구글플레이, 앱스토어 등을 통한 결제건(인앱 결제) 제외']
+        target:
+          merchants: [disney_plus, flo, melon, netflix, tving, watcha, wavve, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: digital}
+        tiers: {from: 300000}
+        stack: other
+        unmodeled: [구글플레이, 앱스토어 등을 통한 인앱 결제는 할인하지 않는다]
+      - key: overseas-1
+        title: 해외 1% 할인
+        source: manual
+        evidence: ['전월 이용금액에 관계없이, 할인한도 없이 해외 1% 결제일할인', 해외 가맹점 및 해외 직접구매 이용건, 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 1}
+        stack: other
+    unmodeled: ['할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제건)는 매출전표 접수 시점 기준이다', 삼성카드의 다른 결제일할인과 겹치면 할인 금액이 큰 것 하나만 준다, GS리테일 POP 서비스(GS ALL 포인트 즉시 적립)는 계산하지 않았다, 건강보험 등 고용부담금과 장애인 고용부담금은 실적에서 빼야 하나 담을 업종이 없다, 후불교통 이용금액은 시내버스와 지하철로 담아 실적에서 뺐다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2026.3)의 첫날로 두었다, assumed: '2026-03-01'}
+  - {path: 'revisions[0]', question: 할인 금액의 원 미만 처리가 공식 문구에 없다, assumed: floor}
+  - {path: 'revisions[0].spend.interest_free', question: 무이자할부의 실적 처리가 상품안내장에 없다. 할인 제외 대상에만 적혀 있다, assumed: count}
+notes: 2026-10-13 상품안내장(2026.3판, 심의필 2026-C1a-02838호) 대조. 연회비 해외겸용 VISA와 국내전용 15,000원(기본 7,000+제휴 8,000). 후불교통 기능 탑재. 실적 제외는 4대보험, 고용부담금, 세금과 공과금, 아파트 관리비, 부동산 임대료, 유치원·초중고 납입금, 대학 등록금, 대중교통, 택시, 기프트·선불카드, 상품권이다. 할인 적용 금액을 실적에서 빼는 문구가 없어 할인 받은 결제도 실적에 넣었다. 발급월+1개월까지는 전월 30만원 미만이어도 30만원 이상 60만원 미만 구간 혜택을 준다.

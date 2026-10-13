@@ -1,0 +1,102 @@
+schema_version: 2
+id: lotte-1802
+issuer: lotte
+name: 나무 롯데카드
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00001_20221025_10001.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express, utility]
+    limits:
+      - {key: life, per: month, amount: 10000}
+      - {key: streaming, per: month, amount: 5000}
+    stacks:
+      - key: main
+        pick: best
+        order: [life-transit, life-streaming, life-cgv, cb-special, cb-basic]
+        spill: none
+    benefits:
+      - key: cb-basic
+        title: 국내외 가맹점 0.7% 기본 캐시백
+        source: manual
+        evidence: [기본캐시백 국내외 가맹점 0.7% 조건없음 없음, '기본 캐시백과 특별 캐시백, 라이프 캐시백은 중복 제공되지 않습니다.']
+        target: {all: true}
+        reward: {type: cashback, rate: 0.7}
+      - key: cb-special
+        title: 지난달 40만원 이상 국내외 가맹점 1.0% 특별 캐시백
+        source: manual
+        evidence: [특별캐시백 1.0% 40만원 이상, '나무 롯데카드를 발급받은 첫달에는 기본캐시백 0.7% 혜택만 제공되며, 그 다음 달부터 지난달 이용금액에 따라 캐시백 혜택이 제공됩니다.']
+        target: {all: true}
+        when:
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 1.0}
+        tiers: {from: 400000}
+      - key: life-transit
+        title: 버스·지하철 50% 라이프 캐시백
+        source: manual
+        evidence: ['대중교통 버스, 지하철 50% 40만원 이상 그룹별 5천원 총 한도 1만원', '대중교통 : 오프라인 일반 결제 건에 한하며, 시외, 고속버스 결제 건은 제외됩니다.', 이용실적 산정 시 제외대상 나무 롯데카드 라이프 캐시백 혜택이 제공된 전체 이용금액]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-streaming
+        title: 넷플릭스·디즈니+ 정기결제 30% 라이프 캐시백
+        source: manual
+        evidence: ['스트리밍 넷플릭스, 디즈니+, CGV 30%', '넷플릭스, 디즈니+ 서비스 대상 가맹점 공식 홈페이지 또는 앱을 통해 직접 신청한 정기결제(자동이체) 이용 건만 혜택이 제공되며']
+        target:
+          merchants: [disney_plus, netflix]
+        when:
+          - card_month: {min: 1}
+          - billing: [subscription]
+        reward: {type: cashback, rate: 30}
+        limits:
+          - {shared: streaming}
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-cgv
+        title: CGV 30% 라이프 캐시백
+        source: manual
+        evidence: ['스트리밍 넷플릭스, 디즈니+, CGV 30%', 'CGV 현장 결제, 공식 홈페이지 및 앱을 통한 예매 시 혜택이 적용되며']
+        target:
+          merchants: [cgv]
+        when:
+          - card_month: {min: 1}
+        reward: {type: cashback, rate: 30}
+        limits:
+          - {shared: streaming}
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+    unmodeled: [스타벅스 사이렌오더 50% 라이프 캐시백은 앱 주문 결제만 대상이라 매장 결제와 가를 수 없어 계산하지 않는다, 넷플릭스·디즈니+의 통신요금 합산청구와 앱마켓 결제는 캐시백하지 않는다, CGV 기프티콘·상품권 구매는 캐시백하지 않는다, 대중교통 라이프 캐시백은 오프라인 일반 결제만 대상이다, 캐시백은 나무증권 계좌를 개설하고 가입해야 받고 그 계좌로 지급된다, 캐시백은 매출전표 접수월 기준으로 다음 달 20일에 지급된다, '나무 롯데카드가 아닌 롯데카드 이용금액, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적과 캐시백에서 빠진다', 대상 가맹점이 겹치면 캐시백이 큰 서비스 하나만 준다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 온라인 판매 목록에 상품 코드가 없어 id를 공시 색인 번호로 두었다. NH투자증권 나무 제휴 채널 전용 판매로 보인다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 공시 설명서에 출시일과 기준월이 비어 있고 심의필이 2023-01-17이다. 시행일은 원문 확인일로 두었다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품설명서 대조. 연회비 국내전용과 해외겸용(MASTER, AMEX) 20,000원, 가족카드 없음. 지난달 40만원 미만 0.7%, 이상 1.0% 캐시백 한도 없음, 라이프 캐시백은 그룹별 월 5천원·합계 1만원이고 기본·특별·라이프는 중복하지 않아 큰 것 하나를 준다. 발급 첫 달은 기본 0.7%만 준다. 라이프 캐시백이 적용된 이용금액은 실적에서 빠진다. 버스, 택시, 고속버스, 고속도로 통행요금은 실적에서 빠지고 지하철은 실적에 남는다.

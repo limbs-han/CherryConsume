@@ -1,0 +1,25 @@
+card: ibk-12112840001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 해외 1.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1-5: 1500}}
+  calc: 100,000원 × 1.5% = 1,500원
+- name: 국내 0.1% 1만원 이상
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-0-1: 50}}
+  calc: 50,000원 × 0.1% = 50원
+- name: 국내 1만원 미만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9999, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건별 1만원 미만이라 없음

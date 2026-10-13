@@ -1,0 +1,75 @@
+schema_version: 2
+id: hana-9400
+issuer: hana
+name: 하나멤버스 Mega 체크카드
+short_name: 하나 Mega 체크
+search_names: [Mega 체크카드, 메가 체크카드]
+kind: check
+product_codes:
+  - '9400'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=4882', fetched_at: 2026-10-13, review_no: A-26-0341}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-02-10
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 250000]
+    spend:
+      exclude_categories: [gift_card, prepaid_charge, tax, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 250000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge, tax]
+    limits:
+      - {key: money, per: month, amount: 100000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [life-200, other-100]
+        spill: split
+    benefits:
+      - key: life-200
+        title: 생활밀착업종 2만원당 200하나머니 적립
+        source: page
+        evidence: [생활밀착업종 | 요식/마트/백화점/ | 온라인쇼핑/주유/병원 | 2만원당 200하나머니 적립 | 월 최대 10만 하나머니, 『건당 이용금액』 기준으로 서비스 제공(승인시점 기준), '(65,000원/20,000원 *소수점이하 절사) X 200', 지난 달 1일부터 말일까지 사용금액 25만원 이상 시 서비스 제공]
+        target:
+          categories: [department_store, fuel, grocery_mart, hospital, online_shopping, restaurant.fastfood, restaurant.general]
+        when:
+          - {region: domestic}
+        reward:
+          type: points
+          program: hana_money
+          per_unit: {unit: 20000, amount: 200}
+        limits:
+          - {shared: money}
+        tiers: {from: 250000}
+        unmodeled: [적립 대상 업종은 하나카드 기준에 따른다. 요식은 일반음식점과 패스트푸드만 넣었고 제과점과 카페는 넣지 않았다]
+      - key: other-100
+        title: 그 외 가맹점 2만원당 100하나머니 적립
+        source: page
+        evidence: ['그 외 모든 가맹점 | (* | 국세, 지방세, 해외매출 제외 | ) | 2만원당 100하나머니 적립', 생활밀착업종/이동통신요금 외 모든 가맹점 2만원당 100하나머니 적립, '(21,000원/20,000원 *소수점이하 절사) X 100']
+        target:
+          exclude_categories: [telecom.mobile]
+          all: true
+        when:
+          - {region: domestic}
+        reward:
+          type: points
+          program: hana_money
+          per_unit: {unit: 20000, amount: 100}
+        limits:
+          - {shared: money}
+        tiers: {from: 250000}
+    unmodeled: ['SKT, KT, LG U+ 자동이체 이동통신요금 월 1회 적립(5만원 이상 10만원 미만 3,000하나머니, 10만원 이상 5,000하나머니)은 계산하지 않는다. 이 자동이체 금액은 실적에서도 빠진다', 본인카드와 가족카드의 사용금액과 적립한도는 각각 산정한다, 아이행복 정부지원금은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다., assumed: '2026-02-10'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 "공과금, 도시가스 이용금액"이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다.', assumed: utility 전체}
+  - {path: 'revisions[0].tiers', question: 다른 하나멤버스 Mega 체크카드 페이지에는 실적 기준이 20만원으로 적힌 곳이 있다고 한다. 이 페이지는 25만원이다., assumed: 25만원}
+  - {path: 'revisions[0].benefits[life-200].target', question: '요식, 온라인쇼핑 업종 범위를 하나카드 기준으로 단정할 수 없다. 요식은 커피 업종을 생활밀착으로 보지 않은 원문 예시에 맞춰 일반음식점과 패스트푸드만 넣었다.', assumed: '일반음식점, 패스트푸드'}
+  - {path: 'revisions[0].benefit_exclusions', question: '상품권, 선불카드 충전 매출이 적립에서 빠지는지 원문에 없다.', assumed: 적립에서 뺌}
+notes: 2026-10-13 공식 상품 페이지(상세 번호 CD_PD_SEQ=4882, 목록 상품 번호 9400, 준법심의 A-26-0341)에서 옮겼다. 연회비 면제, 브랜드 VISA. 발급수수료 2,000원은 다음 달 말일까지 1만원 이상 쓰면 돌려준다. 하나머니 1하나머니 = 1원. 건당 이용금액을 2만원으로 나눈 몫에 200 또는 100을 곱하고 남은 금액은 버린다. 월 통합 적립한도 10만 하나머니.

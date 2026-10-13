@@ -1,0 +1,48 @@
+card: hana-14783
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 로마드 8천원 두 번이면 8천원과 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T09:00, amount: 8000, merchant: lomad, billing: autopay}
+  - {at: 2026-11-20T09:00, amount: 8000, merchant: lomad, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {lomad-autopay-13k: 8000}
+    counted: 0
+  - payment: 1
+    benefits: {lomad-autopay-13k: 5000}
+  calc: 원문 예시대로 8,000원 전액, 다음 건은 남은 한도 5,000원. 할인 받은 로마드 요금은 실적에서 빠짐
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T09:00, amount: 25000, merchant: lomad, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 0원
+- name: 온라인 쇼핑 3% 월 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket, channel: online}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: gs_shop, channel: online}
+  expect:
+  - payment: 0
+    benefits: {online-shopping-3: 3000}
+  - payment: 1
+    benefits: {online-shopping-3: 2000}
+  calc: 100,000원 x 3% = 3,000원, 다음 건은 남은 한도 2,000원
+- name: 스타벅스 5%와 무이자 할부 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-05T11:00, amount: 10000, merchant: starbucks, installment_months: 3, interest_free: true}
+  expect:
+  - payment: 0
+    benefits: {starbucks-5: 500}
+    counted: 10000
+  - payment: 1
+    benefits: {}
+    counted: 0
+  calc: 10,000원 x 5% = 500원. 무이자 할부는 할인과 실적에서 모두 빠짐

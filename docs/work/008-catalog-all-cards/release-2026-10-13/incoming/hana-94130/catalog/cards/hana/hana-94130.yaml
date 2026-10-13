@@ -1,0 +1,86 @@
+schema_version: 2
+id: hana-94130
+issuer: hana
+name: 국민연금증 하나멤버스 1Q 체크카드
+short_name: 하나 국민연금증 1Q 체크
+search_names: [국민연금증 1Q 체크카드, 국민연금증 하나멤버스 1Q]
+kind: check
+product_codes:
+  - '94130'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41006884P&CD_PD_SEQ=16734', fetched_at: 2026-10-13, review_no: L-23-0074}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2023-04-19
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      exclude_categories: [gift_card, prepaid_charge, tax, transit, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 200000, from: registration}
+    limits:
+      - {key: money, per: month, amount: 5000}
+    benefits:
+      - key: convenience-5
+        title: CU·GS25·세븐일레븐 1만원 이상 5% 적립
+        source: page
+        evidence: ['편의점 | CU, GS25, 세븐일레븐 | 1만원 이상 사용시 | 건당 5% 하나머니 적립 | 월 최대 5천 하나머니 | * 각 업종별 하나머니 | 적립횟수 월 최대 5회', 지난 달 1일부터 말일까지 사용금액 20만원 이상 시 서비스 제공]
+        target:
+          merchants: [cu, gs25, seven_eleven]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5}
+        limits:
+          - {per: month, count: 5}
+          - {shared: money}
+        tiers: {from: 200000}
+      - key: bakery-5
+        title: 파리바게뜨·뚜레쥬르 1만원 이상 5% 적립
+        source: page
+        evidence: ['베이커리 | 파리바게뜨, 뚜레쥬르 | 1만원 이상 사용시 | 건당 5% 하나머니 적립 | 월 최대 5천 하나머니 | * 각 업종별 하나머니 | 적립횟수 월 최대 5회']
+        target:
+          merchants: [paris_baguette, tous_les_jours]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5}
+        limits:
+          - {per: month, count: 5}
+          - {shared: money}
+        tiers: {from: 200000}
+      - key: coffee-5
+        title: 스타벅스·커피빈 1만원 이상 5% 적립
+        source: page
+        evidence: ['커피 | 스타벅스, 커피빈 | 1만원 이상 사용시 | 건당 5% 하나머니 적립 | 월 최대 5천 하나머니 | * 각 업종별 하나머니 | 적립횟수 월 최대 5회']
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: points, program: hana_money, rate: 5}
+        limits:
+          - {per: month, count: 5}
+          - {shared: money}
+        tiers: {from: 200000}
+      - key: transit-5
+        title: 대중교통 월 5만원 이상 5% 적립
+        source: page
+        evidence: ['대중교통 | 버스, 지하철, 철도(KTX/SRT 포함) | 월 사용금액 5만원 이상 시 | 5% 하나머니 적립', '대중교통 적립 대상 : 시내버스, 마을버스, 광역버스, 공항버스, 지하철, 철도(KTX/SRT 포함), 공항철도', '대중교통 적립 제외 대상 : 시외버스, 고속버스', 월 최대 5천 하나머니]
+        target:
+          categories: [transit.bus_city, transit.rail, transit.subway]
+        when:
+          - month_total: {min: 50000}
+        reward: {type: points, basis: month_total, program: hana_money, rate: 5}
+        limits:
+          - {shared: money}
+        tiers: {from: 200000}
+        unmodeled: [공항버스는 적립 대상이지만 업종으로 가리지 못해 시내버스로 넣어야 계산된다, '철도는 코레일과 SRT 현장, 공식 홈페이지, 앱 결제만 대상이고 여행사와 편의점 승차권 판매대리점 결제는 제외된다']
+    unmodeled: ['본인카드(모바일카드 포함)와 가족카드의 사용금액, 적립한도, 적립횟수를 합산한다', 아이행복 정부지원금은 실적에서 빠진다, '요약에 적힌 생활밀착업종 2만원당 200하나머니, 그 외 업종 100하나머니, 이동통신요금 자동이체 적립은 상세 조건이 없어 계산하지 않는다']
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 "대중교통 전체 사용금액, 공과금, 도시가스 이용금액"이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다.', assumed: utility 전체}
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다., assumed: '2023-04-19'}
+  - {path: 'revisions[0].benefits', question: '요약 문구의 생활밀착업종 2만원당 200하나머니, 그 외 업종 100하나머니, 이동통신요금 자동이체 적립은 상세 표에 대상과 한도가 없다.', assumed: 넣지 않음}
+  - {path: annual_fees, question: 브랜드 표기가 페이지에 없어 국내전용 0원만 적었다., assumed: 국내전용 0원}
+notes: 2026-10-13 공식 상품 페이지(상세 번호 CD_PD_SEQ=16734, 목록 상품 번호 94130, 준법심의 L-23-0074)에서 옮겼다. 연회비 없음, 발급수수료 2,000원은 다음 달 말일까지 1만원 이상 쓰면 돌려준다. 하나머니 1하나머니 = 1원. 적립 비율의 반올림 문구가 없어 원 미만은 버린다. 하나머니 적립 서비스는 체크 결제에만 주고 최초 사용등록 다음 달 말일까지는 월 최대 5천 하나머니까지 적립한다.

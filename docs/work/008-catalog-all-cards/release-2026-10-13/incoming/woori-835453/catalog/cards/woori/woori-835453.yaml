@@ -1,0 +1,39 @@
+schema_version: 2
+id: woori-835453
+issuer: woori
+name: FC EXPRESS CHECK
+kind: check
+product_codes:
+  - '835453'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835453', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2019-01-02'
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+    benefits:
+      - key: domestic-0-3pct
+        title: 국내 전가맹점 0.3% 모아포인트
+        source: page
+        evidence: [국내 전가맹점 0.3% 모아포인트 적립, 전월 국내가맹점 이용금액 30만원 이상 시 제공]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: woori_moa_point, rate: 0.3}
+        tiers: {from: 300000}
+    unmodeled: [해외가맹점 이용수수료 면제와 외화결제계좌 달러 인출은 계산하지 않는다, 정부지원금과 모바일 교통카드 충전금액은 적립에서 빠진다, 가족카드는 발급되지 않는다, 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다]
+notes: 2026-10-13 공식 상품 페이지 대조. 출시일 2019-01-02. 연회비 없음. 전월 국내 30만원 이상 국내 전가맹점 0.3% 모아포인트. 카드 사용등록일 다음 달 말까지 조건 없이 적립해 30만 구간으로 둔다. 연간 해외이용 한도 1억원은 계산하지 않는다.

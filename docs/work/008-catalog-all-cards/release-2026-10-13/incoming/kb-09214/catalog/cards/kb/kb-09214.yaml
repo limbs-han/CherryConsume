@@ -1,0 +1,126 @@
+schema_version: 2
+id: kb-09214
+issuer: kb
+name: KB국민 탄탄대로 웰컴카드
+short_name: KB 탄탄대로 웰컴
+search_names: [탄탄대로 웰컴카드]
+kind: credit
+product_codes:
+  - '09214'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: upi, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 17000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09214', fetched_at: '2026-10-12', review_no: 제2020-C1a-00790호}
+  - {id: leaflet, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/09214__prdctOpmn_20241129.pdf', fetched_at: '2026-10-12', review_no: 241008-05039-PIF}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+      interest_free: count
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [결제대행업체(PG) 전용 가맹점 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 업종 할인에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - key: shopping
+        per: month
+        amount: {0: 7000, 300000: 7000, 600000: 14000}
+    benefits:
+      - key: mart-10
+        title: 이마트·롯데마트·홈플러스 10% 청구할인
+        source: page
+        evidence: [대형마트 | 10% | 7천원 | 1만 4천원, '3대 대형마트 : 이마트, 롯데마트, 홈플러스', '대형마트 및 백화점의 온라인쇼핑몰, 상품권 구매, 건물 내 임대매장, SSM(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼) 이용금액은 할인 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        exclude_applied: 1
+        unmodeled: ['건물 내 임대매장과 SSM(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼)은 할인에서 빠진다']
+      - key: department-10
+        title: 롯데·신세계·현대백화점 10% 청구할인
+        source: page
+        evidence: [백화점 | 10% | 7천원 | 1만 4천원, '3대 백화점 : 롯데백화점, 신세계백화점, 현대백화점']
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        exclude_applied: 1
+        unmodeled: [건물 내 임대매장은 할인에서 빠진다]
+      - key: favorite-5
+        title: 편의점·면세점·3대 홈쇼핑 5% 청구할인
+        source: page
+        evidence: ['편의점, 면세점, 3대 홈쇼핑 5% 청구할인', 월 5천원 할인한도, '편의점, 면세점 : 편의점 업종, 면세점 업종', '3대 홈쇼핑 : 현대홈쇼핑, GS홈쇼핑, CJ오쇼핑']
+        target:
+          categories: [convenience, travel.duty_free]
+          merchants: [cj_onstyle, gs_shop, hyundai_homeshopping]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: transit-taxi-5
+        title: 버스·지하철·택시 5% 청구할인
+        source: page
+        evidence: ['대중교통(버스, 지하철), 택시 5% 청구할인', 월 3천원 할인한도, '시외버스, 고속버스 제외', 버스/지하철 요금할인은 실제 카드 사용일이 아닌 이용대금명세서 상 기재된 이용일 기준으로 제공]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [버스·지하철 할인은 이용대금명세서에 적힌 이용일 달로 계산된다]
+      - key: telecom-5
+        title: 이동통신요금 자동납부 5% 청구할인
+        source: page
+        evidence: [이동통신요금 5% 청구할인, 월 3천원 할인한도, 'SKT, KT Olleh, LG U+ 이동통신요금 자동납부 시 제공']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: [고궁(경복궁·창경궁·덕수궁)·N서울타워 전망대·서울 시티투어버스 20% 할인(월 3천원)은 담을 가맹점이 없어 계산하지 않는다, '에버랜드 50%, 캐리비안베이 30% 현장할인은 지정 이용권에만 주어 계산하지 않는다', '서울 용산구·영등포구, 안산 단원구 음식 업종 5% 할인(월 3천원)은 지역을 결제 입력으로 가릴 수 없어 계산하지 않는다', 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금 결제는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙의 시작일을 찾지 못했다. 원문은 2017년 01월 13일 출시만 적었다, assumed: '2026-10-12'}
+  - {path: 'revisions[0].limits', question: 대형마트와 백화점은 표에서 각각 월 7천원·1만4천원 한도로 적혀 있지만 따로인지 함께인지 문구가 없다. 덜 주는 쪽인 함께 쓰는 한도로 두었다, assumed: shared}
+notes: 2026-10-12 KB국민카드 상품 페이지와 상품설명서 PDF를 대조했다. 국내 거주 외국인 선호 서비스를 담은 상품이지만 발급 대상 제한이 없어 일반 상품으로 담는다. 대형마트·백화점 할인받은 결제만 실적에서 빠지고 무이자할부는 실적에 들어간다. 연회비 K-WORLD(UPI) 1만5천원, 마스터 1만7천원이다.

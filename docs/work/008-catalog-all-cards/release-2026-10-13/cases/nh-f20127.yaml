@@ -1,0 +1,64 @@
+card: nh-f20127
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 20만 직전 PC방 적립 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: pc_room}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 전월 20만원 이상부터라 0
+- name: PC방 10%와 게임 공유 한도
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, category: pc_room}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: google_play}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: steam, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pc-room-10: 1500}}
+  - {payment: 1, benefits: {app-market-10: 500}}
+  - {payment: 2, benefits: {}}
+  calc: 1,500. 구글 1,000 중 남은 500. 스팀은 한도 소진 0
+- name: 스팀 10%와 간편결제 제외
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: steam, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 5000, merchant: steam, payment_method: toss_pay}
+  expect:
+  - {payment: 0, benefits: {steam-10: 1500}}
+  - {payment: 1, benefits: {}}
+  calc: 15,000 × 10% = 1,500. 토스페이 결제는 제외
+- name: 앱스토어 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5000, merchant: app_store}
+  expect:
+  - {payment: 0, benefits: {app-market-10: 500}}
+  calc: 5,000 × 10% = 500
+- name: 평일 스타벅스 0.5% 주말 쿠팡 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks}
+  - {at: 2026-11-07T12:00, amount: 30000, merchant: coupang}
+  expect:
+  - {payment: 0, benefits: {daily-weekday-0-5: 50}}
+  - {payment: 1, benefits: {daily-weekend-1: 300}}
+  calc: 수요일 10,000 × 0.5% = 50. 토요일 30,000 × 1% = 300
+- name: 버스와 택시는 실적과 적립 제외
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.bus_city}
+  - {at: 2026-11-05T11:00, amount: 10000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  - {payment: 1, benefits: {}, counted: 0}
+  calc: 후불교통 버스·지하철과 택시는 실적과 적립 제외
+- name: 신규 등록 다음 달까지 실적 특례
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: pc_room}
+  expect:
+  - {payment: 0, benefits: {pc-room-10: 1000}}
+  calc: 10월 등록이라 11월 말까지 20만 구간. 1,000

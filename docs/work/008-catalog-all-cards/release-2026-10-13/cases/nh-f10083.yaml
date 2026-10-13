@@ -1,0 +1,92 @@
+card: nh-f10083
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 커피 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-5: 1000}}
+  calc: 20,000원 x 5% = 1,000원. 월 한도 1만원 안
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원보다 1원 적어 0 구간. 혜택 없음
+- name: 건당 1만원 미만은 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 1만원 이상이어야 한다
+- name: 편의점 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  calc: 10,000원 x 5% = 500원
+- name: 온라인 쇼핑 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-5: 1500}}
+  calc: 30,000원 x 5% = 1,500원
+- name: 배달앱 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 1000}}
+  calc: 20,000원 x 5% = 1,000원
+- name: 영화 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {movie-2000: 2000}}
+  calc: 정액 2,000원
+- name: 대형마트 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  calc: 100,000원 x 5% = 5,000원. 30만 구간 통합 한도 1만원 안
+- name: 해외 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  calc: 100,000원 x 2% = 2,000원
+- name: 통합 한도 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: homeplus, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 20000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {convenience-5: 1000}}
+  calc: 마트는 월 1회라 둘째 결제는 0원. 편의점 1,000원은 통합 한도 1만원 안
+- name: GS칼텍스 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-gs-caltex-60: 1614}}
+  calc: 50,000원 / 1,858원 = 26.91리터 x 60원 = 1,614.6원. 원 미만 버림
+- name: 후불 지하철 5% 월 2천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-5: 75}}
+  calc: 1,500원 x 5% = 75원

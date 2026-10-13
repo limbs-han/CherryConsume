@@ -1,0 +1,52 @@
+card: woori-102719
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 쿠팡 5% 적립
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {do-buy: 500}
+  calc: 10,000원 x 5% = 500점
+- name: 건당 1000점 한도
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {do-buy: 1000}
+  calc: 2,500점이지만 건당 1,000점
+- name: 실적 직전 49999
+  prev_month_spend: 49999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 5만원보다 1원 적어 0
+- name: 편의점 오프라인 5%
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: convenience, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {do-eat-convenience: 500}
+  calc: 10,000원 x 5% = 500점
+- name: 배민 5%
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: baemin, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {do-eat-baemin: 500}
+  calc: 10,000원 x 5% = 500점
+- name: 구글플레이 5%
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: google_play, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {do-play: 500}
+  calc: 10,000원 x 5% = 500점

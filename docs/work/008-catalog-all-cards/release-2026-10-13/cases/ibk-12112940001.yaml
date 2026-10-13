@@ -1,0 +1,32 @@
+card: ibk-12112940001
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 편의점 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {offline-5: 500}}
+  calc: 10,000원 x 5% = 500원
+- name: 온라인 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-10: 2000}}
+  calc: 20,000원 x 10% = 2,000원
+- name: 카카오페이 15%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: restaurant.general, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {kakaopay-15: 3000}}
+  calc: 20,000원 x 15% = 3,000원
+- name: 실적 직전
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 전월 20만원 미만이면 할인 없음

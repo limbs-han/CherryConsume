@@ -1,0 +1,74 @@
+card: hana-13798
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 10만 직전이면 캐시백 없음
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: gs25}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 10만원보다 1원 적어 0
+- name: 편의점 5%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: gs25}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 500}
+  calc: 10,000원 x 5% = 500
+- name: 편의점 1만원 미만은 0
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 9999, merchant: gs25, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 건당 1만원 미만
+- name: 편의점 구간 한도 1천원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 40000, merchant: cu}
+  expect:
+  - payment: 0
+    benefits: {convenience-5: 1000}
+  calc: 40,000원 x 5% = 2,000이지만 10만 구간 월 1천원 한도
+- name: 배달 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: baemin, channel: online}
+  expect:
+  - payment: 0
+    benefits: {delivery-5: 1000}
+  calc: 20,000원 x 5% = 1,000
+- name: 커피 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 5000, merchant: starbucks}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {coffee-20: 2000}
+  calc: 5,000원은 1만원 미만이라 0. 10,000원 x 20% = 2,000
+- name: 대중교통 월 3만원 이상 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 29999, category: transit.subway, billing: postpaid_transit}
+  - {at: 2026-11-05T10:00, amount: 1, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {}
+  - payment: 1
+    benefits: {transit-10: 2000}
+  calc: 합계 3만원에서 3,000이지만 30만 구간 대중교통 월 2천원 한도
+- name: 페이 0.5%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, payment_method: samsung_pay}
+  expect:
+  - payment: 0
+    benefits: {pay-cashback-0-5: 500}
+  calc: 100,000원 x 0.5% = 500

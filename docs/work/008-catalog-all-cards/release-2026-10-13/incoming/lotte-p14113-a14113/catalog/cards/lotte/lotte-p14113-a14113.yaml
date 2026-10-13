@@ -1,0 +1,55 @@
+schema_version: 2
+id: lotte-p14113-a14113
+issuer: lotte
+name: LG전자 X LOCA 플랜+
+kind: credit
+product_codes: [P14113-A14113]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 17000}
+  - {scope: global, brand: amex, amount: 17000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14113-A14113', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14113-A14113_220913.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2022-07-08'
+    source: manual
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료는 할인에서 빠진다']
+    options:
+      - key: plan
+        title: LG전자 플랜할인 이용 여부
+        choices:
+          - {key: none, title: 플랜할인 미이용}
+          - {key: using, title: 플랜할인 이용 중}
+        default: null
+        change: immediate
+        unsupported: [using]
+    benefits:
+      - key: all-1
+        title: 플랜할인 미이용 시 국내외 1% 결제일 할인
+        source: manual
+        evidence: [지난달(1일~말일) 실적 서비스 한도 30만원 이상 국내외 가맹점 1% 결제일 할인 없음, 'LG전자 플랜할인 이용 시, 국내외 가맹점 1% 결제일 할인 서비스는 적용되지 않습니다.', LG전자 X LOCA플랜+ 카드를 최초 발급받은 경우 카드발급일~다음 달 말일까지 이용 실적에 관계없이 혜택이 제공됩니다.]
+        target: {all: true}
+        when:
+          - option:
+              plan: [none]
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 300000}
+    unmodeled: [LG전자 플랜할인은 LG베스트샵 30만원 이상 결제 시 30만원을 먼저 할인하고 20개월 동안 지난달 50만원 이상이면 월 15천원을 청구하지 않는 서비스다. 결제마다 주는 혜택이 아니라 계산하지 않는다, 플랜할인 이용 중 지난달 100만원 이상이면 5천원 150만원 이상이면 1만원 캐시백을 더 준다. 계산하지 않는다, 플랜할인 신청 다음 달부터 끝난 다음 달까지 1% 할인이 없다, 플랜할인 적용 매출과 이 카드가 아닌 롯데카드 이용금액은 실적에서 빠진다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', 해외 이용과 이동통신 자동납부처럼 다음 달 접수되는 결제는 롯데카드 접수일 기준으로 실적과 혜택에 들어간다, 롯데카드의 다른 결제일 할인과 겹치면 큰 혜택 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품설명서가 2022년 7월 기준이라 출시일을 시행일로 두었다. 그 뒤 바뀐 조건이 있는지 확인하지 못했다, assumed: '2022-07-08'}
+notes: 2026-10-12 상품 페이지와 상품설명서(2022년 7월 기준) 대조. 공시 색인 id lotte-1772를 상품 코드 id로 바꿨다. 상품 페이지에 발급 중단 문구가 없다. 네이버페이 쇼핑엔로카 PLAN+(lotte-p14381-a14381)처럼 플랜할인 미이용 회원의 1% 결제일 할인만 계산한다. 할인 한도 없음. 가족카드는 발급하지 않는다. 실적 제외의 대중교통은 시외버스까지 빼 실적이 적게 잡히는 쪽으로 두었다.

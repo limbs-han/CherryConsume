@@ -1,0 +1,68 @@
+schema_version: 2
+id: lotte-1727
+issuer: lotte
+name: 롯데백화점 FLEX카드
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 100000}
+  - {scope: global, brand: mastercard, amount: 100000}
+  - {scope: global, brand: amex, amount: 100000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00032_20260929_10006.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2020-09-25'
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, department_store, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    benefits:
+      - key: lpoint-0-5
+        title: 국내외 가맹점 0.5% L.POINT 적립
+        source: manual
+        evidence: [적립한도 없이 국내외 가맹점 이용 시 L.POINT 0.5% 적립, 지난달 1일~말일까지 50만원 이상(본인, 가족카드 합산)이용 시 혜택이 제공됩니다., 'L.POINT 적립기준에 따라 결제금액 1천원당 해당 적립률로 포인트가 적립되며, 1천원 미만 금액은 절사됩니다.']
+        target:
+          exclude_categories: [annual_fee, apartment_fee, car.toll, department_store, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+          all: true
+        reward:
+          type: points
+          program: lotte_lpoint
+          per_unit: {unit: 1000, amount: 5}
+        tiers: {from: 500000}
+      - key: streaming-30
+        title: 스트리밍 정기결제 30% 결제일 할인
+        source: manual
+        evidence: ['스트리밍 | 넷플릭스, 유튜브, 왓챠, 멜론, 지니뮤직 | 30% | 5천원', 서비스 대상 가맹점 공식 홈페이지 또는 앱을 통해 직접 신청한 정기결제(자동이체) 이용 건만 혜택이 제공]
+        target:
+          merchants: [genie, melon, netflix, watcha, youtube_premium]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        unmodeled: [공식 홈페이지나 앱에서 직접 신청한 정기결제만 받는다. 앱마켓 결제와 통신요금 합산 청구는 빠진다]
+      - key: coffee-50
+        title: 커피 50% 결제일 할인
+        source: manual
+        evidence: ['커피 | 스타벅스, 엔제리너스, 폴바셋, 투썸플레이스 | 50% | 1만원']
+        target:
+          merchants: [angel_in_us, paul_bassett, starbucks, twosome]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+    unmodeled: ['실적은 롯데백화점에서 쓴 모든 금액(백화점, 역사, 아울렛)을 뺀다. 롯데백화점만 뺄 칸이 없어 백화점 업종 전체를 실적과 적립에서 뺐다', '무승인전표, 관세, 벌금, 과태료, 민원 수수료, 인지세, 송달료, 장애인 고용부담금, 오토·스마트 캐시백 신청 금액은 실적과 적립에서 빠진다', 롯데카드의 다른 결제일 할인 혜택과 겹치면 할인이 큰 혜택 하나만 준다, 실적과 할인한도는 가족카드와 합산한다, 할인은 승인 시점에 남은 한도 안에서 준다, 롯데면세점 오프라인 5~15% 현장할인은 매장과 상품마다 비율이 달라 계산하지 않는다, Mastercard World와 American Express Platinum Elite 국제브랜드 서비스는 결제 혜택이 아니라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 결제일 할인을 받은 결제에도 L.POINT 0.5%를 더 주는지 원문에 없어 할인만 주는 쪽으로 두었다, assumed: 중복 없음}
+  - {path: product_codes, question: 판매 카드 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다, assumed: '[]'}
+notes: 2026-10-12 상품설명서(2026년 8월 기준, 여신금융협회 심의필 제2026-C1a-13595호) 대조. 출시일 2020-09-25. 연회비 국내전용과 해외겸용(MASTER, AMEX) 10만원, 가족카드 면제. 최초 발급 회원은 발급일부터 다음 달 말일까지 실적과 상관없이 혜택을 받는다.

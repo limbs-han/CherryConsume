@@ -1,0 +1,36 @@
+card: shinhan-boae2u
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: CU 10%와 30만 구간 한도 7천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, merchant: cu, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cu-10: 5000}, counted: 0}
+  - {payment: 1, benefits: {cu-10: 2000}, counted: 0}
+  calc: 50,000 × 10% = 5,000. 30,000 × 10% = 3,000이지만 남은 한도 2,000. 캐시백 받은 거래는 실적에서 빠진다
+- name: 100만 구간 한도 1만 7천원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 200000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cu-10: 17000}}
+  calc: 200,000 × 10% = 20,000이지만 한도 17,000
+- name: 후불교통 10% 월 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 8000, category: transit.subway, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 5000, category: transit.bus_city, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-10: 800}, counted: 0}
+  - {payment: 1, benefits: {transit-10: 200}, counted: 0}
+  calc: 8,000 × 10% = 800. 5,000 × 10% = 500이지만 남은 한도 200
+- name: 30만 직전이면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 30만원 미만 구간

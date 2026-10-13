@@ -1,0 +1,118 @@
+schema_version: 2
+id: ibk-12113220001
+issuer: ibk
+name: 쇼핑앤조이 카드
+kind: credit
+product_codes:
+  - '12113220001'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: bc, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=322&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-13, review_no: 제2024-3802호, review_valid_until: 2027-06-27}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2024-06-28
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, tax, telecom, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card]
+    limits:
+      - key: shopping
+        per: month
+        amount: {300000: 5000, 600000: 10000, 1000000: 15000}
+      - key: life
+        per: month
+        amount: {300000: 5000, 600000: 10000, 1000000: 15000}
+    benefits:
+      - key: transit-5
+        title: 후불교통 버스·지하철 5% 청구할인
+        source: page
+        evidence: [후불교통(버스 지하철) 택시 5% 청구할인, 시외버스 고속버스 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: taxi-5
+        title: 택시 5% 청구할인
+        source: page
+        evidence: [후불교통(버스 지하철) 택시 5% 청구할인]
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: telecom-5
+        title: 이동통신요금 자동이체 5% 청구할인
+        source: page
+        evidence: [이동통신요금(SKT KT LGU+) 자동이체 5% 청구할인]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: [통신요금 자동이체 신청이 있어야 한다]
+      - key: online-5k
+        title: 온라인 쇼핑 건당 2만원 이상 5천원 청구할인
+        source: page
+        evidence: [온라인 쇼핑 건당 이용금액 2만원 이상 시 5천원 청구할인, 오픈마켓 소셜커머스 인터넷면세점 온라인 서점 식품배달 모바일 간편결제]
+        target:
+          merchants: [aladin, auction, baemin, coupang, eleven_st, gmarket, kakao_pay, kyobo_book, naver_pay, shilla_dfs_online, shinsegae_dfs_online, tmon, wemakeprice, yes24, yogiyo]
+        when:
+          - amount: {min: 20000}
+          - {channel: online}
+          - {interest_free: false}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {shared: shopping}
+        tiers: {from: 300000}
+        unmodeled: [롯데 인터넷면세점 엘롯데 신세계몰 갤러리아몰 올리브영 시코르 더반찬 페이코는 가맹점 키가 없거나 매장과 구분할 수 없어 담지 않았다, 모바일 간편결제 할인은 타 서비스와 중복 적용되지 않는다]
+      - key: overseas-5
+        title: 해외쇼핑 5% 청구할인
+        source: page
+        evidence: [해외쇼핑 온 오프라인 건당 USD 10 이상 시 5% 청구할인 1회 최대 5천원]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 20000}
+          - {interest_free: false}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: shopping}
+        tiers: {from: 300000}
+        notes: USD 10 이상 조건을 원화 2만원 이상으로 근사했다
+      - key: starbucks-2k
+        title: 스타벅스 사이렌오더 4천원 이상 2천원 청구할인
+        source: page
+        evidence: [스타벅스 사이렌오더 주문 및 결제 시에만 건당 4천원 이상 시 2천원 청구할인, 스타벅스 선불카드 구입 및 충전 제외]
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 4000}
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 2000}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        notes: 사이렌오더를 온라인 결제로 본다. 통합 한도 소속이 원문에 없어 덜 주는 쪽으로 생활서비스 한도에 묶었다
+    unmodeled: [무이자할부 이용금액은 실적에서 빠지지만 혜택 조건에서만 제외했다, 금융우대서비스는 계산하지 않는다, 가족카드 이용금액은 본인회원과 합산하지 않는다, 교통요금 실적은 비씨카드사 매입 시점 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 준법감시인 심의일로 뒀다, assumed: '2024-06-28'}
+  - {path: 'revisions[0].limits', question: 통합할인한도 표에서 온라인쇼핑과 해외쇼핑이 쇼핑서비스 한 한도인지 따로인지 분명하지 않다. 덜 주는 쪽으로 합쳤다, assumed: 쇼핑서비스 한도 공유}
+  - {path: 'revisions[0].spend.regions', question: 전월 이용금액이 국내만인지 분명하지 않다. 원문은 국내 가맹점 기준, assumed: '[domestic]'}
+notes: 2026-10-13 expand21 조사. 생활서비스는 후불교통 택시 통신 스타벅스가 한도를 같이 쓰고 쇼핑서비스는 온라인과 해외가 같이 쓴다

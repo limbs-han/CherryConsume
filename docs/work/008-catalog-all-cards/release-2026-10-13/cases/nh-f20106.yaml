@@ -1,0 +1,46 @@
+card: nh-f20106
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 편의점 0.5% 구간
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-store: 50}}
+  calc: 10,000원 x 0.5% = 50원
+- name: 실적 직전은 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원보다 1원 적다
+- name: 50만 구간 영화 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-general: 200}}
+  calc: 20,000원 x 1% = 200원
+- name: 통신 자동납부
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-telecom: 500}}
+  calc: 50,000원 x 1% = 500원
+- name: 후불교통
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-transit: 15}}
+  calc: 1,500원 x 1% = 15원
+- name: 해외 2%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-cashback-2: 2000}}
+  calc: 100,000원 x 2% = 2,000원

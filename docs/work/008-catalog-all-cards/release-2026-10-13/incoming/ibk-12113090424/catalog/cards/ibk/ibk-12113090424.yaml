@@ -1,0 +1,102 @@
+schema_version: 2
+id: ibk-12113090424
+issuer: ibk
+name: 일상의 기쁨 (주)자란다 제휴카드
+kind: check
+product_codes:
+  - '12113090424'
+status: on_sale
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=309&PDCD=0424&pageId=CA01010000', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-13
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 500000: 10000}
+    benefits:
+      - key: transit-100
+        title: 버스·지하철 건당 100원 청구할인
+        source: page
+        evidence: ['교통/통신: 후불교통카드 이용 시 버스·지하철 건당 100원 할인, 월 최대 1,000원, 환승 건은 횟수 제외', 전월 국내 가맹점 이용금액 30만원 이상 월 통합할인한도 5, 000원]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, fixed: 100}
+        limits:
+          - {per: month, amount: 1000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [환승 결제는 횟수에서 빠진다]
+      - key: convenience-5
+        title: 편의점·올리브영 5% 청구할인
+        source: page
+        evidence: ['쇼핑/미용: GS25, CU, 세븐일레븐, 올리브영 5% 할인', '통합 1일 1회, 월 2회, 1회 1만원 한도']
+        target:
+          merchants: [cu, gs25, olive_young, seven_eleven]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: online-10
+        title: 쿠팡·티몬·위메프 10% 청구할인
+        source: page
+        evidence: ['쇼핑/미용: 쿠팡, 티몬, 위메프 10% 할인', '통합 1일 1회, 월 2회, 1회 1만원 한도']
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: movie-4000
+        title: CGV·롯데시네마·메가박스 4천원 청구할인
+        source: page
+        evidence: ['공연/문화: CGV, 롯데시네마, 메가박스 4,000원 할인', '현장·온라인 예매, 통합 월 1회·연 12회, 건당 1만원 이상 결제, 예매대행 사이트 제외']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [예매대행 사이트 결제는 제외, 연 12회 한도는 월 1회로 이미 지켜진다]
+      - key: coffee-10
+        title: 주요 커피전문점 10% 청구할인
+        source: page
+        evidence: ['카페/외식: 스타벅스, 커피빈, 카페베네, 탐앤탐스, 엔제리너스, 투썸플레이스, 할리스, 달.콤 10% 할인', '통합 1일 1회, 월 2회, 1회 1만원 한도', 백화점·아울렛 입점 매장 제외]
+        target:
+          merchants: [angel_in_us, cafe_bene, coffee_bean, dalkomm, hollys, starbucks, tom_n_toms, twosome]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [백화점과 아울렛 입점 매장은 제외]
+    unmodeled: [놀이공원 할인과 금융우대는 계산하지 않는다, 가족카드 실적은 본인과 합산하지 않는다, 간편결제 결제는 할인이 제공되지 않을 수 있다]
+open_questions:
+  - {path: 'revisions[0].source', question: 상품 페이지에 연회비 금액이 적혀 있지 않아 연회비 칸을 비웠다, assumed: 연회비 없음으로 표시하지 않음}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택의 시작일을 찾지 못해 수집한 날로 두었다, assumed: '2026-10-13'}
+  - {path: 'revisions[0].limits[0]', question: 통합할인한도가 후불교통 할인에도 걸리는지 원문이 분명하지 않아 걸리는 쪽으로 두었다, assumed: shared integrated}
+notes: 2026-10-13 expand21 조사. 한도는 전월 30만원 5천원과 50만원 1만원이다. 놀이공원과 금융우대는 한도 밖이다

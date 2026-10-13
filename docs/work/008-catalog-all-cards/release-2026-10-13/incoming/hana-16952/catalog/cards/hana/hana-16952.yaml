@@ -1,0 +1,53 @@
+schema_version: 2
+id: hana-16952
+issuer: hana
+name: 더 심플 하나카드
+short_name: 하나 더 심플
+search_names: [더 심플, 더심플 하나카드]
+kind: credit
+product_codes:
+  - '16952'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=16952', fetched_at: 2026-10-13, review_no: A-26-0963}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-04-20
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+    benefits:
+      - key: monthly-bill-discount
+        title: 월납요금 자동이체 청구할인
+        source: page
+        evidence: ['월납요금 | 자동이체시 | 30만원 이상 80만원 미만 10,000원 | 80만원 이상 15,000원 | 횟수 제한 없이 월 할인 한도 내에서 합산 할인', 월납 요금 승인 금액이 할인 한도보다 적을 경우 승인 금액만큼 할인 적용, '통신 : SKT, KT, LG U+, 알뜰폰', '렌탈 : 코웨이, LG전자, SK매직 등', '기타 월납서비스 : 넷플릭스, 유튜브 프리미엄, 디즈니 플러스 등']
+        target:
+          merchants: [coway, disney_plus, kt, lg_uplus, netflix, sk_magic, skt, youtube_premium]
+        when:
+          - {region: domestic}
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 10000, 800000: 15000}
+        tiers: {from: 300000}
+        unmodeled: [월납 요금은 각 대상 가맹점에 자동이체로 등록한 경우만 할인된다, '알뜰폰과 LG전자 렌탈, 대상 가맹점 상세(하나카드 홈페이지 공지사항)의 다른 월납 가맹점은 가맹점 키가 없어 계산하지 않는다']
+    unmodeled: [본인카드와 가족카드 이용금액은 각각 산정한다, 교통요금 등 무승인 매입은 매출전표가 접수된 달의 이용금액에 들어간다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 상품 페이지 준법심의일을 잠정 시작일로 둔다., assumed: '2026-04-20'}
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 공과금, 수도·전기요금, 도시가스, 아파트관리비 등이다. 전기와 수도가 공과금에 드는지 단정할 수 없어 utility 전체를 뺐다.', assumed: utility 전체}
+  - {path: 'revisions[0].benefits[monthly-bill-discount].target', question: 월납요금 대상 가맹점이 "등"으로 끝나 전체 목록을 확인하지 못했다. 원문에 이름이 적힌 가맹점만 넣었다., assumed: 이름이 적힌 가맹점만}
+notes: 2026-10-13 공식 상품 페이지(준법심의 A-26-0963)에서 옮겼다. 연회비 25,000원(기본 25,000원, 제휴 0원). 월납요금 할인을 받은 매출은 실적에서 빠진다. 무이자 할부 이용건은 할인하지 않는다.

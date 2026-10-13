@@ -1,0 +1,39 @@
+card: hyundai-chhhc
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 렌탈료 월 한도 8천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: chungho_rental, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {rental-subscription-discount: 8000}, counted: 0}
+  calc: 30,000원 전액 할인 대상이나 40만 구간 월 한도 8,000원
+- name: 40만 직전 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: chungho_rental, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 40만원 미만은 혜택 제외
+- name: 120만 구간 렌탈료가 한도보다 적으면 결제 금액만큼
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: chungho_rental, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {rental-subscription-discount: 10000}, counted: 0}
+  calc: 10,000원이 한도 16,000원보다 적어 10,000원 할인
+- name: 80만 구간 한도 1만2천원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: chungho_rental, billing: subscription}
+  expect:
+  - {payment: 0, benefits: {rental-subscription-discount: 12000}, counted: 0}
+  calc: 15,000원 중 80만 구간 한도 12,000원
+- name: 일반 납부는 할인 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: chungho_rental, billing: normal}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 정기결제가 아닌 일반 납부는 혜택 제외

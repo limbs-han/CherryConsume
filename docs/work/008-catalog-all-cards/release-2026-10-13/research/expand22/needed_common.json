@@ -1,0 +1,18 @@
+[
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "twentynine_cm",
+      "name": "29CM",
+      "category": "online_shopping",
+      "aliases": [
+        "29CM",
+        "29센티미터",
+        "29cm.co.kr"
+      ]
+    },
+    "card_id": "hyundai-tpie3",
+    "source_url": "https://www.hyundaicard.com/upload/card/20260824_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_the%20Pink%20Edition3.pdf",
+    "evidence": "패션/뷰티 온라인 : 29CM, W컨셉, KREAM"
+  }
+]

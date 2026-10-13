@@ -1,0 +1,44 @@
+card: hyundai-slhc
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 이상 기본 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-05: 500}, counted: 100000}
+  calc: 100,000 x 0.5% = 500
+- name: 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 30만 미만 혜택 제외
+- name: 편의점과 택시 1%는 기본 대신
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: gs25, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 30000, category: taxi}
+  expect:
+  - {payment: 0, benefits: {life-convenience-1: 200}, counted: 20000}
+  - {payment: 1, benefits: {life-transit-1: 300}, counted: 30000}
+  calc: 20,000 x 1% = 200. 30,000 x 1% = 300. 기본 0.5%는 중복되지 않는다
+- name: 대형마트 오프라인 1%, 온라인몰은 기본 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: emart, channel: online}
+  expect:
+  - {payment: 0, benefits: {life-mart-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {base-05: 500}, counted: 100000}
+  calc: 오프라인 100,000 x 1% = 1,000. 온라인몰은 생활 편의 영역에서 빠져 기본 0.5% = 500
+- name: 신규 발급 다음 달까지는 30만 구간
+  holder: {started_on: '2026-10-20'}
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {base-05: 500}, counted: 100000}
+  calc: 발급월 다음 달 이용 건까지 30만 미만도 할인

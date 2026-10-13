@@ -1,0 +1,61 @@
+card: kb-04452
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 병원 10만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-5: 5000}, counted: 0}
+  calc: 100,000 × 5% = 5,000원. 할인 받은 결제는 실적 제외
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 30만 미만은 혜택 없음
+- name: 이마트 오프라인 일 한도
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 5000}}
+  calc: 10,000원 중 일 한도 5,000원
+- name: 영역 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: sports.golf, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 100000, category: travel.hotel, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: gs_shop, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T13:00, amount: 20000, category: taxi, payment_method: physical_card}
+  - {at: 2026-11-05T14:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {golf-1: 1000}}
+  - {payment: 1, benefits: {travel-1: 1000}}
+  - {payment: 2, benefits: {homeshopping-1: 500}}
+  - {payment: 3, benefits: {transit-1: 200}}
+  - {payment: 4, benefits: {telecom-1: 600}}
+  calc: 각 금액의 1%
+- name: 음식점 1만원 이상 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 120000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {food-5: 5000}}
+  calc: 6,000원 중 월 한도 5,000원
+- name: 해외 일시불 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: grocery_mart, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  calc: 100,000 × 2% = 2,000원
+- name: 주유 5만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: fuel, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-60: 1614}}
+  calc: 50,000 ÷ 1,858 = 26.9L × 60 = 1,614원 버림

@@ -1,0 +1,48 @@
+card: shinhan-boadg5
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 지하철 10% 월 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 15000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 15000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-10: 1500}, counted: 0}
+  - {payment: 1, benefits: {transit-10: 500}, counted: 0}
+  calc: 15,000 × 10% = 1,500. 둘째는 월 2,000원 중 남은 500원. 지하철은 실적 제외
+- name: 경계 직전 199999 할인 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 15000, category: transit.subway, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만 할인 없음
+- name: 50만 구간 간편결제 2% 건당 5만원까지, 일 1회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 80000, category: restaurant.general, payment_method: samsung_pay}
+  - {at: 2026-11-05T13:00, amount: 20000, merchant: olive_young, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {easy-pay-2: 1000}}
+  - {payment: 1, benefits: {}}
+  calc: 5만원까지만 2% = 1,000원. 같은 날 둘째 결제는 통합 일 1회로 할인 없음
+- name: 생활 영역 각 2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-07T12:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-08T12:00, amount: 10000, merchant: olive_young, payment_method: physical_card}
+  - {at: 2026-11-09T12:00, amount: 30000, category: hospital, payment_method: physical_card}
+  - {at: 2026-11-10T12:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-11T12:00, amount: 9999, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {baemin-2: 400}}
+  - {payment: 1, benefits: {convenience-2: 200}}
+  - {payment: 2, benefits: {coffee-2: 200}}
+  - {payment: 3, benefits: {olive-young-2: 200}}
+  - {payment: 4, benefits: {hospital-2: 600}}
+  - {payment: 5, benefits: {ott-2: 340}}
+  - {payment: 6, benefits: {}}
+  calc: 각 2%. 마지막은 1만원 미만이라 없음. 합계 1,940원으로 월 5천원 안

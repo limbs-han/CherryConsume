@@ -1,0 +1,89 @@
+[
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "shinbaek_reward",
+      "name": "신백리워드",
+      "won_per_point": 1
+    },
+    "card_id": "samsung-aap1816",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtr2j1%2Bfm3GROO1l7f0rpCVU%3D&sn=1",
+    "evidence": "신백리워드는 10신백리워드 단위로 사용(1신백리워드=1원)"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "cesco",
+      "name": "세스코",
+      "category": "other",
+      "aliases": [
+        "세스코",
+        "CESCO"
+      ]
+    },
+    "card_id": "samsung-aap1833",
+    "source_url": "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1833",
+    "evidence": "세스코 이용료 정기결제 7,000~13,000원 결제일할인"
+  },
+  {
+    "file": "point_programs.yaml",
+    "definition": {
+      "key": "ktx_mileage",
+      "name": "KTX 마일리지",
+      "won_per_point": 1
+    },
+    "card_id": "samsung-aap1864",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtprloyan%2Fs%2FDT5yR2lgNTnM%3D&sn=1",
+    "evidence": "1 KTX 마일리지 포인트 = 1 KTX 마일리지의 가치, 1 KTX 마일리지 = 1원의 가치"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "happy_order",
+      "name": "해피오더",
+      "category": "other",
+      "aliases": [
+        "해피오더",
+        "해피오더 앱",
+        "SPC 해피오더"
+      ]
+    },
+    "card_id": "samsung-aap1895",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtuSesCItYiBCA%2BcophPICH4%3D&sn=1",
+    "evidence": "해피오더/F&B 20% 결제일할인, 해피오더는 공식 홈페이지/앱, 해피포인트 앱을 통한 결제건에 한함"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hy_fresh_manager",
+      "name": "hy 프레시 매니저",
+      "category": "other",
+      "billing": "subscription",
+      "aliases": [
+        "hy 프레시 매니저",
+        "프레시 매니저",
+        "hy프레시매니저"
+      ]
+    },
+    "card_id": "samsung-aap1895",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtuSesCItYiBCA%2BcophPICH4%3D&sn=1",
+    "evidence": "hy 정기결제 20% 결제일할인, 정기결제 프레시 매니저 정기/약정구독 결제건"
+  },
+  {
+    "file": "merchants.yaml",
+    "definition": {
+      "key": "hy_fredit_mall",
+      "name": "hy프레딧 몰",
+      "category": "online_shopping",
+      "aliases": [
+        "hy프레딧 몰",
+        "hy프레딧몰",
+        "프레딧 몰",
+        "hy 프레딧"
+      ]
+    },
+    "card_id": "samsung-aap1895",
+    "source_url": "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtuSesCItYiBCA%2BcophPICH4%3D&sn=1",
+    "evidence": "hy 정기결제/일반결제 20% 결제일할인, hy프레딧 몰 정기/약정구독 및 프레딧 멤버십 자동 연장 결제건, 일반결제는 hy프레딧 몰 공식 홈페이지/앱을 통한 결제건"
+  }
+]

@@ -1,0 +1,37 @@
+card: kb-09112
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 구독료 1만원까지 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: samsung_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {samsung-ai-autopay: 10000}, counted: 0}
+  calc: 30만 구간 월 1만원. 할인 건 실적 제외
+- name: 100만 구간 두 건 합산 1만4천원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: samsung_subscription, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 9000, merchant: samsung_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {samsung-ai-autopay: 9000}, counted: 0}
+  - {payment: 1, benefits: {samsung-ai-autopay: 5000}, counted: 0}
+  calc: 첫 건 9,000원 전액, 둘째는 남은 5,000원
+- name: 30만 직전 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: samsung_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 0 구간이고 유예기간 아님
+- name: 유예기간 5천원
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: samsung_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {samsung-ai-welcome: 5000}, counted: 0}
+  calc: 사용등록 다음 달까지 월 5천원

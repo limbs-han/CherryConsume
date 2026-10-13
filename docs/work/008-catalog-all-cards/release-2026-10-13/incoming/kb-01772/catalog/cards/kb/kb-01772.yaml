@@ -1,0 +1,86 @@
+schema_version: 2
+id: kb-01772
+issuer: kb
+name: KB국민 Liiv M 체크카드
+short_name: KB Liiv M 체크
+kind: check
+product_codes:
+  - '01772'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01772', fetched_at: '2026-10-12', review_no: 260522-01722-PIF}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점, 상품권 구매는 할인에서 빠진다']
+    limits:
+      - key: life
+        per: month
+        amount: {300000: 2000, 600000: 4000}
+    benefits:
+      - key: liivm-telecom-10
+        title: Liiv M 이동통신요금 자동이체 10% 환급할인
+        source: page
+        evidence: [Liiv M 이동통신요금 10% 3천원 6천원 월 1회 / 자동이체 시 할인 적용, 1구간 (30만원 이상 60만원 미만) 2구간 (60만원 이상)]
+        target:
+          merchants: [liiv_m]
+        when:
+          - billing: [autopay]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, count: 1}
+          - per: month
+            amount: {300000: 3000, 600000: 6000}
+        tiers: {from: 300000}
+      - key: eleven-st-3
+        title: 11번가 3% 환급할인
+        source: page
+        evidence: [11번가 3% 2천원 4천원 이용금액 건당 5천원 이상 시 할인, 'Liiv M 체크카드 생활 할인서비스(11번가, 야놀자, CU편의점)는 월간 통합할인한도 적용', 직영 홈페이지 및 App 결제 시 할인 적용]
+        target:
+          merchants: [eleven_st]
+        when:
+          - channel: online
+            amount: {min: 5000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: yanolja-3
+        title: 야놀자 3% 환급할인
+        source: page
+        evidence: [야놀자 3% 2천원 4천원 이용금액 건당 5천원 이상 시 할인, 직영 홈페이지 및 App 결제 시 할인 적용]
+        target:
+          merchants: [yanolja]
+        when:
+          - channel: online
+            amount: {min: 5000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: cu-3
+        title: CU 편의점 3% 환급할인
+        source: page
+        evidence: [CU편의점 3% 2천원 4천원 이용금액 건당 5천원 이상 시 할인]
+        target:
+          merchants: [cu]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+    unmodeled: [정부지원금과 포인트리 충전금액은 실적에서 빠진다]
+notes: 체크카드. 혜택은 전월 30만원 이상부터.

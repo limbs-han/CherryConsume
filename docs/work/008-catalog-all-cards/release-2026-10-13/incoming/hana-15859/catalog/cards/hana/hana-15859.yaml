@@ -1,0 +1,102 @@
+schema_version: 2
+id: hana-15859
+issuer: hana
+name: 하나카드 원더카드 2.0 FREE (FREE 일반)
+short_name: 하나 원더 FREE
+search_names: [원더카드 프리]
+kind: credit
+product_codes:
+  - '15859'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 12000}
+  - {scope: global, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=15859', fetched_at: 2026-10-13, review_no: A-26-2661}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: 2022-11-15
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility.water]
+    limits:
+      - {key: integrated, per: month, amount: 50000}
+    stacks:
+      - {key: main, pick: best, spill: none}
+    benefits:
+      - key: general-0-7
+        title: 국내외 가맹점 0.7% 청구할인
+        source: page
+        evidence: ['할인 대상 : 국내·외 결제 시', 0.7% | 없음 | 없음]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.7}
+      - key: simple-pay-1-2
+        title: 하나페이·간편결제 온라인 1.2% 청구할인
+        source: page
+        evidence: ['할인 대상 : 하나페이 모든결제 / 삼성페이, 네이버페이, 카카오페이, SSG페이, 페이코, 쿠페이, 11 pay에 카드를 등록하여 온라인 가맹점에서 결제하는 건', 1.2% | 없음 | 없음, '하나페이를 제외한 다른 간편결제 시 모바일 단말을 이용한 삼성페이 오프라인 결제, 네이버페이 오프라인 결제 등 오프라인 가맹점에서의 결제는 서비스에서 제외됩니다.']
+        target: {all: true}
+        when:
+          - any_of:
+              - payment: [hana_pay]
+              - channel: online
+                payment: [coupay, eleven_pay, kakao_pay, naver_pay, payco, samsung_pay, ssg_pay]
+        reward: {type: billing_discount, rate: 1.2}
+      - key: coupang-2
+        title: 쿠팡 2% 청구할인
+        source: page
+        evidence: [쿠팡 | 2% | 없음 | 통합 5만원, '공식 홈페이지(온라인/모바일 앱)를 통한 결제 건에 한하여 서비스가 제공되며, 상품 선택 시 연결된 다른 사이트 및 앱에서 결제한 경우와 오프라인 결제 건은 서비스에서 제외됩니다.']
+        target:
+          merchants: [coupang]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: integrated}
+        unmodeled: [상품권 여행 항공권 티켓 도서 공연 매출은 제외되고 공식 홈페이지와 앱 결제만 대상이다]
+      - key: mart-2
+        title: 마트 2% 청구할인
+        source: page
+        evidence: [마트 | 2% | 없음 | 통합 5만원, '할인 대상 : 이마트, 트레이더스 홀세일 클럽, 홈플러스, 롯데마트', 오프라인 결제 건에 한하여 서비스가 제공됩니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: integrated}
+        unmodeled: [롯데 빅마켓 등 트레이더스를 뺀 창고형 할인매장과 상설 임대 매장은 제외된다]
+      - key: bakery-2
+        title: 베이커리 2% 청구할인
+        source: page
+        evidence: [베이커리 | 2% | 없음 | 통합 5만원, '할인 대상 : 파리바게트, 뚜레쥬르, 아티제, 파리크라상, 카페노티드, 던킨도너츠', '오프라인 결제 건에 한하여 서비스가 제공되며, 대형시설물 입점점포 및 임대매장(백화점, 할인점, 아울렛, 쇼핑몰, 휴게소, 공항, 호텔, 리조트, 역사, 마트)은 서비스에서 제외됩니다.']
+        target:
+          merchants: [artisee, dunkin, paris_baguette, paris_croissant, tous_les_jours]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: integrated}
+        unmodeled: [카페노티드는 가맹점 목록에 없다, 백화점 할인점 아울렛 쇼핑몰 휴게소 공항 호텔 리조트 역사 마트 입점 점포와 임대매장은 제외된다, 배달앱과 식당 예약앱 주문과 미리 결제하는 방식은 제외된다]
+      - key: transit-3
+        title: 버스·지하철 3% 청구할인
+        source: page
+        evidence: [대중교통 | 3% | 없음 | 통합 5만원, '할인 대상 : 버스, 지하철', '시외버스, 고속버스, 철도(KTX/SRT)는 서비스에서 제외됩니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: integrated}
+    unmodeled: [가족카드의 한도는 본인카드와 합산한다, 해외결제를 외화 하나머니로 설정하면 원더 서비스가 제공되지 않고 해외 이용 수수료를 면제한다. 해외 수수료 면제는 계산하지 않는다, 온가족 플러스 캐시백은 가족카드 실적과 연속 이용 조건이라 계산하지 않는다, 국내 5만원 이상 결제 2~3개월 무이자 할부는 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙이 시작된 날을 찾지 못했다. 카드 출시일을 잠정 시작일로 둔다., assumed: '2022-11-15'}
+  - {path: 'revisions[0].stacks', question: 전가맹점 0.7%와 간편결제 1.2%와 업종별 2% 3%가 한 결제에 겹치면 더해 받는지 원문에 적혀 있지 않다., assumed: 한 결제에 가장 큰 혜택 하나만 받는다}
+  - {path: 'revisions[0].limits[integrated]', question: 쿠팡 마트 베이커리 대중교통의 할인한도가 통합 5만원으로 한 번만 적혀 있다. 한도를 넘은 금액에 전가맹점 0.7%가 붙는지 원문에 없다., assumed: 넘은 금액은 할인 없음}
+  - {path: 'revisions[0].spend.exclude_categories', question: 이 카드의 혜택은 지난달 실적 조건이 없다. 실적 제외 목록은 참고로만 옮겼다., assumed: 혜택에 영향 없음}
+notes: 2026-10-13 공식 상품 페이지(준법심의 A-26-2661)에서 옮겼다. 연회비 국내전용과 국내외겸용 12,000원. 혜택은 지난달 실적 조건과 월 한도 없이 전가맹점 0.7%, 간편결제 1.2%이고 쿠팡, 마트, 베이커리, 대중교통은 통합 월 5만원이다. 페이지에는 맞춤 혜택 조합 안내가 함께 있지만 FREE의 혜택 표만 옮겼다. 하나머니 소수점 이하는 반올림이라는 문구는 적립용이고 이 카드의 혜택은 청구할인이다.

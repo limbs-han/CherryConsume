@@ -1,0 +1,36 @@
+schema_version: 2
+id: lotte-p13561-a13561
+issuer: lotte
+name: LOCA MONEY 카드
+kind: credit
+product_codes: [P13561-A13561]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13561-A13561', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00044_20260921_10005.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {basis: none, interest_free: exclude, installment: full_at_purchase, cancellation: original_month, exclude_applied: 0}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: ['장애인 고용부담금, 무승인전표(자판기, 터널통행료, 항공 기내), 벌금·과태료·민원 발급 수수료, 고속도로 통행요금, 관세·인지세·송달료, 오토·스마트 캐시백 신청 이용금액, 현금서비스·카드론·이자·수수료는 적립에서 빠진다']
+    benefits:
+      - key: loca-coin-1
+        title: 국내외 가맹점 로카코인 1% 적립
+        source: manual
+        evidence: [국내외 가맹점에서 한도 제한없이 로카코인 적립, 기본 적립 1% 없음, 기본 적립은 지난달 실적 조건 없이 제공됩니다., '로카코인 1P 당 0.5원으로 전환되며, 롯데카드 결제대금을 납부할 수 있습니다.']
+        target: {all: true}
+        reward: {type: points, program: lotte_loca_coin, rate: 1}
+    unmodeled: [지난달 월 평균 현금서비스·카드론 이용잔액이 300만원 이상이면 기본 1% 대신 특별 2%를 적립한다. 대출 잔액 입력이 없어 기본 1%로 계산한다, 로카코인은 현금서비스·카드론 이자 납부에 쓰면 1P당 1원이지만 결제대금 납부에 쓰면 1P당 0.5원이다. 낮은 쪽인 0.5원으로 계산한다, 로카코인은 10P 이상부터 10P 단위로 쓸 수 있고 유효기간은 5년이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 설명서는 2026-09-21 공시본이다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품 페이지와 상품설명서 대조. 국내전용과 해외전용 연회비가 모두 20,000원이다. 적립에 실적 조건이 없어 실적 구간을 두지 않았다. 새 포인트 lotte_loca_coin을 1P 0.5원으로 제안한다.

@@ -1,0 +1,159 @@
+schema_version: 2
+id: lotte-p14042-a14042
+issuer: lotte
+name: 케이뱅크 롯데카드
+kind: credit
+product_codes: [P14042-A14042]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: global, brand: amex, amount: 15000}
+  - {scope: global, brand: unionpay, amount: 15000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/P14042-A14042_1_00.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2022-02-07'
+    source: manual
+    tiers: [0, 400000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_express, utility]
+    limits:
+      - {key: life, per: month, amount: 10000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [life-coffee-50, life-transit-50, life-delivery-10, life-membership-10, life-streaming-10, life-pay-5, life-over-0-5, life-over-pay-0-5, special-1, base-0-5]
+        spill: split
+    benefits:
+      - key: base-0-5
+        title: 국내외 기본 0.5% 캐시백
+        source: manual
+        evidence: [기본캐시백 | 모든 국내외 가맹점(라이프 가맹점 제외) | 0.5% | 조건 없음 | 없음, 지난달 이용금액이 40만원 미만일 경우 기본캐시백 0.5%, 이상일 경우 특별캐시백 1%가 적용됩니다.]
+        target:
+          exclude_categories: [transit.bus_city, transit.subway]
+          all: true
+          exclude_merchants: [baemin, coupang, coupang_wow, disney_plus, flo, kurly, naver_plus_membership, netflix, oasis_market, starbucks, watcha, wavve, yogiyo]
+        when:
+          - payment_not: [naver_pay, samsung_pay]
+        reward: {type: cashback, rate: 0.5}
+        tiers: {to: 0}
+      - key: special-1
+        title: 지난달 40만원 이상 국내외 1% 캐시백
+        source: manual
+        evidence: [특별캐시백 | 1% | 40만원 이상]
+        target:
+          exclude_categories: [transit.bus_city, transit.subway]
+          all: true
+          exclude_merchants: [baemin, coupang, coupang_wow, disney_plus, flo, kurly, naver_plus_membership, netflix, oasis_market, starbucks, watcha, wavve, yogiyo]
+        when:
+          - payment_not: [naver_pay, samsung_pay]
+        reward: {type: cashback, rate: 1}
+        tiers: {from: 400000}
+      - key: life-pay-5
+        title: 네이버페이·삼성페이 5% 캐시백
+        source: manual
+        evidence: ['페이 | 네이버페이, 삼성페이 | 5%', 각 페이서비스에 케이뱅크 롯데카드를 등록하고 페이를 통해 결제한 건에 혜택이 제공됩니다.]
+        target: {all: true}
+        when:
+          - payment: [naver_pay, samsung_pay]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-delivery-10
+        title: 배달·마켓 10% 캐시백
+        source: manual
+        evidence: ['배달·마켓 | 쿠팡, 요기요, 배달의민족, 마켓컬리, 오아시스 | 10%', 서비스 대상 가맹점 공식 홈페이지 및 앱을 통한 카드결제 시 혜택이 제공되며, 직접 결제 건 및 기타 페이결제 건 등 가맹점 구분이 불가한 경우에는 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [baemin, coupang, kurly, oasis_market, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-membership-10
+        title: 멤버십 정기결제 10% 캐시백
+        source: manual
+        evidence: ['멤버십 | 스마일클럽, 쿠팡 로켓와우클럽, 네이버플러스 | 10%', 케이뱅크 롯데카드를 멤버십 정기결제 수단에 등록 시 멤버십 별 매월 1회혜택이 제공되며, 멤버십 무료 혜택과 중복 적용 불가합니다.]
+        target:
+          merchants: [coupang_wow, naver_plus_membership]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: life}
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-streaming-10
+        title: 스트리밍 정기결제 10% 캐시백
+        source: manual
+        evidence: ['스트리밍 | 넷플릭스, 디즈니플러스, 왓차, 웨이브, FLO | 10%', 서비스 대상 가맹점 공식 홈페이지 또는 앱을 통해 직접 신청한 정기결제(자동이체) 이용 건만 혜택이 제공]
+        target:
+          merchants: [disney_plus, flo, netflix, watcha, wavve]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-coffee-50
+        title: 스타벅스 사이렌오더 50% 캐시백
+        source: manual
+        evidence: [커피 | 스타벅스 사이렌오더 | 50%, 스타벅스 공식 앱을 통한 사이렌오더 결제 건에 한하여 혜택이 제공됩니다.]
+        target:
+          merchants: [starbucks]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-transit-50
+        title: 버스·지하철 50% 캐시백
+        source: manual
+        evidence: ['대중교통 | 버스, 지하철 | 50%', '대중교통: 오프라인 일반 결제 건에 한하며, 시외 고속버스 결제 건은 제외됩니다.']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {shared: life}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-over-0-5
+        title: 라이프 가맹점 한도 초과분 0.5% 캐시백
+        source: manual
+        evidence: [라이프캐시백 월 한도 초과 금액에 대해서는 0.5% 혜택이 제공됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+          merchants: [baemin, coupang, coupang_wow, disney_plus, flo, kurly, naver_plus_membership, netflix, oasis_market, starbucks, watcha, wavve, yogiyo]
+        reward: {type: cashback, rate: 0.5}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-over-pay-0-5
+        title: 페이 결제 한도 초과분 0.5% 캐시백
+        source: manual
+        evidence: [라이프캐시백 월 한도 초과 금액에 대해서는 0.5% 혜택이 제공됩니다.]
+        target: {all: true}
+        when:
+          - payment: [naver_pay, samsung_pay]
+        reward: {type: cashback, rate: 0.5}
+        tiers: {from: 400000}
+        exclude_applied: 1
+    unmodeled: [스마일클럽 멤버십 10%는 가맹점이 없어 계산하지 않는다, 멤버십 캐시백은 멤버십마다 매월 1회인데 둘을 합쳐 월 1회로 두었다, 라이프 가맹점과 페이 결제는 지난달 40만원 미만이면 기본 0.5%에서도 빠지는 것으로 두었다. 원문 표가 기본캐시백 대상에서 라이프 가맹점을 뺀다, 스타벅스는 사이렌오더만 받아 온라인 결제로 두었다. 스타벅스 카드 충전은 빠진다, 스트리밍은 공식 홈페이지나 앱에서 직접 신청한 정기결제만 받는다. 앱마켓 결제와 통신요금 합산 청구는 빠진다, 배달·마켓은 다른 페이로 결제하면 빠진다, 발급 첫 달에는 모든 가맹점 0.5%만 준다. 첫 달 라이프 가맹점 0.5%는 계산하지 않는다, '무승인전표, 관세, 벌금, 과태료, 민원 수수료, 인지세, 송달료, 장애인 고용부담금, 오토·스마트 캐시백 신청 금액은 실적과 캐시백에서 빠진다', 가족카드는 발급하지 않는다]
+open_questions:
+  - {path: sources, question: 롯데카드 상품 페이지가 존재하지 않는 상품으로 나온다. 공시 목록은 발급 중이라 케이뱅크 앱 전용으로 보았다. 상품설명서가 2022년 7월판이라 이후 바뀐 혜택이 있는지 확인한다, assumed: 2022년 7월판 상품설명서}
+notes: 2026-10-12 상품설명서(2022년 7월 기준) 대조. 출시일 2022-02-07. 연회비 국내전용과 해외겸용(MASTER, AMEX, UnionPay) 1만5천원. 라이프 캐시백 월 한도 1만원은 표에서 한 칸이라 여섯 영역이 함께 쓰는 한도로 두었다. 라이프 캐시백을 받은 결제는 실적에서 뺀다. 공시 색인 id lotte-1758을 상품설명서 파일 이름의 상품 코드로 바꿨다.

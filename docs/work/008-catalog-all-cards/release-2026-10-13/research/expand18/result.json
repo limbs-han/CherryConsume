@@ -1,0 +1,979 @@
+[
+  {
+    "card_id": "woori-100825",
+    "status": "blocked",
+    "reason": "원주 지역 체크카드. 페이지에 포인트 0.2~2% 한 줄뿐이고 세부 규칙이 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100825"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      {
+        "path": "benefits",
+        "question": "세부 적립 규칙 확인 불가",
+        "assumed": "담지 않음"
+      }
+    ]
+  },
+  {
+    "card_id": "woori-100826",
+    "status": "exclude",
+    "reason": "군위사랑상품권 지역 전용 체크카드로 지역민 대상이고 혜택이 모아포인트 0.2~2% 범위 표기뿐이다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100826"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-100827",
+    "status": "exclude",
+    "reason": "상주지역화폐 지역 전용 체크카드로 지역민 대상이고 혜택이 모아포인트 0.2~2% 범위 표기뿐이다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100827"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-100860",
+    "status": "ready",
+    "reason": "국민행복카드. 쇼핑 5% 의료 7% 언택트 20% 해외 1~2% 구간별 한도. 어린이집 학원 도시가스 전기 월납은 뺐다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100860"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "국가 바우처",
+      "프리미엄 투어",
+      "어린이집 유치원 학원 윤선생 유튜브 뮤직 제외",
+      "Mastercard 한정 해외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-100861",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. 월 한도 표 30/60/90만 구간과 통합 한도를 담았다. 11번가, 윤선생, 알라딘중고서점, 유튜브 뮤직, 도시가스와 전기요금, 산후조리원과 어린이집은 담지 않았다.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100861"
+    ],
+    "case_count": 12,
+    "unmodeled": [
+      "병의원 등 정부지원금 제외",
+      "학원 오프라인 전체 대상이라 담지 않음",
+      "결제대행과 간편결제 매출 제외는 payment_not으로 담음"
+    ],
+    "open_questions": [
+      "현재 혜택 시작일 미확인. 상품출시일 2021-03-02"
+    ]
+  },
+  {
+    "card_id": "woori-101564",
+    "status": "exclude",
+    "reason": "영등포 평생교육 바우처 체크카드는 지자체 바우처 전용 카드이고 상품 페이지에 혜택 내용이 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=101564"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102031",
+    "status": "exclude",
+    "reason": "NU 후불하이패스는 하이패스 전용 카드로 일반 가맹점 결제가 안 되고 카드 자체 할인이 없다. 통행료 할인은 한국도로공사 제공",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102031"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102033",
+    "status": "blocked",
+    "reason": "공식 페이지를 열었으나 핵심 혜택이 연 1회 프리미엄 기프트(라운지 이용권, 상품권, 여행 할인권)와 라운지 연 20회뿐이라 금액 규칙으로 담을 수 없다. 연회비 300,000원",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102033"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "프리미엄 기프트와 공항라운지 무료이용"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102280",
+    "status": "blocked",
+    "reason": "공식 페이지에 혜택, 실적, 연회비 본문이 없고 배너뿐이라 값을 옮길 수 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102280"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102480",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조 후 담음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102480"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "Two-in-One 결제서비스로 체크 매출이 된 건은 0.3% 캐시백만 받는다",
+      "교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다",
+      "국내 가맹점 무승인매입취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다",
+      "할인은 거래 매입 순서대로 한도를 쓴다",
+      "가족카드 실적과 한도는 본인카드와 별도다",
+      "0.7% 청구할인과 생활밀착 할인은 중복되지 않고 결제마다 큰 쪽으로 둔다"
+    ],
+    "open_questions": [
+      "원 미만 처리 문구가 없다",
+      "건당 1천원 한도가 결제 건당 할인액인지 대상금액인지 불명확하다"
+    ]
+  },
+  {
+    "card_id": "woori-102492",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 카드의정석 SHOPPING(woori-834221)과 혜택 구성이 같은 별도 상품. 연회비 10,000/12,000원, 30만 이상 온오프라인 쇼핑 10%, 4대 PAY 5% 추가, 주말 주유, 스타벅스",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102492"
+    ],
+    "case_count": 9,
+    "unmodeled": [
+      "스타벅스 백화점 내 매장 제외",
+      "LPG 제외",
+      "Two-in-One 체크매출은 0.3% 캐시백으로 대체"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102496",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. 국내 1% 모아포인트.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102496"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "기프트 바우처와 공항라운지는 계산하지 않음"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102529",
+    "status": "exclude",
+    "reason": "속초사랑 체크카드는 지역민 전용 지역사랑 카드이고 상품 페이지에 혜택 내용이 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102529"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102611",
+    "status": "exclude",
+    "reason": "지방보조금 전용카드는 지방보조사업자 전용이고 혜택이 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102611"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102612",
+    "status": "exclude",
+    "reason": "양천구 지방보조금 전용 개인체크카드로 지역민 전용이고 혜택이 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102612"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102716",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. 월 한도 표는 페이지 이미지에서 읽었다. 안경점, OPIc·HSK·TEPS·TOEFL, U+유모바일은 담지 않았다.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102716"
+    ],
+    "case_count": 12,
+    "unmodeled": [
+      "쿠팡 와우, 컬리패스 월 1회, 입점 매장 제외",
+      "Mastercard 겸용만 해외 캐시백"
+    ],
+    "open_questions": [
+      "현재 혜택 시작일 미확인. 상품출시일 2023-07-20"
+    ]
+  },
+  {
+    "card_id": "woori-102719",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. DON 5% 적립 건당 1000점 월 3000점.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102719"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "쿠팡 멤버십과 유튜브 결제 제외",
+      "백화점 등 입점 매장 제외"
+    ],
+    "open_questions": [
+      "현재 혜택 시작일 미확인. 상품출시일 2023-12-13"
+    ]
+  },
+  {
+    "card_id": "woori-102724",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 연회비 15,000원, 넥센타이어 렌탈요금 자동납부 청구할인 구간별 한도",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102724"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "가족카드는 청구할인을 받지 못한다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102858",
+    "status": "ready",
+    "reason": "바디프랜드 렌탈 자동납부 청구할인 구간별 한도",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102858"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "장기할부 청구분 할인",
+      "가족카드 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102859",
+    "status": "ready",
+    "reason": "",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102859"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "가족카드는 청구할인 적용 안 됨"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102864",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조 후 담음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102864"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "후불교통 이용금액 전체가 실적에서 빠지는데 시내버스·지하철 업종만 뺐다. 승인된 버스·지하철 결제도 빠질 수 있다",
+      "공항버스와 공항철도 직통열차는 대중교통 할인 제외",
+      "모바일 교통카드에 등록한 후불 이용도 할인 대상",
+      "월 할인 한도가 영역별인지 통합인지 표가 모호해 세 혜택이 함께 쓰는 한도로 보았다",
+      "가족카드 발급 불가",
+      "PG·간편결제 전용 가맹점 승인 건은 생활 할인 제외",
+      "백화점·대형할인점·면세점·공항·미군부대·리조트 등 입점 매장은 생활 할인 제외",
+      "통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다",
+      "국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "40만원 구간 월 한도 표에서 기본 할인과 생활·대중교통 할인이 각각 5000원인지 합쳐 5000원인지 표가 모호하다",
+      "원 미만 처리 문구가 없다"
+    ]
+  },
+  {
+    "card_id": "woori-102869",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. 주유 리터당 60/80/100원, 대중교통 10%, 스타벅스·폴바셋 10%, 기본 0.2%는 같은 묶음.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102869"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "LPG 제외",
+      "기본 할인과 생활밀착 할인 중복 불가",
+      "주유 공시가는 reference 기름값으로 환산"
+    ],
+    "open_questions": [
+      "현재 혜택 시작일 미확인. 상품출시일 2023-12-27"
+    ]
+  },
+  {
+    "card_id": "woori-102870",
+    "status": "ready",
+    "reason": "기본 0.5%와 주유 교통 커피 청구할인을 한 묶음 우선순위로",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102870"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "LPG 제외",
+      "할인받은 금액 실적 제외"
+    ],
+    "open_questions": [
+      {
+        "path": "benefits.fuel",
+        "question": "생활밀착 한도를 넘은 결제가 기본 0.5%로 넘어가는지 원문에 없다",
+        "assumed": "넘기지 않는다"
+      }
+    ]
+  },
+  {
+    "card_id": "woori-102958",
+    "status": "blocked",
+    "reason": "공식 상품 페이지가 비어 있어(판매 종료 추정) 혜택 원문을 열지 못했다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102958"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-102997",
+    "status": "ready",
+    "reason": "국내외 1.2% 청구할인. 분기별 추가 할인은 뺐다(덜 주는 쪽)",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102997"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "분기별 추가 할인 5천/1만/1만5천원"
+    ],
+    "open_questions": [
+      {
+        "path": "revisions[0].effective_from",
+        "question": "시행일이 페이지에 없다",
+        "assumed": "확인일 2026-10-13"
+      }
+    ]
+  },
+  {
+    "card_id": "woori-103116",
+    "status": "blocked",
+    "reason": "핵심 혜택이 추가적립 구간 고정액과 연 4회 특별적립이라 기본 0.2%만 담으면 크게 약해 보인다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103116"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "추가 적립 전월실적별 1천~3천원",
+      "특별 적립 1만원 월 1회 연 4회"
+    ],
+    "open_questions": [
+      {
+        "path": "benefits",
+        "question": "연 4회가 발급일 기준인지 달력연도인지 원문에 없다",
+        "assumed": "담지 않음"
+      }
+    ]
+  },
+  {
+    "card_id": "woori-103453",
+    "status": "exclude",
+    "reason": "경기도사회적경제원 지원금 전용 체크카드이고 공식 페이지가 해당 상품이 존재하지 않는다고 한다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103453"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-103564",
+    "status": "ready",
+    "reason": "공식 상품 페이지를 브라우저로 열어 대조. 새 가맹점 e1_charging 필요(needed/woori-103564.json).",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103564"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "입점 매장과 PG·간편결제 할인 제외",
+      "E1 오렌지 포인트는 계산하지 않음"
+    ],
+    "open_questions": [
+      "현재 혜택 시작일 미확인"
+    ]
+  },
+  {
+    "card_id": "woori-103687",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조 후 담음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103687"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "가족카드 발급 불가",
+      "하이브리드 소액신용 서비스는 만 19세 이상",
+      "우리WON모바일 통신요금 자동납부를 카드 수령 후 따로 신청해야 한다",
+      "해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다",
+      "국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다",
+      "서비스는 매입 순서대로 적용된다"
+    ],
+    "open_questions": [
+      "원 미만 처리 문구가 없다"
+    ]
+  },
+  {
+    "card_id": "woori-103721",
+    "status": "blocked",
+    "reason": "상품 페이지에 혜택 본문이 없어 확인하지 못했다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103721"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      {
+        "path": "benefits",
+        "question": "페이지가 비어 있어 혜택과 연회비를 확인하지 못했다",
+        "assumed": "담지 않음"
+      }
+    ]
+  },
+  {
+    "card_id": "woori-103722",
+    "status": "blocked",
+    "reason": "공식 상품 페이지가 비어 있어 혜택 원문을 열지 못했다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103722"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-103726",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. 국내외 2% 모아포인트.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103726"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "연간 리워드, 기프트 바우처, 라운지 등 계산하지 않음"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-103762",
+    "status": "exclude",
+    "reason": "한국철도공사 개인형복지카드로 직원 전용이다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103762"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-103774",
+    "status": "exclude",
+    "reason": "카드의정석 Welfare CHECK 서울경제진흥원은 서울경제진흥원 임직원 전용 복지카드",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103774"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104131",
+    "status": "exclude",
+    "reason": "영등포 평생교육 바우처 체크카드. 지역 대상 바우처 카드이고 원문에 카드 혜택 표가 없다.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104131"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104137",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 연회비 20,000원, 동양생명 보험료 자동납부 청구할인 구간별 한도",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104137"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "가족카드는 청구할인을 받지 못한다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104148",
+    "status": "blocked",
+    "reason": "공식 상품 페이지가 비어 있어 혜택 원문을 열지 못했다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104148"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104153",
+    "status": "blocked",
+    "reason": "해외 특화지역 7개국 6%와 그 외 3%의 구분을 결제 입력으로 알 수 없고 헤드라인 혜택이라 빼면 카드가 크게 약해 보인다. UniMile 포인트와 항공사 가맹점 여러 곳도 공통 파일에 더해야 한다.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104153"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104154",
+    "status": "blocked",
+    "reason": "핵심 혜택이 대한항공 SKYPASS 마일리지 적립(1500원당 1마일)인데 공통 포인트 프로그램에 마일리지가 없고 마일 1개의 원화 가치 문구도 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104154"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "SKYPASS 마일리지 적립과 포인트 5배 적립, 라운지 연 2회"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104156",
+    "status": "ready",
+    "reason": "",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104156"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "국내 고액 매출 1~2% 청구할인은 KREAM·해외 실적 50만원 조건이라 뺐다",
+      "입점 KREAM 매장과 일부 간편결제는 할인 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104168",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. KT 자동납부 할인.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104168"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "가족카드 실적 합산",
+      "KT 자동납부 또는 단말 할부 필수"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-104171",
+    "status": "blocked",
+    "reason": "스타벅스 리워드 별 적립이 핵심 혜택인데 1별의 원화 가치 문구가 없다(해지 시 별당 600원 청구 문구뿐). 포인트를 새로 더할 수 없다.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104171"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "스타벅스 별 1개의 원화 가치"
+    ]
+  },
+  {
+    "card_id": "woori-104172",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조 후 담음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104172"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "가족카드는 청구할인이 적용되지 않는다",
+      "아파트관리비 자동납부를 카드 수령 후 따로 신청해야 한다",
+      "해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다",
+      "국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다",
+      "서비스는 매입 순서대로 적용된다"
+    ],
+    "open_questions": [
+      "원 미만 처리 문구가 없다"
+    ]
+  },
+  {
+    "card_id": "woori-226525",
+    "status": "blocked",
+    "reason": "핵심 혜택이 대한항공 SKYPASS와 아시아나 마일리지 적립인데 마일리지의 원화 가치 문구가 없고 항공사별 적립률이 다르다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=226525"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-227809",
+    "status": "blocked",
+    "reason": "적립 포인트가 자녀 학자금 대출 상환에만 쓰이고 6개월 누적 보너스와 연 횟수 한도가 있다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=227809"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      {
+        "path": "points",
+        "question": "상환용 포인트 원화 가치 문구와 연 10회 기준 불명",
+        "assumed": "담지 않음"
+      }
+    ]
+  },
+  {
+    "card_id": "woori-227812",
+    "status": "blocked",
+    "reason": "핵심 혜택이 한국장학재단 학자금 대출 상환 전용 포인트 적립이라 원화 가치를 담을 수 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=227812"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-227977",
+    "status": "blocked",
+    "reason": "혜택이 연 1회 선택형 기프트(전년도 200만원 연 누적 실적)뿐이고 건별 할인이나 적립이 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=227977"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "연간 누적 실적 조건의 선택형 기프트"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-228316",
+    "status": "ready",
+    "reason": "",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=228316"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "적립은 천주교 교구 자동 기부 포인트라 담지 않음",
+      "영화 3천원과 놀이공원 50%는 연 10회 기준 불명이라 뺐다",
+      "백화점·대형할인점 내 매장 제외"
+    ],
+    "open_questions": [
+      "연회비 10000원과 5000원 중 본인 금액 불명, 10000 가정"
+    ]
+  },
+  {
+    "card_id": "woori-228391",
+    "status": "exclude",
+    "reason": "보조금 결제 전용 카드로 혜택이 없고 단체 대상이다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=228391"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-244332",
+    "status": "exclude",
+    "reason": "서울시 거주 2자녀 이상 가정 전용 다둥이 행복체크카드. 지역민 전용.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=244332"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500002",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 연회비 없음, 기본 0.2%, 전월 30만 이상 0.5%(온라인·생활·의료 통합 1만원)와 주유 1%(통합 2만원). 보험과 레저는 뺐다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500002"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "보험 동양생명 1%와 레저 1%는 담지 않았다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500003",
+    "status": "ready",
+    "reason": "",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500003"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "만 12~18세 청소년 가족카드",
+      "신차구매·의약품몰·환금성 업종 실적 제외 미반영",
+      "PG와 간편결제 전용 가맹점 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500004",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. 코웨이 렌탈요금 자동납부 청구할인 13000/17000/23000.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500004"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "자동납부 신청과 재신청 필요",
+      "가족카드 할인 없음"
+    ],
+    "open_questions": [
+      "혜택 개정일 미확인"
+    ]
+  },
+  {
+    "card_id": "woori-500008",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조. 국내외 0.8% 청구할인.",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500008"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "Two-in-One 체크 0.3%는 중복 여부 불명이라 뺌"
+    ],
+    "open_questions": [
+      "Two-in-One 0.3%가 0.8%와 중복되는지"
+    ]
+  },
+  {
+    "card_id": "woori-500020",
+    "status": "exclude",
+    "reason": "매일유업 임직원 전용 복지카드",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500020"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500039",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조 후 담음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500039"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "가족카드는 할인 대상에서 제외된다",
+      "PG·간편결제 전용 가맹점번호로 승인된 건은 할인 제외",
+      "백화점·대형마트·면세점·공항·미군부대·리조트 등 입점 매장은 할인 제외",
+      "교통카드와 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다",
+      "국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다",
+      "서비스는 매입 순서대로 적용된다"
+    ],
+    "open_questions": [
+      "원 미만 처리 문구가 주유 외에는 없다"
+    ]
+  },
+  {
+    "card_id": "woori-500040",
+    "status": "ready",
+    "reason": "렌탈 통신 자동납부 청구할인. 공통 가맹점에 없는 일부 대상은 뺐다(덜 주는 쪽)",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500040"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "아정당렌탈 BS온 세스코 캐리어 SK 세븐모바일 U+ 유모바일 아정당 알뜰폰 미등록"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500043",
+    "status": "ready",
+    "reason": "S-OIL 주유 구간별 리터당 할인과 편의점 커피 OTT 7%",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500043"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "LPG 제외",
+      "주유 기준가 오피넷 공시가",
+      "가족카드 제외",
+      "할인받은 금액 실적 제외"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500047",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조 후 담음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500047"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "Mnet Plus Merch 20% 청구할인은 월 2회와 연 최대 6회 제한이 있는데 연 횟수의 기준이 발급일인지 달력 연도인지 원문에 없어 담지 않았다",
+      "가족카드 없음",
+      "PG·간편결제 전용 가맹점 승인 건은 할인 제외",
+      "교통카드와 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다",
+      "국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다"
+    ],
+    "open_questions": [
+      "Mnet Plus Merch 20% 청구할인의 연 6회 한도 기준일이 원문에 없다"
+    ]
+  },
+  {
+    "card_id": "woori-500049",
+    "status": "blocked",
+    "reason": "핵심 혜택이 연 1회 프리미엄 바우처(국내 이용실적 초년도 100만원, 차년도 1200만원 연 누적)와 연 4회 라운지라 지금 모델로 담을 수 없다. 빼면 카드가 크게 약해 보인다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500049"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "연간 누적 실적 조건의 바우처와 연 횟수 라운지"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500053",
+    "status": "ready",
+    "reason": "공식 상품 페이지 대조 후 담음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500053"
+    ],
+    "case_count": 12,
+    "unmodeled": [
+      "교통카드 이용금액과 통신료 자동납부 금액과 해외 이용금액은 매출표 접수일 기준으로 실적에 넣는다",
+      "국내 가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다",
+      "서비스는 거래 매입 순서대로 한도를 쓴다",
+      "체크카드 소액신용결제는 월 최대 30만원 한도 안 신용 일시불. 간편결제로 승인되면 간편결제 서비스가 먼저 적용된다. 해외 캐시백은 카드 결제일에 입금된다. 잔여 한도는 이월하지 않는다"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500096",
+    "status": "ready",
+    "reason": "체크카드. 국내외 0.3% 트래블 포인트 실적 조건 없음",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500096"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "트래블월렛 유효 회원 조건",
+      "해외 적립은 VISA만",
+      "해외 이용 수수료 면제"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500101",
+    "status": "ready",
+    "reason": "공식 페이지 대조. 연회비 없음, 전월 국내 20/50/70만 구간, 5% 캐시백 건당 1천원, 영역별 통합 한도. 간편결제·안경점 5%와 B마트·컬리패스·TOEFL·U+유모바일은 뺐다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500101"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "간편결제 5%와 안경점 5% 캐시백",
+      "B마트와 마켓컬리 컬리패스",
+      "후불교통 반영과 실물·모바일 구분은 billing 입력에 의존"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500102",
+    "status": "blocked",
+    "reason": "공식 상품 페이지가 비어 있어 혜택 원문을 열지 못했다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500102"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-500103",
+    "status": "blocked",
+    "reason": "프로배구 입장권 KOVO 혜택과 비시즌 합산실적 한도 추가를 담을 수 없다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500103"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      {
+        "path": "benefits",
+        "question": "KOVO 가맹점과 비시즌 합산실적 모델 없음",
+        "assumed": "담지 않음"
+      }
+    ]
+  },
+  {
+    "card_id": "woori-834629",
+    "status": "exclude",
+    "reason": "woori-103764와 같은 상품",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834629"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-834645",
+    "status": "ready",
+    "reason": "",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=834645"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "입점 매장과 예매대행 제외 등 부가 조건"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-835453",
+    "status": "ready",
+    "reason": "체크카드. 전월 국내 30만원 이상 국내 0.3% 모아포인트",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835453"
+    ],
+    "case_count": 2,
+    "unmodeled": [
+      "해외가맹점 이용수수료 면제와 달러 인출",
+      "연간 해외이용 한도"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "woori-835466",
+    "status": "blocked",
+    "reason": "공식 상품 페이지가 비어 있어 혜택 원문을 열지 못했다",
+    "source_urls": [
+      "https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=835466"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  }
+]

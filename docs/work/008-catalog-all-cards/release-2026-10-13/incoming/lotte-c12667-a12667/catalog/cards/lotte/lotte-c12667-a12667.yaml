@@ -1,0 +1,57 @@
+schema_version: 2
+id: lotte-c12667-a12667
+issuer: lotte
+name: LIKIT all 체크카드
+kind: check
+product_codes: [C12667-A12667]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=C12667-A12667', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2019-A00014_20260715_10004.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+    stacks:
+      - {key: main}
+      - {key: weekend}
+    benefits:
+      - key: base-cashback-0-2
+        title: 국내 가맹점 0.2% 캐시백
+        source: page
+        evidence: [국내(온·오프라인) 가맹점 0.2% 캐시백, '실적조건, 한도제한 없이 0.2% 혜택이 적용됩니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 0.2}
+      - key: weekend-cashback-0-2
+        title: 주말·공휴일 0.2% 추가 캐시백
+        source: page
+        evidence: [추가 혜택은 지난달 1일~말일까지 LIKIT all 체크카드 30만원(캐시백 혜택이 적용된 이용금액 포함) 이상 이용 시 제공됩니다., 주말 및 공휴일에 국내(온·오프라인) 가맹점 0.2% 추가 혜택이 적용됩니다.]
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - day:
+              in: [sat, sun]
+              holidays: include
+        reward: {type: cashback, rate: 0.2}
+        tiers: {from: 300000}
+        stack: weekend
+    unmodeled: ['오토·스마트 캐시백 신청 매출, 포인트 충전, 장애인 고용부담금, 이자·수수료는 캐시백과 실적에서 빠진다', 롯데카드의 다른 캐시백 혜택과 겹치면 금액이 큰 혜택 하나만 준다, LIKIT all 체크카드가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 본인과 가족카드 이용실적을 합산한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2019-08-30이고 설명서는 2026년 7월 기준이다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품 페이지와 상품설명서 대조. lotte-c15817-a15817 LIKIT all 기본교통 체크카드와 혜택은 같지만 실적과 캐시백 제외 목록에 교통이 없어 다른 상품으로 둔다. 기본 0.2%와 주말·공휴일 0.2%는 더해 받는다. 최초 발급은 사용 등록일부터 다음 달 말일까지 추가 혜택을 주어 30만 구간으로 넣었다.

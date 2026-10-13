@@ -1,0 +1,48 @@
+schema_version: 2
+id: hyundai-28394
+issuer: hyundai
+name: SC제일은행-현대카드X CHECK
+short_name: 현대 SC제일은행 X 체크
+search_names: [SC 현대카드X 체크, SC제일은행 X체크, SC제일은행 현대카드X CHECK]
+kind: check
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://www.hyundaicard.com/upload/card/T_AOB-20260709-1651-46_%EA%B0%80%EC%9D%B4%EB%93%9C%EB%B6%81_SC_MX%20CHECK_V3_%EA%B3%B5%EC%8B%9C%EC%8B%A4%EC%9A%A9.pdf', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-07-09
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 1000000]
+    spend:
+      exclude_categories: [annual_fee]
+      cancellation: original_month
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_express, utility]
+      unmodeled: [고속도로 통행 요금은 적립에서 뺀다, 현대카드의 다른 할인이 적용된 결제는 적립에서 뺀다]
+    benefits:
+      - key: base-03
+        title: 국내외 가맹점 0.3% X캐시백 적립
+        source: manual
+        evidence: [월 100만원 미만 이용 시 0.3% X캐시백 적립 월 100만원 이상 이용 시 0.6% X캐시백 적립, 전월 이용 금액은 전월 1일~말일까지 SC제일은행-현대카드 X CHECK의 이용 금액임, 매출 건별로 소수점 이하 반올림 후 적립, 연간 적립 한도 제한 없음, 적립된 X캐시백을 결제 계좌로 자동 입금 1 X캐시백 = 1원]
+        target: {all: true}
+        reward: {type: cashback, rate: 0.3, round: round}
+        tiers: {to: 0}
+      - key: high-06
+        title: 전월 100만원 이상 국내외 가맹점 0.6% X캐시백 적립
+        source: manual
+        evidence: [전월 이용 금액 100만원 이상 시 당월 1일~말일까지 0.6% 적립 적용, 매출 건별로 소수점 이하 반올림 후 적립]
+        target: {all: true}
+        reward: {type: cashback, rate: 0.6, round: round}
+        tiers: {from: 1000000}
+    unmodeled: [대중교통·하이패스·도시가스 등 사후 승인 가맹점 이용 금액은 매출전표 접수일 달의 실적으로 센다, 같은 가이드북의 SC제일은행-현대카드M CHECK(M포인트 0.5%와 1%)는 다른 상품이다, SC제일은행 계좌 현금 인출 같은 은행 혜택은 결제 혜택이 아니라 계산하지 않는다, X캐시백은 매달 10일 결제 계좌로 입금된다]
+open_questions:
+  - {path: product_codes, question: 카드 상세 주소의 상품 코드를 확인하지 못했다, assumed: '[]'}
+  - {path: 'revisions[0].effective_from', question: 가이드북 시행일을 확인하지 않아 파일 이름의 날짜 20260709를 시작일로 둔다, assumed: '2026-07-09'}
+notes: 2026-10-13 공식 가이드북 대조. 연회비 없음. 전월 이용 금액 100만원 미만이면 0.3%, 이상이면 당월 0.6% X캐시백이고 1 X캐시백은 1원으로 결제 계좌에 입금된다. 매출 건별 소수점 이하 반올림, 한도 없음. 실적 제외는 카드론 등과 연회비, 수수료, 이자뿐이다. 취소는 승인월에서 뺀다. 적립 제외는 공과금, 전기·가스·관리비, 학교 납입금과 등록금, 상품권·선불카드, 4대보험, 고속도로 통행료, 고속버스, 다른 할인과 무이자 할부다. 같은 가이드북의 M CHECK는 hyundai-28392다.

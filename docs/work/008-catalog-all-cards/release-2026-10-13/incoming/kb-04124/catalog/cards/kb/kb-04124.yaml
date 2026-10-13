@@ -1,0 +1,214 @@
+schema_version: 2
+id: kb-04124
+issuer: kb
+name: KB Youth Club 체크카드
+short_name: KB Youth Club 체크
+kind: check
+product_codes:
+  - '04124'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04124', fetched_at: '2026-10-12', review_no: 260313-00719-HPM}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제, 백화점·대형마트 등 입점 매장, 상품권 구매는 할인에서 빠진다']
+    options:
+      - key: pack
+        title: 선택 서비스 팩
+        choices:
+          - {key: a, title: A팩}
+          - {key: b, title: B팩}
+        default: null
+        change: next_month
+    limits:
+      - {key: fashion-life, per: month, amount: 2000}
+    benefits:
+      - key: a-ott-50
+        title: '[A팩] 넷플릭스·유튜브 프리미엄·티빙·스포티파이 50% 할인'
+        source: page
+        evidence: ['OTT 넷플릭스, 유튜브, 티빙, 스포티파이 50% 5,000원', '[OTT] 공식 홈페이지를 통한 정기결제 이용권에 한함 (인앱결제, 단건 결제, 포인트 및 캐시 충전 등은 제외)', 유튜브는 유튜브 프리미엄 멤버십 결제 건에 한함]
+        target:
+          merchants: [netflix, spotify, tving, youtube_premium]
+        when:
+          - billing_not: [in_app]
+            option:
+              pack: [a]
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 200000}
+        unmodeled: [정기결제 이용권만 할인하고 단건 결제와 캐시 충전은 빠진다]
+      - key: a-app-30
+        title: '[A팩] 구글 플레이스토어·애플 앱스토어 30% 할인'
+        source: page
+        evidence: ['APP 구글 플레이스토어, 애플 앱스토어 (건당 5,000원 이상 이용시) 30% 5,000원']
+        target:
+          merchants: [app_store, google_play]
+        when:
+          - option:
+              pack: [a]
+            amount: {min: 5000}
+        reward: {type: cashback, rate: 30}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 200000}
+      - key: a-pcroom-20
+        title: '[A팩] PC방 20% 할인'
+        source: page
+        evidence: ['여가 노래방, PC방(건당 5,000원 이상 이용시) 20% 2,000원', '[여가] 노래방 및 비디오방/게임방 업종 결제 건에 한함']
+        target:
+          categories: [pc_room]
+        when:
+          - option:
+              pack: [a]
+            amount: {min: 5000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+        unmodeled: [노래방도 같은 한도로 할인하지만 업종이 없어 담지 않았다]
+      - key: a-taxi-rail-20
+        title: '[A팩] 택시·철도 20% 할인'
+        source: page
+        evidence: ['교통 택시, 철도(건당 5,000원 이상 이용시) 20% 2,000원', '[교통] 택시 및 철도 업종 결제 건에 한함']
+        target:
+          categories: [taxi, transit.rail]
+        when:
+          - option:
+              pack: [a]
+            amount: {min: 5000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+      - key: cvs-kbpay-20
+        title: GS25·CU KB Pay 결제 20% 할인
+        source: page
+        evidence: ['편의점 GS25, CU에서 KB Pay로 결제 시 20% 2,000원', '[편의점] 오프라인 매장에서 KB Pay로 이용 시 제공 백화점, 대형마트 등 일부 입점 매장 제외']
+        target:
+          merchants: [cu, gs25]
+        when:
+          - channel: offline
+            payment: [kb_pay]
+            option:
+              pack: [a, b]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+        notes: A팩과 B팩에 같은 편의점 혜택이 있어 하나로 두었다
+      - key: a-movie-4000
+        title: '[A팩] CGV·메가박스·롯데시네마 4천원 할인'
+        source: page
+        evidence: ['영화관 CGV, 메가박스, 롯데시네마 (건당 15,000원 이상 이용시) 4,000원 4,000원(1회)', '[영화관] 공식 홈페이지/모바일 앱 및 영화관 현장 결제건에 한함 (단, 매점, 관람권(상품권) 구입, 예매대행사이트는 제외)']
+        target:
+          merchants: [cgv, lotte_cinema, megabox]
+        when:
+          - option:
+              pack: [a]
+            amount: {min: 15000}
+        reward: {type: cashback, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        unmodeled: [영화관 매점 결제는 빠진다]
+      - key: b-membership-50
+        title: '[B팩] 네이버플러스·쿠팡와우 멤버십 50% 할인'
+        source: page
+        evidence: ['쇼핑 멤버십 네이버플러스 멤버십, 쿠팡와우 멤버십 50% 5,000원', '[쇼핑멤버십] 공식 홈페이지/모바일 앱을 통한 정기결제 이용권 결제 시 제공']
+        target:
+          merchants: [coupang_wow, naver_plus_membership]
+        when:
+          - option:
+              pack: [b]
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 200000}
+      - key: b-telecom-30
+        title: '[B팩] SKT·KT·LG U+·Liiv M 자동납부 30% 할인'
+        source: page
+        evidence: ['통신요금 SKT, KT, LG U+, Liiv M 이동통신 자동납부 요금 30% 5,000원', '[통신요금] 인터넷, IPTV 등 결합상품 제외']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+            option:
+              pack: [b]
+        reward: {type: cashback, rate: 30}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 200000}
+        unmodeled: [인터넷·IPTV 결합상품 요금은 빠진다]
+      - key: b-fashion-online-20
+        title: '[B팩] 무신사·29CM·W컨셉·지그재그·에이블리·야놀자 20% 할인'
+        source: page
+        evidence: ['패션/라이프 온라인패션몰 (무신사, 29CM, W컨셉, 지그재그, 에이블리), 올리브영, 야놀자 20% 2,000원', 온라인패션몰은 공식 홈페이지/모바일 앱 결제 시 제공(오프라인 매장 결제 제외), 야놀자는 공식 홈페이지/모바일 결제 시 제공]
+        target:
+          merchants: [ably, musinsa, twentynine_cm, wconcept, yanolja, zigzag]
+        when:
+          - channel: online
+            option:
+              pack: [b]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: fashion-life}
+        tiers: {from: 200000}
+      - key: b-oliveyoung-20
+        title: '[B팩] 올리브영 20% 할인'
+        source: page
+        evidence: ['패션/라이프 온라인패션몰 (무신사, 29CM, W컨셉, 지그재그, 에이블리), 올리브영, 야놀자 20% 2,000원', '올리브영은 오프라인 매장 및 공식 홈페이지/모바일 앱 결제 시 제공 (백화점, 대형마트 등 일부 입점 매장 제외)']
+        target:
+          merchants: [olive_young]
+        when:
+          - option:
+              pack: [b]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: fashion-life}
+        tiers: {from: 200000}
+      - key: b-delivery-20
+        title: '[B팩] 배달의민족·쿠팡이츠 20% 할인'
+        source: page
+        evidence: ['배달 배달의민족, 쿠팡이츠 20% 2,000원', '[배달] 공식 모바일 앱 결제 시 제공(배달 현장 결제건 제외), 멤버십 이용권은 할인 대상 제외']
+        target:
+          merchants: [baemin, coupang_eats]
+        when:
+          - channel: online
+            option:
+              pack: [b]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+        unmodeled: [배달앱 멤버십 이용권 결제는 빠진다]
+      - key: b-date-4000
+        title: '[B팩] 아웃백·VIPS·에버랜드·롯데월드 4천원 할인'
+        source: page
+        evidence: ['데이트 아웃백스테이크하우스, VIPS, 에버랜드, 롯데월드 (건당 10,000원 이상 이용시) 4,000원 4,000원(1회)', 레스토랑은 백화점/대형마트 등 일부 입점 매장 및 배달 제외, '놀이공원은 공식 오프라인 창구, 발권기 및 공식 홈페이지/앱에서 티켓 요금 결제 시 제공 (상품권, 매점 등은 제외)']
+        target:
+          merchants: [everland, lotte_world, outback, vips]
+        when:
+          - option:
+              pack: [b]
+            amount: {min: 10000}
+        reward: {type: cashback, fixed: 4000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        unmodeled: [놀이공원 매점과 레스토랑 배달 결제는 빠진다]
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적이 없어도 영역별 한도의 50%까지 할인하는 특례는 담지 않았다, 2026-12-31까지 Youth Club 멤버십 가입 고객 대상 커피·온라인쇼핑·대중교통·해외 프로모션 할인은 담지 않았다, 정부지원금과 포인트리 충전금액은 실적에서 빠진다]
+notes: 체크카드. A팩·B팩 중 하나를 고르고 바꾼 팩은 다음 달 1일부터 적용된다. 전월 20만원 이상부터 할인한다. Mastercard 플래티늄 기본 서비스는 계산하지 않는다.

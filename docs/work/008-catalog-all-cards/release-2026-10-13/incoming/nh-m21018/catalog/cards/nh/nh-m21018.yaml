@@ -1,0 +1,66 @@
+schema_version: 2
+id: nh-m21018
+issuer: nh
+name: NH농협 올바른하나로(Hanaro) 체크카드
+short_name: 올바른하나로 체크
+kind: check
+product_codes:
+  - '90010011'
+  - M21018
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010011', fetched_at: 2026-10-13}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-10-05
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·할인점·쇼핑몰 안 입점 매장은 적립에서 빠질 수 있다, 가족카드 이용실적은 본인카드와 합산되지 않는다]
+    limits:
+      - {key: hanaro-extra, per: month, amount: 5000}
+    stacks:
+      - {key: main}
+      - {key: extra}
+    benefits:
+      - key: base-0-2
+        title: 전 가맹점 0.2% NH포인트
+        source: page
+        evidence: [전 가맹점 이용액의 0.2% 적립, 전월실적 및 적립한도 없음]
+        target: {all: true}
+        reward: {type: points, program: nh_point, rate: 0.2}
+        stack: main
+      - key: hanaro-extra
+        title: 농협판매장 추가 적립
+        source: page
+        evidence: [농협판매장 NH포인트 추가 적립, 10만원 이상~30만원 미만 +0.5% 총 0.7%, 30만원 이상 +1.0% 총 1.2%, 추가적립은 월 한도 5천포인트, '농협판매장: 하나로마트/클럽, 한삼인, 농협몰, 농협주유소']
+        target:
+          merchants: [nh_hanaro_mart, nh_mall]
+        reward:
+          type: points
+          program: nh_point
+          rate: {100000: 0.5, 300000: 1}
+        limits:
+          - {shared: hanaro-extra}
+        tiers: {from: 100000}
+        stack: extra
+        unmodeled: [한삼인과 농협주유소는 가맹점이 없어 뺐다]
+    unmodeled: [국제공항 라운지 연 1회 무료는 담을 가맹점이 없어 계산하지 않는다, OK캐쉬백 가맹점 이용 시 OK캐쉬백 포인트 적립은 비율이 원문에 없어 뺐다, 만 12~13세는 1일 3만원 월 30만원 이용한도다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일을 찾지 못해 수집일로 두었다, assumed: '2026-10-05'}
+  - {path: 'revisions[0].new_card', question: 신규 발급 특례가 전월실적 구간 중 어느 것을 주는지 원문에 분명하지 않다, assumed: 10만원 구간}
+notes: 2026-10-13 공식 상품 페이지에서 옮겼다. 연회비 0원이고 후불교통 기능이 있다. 쇼핑 0.7~1.2%는 기본 0.2%에 농협판매장 추가 적립을 더한 총적립률이다.

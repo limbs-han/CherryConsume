@@ -1,0 +1,36 @@
+card: hyundai-mhmfi
+holder:
+  started_on: '2026-01-01'
+  facts: {hi_insurance_kept: true}
+cases:
+- name: 50만 구간 보험 유지 청구 할인 1만2천원 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.general}
+  - {at: 2026-11-06T10:00, amount: 20000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {insured-discount: 10000}, counted: 0}
+  - {payment: 1, benefits: {insured-discount: 2000}, counted: 0}
+  calc: 첫 건 10,000원 전액, 둘째 건은 월 12,000원 중 남은 2,000원
+- name: 100만 구간 1만7천원 한도
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {insured-discount: 17000}, counted: 0}
+  calc: 월 한도 17,000원
+- name: 50만 직전은 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 50만 미만 혜택 제외
+- name: 보험 유지하지 않으면 할인 없음
+  holder: {started_on: '2026-01-01', facts: {hi_insurance_kept: false}}
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 보험 유지 조건이 없으면 청구 할인 없음

@@ -1,0 +1,32 @@
+card: shinhan-bgnd9k
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 CU 10% 1천P
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cvs-10: 1000}, counted: 15000}
+  calc: 1,500P 중 1회 최대 1,000P
+- name: 경계 직전 199999 적립 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 5000}
+  calc: 20만 미만
+- name: 카페 10%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 5000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 500}, counted: 5000}
+  calc: 5,000원 × 10%
+- name: 해외 일시불 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: online_shopping, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}, counted: 100000}
+  calc: 100,000원 × 1%

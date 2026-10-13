@@ -1,0 +1,52 @@
+card: hana-17016
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 후불교통 10% 한도 1만
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 150000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {transit-10: 10000}
+  calc: 150,000원 x 10% = 15,000원이 50만 구간 월 한도 10,000원에 걸림
+- name: 100만 구간 후불교통 한도 2만
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 250000, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {transit-10: 20000}
+  calc: 250,000원 x 10% = 25,000원이 100만 구간 월 한도 20,000원에 걸림
+- name: 실적 직전 499999
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T08:00, amount: 10000, category: transit.subway, billing: postpaid_transit}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원보다 1원 적어 0원
+- name: 올리브영 일 한도 1천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: olive_young}
+  expect:
+  - payment: 0
+    benefits: {olive-young-10: 1000}
+  calc: 20,000원 x 10% = 2,000원이 일 한도 1,000원에 걸림
+- name: 스타벅스 월 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T09:00, amount: 60000, merchant: starbucks}
+  expect:
+  - payment: 0
+    benefits: {coffee-10: 5000}
+  calc: 60,000원 x 10% = 6,000원이 월 한도 5,000원에 걸림
+- name: 다이소 오프라인 일 한도 1천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: daiso, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {daiso-10: 1000}
+  calc: 20,000원 x 10% = 2,000원이 일 한도 1,000원에 걸림

@@ -1,0 +1,1155 @@
+[
+  {
+    "card_id": "samsung-aap1434",
+    "status": "ready",
+    "reason": "2015년 출시 해외쇼핑 카드. 커피제과 10%, 교육 5%, 특별 1%, 해외 1%에 해외 특별 1% 추가. 안내장 2017년판",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1434",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qthnuDbdVtn7iyBdTTla9Ohc%3D&sn=1"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "직전 3개월 평균 조건의 CGV 놀이공원 할인",
+      "아이포터 해외직구 할인과 국제브랜드 수수료 면제",
+      "빅마켓 신세계몰 롯데i몰 문화센터 놀이방 가맹점 없음",
+      "해외특별적립의 전월 국내 기준 때문에 실적을 국내만 세어 해외 이용이 많으면 구간이 낮게 잡힘",
+      "안내장이 2017년판이라 이후 개정 미확인"
+    ],
+    "open_questions": [
+      "안내장에 일반 가맹점 기본 적립률이 없어 넣지 않음",
+      "실적 제외 항목이 안내장에 없어 삼성 공통 기준 적용",
+      "판매 상태 on_sale 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1450",
+    "status": "blocked",
+    "reason": "THE 1 스카이패스. 혜택이 스카이패스 마일리지(1000원당 1마일, 옵션 2마일)이고 원문에 1마일의 원화 가치 문구가 없어 포인트를 더할 수 없다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1450",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtrQ0RXFRxGsxD3GFq7pljCc%3D&sn=2"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "택시 스타벅스 인천공항 주차 청구할인",
+      "기프트 4택1"
+    ],
+    "open_questions": [
+      "스카이패스 마일리지 원화 가치 문구 없음"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1451",
+    "status": "blocked",
+    "reason": "THE 1 SFC 핵심 혜택이 스카이패스 마일리지 적립이고 마일리지 1의 원화 가치 문구가 없다. 마일리지를 원으로 환산하지 않는다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1451",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtu%2Bk15Y5JvruRjBXEx529C0%3D&sn=2"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "기본 1,000원당 1마일, 특별 2마일 옵션, 연간 기프트, 택시 스타벅스 공항주차 할인"
+    ],
+    "open_questions": [
+      "스카이패스 마일리지 1의 원화 가치"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1453",
+    "status": "blocked",
+    "reason": "삼성카드 SFC & MILEAGE Platinum(스카이패스). 적립이 스카이패스 마일리지(1,000원당 1~2마일)뿐이고 상품안내장에 마일리지의 원화 가치 문구가 없어 포인트를 더할 수 없다. 핵심 혜택이라 빼면 카드가 비어 보인다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1453",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpEM3RxWhtX4QmxzEwrpGuA%3D&sn=2"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "마일리지 1마일의 원화 가치"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1482",
+    "status": "ready",
+    "reason": "taptap S 빅포인트 1%와 주유 2,000원 담음. 실적 50만. 연회비 1만원",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1482",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmWitxypLHPHniDSEYMGFYA%3D&sn=1"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "영화 5,000원 할인은 연 12회 기준일이 없어 뺌",
+      "전기차 충전 제외",
+      "할인 적용 이용금액에 적립 없음"
+    ],
+    "open_questions": [
+      "시행일 상품안내장 판 첫날로 가정",
+      "전월 이용금액 제외 목록이 안내장에 없어 삼성카드 공통 목록으로 가정",
+      "원 미만 floor 가정"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1484",
+    "status": "blocked",
+    "reason": "스카이패스 마일리지 적립 카드인데 1마일의 원화 가치 문구가 상품안내장에 없다. 연회비 97,000~99,000원",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1484"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "스카이패스 마일리지 1마일의 원화 가치"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1501",
+    "status": "ready",
+    "reason": "상품안내장(2022.7판) 대조. 대중교통 10%, CU 20%, 음식점 1,000원, 배달의민족 2,000원 모두 30만원 구간",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1501",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoi5AVOU7whODzCPGg4gWlc%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "대중교통은 명세서 이용일 기준 월 누적 1,000원당 100원이나 결제마다 계산해 덜 계산한다",
+      "주점, 노래방, 주류판매점은 담을 업종이 없다",
+      "삼성카드의 다른 결제일할인과 중복 적용되지 않는다"
+    ],
+    "open_questions": [
+      "시행일 미확인",
+      "원 미만 처리 미확인",
+      "실적 제외 대중교통 범위 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1528",
+    "status": "ready",
+    "reason": "일상 패키지 중심으로 전월 50만원 이상 3%, 커피제과 30%, 음식점 20%, 영화관 6000원, 서점 티켓 동물병원 10000원. 여가 패키지는 연 3개월 제공이라 뺌. 안내장 2019년 심의판",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1528",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtghgJUC%2Fvp2aQfUObuNpARs%3D&sn=2"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "여가 패키지(해외 여행 3%, 철도 5000원, 라운지)는 연 3개월만 제공돼 계산 안 함",
+      "연간 누적 1500만원당 3만원 캐시백",
+      "GS수퍼마켓 발재반점 엘롯데 롯데마트몰 카레클린트 가맹점 없음",
+      "임대매장 제외",
+      "안내장이 2019년 심의판이라 이후 개정 미확인"
+    ],
+    "open_questions": [
+      "안내장의 실적 제외에 대중교통과 택시가 없어 실적에 넣음",
+      "판매 상태 on_sale 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1594",
+    "status": "ready",
+    "reason": "상품안내장(2022.7판) 대조. 빅포인트 국내 0.5%, 음식점·병원·약국·해외 1%, 할인점·주유·온라인쇼핑몰 1.5%, 영화 5,000원, 이동통신 2,000원",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1594",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoce30ZaUaZlJahmbI6s3IY%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "요양병원과 보건소 제외",
+      "삼성카드의 다른 결제일할인과 중복 적용되지 않는다"
+    ],
+    "open_questions": [
+      "시행일 미확인",
+      "판매 상태 문구 없음, 발급 대상 제한 없음 확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1608",
+    "status": "ready",
+    "reason": "상품안내장 대조. 사례 통과",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1608",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvNgbhGvgGcxfEIhXg67blo%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "할인과 실적은 승인 시점 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다",
+      "보험사 정책에 따라 신용카드로 보험료 납부가 제한될 수 있다",
+      "보험료 결제 시 건별 30만원 이상 10,000원 60만원 이상 20,000원을 주는 보험료 연 할인은 연 기준이 발급월 포함 12개월이라 담지 않았다. 이 할인을 받는 첫 결제 이후에는 월 3,000원·5,000원 할인으로 넘어간다",
+      "쇼핑 외 결제(상품권",
+      "주차장 등)와 할인점 내 임대매장은 할인하지 않는다",
+      "요양병원과 보건소는 할인하지 않는다",
+      "다이어트할부와 삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2022.8)의 첫날로 두었다. 출시일은 2019-06-05다 (가정 2022-08-01)",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다 (가정 transit.bus_city, transit.subway)",
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다 (가정 floor)"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1666",
+    "status": "ready",
+    "reason": "taptap DIGITAL 온라인 간편결제 5%, 스트리밍 50%, 편의점 등 10%, 해외 1.5% 담음. 실적 30/60/90만. 후불교통은 실적 제외 처리",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1666",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtj6Nd6DKRzJmL9%2B3RLHIT3U%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "랄라블라는 공통 가맹점이 없어 뺌",
+      "인앱 결제, 임대매장 제외",
+      "고용부담금은 실적에서 빼야 하나 담을 업종 없음"
+    ],
+    "open_questions": [
+      "시행일 상품안내장 판 첫날로 가정",
+      "원 미만 floor 가정"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1667",
+    "status": "ready",
+    "reason": "상품안내장 대조. 사례 통과",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1667",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qth0np8HBSCuOOy9MapUnRdA%3D&sn=1"
+    ],
+    "case_count": 14,
+    "unmodeled": [
+      "할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다",
+      "주유 할인 리터 수는 SK에너지 고시 휘발유가로 환산하고 경유와 등유는 휘발유가 기준으로 환산한다",
+      "전월 생활요금 자동납부 결제건수는 전월 1일부터 말일까지 매출전표가 접수된 아파트 관리비 통신 렌탈 자동납부건이다",
+      "LPG충전소는 할인하지 않는다",
+      "임대매장 결제는 할인하지 않는다",
+      "매장 결제와 사이렌오더만 할인하고 임대매장은 제외한다",
+      "삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다",
+      "고속도로 통행요금, 문자알림서비스, 스마트오토서비스 이용금액은 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2022.10)의 첫날로 두었다. 출시일은 2020-07-06다 (가정 2022-10-01)",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다 (가정 transit.bus_city, transit.subway)",
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다 (가정 floor)"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1668",
+    "status": "ready",
+    "reason": "상품안내장(2025.9판) 대조. 온라인·오프라인 쇼핑 5%, 스트리밍 3,000원, 해외 1.5%",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1668",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtm9H55hvbi8olu0bow0Ptqw%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "쇼핑 5% 월 한도는 전월 생활요금 자동납부 건수에 따라 오르는데 0건 기준만 계산한다",
+      "코웨이와 SK매직 자동납부",
+      "홈쇼핑과 신선식품은 공식 앱 결제만"
+    ],
+    "open_questions": [
+      "시행일 미확인",
+      "원 미만 처리 미확인",
+      "실적 제외 대중교통 범위 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1683",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1683",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qth1%2BllW9SL5HXdk3ZHHRp1A%3D&sn=2"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "SSG.COM 멤버십(신세계 유니버스 클럽 또는 쓱배송 클럽 또는 SSG 세븐클럽)에 가입하고 전월 이용금액 40만원 이상이면 매월 3",
+      "900원을 캐시백한다. 가입 여부를 묻지 않아 계산하지 않는다",
+      "삼성카드의 다른 할인이 적용된 결제는 적립하지 않는다",
+      "SSG MONEY는 매월 1일부터 말일까지 매출전표가 접수된 금액을 다음 달 25일에 적립한다",
+      "전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 자동납부)는 매출전표 접수일 기준이다",
+      "후불교통기능이 탑재되어 발급된다",
+      "임대매장은 적립하지 않는다",
+      "스타벅스 사이렌오더 결제는 온라인으로 입력하면 적립으로 계산하지 않는다",
+      "주유는 LPG 충전소를 제외한다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일을 원문에서 찾지 못했다. 상품안내장은 2026.1판이고 심의필 날짜는 2026-01-06이다",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다",
+      "revisions[0].benefits: 1 SSG MONEY의 원화 가치와 원 미만 처리가 안내장에 없다. 공통 포인트 파일의 1원 기준을 따랐다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1686",
+    "status": "ready",
+    "reason": "상품안내장 대조. 사례 통과",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1686",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvyP8178a0yQl5%2BjKg5OKR0%3D&sn=1"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다",
+      "구독료가 월 할인금액보다 적으면 남은 할인금액을 그달 카드 결제대금에서 빼 주지만 이 계산은 구독료까지만 깎는다",
+      "통신의 결합상품요금, 사물인터넷 요금, 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다",
+      "삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2025.11, 심의필 2025-11-13)의 날짜로 두었다. 출시일은 2020-09-29다 (가정 2025-11-13)",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다 (가정 transit.bus_city, transit.subway)"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1687",
+    "status": "ready",
+    "reason": "상품안내장(2025.11판) 대조. 전월 이용금액 30만·70만·120만 구간 월 7,000·10,000·13,000원과 생활요금 자동납부 1,000원 월 3회",
+    "source_urls": [
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qts4wkOEMEDk4HzBkQ%2FnnbQ4%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "월 할인은 그 달 이용과 관계없이 주는데 앱은 결제가 있을 때 계산한다",
+      "SK인텔릭스 할부 납부금액이 먼저 차감된다",
+      "24·36개월 무이자할부"
+    ],
+    "open_questions": [
+      "시행일 미확인",
+      "원 미만 처리 미확인",
+      "실적 제외 대중교통 범위 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1688",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1688",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvWvRt615oAenrj2Jvu0Me0%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다",
+      "할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 자동납부)는 매출전표 접수 시점 기준이다",
+      "국가바우처로 임신·출산·육아 바우처를 이 카드로 쓸 수 있다. 정부 정책에 따라 바뀐다",
+      "탈회 후 카드를 재발급받은 경우 전월 실적(일시불 및 할부 합산 30만원 이상) 충족 시 제공한다",
+      "후불교통기능이 탑재되어 발급된다",
+      "임대매장과 쇼핑 외 결제(상품권",
+      "주차장 등)는 할인하지 않는다",
+      "기업형 슈퍼마켓은 할인하지 않는다",
+      "요양병원과 보건소는 할인하지 않는다",
+      "학원은 오프라인 일반 결제만 할인하고 온라인서점은 공식 홈페이지·앱 결제만 할인한다",
+      "어린이집·유치원은 정부 지원금을 제외한 금액만 할인한다",
+      "LPG충전소는 할인하지 않는다",
+      "통신의 결합상품요금, 사물인터넷(IoT) 요금, 단말기 구매금액, 대리점 카드 결제건과 렌탈의 일반 제품·서비스 구매금액은 할인하지 않는다",
+      "전기요금은 주택용·주거용 심야전력·계약전력 20kw 이하만 대상이다",
+      "간편결제건과 앱스토어를 통한 인앱 결제건은 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 안내장에 판 표시나 시행일이 보이지 않아 수집일로 두었다",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다",
+      "revisions[0].spend.interest_free: 전월 이용금액 제외 대상에 무이자할부가 있어 제외로 두었다",
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1705",
+    "status": "blocked",
+    "reason": "전월 이용금액에서 삼성스토어와 삼성닷컴 이용금액을 빼야 하나 가맹점 단위 실적 제외 칸이 없고 두 가맹점의 전용 업종도 없어 실적이 부풀려진다. 나머지 혜택은 라이트할부 옵션으로 담은 초안을 scratchpad s19-4/blocked1705에 남김",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1705",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtktego28g1atpurb0A%2FSZaI%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "라이트할부 결제대금 차감과 삼성케어플러스 할인은 뺌",
+      "전기요금 자동납부는 공통 업종이 넓어 뺌",
+      "LPG충전소 제외는 담지 못함"
+    ],
+    "open_questions": [
+      "공통 업종이 생기면 삼성스토어와 삼성닷컴을 spend.exclude_categories로 빼고 초안을 되살릴 수 있다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1709",
+    "status": "ready",
+    "reason": "상품안내장 대조. 사례 통과",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1709",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmS3qjuToLdgiZsWiVUmVfw%3D&sn=1"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다",
+      "원문이 할인 대상 결제를 웰스 상품 할부 구매 납부금액이라고만 적어 웰스 결제 한 건에 월 1회 구간별 금액까지 깎는 것으로 옮겼다. 남은 할인금액을 그달 카드 결제대금에서 빼 주는 부분은 계산하지 않는다",
+      "웰스 24·36개월 라이트할부는 할부수수료율이 정해진 별도 서비스라 계산하지 않는다",
+      "통신의 결합상품요금, 사물인터넷 요금, 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다",
+      "삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다",
+      "자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2022.8)의 첫날로 두었다. 출시일은 2021-02-24다 (가정 2022-08-01)",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다 (가정 transit.bus_city, transit.subway)",
+      "revisions[0].benefits[wells-discount]: 7천~1만3천원 할인이 어떤 결제에 붙는지 원문에 자동납부 같은 조건이 없다. 웰스 결제 한 건이면 붙는 것으로 보았다 (가정 wells 결제 월 1회)"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1713",
+    "status": "blocked",
+    "reason": "삼성카드 더블포인트. 핵심이 D선지급포인트 상환형 서비스(최대 20만P 선지급 뒤 3년 상환, 사용 시 추가 적립)이고, 5%+5% 적립 대상인 삼성화재 자동차보험은 상품 한정이라 공통 가맹점으로 담으면 다른 삼성화재 결제에도 붙는다. 이 둘을 빼면 카드가 실제보다 크게 약해 보인다.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1713",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmWSlAD8yxxfLb8oNH4omVk%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1717",
+    "status": "blocked",
+    "reason": "롯데월드카드는 상품 페이지가 혜택 이름만 적고 숫자는 함께 신청하는 다른 카드 안내에 있으며 상품안내장 PDF를 찾지 못했다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1717"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "상품안내장 PDF 주소와 혜택별 비율, 한도"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1727",
+    "status": "exclude",
+    "reason": "samsung-aap1728과 같은 상품. 삼성 iD ALL 카드와 SFC iD ALL 카드는 연회비 20,000원, 40만·70만 구간, 많이 쓰는 영역 5%, 주유·이동통신·아파트 관리비 2.5%, 국내외 0.5%가 같다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1727"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1729",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1729",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qthapAfJijUJHd6ecNiZokiI%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "가족카드의 이용금액은 본인카드와 합산해 실적과 적립한도를 센다",
+      "3개 영역 합산 이용금액 1원 이상이어야 5% 영역 적립을 준다. 가족카드에는 5% 영역 적립을 주지 않는다",
+      "포인트는 다음 달 15일에 적립한다",
+      "적립은 매출전표 접수 시점순으로 하고 전월 이용금액은 승인일 기준이다. 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제)는 매출전표 접수일 기준이다",
+      "후불교통기능이 탑재되어 발급된다",
+      "임대매장과 쇼핑 외 결제(상품권",
+      "주차장 등)는 적립하지 않는다",
+      "전기차충전소는 환경부 등 충전사업자 멤버십 등록 가맹점에 한하는 조건이라 담지 않았다",
+      "결합상품요금",
+      "단말기 구매금액",
+      "대리점 카드 결제건은 적립하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 안내장에 판 표시나 시행일이 보이지 않아 수집일로 두었다",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다",
+      "revisions[0].benefits: 적립 금액의 원 미만 처리가 공식 문구에 없다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1732",
+    "status": "exclude",
+    "reason": "samsung-id-on과 같은 상품. SFC iD ON도 많이 쓰는 영역 30%, 교통 이동통신 스트리밍 10%, 온라인 간편결제 해외 3%·1%, 연회비 2만원과 모바일 1.5만원이 같다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1732",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnPI3IS%2F2%2BDNzB%2BKMhzQYg0%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1741",
+    "status": "ready",
+    "reason": "아울렛 10%, 이마트 7%, 커피제과 10%, 배달앱 10%는 전월 40만원 이상 구간별 한도, 간편결제 1%, 해외 1.5%. 안내장 2021년판",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1741",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtnn%2FQeRAq3lUAChQ9ts%2BYWw%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "쇼핑 외 결제와 임대매장",
+      "신세계백화점 제휴 서비스",
+      "다른 결제일할인과 중복 불가는 한 묶음 큰 쪽으로 처리",
+      "안내장이 2021년판이라 이후 개정 미확인"
+    ],
+    "open_questions": [
+      "연회비 국내전용 칸이 비어 해외겸용 2만원만 적음",
+      "판매 상태 on_sale 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1742",
+    "status": "ready",
+    "reason": "상품 페이지 본문(상품안내장 PDF 주소를 못 찾음)에서 옮김. 이동통신·관리비, 대중교통·택시, 배달앱 10%와 선택 옵션 서비스 둘, 전월 30만원 이상",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1742"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "이동통신 결합상품 단말기 대리점 결제 제외",
+      "교보문고 온라인과 스트리밍 정기결제만",
+      "임대매장 제외"
+    ],
+    "open_questions": [
+      "공통 10% 셋의 월 5000원 한도가 따로인지 불분명해 합침",
+      "출시일이 비어 심의일 2026-01-19를 시행일로 둠",
+      "판매 상태 on_sale 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1748",
+    "status": "ready",
+    "reason": "NS홈쇼핑 10%, 생활 5%, 생활요금 1,000원 담음. 실적 구간 40/80/120만, 연회비 1만원",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1748",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtl1xNXmB%2Fyj1HLwX1SUW6G4%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "삼성카드 할인 적용 이용금액과 자체 가맹점번호 결제 제외",
+      "임대매장, LPG충전소, 통신 결합상품 제외",
+      "고용부담금은 실적에서 빼야 하나 담을 업종 없음"
+    ],
+    "open_questions": [
+      "시행일 상품안내장 판 첫날로 가정",
+      "원 미만 floor 가정",
+      "무이자할부 실적 count 가정"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1752",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1752",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtsljDdSS8odniHlOoWAm%2B3k%3D&sn=1"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "전월 생활요금 정기결제(아파트 관리비, 4대 사회보험, 생명·손해보험, 코웨이·SK매직 렌탈, 웨이브·FLO 중 5,000원 이상) 건수가 1건, 2건, 3건 이상이면 월 할인한도가 1,000원, 2,000원, 3,000원씩 커진다. 건수를 계산하지 않아 0건 한도로만 할인한다",
+      "SKT 24개월 라이트할부(최소 10만원, 연 5.9%)는 할부 서비스라 계산하지 않는다",
+      "삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다",
+      "전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 자동납부)는 매출전표 접수일 기준이다",
+      "후불교통기능이 탑재되어 발급된다",
+      "결합상품요금, 단말기 구매금액, 대리점 카드 결제건은 할인하지 않는다, SK 세븐모바일은 가맹점이 없어 담지 않았다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 상품안내장은 2023.1판이다. 시행일을 안내장 판 월의 첫 영업일로 두었다",
+      "revisions[0].limits[telecom]: 생활요금 정기결제 건수에 따른 한도 증가를 담지 않고 0건 한도만 두었다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1760",
+    "status": "ready",
+    "reason": "우리동네GS GS25와 GS더프레시 1·5·10%, 커피 배달 10%, 디지털콘텐츠 30%, 해외 1% 담음. 연회비 15,000원. 후불교통은 실적 제외 처리",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1760",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtsbIJdijZfBEoLXEDuZVL4Y%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "GS리테일 POP 서비스 제외",
+      "GS25와 GS더프레시 한도 함께 쓰는 쪽으로 둠",
+      "상품권 택배 임대매장 인앱 결제 제외"
+    ],
+    "open_questions": [
+      "시행일 상품안내장 판 첫날로 가정",
+      "원 미만 floor 가정"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1764",
+    "status": "ready",
+    "reason": "상품안내장 대조. 사례 통과",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1764",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvPYHHhILDNeuMOyEOZMras%3D&sn=1"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수일 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다",
+      "본인카드와 가족카드의 이용실적과 할인 한도는 합산한다",
+      "CJ ONE 포인트 기본 적립은 적립률이 CJ ONE 홈페이지에만 있어 계산하지 않는다",
+      "백화점·할인점·쇼핑몰 임대매장 결제는 할인하지 않는다",
+      "삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다",
+      "자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2022.8)의 첫날로 두었다. 출시일은 2022-04-22다 (가정 2022-08-01)",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다 (가정 transit.bus_city, transit.subway)",
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다 (가정 floor)",
+      "revisions[0].benefits[tving-30].when: 원문은 정기결제라고만 적어 자동납부와 정기결제를 모두 대상으로 두었다 (가정 autopay, subscription)"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1773",
+    "status": "ready",
+    "reason": "iD PET 동물병원 30%, 온라인 간편결제 5%, 해외 1.5%, 스트리밍 10%, 커피 편의점 1,000원 담음. 연회비 15,000원",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1773",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoMknQMkPnMZbWd1stD0YOE%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "반려동물쇼핑몰 30% 할인은 공통 가맹점 없어 뺌",
+      "손해보험 10% 할인은 공통 업종 없어 뺌",
+      "임대매장, 인앱 결제 제외"
+    ],
+    "open_questions": [
+      "시행일 상품안내장 판 첫날로 가정",
+      "원 미만 floor 가정",
+      "무이자할부 실적 count 가정"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1778",
+    "status": "exclude",
+    "reason": "samsung-aap1777와 같은 상품. 연회비 70만원, 국내 1.2%와 해외 면세 항공 여행 주유 1.5%, 기프트 택2, 라이프스타일 5만원 할인이 같다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1778",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoTRCaCrKLW8k7gLUt6T8jI%3D&sn=2"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1781",
+    "status": "blocked",
+    "reason": "TR CASH 적립인데 1 TR CASH의 원화 가치 문구가 상품안내장에 없고 TRADERS CLUB 가입이 조건이라 포인트 종류를 만들 수 없다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1781"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "TR CASH 1개의 원화 가치"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1812",
+    "status": "blocked",
+    "reason": "W컨셉 7% W POINT 적립 등 핵심 혜택이 W POINT인데 원문에 1P의 원화 가치 문구가 없어 포인트를 더할 수 없다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1812",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpIiWzaHUgEX3dHM8CEIx2g%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "W POINT 원화 가치 문구 없음"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1816",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1816",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtr2j1%2Bfm3GROO1l7f0rpCVU%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "놀이공원(에버랜드, 롯데월드, 서울랜드, 대전오월드, 이월드, 경주월드) 자유이용권 50% 현장할인과 워터파크(캐리비안 베이, 캘리포니아비치, 중흥골드스파, 디오션리조트, 워터파크 스파밸리) 입장권 30% 현장할인은 전월 이용금액 30만원 이상 조건에 통합 일 1회, 연 5회(1월 1일~12월 31일)라 담지 않았다",
+      "삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다",
+      "신백리워드 포인트는 매월 매출전표 접수분을 다음 달 18일에 신백리워드로 전환한다",
+      "이마트 6,000원 할인과 CGV 할인이 적용된 결제는 신백리워드를 적립하지 않는다",
+      "후불교통기능이 탑재되어 발급된다",
+      "백화점의 쇼핑 외 결제(상품권",
+      "주차장 등)와 임대매장은 적립하지 않는다",
+      "백화점·할인점·쇼핑몰 안 임대매장은 적립하지 않는다",
+      "일렉트로마트와 노브랜드 매장은 가맹점 목록에 없어 담지 않았다",
+      "무이자할부 결제는 할인 대상이지만 앱은 할인하지 않는다",
+      "쇼핑 외 결제(상품권",
+      "주차장 등)와 임대매장은 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일을 원문에서 찾지 못했다. 상품안내장은 2024.9판이고 심의필 날짜는 2024-09-19이다",
+      "revisions[0].spend.exclude_categories: 전월 이용금액 제외 대상이 CGV 안내에 적혀 있지 않아 적립 제외 대상 목록으로 대신했다",
+      "revisions[0].benefits: 적립과 할인 금액의 원 미만 처리가 공식 문구에 없다",
+      "revisions[0].benefits[area1-wd].when: 평일과 주말 구분에서 공휴일을 어느 쪽으로 세는지 적혀 있지 않다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1830",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1830",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtm6gfSJg2Zrshv3zEpt3zsI%3D&sn=1"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "특수 소재 카드는 신청 때 발급수수료 5",
+      "000원을 받고 일반 카드와 동시에 쓸 수 없다",
+      "전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통",
+      "이동통신 등 정기결제)는 매출전표 접수일 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 중복 적용되지 않고 큰 금액만 적용한다",
+      "후불교통기능이 탑재되어 발급된다",
+      "백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다",
+      "디지털콘텐츠의 구글플레이·앱스토어 인앱 결제는 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 상품 출시일은 2024-04-11이고 상품안내장은 2024.4판이다. 출시일을 시행일로 두었다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1833",
+    "status": "ready",
+    "reason": "상품안내장 대조. 사례 통과",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1833",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qthVnkV%2FtC6ugSgZNGWz9L04%3D&sn=1"
+    ],
+    "case_count": 7,
+    "unmodeled": [
+      "할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다",
+      "이용료가 월 할인금액보다 적으면 남은 할인금액을 그달 카드 결제대금에서 빼 주지만 이 계산은 이용료까지만 깎는다",
+      "일반 제품·서비스 구매금액과 대리점 카드 결제는 할인하지 않는다",
+      "인터넷·유선통신의 사물인터넷 요금, 휴대폰 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다",
+      "삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다",
+      "자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다 (가정 floor)",
+      "revisions[0].spend.exclude_categories: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다 (가정 transit.bus_city, transit.subway)",
+      "revisions[0].benefits[cesco].when: 원문은 정기결제라고만 적어 자동납부와 정기결제를 모두 대상으로 두었다 (가정 autopay, subscription)"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1837",
+    "status": "ready",
+    "reason": "4대 영역 10% 빅포인트는 전월 100만원 이상 영역별 월 1만P, 관리비·이동통신·교육 3%는 전월 50만원 이상 월 5천P, 삼성페이 오프라인 1%, 해외 1%",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1837",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtpUKOWwrE%2Ft6%2F4%2FLnkHoltY%3D&sn=1"
+    ],
+    "case_count": 8,
+    "unmodeled": [
+      "연간 이용금액 1500만원 이상 다음해 연회비 할인",
+      "전기차 충전소 10%는 대상 사업자와 멤버십 조건으로 제외",
+      "이투스 대성마이맥 밀크T 가맹점 없음",
+      "후불교통 실적 제외는 시내버스와 지하철로 근사"
+    ],
+    "open_questions": [
+      "연회비 국내전용 칸이 비어 해외겸용 5만원만 적음",
+      "판매 상태 on_sale 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1841",
+    "status": "ready",
+    "reason": "상품안내장 대조. 삼성전자 구독요금 13,000/17,000/23,000원, 디지털콘텐츠 30% 월 5,000원",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1841",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtiYRkkmsP7JOVl13dbLDs8g%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "삼성닷컴 정기결제 신청분만 할인",
+      "인앱 결제는 제외"
+    ],
+    "open_questions": [
+      "시행일 미확인",
+      "원 미만 처리 미확인",
+      "실적 제외 대중교통 범위 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1846",
+    "status": "ready",
+    "reason": "기후동행 삼성카드 커피 편의점 10%, 통신 5·7%, 배달 쇼핑 5·7%, 디지털콘텐츠 30%, 해외 1% 담음. 실적 40/80만. 후불교통은 실적 제외 처리",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1846",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoA3L8Iz1iDL7PEH1wOoFtA%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "고용부담금은 실적에서 빼야 하나 담을 업종 없음",
+      "인앱 결제, 임대매장 제외"
+    ],
+    "open_questions": [
+      "시행일 상품안내장 판 첫날로 가정",
+      "원 미만 floor 가정"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1864",
+    "status": "ready",
+    "reason": "KTX 마일리지 포인트(1P=1원) 0.5% 기본, 한국철도공사 5%는 전월 40만원 이상 월 한도 구간별, 생활 0.5% 추가",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1864",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtprloyan%2Fs%2FDT5yR2lgNTnM%3D&sn=1"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "SRT 결제와 철도승차권 반환수수료 제외",
+      "임대매장, 할인점 임대매장과 주차장",
+      "StoryWay 편의점",
+      "코레일멤버십 회원이어야 마일리지 전환"
+    ],
+    "open_questions": [
+      "연회비 국내전용 칸이 비어 해외겸용과 같다고 둠",
+      "판매 상태 on_sale 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1875",
+    "status": "exclude",
+    "reason": "samsung-aap1876과 같은 상품. iD SELECT ALL 카드이고 SFC 표기만 다르다. 연회비 20,000원과 SELECT 1·2, 생활 편의 5%, 디지털콘텐츠 50%, 해외 2% 혜택이 같다.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1875",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtokP0%2F6itdmI2pRMwOmAF10%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1883",
+    "status": "blocked",
+    "reason": "전월 이용금액 제외에 하이마트 직영점(오프라인) 결제가 있는데 가맹점을 실적에서 뺄 수 없어 실적이 부풀 수 있다. 하이마트 라이트할부 이용 여부도 전월 말 기준",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1883",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtotyCvA47YhS%2FA7gH7E6omY%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "하이마트 직영점 결제 실적 제외",
+      "라이트할부 이용 여부 산정"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1886",
+    "status": "blocked",
+    "reason": "THE iD. 1st. 핵심인 프리미엄 영역 연간 최대 15만원 할인 기프트가 전년도 이용금액 600만원·3,600만원 구간별 연 2~3회이고 발급 첫 해는 누적 50만원이라는 연간 누적 조건이라 지금 모델로 맞게 못 한다.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1886",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmyoMBFrPWDkhp9nA7bBync%3D&sn=2"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1888",
+    "status": "blocked",
+    "reason": "내려받은 상품안내장이 VISA INFINITE 등급서비스와 선택서비스 안내뿐이고 카드 자체의 적립 혜택과 연회비 구간 원문을 열지 못했다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1888",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtqQekVCy%2F%2BvyUf8mPvLDSxs%3D&sn=2"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1895",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1895",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtuSesCItYiBCA%2BcophPICH4%3D&sn=1"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "아모레퍼시픽 온라인몰(아모레몰, 이니스프리, 오설록) 이용 시 10% 뷰티포인트 적립과 해피오더, F&B, hy 1%·그 외 국내 가맹점 0.1% 뷰티포인트 적립은 안내장에 뷰티포인트의 원화 가치가 없어 담지 않았다",
+      "많이 쓸수록 5%~20% 추가 할인은 당월 이용금액 40만원 이상과 당월 이용 영역 개수로 정해 다음 달 결제대금에서 차감한다. 전월 이용금액 구간으로 계산하는 이 앱 모델에 맞지 않아 담지 않았다",
+      "삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다",
+      "전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제)는 매출전표 접수일 기준이다",
+      "후불교통기능이 탑재되어 발급된다",
+      "백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다",
+      "멤버십 선물하기는 할인하지 않는다",
+      "결합상품요금",
+      "사물인터넷(IoT) 요금",
+      "단말기 구매금액",
+      "대리점 카드 결제건은 할인하지 않는다",
+      "임대매장과 쇼핑 외 결제(상품권",
+      "주차장 등)는 할인하지 않는다",
+      "학습지는 온라인 결제도 할인 대상이지만 앱은 오프라인 입력만 할인한다",
+      "이투스",
+      "대성마이맥",
+      "천재교과서(밀크T)는 가맹점 목록에 없어 담지 않았다",
+      "캐시충전건과 인앱 결제는 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 시행일을 원문에서 찾지 못했다. 안내장 유의사항에 카드 신규 출시일이 2026년 3월 26일로 적혀 있다",
+      "revisions[0].limits[happy-fnb]: 해피오더와 F&B, hy 정기결제와 일반결제가 각자 통합 월 할인한도 10,000원이라고 적혀 있어 같은 한도를 함께 쓰는지 따로 쓰는지 불분명하다",
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1896",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1896",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvyRUoUc3r2CAEvTSbZXfG8%3D&sn=1"
+    ],
+    "case_count": 5,
+    "unmodeled": [
+      "삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다",
+      "가맹점 정보가 결제대행업체(PG)나 간편결제 전용 가맹점으로 확인되면 음식점 등 업종 할인 대상에서 빠진다",
+      "전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제)는 매출전표 접수일 기준이다",
+      "후불교통기능이 탑재되어 발급된다",
+      "임대매장과 쇼핑 외 결제(상품권",
+      "주차장 등)는 할인하지 않는다",
+      "LPG충전소는 할인하지 않는다",
+      "요양병원과 보건소는 할인하지 않는다",
+      "백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다",
+      "구글플레이와 앱스토어 등을 통한 인앱 결제는 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 안내장에 판 표시나 시행일이 보이지 않아 수집일로 두었다",
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1897",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1897",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlffutym8SnEUqNn2nLJ9nY%3D&sn=1"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "삼성카드의 다른 결제일할인과 중복 적용되지 않고 할인 혜택이 큰 금액만 적용한다",
+      "차량 점검 서비스(엔진오일 교환 현장할인, 안전점검, 타이어 펑크 수리, 위치 교환)는 연 단위 횟수 혜택이라 담지 않았다",
+      "가맹점 정보가 결제대행업체(PG)나 간편결제 전용 가맹점으로 확인되면 업종 할인 대상에서 빠진다",
+      "HD현대오일뱅크 주유(충전)소 이용금액은 전월 이용금액에서 빠진다. 앱은 모든 주유 업종을 뺐다",
+      "전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 이동통신 등 정기결제)는 매출전표 접수일 기준이다",
+      "후불교통기능이 탑재되어 발급된다",
+      "결합상품요금",
+      "사물인터넷(IoT) 요금",
+      "단말기 구매금액",
+      "대리점 카드 결제건은 할인하지 않는다",
+      "백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 안내장에 판 표시나 시행일이 보이지 않아 수집일로 두었다",
+      "revisions[0].spend.exclude_categories: 실적 제외는 HD현대오일뱅크 주유소 이용금액뿐인데 가맹점 단위로 뺄 수 없어 주유 업종 전체를 뺐다. 대중교통 범위는 시내버스와 지하철로 두었다",
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1899",
+    "status": "ready",
+    "reason": "삼성생명 보험 이용 여부 옵션에 따라 전월 50만원 이상 7000원, 100만원 이상 17000원 결제대금 차감 또는 보험 미이용 0.5% 빅포인트",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1899",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtv7kpq0TjaWKdcfWjBwoM3k%3D&sn=1"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "삼성생명 계약자 본인 회원만",
+      "발급월 보험 이용 선택자 적립",
+      "결제대금 차감은 월 첫 결제에 붙는 것으로 계산"
+    ],
+    "open_questions": [
+      "연회비 국내전용 칸이 비어 해외겸용과 같다고 둠",
+      "판매 상태 on_sale 미확인"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1900",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1900",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtiZXE4w0dqyl6%2FhtMmjS3QM%3D&sn=1"
+    ],
+    "case_count": 4,
+    "unmodeled": [
+      "전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다",
+      "결제예정금액이 월 혜택금액보다 적으면 남은 금액은 결제계좌로 입금한다",
+      "삼성화재 보험 유지 여부는 삼성화재 고객센터에서 확인하는 값이라 사용자 선택에 맡긴다",
+      "결제대금 차감은 결제 하나에 붙는 혜택이 아니라 월 1회 청구금액에서 빠지므로 그 달 첫 결제에 붙는 것으로 계산한다",
+      "보험료를 납입하는 삼성화재 계약자 본인 회원에게만 준다",
+      "고속버스는 차내 단말기와 고속버스 앱 결제만 적립에서 빠지지만 구분할 수 없어 고속버스 전체를 뺐다",
+      "발급월에는 보험 이용 여부와 관계없이 0.5%를 주지만 보험 이용 선택자의 발급월 적립은 담지 않았다"
+    ],
+    "open_questions": [
+      "annual_fees: 연회비 표에서 해외겸용 Mastercard와 국내전용 칸이 하나로 합쳐져 총 연회비 3만원(기본 7,000+제휴 23,000)으로 적혀 있다",
+      "revisions[0].effective_from: 안내장에 판 표시나 시행일이 보이지 않아 수집일로 두었다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1910",
+    "status": "blocked",
+    "reason": "PORSCHE 삼성카드. 핵심인 프리미엄 영역 연 2회 10만원 할인 기프트와 포르쉐 서비스센터 4% 적립이 발급 첫 해 누적 이용금액 50만원, 2차년도 이후 전년도 600만원이라는 연간 누적 조건이고 연 기준이 발급월 포함 12개월이라 지금 모델로 맞게 못 한다. 전기차 충전 20% 대상 충전소는 QR 목록이라 담을 수 없다.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1910",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtp6yCq%2B1jLC9UwbG5HJoAp0%3D&sn=2"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-aap1913",
+    "status": "ready",
+    "reason": "상품안내장 대조. 의료 20% 또는 생활 10% 옵션, 쇼핑 1%, 여가 2%, 국내 0.5%",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1913",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtgaFQvcYfHTfORut5y1Z%2FVo%3D&sn=1"
+    ],
+    "case_count": 6,
+    "unmodeled": [
+      "병원·약국 2~3개월 무이자할부",
+      "해외수수료 할인",
+      "동화, JDC, JTO 면세점",
+      "항공 공식 앱 결제만, 공연 NOL 티켓 공식 앱 결제만"
+    ],
+    "open_questions": [
+      "시행일 미확인",
+      "원 미만 처리 미확인",
+      "전월 이용금액 제외에 대중교통이 없어 실적에 넣었다"
+    ]
+  },
+  {
+    "card_id": "samsung-aap1914",
+    "status": "ready",
+    "reason": "상품안내장 대조. 사례 통과",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1914",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtmc0SLDAXWvZWFP6kVqAPN0%3D&sn=1"
+    ],
+    "case_count": 10,
+    "unmodeled": [
+      "할인과 실적은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다",
+      "삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다",
+      "해외수수료 할인(브랜드사수수료 1.1%, 해외이용수수료 0.2%)은 수수료 계산이라 담지 않았다",
+      "병원·약국 건별 5만원 이상 2~3개월 무이자할부는 계산하지 않는다",
+      "선택 옵션 할인과 여가 2%는 통합 월 한도를 넘으면 국내 가맹점 0.5%만 받는다",
+      "보건소는 할인하지 않는다",
+      "보험사 정책에 따라 신용카드로 보험료 납부가 제한될 수 있다",
+      "LPG충전소는 할인하지 않는다",
+      "동화면세점",
+      "HDC신라면세점",
+      "제주 JDC·JTO 면세점은 담지 않았다",
+      "임대매장은 할인하지 않는다",
+      "항공과 공연은 공식 홈페이지·앱 결제만 할인하고 다른 여행사나 대행 사이트 결제는 제외한다",
+      "쇼핑 외 결제(상품권",
+      "주차장 등)와 임대매장은 할인하지 않는다",
+      "기업형 슈퍼마켓은 할인하지 않는다",
+      "오아시스마켓 오프라인 매장은 담지 않았다",
+      "삼성카드의 다른 행사 혜택이 적용된 일시불·할부 이용금액은 할인하지 않는다",
+      "고속도로 통행요금, 문자알림서비스, 스마트오토서비스, 구매캐시백 계약 가맹점의 의약품·유류 구매한도 결제는 할인하지 않는다",
+      "가맹점 정보가 결제대행업체나 간편결제 전용 가맹점으로 확인되는 결제는 할인하지 않는다"
+    ],
+    "open_questions": [
+      "revisions[0].benefits: 할인 금액의 원 미만 처리가 공식 문구에 없다 (가정 floor)",
+      "revisions[0].benefits[mobile-10].when: 원문은 정기결제라고만 적어 자동납부와 정기결제를 모두 대상으로 두었다 (가정 autopay, subscription)"
+    ]
+  },
+  {
+    "card_id": "samsung-abp0508",
+    "status": "blocked",
+    "reason": "공식 원문을 열지 못했다. 삼성카드 상품 페이지는 혜택 제목(주유비 캐시백, 영화관 할인, 커피 캐시백)과 연회비 없음만 보이고 비율, 한도, 실적 조건을 적은 상품설명서 PDF 링크가 없다. 2016년 심의 상품이다.",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP0508",
+      "https://www.samsungcard.com/personal/card/cardfinder/UHPPCA0102M0.jsp?code=ABP0508"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-abp1159",
+    "status": "blocked",
+    "reason": "새마을금고 삼성애니패스포인트체크카드. 적립률이 연간 누적 이용금액 300만원 기준으로 바뀌고 안내장도 체크카드 전체 묶음이다. 금고 제휴 카드라 일반 상품이 아니기도 하다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1159",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qthOAX4DThSUWjWmmNhfujTU%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "연간 누적 구간 적립"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-abp1285",
+    "status": "blocked",
+    "reason": "새마을금고 삼성체크카드 적립률이 연간 이용금액 300만원 기준과 3개월 평균 조건으로 갈려 지금 모델로 맞게 계산할 수 없다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1285",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtn063RJJuAkgi0GX3b8X%2BxU%3D&sn=1"
+    ],
+    "case_count": 0,
+    "unmodeled": [
+      "연간 누적 기준 빅포인트 적립률, 직전 3개월 월평균 조건"
+    ],
+    "open_questions": []
+  },
+  {
+    "card_id": "samsung-abp1457",
+    "status": "ready",
+    "reason": "상품안내장 PDF 대조. 핵심 혜택 금액과 조건을 담음",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1457",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtoRl%2F6Fikq1M3HuEx3hGIuU%3D&sn=1"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "CGV 3",
+      "000원 할인과 놀이공원 50%·워터파크 30% 현장할인은 직전 3개월 월평균 이용금액 30만원 이상 조건이라 계산하지 않는다",
+      "캐시백은 매월 15일 결제계좌로 입금된다",
+      "후불교통기능은 만 19세 이상 신청자에게 준다",
+      "결합상품요금",
+      "대리점 단말기 구매금액",
+      "대리점 카드 결제금액은 캐시백하지 않는다",
+      "백화점·할인점 안 일부 임대매장과 식품매장은 업종 구분이 되지 않아 캐시백 대상에서 빠질 수 있다"
+    ],
+    "open_questions": [
+      "revisions[0].effective_from: 현재 혜택의 시행일을 확인하지 못해 원문 수집일로 두었다. 상품 출시일은 2016-05-30이다",
+      "status: 상품설명서 관리번호의 유효기간이 2023-10-31로 적혀 있다. 상품 페이지는 열려 있고 발급 중단 문구는 없어 판매 중으로 두었다"
+    ]
+  },
+  {
+    "card_id": "samsung-abp1460",
+    "status": "ready",
+    "reason": "상품안내장(YOUNG·CASHBACK·POINT 공용) 대조. POINT 카드의 빅포인트 적립 음식점·주유·할인점 0.4%, 일반 0.2%만 담았다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1460",
+      "https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtlbOm%2BAi7PzrfjKmEyl9q%2F4%3D&sn=1"
+    ],
+    "case_count": 3,
+    "unmodeled": [
+      "연간 누적 300만원 이상 상향 비율은 낮은 비율만 계산",
+      "CGV와 놀이공원 할인은 직전 3개월 평균 조건이라 뺐다"
+    ],
+    "open_questions": [
+      "시행일 미확인",
+      "상품설명서 유효기간 2023-10-31 표기",
+      "빅마켓은 공통 가맹점에 없다"
+    ]
+  },
+  {
+    "card_id": "samsung-abp1871",
+    "status": "blocked",
+    "reason": "스타벅스 별 리워드 적립 카드인데 별 리워드 1개의 혜택 가치 문구가 없다. 600원은 취소 때 청구 환산액이고 적립 가치가 아니다",
+    "source_urls": [
+      "https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1871"
+    ],
+    "case_count": 0,
+    "unmodeled": [],
+    "open_questions": [
+      "스타벅스 별 리워드 1개의 원화 가치"
+    ]
+  }
+]

@@ -1,0 +1,46 @@
+card: lotte-p13407-a13407
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 150만 구간 병원 10%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {medical-10: 5000}}
+  calc: 50,000 × 10% = 5,000
+- name: 실적 직전 1499999는 할인 없음
+  prev_month_spend: 1499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 150만원보다 1원 적다
+- name: 건당 2만원 미만은 할인 없음
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 19999, category: pharmacy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 2만원 미만
+- name: 백화점 오프라인 5% 한도 1만원
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 300000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {department-5: 10000}}
+  calc: 300,000 × 5% = 15,000이 월 한도 10,000에 걸림
+- name: 롯데슈퍼 오프라인 5%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 40000, merchant: lotte_super, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {super-5: 2000}}
+  calc: 40,000 × 5% = 2,000
+- name: 지하철 청구 3만원 10% 한도 5천원
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-10: 5000}}
+  calc: 60,000 × 10% = 6,000이 월 한도 5,000에 걸림

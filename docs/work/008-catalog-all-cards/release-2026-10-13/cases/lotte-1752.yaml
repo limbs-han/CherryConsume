@@ -1,0 +1,20 @@
+card: lotte-1752
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 1천원당 10포인트
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 12345, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lpoint-1: 120}}
+  calc: 12,000원분 12단위 × 10 = 120P
+- name: 월 10만 포인트 한도
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lpoint-1: 99990}}
+  - {payment: 1, benefits: {lpoint-1: 10}}
+  calc: 9,999,000원 9,999단위 × 10 = 99,990P. 다음 100P 중 남은 한도 10P

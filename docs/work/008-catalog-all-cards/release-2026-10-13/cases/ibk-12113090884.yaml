@@ -1,0 +1,62 @@
+card: ibk-12113090884
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 버스 후불교통 100원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T08:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit}
+  expect:
+  - {payment: 0, benefits: {transit-100: 100}}
+  calc: 건당 100원
+- name: 편의점 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu, channel: offline}
+  expect:
+  - {payment: 0, benefits: {cvs-5: 500}}
+  calc: 10,000원 × 5% = 500원
+- name: 올리브영 5% 편의점과 하루 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu, channel: offline}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: olive_young, channel: offline}
+  expect:
+  - {payment: 0, benefits: {cvs-5: 500}}
+  - {payment: 1, benefits: {}}
+  calc: 편의점과 올리브영은 하루 1회를 함께 쓴다
+- name: 쿠팡 10% 1회 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: coupang, channel: online}
+  expect:
+  - {payment: 0, benefits: {online-10: 1000}}
+  calc: 1회 1만원까지 × 10% = 1,000원
+- name: 영화 4천원 통합한도 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cgv, channel: offline}
+  expect:
+  - {payment: 0, benefits: {movie-4000: 4000}}
+  calc: 4,000원
+- name: 커피 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 1000}}
+  calc: 10,000원 × 10% = 1,000원
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 0 구간이라 없음
+- name: 올리브영 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, merchant: olive_young, channel: offline}
+  expect:
+  - {payment: 0, benefits: {oliveyoung-5: 500}}
+  calc: 1회 1만원까지 × 5% = 500원

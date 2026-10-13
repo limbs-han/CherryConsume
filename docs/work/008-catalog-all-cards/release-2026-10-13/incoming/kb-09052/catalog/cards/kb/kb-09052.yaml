@@ -1,0 +1,23 @@
+schema_version: 2
+id: kb-09052
+issuer: kb
+name: 토스페이 플러스 KB카드
+short_name: KB 토스페이 플러스
+kind: credit
+product_codes:
+  - '09052'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, form: mobile, amount: 1000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09052', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    benefits: []
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 원문은 부가서비스가 없는 토스 제휴 신용카드라고 적었다. 실물 없는 모바일 단독카드로 토스페이와 KB Pay에 등록해 쓴다. 연회비 1천원이고 면제 조건이 없다.

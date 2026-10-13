@@ -1,0 +1,83 @@
+schema_version: 2
+id: ibk-12113290001
+issuer: ibk
+name: 하이틴즈 체크카드
+kind: check
+product_codes:
+  - '12113290001'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: bc, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.ibk.co.kr/cardbiz/detailBizNew.ibk?PDLN_CD=12&PDGR_CD=11&PDTM_CD=329&PDCD=0001&pageId=CA01010000', fetched_at: 2026-10-13, review_no: 제2026-1258호, review_valid_until: 2029-02-12}
+checked_at: 2026-10-13
+revisions:
+  - effective_from: 2026-02-19
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000, 200000, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 100000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: integrated
+        per: month
+        amount: {100000: 2000, 200000: 4000, 300000: 6000}
+      - {key: study-day, per: day, count: 1}
+    benefits:
+      - key: life-500
+        title: 편의점·베이커리·패스트푸드·음료 500원 청구할인
+        source: page
+        evidence: ['라이프 할인 500원 할인 편의점: GS25, CU, 세븐일레븐, 이마트24, 올리브영', '푸드: 파리바게트, 뚜레쥬르, 맥도날드, 버거킹, 롯데리아', '음료: 공차, 쥬씨, 이디야커피, 베스킨라빈스, 던킨도너츠', 5천원 이상, 하루 1회]
+        target:
+          merchants: [baskin_robbins, burger_king, cu, dunkin, ediya, emart24, gs25, lotteria, mcdonalds, olive_young, paris_baguette, seven_eleven, tous_les_jours]
+        when:
+          - {channel: offline}
+          - amount: {min: 5000}
+          - payment_not: [apple_pay, coupay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, fixed: 500}
+        limits:
+          - {per: day, count: 1}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [공차와 쥬씨는 가맹점 목록에 없어 계산하지 않는다, 백화점·대형할인점 등 일부 입점 매장은 제외된다]
+      - key: study-bookstore-1000
+        title: 온라인서점 1천원 청구할인
+        source: page
+        evidence: ['스터디 할인 1천원 할인 온라인서점: 교보문고, 영풍문고, 예스24', 1만원 이상, 온라인서점은 오프라인 및 간편결제 건 제외, 하루 1회]
+        target:
+          merchants: [kyobo_book, yes24, youngpoong_book]
+        when:
+          - {channel: online}
+          - amount: {min: 10000}
+          - payment_not: [apple_pay, coupay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: study-day}
+          - {shared: integrated}
+        tiers: {from: 100000}
+      - key: study-academy-1000
+        title: 학원 1천원 청구할인
+        source: page
+        evidence: ['스터디 할인 1천원 할인 전국 독서실·학원 업종(BC카드 기준, 오프라인)', 1만원 이상, 하루 1회]
+        target:
+          categories: [education.academy]
+        when:
+          - {channel: offline}
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {shared: study-day}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [독서실은 담을 업종이 없어 계산하지 않는다]
+    unmodeled: [후불교통은 청소년 요금 적용 서비스이고 할인은 없다, 가족이나 본인 확인 같은 발급 대상은 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].new_card.tier', question: 카드 사용등록일 이후 다음 달까지 어느 통합할인한도를 주는지 원문 요약에 금액이 없다, assumed: 100000}
+notes: 2026-10-13 expand21 조사. 만 12~18세 대상 체크카드. 간편결제는 할인이 제공되지 않을 수 있다는 문구에 따라 간편결제 결제수단을 제외했다
