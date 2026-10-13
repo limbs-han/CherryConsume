@@ -1,0 +1,116 @@
+schema_version: 2
+id: shinhan-poidzr
+issuer: shinhan
+name: SOL 메이트 신한카드 SOL Plan 체크
+short_name: 신한 SOL Plan 체크
+search_names: [SOL메이트, 쏠플랜 체크]
+kind: check
+product_codes: [POIDZR]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1239102_2206.html', fetched_at: 2026-10-12, review_no: 제20260907-Dpp-001호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-05-28
+    source: page
+    tiers: [0, 200000, 600000, 2000000, 3000000]
+    spend:
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {tier: 200000}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [이 카드 서비스 밖의 프로모션 할인이 적용된 거래와 포인트 사용 금액은 적립하지 않는다, 결제대행업체(PG)나 간편결제 가맹점으로 찍히는 결제는 적립하지 않는다]
+    limits:
+      - {key: integrated, per: month, amount: 30000}
+    benefits:
+      - key: base-point
+        title: 국내외 기본 0.2~0.4% 적립
+        source: page
+        evidence: ['기본 적립 : 국내/외 이용금액 최대 0.4% SOL포인트 적립', 20만원 이상 60만원 미만 기본 0.2%, 60만원 이상 기본 0.4%, 기본 적립과 특별 적립을 통합하여 월 3만 포인트 한도까지 적립됩니다., '기본 적립과 특별 적립은 중복 적용되지 않으며, 특별 적립 영역 가맹점은 기본 적립 대상에서 제외됩니다.', ‘담을수록 SOLSOL 서비스’ 대상 영역(OTT/멤버십)은 기본 적립 대상에서 제외됩니다.]
+        target:
+          exclude_categories: [cafe, hospital, pet.vet, restaurant.bakery]
+          all: true
+          exclude_merchants: [coffee_bean, coupang_wow, disney_plus, ediya, emart, lotte_mart, mega_coffee, naver_plus_membership, netflix, nh_hanaro_mart, paris_baguette, paul_bassett, starbucks, tous_les_jours, traders, tving, twosome, youtube_premium]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 0.2, 600000: 0.4}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [해외 현금인출은 적립하지 않는다]
+      - key: hospital-special
+        title: 병원 1~2% 적립
+        source: page
+        evidence: [특별 적립 1.0% / 2.0%, '병원: 종합병원, 개인병원, 치과병원, 동물병원, 응급실운영병원 업종', 특별 적립 영역의 경우 병원/마트/카페 각 영역별로 이용금액 기준 월 30만원까지 서비스가 적용됩니다., 특별 적립 영역은 오프라인 매장 이용시에만 적립]
+        target:
+          categories: [hospital, pet.vet]
+        when:
+          - {channel: offline}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1.0, 600000: 2.0}
+        limits:
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: mart-special
+        title: 마트 1~2% 적립
+        source: page
+        evidence: [특별 적립 1.0% / 2.0%, '마트: 이마트, 트레이더스 홀세일클럽, 롯데마트, 농협 하나로마트', '마트 영역은 대상 가맹점 외 창고형 할인매장, 기업형 슈퍼마켓(이마트 에브리데이, 롯데슈퍼 등) 이용 시에는 적립되지 않습니다.', 특별 적립 영역의 경우 병원/마트/카페 각 영역별로 이용금액 기준 월 30만원까지 서비스가 적용됩니다.]
+        target:
+          merchants: [emart, lotte_mart, nh_hanaro_mart, traders]
+          exclude_merchants: [emart_everyday, homeplus_express, lotte_super]
+        when:
+          - {channel: offline}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1.0, 600000: 2.0}
+        limits:
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [마트 주차비·문화센터·입점 임대 매장은 적립하지 않는다]
+      - key: cafe-special
+        title: 카페·제과 1~2% 적립
+        source: page
+        evidence: [특별 적립 1.0% / 2.0%, '카페: 스타벅스, 이디야, 커피빈, 투썸플레이스, 폴바셋, 메가커피, 파리바게뜨, 뚜레쥬르, 커피전문점/제과점 업종', 해외 스타벅스 가맹점 구매 금액 및 스타벅스 홈페이지/앱 내 선물하기 이용금액은 적립되지 않습니다.]
+        target:
+          categories: [cafe, restaurant.bakery]
+          merchants: [coffee_bean, ediya, mega_coffee, paris_baguette, paul_bassett, starbucks, tous_les_jours, twosome]
+        when:
+          - {channel: offline}
+          - {region: domestic}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {200000: 1.0, 600000: 2.0}
+        limits:
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [스타벅스 사이렌오더 같은 스마트 오더도 적립되지만 온라인 결제는 계산하지 않는다, 백화점·할인점·면세점·공항 입점 매장은 적립하지 않는다]
+      - key: ott-membership-100
+        title: OTT·멤버십 정기결제 100% 적립
+        source: page
+        evidence: [OTT·멤버십 영역 이용금액의 100% SOL포인트 적립, '단, 결제계좌의 전월 잔액 조건을 미충족하였더라도 카드 전월 이용금액이 200만원 이상일 경우 2천 포인트, 300만원 이상일 경우 5천 포인트 적립 한도가 제공됩니다.', 'OTT: 넷플릭스, 유튜브 프리미엄, 티빙, 디즈니플러스', '멤버십: 네이버플러스 멤버십, 쿠팡 와우 멤버십']
+        target:
+          merchants: [coupang_wow, disney_plus, naver_plus_membership, netflix, tving, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: points, program: mysinhan_point, rate: 100}
+        limits:
+          - per: month
+            amount: {2000000: 2000, 3000000: 5000}
+        tiers: {from: 2000000}
+        unmodeled: [유튜브 프리미엄은 PC 정기결제만 적립한다]
+    unmodeled: [담을수록 서비스의 결제계좌 일 잔액 조건(전월 60만원 이상 이용과 일 잔액 100만원·200만원 이상 영업일 15일)은 계좌 잔액을 알 수 없어 계산하지 않는다. 카드 전월 이용금액 200만원·300만원 조건만 담았다, 모을수록 서비스의 포인트박스 10% 추가 입금은 계산하지 않는다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 서비스는 영역별로 이용한 거래 순서대로 적용한다]
+notes: '신한카드 상품 페이지 기준. 신한 슈퍼SOL 앱에서 신청, 연회비 없음, 신한은행 결제계좌만. SOL포인트 1P는 마이신한포인트 1P와 같아 mysinhan_point로 담았다. 전월 20만원 이상 기본 0.2%·특별 1.0%, 60만원 이상 기본 0.4%·특별 2.0%, 기본과 특별을 합쳐 월 3만P. 특별 영역은 병원·마트·카페 오프라인 결제로 영역별 월 30만원 이용금액까지, 특별 영역 가맹점과 OTT·멤버십은 기본 적립에서 빠진다. 취소는 국내는 처음 승인된 달, 해외는 취소 전표 매입 달에서 뺀다. 신규 회원은 등록월+1개월까지 20만 구간. 실적 제외: 카드대출, 수수료·이자, 기프트·선불카드, 지방세·국세·지방세외수입·환경개선부담금, 4대보험, 스쿨뱅킹·대학 등록금, 아파트관리비·도시가스·전기·TV수신료·수도요금, 상품권·선불전자지급수단, 포인트·캐시 충전, 거래 취소.'
