@@ -1,0 +1,130 @@
+schema_version: 2
+id: kb-09138
+issuer: kb
+name: HERITAGE Classic(할인형)
+short_name: KB HERITAGE Classic 할인형
+kind: credit
+product_codes:
+  - '09138'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 127000}
+  - {scope: global, brand: mastercard, amount: 127000}
+  - {scope: global, brand: k_world_jcb, amount: 127000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09138', fetched_at: '2026-10-12', review_no: 제2024-C1a-14404호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 전용 가맹점 결제와 할인하지 않는 일부 간편결제는 할인에서 빠질 수 있다]
+    limits:
+      - {key: flex, per: quarter, count: 1}
+      - {key: car_life, per: month, amount: 10000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: special, pick: best}
+    benefits:
+      - key: base-1
+        title: 국내외 가맹점 1% 청구할인
+        source: page
+        evidence: [국내외 가맹점 1% 청구할인, '전월 이용실적 50만원 이상, 할인한도 없음', '기본 서비스 제외: 쿠폰 서비스 적용 매출, 무이자할부 이용금액, 단기카드대출(현금서비스), 장기카드대출(카드론), 상품권 및 선불카드(선불전자지급수단 포함) 구입·충전금액, 아파트관리비, 유치원/초·중·고 학교 납입금 전체, 정부지원금(보육료/유치원보조비/바우처 이용금액 등), 대학(원) 등록금, 국세, 지방세, 공과금(전기/수도 등), 4대 사회보험료(건강/연금/고용/산재), 각종 수수료 및 이자, 연체료, 연회비, 신차구매 청구(환급) 할인 전표 전체, RF후불교통요금, 취소금액']
+        target:
+          exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, insurance.social, tax, transit.bus_city, transit.subway, utility]
+          all: true
+        reward: {type: billing_discount, rate: 1}
+        tiers: {from: 500000}
+        unmodeled: [정부지원금 결제와 신차구매청구(환급)할인 전표는 할인에서 빠진다, 시내버스·지하철은 후불교통만 빠지지만 덜 주는 쪽으로 업종 전체를 뺐다]
+      - key: special-online-0-2
+        title: '[특별 쇼핑] 온라인몰 KB Pay 0.2% 추가 청구할인'
+        source: page
+        evidence: ['특별 서비스: 생활밀착 4개 영역 1.2% 청구할인 (기본 1% + 추가 0.2%)', '온라인몰: 네이버플러스 스토어/쿠팡/G마켓/11번가/SSG.COM | KB Pay 결제 시에만 할인', '상품권, 여행, 티켓, 도서, 배달, 멤버십 구독료, 외부 제휴몰, 별도 팝업 사이트 제외']
+        target:
+          merchants: [coupang, eleven_st, gmarket, naver_plus_store, ssg_com]
+        when:
+          - payment: [kb_pay]
+          - {channel: online}
+        reward: {type: billing_discount, rate: 0.2}
+        tiers: {from: 500000}
+        stack: special
+      - key: special-offline-0-2
+        title: '[특별 쇼핑·생활] 백화점·마트·음식점·커피·편의점 0.2% 추가 청구할인'
+        source: page
+        evidence: ['백화점, 대형마트, 슈퍼마켓 | 오프라인 결제 건만', '음식: 한식/일식/중식/양식/기타음식점/뷔페/패밀리레스토랑/휴게음식점/패스트푸드 | 오프라인 결제 건만', '커피: 커피 오프라인 매장', 편의점은 오프라인 결제 건만]
+        target:
+          categories: [cafe, convenience, department_store, grocery_mart, restaurant.fastfood, restaurant.general]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 0.2}
+        tiers: {from: 500000}
+        stack: special
+        unmodeled: [스타벅스 사이렌오더도 대상이지만 온라인 결제로 기록되면 계산하지 않는다]
+      - key: special-other-0-2
+        title: '[특별 생활·교육·건강] 택시·학원·학습지·병원 0.2% 추가 청구할인'
+        source: page
+        evidence: ['생활 | 편의점, 택시', '교육 | 학원: 문리계학원/외국어학원/예체능계학원/기술사무가정계학원/자동차학원/기타학원, 학습지, 독서실', '건강 | 병원: 종합병원/일반병원(치과/한방)/일반의원(치과/한의원), 건강검진센터']
+        target:
+          categories: [education.academy, education.study_material, hospital, taxi]
+        reward: {type: billing_discount, rate: 0.2}
+        tiers: {from: 500000}
+        stack: special
+        unmodeled: [독서실은 담을 업종이 없어 계산하지 않는다]
+      - key: flex-online-10000
+        title: '[Flex] 항공·온라인면세점 건당 20만원 이상 1만원 청구할인'
+        source: page
+        evidence: ['Flex 서비스: 건당 20만원 이상 결제 시 1만원 청구할인, 분기당 영역 통합 1회', '온라인항공: 대한항공/아시아나항공 공식 홈페이지·앱 직판항공권, 외화 결제 건 제외', '온라인면세: 롯데면세점/신라면세점/신세계면세점 공식 홈페이지·앱 결제 시만']
+        target:
+          merchants: [asiana_airlines, korean_air, lotte_dfs_online, shilla_dfs_online, shinsegae_dfs_online]
+        when:
+          - amount: {min: 200000}
+          - {channel: online}
+          - {region: domestic}
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {shared: flex}
+        tiers: {from: 500000}
+        stack: special
+        exclude_applied: 1
+      - key: flex-offline-10000
+        title: '[Flex] 호텔·스포츠·미용실 건당 20만원 이상 1만원 청구할인'
+        source: page
+        evidence: [호텔 | 특급/일반/기타관광호텔 | 오프라인 결제 건만, 스포츠 | 종합스포츠센터/레포츠클럽/골프장/골프연습장/요가/테니스장/볼링장/스키장/수영장/스포츠용품점/레저용품점, 미용실 | 미용실]
+        target:
+          categories: [beauty.salon, sports, travel.hotel]
+        when:
+          - amount: {min: 200000}
+          - {channel: offline}
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {shared: flex}
+        tiers: {from: 500000}
+        stack: special
+        exclude_applied: 1
+      - key: car-life-10
+        title: '[카 라이프] 주차·세차 10% 청구할인'
+        source: page
+        evidence: ['카(Car) 라이프 서비스: 주차/세차 10% 청구할인, 월 1만원', 전월 이용실적 50만원 이상 조건, 주유소 내 세차장은 업종분류 기준에 따라 제외될 수 있음]
+        target:
+          categories: [car.car_wash, car.parking]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: car_life}
+        tiers: {from: 500000}
+        stack: special
+        exclude_applied: 1
+    unmodeled: [연 1회 쿠폰(포인트리 8만점·롯데백화점 상품권 8만원·CGV 씨네드쉐프 9만원 중 택1)과 공항 라운지·발레파킹·금융 수수료 면제는 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 실적 없이 할인을 주는 신규 특례는 계산하지 않는다, 정부지원금과 무승인전표(자판기·터널 이용료·항공기내 이용)는 실적에서 빠진다, 할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: 'revisions[0].limits[car_life]', question: 원문 표가 주차 행에만 월 1만원을 적고 세차 행에는 한도를 적지 않았다. 덜 주는 쪽으로 주차와 세차가 월 1만원을 함께 쓴다고 두었다, assumed: shared}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 특별 서비스 1.2%는 기본 1%와 추가 0.2%를 다른 묶음에 두어 더한다. 특별·Flex·카 라이프는 서로 겹치지 않아 한 묶음이다. Flex와 카 라이프 할인을 받은 결제는 실적에서 빠진다.
