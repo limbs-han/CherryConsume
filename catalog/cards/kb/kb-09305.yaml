@@ -1,0 +1,107 @@
+schema_version: 2
+id: kb-09305
+issuer: kb
+name: BeV Ⅴ 카드(포인트형)
+short_name: KB BeV Ⅴ 포인트형
+kind: credit
+product_codes:
+  - '09305'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 295000}
+  - {scope: global, brand: mastercard, amount: 300000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09305', fetched_at: '2026-10-12', review_no: 제2026-C1a-04968호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, utility]
+    limits:
+      - {key: points, per: month, amount: 500000}
+    benefits:
+      - key: weekday-base-1-2
+        title: 주중(월~목) 전 가맹점 1.2% 포인트리
+        source: page
+        evidence: [주중(월요일~목요일) 전 가맹점 기본 1.2% 포인트리 / 일반업종(커피/편의점/자동납부) 이용 시 1.5% 포인트리 적립, 매월 1일 ~말일까지 (승인시점 기준) 이용금액 월 최대 50만점 적립, 50만원 이상일 경우에만 포인트리 적립 서비스가 제공되며 월 최대 50만점까지 적립됩니다.]
+        target: {all: true}
+        when:
+          - day:
+              in: [mon, tue, wed, thu]
+        reward: {type: points, program: kb_pointree, rate: 1.2}
+        limits:
+          - {shared: points}
+        tiers: {from: 500000}
+      - key: weekday-daily-1-5
+        title: 주중(월~목) 커피·편의점·자동납부 1.5% 포인트리
+        source: page
+        evidence: [일반업종(커피/편의점/자동납부) 이용 시 1.5% 포인트리 적립, '자동납부 업종: 이동통신/아파트관리비/도시가스 업종에 한함', 특별 적립 서비스는 국내 가맹점 이용 시에 한하여 제공됩니다.]
+        target:
+          categories: [cafe, convenience]
+        when:
+          - region: domestic
+            day:
+              in: [mon, tue, wed, thu]
+        reward: {type: points, program: kb_pointree, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 500000}
+        unmodeled: [PG 결제와 입점 매장 결제는 기본 1.2%만 받는다]
+      - key: weekday-autopay-1-5
+        title: 주중(월~목) 이동통신·아파트관리비 자동납부 1.5% 포인트리
+        source: page
+        evidence: ['자동납부 업종: 이동통신/아파트관리비/도시가스 업종에 한함']
+        target:
+          categories: [apartment_fee, telecom.mobile]
+        when:
+          - region: domestic
+            billing: [autopay]
+            day:
+              in: [mon, tue, wed, thu]
+        reward: {type: points, program: kb_pointree, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 500000}
+        unmodeled: [도시가스 자동납부도 1.5% 대상이지만 공과금 적립 제외와 겹쳐 덜 주는 쪽으로 빼 두었다]
+      - key: weekend-base-1-5
+        title: 주말(금~일) 전 가맹점 1.5% 포인트리
+        source: page
+        evidence: [주말(금요일~일요일) 전 가맹점 기본 1.5% 포인트리 / 프리미엄 업종(골프장/호텔/면세점(기내 제외)) 이용 시 3% 포인트리 적립]
+        target: {all: true}
+        when:
+          - day:
+              in: [fri, sat, sun]
+        reward: {type: points, program: kb_pointree, rate: 1.5}
+        limits:
+          - {shared: points}
+        tiers: {from: 500000}
+      - key: weekend-dutyfree-3
+        title: 주말(금~일) 면세점 3% 포인트리
+        source: page
+        evidence: [프리미엄 업종(골프장/호텔/면세점(기내 제외)) 이용 시 3% 포인트리 적립, PG(인터넷)업체를 통한 결제 및 골프장, 호텔, 면세점 매장 등에 입점한 가맹점에서 이용한 이용금액은 기본 적립 대상입니다., 특별 적립 서비스는 국내 가맹점 이용 시에 한하여 제공됩니다.]
+        target:
+          categories: [travel.duty_free]
+        when:
+          - region: domestic
+            channel: offline
+            day:
+              in: [fri, sat, sun]
+        reward: {type: points, program: kb_pointree, rate: 3}
+        limits:
+          - {shared: points}
+        tiers: {from: 500000}
+        unmodeled: [기내 면세점은 빠진다]
+    unmodeled: ['주말 골프장·호텔 3%는 공통 업종(골프 전체, 숙박 전체)이 원문보다 넓어 기본 1.5%로 계산한다', '연 1회 쿠폰(웹투어 숙박 25만원, 호텔 뷔페 25만원, 롯데백화점 상품권 22만원, 포인트리 22만점 중 택1)은 첫해 100만원, 다음 해부터 전년 1,000만원 이용 시 준다. 결제 혜택이 아니라 담지 않는다', '해외여행상품 현장할인, 렌터카, 골프, 공항 같은 BeV Ⅴ 전용 서비스는 담지 않는다', 무승인전표(자판기·터널 통행료·항공기 내 이용)는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙의 시작일을 원문에서 찾지 못했다. 수집일을 잠정 시작일로 둔다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 옮겼다. 적립은 전월 50만원 이상일 때만 주고 월 50만점까지다. 연회비는 K-WORLD(UPI) 29만5천원, 마스터 30만원이다.
