@@ -1,0 +1,48 @@
+schema_version: 2
+id: kb-02210
+issuer: kb
+name: KB국민 비상온리원 카드
+short_name: KB 비상온리원
+kind: credit
+product_codes:
+  - '02210'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: k_world_jcb, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02210', fetched_at: '2026-10-12', review_no: 제2022-C1a-09734호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행 가맹점과 일부 간편결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    benefits:
+      - key: onlyone-autopay
+        title: 비상온리원 자동납부 요금 월 1만2천원·1만7천원 청구할인
+        source: page
+        evidence: [비상온리원요금 자동납부 | 1만2천원 | 1만7천원, 1구간(30만원 이상) | 2구간(70만원 이상), 할인금액보다 자동납부 승인금액이 작을 경우 승인금액만큼 할인 적용됩니다., 비상온리원 자동납부 승인 건이 여러 건인 경우 합산하여 월 할인한도 내에서 할인 됩니다.]
+        target:
+          merchants: [visang_onlyone]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 12000, 700000: 17000}
+        tiers: {from: 300000}
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 없이 1구간 할인을 주는 신규 특례는 생애 최초 본인 발급만 받으므로 계산하지 않는다, 비상온리원 고객센터에 이 카드로 자동납부를 따로 신청해야 할인된다, 무승인전표(공항버스·자판기·터널이용료·항공기내 이용)와 정부지원금은 실적에서 빠진다, 할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2021년 4월 30일 출시만 적었다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 비상온리원은 비상교육의 초중등 스마트 학습 서비스다. 연회비는 기본 7천원과 제휴 8천원을 더한 1만5천원이다. KB Pay에서만 신청한다.
