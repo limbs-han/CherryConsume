@@ -1,0 +1,47 @@
+schema_version: 2
+id: kb-02249
+issuer: kb
+name: KB국민 HCN카드
+short_name: KB HCN
+kind: credit
+product_codes:
+  - '02249'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02249', fetched_at: '2026-10-12', review_no: 제2021-C1a-09697호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2021-04-30'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [별도 가맹점번호로 승인되는 PG와 일부 간편결제는 할인에서 빠질 수 있다]
+    benefits:
+      - key: hcn-autopay
+        title: HCN 요금 자동납부 월 최대 1만2천원·1만7천원 할인
+        source: page
+        evidence: [HCN 요금 자동납부 1구간(30만원 이상) 1만2천원 2구간(70만원 이상) 1만7천원, 할인금액보다 자동납부 승인금액이 작을 경우 승인금액만큼 할인 적용됩니다., HCN 자동납부 승인 건이 여러 건인 경우 합산하여 월 할인한도 내에서 할인 됩니다., 최초 카드 사용 등록일로부터 다음달 말일까지는 1구간 할인 서비스가 적용됩니다.]
+        target:
+          merchants: [hcn]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 12000, 700000: 17000}
+        tiers: {from: 300000}
+    unmodeled: ['정부지원금(보육료, 유치원보조비, 바우처) 이용금액은 실적에서 빠진다', 가족카드 이용금액이 실적에 합산된다]
+notes: HCN 케이블 요금 자동납부 전용 할인 카드. KB Pay에서만 신청한다.
