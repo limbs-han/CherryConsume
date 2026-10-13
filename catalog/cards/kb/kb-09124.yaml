@@ -1,0 +1,205 @@
+schema_version: 2
+id: kb-09124
+issuer: kb
+name: KB YOU With 카드
+short_name: KB YOU With
+kind: credit
+product_codes:
+  - '09124'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: domestic, brand: local, form: mobile, amount: 9000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 9000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09124', fetched_at: '2026-10-12', review_no: 제2026-C1a-04223호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 전용 가맹점 결제와 할인하지 않는 일부 간편결제, 백화점·대형마트 일부 입점 매장은 할인에서 빠진다']
+    options:
+      - key: first
+        title: 1st 선택서비스
+        choices:
+          - {key: mart, title: 마트중심}
+          - {key: department, title: 백화점중심}
+          - {key: neighborhood, title: 동네중심}
+        default: null
+        change: next_month
+      - key: second
+        title: 2nd 선택서비스
+        choices:
+          - {key: couple, title: 둘이중심}
+          - {key: kids, title: 자녀중심}
+          - {key: care, title: 돌봄중심}
+        default: null
+        change: next_month
+    limits:
+      - key: first
+        per: month
+        amount: {400000: 8000, 800000: 11000, 1200000: 13000, 2000000: 30000}
+      - key: second
+        per: month
+        amount: {400000: 7000, 800000: 9000, 1200000: 12000, 2000000: 15000}
+        adjust:
+          - when:
+              months: [5]
+            multiply: 2
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: telecom-10
+        title: 이동통신 자동납부 10% 청구할인
+        source: page
+        evidence: ['YOU With 기본 서비스 | 이동통신 자동납부 | 10% | 5,000원', 'SKT, KT, LG U+, Liiv M 이동통신 자동납부 (인터넷·IPTV 등 결합상품 제외)', KB YOU With 카드할인서비스는 전월이용실적 40만원 이상 시 월 단위로 제공되며]
+        target:
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: [인터넷·IPTV 결합상품 요금은 할인에서 빠진다]
+      - key: first-mart-5
+        title: '[1st 마트중심] 이마트·롯데마트·홈플러스 5% 청구할인'
+        source: page
+        evidence: [마트중심 5% 청구할인 (건당 3만원 이상 매출에 한하여 서비스 적용), '대형마트 (이마트, 롯데마트, 홈플러스)', '온라인(PG) 결제, 상품권 구매 및 임대매장, SSM 이용금액 제외', '1st 선택 | 5% | 8,000원 | 11,000원 | 13,000원 | 30,000원', 선택한 한 개의 서비스에 대하여 적용]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - option:
+              first: [mart]
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: first}
+        tiers: {from: 400000}
+      - key: first-department-5
+        title: '[1st 백화점중심] 롯데·신세계·현대백화점 5% 청구할인'
+        source: page
+        evidence: [백화점중심 5% 청구할인 (건당 3만원 이상 매출에 한하여 서비스 적용), '백화점 (롯데백화점, 신세계백화점, 현대백화점)', '온라인, 임대매장 결제, 상품권 구매 제외']
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - option:
+              first: [department]
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: first}
+        tiers: {from: 400000}
+        unmodeled: [백화점 임대매장 결제는 할인에서 빠진다]
+      - key: first-dining-fuel-5
+        title: '[1st 마트·백화점중심] 음식점·SK주유소 5% 청구할인'
+        source: page
+        evidence: ['음식점 (한식, 중식, 일식, 양식) 주유소 (SK 주유소, SK 충전소)', 건당 3만원 이상 매출에 한하여 서비스 적용, '음식점: 온라인결제(PG) 제외', '주유소: 상품권(각종 지류 포함) 구입, 선불식 충전카드 이용 제외']
+        target:
+          categories: [restaurant.general]
+          merchants: [sk_energy]
+        when:
+          - option:
+              first: [mart, department]
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: first}
+        tiers: {from: 400000}
+      - key: first-neighborhood-5
+        title: '[1st 동네중심] SSM·배달앱·세탁소·약국·제과점·미용실 5% 청구할인'
+        source: page
+        evidence: ['동네중심 | SSM(이마트에브리데이/롯데슈퍼/홈플러스익스프레스), 배달앱(배달의민족/요기요), 동네상권(세탁소, 정육점, 약국, 제과점/아이스크림점, 미용원, 서점)', '배달앱은 상품권(선물하기 등), 선불카드 충전, 배달현장 결제 제외. 동네상권은 온라인(PG) 결제 제외']
+        target:
+          categories: [beauty.salon, laundry, pharmacy, restaurant.bakery]
+          merchants: [baemin, emart_everyday, homeplus_express, lotte_super, yogiyo]
+        when:
+          - option:
+              first: [neighborhood]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: first}
+        tiers: {from: 400000}
+        unmodeled: [정육점과 서점은 담을 업종이 없어 계산하지 않는다, 동네상권 업종의 온라인 결제와 배달앱 배달현장 결제는 할인에서 빠진다]
+      - key: second-couple-10
+        title: '[2nd 둘이중심] 영화관·커피·주차장·티켓 10% 청구할인'
+        source: page
+        evidence: ['둘이중심 | 온라인 티켓(인터파크, 티켓링크, 공연 예매에 한함), 영화관·공연장/전시장·경기장(현장구매에 한함), 커피/음료전문점, 주차장', '2nd 선택 | 10% | 7,000원 | 9,000원 | 12,000원 | 15,000원']
+        target:
+          categories: [cafe, car.parking, movie]
+          merchants: [interpark_ticket, ticketlink]
+        when:
+          - option:
+              second: [couple]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: second}
+        tiers: {from: 400000}
+        unmodeled: ['인터파크·티켓링크는 공연 예매만, 영화관은 현장구매만 대상이다. 공연장·전시장·경기장 현장구매는 담을 업종이 없어 계산하지 않는다']
+      - key: second-kids-academy-10
+        title: '[2nd 자녀중심] 학원 10% 청구할인'
+        source: page
+        evidence: [자녀중심 10% 청구할인 (일부 건당 3만원이상 매출에 한하여 서비스 적용), '문리계학원, 외국어학원, 예체능학원 | 건 당 3만원이상 매출서비스에 한함']
+        target:
+          categories: [education.academy]
+        when:
+          - option:
+              second: [kids]
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: second}
+        tiers: {from: 400000}
+      - key: second-kids-other-10
+        title: '[2nd 자녀중심] CU·GS25·패스트푸드 10% 청구할인'
+        source: page
+        evidence: ['편의점(CU, GS25), 독서실, 패스트푸드점', '온라인(PG) 결제 제외, 백화점·대형마트 일부 입점 매장 제외']
+        target:
+          categories: [restaurant.fastfood]
+          merchants: [cu, gs25]
+        when:
+          - option:
+              second: [kids]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: second}
+        tiers: {from: 400000}
+        unmodeled: [독서실은 담을 업종이 없어 계산하지 않는다]
+      - key: second-care-10
+        title: '[2nd 돌봄중심] 병원 10% 청구할인'
+        source: page
+        evidence: [돌봄중심 10% 청구할인 (건당 3만원이상 매출에 한하여 서비스 적용), '종합병원, 일반병원(치과/한방), 일반의원(치과/한의원), 한약방, 건강식품점', 병원·의원 온라인(PG) 결제 제외]
+        target:
+          categories: [hospital]
+        when:
+          - option:
+              second: [care]
+          - amount: {min: 30000}
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: second}
+        tiers: {from: 400000}
+        unmodeled: [한약방과 건강식품점은 담을 업종이 없어 계산하지 않는다]
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 1구간 서비스를 주는 신규 특례는 계산하지 않는다, 전월실적 35만원 이상 40만원 미만 고객이 신청하는 전월실적 채워드림(월 1회·연 2회)은 계산하지 않는다, 정부지원금과 무승인전표(자판기·터널이용료·항공기내 이용)는 실적에서 빠진다, 할인 한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2022.12.26 출시만 적었다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(RF후불교통요금) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+  - {path: status, question: 데스크톱 페이지가 기존 보유 고객의 재발급 신청만 된다고 안내한다. 신규 발급이 끝났는지 확인해야 한다, assumed: on_sale}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 할인받은 결제는 금액 전체가 실적에서 빠진다. 5월 Happy Family Month에는 2nd 한도가 두 배다.
