@@ -1,0 +1,119 @@
+schema_version: 2
+id: kb-09167
+issuer: kb
+name: KB국민 가온글로벌카드
+short_name: KB 가온글로벌
+kind: credit
+product_codes:
+  - '09167'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09167', fetched_at: '2026-10-12', review_no: 181002-03135-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2018-10-02'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax.local]
+      unmodeled: [PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 적립에서 빠질 수 있다, 정부지원금 결제는 적립에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    stacks:
+      - {key: main, pick: best}
+      - {key: area, pick: best}
+      - {key: overseas-special, pick: best}
+    benefits:
+      - key: domestic-base-0-3
+        title: 국내 가맹점 0.3% 포인트리 기본 적립
+        source: page
+        evidence: [국내 전 가맹점에서 포인트리 0.3% 기본 적립 됩니다., '전월 실적 조건, 적립한도 및 횟수 제한이 없습니다.']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 0.3}
+        stack: main
+      - key: shopping-0-7
+        title: 소셜커머스·온라인마켓·커피 0.7% 추가 적립
+        source: page
+        evidence: ['3대 소셜커머스: 쿠팡, 티켓몬스터, 위메프', '3대 온라인마켓: G마켓, 옥션, 11번가', 커피전문점 업종, 전월 국내 이용실적 20만원 이상 시 제공됩니다., 적립한도 및 횟수 제한이 없습니다., 최초 카드 사용등록일로부터 다음달 말일까지 KB국민 가온글로벌카드 이용실적이 없는 경우에도 서비스가 제공됩니다., '「KB국민 가온글로벌카드」로 추가 적립(쇼핑,여행) 받은 이용금액(해당매출전체)는 이용실적 제외']
+        target:
+          categories: [cafe]
+          merchants: [auction, coupang, eleven_st, gmarket, tmon, wemakeprice]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 0.7}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: area
+        exclude_applied: 1
+      - key: travel-0-7
+        title: 면세점·여행사·항공사 0.7% 추가 적립
+        source: page
+        evidence: [면세점 업종, 여행사 업종, 항공사 업종, 전월 국내 이용실적 20만원 이상 시 제공됩니다., 적립한도 및 횟수 제한이 없습니다.]
+        target:
+          categories: [travel.agency, travel.airline, travel.duty_free]
+        when:
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 0.7}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: area
+        exclude_applied: 1
+      - key: overseas-base-1
+        title: 해외 가맹점 1% 포인트리 기본 적립
+        source: page
+        evidence: [해외 전 가맹점에서 포인트리 1.0% 기본 적립 됩니다., '전월 실적 조건, 적립한도 및 횟수 제한이 없습니다.']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: kb_pointree, rate: 1}
+        stack: main
+      - key: overseas-extra-1
+        title: 해외 가맹점 1% 포인트리 추가 적립
+        source: page
+        evidence: [해외 전 가맹점에서 포인트리 1.0% 추가 적립 됩니다., 전월 국내 이용실적 20만원 이상 시 제공됩니다., 적립한도 및 횟수 제한이 없습니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: kb_pointree, rate: 1}
+        tiers:
+          from: 200000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: area
+      - key: overseas-special-1
+        title: 해외 가맹점 1% 포인트리 특별 적립
+        source: page
+        evidence: [해외 전 가맹점에서 포인트리 1.0% 추가 적립 됩니다., 전월 국내 이용실적 50만원 이상 시 제공됩니다., 이용금액 50만원까지 해외가맹점 특별적립 서비스가 제공됩니다. (별도 실적 유예기간 없음)]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: kb_pointree, rate: 1}
+        limits:
+          - {per: month, base: 500000}
+        tiers: {from: 500000}
+        stack: overseas-special
+    unmodeled: [이하넥스·아이포터 해외 배송대행 배송료 5% 현장할인은 담을 가맹점이 없어 계산하지 않는다, 정부지원금과 대중교통 이용 등 무승인 전표는 실적에서 빠진다, 해외 이용금액은 일시불 매입 완료 기준이고 매입이 늦으면 적용 월이 달라질 수 있다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2015.12.11 출시와 2018.10.02 심의번호만 적었다. 심의일을 현재 규칙의 시작일로 잠정 적용한다., assumed: '2018-10-02'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 대중교통 무승인 전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 쇼핑·여행 추가 적립을 받은 결제는 그 금액 전체가 실적에서 빠진다. 해외 특별 적립은 실적 유예가 없다.
