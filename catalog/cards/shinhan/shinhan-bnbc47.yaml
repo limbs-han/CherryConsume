@@ -1,0 +1,441 @@
+schema_version: 2
+id: shinhan-bnbc47
+issuer: shinhan
+name: 신한카드 Deep Once Plus
+short_name: 신한 Deep Once Plus
+search_names: [딥원스플러스]
+kind: credit
+product_codes: [BNBC47]
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 27000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1192801_2207.html', fetched_at: 2026-10-12, review_no: 제2021-C1a-04525호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2021-05-28
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, transit.bus_city, transit.subway]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      unmodeled: [이 카드로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 적립하지 않는다]
+    limits:
+      - {key: rental-area, per: month, count: 5}
+      - {key: life-area, per: month, count: 3}
+      - {key: digital-area, per: month, count: 3}
+    stacks:
+      - {key: plus-cafe}
+      - {key: plus-convenience}
+      - {key: plus-overseas}
+    benefits:
+      - key: rental-lgcare
+        title: LG전자 케어솔루션 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [lg_appliance_subscription]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-coway
+        title: 코웨이 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [coway, coway_rental]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-skmagic
+        title: SK매직 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [sk_magic]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-cuckoo
+        title: 쿠쿠홈시스 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [cuckoo_rental]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-bs
+        title: BS렌탈 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [bs_rental]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-wellrix
+        title: 웰릭스렌탈 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [wellrix_rental]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-nexen
+        title: 넥센타이어 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [nexen_tire_rental]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-bodyfriend
+        title: 바디프랜드 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [bodyfriend_rental]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: rental-wells
+        title: 교원웰스 렌탈 자동이체 적립
+        source: page
+        evidence: ['10개 렌탈사에서 이용한 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 7천 포인트, 월 최대 5건까지 적립', 건당 이용금액 1만원 이상인 경우에 서비스 적용됩니다., '40만원 이상 3천 포인트, 80만원 이상 5천 포인트, 120만원 이상 7천 포인트', '렌탈 업체별 월 1건, 렌탈 서비스 통합 월 5건까지 적립']
+        target:
+          merchants: [wells]
+        when:
+          - amount: {min: 10000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 3000, 800000: 5000, 1200000: 7000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: rental-area}
+        tiers: {from: 400000}
+      - key: life-apartment
+        title: 아파트관리비 자동이체 적립
+        source: page
+        evidence: ['생활월납 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다., '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '생활월납 대상별 월 1건, 생활월납 서비스 통합 월 3건까지 적립']
+        target:
+          categories: [apartment_fee]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life-area}
+        tiers: {from: 400000}
+      - key: life-mobile
+        title: 이동통신요금 자동이체 적립
+        source: page
+        evidence: ['생활월납 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다., '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '생활월납 대상별 월 1건, 생활월납 서비스 통합 월 3건까지 적립']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life-area}
+        tiers: {from: 400000}
+      - key: life-gas
+        title: 도시가스 자동이체 적립
+        source: page
+        evidence: ['생활월납 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다., '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '생활월납 대상별 월 1건, 생활월납 서비스 통합 월 3건까지 적립']
+        target:
+          categories: [utility.gas]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life-area}
+        tiers: {from: 400000}
+      - key: life-electricity
+        title: 전기요금 자동이체 적립
+        source: page
+        evidence: ['생활월납 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다., '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '생활월납 대상별 월 1건, 생활월납 서비스 통합 월 3건까지 적립']
+        target:
+          categories: [utility.electricity]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life-area}
+        tiers: {from: 400000}
+      - key: life-thinkbig
+        title: 웅진씽크빅 자동이체 적립
+        source: page
+        evidence: ['생활월납 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다., '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '생활월납 대상별 월 1건, 생활월납 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [woongjin_thinkbig]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life-area}
+        tiers: {from: 400000}
+      - key: life-yedaham
+        title: 예다함 자동이체 적립
+        source: page
+        evidence: ['생활월납 자동이체 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다., '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '생활월납 대상별 월 1건, 생활월납 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [yedaham]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: life-area}
+        tiers: {from: 400000}
+      - key: digital-netflix
+        title: 넷플릭스 정기결제 적립
+        source: page
+        evidence: ['디지털 구독 서비스 정기결제 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다.(정기결제 요금이 6천원 미만인 경우 서비스 제외), '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '디지털 구독 대상 업체별 월 1건, 디지털 구독 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [netflix]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay, subscription]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: digital-area}
+        tiers: {from: 400000}
+      - key: digital-wavve
+        title: 웨이브 정기결제 적립
+        source: page
+        evidence: ['디지털 구독 서비스 정기결제 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다.(정기결제 요금이 6천원 미만인 경우 서비스 제외), '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '디지털 구독 대상 업체별 월 1건, 디지털 구독 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [wavve]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay, subscription]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: digital-area}
+        tiers: {from: 400000}
+      - key: digital-watcha
+        title: 왓챠 정기결제 적립
+        source: page
+        evidence: ['디지털 구독 서비스 정기결제 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다.(정기결제 요금이 6천원 미만인 경우 서비스 제외), '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '디지털 구독 대상 업체별 월 1건, 디지털 구독 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [watcha]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay, subscription]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: digital-area}
+        tiers: {from: 400000}
+      - key: digital-melon
+        title: 멜론 정기결제 적립
+        source: page
+        evidence: ['디지털 구독 서비스 정기결제 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다.(정기결제 요금이 6천원 미만인 경우 서비스 제외), '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '디지털 구독 대상 업체별 월 1건, 디지털 구독 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [melon]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay, subscription]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: digital-area}
+        tiers: {from: 400000}
+      - key: digital-genie
+        title: 지니뮤직 정기결제 적립
+        source: page
+        evidence: ['디지털 구독 서비스 정기결제 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다.(정기결제 요금이 6천원 미만인 경우 서비스 제외), '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '디지털 구독 대상 업체별 월 1건, 디지털 구독 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [genie]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay, subscription]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: digital-area}
+        tiers: {from: 400000}
+      - key: digital-millie
+        title: 밀리의서재 정기결제 적립
+        source: page
+        evidence: ['디지털 구독 서비스 정기결제 거래 건수에 대해 전월 이용금액에 따라 건별 최대 6천 포인트, 월 최대 3건까지 적립', 건당 이용금액 6천원 이상인 경우에 서비스 적용됩니다.(정기결제 요금이 6천원 미만인 경우 서비스 제외), '40만원 이상 2천 포인트, 80만원 이상 4천 포인트, 120만원 이상 6천 포인트', '디지털 구독 대상 업체별 월 1건, 디지털 구독 서비스 통합 월 3건까지 적립']
+        target:
+          merchants: [millie]
+        when:
+          - amount: {min: 6000}
+          - billing: [autopay, subscription]
+        reward:
+          type: points
+          program: mysinhan_point
+          fixed: {400000: 2000, 800000: 4000, 1200000: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: digital-area}
+        tiers: {from: 400000}
+      - key: plus-cafe
+        title: 커피 업종 월 5만원 이상 3천P
+        source: page
+        evidence: [Plus 서비스 대상 영역별 월(1일~말일) 누적 5만원 이상 이용 시 영역별 포인트 적립, 커피(업종) 3천 포인트, '상품권 구입·충전, 선물하기, 선불카드(선불전자 지급수단 포함) 구입· 충전 제외/스타벅스 자동충전 제외']
+        target:
+          categories: [cafe]
+        when:
+          - month_total: {min: 50000}
+        reward: {type: points, basis: month_total, program: mysinhan_point, fixed: 3000}
+        tiers: {from: 400000}
+        stack: plus-cafe
+      - key: plus-convenience
+        title: 편의점 업종 월 5만원 이상 3천P
+        source: page
+        evidence: [Plus 서비스 대상 영역별 월(1일~말일) 누적 5만원 이상 이용 시 영역별 포인트 적립, 편의점(업종) 3천 포인트, 온라인 결제 및 배달앱 결제 제외]
+        target:
+          categories: [convenience]
+        when:
+          - {channel: offline}
+          - month_total: {min: 50000}
+        reward: {type: points, basis: month_total, program: mysinhan_point, fixed: 3000}
+        tiers: {from: 400000}
+        stack: plus-convenience
+      - key: plus-overseas
+        title: 해외 일시불 월 5만원 이상 2천P
+        source: page
+        evidence: [Plus 서비스 대상 영역별 월(1일~말일) 누적 5만원 이상 이용 시 영역별 포인트 적립, 해외(온·오프라인 일시불 이용금액) 2천 포인트, 해외 일시불 거래 후 할부로 전환하는 경우 제외]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+          - month_total: {min: 50000}
+        reward: {type: points, basis: month_total, program: mysinhan_point, fixed: 2000}
+        tiers: {from: 400000}
+        stack: plus-overseas
+    unmodeled: [모두렌탈과 한국야쿠르트 정기주문은 공통 가맹점이 없어 계산하지 않는다, 스타벅스 카드 자동충전 적립은 선불 충전을 스타벅스만 가려낼 수 없어 계산하지 않는다, 아파트관리비에 도시가스·전기요금이 함께 청구되면 1건으로 본다, 이동통신은 순수 통신요금 자동이체만이고 약정금액 대납·지점 월납·알뜰폰은 제외한다, 같은 가맹점에 자동이체를 여러 건 등록해도 월 1건만 적립한다, 디지털 구독은 공식 홈페이지나 앱에서 직접 신청한 정기결제만이고 앱마켓 인앱결제와 통신요금 합산 결제는 제외한다, Local(국내전용) 카드는 Plus 해외 적립을 받지 못한다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, '본인과 가족카드의 전월 이용금액, 월 적립 건수와 한도를 합산한다', 백화점·할인점 입점 매장 결제와 1회성 결제는 렌탈·생활월납·디지털 구독 적립에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 시행일이 원문에 없어 심의필 날짜를 넣었다, assumed: '2021-05-28'}
+  - {path: 'revisions[0].benefits[rental-lgcare]', question: LG전자 케어솔루션을 공통 가맹점 LG전자 가전구독(lg_appliance_subscription)으로 보았다, assumed: lg_appliance_subscription}
+notes: '신한카드 상품 페이지 기준. 연회비 국내 27,000원, Mastercard 30,000원. 전월 40만/80만/120만원 이상 구간에 따라 렌탈 자동이체 건당 3천/5천/7천P(1만원 이상, 업체별 월 1건, 통합 월 5건), 생활월납 자동이체 건당 2천/4천/6천P(6천원 이상, 대상별 월 1건, 통합 월 3건), 디지털 구독 정기결제 건당 2천/4천/6천P(6천원 이상, 업체별 월 1건, 통합 월 3건). Plus는 전월 40만원 이상이면 커피·편의점 업종 각 월 누적 5만원 이상 3천P, 해외 일시불 월 5만원 이상 2천P. 신규 회원은 등록월+1개월까지 40만 구간. 실적 제외: 연회비, 카드대출, 수수료·이자, 거래취소, 기프트카드·상품권, 선불카드·선불전자지급수단. 생활월납 대상인 아파트관리비·도시가스·전기요금은 실적에 들어간다.'
