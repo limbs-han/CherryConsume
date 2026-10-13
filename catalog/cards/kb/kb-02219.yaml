@@ -1,0 +1,102 @@
+schema_version: 2
+id: kb-02219
+issuer: kb
+name: 두산베어스 KB카드
+short_name: KB 두산베어스
+search_names: [두산베어스 KB국민카드, 두산베어스 신용카드]
+kind: credit
+product_codes:
+  - '02219'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: domestic, form: mobile, amount: 9000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 9000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02219', fetched_at: '2026-10-12', review_no: 제2026-C1a-00553호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-01-28'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [결제대행업체(PG) 전용 가맹점 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: bears-ticket-goods-50
+        title: 두산베어스 홈경기 티켓·굿즈 50% 청구할인
+        source: page
+        evidence: [야구 홈경기 티켓/굿즈&용품 | 50% | 1만원 | 2만원, 30만원 이상 | 80만원 이상, '최초 카드 사용등록일(KB Pay 등 간편결제 등록 포함)로 부터 다음달 말일까지 두산베어스 KB카드 전월이용 실적 30만원 미만 시에도 30만원이상 구간 할인 제공(단, 월 할인한도는 50%까지만 적용)', '주) KBO 정규시즌 두산베어스 홈경기에 한하며, 시범경기 및 포스트시즌 제외']
+        target:
+          merchants: [doosan_bears_ticket, doosan_bears_wefan]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - per: month
+            amount: {0: 5000, 300000: 10000, 800000: 20000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [홈경기 티켓은 KBO 정규시즌 두산베어스 홈경기만 대상이고 시범경기와 포스트시즌은 빠진다, NOL 티켓에서 산 두산베어스 홈경기 티켓과 잠실야구장 NOL 상품샵 결제도 대상이지만 가맹점을 나눌 수 없어 계산하지 않는다]
+      - key: ott-30
+        title: 티빙·넷플릭스·유튜브 프리미엄·디즈니플러스 30% 청구할인
+        source: page
+        evidence: [OTT | 30% | 5천원 | 1만원, 'OTT : 티빙, 넷플릭스, 유튜브 프리미엄, 디즈니 플러스']
+        target:
+          merchants: [disney_plus, netflix, tving, youtube_premium]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - per: month
+            amount: {0: 2500, 300000: 5000, 800000: 10000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: convenience-5
+        title: CU·GS25 5% 청구할인
+        source: page
+        evidence: [편의점 | 5% | 3천원 | 5천원, '편의점 : CU, GS25']
+        target:
+          merchants: [cu, gs25]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1500, 300000: 3000, 800000: 5000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: delivery-5
+        title: 배달의민족·요기요·쿠팡이츠·마켓컬리 5% 청구할인
+        source: page
+        evidence: [배달앱 | 5% | 3천원 | 5천원, '배달앱 : 배달의 민족, 요기요, 쿠팡이츠, 마켓컬리']
+        target:
+          merchants: [baemin, coupang_eats, kurly, yogiyo]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {0: 1500, 300000: 3000, 800000: 5000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: [홈구장 F&B 20% 청구할인(월 5천원·1만원)은 잠실야구장 안 식음료 매장과 배달타자 앱 주문이 대상인데 담을 가맹점이 없어 계산하지 않는다, 월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금 결제는 실적에서 빠진다, 자판기·터널이용료·항공기내 같은 무승인 전표는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일 2026.01.28 뒤 혜택 변경 공지를 찾지 못해 출시일을 시작일로 두었다, assumed: '2026-01-28'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 RF후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 대조했다. 상품설명서 PDF 주소는 페이지에 없었다. 할인받은 결제는 전부 실적에서 빠진다. 실적 유예기간은 0 구간 한도를 30만원 구간 한도의 50%로 두어 담았다.
