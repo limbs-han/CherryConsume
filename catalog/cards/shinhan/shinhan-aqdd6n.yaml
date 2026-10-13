@@ -1,0 +1,70 @@
+schema_version: 2
+id: shinhan-aqdd6n
+issuer: shinhan
+name: 신한카드 봄
+short_name: 신한 봄
+kind: credit
+product_codes: [AQDD6N]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 17000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1221135_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2023-03-20
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility.water]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인 서비스(이벤트 포함)가 적용된 거래는 캐시백하지 않는다]
+    benefits:
+      - key: base-cashback
+        title: 국내외 0.2~0.5% 캐시백
+        source: page
+        evidence: [국내외 이용금액 캐시백, '30만원 미만 0.2%, 30만원 이상 0.5%', 월 캐시백은 캐시백 금액 한도가 없습니다., '교통 서비스 가맹점(버스/지하철 후불교통)과 디지털 구독 서비스(넷플릭스, 유튜브 프리미엄) 대상 가맹점에 대해 월 캐시백 서비스가 제공되지 않습니다.']
+        target:
+          exclude_categories: [transit.bus_city, transit.subway]
+          all: true
+          exclude_merchants: [netflix, youtube_premium]
+        reward:
+          type: cashback
+          rate: {0: 0.2, 300000: 0.5}
+      - key: transit-daily
+        title: 버스·지하철 후불교통 일 100~200원 캐시백
+        source: page
+        evidence: ['30만원 이상 50만원 미만 일 100원, 50만원 이상 일 200원', 버스/지하철 후불교통을 이용한 일수를 기준으로 서비스가 제공됩니다., 신한카드 봄(신용)으로 전월(1일~말일) 이용금액 30만원 이상 시 서비스가 제공됩니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward:
+          type: cashback
+          fixed: {300000: 100, 500000: 200}
+        limits:
+          - {per: day, count: 1}
+        tiers: {from: 300000}
+      - key: digital-subscription
+        title: 넷플릭스·유튜브 프리미엄 월 1만원 캐시백
+        source: page
+        evidence: [디지털 구독 이용금액 월 최대 1만원 캐시백, '서비스 대상: 넷플릭스, 유튜브 프리미엄', 서비스 대상 디지털 구독 이용금액이 1만원 미만인 경우 결제 금액만큼 캐시백 됩니다., 전월 이용금액 30만원 이상 시 서비스 제공, 공식 홈페이지(앱)을 통해 직접 신청한 이용건에 한하여 서비스가 제공됩니다.]
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: cashback, rate: 100}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+    unmodeled: [분기 이용금액 300만원 이상 5천원과 연 이용금액 1500만원 이상 2만원 추가 캐시백은 분기와 연 누적이라 계산하지 않는다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 서비스는 거래 순서대로 적용한다]
+notes: 신한카드 봄 상품 페이지 기준. 연회비 국내전용 1만7천원, Mastercard 2만원. 국내외 전 가맹점 캐시백은 전월 30만원 미만 0.2%, 이상 0.5%이고 한도가 없다. 버스·지하철 후불교통은 이용한 날마다 30만 구간 100원, 50만 구간 200원이다. 넷플릭스와 유튜브 프리미엄 정기결제는 전월 30만원 이상이면 월 1만원까지 결제액만큼 돌려준다. 신규 발급 회원은 등록월 다음 달 말까지 30만 구간을 적용한다. 봄(도구리) 디자인만 신규 발급이 끝났다.
