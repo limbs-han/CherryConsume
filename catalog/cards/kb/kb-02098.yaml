@@ -1,0 +1,108 @@
+schema_version: 2
+id: kb-02098
+issuer: kb
+name: 서울도시가스 KB국민카드
+short_name: KB 서울도시가스
+kind: credit
+product_codes:
+  - '02098'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 5000}
+  - {scope: global, brand: jcb, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02098', fetched_at: '2026-10-12', review_no: 제2024-C1a-14696호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, telecom.mobile, transit.bus_city, transit.subway]
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 전용 가맹점 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인과 적립에서 빠질 수 있다]
+    limits:
+      - {key: transit, per: month, amount: 5000, base: 100000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: happy, pick: best}
+    benefits:
+      - key: city-gas-5
+        title: 서울도시가스 요금 5% 청구할인
+        source: page
+        evidence: [30만원 이상 | 5% | 1만원, '할인 한도 : 월 20만원 이용금액까지 할인 적용', 서울도시가스 요금할인 서비스와 서울도시가스 요금 수납은 가정용에 한하여 제공됩니다.]
+        target:
+          merchants: [seoul_city_gas]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000, base: 200000}
+        tiers: {from: 300000, to: 300000}
+        unmodeled: [가정용 도시가스 요금만 할인한다, 최초 사용등록일 이후 60일이 포함된 달의 말일까지 실적 없이 5% 할인하는 신규 특례는 계산하지 않는다]
+      - key: city-gas-10
+        title: 서울도시가스 요금 10% 청구할인
+        source: page
+        evidence: [60만원 이상 | 10% | 2만원, '할인 한도 : 월 20만원 이용금액까지 할인 적용']
+        target:
+          merchants: [seoul_city_gas]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 20000, base: 200000}
+        tiers: {from: 600000}
+        unmodeled: [가정용 도시가스 요금만 할인한다]
+      - key: family-restaurant-10
+        title: 아웃백·빕스·생어거스틴 10% 청구할인
+        source: page
+        evidence: ['패밀리레스토랑(아웃백스테이크하우스, VIPS, 생어거스틴) 이용 시 10% 청구할인', '할인한도 : 월간 최대 20만원 이용금액까지 할인 (일 1회 / 월 2회 한도, 월 최대 2만원 할인)', 대형 할인마트, 백화점 등에 입점된 일부 매장 및 임대매장 제외, '서비스 제공 조건 : 전월 이용실적 30만원 이상인 경우 할인 적용', 최초 사용등록일 후 실적유예기간 없음]
+        target:
+          merchants: [outback, saint_augustin, vips]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, amount: 20000, count: 2, base: 200000}
+        tiers: {from: 300000}
+        unmodeled: [대형마트·백화점 입점 매장과 임대매장은 할인에서 빠진다]
+      - key: transit-postpaid-5
+        title: 후불교통 시내버스·지하철 5% 청구할인
+        source: page
+        evidence: ['후불교통(시내버스/지하철), 고속/시외버스 5% 청구 할인', '할인한도 : 월간 최대 10만원 이용금액 까지 할인 적용 (월 최대 5천원 할인)', 대중교통 할인 서비스는 KB국민카드의 RF 교통기관 업종으로 후불교통 카드 서비스 제공지역에 한하여 할인 적용됩니다., '서비스 제공 조건 : 전월 이용실적 주) 30만원 이상인 경우 할인 적용']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: transit}
+        tiers: {from: 300000}
+      - key: telecom-3000
+        title: 이동통신요금 자동이체 3천원 청구할인
+        source: page
+        evidence: ['SKT, KT, LG U+ 이동통신요금을 서울도시가스 KB국민카드로 자동이체 시 매월 1건에 대해 3천원 정액 할인 (최소청구금액 3천원 이상)', '서비스 제공 조건 : 주) 전월 이용실적 30만원 이상인 경우 할인 적용']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 3000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+      - key: happy-point-5
+        title: 해피포인트 가맹점 5% 현장 적립
+        source: page
+        evidence: [해피포인트 가맹점에서 구매 시 해피포인트 5% 현장적립 (적립 한도 없음), '파리크라상, 파리바게뜨, 배스킨라빈스, 던킨도너츠, 파스쿠찌, 타마티, 리나스, 빚은, 사누끼보레, 잠바주스, 월드바인의 전국 3,000여 개의 매장', 1포인트는 현금 1원에 해당, 일부 해피포인트 가맹점에서 통신사 카드로 할인 또는 사이즈 업그레이드 서비스를 적용 시 해피포인트 적립 서비스는 제공되지 않습니다.]
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette, paris_croissant, pascucci]
+        reward: {type: points, program: happy_point, rate: 5}
+        stack: happy
+        unmodeled: [타마티·리나스·빚은·사누끼보레·잠바주스·월드바인 매장 적립은 담을 가맹점이 없어 계산하지 않는다, 통신사 카드 할인을 받으면 적립하지 않는다]
+    unmodeled: [고속·시외버스 5% 할인은 원문이 RF 교통기관 업종으로 후불교통 제공지역에서만 할인한다고 적어 일반 승인 승차권이 대상인지 분명하지 않다. 덜 주는 쪽으로 계산하지 않는다, 월 할인한도는 매입 완료 건 기준이다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나눈다, 포인트리 결제금액은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2012년 2월 16일 출시와 2024.11.25 심의필만 적었다. 현재 규칙 시작일을 몰라 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통 이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 이동통신요금 자동이체 금액 실적 제외는 이동통신 업종 전체 제외로 옮겼다. 둘 다 실적이 적게 잡히는 쪽이다, assumed: 'telecom.mobile, transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지로 대조했다. 공통 가맹점 seoul_city_gas가 필요하다. 서울도시가스 요금은 실적 구간에 따라 할인율이 달라 두 혜택으로 나눴다.
