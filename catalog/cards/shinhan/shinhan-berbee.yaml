@@ -1,0 +1,69 @@
+schema_version: 2
+id: shinhan-berbee
+issuer: shinhan
+name: KT 신한카드 체크
+short_name: 신한 KT 체크
+kind: check
+product_codes: [BERBEE]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1188338_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2017-09-18
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card.prepaid_card, prepaid_charge]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+    benefits:
+      - key: kt-telecom
+        title: KT 통신요금 자동납부 최대 5천원 캐시백
+        source: page
+        evidence: [전월 30만원 이상 이용 시 3천원 캐시백, 전월 50만원 이상 이용 시 5천원 캐시백, 'KT 통신요금(휴대폰, 인터넷, TV, 집전화, 인터넷전화, 유무선결합상품) 자동납부 시 캐시백 적용', 통신요금이 캐시백금액보다 적을 시 통신요금만큼 캐시백 적용]
+        target:
+          merchants: [kt]
+        when:
+          - billing: [autopay]
+        reward:
+          type: cashback
+          fixed: {300000: 3000, 500000: 5000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+      - key: gs25-5
+        title: GS25 5% 캐시백
+        source: page
+        evidence: [GS25 5% 캐시백, 전월 30만원 이상 이용 시 캐시백 적용, 월 최대 2천원 캐시백]
+        target:
+          merchants: [gs25]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 2000}
+        tiers: {from: 300000}
+      - key: cgv-10
+        title: CGV 10% 캐시백
+        source: page
+        evidence: [CGV 10% 캐시백, 전월 30만원 이상 이용 시 캐시백 적용, 월 최대 2천원 캐시백, CGV 사이트/앱/현장 결제 시 캐시백 적용]
+        target:
+          merchants: [cgv]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: month, amount: 2000}
+        tiers: {from: 300000}
+    unmodeled: [KT 통신요금 캐시백이 월 1회인지 원문에 없지만 월 최대 5천원이라 월 1회로 두었다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비 없음, 국내전용. 전월 30만원 이상이면 KT 통신요금 자동납부 3천원, 50만원 이상이면 5천원 캐시백. GS25 5%, CGV 10%는 각각 월 2천원까지. 실적 제외: 수수료, 이자, 기프트카드 구매, 선불카드 충전, 취소. 후불교통 이용금액은 전전월 금액이 반영되어 카드사 기본값 month_offset을 쓴다. 신규 발급 회원은 등록월 다음 달 말까지 30만원 구간을 적용한다.'
