@@ -1,0 +1,52 @@
+schema_version: 2
+id: kb-09127
+issuer: kb
+name: HERITAGE Reserve(포인트형)
+short_name: KB HERITAGE Reserve 포인트형
+kind: credit
+product_codes:
+  - '09127'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 800000}
+  - {scope: global, brand: amex, amount: 800000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09127', fetched_at: '2026-10-12', review_no: 제2026-C1a-02016호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2023-06-08'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: prev_calendar_month, exclude_applied: 0}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [정부지원금 결제와 쿠폰 이용금액은 적립에서 빠진다]
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: domestic-1
+        title: 국내 가맹점 1% 포인트리 적립
+        source: page
+        evidence: ['매월1일 ~ 말일, 회수금액 500만원까지 1% 포인트리 적립', '매월1일 ~ 말일, 회수금액 500만원 초과금액 1.2% 포인트리 적립', '적립한도: 월 30만점', 전월 이용실적 조건 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 1}
+        limits:
+          - {per: month, amount: 300000}
+        unmodeled: [한 달 회수금액 500만원 초과분의 1.2% 적립은 1%로만 계산한다]
+      - key: overseas-3
+        title: 해외 가맹점 3% 포인트리 적립
+        source: page
+        evidence: ['매월1일 ~ 말일, 해외 이용금액의 3% 포인트리 적립', 전월 이용실적 조건 및 적립한도 없음]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: kb_pointree, rate: 3}
+    unmodeled: [골프클럽 이용권·호텔 멤버십·항공권 할인 쿠폰(연 1회 택1)과 공항 라운지 같은 Amex 서비스는 계산하지 않는다, 특별 적립을 받은 결제는 국내 1% 적립에서 빠져 둘 중 큰 쪽 하나만 준다, 무승인전표(교통요금·자판기·터널통행료·항공기내 이용)는 적립에서 빠진다, 백화점·골프 한 건 100만원 이상 5만점 연 2회는 연 기준이 발급일인지 달력 연도인지 몰라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2023.06.08로 두었다., assumed: '2023-06-08'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 연회비는 기본 7,000원과 제휴 793,000원을 더한 본인 800,000원이고 가족카드는 200,000원이다. 포인트리 1점은 1원이다. 특별 적립은 백화점·골프장·골프연습장 각 업종의 한 건 결제가 100만원 이상이어야 하고 여러 업종을 합산하지 않는다.
