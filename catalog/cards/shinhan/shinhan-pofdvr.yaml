@@ -1,0 +1,125 @@
+schema_version: 2
+id: shinhan-pofdvr
+issuer: shinhan
+name: 신한카드 SOL Plan
+short_name: 신한 SOL Plan
+search_names: [쏠플랜]
+kind: credit
+product_codes:
+  - '202508180003'
+  - POFDVR
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 33000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1235253_2207.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202508180003', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2025-08-25
+    source: page
+    tiers: [0, 400000, 1000000, 2000000, 3000000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+    new_card: {tier: 400000}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트 사용 거래의 포인트 금액은 적립하지 않는다, SOL Plan으로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체를 적립하지 않는다]
+    limits:
+      - {key: integrated, per: month, amount: 50000}
+      - key: ott
+        per: month
+        amount: {2000000: 5000, 3000000: 15000}
+    stacks:
+      - {key: main}
+      - {key: ott}
+    benefits:
+      - key: base
+        title: 국내외 기본 1~1.5% 적립
+        source: page
+        evidence: ['기본 적립 : 국내/외 이용금액 최대 1.5% SOL포인트 적립', 기본 적립 | 1% | 1.5%, 통합 적립 한도 | 5만 포인트, '기본 적립과 특별 적립은 중복 적용되지 않으며, 특별 적립 영역 가맹점은 기본 적립 대상에서 제외됩니다.', ‘담을수록 SOLSOL 서비스’ 대상 영역(OTT/멤버십)은 기본 적립 대상에서 제외됩니다.]
+        target:
+          all: true
+          exclude_merchants: [baemin, coupang, coupang_eats, coupang_wow, ddangyo, disney_plus, gs_caltex, musinsa, naver_plus_membership, netflix, sk_energy, ssg_com, tving, twentynine_cm, yogiyo, youtube_premium]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {400000: 1, 1000000: 1.5}
+        limits:
+          - {shared: integrated}
+        tiers: {from: 400000}
+        stack: main
+        unmodeled: [해외 일시불을 할부로 바꾸면 적립하지 않는다]
+      - key: special-fuel
+        title: 주유 2.5~5% 특별 적립
+        source: page
+        evidence: ['특별 적립 : 주유/온라인쇼핑/배달 최대 5% SOL포인트 적립', 특별 적립 | 2.5% | 5%, '주유 | SK에너지, GS칼텍스', '특별 적립 영역의 경우, 주유/온라인쇼핑/배달 각 영역별로 이용금액 기준 월 30만원까지 서비스가 적용됩니다.', '주유 영역은 휘발유, 경유, 등유만 적립되며 LPG 이용금액은 적립되지 않습니다.']
+        target:
+          merchants: [gs_caltex, sk_energy]
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {400000: 2.5, 1000000: 5}
+        limits:
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        stack: main
+        unmodeled: [LPG는 적립하지 않는다]
+      - key: special-shopping
+        title: 온라인쇼핑 2.5~5% 특별 적립
+        source: page
+        evidence: ['온라인쇼핑 | 쿠팡, SSG.COM, 무신사, 29CM', 특별 적립 | 2.5% | 5%, '특별 적립 영역의 경우, 주유/온라인쇼핑/배달 각 영역별로 이용금액 기준 월 30만원까지 서비스가 적용됩니다.', '온라인쇼핑 영역은 쿠팡 와우 멤버십 등 유료 멤버십 및 구독형 서비스, 쿠팡이츠 이용 시에는 적립되지 않습니다.', 온라인쇼핑 영역은 대상 가맹점의 공식 홈페이지 또는 모바일앱 이용 시에만 적립되며]
+        target:
+          merchants: [coupang, musinsa, ssg_com, twentynine_cm]
+        when:
+          - {channel: online}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {400000: 2.5, 1000000: 5}
+        limits:
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        stack: main
+        unmodeled: ['항공권, 티켓처럼 대상 가맹점이 아닌 별도 가맹점으로 결제되면 적립하지 않는다']
+      - key: special-delivery
+        title: 배달앱 2.5~5% 특별 적립
+        source: page
+        evidence: ['배달 | 땡겨요, 배달의 민족, 요기요, 쿠팡이츠', 특별 적립 | 2.5% | 5%, '특별 적립 영역의 경우, 주유/온라인쇼핑/배달 각 영역별로 이용금액 기준 월 30만원까지 서비스가 적용됩니다.', '배달 영역은 공식 배달앱에서 ‘앱 내 카드결제’시 적립되며, ‘현장결제’ (물품 수령 시 결제)는 적립되지 않습니다.']
+        target:
+          merchants: [baemin, coupang_eats, ddangyo, yogiyo]
+        when:
+          - {channel: online}
+        reward:
+          type: points
+          program: mysinhan_point
+          rate: {400000: 2.5, 1000000: 5}
+        limits:
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        stack: main
+      - key: ott-100
+        title: OTT·멤버십 정기결제 100% 적립
+        source: page
+        evidence: [OTT·멤버십 영역 이용금액의 100% SOL포인트 적립, '단, 결제계좌의 전월 잔액 조건을 미충족하였더라도 카드 전월 이용금액이 200만원 이상일 경우 5천 포인트 적립 한도, 300만원 이상일 경우 1만5천 포인트 적립 한도가 제공됩니다.', 'OTT | 넷플릭스, 유튜브 프리미엄, 티빙, 디즈니플러스', '멤버십 | 네이버플러스 멤버십, 쿠팡 와우 멤버십', '이용금액 기준 건당 4,900원 이상인 거래에 한해서만 서비스 제공됩니다.', 'OTT, 멤버십 영역은 공식 홈페이지를 통한 정기결제(자동납부) 시에만 적립되며, 1회성 일반구매 결제, 구글 플레이/애플 앱스토어 등 앱마켓을 통한 인앱결제, 통신요금 포함 결제는 적립되지 않습니다.']
+        target:
+          merchants: [coupang_wow, disney_plus, naver_plus_membership, netflix, tving, youtube_premium]
+        when:
+          - amount: {min: 4900}
+          - billing: [autopay]
+        reward: {type: points, program: mysinhan_point, rate: 100}
+        limits:
+          - {shared: ott}
+        tiers: {from: 2000000}
+        stack: ott
+        unmodeled: ['카드 전월 이용금액 100만원 이상과 결제계좌 일 잔액 100만원(200만원) 이상 영업일 15일 이상을 함께 채우면 5천(1만5천) 포인트 한도인데, 달마다 바뀌는 계좌 잔액을 알 수 없어 카드 이용금액 200만원(300만원) 이상 조건으로만 계산한다', 유튜브 프리미엄은 PC 정기결제만 적립한다]
+    unmodeled: ['적립한 SOL포인트를 SOL Plan 포인트박스로 받으면 10%를 더 주는데, 포인트박스 계좌 보유를 알 수 없어 계산하지 않는다', 일반 후불교통 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, '지방세외수입, 환경개선부담금, TV수신료, 전자지급수단 충전은 실적과 적립에서 빠진다', 본인카드와 가족카드의 전월 이용금액과 적립 한도를 합산한다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 최초 신규 발급 특례는 SOL Plan 만기나 해지 뒤 재발급이면 받지 못한다, 신규 발급 기간의 담을수록 SOLSOL 5천 포인트 한도 특례는 계산하지 않는다, 온라인 결제는 해당 업체 사이트나 앱에서 직접 결제해야 혜택을 준다]
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2025.08.25. 연회비 국내 3만원, 해외겸용(Mastercard) 3.3만원. SOL포인트는 1포인트를 마이신한포인트 1포인트로 바꿀 수 있어 마이신한포인트로 계산한다. 전월 이용금액(일시불+할부) 40만~100만원 기본 1%·특별 2.5%, 100만원 이상 기본 1.5%·특별 5%. 특별 적립은 주유, 온라인쇼핑, 배달 영역마다 이용금액 월 30만원까지이고 기본 적립과 중복되지 않는다. 기본과 특별을 합쳐 월 5만 포인트. 담을수록 SOLSOL은 OTT·멤버십 정기결제 100% 적립으로 한도가 따로다. 국내 취소는 최초 승인 달, 해외 취소는 취소 전표 매입 달 실적에서 뺀다. 최초 신규 발급 회원은 등록월 다음 달까지 40만~100만원 구간.
