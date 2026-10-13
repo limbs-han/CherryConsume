@@ -1,0 +1,179 @@
+schema_version: 2
+id: kb-09570
+issuer: kb
+name: KB국민 WE:SH Daily 카드
+short_name: KB WE:SH Daily
+search_names: [위시 데일리]
+kind: credit
+product_codes:
+  - '09570'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09570', fetched_at: '2026-10-12', review_no: 제2026-C1a-01363}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2024-07-01'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: ['PG 결제, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    options:
+      - key: pick
+        title: 선택 할인 영역
+        choices:
+          - {key: shopping, title: 쇼핑}
+          - {key: convenience, title: 편의}
+          - {key: coffee, title: 커피}
+          - {key: life, title: 생활}
+          - {key: bakery, title: 먹빵}
+          - {key: taste, title: 취향}
+        default: null
+        change: next_month
+    limits:
+      - key: select
+        per: month
+        amount: {400000: 7000, 800000: 12000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: base, pick: best}
+    benefits:
+      - key: base-0-5
+        title: 국내 가맹점 0.5% 청구할인
+        source: page
+        evidence: [기본 할인 국내 가맹점 0.5% 전월 이용실적 조건 및 월 할인한도 없음, 선택 할인과 중복 적용]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+        stack: base
+      - key: shopping-10
+        title: '[쇼핑] G마켓·11번가·SSG.COM KB Pay 10% 청구할인'
+        source: page
+        evidence: ['쇼핑 KB Pay 쇼핑, G마켓, 11번가, SSG.COM 10% 7천원 1만2천원', '[건별 할인한도 5천원]', 선택 할인 서비스는 KB Pay 이용 건에 한하여 제공됩니다, '※ 상품권, 여행, 항공권, 티켓, 도서, 별도 팝업사이트 제외']
+        target:
+          merchants: [eleven_st, gmarket, ssg_com]
+        when:
+          - payment: [kb_pay]
+            option:
+              pick: [shopping]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: select}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [상품권·여행·항공권·티켓·도서와 별도 팝업사이트 결제는 빠진다, KB Pay 앱 쇼핑 결제도 대상이지만 가맹점이 없어 담지 않았다]
+      - key: convenience-10
+        title: '[편의] GS25·CU KB Pay 10% 청구할인'
+        source: page
+        evidence: ['[편의] GS25/CU 10% 청구할인 GS25, CU 오프라인 매장', ※ 오프라인 매장 결제 건에 한함 (온라인 가맹점 제외)]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - channel: offline
+            payment: [kb_pay]
+            option:
+              pick: [convenience]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: select}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: coffee-10
+        title: '[커피] 스타벅스·커피빈 KB Pay 10% 청구할인'
+        source: page
+        evidence: ['[커피] 스타벅스/커피빈 10% 청구할인 스타벅스, 커피빈(사이렌오더, 퍼플오더 포함)', '※ 사이렌오더, 퍼플오더는 공식 모바일 앱 결제 건에 한함']
+        target:
+          merchants: [coffee_bean, starbucks]
+        when:
+          - payment: [kb_pay]
+            option:
+              pick: [coffee]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: select}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-oliveyoung-10
+        title: '[생활] 올리브영 KB Pay 10% 청구할인'
+        source: page
+        evidence: ['[생활] 올리브영/다이소몰 10% 청구할인 올리브영, 온라인 다이소몰', '※ 올리브영은 오프라인 매장 및 공식 홈페이지/모바일 앱 결제 건에 한하며, 백화점/대형마트 등 일부 입점 매장 제외']
+        target:
+          merchants: [olive_young]
+        when:
+          - payment: [kb_pay]
+            option:
+              pick: [life]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: select}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: life-daiso-10
+        title: '[생활] 온라인 다이소몰 KB Pay 10% 청구할인'
+        source: page
+        evidence: ['※ 온라인 다이소몰은 공식 홈페이지/모바일 앱 결제 건에 한하며, 오프라인 매장 결제 건은 제외']
+        target:
+          merchants: [daiso]
+        when:
+          - channel: online
+            payment: [kb_pay]
+            option:
+              pick: [life]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: select}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: bakery-fastfood-10
+        title: '[먹빵] 제과·패스트푸드 KB Pay 10% 청구할인'
+        source: page
+        evidence: ['[먹빵] 제과/아이스크림/패스트푸드 업종 10% 청구할인 제과/아이스크림 및 패스트푸드 업종', ※ 백화점/대형마트 등 일부 입점 매장 제외]
+        target:
+          categories: [restaurant.bakery, restaurant.fastfood]
+        when:
+          - payment: [kb_pay]
+            option:
+              pick: [bakery]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: select}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [아이스크림 업종도 대상이지만 담을 업종이 없어 계산하지 않는다]
+      - key: taste-10
+        title: '[취향] 오늘의집·29CM·인터파크티켓·티켓링크 KB Pay 10% 청구할인'
+        source: page
+        evidence: ['[취향] 오늘의집/29CM/인터파크티켓/티켓링크 10% 청구할인 오늘의집, 29CM, 인터파크티켓, 티켓링크', ※ 공식 홈페이지/모바일 앱 결제 건에 한함, '※ 인터파크티켓, 티켓링크는 공연, 전시, 스포츠 예매에 한함']
+        target:
+          merchants: [interpark_ticket, ohouse, ticketlink, twentynine_cm]
+        when:
+          - channel: online
+            payment: [kb_pay]
+            option:
+              pick: [taste]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 5000}
+          - {shared: select}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [인터파크티켓과 티켓링크는 공연·전시·스포츠 예매만 할인한다]
+    unmodeled: [데일리 스탬프를 한 달 20개 이상 모으면 다음 달 실적을 채워 주는 서비스는 앱 접속 일수라 담지 않았다, '최초 사용등록일부터 다음 달 말일까지 월 3,500원 한도로 할인하는 특례는 담지 않았다', 정부지원금은 실적에서 빠진다]
+notes: 2024-07-01 출시. 연회비는 일반카드 합계 1만5천원이고 모바일 단독은 9천원이다. 선택 할인은 KB Pay 결제만 받고 할인받은 이용건은 실적에서 빠진다.
