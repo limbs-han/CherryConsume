@@ -1,0 +1,123 @@
+schema_version: 2
+id: shinhan-cbtcez
+issuer: shinhan
+name: 신한카드 국민행복 체크
+short_name: 신한 국민행복 체크
+kind: check
+product_codes: [CBTCEZ]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: visa, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1200238_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2021-02-04
+    source: page
+    tiers: [0, 300000, 600000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, childcare, education.kindergarten, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.gas, utility.water]
+      unmodeled: [포인트로 결제한 금액과 신한카드 전 회원 대상 이벤트, 다른 쿠폰 혜택이 적용된 거래는 할인하지 않는다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 600000: 10000, 1000000: 15000}
+    benefits:
+      - key: medical-5
+        title: 병원·약국·산후조리원 5% 할인
+        source: page
+        evidence: [병원/약국/산후조리원 5% 결제일 할인(캐시백), '통합 월 최대 1회, 건당 최대 3천원 할인', '신한카드 가맹점 업종 기준으로 적용됩니다.(치과, 한의원 포함/동물병원 제외)', 30만원 이상60만원 미만 | 5천원, 60만원 이상100만원 미만 | 1만원, 100만원 이상 | 1만 5천원]
+        target:
+          categories: [hospital, maternity_center, pharmacy]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: online-mall-5
+        title: 온라인몰 5% 할인
+        source: page
+        evidence: ['쿠팡, SSG닷컴, 롯데ON, 11번가, G마켓 5% 결제일 할인(캐시백)', '통합 월 최대 1회, 건당 최대 3천원 할인', 서비스 대상 공식 사이트(앱)에 직접 접속하여 이용하는 경우에 한하여 할인 적용됩니다.]
+        target:
+          merchants: [coupang, eleven_st, gmarket, lotte_on, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [상품권과 항공권 구매, 별도 팝업 사이트는 할인하지 않는다]
+      - key: education-bookstore-5
+        title: 인터넷서점 5% 할인
+        source: page
+        evidence: ['어린이집/유치원 중 부모부담금, 인터넷서점(YES24, 알라딘, 교보문고) 5% 결제일 할인(캐시백)', '통합 월 최대 1회, 건당 최대 3천원 할인', 인터넷서점은 온라인 매장만 적용됩니다.]
+        target:
+          merchants: [aladin, kyobo_book, yes24]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: delivery-5
+        title: 배달의민족·요기요 5% 할인
+        source: page
+        evidence: ['배달의민족, 요기요 5% 결제일 할인(캐시백)', '통합 월 최대 1회, 건당 최대 3천원 할인', 서비스 대상 공식 배달앱에서 ‘앱 내 카드 결제’에 한하여 적용]
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, amount: 3000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: ott-50
+        title: 넷플릭스·유튜브프리미엄 50% 할인
+        source: page
+        evidence: ['넷플릭스, 유튜브프리미엄 50% 할인(캐시백)', '통합 월 최대 1회, 건당 최대 5천원 할인', 서비스 대상 가맹점 공식 사이트에 직접 접속하여 신청한 정기결제(자동이체) 이용 건에 한하여 서비스 적용됩니다.]
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: txn, amount: 5000}
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [앱 내 결제와 앱마켓 결제와 통신요금 합산 결제는 할인하지 않는다]
+      - key: membership-3000
+        title: 온라인몰 월회비 3천원 할인
+        source: page
+        evidence: ['네이버-플러스멤버십, 쿠팡-로켓와우, 롯데ON-롯데오너스 3천원 할인(캐시백)', '통합 월 최대 1회, 건당 최대 3천원 할인', 서비스 대상 공식사이트(앱)에 직접 접속하여 결제하는 경우에 한하여 서비스가 적용됩니다.]
+        target:
+          merchants: [coupang_wow, naver_plus_membership]
+        reward: {type: cashback, fixed: 3000}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [롯데ON 롯데오너스는 공통 가맹점이 없어 넣지 않았다]
+    unmodeled: [어린이집·유치원 부모부담금 5% 할인은 정부지원금 결제와 구별할 수 없어 계산하지 않는다, 국가바우처와 신한은행 수수료 면제와 신한라이프 보험료 우대는 결제 할인이 아니라 계산하지 않는다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 아이돌봄지원 결제금액은 전월 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비는 국내전용과 Visa 모두 없음. 페이지에 발급 대상을 바우처 자격자로 제한하는 문구가 없어 일반 카드로 담았다. 할인은 영역마다 월 1회이고 전월 30만, 60만, 100만원 구간마다 월 통합 5천, 1만, 1만 5천원 한도를 같이 쓴다. 신규 발급 체크카드는 등록월 다음 달 말까지 5천원 한도를 받는다. 실적 제외: 현금서비스, 카드론, 연회비, 수수료, 이자, 기프트카드와 선불카드, 취소, 지방세, 수도, 국세, 4대보험, 어린이집·유치원 결제, 아이돌봄지원 결제.'
