@@ -1,0 +1,165 @@
+schema_version: 2
+id: shinhan-axdbmr
+issuer: shinhan
+name: 신한카드 Deep On Platinum+
+short_name: 신한 Deep On Platinum+
+kind: credit
+product_codes: [AXDBMR]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 33000}
+  - {scope: global, brand: unionpay, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1188280_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2018-07-26
+    source: page
+    tiers: [0, 300000, 600000, 900000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card.prepaid_card, insurance.social, prepaid_charge, tax, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+    limits:
+      - key: pay
+        per: month
+        amount: {300000: 10000, 600000: 20000, 900000: 30000, 1200000: 40000}
+      - {key: pay_count, per: month, count: 6}
+      - key: life
+        per: month
+        amount: {300000: 10000, 600000: 15000, 900000: 20000, 1200000: 30000}
+      - {key: airline_year, per: year, count: 3}
+    stacks:
+      - {key: main}
+      - {key: extra}
+    benefits:
+      - key: pay-online-10
+        title: 간편결제 국내 온라인 10% 할인
+        source: page
+        evidence: [할인 대상 간편결제(Pay)로 국내 온라인 이용 시 기본 10% 결제일 할인, '신한 SOL페이(신한 슈퍼SOL로 결제 포함), 삼성페이, LG페이, 스마일페이, 네이버페이, SK페이, 카카오페이, 페이코, SSG페이, L페이', 월 6회(기본 할인, 추가 할인 통합), '할인 전 이용금액 1회 2만원 이상인 경우에 할인 서비스 적용되며 할인 전 이용금액 1회 5만원까지(할인액 기준 기본 할인 서비스 1회 5천원, 온라인 배달, 온라인 슈퍼 서비스 1회 1만원) 할인 적용됩니다.', 온라인 거래에 한하여 제공되며 오프라인 매장에서 바코드나 스마트폰 NFC기능을 통한 거래 등은 할인 적용되지 않습니다.]
+        target: {all: true}
+        when:
+          - region: domestic
+            channel: online
+            payment: [kakao_pay, l_pay, naver_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay]
+            amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: pay_count}
+          - {shared: pay}
+        tiers: {from: 300000}
+        unmodeled: [LG페이와 SK페이는 공통 결제수단에 없어 계산하지 않는다]
+      - key: pay-delivery-extra-10
+        title: 간편결제 요기요·오아시스마켓 추가 10% 할인
+        source: page
+        evidence: ['할인 대상 간편결제(Pay)로 온라인 배달, 온라인 슈퍼 이용 시 추가 10% 결제일 할인(최대 총 20% 할인)', '요기요, GS프레시, 오아시스마켓(온라인)', 월 6회(기본 할인, 추가 할인 통합)]
+        target:
+          merchants: [oasis_market, yogiyo]
+        when:
+          - region: domestic
+            channel: online
+            payment: [kakao_pay, l_pay, naver_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay]
+            amount: {min: 20000}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: pay_count}
+          - {shared: pay}
+        tiers: {from: 300000}
+        stack: extra
+        unmodeled: [GS프레시는 공통 가맹점에 온라인몰이 없어 계산하지 않는다, 기본 할인과 추가 할인이 월 6회를 함께 쓰는데 한 결제가 두 번으로 세는지 원문에 없어 두 번으로 센다]
+      - key: convenience-20
+        title: 4대 편의점 20% 할인
+        source: page
+        evidence: ['GS25, CU, 세븐일레븐, 이마트24', '오프라인 매장에 한하여 적용되며, 인터넷이나 모바일앱을 통한 온라인 거래는 할인 적용되지 않습니다.', '생활 서비스는 각 영역(편의점, 생활/잡화, 커피, 월납)별 월 4회 할인 적용됩니다.', 생활 서비스는 할인 전 이용금액 1회 1만원 이상인 경우에 할인 서비스 적용되며 할인 전 이용금액 1회 5만원까지(할인액 기준 1회 1만원) 할인 적용됩니다.]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - channel: offline
+            payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 4}
+          - {shared: life}
+        tiers: {from: 300000}
+      - key: living-20
+        title: 올리브영·다이소 20% 할인
+        source: page
+        evidence: [올리브영, 다이소, '가두매장에 한하여 할인 적용되며 온라인 매장, 백화점 등 입점 매장의 경우 할인 적용되지 않습니다.', '생활 서비스는 각 영역(편의점, 생활/잡화, 커피, 월납)별 월 4회 할인 적용됩니다.']
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - channel: offline
+            payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 4}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: [백화점 등에 입점한 매장은 할인하지 않는다]
+      - key: coffee-20
+        title: 스타벅스·투썸플레이스 20% 할인
+        source: page
+        evidence: ['스타벅스, 투썸플레이스', '백화점, 할인점 등 입점 매장 및 상품권, 선불카드 구입/충전건은 할인 적용되지 않습니다.', '생활 서비스는 각 영역(편의점, 생활/잡화, 커피, 월납)별 월 4회 할인 적용됩니다.']
+        target:
+          merchants: [starbucks, twosome]
+        when:
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 4}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: ['백화점, 할인점 입점 매장은 할인하지 않는다']
+      - key: monthly-20
+        title: 쿠팡 정기배송·리디 월납 20% 할인
+        source: page
+        evidence: ['쿠팡 정기배송, 위메프 정기배송, 리디북스, 프레딧, 위메프오', 일반 상품 구매는 할인 적용되지 않으며 카드 등록에 의한 매월 자동결제 거래에 한하여 할인 적용됩니다.]
+        target:
+          merchants: [coupang, ridi]
+        when:
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+            billing: [autopay, subscription]
+            amount: {min: 10000}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 4}
+          - {shared: life}
+        tiers: {from: 300000}
+        unmodeled: [쿠팡은 정기배송 자동결제만 할인한다, 프레딧은 공통 가맹점에 없어 계산하지 않는다]
+      - key: airline-10
+        title: 제주항공·에어부산 10% 할인
+        source: page
+        evidence: ['제주항공, 에어부산 공식 홈페이지 및 모바일(앱)에서 예약/결제 시 할인 적용됩니다.', 할인 전 이용금액 1회 30만원까지(할인액 기준 1회 3만원) 할인 제공됩니다., '제주항공, 에어부산 통합 월 1회, 연 3회 한도 내 제공됩니다.', 간편결제(Pay) 및 타 여행사, 항공권 예매 대행 사이트를 통해서 예약/결제하는 거래건은 할인적용 불가합니다.]
+        target:
+          merchants: [air_busan, jeju_air]
+        when:
+          - payment_not: [kakao_pay, l_pay, naver_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 300000}
+          - {per: month, count: 1}
+          - {shared: airline_year}
+        tiers: {from: 300000}
+        unmodeled: [항공사 포인트와 마일리지 구매는 할인하지 않는다]
+    unmodeled: [해외 이용금액 10% 연간 캐시백은 연간 이용금액 1천만원 이상 조건이라 계산하지 않는다, 전월 실적과 월 할인 횟수는 본인과 가족카드를 합산한다, 할인은 영역별 이용 순서대로 적용한다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+  - {path: 'revisions[0].benefit_exclusions', question: 무이자할부 거래가 할인에서 빠지는지 상품 페이지에 없다. 신한카드 기본값대로 뺐다, assumed: true}
+notes: '신한카드 상품 페이지 기준. 연회비 Mastercard 3만 3천원, UPI 3만원. 할인 대상 간편결제로 국내 온라인 결제 시 2만원 이상 건에 10%(1회 5만원까지), 요기요와 오아시스마켓은 10%를 더한다. 간편결제 할인은 기본과 추가 통합 월 6회다. 생활 서비스는 편의점, 올리브영·다이소, 스타벅스·투썸플레이스, 월납(쿠팡 정기배송, 리디)을 20% 할인하고 영역마다 월 4회, 1만원 이상 건, 1회 5만원까지다. 간편결제 한도와 생활 한도는 전월 30만, 60만, 90만, 120만원 구간마다 따로 있다. 제주항공·에어부산 10%는 월 1회 연 3회. 실적 제외: 할인 적용 매출, 국세, 지방세, 수도요금, 4대보험, 카드대출, 연회비, 수수료, 이자, 기프트카드, 선불카드 충전, 취소. 간편결제 할인이 네이버페이, 카카오페이, 페이코를 대상으로 해서 카드사 기본 간편결제 제외를 쓰지 않고 생활 혜택에만 payment_not으로 걸었다.'
