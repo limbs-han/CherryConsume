@@ -1,0 +1,108 @@
+schema_version: 2
+id: kb-09118
+issuer: kb
+name: KB국민 Green Wave 1.5℃카드
+short_name: KB Green Wave
+kind: credit
+product_codes:
+  - '09118'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 15000}
+  - {scope: global, brand: k_world_upi, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+  - {scope: domestic, brand: local, form: mobile, amount: 9000}
+  - {scope: global, brand: k_world_upi, form: mobile, amount: 9000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 9000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09118', fetched_at: '2026-10-12', review_no: 제2023-C1a-00084호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2023-01-04'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제와 호텔·백화점·대형마트·철도역사 입점 가맹점, 별도 가맹점번호로 승인되는 일부 간편결제는 적립에서 빠질 수 있다']
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - key: mobility
+        per: month
+        amount: {0: 7000, 400000: 7000, 800000: 10000, 1200000: 15000}
+      - key: shopping
+        per: month
+        amount: {0: 7000, 400000: 7000, 800000: 10000, 1200000: 15000}
+    benefits:
+      - key: ev-charging-10
+        title: 전기차 충전 10% 포인트리 적립
+        source: page
+        evidence: [Green Mobility 전기/수소차 충전 10% 1구간(40만원 이상 80만원 미만) 7천원 2구간(80만원 이상 120만원 미만) 1만원 3구간(120만원 이상) 1만5천원, '* 전기차 충전기, 수소차 충전소', 최초 카드 사용 등록일로부터 다음달 말일(실적 유예기간)까지 실적이 없는 경우에도 40만원 이상 80만원 미만 구간의 서비스가 제공됩니다., KB국민카드의 포인트리 1점은 1원과 가치가 동일합니다.]
+        target:
+          categories: [car.ev_charging]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {shared: mobility}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [수소차 충전소는 담을 업종이 없다]
+      - key: rail-10
+        title: 철도 10% 포인트리 적립
+        source: page
+        evidence: ['버스/지하철, 철도 10% 포인트리 적립', '* 시외버스, 고속버스, 공항버스 제외', '* 이용대금명세서 상 기재된 이용일 기준 서비스 적용']
+        target:
+          categories: [transit.rail]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {shared: mobility}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: chorokmaeul-20
+        title: 초록마을 20% 포인트리 적립
+        source: page
+        evidence: ['Green Shopping 올가홀푸드, 바이올가, 초록마을 20% 1구간 7천원 2구간 1만원 3구간 1만5천원', '* 백화점, 마트 등 일부 입점 매장의 경우 제외']
+        target:
+          merchants: [chorokmaeul]
+        reward: {type: points, program: kb_pointree, rate: 20}
+        limits:
+          - {shared: shopping}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [백화점과 마트 안 초록마을 매장은 적립에서 빠진다]
+      - key: streaming-1000
+        title: 넷플릭스·웨이브·유튜브 프리미엄·스포티파이 정기결제 1천점 적립
+        source: page
+        evidence: ['영상/음원 건당 5천원 이상 이용 시 포인트리 1천점 적립(월1회)넷플릭스, 웨이브, 유튜브 프리미엄, 스포티파이', '* 공식 홈페이지 및 모바일(앱)을 통한 정기결제 시 제공', Green Plus 서비스는 전월 이용실적 40만원 이상 시 제공]
+        target:
+          merchants: [netflix, spotify, wavve, youtube_premium]
+        when:
+          - amount: {min: 5000}
+        reward: {type: points, program: kb_pointree, fixed: 1000}
+        limits:
+          - {per: month, count: 1}
+        tiers:
+          from: 400000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [공식 홈페이지와 앱 정기결제만 적립한다]
+    unmodeled: [버스·지하철 10% 적립은 실제 이용일이 아닌 이용대금명세서 기재일 기준이라 계산하지 않는다, '킥고잉·씽씽·따릉이·카카오T바이크 20%, 올가 20%, 플리츠마마·파타고니아·트리플래닛 10%, 굿윌스토어 1천점은 담을 가맹점이 없어 계산하지 않는다', 모바일 단독카드 이용 1천점 적립은 결제 입력으로 카드 형태를 알 수 없어 계산하지 않는다, 전월 실적 120만원 초과분 0.3%와 발급 2천점 기부 포인트는 환경재단 기부에만 쓰여 계산하지 않는다, 정부지원금 결제는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2021.05.26 출시와 2023.01.04 심의번호만 적었다. 심의일을 현재 규칙의 시작일로 잠정 적용한다., assumed: '2023-01-04'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. Green Mobility와 Green Shopping은 영역마다 한도가 따로다. 심의번호 원문 표기는 제 2023-C1a-00084gh였다.
