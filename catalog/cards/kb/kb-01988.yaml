@@ -1,0 +1,143 @@
+schema_version: 2
+id: kb-01988
+issuer: kb
+name: KB국민 청춘대로 싱글 체크카드
+short_name: KB 청춘대로 싱글 체크
+kind: check
+product_codes:
+  - '01988'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=01988', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행 가맹점, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    limits:
+      - key: shopping
+        per: month
+        amount: {300000: 5000, 500000: 10000}
+      - {key: beauty-pet, per: month, amount: 10000}
+    benefits:
+      - key: cvs-5
+        title: 편의점 5% 할인
+        source: page
+        evidence: [편의점 업종 | 5% (싱글데이 추가 5%) | 5천원 | 1만원, 이용금액 건당 1만원 ~ 2만원까지 할인, 1회 최대 할인금액 1천원]
+        target:
+          categories: [convenience]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 20000}
+          - per: month
+            amount: {300000: 5000, 500000: 10000}
+        tiers: {from: 300000}
+      - key: daiso-5
+        title: 다이소 5% 할인
+        source: page
+        evidence: [다이소 | 5% (싱글데이 추가 5%), 이용금액 건당 1만원 ~ 2만원까지 할인, '할인대상 : 다이소 직영 매장', '할인제외 : 온라인몰, 백화점·대형마트 입점 점포 제외', 전월 이용실적 30만원 이상 시 쇼핑 서비스의 월간 할인한도 5천원 이내에서 서비스 제공]
+        target:
+          merchants: [daiso]
+        when:
+          - channel: offline
+            amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 20000}
+          - {shared: shopping}
+        tiers: {from: 300000}
+        unmodeled: [다이소 직영 매장만 대상이다]
+      - key: social-5
+        title: 쿠팡·티몬·위메프 5% 할인
+        source: page
+        evidence: [소셜커머스 (쿠팡/티몬/위메프), 이용금액 건당 3만원 ~ 5만원까지 할인, 1회 최대 할인금액 2, 500원, 전월 이용실적 50만원 이상 시 쇼핑 서비스의 월간 할인한도 1만원 이내에서 서비스 제공]
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+        tiers: {from: 300000}
+      - key: overseas-5
+        title: 해외 이용 5% 캐시백
+        source: page
+        evidence: [해외이용/해외직구 할인 캐시백 | 5% | 5천원, '제공조건 : 이용금액 건당 3만원 이상 시 할인 제공', 전월 이용실적 30만원 이상 시 월간 할인한도 5천원 내에서 서비스 제공]
+        target: {all: true}
+        when:
+          - region: overseas
+            amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        unmodeled: [해외 이용은 그 달에 매입 완료된 건만 그 달 할인에 넣고 다음 달 둘째 주에 입금한다]
+      - key: taxi-5
+        title: 택시 5% 할인
+        source: page
+        evidence: [택시 업종 | 5% | 3천원, 이용금액 건당 5천원 ~ 2만원까지 할인 제공, 1회 최대 할인금액 1천원]
+        target:
+          categories: [taxi]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 20000}
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+      - key: transit-5
+        title: 대중교통 5% 할인
+        source: page
+        evidence: [대중교통 | 5% | 2천원, '후불 교통 (시내버스, 지하철) 5% 청구할인', 고속/시외버스 5% 환급할인, '할인 제외 : 공항버스', '제공조건 : 월간 이용금액 4만원까지 이용분에 대해 할인 제공']
+        target:
+          categories: [transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, base: 40000}
+          - {per: month, amount: 2000}
+        tiers: {from: 300000}
+        unmodeled: [후불교통 할인은 이용내역서에 적힌 이용일 기준이다, 공항버스는 빠진다]
+      - key: beauty-10
+        title: 올리브영 10% 할인
+        source: page
+        evidence: [올리브영 박승철헤어 스투디오 | 10% | - | 1만원, 이용금액 건당 3만원 ~ 5만원까지 할인 제공, 1회 최대 할인금액 5천원, 전월 이용실적 50만원 이상 시 뷰티/펫 서비스의 월간 할인한도 1만원 이내에서 서비스 제공]
+        target:
+          merchants: [olive_young]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: beauty-pet}
+        tiers: {from: 500000}
+        unmodeled: [박승철헤어스투디오는 가맹점 목록에 없어 계산하지 않는다]
+      - key: pet-10
+        title: 동물병원·애완동물 10% 할인
+        source: page
+        evidence: [동물병원/애완동물 업종 | 10%, '할인대상 : 동물병원 업종, 애완동물 업종 (KB국민카드 가맹점 업종 기준)', 이용금액 건당 3만원 ~ 5만원까지 할인 제공, PG(인터넷 결제 대행업체) 이용금액 제외]
+        target:
+          categories: [pet]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: beauty-pet}
+        tiers: {from: 500000}
+    unmodeled: [싱글데이(매월 1·11·21·31일) 편의점·다이소·소셜커머스 5% 추가 할인은 날짜 조건을 담을 수 없어 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 편의점·쇼핑 1구간 할인을 주는 신규 특례는 계산하지 않는다, KB Pay 여행 해외패키지 3% 현장할인은 계산하지 않는다, 무승인금액(자판기·터널통행료 등)과 정부지원금은 실적에서 빠진다, 할인 한도는 본인회원 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 할인은 환급할인이고 후불 버스·지하철만 청구할인이다. 해외 이용금액은 실적에서 빠진다.
