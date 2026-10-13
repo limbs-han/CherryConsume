@@ -1,0 +1,82 @@
+schema_version: 2
+id: shinhan-acacd8
+issuer: shinhan
+name: LG U+ Bora 신한카드 Big Plus
+short_name: 신한 LG U+ Bora Big Plus
+search_names: [보라카드, 빅플러스]
+kind: credit
+product_codes: [ACACD8]
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 22000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1202226_2207.html', fetched_at: 2026-10-12, review_no: 제2021-C1a-01341호}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2020-12-23
+    source: page
+    tiers: [0, 300000, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.water]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+    limits:
+      - {key: movie-day, per: day, count: 2}
+      - {key: movie-month, per: month, count: 6}
+      - {key: movie-year, per: year, count: 15}
+    benefits:
+      - key: uplus-telecom
+        title: LG U+ 통신요금 자동납부 할인
+        source: page
+        evidence: [전월 신판 금액 40만원 이상 80만원 미만 이용 시 LG U+ 통신요금 1만원 할인, 전월 신판 금액 80만원 이상 이용 시 LG U+ 통신요금 1만 5천원 할인, '통신요금이 할인 한도보다 적을 경우, 통신요금 만큼 할인', 통신요금 자동이체 필수]
+        target:
+          merchants: [lg_uplus]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {400000: 10000, 800000: 15000}
+        tiers: {from: 400000}
+      - key: movie-1500
+        title: CGV·메가박스 예매 9천원 이상 1,500원 할인
+        source: page
+        evidence: ['9천원 이상일 경우 1,500원 할인, 18천원 이상일 경우 3,000원 할인', '제공 기준: 통합 1일 2회, 월 6회, 연 15회에 한함(연 기준: 1월~12월)', 공식 홈페이지 및 APP을 통해 예매시 제공됩니다., 서비스 이용 직전월의 빅플러스카드 이용금액(1일~말일)이 30만원 이상인 경우 서비스가 제공됩니다.]
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+          - amount: {min: 9000, below: 18000}
+        reward: {type: billing_discount, fixed: 1500}
+        limits:
+          - {shared: movie-day}
+          - {shared: movie-month}
+          - {shared: movie-year}
+        tiers: {from: 300000}
+      - key: movie-3000
+        title: CGV·메가박스 예매 1만8천원 이상 3,000원 할인
+        source: page
+        evidence: ['9천원 이상일 경우 1,500원 할인, 18천원 이상일 경우 3,000원 할인', '제공 기준: 통합 1일 2회, 월 6회, 연 15회에 한함(연 기준: 1월~12월)']
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+          - amount: {min: 18000}
+        reward: {type: billing_discount, fixed: 3000}
+        limits:
+          - {shared: movie-day}
+          - {shared: movie-month}
+          - {shared: movie-year}
+        tiers: {from: 300000}
+    unmodeled: [HD현대오일뱅크 리터당 40포인트 적립은 HD현대오일뱅크 포인트이고 그 혜택만 주유·LPG 이용금액을 뺀 전월 20만원 실적을 따로 봐서 계산하지 않는다, '롯데월드·서울랜드 본인 자유이용권 50% 할인(일 1회, 연 3회)은 자유이용권 결제를 가려낼 수 없어 계산하지 않는다', LG U+ 스마트할부 확정이자는 결제 혜택이 아니라 계산하지 않는다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다]
+notes: '신한카드 상품 페이지 기준. 연회비 국내 22,000원, Mastercard 25,000원. LG U+ 통신요금(휴대폰·인터넷·TV·집전화·인터넷전화) 자동납부를 전월 40만원 이상 1만원, 80만원 이상 1만5천원까지 요금만큼 할인. 영화는 전월 30만원 이상, CGV·메가박스 공식 홈페이지·앱 예매 9천원 이상 1,500원, 1만8천원 이상 3,000원. 신규 회원은 등록월+1개월까지 통신 40만 구간, 영화는 실적과 관계없이 제공. 실적 제외: 카드대출, 연회비, 수수료·이자, 기프트·선불카드, 거래 취소, 무이자할부, 국세·지방세·수도요금, 4대보험.'
