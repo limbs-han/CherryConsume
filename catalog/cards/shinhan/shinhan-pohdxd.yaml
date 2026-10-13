@@ -1,0 +1,64 @@
+schema_version: 2
+id: shinhan-pohdxd
+issuer: shinhan
+name: 신한카드 Simple Plan+ (플러스)
+short_name: 신한 Simple Plan+
+kind: credit
+product_codes: [POHDXD]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 47000}
+  - {scope: global, brand: mastercard, amount: 50000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1237252_2207.html', fetched_at: 2026-10-12, review_no: 제2026-C1h-02346호, review_valid_until: 2027-02-22}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2026-02-04
+    source: page
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: original_month}
+    new_card: {until: next_month_end, tier: 0, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, pharmacy, prepaid_charge, tax, utility]
+      unmodeled: ['포인트로 결제한 금액, 의약품 전용몰, 신차판매와 수입자동차 업종, TV수신료, Simple Plan+ 서비스 이외의 프로모션 할인이 적용된 거래는 할인하지 않는다']
+    stacks:
+      - {key: main}
+      - {key: welcome}
+    benefits:
+      - key: domestic-1-5
+        title: 국내 1.5% 결제일 할인
+        source: page
+        evidence: [국내 이용금액 1.5% 결제일 할인, 실적 조건 및 한도 없이 할인됩니다., 무이자 할부 서비스 적용 건은 심플 할인 서비스가 제공되지 않습니다.]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 1.5}
+      - key: overseas-2
+        title: 해외 2% 결제일 할인
+        source: page
+        evidence: [해외 이용금액 2% 결제일 할인, 실적 조건 및 한도 없이 할인됩니다., 해외 일시불 거래 후 할부로 전환하는 경우 할인되지 않습니다., 해외 현금인출 이용금액은 할인되지 않습니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 2}
+      - key: welcome-30000
+        title: 웰컴 캐시백 마트·병원·주유 3만원 이상 3만원 (최초 1회)
+        source: page
+        evidence: [마트/병원/주유 3만원 이상 결제 시 3만원 캐시백 (최초 1회), '마트 이마트, 트레이더스 홀세일 클럽, 롯데마트 / 병원 종합병원, 개인병원, 치과병원, 응급실운영병원, 동물병원 업종 / 주유 SK에너지, GS칼텍스, S-OIL, HD현대오일뱅크', 발급 초년도에 한해 제공됩니다., 오프라인 매장 이용 시에만 캐시백 제공, 1회 결제금액 기준 3만원 이상인 경우에 캐시백이 제공됩니다., 웰컴 캐시백은 심플 할인 서비스와 중복 제공이 가능합니다., 간편결제명으로 나오는 경우는 웰컴 캐시백이 제공되지 않습니다.]
+        target:
+          categories: [hospital, pet.vet]
+          merchants: [emart, gs_caltex, hd_oilbank, lotte_mart, s_oil, sk_energy, traders]
+        when:
+          - {channel: offline}
+          - amount: {min: 30000}
+          - card_month: {max: 10}
+          - payment_not: [kakao_pay, naver_pay, payco, toss_pay]
+        reward: {type: cashback, fixed: 30000}
+        limits:
+          - {per: lifetime, count: 1}
+        stack: welcome
+        unmodeled: [발급 초년도는 발급일부터 다음 해 연회비 결제월의 전월 말일까지인데 연회비 결제월을 몰라 등록월부터 열한 달째까지만 계산한다, 'LPG 충전과 마트 내 임대 매장, 문화센터, 주차비는 대상이 아니다', 가족카드 거래는 대상이 아니다]
+    unmodeled: [가족카드 1매당 분기 150만원 이상 이용 시 1만원 캐시백은 가족카드 실적이라 계산하지 않는다, 국내 5만원 이상 2~3개월 무이자 할부는 혜택 금액으로 계산하지 않는다]
+notes: 신한카드 Simple Plan+ 상품 페이지 기준. 연회비 국내전용 4만7천원, Mastercard 5만원. 실적 조건과 한도 없이 국내 1.5%, 해외 2%를 결제일에 할인한다. 웰컴 캐시백은 발급 초년도 마트, 병원, 주유 오프라인 3만원 이상 결제 한 번에 3만원이고 심플 할인과 겹쳐 받는다. 간편결제명 제외 문구는 웰컴 캐시백에만 있어 카드사 기본값을 덮고 웰컴 캐시백에만 걸었다. 신규 고객 연회비 캐시백 행사는 담지 않았다. 기본 Plan 카드와 이름이 기호 하나만 달라 이름 뒤에 (플러스)를 붙였다.
