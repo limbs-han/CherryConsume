@@ -1,0 +1,275 @@
+schema_version: 2
+id: shinhan-blbbsk
+issuer: shinhan
+name: 신한카드 Deep Taking
+short_name: 신한 Deep Taking
+kind: credit
+product_codes: [BLBBSK]
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: jcb, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1188287_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2025-11-24
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000, 1200000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, prepaid_charge, transit.bus_city, transit.subway]
+    new_card: {tier: 400000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, smile_pay, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인을 받은 거래는 적립하지 않는다, '백화점, 할인점 입점 매장이 백화점·할인점 이름으로 찍히면 적립하지 않는다']
+    ranked:
+      - {key: taking10, top: 5}
+    limits:
+      - key: integrated
+        per: month
+        amount: {400000: 10000, 800000: 30000, 1200000: 50000}
+    benefits:
+      - key: taking-dept
+        title: Taking 10 백화점 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '백화점 | 신세계백화점, 롯데백화점, 현대백화점']
+        target:
+          merchants: [hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: ['비쇼핑 항목(상품권, 문화센터, 주차장, 미용실, 여행사, 약국, 보험, 주유소, 정비소)은 빠진다']
+      - key: taking-mart
+        title: Taking 10 마트 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '마트 | 이마트, 홈플러스, 롯데마트, 농협 하나로마트·클럽, 메가마트, 이케아, 이마트 트레이더스, 롯데 VIC마켓']
+        target:
+          merchants: [emart, homeplus, ikea, lotte_mart, mega_mart, nh_hanaro_mart, traders]
+        when:
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: [롯데 VIC마켓도 대상이지만 공통 가맹점이 없어 뺐다]
+      - key: taking-homeshopping
+        title: Taking 10 홈쇼핑 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '홈쇼핑 | GS홈쇼핑, CJ홈쇼핑, 현대홈쇼핑']
+        target:
+          merchants: [cj_onstyle, gs_shop, hyundai_homeshopping]
+        when:
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-online
+        title: Taking 10 온라인 쇼핑 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '온라인 쇼핑 | G마켓, 옥션, 11번가']
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - {channel: online}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-social
+        title: Taking 10 소셜몰 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '소셜몰 | 쿠팡, 위메프, 티몬']
+        target:
+          merchants: [coupang, tmon, wemakeprice]
+        when:
+          - {channel: online}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-fashion
+        title: Taking 10 패션·뷰티 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '패션&뷰티 | 자라, 올리브영, 유니클로, 다이소 | 온라인 결제 제외']
+        target:
+          merchants: [daiso, olive_young, uniqlo, zara]
+        when:
+          - {channel: offline}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-overseas
+        title: Taking 10 해외 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., 해외 | 해외 온·오프라인 일시불 이용금액]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: ['해외는 VISA, URS(JCB) 가맹점 결제만 대상이다']
+      - key: taking-air-dutyfree
+        title: Taking 10 항공·면세점 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '항공: 대한항공, 아시아나, 제주항공, 진에어, 티웨이항공, 이스타항공 / 면세점: 롯데면세점, 신라면세점, 신세계면세점']
+        target:
+          merchants: [asiana_airlines, eastar_jet, jeju_air, jin_air, korean_air, lotte_dfs, lotte_dfs_online, shilla_dfs, shilla_dfs_online, shinsegae_dfs, shinsegae_dfs_online, tway_air]
+        when:
+          - {region: domestic}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: ['항공권은 항공사 공식 홈페이지와 앱으로 산 국내선, 국내 출발 원화 결제 국제선만 대상이다']
+      - key: taking-coffee
+        title: Taking 10 커피전문점 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '커피 전문점 | 스타벅스(사이렌오더 포함), 커피빈, 엔제리너스, 투썸플레이스, 폴바셋, 이디야']
+        target:
+          merchants: [angel_in_us, coffee_bean, ediya, paul_bassett, starbucks, twosome]
+        when:
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-convenience
+        title: Taking 10 편의점 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '편의점 | GS25, CU, 이마트24 | 온라인 결제 및 배달앱 결제 제외']
+        target:
+          merchants: [cu, emart24, gs25]
+        when:
+          - {channel: offline}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-bakery
+        title: Taking 10 베이커리 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '베이커리 | 파리바게뜨, 뚜레쥬르, 던킨도너츠, 배스킨라빈스']
+        target:
+          merchants: [baskin_robbins, dunkin, paris_baguette, tous_les_jours]
+        when:
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-delivery
+        title: Taking 10 배달앱 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '배달앱 | 요기요, 배달의 민족 / 공식 앱(사이트)에서 ‘앱(웹)으로 결제’ 이용 시 적용']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - {channel: online}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-fuel
+        title: Taking 10 주유 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '주유 | 주유소, 충전소 업종 기준']
+        target:
+          categories: [fuel]
+        when:
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-education
+        title: Taking 10 교육 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '교육 | 학원(학습지 포함) 일반전문학원, 학습지 업종 기준 온라인 결제 제외']
+        target:
+          categories: [education.academy, education.study_material]
+        when:
+          - {channel: offline}
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-hospital
+        title: Taking 10 병원 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '병원 | 병원(동물병원 포함) 개인병원, 종합병원, 치과, 한의원, 동물병원 업종 기준 약국, 산후조리원 제외']
+        target:
+          categories: [hospital, pet.vet]
+        when:
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+      - key: taking-telecom
+        title: Taking 10 이동통신 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '이동통신 | SKT, LG U+, KT 이동통신요금 자동이체']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: ['약정대금 대납, 지점 월납, 알뜰폰은 빠진다']
+      - key: taking-transit
+        title: Taking 10 대중교통 2% 적립
+        source: page
+        evidence: [17개 서비스 영역에서 금액 기준으로 월별(1일~말일) 가장 많이 이용한 5개 영역에 대해 각 2%씩 자동으로 적립, 각 서비스영역별 월 1만 포인트 한도 내에서 적립됩니다., '대중교통 | 버스(마을/시내/시외/광역/공항버스), 지하철 후불교통기능을 이용한 터치(RF) 거래 기준 고속버스 제외']
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+          - {ranked: taking10}
+        reward: {type: points, program: mysinhan_point, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+          - {shared: integrated}
+        tiers: {from: 400000}
+        unmodeled: [시외·광역·공항버스도 대상이지만 시내버스와 지하철만 계산한다]
+    unmodeled: ['My Pick 서비스(월 최다 이용 오프라인 가맹점 3, 6, 9번째 이용마다 1천 포인트, 5천원 이상, 일 1회)는 가맹점별 이용 횟수 순위라 계산하지 않는다', 교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, Taking 10 포인트는 다음 달 10일에 영역별 한도와 통합 한도 안에서 한꺼번에 적립한다. 순위는 그 달 이용금액으로 매긴다]
+notes: 신한카드 Deep Taking 상품 페이지 기준(2026-10-12). 출시 2019-07-11, 심의필 제2025-C1h-17031호(2025.11.24~2026.11.23)라 시작일을 심의 시작일로 두었다. 연회비는 페이지 HTML의 Visa 플래티늄 2만원, URS 플래티늄 2만원. URS는 신한카드와 JCB가 만든 국내전용 연회비 브랜드라 국내 칸에 jcb로 적었다. 전월 40만원 이상이면 17개 영역 중 그 달 이용금액 상위 5개 영역에 각 2%를 영역별 월 1만 포인트, 통합 월 1만·3만·5만 포인트(40만·80만·120만원) 한도로 적립한다. 신규 발급 회원은 등록월 다음 달 말까지 40만 구간 한도. 2026-10-12 결정대로 시내버스와 지하철을 실적에서 뺐다.
