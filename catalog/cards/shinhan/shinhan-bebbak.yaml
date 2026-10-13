@@ -1,0 +1,76 @@
+schema_version: 2
+id: shinhan-bebbak
+issuer: shinhan
+name: 신세계 신한카드 체크
+short_name: 신한 신세계 체크
+kind: check
+product_codes: [BEBBAK]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+  - {scope: global, brand: unionpay, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1187968_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2017-04-01
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, department_store, gift_card.prepaid_card, prepaid_charge]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      month_offset: {transit.bus_city: 1, transit.subway: 1}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+    benefits:
+      - key: social-1
+        title: 쿠팡·티몬 1% 적립
+        source: page
+        evidence: [주요 업종 0.5%~1% 마이신한포인트 적립(전월 실적기준 30만원 이상 시 제공), '소셜커머스(쿠팡, 티몬) 1% 마이신한포인트 적립']
+        target:
+          merchants: [coupang, tmon]
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        tiers: {from: 300000}
+      - key: daily-0-5
+        title: 할인점·주유·대중교통·통신 자동이체 0.5% 적립
+        source: page
+        evidence: [할인점/주유/대중교통/통신 자동이체 가맹점 0.5% 마이신한포인트 적립(대상가맹점), '할인점(이마트, 홈플러스, 롯데마트 등), 주유(LPG제외 전 주유 가맹점), 대중교통(지하철 및 버스) 및 이동통신자동이체(SKT, KT, LGU+, SK브로드밴드) 자동이체 가맹점 기준이며, 제휴사 운영 간편결제 및 별도 POP-UP Site, 상품권 구매는 적립 제외 됩니다.']
+        target:
+          categories: [fuel, transit.bus_city, transit.subway]
+          merchants: [emart, homeplus, lotte_mart]
+        reward: {type: points, program: mysinhan_point, rate: 0.5}
+        tiers: {from: 300000}
+        unmodeled: [LPG 충전은 적립하지 않는다, '할인점은 이마트, 홈플러스, 롯데마트 등이라 원문에 이름이 나온 세 곳만 계산한다']
+      - key: telecom-0-5
+        title: 이동통신 자동이체 0.5% 적립
+        source: page
+        evidence: ['이동통신자동이체(SKT, KT, LGU+, SK브로드밴드) 자동이체 가맹점 기준']
+        target:
+          merchants: [kt, lg_uplus, sk_broadband, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: mysinhan_point, rate: 0.5}
+        tiers: {from: 300000}
+      - key: starbucks-500
+        title: 스타벅스 건당 500원 캐시백
+        source: page
+        evidence: ['스타벅스 승인 건당 500원 할인(일 1회, 월 3회)', '사이렌오더 포함, 상품권 및 충전 금액 제외', 상기 서비스는 전월 실적기준에 상관없이 적용 됩니다.]
+        target:
+          merchants: [starbucks]
+        reward: {type: cashback, fixed: 500}
+        limits:
+          - {per: day, count: 1}
+          - {per: month, count: 3}
+    unmodeled: [신세계백화점 입점 영화관 주말 2천원 캐시백은 입점 영화관을 가릴 수 없어 계산하지 않는다, '롯데월드, 서울랜드 본인 자유이용권 50% 할인(연 3회)은 본인 이용권만 대상이라 계산하지 않는다', 전월 실적에서 신세계백화점 점내 이용금액을 빼는데 가맹점 단위로 뺄 수 없어 백화점 업종 전체를 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 신세계멤버십 혜택은 제휴사 정책이라 계산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+  - {path: 'revisions[0].benefits', question: 주요 업종 적립의 월 적립 한도가 상품 페이지에 없다. 한도 없이 두었다, assumed: null}
+notes: 신한카드 상품 페이지 기준. 연회비 없음. 전월 30만원 이상이면 쿠팡·티몬 1%, 할인점·주유·대중교통·통신 자동이체 0.5% 마이신한포인트. 스타벅스 건당 500원은 실적과 관계없이 일 1회 월 3회. 실적은 국내 일시불과 할부만 넣고 신세계백화점 점내 이용금액, 연회비, 수수료, 포인트 이용금액, 이자, 기프트카드, 선불카드 충전, 취소를 뺀다. 후불교통 이용금액은 전전월 금액이 반영되어 카드사 기본값 month_offset을 쓴다. 신규 발급 회원은 등록월 다음 달 말까지 30만원 구간을 적용한다.
