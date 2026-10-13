@@ -1,0 +1,346 @@
+schema_version: 2
+id: shinhan-poedr2
+issuer: shinhan
+name: 신한카드 Discount Plan+ (플러스)
+short_name: 신한 Discount Plan+
+kind: credit
+product_codes: [POEDR2]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 50000}
+  - {scope: global, brand: mastercard, amount: 50000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1232390_2207.html', fetched_at: '2026-10-12', review_no: 제2025-C1h-16475호, review_valid_until: '2026-11-11'}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202503280002', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-03-24'
+    source: page
+    tiers: [0, 400000, 800000, 1200000, 1800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.rail, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['포인트로 결제한 금액, 포인트·캐시·예치금 충전, 신한카드 할인서비스가 적용된 거래는 할인하지 않는다', 키오스크나 PG사 이름으로 찍히는 결제는 할인하지 않는다]
+    limits:
+      - key: time
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 15000, 1800000: 20000}
+      - key: daily
+        per: month
+        amount: {400000: 15000, 800000: 25000, 1200000: 35000, 1800000: 50000}
+      - key: monthly
+        per: month
+        amount: {400000: 5000, 800000: 10000, 1200000: 15000, 1800000: 20000}
+    benefits:
+      - key: time-cafe
+        title: DAY 카페 10% 할인
+        source: page
+        evidence: ['DAY (07~15시) 카페 스타벅스, 투썸플레이스, 폴바셋, 커피빈, 메가커피, 이디야', '카페, 음식점, 편의점 영역은 오프라인 매장 이용 시에만 할인됩니다.', 각 영역(카페/음식점/편의점/배달앱) 별로 일 1회 할인됩니다., 할인받기 전 이용금액 기준 1회 1만원까지 할인됩니다., 'Time Plan 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          merchants: [coffee_bean, ediya, mega_coffee, paul_bassett, starbucks, twosome]
+        when:
+          - {channel: offline}
+          - time: {from: '07:00', to: '15:00'}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {shared: time}
+        tiers: {from: 400000}
+        unmodeled: [스타벅스 사이렌오더도 할인되지만 온라인 결제로 기록하면 계산하지 않는다, 백화점·할인점·공항·기차역 입점 매장은 할인하지 않는다]
+      - key: time-restaurant
+        title: DAY 음식점 10% 할인
+        source: page
+        evidence: ['DAY (07~15시) 음식점 한식, 일식, 양식, 중식, 일반대중음식, 패스트푸드, 뷔페 업종', 각 영역(카페/음식점/편의점/배달앱) 별로 일 1회 할인됩니다., 할인받기 전 이용금액 기준 1회 1만원까지 할인됩니다., 'Time Plan 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        when:
+          - {channel: offline}
+          - time: {from: '07:00', to: '15:00'}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {shared: time}
+        tiers: {from: 400000}
+        unmodeled: [백화점·할인점 입점 매장은 할인하지 않는다]
+      - key: time-convenience
+        title: NIGHT 편의점 10% 할인
+        source: page
+        evidence: ['NIGHT (18~22시) 편의점 CU, GS25, 세븐일레븐, 이마트24', 각 영역(카페/음식점/편의점/배달앱) 별로 일 1회 할인됩니다., 할인받기 전 이용금액 기준 1회 1만원까지 할인됩니다., 'Time Plan 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+          - time: {from: '18:00', to: '22:00'}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {shared: time}
+        tiers: {from: 400000}
+      - key: time-delivery
+        title: NIGHT 배달앱 10% 할인
+        source: page
+        evidence: ['NIGHT (18~22시) 배달앱 배달의민족, 요기요, 쿠팡이츠, 땡겨요', '배달앱 영역은 공식 배달앱에서 앱 내 카드결제 시 할인되며, 현장결제(물품 수령 시 결제)는 할인되지 않습니다.', 각 영역(카페/음식점/편의점/배달앱) 별로 일 1회 할인됩니다., 할인받기 전 이용금액 기준 1회 1만원까지 할인됩니다., 'Time Plan 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          merchants: [baemin, coupang_eats, ddangyo, yogiyo]
+        when:
+          - {channel: online}
+          - time: {from: '18:00', to: '22:00'}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {shared: time}
+        tiers: {from: 400000}
+      - key: daily-mart
+        title: 마트 10% 할인
+        source: page
+        evidence: ['마트 이마트, 트레이더스 홀세일 클럽, 롯데마트', 마트 영역 및 다이소는 오프라인 매장 이용 시에만 할인됩니다., '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          merchants: [emart, lotte_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+        unmodeled: ['마트 주차비, 문화센터, 입점 임대 매장은 할인하지 않는다']
+      - key: daily-online
+        title: 온라인쇼핑 10% 할인
+        source: page
+        evidence: ['온라인쇼핑 네이버플러스 스토어, 쿠팡, SSG.COM, 무신사, 29CM', '온라인쇼핑 영역은 쿠팡 와우 멤버십, 네이버플러스 멤버십 요금 등 멤버십 및 구독형 서비스, 쿠팡이츠 이용 시에는 할인되지 않습니다.', '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          merchants: [coupang, musinsa, naver_plus_store, ssg_com, twentynine_cm]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: daily-outlet
+        title: 아울렛 10% 할인
+        source: page
+        evidence: ['아울렛 신세계사이먼 프리미엄아울렛, 현대 프리미엄 아울렛, 롯데 프리미엄 아울렛', '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          merchants: [hyundai_premium_outlet, lotte_premium_outlet, shinsegae_premium_outlet]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: daily-goods
+        title: 올리브영·다이소 10% 할인
+        source: page
+        evidence: ['잡화 올리브영, 다이소', 마트 영역 및 다이소는 오프라인 매장 이용 시에만 할인됩니다., '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          merchants: [daiso, olive_young]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+        unmodeled: [올리브영 온라인도 대상이지만 다이소와 횟수를 같이 써서 오프라인만 계산한다]
+      - key: move-fuel
+        title: 주유 5% 할인
+        source: page
+        evidence: ['주유 SK에너지, GS칼텍스, HD현대오일뱅크, S-OIL', '주유 영역은 휘발유, 경유, 등유만 할인되며 LPG 이용금액은 할인되지 않습니다.', '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          merchants: [gs_caltex, hd_oilbank, s_oil, sk_energy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+        unmodeled: [LPG 충전은 할인하지 않는다]
+      - key: move-socar
+        title: 쏘카 5% 할인
+        source: page
+        evidence: [카쉐어링 쏘카, '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          merchants: [socar]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: move-parking
+        title: 주차 5% 할인
+        source: page
+        evidence: ['주차 주차장 업종, 카카오T 주차', 주차장 내 키오스크 등을 통한 현장 결제 시 주차장 업종이 아닌 PG업종 등으로 결제되는 경우 할인되지 않습니다., '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          categories: [car.parking]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: move-taxi
+        title: 택시 5% 할인
+        source: page
+        evidence: ['택시 택시 업종, 카카오T 택시', '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: life-overseas
+        title: 해외 일시불 5% 할인
+        source: page
+        evidence: [해외 해외 일시불, '해외 영역은 해외겸용(Mastercard) 카드 이용 시에만 할인되며, 최종 원화 청구금액을 기준으로 할인됩니다.', '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: life-medical
+        title: 병원·약국 5% 할인
+        source: page
+        evidence: ['병원·약국 종합병원, 개인병원, 치과병원, 응급실운영병원, 약국 업종', '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          categories: [hospital, pharmacy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: life-salon
+        title: 미용실 5% 할인
+        source: page
+        evidence: ['미용실 이용, 미용 업종', '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          categories: [beauty.salon]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: life-bookstore
+        title: 온라인서점 5% 할인
+        source: page
+        evidence: ['온라인서점 교보문고, YES24', 온라인서점 영역은 대상 가맹점의 공식 홈페이지 또는 모바일앱 이용 시에만 할인됩니다., '일 1회, 월 5회까지 할인됩니다.', 할인받기 전 이용금액 기준 1회 5만원까지 할인됩니다., 'Daily Plan 1만 5천원, 2만 5천원, 3만 5천원, 5만원']
+        target:
+          merchants: [kyobo_book, yes24]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: daily}
+        tiers: {from: 400000}
+      - key: monthly-utility
+        title: 공과금 자동납부 10% 할인
+        source: page
+        evidence: ['공과금 10% 아파트관리비, 도시가스, 전기요금, 통신요금(SKT/KT/LGU+)', 할인받기 전 이용금액 기준 공과금 1회 5만원, 공과금 영역은 자동납부 시에만 할인됩니다., '정기결제 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          categories: [apartment_fee, utility.electricity, utility.gas]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: monthly}
+        tiers: {from: 400000}
+      - key: monthly-telecom
+        title: 통신요금 자동납부 10% 할인
+        source: page
+        evidence: ['공과금 10% 아파트관리비, 도시가스, 전기요금, 통신요금(SKT/KT/LGU+)', 공과금 중 통신요금은 월 1회, '통신요금은 순수 통신요금 자동납부 시에만 할인되며, 약정금액 대납, 지점을 통한 월납, 알뜰폰, 선불폰, 결합상품(TV, 인터넷, 유선전화 등) 이용 시에는 할인되지 않습니다.', '정기결제 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, base: 50000}
+          - {per: month, count: 1}
+          - {shared: monthly}
+        tiers: {from: 400000}
+        unmodeled: [통신요금 자동납부가 2건 이상이면 첫 번째 결제만 할인한다]
+      - key: monthly-digital
+        title: 디지털구독·멤버십 20% 할인
+        source: page
+        evidence: ['디지털구독 20% 넷플릭스, 유튜브 프리미엄, 티빙, 디즈니플러스, 밀리의서재', '멤버십 네이버플러스 멤버십, 쿠팡 와우 멤버십', 디지털구독·멤버십 1회 1만원까지, '디지털구독, 멤버십 영역은 공식 홈페이지를 통한 정기결제(자동납부) 시에만 할인되며 앱마켓 인앱결제는 할인되지 않습니다.', '정기결제 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          merchants: [coupang_wow, disney_plus, millie, naver_plus_membership, netflix, tving, youtube_premium]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 10000}
+          - {shared: monthly}
+        tiers: {from: 400000}
+      - key: monthly-fitness
+        title: 피트니스 5% 할인
+        source: page
+        evidence: ['피트니스 5% 스포츠센터/레포츠클럽, 테니스장, 수영장, 실내/외 골프장 업종', 피트니스 1회 10만원까지, 피트니스 영역은 일 1회, '정기결제 5천원, 1만원, 1만 5천원, 2만원']
+        target:
+          categories: [sports]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {shared: monthly}
+        tiers: {from: 400000}
+      - key: movie-5000
+        title: CGV·롯데시네마 예매 5천원 할인
+        source: page
+        evidence: ['CGV, 롯데시네마 영화 예매 5천원 할인(월1회)', 할인 받기 전 이용금액 기준 1회 1만2천원 이상인 경우 할인됩니다., 'CGV, 롯데시네마 공식 홈페이지/앱 및 오프라인 매장 이용 시에만 할인됩니다.']
+        target:
+          merchants: [cgv, lotte_cinema]
+        when:
+          - amount: {min: 12000}
+        reward: {type: billing_discount, fixed: 5000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 400000}
+        unmodeled: ['예매권, 상품권, 매점, 통신사 앱 예매는 할인하지 않는다']
+    unmodeled: [Plan Day. 매월 1일 Time Plan과 Daily Plan 첫 할인 거래에 할인율 2배(해외 제외)는 날짜 조건을 담을 수 없어 계산하지 않는다, 'Monthly 리워드. 전월 150만원 이상 3천원, 180만원 이상 5천원 캐시백은 결제마다 주는 혜택이 아니라 계산하지 않는다', 'Annual Plan 장보기 3만원 캐시백(연회비 청구 주기마다 연 1회, 2차년도부터 전년도 1천만원 이상)은 계산하지 않는다', 스피드메이트 정비 현장 할인과 에버랜드·롯데월드·캐리비안베이 할인은 품목과 이용권을 가릴 수 없어 계산하지 않는다, 배달앱으로 카페·음식점·편의점을 주문하면 배달앱 할인만 받는다, '교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다', '본인카드와 가족카드의 전월 이용금액, 할인 한도, 횟수를 합산한다', 서비스는 영역별로 이용한 거래 순서대로 적용하고 해외 결제는 매입 순서대로 적용한다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다, 'TV수신료, 세외수입, 포인트·캐시·예치금 충전은 실적에서 빠진다']
+notes: '신한카드 상품 페이지와 상품 상세 API 기준. 연회비는 API afeInfoList로 국내와 Mastercard 모두 5만원(기본 7천 + 제휴 4만 3천). 카드 출시 2025.03.24. Time Plan은 DAY(07~15시) 카페·음식점, NIGHT(18~22시) 편의점·배달앱 10%, 영역별 일 1회, 1회 1만원까지. Daily Plan은 쇼핑 10%, 이동·생활 5%, 영역별 일 1회 월 5회, 1회 5만원까지. Monthly Plan은 공과금 자동납부 10%(1회 5만원, 통신 월 1회), 디지털구독·멤버십 20%(1회 1만원), 피트니스 5%(1회 10만원, 일 1회), 영화 예매 5천원 월 1회. 월 한도는 전월 40만/80만/120만/180만원 구간 Time 5천/1만/1만 5천/2만원, Daily 1만 5천/2만 5천/3만 5천/5만원, 정기결제 5천/1만/1만 5천/2만원, 영화 5천원. 신규 발급 회원은 등록월 다음 달까지 40만원 구간. 국내 취소는 처음 승인한 달, 해외 취소는 매입 달 실적에서 뺀다. 시각 조건 15:00과 22:00은 끝 시각을 넣지 않는 쪽으로 계산한다. 실적 제외: 카드대출, 기프트·선불카드, 국세·지방세·세외수입, 4대보험, 스쿨뱅킹·대학 등록금, 아파트관리비, 도시가스, 전기요금, TV수신료, 수도요금, 상품권·선불전자지급수단, 포인트 충전, 취소, 철도. 기본 Plan 카드와 이름이 기호 하나만 달라 이름 뒤에 (플러스)를 붙였다.'
