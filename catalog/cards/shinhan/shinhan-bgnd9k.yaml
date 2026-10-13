@@ -1,0 +1,75 @@
+schema_version: 2
+id: shinhan-bgnd9k
+issuer: shinhan
+name: 신한카드 Pick E 체크
+kind: check
+product_codes: [BGND9K, BGNDD8]
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1221536_2206.html', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-06-19'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      month_offset: {}
+    new_card: {tier: 200000}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [포인트 사용금액, 이 카드 할인서비스를 받은 거래는 적립 제외]
+    limits:
+      - {key: cvs, per: month, count: 3}
+      - {key: cvs-day, per: day, count: 1}
+      - {key: coffee, per: month, count: 3}
+      - {key: coffee-day, per: day, count: 1}
+    benefits:
+      - key: cvs-10
+        title: 4개 편의점 10% 적립
+        source: page
+        evidence: ['4개 편의점: GS25, CU, 세븐일레븐, 이마트24', '4개 편의점 통합 일 1회, 월 3회, 1회 최대 1천 포인트까지 적립', 오프라인 매장에 한하여 적용되며, 전월 이용금액 20만원 이상 시 서비스가 제공됩니다.]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: cvs-day}
+          - {shared: cvs}
+        tiers: {from: 200000}
+        unmodeled: [백화점·할인점 등 입점 매장 제외]
+      - key: coffee-10
+        title: 커피전문점 10% 적립
+        source: page
+        evidence: [커피 업종 이용 시 10% 적립, '커피전문점 업종 통합 일 1회, 월 3회, 1회 최대 1천 포인트까지 적립', 전월 이용금액 20만원 이상 시 서비스가 제공됩니다.]
+        target:
+          categories: [cafe]
+        reward: {type: points, program: mysinhan_point, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: coffee-day}
+          - {shared: coffee}
+        tiers: {from: 200000}
+        unmodeled: [신한카드 커피전문점 업종 기준. 백화점·할인점 입점 매장 제외]
+      - key: overseas-1
+        title: 해외 일시불 1% 적립
+        source: page
+        evidence: ['해외: 해외 일시불 이용금액(해외사이트 거래 포함)', '월 적립한도: 1만 포인트', 해외 인출은 적립 서비스가 제공되지 않습니다., 전월 이용금액 20만원 이상 시 서비스가 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: points, program: mysinhan_point, rate: 1}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 200000}
+    unmodeled: [교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, '놀이 영역(사진관, 볼링장, 테니스장, 스키장) 10% 적립은 업종이 없어 계산하지 않는다', One Pick 맛집 적립(월 최다 이용 요식 가맹점 3·6·9회째 1천P)은 가맹점별 횟수를 셀 수 없어 계산하지 않는다]
+notes: 상품 페이지 기준. 신규 발급 회원은 등록월 다음 달 말까지 전월 이용금액 조건 없이 서비스를 받아 20만 구간으로 둔다. 디자인만 다른 같은 상품 BGNDD8도 이 카드로 등록한다.
