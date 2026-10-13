@@ -1,0 +1,68 @@
+schema_version: 2
+id: shinhan-boadt2
+issuer: shinhan
+name: LG전자 The 구독케어 신한카드
+short_name: 신한 LG전자 구독케어
+kind: credit
+product_codes: [BOADT2]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 22000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1234346_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2025-04-25
+    source: page
+    tiers: [0, 300000, 700000, 1300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      cancellation_overrides:
+        - use: cancel_month
+          when: {region: overseas}
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액은 할인과 적립에서 빠진다]
+    stacks:
+      - {key: main}
+      - {key: points}
+    benefits:
+      - key: lg-subscription-discount
+        title: LG전자 구독요금 자동납부 월 최대 2만원 할인
+        source: page
+        evidence: [월 최대 2만원 결제일 할인, 'LG전자 구독요금이 할인 한도 미만인 경우 결제금액 만큼 서비스가 적용되며, 남은 할인 한도는 이월되지 않습니다.', 30만원 이상 70만원 미만 | 1만 3천원 | 70만원 이상 130만원 미만 | 1만 6천원 | 130만원 이상 | 2만, 'LG전자 구독요금 자동납부 시 적용되며, 선납 또는 미납요금 등 일시적인 요금납부 승인에 대해서는 혜택이 적용되지 않습니다.']
+        target:
+          merchants: [lg_appliance_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 700000: 16000, 1300000: 20000}
+        tiers: {from: 300000}
+      - key: lg-subscription-points
+        title: LG전자 구독요금 7만원 이상 1만 포인트 적립
+        source: page
+        evidence: [LG전자 구독요금 7만원 이상 납부 시 마이신한포인트 1만 포인트 적립(월 1회), LG전자 구독요금 할인 전 자동납부 이용금액 기준 1회 7만원 이상인 경우 서비스가 적용됩니다., 70만원 이상 130만원 미만 | 1만 포인트 | 130만원 이상]
+        target:
+          merchants: [lg_appliance_subscription]
+        when:
+          - billing: [autopay]
+            amount: {min: 70000}
+        reward: {type: points, program: mysinhan_point, fixed: 10000}
+        limits:
+          - {per: month, count: 1}
+        tiers: {from: 700000}
+        stack: points
+    unmodeled: [교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 여러 건의 구독요금은 합산하지 않고 건마다 7만원 이상인지 본다, 할인과 적립은 자동납부 매입 순서대로 적용한다]
+notes: 신한카드 상품 페이지 기준. 연회비 국내전용 2만 2천원, Mastercard 2만 5천원. LG전자 구독요금 자동납부를 전월 30만, 70만, 130만원 구간에 따라 월 1만 3천, 1만 6천, 2만원까지 결제일 할인한다. 전월 70만원 이상이면 할인 전 1회 7만원 이상 구독요금에 월 1회 1만 포인트를 더 적립한다. 실적은 무이자할부를 빼고, 국내 취소는 처음 승인한 달에서, 해외 취소는 취소 매입한 달에서 뺀다. 구독요금 할인을 뺀 다른 신한카드 할인이 적용된 거래는 할인과 적립에서 빠진다. 신규 발급 회원은 등록월 다음 달 말까지 30만원 구간을 적용한다.
