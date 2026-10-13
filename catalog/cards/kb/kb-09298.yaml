@@ -1,0 +1,164 @@
+schema_version: 2
+id: kb-09298
+issuer: kb
+name: KB YOU Wish up 카드
+short_name: KB YOU Wish up
+kind: credit
+product_codes:
+  - '09298'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 50000}
+  - {scope: global, brand: mastercard, amount: 50000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09298', fetched_at: '2026-10-12', review_no: 제2026-C1a-01201호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-04-22'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [정부지원금 결제와 신차구매 청구(환급) 할인 전표는 할인에서 빠진다]
+    limits:
+      - {key: telecom-ott, per: month, amount: 5000}
+      - key: leisure
+        per: month
+        amount: {400000: 5000, 800000: 10000}
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: kbpay-10
+        title: KB Pay 10% 청구할인
+        source: page
+        evidence: ['KB Pay | 10% | 5,000원 | 건당 할인한도 2,500원', 국내 가맹점에서 KB Pay로 결제한 이용건※ 해외 가맹점 결제건 제외, '※ 음식/건강/여가/차량 할인서비스와 중복 적용 가능 (단, 통신/구독 할인은 중복 적용 불가)']
+        target:
+          exclude_categories: [streaming, telecom]
+          all: true
+        when:
+          - {region: domestic}
+          - payment: [kb_pay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 2500}
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        stack: kbpay
+        unmodeled: [통신·구독 할인과 겹치지 않게 통신요금과 구독·스트리밍 업종 결제는 KB Pay 할인에서 뺐다]
+      - key: dining-convenience-10
+        title: 음식점·GS25·CU 10% 청구할인
+        source: page
+        evidence: ['음식점(한식, 일식, 중식, 양식, 뷔페, 패밀리레스토랑, 일반음식점 업종), 편의점(GS25, CU)', ※ 백화점/대형마트 등 일부 입점 매장 제외※ 편의점은 오프라인 매장 일반 결제건에 한함(온라인 가맹점 제외), '음식점, 편의점 | 5,000원 (건당 2,500원 한도)']
+        target:
+          categories: [restaurant.general]
+          merchants: [cu, gs25]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 2500}
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        unmodeled: [음식점 업종은 오프라인 결제만 계산한다]
+      - key: telecom-10
+        title: 이동통신요금 자동납부 10% 청구할인
+        source: page
+        evidence: ['SKT, KT, LG U+, Liiv M 이동통신 자동납부 요금 ※ 인터넷, IPTV 등 결합상품 제외', '이동통신요금 | OTT | 5,000원 (건당 2,500원 한도)']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 2500}
+          - {shared: telecom-ott}
+        tiers: {from: 400000}
+      - key: ott-30
+        title: OTT 정기결제 30% 청구할인
+        source: page
+        evidence: ['넷플릭스, 유튜브, 웨이브, 티빙, 디즈니 플러스 공식 홈페이지를 통한 정기결제 이용건 ※ 간편결제, 인앱 결제, 단건 결제, 포인트 및 캐시 충전 등은 제외', 유튜브는 유튜브 프리미엄 멤버십 결제건에 한함]
+        target:
+          merchants: [disney_plus, netflix, tving, wavve, youtube_premium]
+        when:
+          - billing: [subscription]
+          - payment_not: [kakao_pay, naver_pay, payco, samsung_pay, toss_pay]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {per: txn, amount: 2500}
+          - {shared: telecom-ott}
+        tiers: {from: 400000}
+      - key: health-5
+        title: 병원·약국·골프 5% 청구할인
+        source: page
+        evidence: ['병원 | 종합병원, 일반병원(치과/한방), 일반의원(치과/한의원), 건강진단센터 업종', 약국 | 약국 업종, '스포츠 | 스포츠용품점, 레저용품점, 골프(연습)장, 테니스장, 볼링장 스키장, 수영장, 종합스포츠센터, 레포츠클럽, 요가 업종', '병원, 약국, 스포츠 | 5% | 5,000원 | 10,000원']
+        target:
+          categories: [hospital, pharmacy, sports.golf]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - per: month
+            amount: {400000: 5000, 800000: 10000}
+        tiers: {from: 400000}
+      - key: leisure-online-5
+        title: 온라인쇼핑 KB Pay 5% 청구할인
+        source: page
+        evidence: ['온라인쇼핑 (KB Pay 결제 시) | G마켓, 11번가, SSG.COM, 무신사, 지그재그 W컨셉, 29CM, 오늘의집, 온라인 다이소몰', '※ [온라인몰] KB Pay 결제 시에만 할인 제공 상품권, 여행 티켓, 도서, 배달, 멤버십 구독료, 외부 제휴몰, 별도 팝업사이트 제외', '온라인쇼핑, 주유, 커피 | 5% | 5,000원 | 10,000원']
+        target:
+          merchants: [daiso, eleven_st, gmarket, musinsa, ohouse, ssg_com, twentynine_cm, wconcept, zigzag]
+        when:
+          - {channel: online}
+          - payment: [kb_pay]
+        area: leisure
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+        unmodeled: [온라인몰의 여행·티켓·도서·배달·멤버십 구독료와 외부 제휴몰·팝업사이트 결제는 할인에서 빠진다]
+      - key: leisure-fuel-5
+        title: SK에너지·GS칼텍스 5% 청구할인
+        source: page
+        evidence: ['주유 | SK에너지, GS칼텍스', '온라인쇼핑, 주유, 커피 | 5% | 5,000원 | 10,000원']
+        target:
+          merchants: [gs_caltex, sk_energy]
+        area: leisure
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+      - key: leisure-cafe-5
+        title: 커피전문점 5% 청구할인
+        source: page
+        evidence: [커피 | 커피 오프라인 매장 (커피전문점 업종), '※ [커피] 오프라인 매장은 커피전문점 업종 결제 건에 한함(앱주문 제외) 백화점/대형마트 등 일부 입점 매장 제외']
+        target:
+          categories: [cafe]
+        when:
+          - {channel: offline}
+        area: leisure
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: leisure}
+        tiers: {from: 400000}
+      - key: vehicle-10
+        title: 주차장·세차장 10% 청구할인
+        source: page
+        evidence: ['주차장, 세차장 업종※ 주유소 내 세차장은 당사 업종분류기준에 따라 제외될 수 있음', '주차장, 세차장 | 10,000원']
+        target:
+          categories: [car.car_wash, car.parking]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 400000}
+    unmodeled: [연간 이용실적 600만원 이상이면 다음 해 포인트리 2만점이나 롯데시네마 관람권 2매를 주는 쿠폰 서비스는 연간 누적이라 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 1구간 한도의 50%만 주는 신규 특례는 계산하지 않는다, 공항 라운지·발레파킹 같은 Mastercard 서비스는 계산하지 않는다, 스포츠 업종 중 골프 외 업종(스포츠용품점·테니스장·볼링장·스키장·수영장·종합스포츠센터·요가)은 담을 업종이 없어 계산하지 않는다, 무승인전표(자판기·터널통행료·항공기내 이용)와 정부지원금은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2025.04.22로 두었다., assumed: '2025-04-22'}
+  - {path: 'revisions[0].limits[telecom-ott]', question: 원문 표가 이동통신요금과 OTT에 월 5천원과 건당 2천5백원 한도를 한 칸으로 적었다. 덜 주는 쪽으로 둘이 한도 하나를 함께 쓰고 OTT에도 건당 한도를 둔다고 두었다, assumed: shared}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 RF후불교통요금 무승인전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 연회비는 기본 7천원과 제휴 4만3천원이고 모바일 단독카드는 4만4천원이다. 할인 받은 결제는 금액 전체가 실적에서 빠진다. KB Pay 10%는 음식·건강·여가·차량 할인과 더해서 받는다.
