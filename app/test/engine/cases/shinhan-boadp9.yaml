@@ -1,0 +1,46 @@
+card: shinhan-boadp9
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 알리 국내 배송 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: aliexpress, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ali-domestic-10: 5000}, counted: 50000}
+  calc: 50,000원 × 10%
+- name: 알리 해외 배송 2만원 이상 10%와 해외 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: aliexpress, channel: online, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ali-overseas-10: 3000, overseas-point-1: 300}, counted: 30000}
+  calc: 30,000원 × 10% + 1% 300P
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: aliexpress, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만
+- name: 음식점 10% 하루 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {dining-10: 1000}, counted: 20000}
+  calc: 2,000원 중 하루 1,000원
+- name: 스타벅스 사이렌오더 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 5000, merchant: starbucks, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {smart-order-10: 500}, counted: 5000}
+  calc: 5,000원 × 10%
+- name: 배민 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-06T12:00, amount: 5000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-10: 500}, counted: 5000}
+  calc: 5,000원 × 10%

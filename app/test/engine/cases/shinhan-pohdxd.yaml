@@ -1,0 +1,24 @@
+card: shinhan-pohdxd
+holder:
+  started_on: '2026-10-01'
+cases:
+- name: 국내 1.5%와 웰컴 3만원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, category: restaurant, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 40000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: lotte_mart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-1-5: 150}, counted: 10000}
+  - {payment: 1, benefits: {domestic-1-5: 600, welcome-30000: 30000}, counted: 40000}
+  - {payment: 2, benefits: {domestic-1-5: 600}, counted: 40000}
+  calc: 10,000 × 1.5% = 150. 40,000 × 1.5% = 600과 웰컴 30,000. 웰컴은 최초 1회
+- name: 해외 2%와 웰컴 3만원 미만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 29999, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  - {payment: 1, benefits: {domestic-1-5: 449}}
+  calc: 100,000 × 2% = 2,000. 29,999 × 1.5% = 449.985 내림 449, 3만원 미만이라 웰컴 없음

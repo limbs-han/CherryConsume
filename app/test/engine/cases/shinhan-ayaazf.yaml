@@ -1,0 +1,94 @@
+card: shinhan-ayaazf
+holder:
+  started_on: '2026-01-01'
+  options: [{option: taxi, choice: r10, effective_from: '2026-01-01'}, {option: movie, choice: r10, effective_from: '2026-01-01'}, {option: coffee, choice: r15, effective_from: '2026-01-01'}, {option: bakery, choice: r15, effective_from: '2026-01-01'}, {option: social, choice: r10, effective_from: '2026-01-01'}, {option: convenience, choice: r20, effective_from: '2026-01-01'}]
+cases:
+- name: 기본 선택 편의점 20% 커피 15%
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 10000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-20: 2000}, counted: 0}
+  - {payment: 1, benefits: {coffee-15: 1500}, counted: 0}
+  - {payment: 2, benefits: {taxi-10: 1000}, counted: 0}
+  calc: 10,000 × 20% = 2,000, 10,000 × 15% = 1,500, 10,000 × 10% = 1,000. 할인 받은 거래는 실적 제외
+- name: 30만 구간 통합 7천 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-20: 7000}, counted: 0}
+  calc: 50,000 × 20% = 10,000이지만 통합 7천
+- name: 영역 월 5만원까지
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 80000, merchant: paris_baguette, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {bakery-15: 7500}, counted: 0}
+  calc: 5만원까지만 15% = 7,500
+- name: 30만 직전 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 30만원 미만
+- name: 모든 영역 20% 선택
+  prev_month_spend: 1500000
+  holder:
+    options: [{option: taxi, choice: r20, effective_from: '2026-01-01'}, {option: movie, choice: r20, effective_from: '2026-01-01'}, {option: coffee, choice: r20, effective_from: '2026-01-01'}, {option: bakery, choice: r20, effective_from: '2026-01-01'}, {option: social, choice: r20, effective_from: '2026-01-01'}, {option: convenience, choice: r20, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, category: taxi, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coffee_bean, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: tous_les_jours, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-08T10:00, amount: 10000, merchant: seven_eleven, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {taxi-20: 2000}}
+  - {payment: 1, benefits: {movie-20: 2000}}
+  - {payment: 2, benefits: {coffee-20: 2000}}
+  - {payment: 3, benefits: {bakery-20: 2000}}
+  - {payment: 4, benefits: {social-20: 2000}}
+  - {payment: 5, benefits: {convenience-20: 2000}}
+  calc: 영역마다 10,000 × 20% = 2,000. 합계 12,000로 통합 4만원 안
+- name: 모든 영역 15% 선택
+  prev_month_spend: 1500000
+  holder:
+    options: [{option: taxi, choice: r15, effective_from: '2026-01-01'}, {option: movie, choice: r15, effective_from: '2026-01-01'}, {option: coffee, choice: r15, effective_from: '2026-01-01'}, {option: bakery, choice: r15, effective_from: '2026-01-01'}, {option: social, choice: r15, effective_from: '2026-01-01'}, {option: convenience, choice: r15, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, category: taxi, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coffee_bean, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: tous_les_jours, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-08T10:00, amount: 10000, merchant: seven_eleven, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {taxi-15: 1500}}
+  - {payment: 1, benefits: {movie-15: 1500}}
+  - {payment: 2, benefits: {coffee-15: 1500}}
+  - {payment: 3, benefits: {bakery-15: 1500}}
+  - {payment: 4, benefits: {social-15: 1500}}
+  - {payment: 5, benefits: {convenience-15: 1500}}
+  calc: 영역마다 10,000 × 15% = 1,500. 합계 9,000로 통합 4만원 안
+- name: 모든 영역 10% 선택
+  prev_month_spend: 1500000
+  holder:
+    options: [{option: taxi, choice: r10, effective_from: '2026-01-01'}, {option: movie, choice: r10, effective_from: '2026-01-01'}, {option: coffee, choice: r10, effective_from: '2026-01-01'}, {option: bakery, choice: r10, effective_from: '2026-01-01'}, {option: social, choice: r10, effective_from: '2026-01-01'}, {option: convenience, choice: r10, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T10:00, amount: 10000, category: taxi, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coffee_bean, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 10000, merchant: tous_les_jours, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-08T10:00, amount: 10000, merchant: seven_eleven, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {taxi-10: 1000}}
+  - {payment: 1, benefits: {movie-10: 1000}}
+  - {payment: 2, benefits: {coffee-10: 1000}}
+  - {payment: 3, benefits: {bakery-10: 1000}}
+  - {payment: 4, benefits: {social-10: 1000}}
+  - {payment: 5, benefits: {convenience-10: 1000}}
+  calc: 영역마다 10,000 × 10% = 1,000. 합계 6,000로 통합 4만원 안

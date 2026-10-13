@@ -1,0 +1,39 @@
+card: shinhan-bubdwl
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 해외 온라인 50만 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: online_shopping, region: overseas, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-fee-free: 1300, overseas-online-0-3: 300, overseas-online-extra: 2200}, counted: 100000}
+  calc: 수수료 1.3% 1,300원 + 0.3% 300P + 2.2% 2,200P
+- name: 해외 오프라인은 수수료 면제만
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, region: overseas, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-fee-free: 1300}, counted: 100000}
+  calc: 1.3% 면제만
+- name: 경계 직전 299999 편의점 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 30만 미만
+- name: 30만 구간 편의점 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cvs-5: 500}, counted: 10000}
+  calc: 10,000원 × 5%
+- name: 후불교통 버스 1%와 실적 제외
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-1: 100}, counted: 0}
+  calc: 10,000원 × 1% = 100원

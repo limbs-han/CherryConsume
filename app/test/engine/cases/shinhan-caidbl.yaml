@@ -1,0 +1,46 @@
+card: shinhan-caidbl
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 모바일티머니 교통과 생활
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: mobile_tmoney}
+  - {at: 2026-11-03T09:00, amount: 1500, category: transit.bus_city, billing: postpaid_transit, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 50000, merchant: hyundai_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 8000, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 6000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {transit-mobile-tmoney-30: 450}, counted: 1500}
+  - {payment: 1, benefits: {}, counted: 1500}
+  - {payment: 2, benefits: {life-department-5: 2500}, counted: 50000}
+  - {payment: 3, benefits: {life-convenience-5: 400}, counted: 8000}
+  - {payment: 4, benefits: {life-telecom-5: 2100}, counted: 60000}
+  - {payment: 5, benefits: {}, counted: 6000}
+  calc: 1,500 × 30% = 450, 실물 후불은 대상 아님, 백화점 2,500, 편의점 400, SKT 5만 × 5% = 2,500이지만 남은 생활 한도 2,100, 커피는 한도 소진
+- name: 교통 한도 7천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20000, category: transit.subway, billing: postpaid_transit, payment_method: mobile_tmoney}
+  - {at: 2026-11-04T08:00, amount: 10000, category: transit.subway, billing: postpaid_transit, payment_method: mobile_tmoney}
+  expect:
+  - {payment: 0, benefits: {transit-mobile-tmoney-30: 6000}, counted: 20000}
+  - {payment: 1, benefits: {transit-mobile-tmoney-30: 1000}, counted: 10000}
+  calc: 6,000 다음 남은 1,000
+- name: 30만 직전은 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 1500, category: transit.subway, billing: postpaid_transit, payment_method: mobile_tmoney}
+  - {at: 2026-11-03T10:00, amount: 6000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 1500}
+  - {payment: 1, benefits: {}, counted: 6000}
+  calc: 30만원 미만
+- name: 커피 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 12000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-coffee-5: 500}, counted: 12000}
+  calc: 1회 1만원까지 × 5% = 500

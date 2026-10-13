@@ -1,0 +1,43 @@
+card: shinhan-poke1m
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 일반 결제 기본 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base: 1000}, counted: 100000}
+  calc: 100,000원 x 1% = 1,000P
+- name: 50만 직전 기본 0.5%
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base: 500}}
+  calc: 0 구간 100,000원 x 0.5% = 500P
+- name: 150만 구간 스타벅스 오프라인 특별 5%
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special: 500}}
+  calc: 10,000원 x 5% = 500P. 기본 적립과 중복되지 않는다
+- name: 100만 구간 SKT 자동납부 3.5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-telecom: 2100}}
+  calc: 60,000원 x 3.5% = 2,100P
+- name: 월 5만P 통합 한도
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 3000000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 1000000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base: 45000}}
+  - {payment: 1, benefits: {special: 1500}}
+  - {payment: 2, benefits: {base: 3500}}
+  calc: 3,000,000 x 1.5% = 45,000P. 이마트 30,000 x 5% = 1,500P. 1,000,000 x 1.5% = 15,000이나 남은 한도 3,500P

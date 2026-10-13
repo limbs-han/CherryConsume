@@ -1,0 +1,53 @@
+card: shinhan-poje1j
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 기본 1%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-point: 1000}, counted: 100000}
+  calc: 100,000원 × 1%
+- name: 경계 직전 399999 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 40만 미만은 적립 없음
+- name: 100만 구간 쿠팡 5% 월 30만원까지
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 400000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-online: 15000}, counted: 400000}
+  calc: 30만원까지 × 5% = 15,000P. 넘친 10만원은 기본 적립 제외 가맹점이라 없음
+- name: 40만 구간 배민 2.5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-delivery: 500}, counted: 20000}
+  calc: 20,000원 × 2.5%
+- name: 100만 구간 SK에너지 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: sk_energy, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-fuel: 2500}, counted: 50000}
+  calc: 50,000원 × 5%
+- name: 200만 구간 넷플릭스 100% 5천P 한도
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {subscribe-100: 5000}, counted: 17000}
+  calc: 17,000원 × 100% 중 한도 5,000P
+- name: 100만 구간 넷플릭스 적립 없음
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 17000}
+  calc: 잔액 조건 없는 한도는 200만원부터. 기본 적립 제외 가맹점

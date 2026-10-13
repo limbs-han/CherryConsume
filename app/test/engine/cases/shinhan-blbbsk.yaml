@@ -1,0 +1,82 @@
+card: shinhan-blbbsk
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 120만 구간 상위 5개 영역 2% 묶음 1
+  prev_month_spend: 1200000
+  payments:
+  - {"at": "2026-11-03T12:00", "amount": 100000, "merchant": "shinsegae_department", "channel": "offline", "payment_method": "physical_card"}
+  - {"at": "2026-11-04T12:00", "amount": 100000, "merchant": "emart", "payment_method": "physical_card"}
+  - {"at": "2026-11-05T12:00", "amount": 100000, "merchant": "gs_shop", "payment_method": "physical_card"}
+  - {"at": "2026-11-06T12:00", "amount": 100000, "merchant": "gmarket", "channel": "online", "payment_method": "physical_card"}
+  - {"at": "2026-11-07T12:00", "amount": 100000, "merchant": "coupang", "channel": "online", "payment_method": "physical_card"}
+  expect:
+  - {payment: 0, benefits: {taking-dept: 2000}}
+  - {payment: 1, benefits: {taking-mart: 2000}}
+  - {payment: 2, benefits: {taking-homeshopping: 2000}}
+  - {payment: 3, benefits: {taking-online: 2000}}
+  - {payment: 4, benefits: {taking-social: 2000}}
+  calc: 영역마다 10만원 × 2% = 2,000. 이용한 영역이 5개라 모두 상위 5개
+- name: 120만 구간 상위 5개 영역 2% 묶음 2
+  prev_month_spend: 1200000
+  payments:
+  - {"at": "2026-11-03T12:00", "amount": 100000, "merchant": "olive_young", "channel": "offline", "payment_method": "physical_card"}
+  - {"at": "2026-11-04T12:00", "amount": 100000, "category": "restaurant.general", "region": "overseas", "payment_method": "physical_card"}
+  - {"at": "2026-11-05T12:00", "amount": 100000, "merchant": "korean_air", "payment_method": "physical_card"}
+  - {"at": "2026-11-06T12:00", "amount": 100000, "merchant": "starbucks", "payment_method": "physical_card"}
+  - {"at": "2026-11-07T12:00", "amount": 100000, "merchant": "gs25", "channel": "offline", "payment_method": "physical_card"}
+  expect:
+  - {payment: 0, benefits: {taking-fashion: 2000}}
+  - {payment: 1, benefits: {taking-overseas: 2000}}
+  - {payment: 2, benefits: {taking-air-dutyfree: 2000}}
+  - {payment: 3, benefits: {taking-coffee: 2000}}
+  - {payment: 4, benefits: {taking-convenience: 2000}}
+  calc: 영역마다 10만원 × 2% = 2,000. 이용한 영역이 5개라 모두 상위 5개
+- name: 120만 구간 상위 5개 영역 2% 묶음 3
+  prev_month_spend: 1200000
+  payments:
+  - {"at": "2026-11-03T12:00", "amount": 100000, "merchant": "paris_baguette", "payment_method": "physical_card"}
+  - {"at": "2026-11-04T12:00", "amount": 100000, "merchant": "baemin", "channel": "online", "payment_method": "physical_card"}
+  - {"at": "2026-11-05T12:00", "amount": 100000, "category": "fuel", "payment_method": "physical_card"}
+  - {"at": "2026-11-06T12:00", "amount": 100000, "category": "education.academy", "channel": "offline", "payment_method": "physical_card"}
+  - {"at": "2026-11-07T12:00", "amount": 100000, "category": "hospital", "payment_method": "physical_card"}
+  expect:
+  - {payment: 0, benefits: {taking-bakery: 2000}}
+  - {payment: 1, benefits: {taking-delivery: 2000}}
+  - {payment: 2, benefits: {taking-fuel: 2000}}
+  - {payment: 3, benefits: {taking-education: 2000}}
+  - {payment: 4, benefits: {taking-hospital: 2000}}
+  calc: 영역마다 10만원 × 2% = 2,000. 이용한 영역이 5개라 모두 상위 5개
+- name: 120만 구간 상위 5개 영역 2% 묶음 4
+  prev_month_spend: 1200000
+  payments:
+  - {"at": "2026-11-03T12:00", "amount": 100000, "merchant": "skt", "billing": "autopay", "payment_method": "physical_card"}
+  - {"at": "2026-11-04T12:00", "amount": 100000, "category": "transit.subway", "billing": "postpaid_transit", "payment_method": "physical_card"}
+  expect:
+  - {payment: 0, benefits: {taking-telecom: 2000}}
+  - {payment: 1, benefits: {taking-transit: 2000}}
+  calc: 영역마다 10만원 × 2% = 2,000. 이용한 영역이 2개라 모두 상위 5개
+- name: 여섯째 영역은 적립 없음, 영역 한도 1만
+  prev_month_spend: 1200000
+  payments:
+  - {"at": "2026-11-03T12:00", "amount": 600000, "merchant": "emart", "payment_method": "physical_card"}
+  - {"at": "2026-11-04T12:00", "amount": 50000, "merchant": "gmarket", "channel": "online", "payment_method": "physical_card"}
+  - {"at": "2026-11-05T12:00", "amount": 40000, "merchant": "coupang", "channel": "online", "payment_method": "physical_card"}
+  - {"at": "2026-11-06T12:00", "amount": 30000, "merchant": "gs_shop", "payment_method": "physical_card"}
+  - {"at": "2026-11-07T12:00", "amount": 20000, "category": "hospital", "payment_method": "physical_card"}
+  - {"at": "2026-11-08T12:00", "amount": 10000, "merchant": "gs25", "channel": "offline", "payment_method": "physical_card"}
+  expect:
+  - {payment: 0, benefits: {taking-mart: 10000}}
+  - {payment: 1, benefits: {taking-online: 1000}}
+  - {payment: 2, benefits: {taking-social: 800}}
+  - {payment: 3, benefits: {taking-homeshopping: 600}}
+  - {payment: 4, benefits: {taking-hospital: 400}}
+  - {payment: 5, benefits: {}}
+  calc: 마트 60만 × 2% = 12,000이지만 영역 1만. 편의점은 이용액 여섯째라 없음
+- name: 경계 직전 399999 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {"at": "2026-11-03T12:00", "amount": 100000, "merchant": "emart", "payment_method": "physical_card"}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만 적립 없음

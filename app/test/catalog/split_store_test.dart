@@ -125,7 +125,7 @@ void main() {
     expect(rows(db), n * copies);
     final first = storeOf(db, chooseIndex(db, big, nothing));
     for (final id in [
-      'shinhan-mrlife-3',
+      'shinhan-mrlife-${copies ~/ 3}',
       'ibk-narasarang-${copies ~/ 2}',
       'hana-wonder2-daily-${copies - 1}',
     ]) {
@@ -142,7 +142,7 @@ void main() {
       [
         'hana-wonder2-daily-${copies - 1}',
         'ibk-narasarang-${copies ~/ 2}',
-        'shinhan-mrlife-3',
+        'shinhan-mrlife-${copies ~/ 3}',
       ],
     );
   });

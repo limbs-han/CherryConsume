@@ -1,0 +1,66 @@
+card: shinhan-biabix
+holder:
+  started_on: '2026-01-01'
+  options: [{option: refinery, choice: gs_caltex, effective_from: '2026-01-01'}]
+cases:
+- name: 30만 구간 GS칼텍스 15만원까지 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 100000, merchant: gs_caltex, payment_method: physical_card}
+  - {at: 2026-11-10T08:00, amount: 100000, merchant: gs_caltex, payment_method: physical_card}
+  - {at: 2026-11-11T08:00, amount: 50000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-gs-10: 10000}, counted: 0}
+  - {payment: 1, benefits: {fuel-gs-10: 5000}, counted: 0}
+  - {payment: 2, benefits: {}, counted: 0}
+  calc: 첫 10만 × 10% = 1만. 둘째는 남은 이용금액 한도 5만 × 10% = 5천. S-OIL은 고르지 않은 정유사. 주유는 실적 제외
+- name: SK에너지 선택 70만 구간
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: refinery, choice: sk_energy, effective_from: '2026-01-01'}]
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 80000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-sk-10: 8000}, counted: 0}
+  calc: 80,000 × 10% = 8,000
+- name: S-OIL과 현대오일뱅크 선택
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: refinery, choice: s_oil, effective_from: '2026-01-01'}]
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 50000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-soil-10: 5000}, counted: 0}
+  calc: 50,000 × 10% = 5,000
+- name: 현대오일뱅크 선택
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: refinery, choice: hd_oilbank, effective_from: '2026-01-01'}]
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 50000, merchant: hd_oilbank, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-hd-10: 5000}, counted: 0}
+  calc: 50,000 × 10% = 5,000
+- name: 차량과 생활 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 100000, merchant: speedmate, payment_method: physical_card}
+  - {at: 2026-11-04T08:00, amount: 80000, category: car.parking, payment_method: physical_card}
+  - {at: 2026-11-05T08:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+  - {at: 2026-11-06T08:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {car-10: 10000}}
+  - {payment: 1, benefits: {car-10: 5000}}
+  - {payment: 2, benefits: {life-5: 500}}
+  - {payment: 3, benefits: {life-5: 1000}}
+  calc: 정비 10만 × 10% = 1만. 주차는 차량 영역 이용금액 한도 15만 중 남은 5만 × 10% = 5천. 편의점 500, 택시 1,000
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 50000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 30만원 미만 할인 없음

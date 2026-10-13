@@ -1,0 +1,57 @@
+card: shinhan-bggdvj
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 정액 캐시백과 통합 한도 5천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 25000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-03T13:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cgv-5000: 5000}}
+  - {payment: 1, benefits: {}}
+  calc: CGV 5,000원으로 통합 한도 5,000원을 다 써 카페는 0
+- name: 50만 구간 생활 정액 캐시백
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 10000, merchant: mega_coffee, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 10000, merchant: kfc, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 10000, merchant: ddangyo, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 10000, merchant: daiso, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T13:00, amount: 17000, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-03T14:00, amount: 20000, merchant: musinsa, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-1000: 1000}}
+  - {payment: 1, benefits: {cafe-1000: 1000}}
+  - {payment: 2, benefits: {fastfood-1000: 1000}}
+  - {payment: 3, benefits: {delivery-1000: 1000}}
+  - {payment: 4, benefits: {living-1000: 1000}}
+  - {payment: 5, benefits: {ott-1000: 1000}}
+  - {payment: 6, benefits: {shopping-1000: 1000}}
+  calc: 영역마다 1,000원씩 7,000원. 50만 구간 한도 1만원 안
+- name: 교통 5%, 통신, 간편결제 1%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 2000, category: transit.subway, payment_method: physical_card}
+  - {at: 2026-11-05T09:00, amount: 55000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T12:00, amount: 30000, category: restaurant.general, payment_method: samsung_pay}
+  expect:
+  - {payment: 0, benefits: {transit-5: 100}, counted: 0}
+  - {payment: 1, benefits: {telecom-2000: 2000}}
+  - {payment: 2, benefits: {pay-1: 300}}
+  calc: 2,000 × 5% = 100. 5만원 이상 자동납부 2,000. 30,000 × 1% = 300
+- name: 실적 없이 해외 1.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1-2: 1200}}
+  calc: 100,000 × 1.2% = 1,200
+- name: 20만 직전이면 국내 혜택 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-03T08:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만 구간

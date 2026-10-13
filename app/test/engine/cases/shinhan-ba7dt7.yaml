@@ -1,0 +1,62 @@
+card: shinhan-ba7dt7
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 일반 결제 1% 캐시백 실적 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-1: 500}}
+  calc: 50,000 x 1% = 500
+- name: 이마트 1%와 0.7% 추가
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-1: 1000, cashback-extra-07: 700}}
+  calc: 100,000 x 1.7% = 1,700
+- name: SKT 자동이체 1.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-1: 500, cashback-extra-07-telecom: 350}}
+  calc: 50,000 x 1% = 500, 0.7% = 350
+- name: 지하철 1.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T08:00, amount: 10000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-1: 100, cashback-extra-07-transit: 70}}
+  calc: 10,000 x 1.7% = 170
+- name: 편의점 2만원 미만 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T08:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-1-coinsave-area: 100}}
+  calc: 10,000 x 1% = 100
+- name: 30만 구간 CGV 1만8천원 3천원 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T20:00, amount: 18000, merchant: cgv, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T20:00, amount: 9000, merchant: megabox, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {movie-3000: 3000}}
+  - {payment: 1, benefits: {movie-1500: 1500}}
+  calc: 1만8천원 이상 3,000원, 9천원 이상 1,500원
+- name: 30만 직전 영화 할인 없이 1%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T20:00, amount: 18000, merchant: cgv, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cashback-1: 180}}
+  calc: 30만원 미만이라 영화 할인 없음. 18,000 x 1% = 180
+- name: 서울랜드 50%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: seoul_land, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {seoul-land-50: 25000}}
+  calc: 50,000 x 50% = 25,000

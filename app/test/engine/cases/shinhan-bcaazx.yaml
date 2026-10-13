@@ -1,0 +1,56 @@
+card: shinhan-bcaazx
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 쇼핑과 생활 할인
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 80000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 40000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 15000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 8000, merchant: daiso, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: yes24, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: sk_energy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 60000, merchant: kurly, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shop-mart-10: 5000}, counted: 80000}
+  - {payment: 1, benefits: {shop-social-10: 3000}, counted: 40000}
+  - {payment: 2, benefits: {life-coffee-10: 1000}, counted: 15000}
+  - {payment: 3, benefits: {life-zakka-10: 800}, counted: 8000}
+  - {payment: 4, benefits: {life-bookstore-10: 1000}, counted: 20000}
+  - {payment: 5, benefits: {life-fuel-60: 1614}, counted: 60000}
+  - {payment: 6, benefits: {partner-kurly-10: 5000}, counted: 60000}
+  calc: 마트 5만 × 10%, 쿠팡 3만 × 10%, 커피 1만 × 10%, 다이소 8천 × 10%, 서점 1만 × 10%, 주유 5만 ÷ 1,858 × 60 = 1,614, 컬리 5만 × 10%
+- name: 쇼핑 한도 1만 5천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: traders, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shop-mart-10: 5000}, counted: 50000}
+  - {payment: 1, benefits: {shop-mart-10: 5000}, counted: 50000}
+  - {payment: 2, benefits: {shop-department-10: 5000}, counted: 50000}
+  - {payment: 3, benefits: {}, counted: 50000}
+  calc: 세 번째까지 1만 5천원으로 쇼핑 한도를 다 쓴다
+- name: 50만 직전은 쇼핑 할인 없고 컬리만
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 20000, merchant: kurly, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  - {payment: 1, benefits: {partner-kurly-10: 2000}, counted: 20000}
+  calc: 쇼핑은 50만원부터, 컬리는 30만원부터
+- name: 아울렛, 창고형, 홈쇼핑 10%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: lotte_premium_outlet, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 30000, merchant: ikea, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: gs_shop, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shop-outlet-10: 3000}, counted: 30000}
+  - {payment: 1, benefits: {shop-warehouse-10: 3000}, counted: 30000}
+  - {payment: 2, benefits: {shop-homeshopping-10: 3000}, counted: 50000}
+  calc: 3만 × 10%, 3만 × 10%, 홈쇼핑은 1회 3만원까지라 3천원

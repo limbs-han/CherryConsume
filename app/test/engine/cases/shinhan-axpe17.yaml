@@ -1,0 +1,37 @@
+card: shinhan-axpe17
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 100만 구간 온라인 서비스
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 80000, merchant: musinsa, channel: online, payment_method: kakao_pay}
+  - {at: 2026-11-04T10:00, amount: 30000, merchant: chatgpt, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 7890, merchant: coupang_wow, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 30000, merchant: claude, billing: subscription, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-pay-10: 5000}, counted: 80000}
+  - {payment: 1, benefits: {online-ai-10: 3000}, counted: 30000}
+  - {payment: 2, benefits: {online-membership-50: 3945}, counted: 7890}
+  - {payment: 3, benefits: {online-ai-10: 3000}, counted: 30000}
+  calc: 간편결제 8,000이지만 건당 5천, ChatGPT 3,000, 와우 3,945, Claude 3,000
+- name: 50만 구간 오프라인 한도 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 10000, category: cafe, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 10000, category: cafe, channel: offline, payment_method: kakao_pay}
+  expect:
+  - {payment: 0, benefits: {offline-mart-10: 6000}, counted: 60000}
+  - {payment: 1, benefits: {offline-coffee-10: 1000}, counted: 10000}
+  - {payment: 2, benefits: {offline-life-10: 3000}, counted: 30000}
+  - {payment: 3, benefits: {}, counted: 10000}
+  calc: 6,000 + 1,000 + 3,000 = 1만원 한도, 카카오페이 오프라인은 제외
+- name: 50만 직전은 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 60000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 60000}
+  calc: 50만원 미만

@@ -1,0 +1,45 @@
+card: shinhan-bgod9l
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 편의점 10% 건당 1천 포인트
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T18:00, amount: 15000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cvs-10: 1000}}
+  calc: 15,000 x 10% = 1,500P가 1회 1천P에 걸림
+- name: 실적 직전 199999는 혜택 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T18:00, amount: 5000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만이라 적립 없음
+- name: 커피 10% 일 1회
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 5000, category: cafe, payment_method: physical_card}
+  - {at: 2026-11-04T15:00, amount: 5000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cafe-10: 500}}
+  - {payment: 1, benefits: {}}
+  calc: 5,000 x 10% = 500P, 같은 날 두 번째는 일 1회에 걸림
+- name: 해외 1%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: grocery_mart, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}}
+  calc: 100,000 x 1% = 1,000P
+- name: 디지털 구독 세 영역
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 8000, merchant: melon, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 14000, merchant: youtube_premium, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 9000, merchant: ridi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {digital-music: 800}}
+  - {payment: 1, benefits: {digital-ott: 1000}}
+  - {payment: 2, benefits: {digital-book: 900}}
+  calc: 800P, 1,400P가 1회 1천P, 900P. 합계 2,700P로 월 3천P 안

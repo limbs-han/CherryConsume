@@ -1,0 +1,36 @@
+card: shinhan-bebbak
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 쿠팡 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {social-1: 500}}
+  calc: 50,000 x 1% = 500P
+- name: 30만 직전 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만
+- name: 주유 0.5%와 KT 자동이체 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 60000, merchant: sk_energy, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: kt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-0-5: 300}}
+  - {payment: 1, benefits: {telecom-0-5: 250}}
+  calc: 60,000 x 0.5% = 300P, 50,000 x 0.5% = 250P
+- name: 스타벅스 실적 없이 500원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 6000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-04T15:00, amount: 6000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-500: 500}}
+  - {payment: 1, benefits: {}}
+  calc: 건당 500원, 일 1회

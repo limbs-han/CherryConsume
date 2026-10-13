@@ -1,0 +1,47 @@
+card: shinhan-bpac88
+holder:
+  started_on: '2026-01-01'
+  options: [{option: fuel, choice: gasoline_diesel, effective_from: '2026-01-01'}]
+  facts: {my_car_hipass: true}
+cases:
+- name: 40만 구간 자동차 이용 서비스와 월 캐시백
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: fuel, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 20000, merchant: kepco_ev, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 5000, category: car.parking, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 30000, category: car.toll, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 6000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-80: 2152, auto-finance-base: 3000}, counted: 50000}
+  - {payment: 1, benefits: {ev-30: 6000}, counted: 20000}
+  - {payment: 2, benefits: {parking-2000: 2000}, counted: 0}
+  - {payment: 3, benefits: {hipass-1000: 1000}, counted: 0}
+  - {payment: 4, benefits: {coffee-500: 500}, counted: 6000}
+  calc: 5만 ÷ 1,858 × 80 = 2,152, 첫 결제로 그 달 월 캐시백 3천, 전기차 6,000, 주차 2천, 하이패스 1천, 커피 500. 자동차 업종은 실적에서 뺐다
+- name: 주유와 전기차 월 1만원 한도
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 30000, merchant: me_ev_charger, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: me_ev_charger, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ev-30: 9000, auto-finance-base: 10000}, counted: 30000}
+  - {payment: 1, benefits: {ev-30: 1000}, counted: 10000}
+  calc: 9,000 다음 남은 1,000. 120만 구간 월 캐시백 1만원
+- name: 40만 직전은 혜택 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: fuel, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 40만원 미만
+- name: LPG 선택 시 리터당 40원
+  prev_month_spend: 800000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: fuel, choice: lpg, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: fuel, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {lpg-40: 1076, auto-finance-base: 5000}, counted: 50000}
+  calc: 5만 ÷ 1,858 × 40 = 1,076, 80만 구간 월 캐시백 5천

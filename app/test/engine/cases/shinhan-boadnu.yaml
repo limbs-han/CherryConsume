@@ -1,0 +1,46 @@
+card: shinhan-boadnu
+cases:
+- name: 20만 구간 스타벅스 5% 최대 1천
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 9999, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-5: 500}}
+  - {payment: 1, benefits: {coffee-5: 1000}}
+  - {payment: 2, benefits: {}}
+  calc: 10,000 x 5% = 500. 30,000은 1,000원 상한. 9,999원은 1만원 미만
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만원 미만
+- name: 온라인 영역들
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, merchant: eleven_st, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 17000, merchant: netflix, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: yogiyo, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 20000, merchant: yes24, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T13:00, amount: 20000, merchant: kyobo_book, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T13:00, amount: 20000, merchant: gs_shop, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-shopping-5: 1000}}
+  - {payment: 1, benefits: {ott-5: 850}}
+  - {payment: 2, benefits: {delivery-5: 1000}}
+  - {payment: 3, benefits: {online-book-5: 1000}}
+  - {payment: 4, benefits: {online-book-5: 1000}}
+  - {payment: 5, benefits: {online-shopping-5: 150}}
+  calc: 1,000+850+1,000+1,000+1,000 = 4,850원. 온라인 60만 구간 한도 5천이라 마지막은 150원
+- name: 편의점과 올리브영
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T11:00, amount: 20000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  - {payment: 1, benefits: {retail-5: 1000}}
+  calc: 500원, 1,000원

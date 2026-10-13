@@ -1,0 +1,353 @@
+card: shinhan-bnac46
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: LG전자 케어솔루션 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-01-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: lg_appliance_subscription
+  expect:
+  - payment: 0
+    benefits:
+      rental-lg-appliance-subscription: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: 코웨이 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-02-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: coway_rental
+  expect:
+  - payment: 0
+    benefits:
+      rental-coway-rental: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: SK매직 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-03-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: sk_magic
+  expect:
+  - payment: 0
+    benefits:
+      rental-sk-magic: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: 쿠쿠 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-04-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: cuckoo_rental
+  expect:
+  - payment: 0
+    benefits:
+      rental-cuckoo-rental: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: BS렌탈 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-05-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: bs_rental
+  expect:
+  - payment: 0
+    benefits:
+      rental-bs-rental: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: 웰릭스렌탈 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-06-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: wellrix_rental
+  expect:
+  - payment: 0
+    benefits:
+      rental-wellrix-rental: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: 넥센타이어 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-07-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: nexen_tire_rental
+  expect:
+  - payment: 0
+    benefits:
+      rental-nexen-tire-rental: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: 바디프랜드 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-08-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: bodyfriend_rental
+  expect:
+  - payment: 0
+    benefits:
+      rental-bodyfriend-rental: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: 교원웰스 렌탈 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-09-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: wells
+  expect:
+  - payment: 0
+    benefits:
+      rental-wells: 7000
+  calc: 120만원 이상 구간 건당 7000P
+- name: 아파트관리비 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-10-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    category: apartment_fee
+  expect:
+  - payment: 0
+    benefits:
+      living-apartment: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 이동통신요금 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-11-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: skt
+  expect:
+  - payment: 0
+    benefits:
+      living-telecom: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 도시가스 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2027-12-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    category: utility.gas
+  expect:
+  - payment: 0
+    benefits:
+      living-gas: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 전기요금 자동이체 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-01-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    category: utility.electricity
+  expect:
+  - payment: 0
+    benefits:
+      living-electricity: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 웅진씽크빅 정기결제 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-02-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: woongjin_thinkbig
+  expect:
+  - payment: 0
+    benefits:
+      living-thinkbig: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 예다함 상조 월부금 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-03-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: yedaham
+  expect:
+  - payment: 0
+    benefits:
+      living-yedaham: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 넷플릭스 정기결제 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-04-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: netflix
+  expect:
+  - payment: 0
+    benefits:
+      digital-netflix: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 웨이브 정기결제 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-05-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: wavve
+  expect:
+  - payment: 0
+    benefits:
+      digital-wavve: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 왓챠 정기결제 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-06-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: watcha
+  expect:
+  - payment: 0
+    benefits:
+      digital-watcha: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 멜론 정기결제 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-07-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: melon
+  expect:
+  - payment: 0
+    benefits:
+      digital-melon: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 지니뮤직 정기결제 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-08-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: genie
+  expect:
+  - payment: 0
+    benefits:
+      digital-genie: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 밀리의서재 정기결제 적립 120만 구간
+  prev_month_spend: 1200000
+  payments:
+  - at: 2028-09-05T09:00
+    amount: 30000
+    billing: autopay
+    payment_method: physical_card
+    merchant: millie
+  expect:
+  - payment: 0
+    benefits:
+      digital-millie: 6000
+  calc: 120만원 이상 구간 건당 6000P
+- name: 렌탈 40만 구간과 업체별 월 1건
+  prev_month_spend: 400000
+  payments:
+  - at: 2026-11-05T09:00
+    amount: 30000
+    merchant: sk_magic
+    billing: autopay
+    payment_method: physical_card
+  - at: 2026-11-06T09:00
+    amount: 30000
+    merchant: sk_magic
+    billing: autopay
+    payment_method: physical_card
+  - at: 2026-11-07T09:00
+    amount: 9999
+    merchant: coway_rental
+    billing: autopay
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      rental-sk-magic: 3000
+    counted: 30000
+  - payment: 1
+    benefits: {}
+  - payment: 2
+    benefits: {}
+  calc: 40만 구간 3천P. 같은 업체 두 번째는 없음. 1만원 미만 없음
+- name: 생활월납 통합 월 3건
+  prev_month_spend: 800000
+  payments:
+  - at: 2026-11-05T09:00
+    amount: 60000
+    merchant: skt
+    billing: autopay
+    payment_method: physical_card
+  - at: 2026-11-06T09:00
+    amount: 30000
+    category: utility.gas
+    billing: autopay
+    payment_method: physical_card
+  - at: 2026-11-07T09:00
+    amount: 30000
+    category: utility.electricity
+    billing: autopay
+    payment_method: physical_card
+  - at: 2026-11-08T09:00
+    amount: 200000
+    category: apartment_fee
+    billing: autopay
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits:
+      living-telecom: 4000
+  - payment: 1
+    benefits:
+      living-gas: 4000
+  - payment: 2
+    benefits:
+      living-electricity: 4000
+  - payment: 3
+    benefits: {}
+  calc: 80만 구간 건당 4천P, 네 번째는 월 3건 초과
+- name: 40만 직전이면 없음
+  prev_month_spend: 399999
+  payments:
+  - at: 2026-11-05T09:00
+    amount: 17000
+    merchant: netflix
+    billing: subscription
+    payment_method: physical_card
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만원 미만 구간

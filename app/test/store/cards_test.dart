@@ -54,8 +54,16 @@ void main() {
       }
     });
     final shinhan = cards(s, issuer: 'shinhan');
-    expect(shinhan.last['name'], '신한카드 Mr.Life');
-    expect(shinhan.last['status'], 'discontinued');
+    // 단종 카드는 판매 중인 카드 아래에 모여 있다. 단종 카드끼리의 순서는 따지지 않는다
+    final states = [for (final r in shinhan) r['status']];
+    expect(
+      states.indexOf('discontinued') > states.lastIndexOf('on_sale'),
+      isTrue,
+    );
+    expect(
+      shinhan.firstWhere((r) => r['name'] == '신한카드 Mr.Life')['status'],
+      'discontinued',
+    );
     expect(shinhan.first['status'], 'on_sale');
     expect(preview(s, 'shinhan-mrlife')['tier_source'], isNotNull);
   });
