@@ -1,0 +1,53 @@
+schema_version: 2
+id: kb-02066
+issuer: kb
+name: KB국민행복체크카드
+short_name: KB 국민행복체크
+kind: check
+product_codes:
+  - '02066'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=02066', fetched_at: '2026-10-12', review_no: 220414-01031-PIF}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 400000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit, utility.electricity, utility.water]
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG(인터넷) 업체 결제와 호텔·백화점·대형마트·철도역사·아울렛 입점 가맹점은 할인에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    limits:
+      - key: integrated
+        per: month
+        amount: {0: 1000, 300000: 1000, 400000: 3000, 500000: 5000}
+    benefits:
+      - key: hospital-5
+        title: 병원 5% 환급할인
+        source: page
+        evidence: [병원 | 5% | 1천원 | 3천원 | 5천원, 30만원 이상 | 40만원 이상 | 50만원 이상, '병원 : 종합병원, 일반/치과/한방병원, 일반/치과/한의원 업종', 최초 카드 사용등록일로부터 다음달 말일까지 ‘KB국민행복체크카드’ 이용실적이 30만원 미만 시에도 할인서비스가 제공됩니다.(단 30만원 이상 구간 적용), 할인(적립) 서비스 제공 관련 카드별 유예기간은 해당카드를 생애 최초 발급받은 경우에 적용됩니다.]
+        target:
+          categories: [hospital]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+    unmodeled: [키즈카페·문화센터·학습지 업종 5% 할인은 담을 업종이 없어 계산하지 않는다. 병원 할인과 통합할인한도를 함께 쓴다, 대중교통 상해와 임신 관련 진단비 단체보험은 계산하지 않는다, 국가바우처 결제는 카드 혜택 계산에 넣지 않는다, '정부지원금(보육료·유치원보조비·바우처)과 무승인전표(자판기, 터널통행료, 항공기내 이용)는 실적에서 빠진다', 체크카드 공통 안내는 동일계열 카드 이용금액을 합산해 실적을 센다고 적었다, 통합할인한도는 본인회원 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2021년 2월 1일 출시와 2022.04.14 심의필만 적었다. 현재 규칙 시작일을 몰라 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.regions', question: 카드 안내는 해외 이용금액을 매입완료 기준으로 실적에 넣는다고 적었지만 체크카드 공통 안내는 해외이용금액을 실적에서 뺀다. 덜 주는 쪽으로 국내 이용만 센다, assumed: domestic}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 실적 제외 '교통요금'이 후불교통만인지 교통 전체인지 분명하지 않다. 덜 주는 쪽으로 교통 업종 전체를 실적에서 뺐다. 택시는 남겼다., assumed: transit}
+notes: 2026-10-12 KB국민카드 상품 페이지로 대조했다. 정부 바우처를 쓰는 국민행복카드의 KB 체크카드다.
