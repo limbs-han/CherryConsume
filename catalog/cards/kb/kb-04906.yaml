@@ -1,0 +1,124 @@
+schema_version: 2
+id: kb-04906
+issuer: kb
+name: H.Point KB국민 체크카드
+short_name: KB H.Point 체크
+kind: check
+product_codes:
+  - '04906'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04906', fetched_at: '2026-10-12', review_no: 200428-01318-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2020-04-28'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 결제와 호텔·백화점·대형마트·철도역사·아울렛 입점 가맹점은 할인·적립에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    stacks:
+      - {key: main, pick: best}
+      - {key: hpoint-extra, pick: best}
+    benefits:
+      - key: hpoint-base
+        title: 국내 가맹점 0.2% H.Point 기본 적립
+        source: page
+        evidence: [H.Point 기본적립 0.2% 국내 가맹점 이용금액 전월이용금액 30만원 이상 적립한도 제한없음, '실적유예기간 제공 : H.Point KB국민 체크카드 최초 카드 사용등록일로부터 다음달 말일까지 이용실적이 없는 경우에도 H.Point 기본적립(0.2%) 서비스 제공', 'H.Point 적립 제외대상 대학(대학원)등록금, 상품권 및 선불카드 구입(충전)금액, 정부지원금, 아파트 관리비, 지방세, 이용금액 건당 1천원 미만 건, 포인트리 충전금액, 취소금액, 각종 수수료 및 이자, 연체료, 생활할인 서비스로 할인 받은 전표', 'H.Point는 현대백화점그룹 통합 멤버십 포인트이며, 1p=1원입니다.']
+        target:
+          exclude_categories: [apartment_fee, education.tuition, tax.local]
+          all: true
+        when:
+          - {region: domestic}
+          - amount: {min: 1000}
+        reward: {type: points, program: h_point, rate: 0.2}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        stack: main
+      - key: hpoint-hyundai
+        title: 현대백화점 0.5% H.Point 추가 적립
+        source: page
+        evidence: [H.Point 추가적립 0.5% 현대백화점그룹 내 이용금액 전월이용금액 30만원 이상 월간 최대 3만점, (추가적립은 실적유예기간 없음), 현대백화점 그룹 내 별도 임대매장 이용 시에는 기본적립 서비스(0.2%적립)만 제공됩니다.]
+        target:
+          merchants: [hyundai_department]
+        when:
+          - amount: {min: 1000}
+        reward: {type: points, program: h_point, rate: 0.5}
+        limits:
+          - {per: month, amount: 30000}
+        tiers: {from: 300000}
+        stack: hpoint-extra
+        unmodeled: [현대백화점그룹의 다른 계열사는 범위가 원문에 나열되지 않아 현대백화점만 담았다, 현대백화점 안 별도 임대매장은 추가 적립에서 빠진다]
+      - key: paris-baguette-5
+        title: 파리바게뜨 5% 환급할인
+        source: page
+        evidence: [파리바게뜨 5% 1구간(30만원 이상 50만원 미만) 1천원 2구간(50만원 이상) 3천원, '제공조건 : 이용금액 건당 5천원 이상 이용 시 할인', 실적유예기간 미적용 (전월 이용실적 충족 시에만 제공)]
+        target:
+          merchants: [paris_baguette]
+        when:
+          - amount: {min: 5000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 1000, 500000: 3000}
+        tiers: {from: 300000}
+        stack: main
+      - key: starbucks-5
+        title: 스타벅스 5% 환급할인
+        source: page
+        evidence: [스타벅스 5% 1구간(30만원 이상 50만원 미만) 1천원 2구간(50만원 이상) 3천원, '할인제외 : 상품권 및 선불카드 구매(충전)금액', 실적유예기간 미적용 (전월 이용실적 충족 시에만 제공)]
+        target:
+          merchants: [starbucks]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 1000, 500000: 3000}
+        tiers: {from: 300000}
+        stack: main
+      - key: cgv-5
+        title: CGV 5% 환급할인
+        source: page
+        evidence: [CGV 5% 1구간(30만원 이상 50만원 미만) 1천원 2구간(50만원 이상) 3천원, '제공조건 : 이용금액 건당 1만원 이상 시 할인', CGV 영화관, 홈페이지 및 공식 App 예매 시 할인, '할인제외: 상품권 구매 및 매점 이용금액']
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 1000, 500000: 3000}
+        tiers: {from: 300000}
+        stack: main
+        unmodeled: [CGV 매점 이용금액은 할인에서 빠진다]
+      - key: olive-young-5
+        title: 올리브영 5% 환급할인
+        source: page
+        evidence: [올리브영 5% 1구간(30만원 이상 50만원 미만) 1천원 2구간(50만원 이상) 3천원, '제공조건 : 이용금액 건당 1만원 이상 시 할인', 실적유예기간 미적용 (전월 이용실적 충족 시에만 제공)]
+        target:
+          merchants: [olive_young]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - per: month
+            amount: {300000: 1000, 500000: 3000}
+        tiers: {from: 300000}
+        stack: main
+    unmodeled: ['정부지원금, 포인트 충전금액, 자판기·터널통행료·기차와 고속버스 취소 반환 수수료 같은 무승인금액은 실적에서 빠진다', 생활할인을 받은 결제는 H.Point 적립에서 빠진다. 같은 묶음에서 큰 쪽 하나만 계산한다, H.Point는 주간 단위로 합산해 현대백화점으로 보내 적립한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2017.08.10 출시와 2020.04.28 심의번호만 적었다. 심의일을 현재 규칙의 시작일로 잠정 적용한다., assumed: '2020-04-28'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 교통이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 원문에 1p=1원이 적혀 있어 공통 H.Point를 쓴다. 생활할인은 가맹점마다 한도가 따로다.
