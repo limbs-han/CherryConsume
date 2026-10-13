@@ -1,0 +1,55 @@
+schema_version: 2
+id: shinhan-boac5c
+issuer: shinhan
+name: SKT T라이트 신한카드
+short_name: 신한 SKT T라이트
+kind: credit
+product_codes: [BOAC5C]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 22000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1196330_2207.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-03-22
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      exclude_categories: [annual_fee, gift_card, insurance.social, prepaid_charge, transit.bus_city, transit.subway, utility.electricity, utility.gas]
+      interest_free: exclude
+    new_card: {tier: 300000}
+    options:
+      - key: light_installment
+        title: SKT 라이트할부 이용 여부
+        choices:
+          - {key: using, title: 라이트할부 이용 중}
+          - {key: none, title: 라이트할부 미이용}
+        default: null
+        change: immediate
+    benefits:
+      - key: skt-telecom
+        title: SKT 통신요금 결제일 할인
+        source: page
+        evidence: ['통신기기(휴대폰/태블릿 등), 인터넷, TV, 집전화 상관없이 요금 통합 청구할인', '라이트할부 이용 회원 30만원 이상 70만원 미만 1만원, 70만원 이상 1만 5천원', '라이트할부 미이용 회원 30만원 이상 70만원 미만 3천원, 70만원 이상 5천원', '라이트할부 완납 시 [라이트할부 미이용 회원] 할인 한도 적용']
+        target:
+          merchants: [skt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 3000, 700000: 5000}
+            adjust:
+              - when:
+                  option:
+                    light_installment: [using]
+                amount: {300000: 10000, 700000: 15000}
+        tiers: {from: 300000}
+        unmodeled: [원문은 SKT 요금 통합 청구할인이라고만 하고 자동납부 조건을 따로 적지 않았는데 요금을 카드로 내는 방식이 자동납부뿐이라 보고 자동납부만 계산한다]
+    unmodeled: [SKT 라이트할부(통신기기 24개월 할부 연 5.9% 확정 이자)는 할부 이자 서비스라 계산하지 않는다, 라이트할부를 다 갚으면 미이용 회원 한도로 바뀌므로 선택을 바꿔야 한다, 교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 지금 혜택 구성이 시작된 날을 원문에서 찾지 못해 신한카드 부속약관 시행일로 두었다, assumed: '2024-03-22'}
+notes: 'SKT T라이트 신한카드 상품 페이지 기준(2026-10-12). 출시 2020-04-09, 심의필 제2020-C1a-03373호(2020.04.20). 연회비는 페이지 HTML의 국내전용 2만2천원, Master 2만5천원. 가족카드 발급 불가. SKT 요금 할인은 라이트할부 이용 회원 월 1만·1만5천원, 미이용 회원 3천·5천원 한도다. 요금이 한도보다 적을 때 요금만큼 할인하는 문구는 KT 가족만족 할부와 달리 없지만 할인액은 결제액을 넘을 수 없어 100%로 두었다. 실적 제외: 카드대출, 연회비, 수수료·이자, 도시가스, 전기요금, 4대보험, 무이자할부(슬림할부 포함), 기프트·선불카드, 상품권·선불전자지급수단, 거래 취소. 신규 발급 회원은 등록월 다음 달 말까지 30만 구간. 2026-10-12 결정대로 시내버스와 지하철을 실적에서 뺐다.'
