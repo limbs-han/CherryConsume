@@ -1,0 +1,188 @@
+schema_version: 2
+id: kb-07986
+issuer: kb
+name: KB국민 노리2 체크카드(Play)
+short_name: KB 노리2 Play
+kind: check
+product_codes:
+  - '07986'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=07986', fetched_at: '2026-10-12', review_no: 260522-01722-HPP}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2023-06-23'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 200000, 300000, 400000, 600000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [education.tuition, gift_card, prepaid_charge, tax.local, transit.bus_city, transit.subway, utility.water]
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG·간편결제 전용 가맹점과 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {0: 3000, 200000: 20000, 400000: 30000, 600000: 40000, 800000: 50000}
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: coffee-10
+        title: 스타벅스·커피빈 10% 할인
+        source: page
+        evidence: ['스타벅스, 커피빈 | 10% | 전월 이용실적 조건 없음', '월 할인한도 : 3천원 (월 3만원 이용금액까지 할인)', 스타벅스는 사이렌오더 결제 포함]
+        target:
+          merchants: [coffee_bean, starbucks]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated}
+          - {per: month, amount: 3000}
+      - key: mobile-10
+        title: 구글플레이·앱스토어 10% 할인
+        source: page
+        evidence: ['구글플레이스토어, 앱스토어 | 10% | 전월 이용실적 20만원 이상 시 제공', '월 할인한도 : 5천원 (월 5만원 이용금액까지 할인)']
+        target:
+          merchants: [app_store, google_play]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated}
+          - {per: month, amount: 5000}
+        tiers: {from: 200000}
+      - key: culture-10
+        title: 인터파크 티켓 10% 할인
+        source: page
+        evidence: [인터파크 티켓 | 10% | 전월 이용실적 20만원 이상 시 제공, '월 할인한도 : 7천원 (월 7만원 이용금액까지 할인)', 공연 티켓 예매 시에만 제공]
+        target:
+          merchants: [interpark]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated}
+          - {per: month, amount: 7000}
+        tiers: {from: 200000}
+        unmodeled: [인터파크 공연 티켓 예매만 할인한다]
+      - key: beauty-5
+        title: 올리브영·미용실 5% 할인
+        source: page
+        evidence: ['올리브영, 미용실 업종 | 5% | 전월 이용실적 20만원 이상 시 제공', '월 할인한도 : 2천원 (월 4만원 이용금액까지 할인)']
+        target:
+          categories: [beauty.salon]
+          merchants: [olive_young]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+      - key: convenience-5
+        title: GS25·CU 5% 할인
+        source: page
+        evidence: ['GS25, CU | 5% | 전월 이용실적 20만원 이상 시 제공', '월 할인한도 : 2천원 (월 4만원 이용금액까지 할인)']
+        target:
+          merchants: [cu, gs25]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: integrated}
+          - {per: month, amount: 2000}
+        tiers: {from: 200000}
+      - key: subscription-1000
+        title: 넷플릭스·유튜브프리미엄 1,000원 할인
+        source: page
+        evidence: ['넷플릭스, 유튜브프리미엄 | 1,000원', 건당 1만원 이상 이용 시 제공, '월 할인횟수 : 2회 (월 할인한도 2천원 이내 제공)']
+        target:
+          merchants: [netflix, youtube_premium]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: integrated}
+          - {per: month, count: 2}
+        tiers: {from: 200000}
+      - key: delivery-1000
+        title: 배달의민족·요기요 1,000원 할인
+        source: page
+        evidence: ['배달의민족, 요기요 | 1,000원', 건당 1만원 이상 이용 시 제공, '월 할인횟수 : 1회 (월 할인한도 1천원 이내 제공)']
+        target:
+          merchants: [baemin, yogiyo]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: integrated}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+      - key: telecom-2500
+        title: 이동통신 자동이체 2,500원 할인
+        source: page
+        evidence: ['SKT, KT, LG U+, Liiv M | 2,500원', 통신요금 5만원 이상 이용 시 제공, 이동통신요금 자동이체 납부금액 기준 제공, '월 할인횟수 : 1회 (월 할인한도 2천5백원 이내 제공)']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, liiv_m, skt]
+        when:
+          - amount: {min: 50000}
+          - billing: [autopay]
+        reward: {type: cashback, fixed: 2500}
+        limits:
+          - {shared: integrated}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+      - key: movie-4000
+        title: CGV 4,000원 할인
+        source: page
+        evidence: ['CGV | 4,000원', 건당 1만원 이상 이용 시 제공, '현장 결제, 공식 홈페이지 및 모바일(앱) 결제 시 제공', '할인 제외 : 상품권 구매 및 매점 이용금액', '월 할인횟수 : 2회 (월 할인한도 8천원 이내 제공)']
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 4000}
+        limits:
+          - {shared: integrated}
+          - {per: month, count: 2}
+        tiers: {from: 200000}
+        unmodeled: [CGV 매점 결제는 할인에서 빠진다]
+      - key: amusement-15000
+        title: 에버랜드·롯데월드 15,000원 할인
+        source: page
+        evidence: ['에버랜드, 롯데월드 | 15,000원', 건당 3만원 이상 이용 시 제공, 티켓 결제 시 제공, '월 할인횟수 : 1회 (월 할인한도 1만5천원 이내 제공)']
+        target:
+          merchants: [everland, lotte_world]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, fixed: 15000}
+        limits:
+          - {shared: integrated}
+          - {per: month, count: 1}
+        tiers: {from: 200000}
+        unmodeled: [놀이공원 매점 결제는 할인에서 빠진다]
+      - key: play-pc-10
+        title: PC방 10% 할인
+        source: page
+        evidence: ['[Play] 게임 할인 PC방 업종 10% 할인', 전월 이용실적 30만원 이상 시 제공, '월 할인한도: 2천원 (월 2만원 이용분까지 할인)']
+        target:
+          categories: [pc_room]
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: integrated}
+          - {per: month, amount: 2000}
+        tiers: {from: 300000}
+      - key: play-fastfood-1000
+        title: 패스트푸드 1,000원 할인
+        source: page
+        evidence: ['[Play] 푸드 할인 패스트푸드 업종 1,000원 할인', 전월 이용실적 30만원 이상 시 제공, 건당 1만원 이상 이용 시, '월 할인횟수: 1회 (월 할인한도 1천원 이내 제공)']
+        target:
+          categories: [restaurant.fastfood]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, fixed: 1000}
+        limits:
+          - {shared: integrated}
+          - {per: month, count: 1}
+        tiers: {from: 300000}
+    unmodeled: [무승인금액(자판기·터널통행료·기차/고속버스 취소 반환 수수료)과 정부지원금과 포인트리 충전금액은 실적에서 빠진다. 해외 이용액은 매입 완료월 실적에 넣는다, 노리2 KB Pay·Global과 실적과 한도를 합산하지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2023.06.23으로 두었다., assumed: '2023-06-23'}
+  - {path: 'revisions[0].limits[integrated]', question: 원문 통합할인한도표는 20만원 이상부터다. 실적 조건 없는 커피 할인만 받는 20만원 미만 구간은 커피 월 한도 3천원으로 두었다, assumed: '0: 3000'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통요금 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 일상 혜택은 kb-07964 노리2 KB Pay와 같고 KB Pay 추가 할인 대신 Play 게임·푸드 할인이 있다. 체크카드 환급할인은 캐시백으로 옮겼다.
