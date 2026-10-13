@@ -1,0 +1,94 @@
+schema_version: 2
+id: kb-09340
+issuer: kb
+name: KB국민 WE:SH Together 카드
+short_name: KB WE:SH Together
+kind: credit
+product_codes:
+  - '09340'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 7000}
+  - {scope: global, brand: visa, amount: 7000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09340', fetched_at: '2026-10-12', review_no: 제2023-C1a-04886호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2023-06-28'
+    source: page
+    tiers: [0]
+    spend: {basis: prev_calendar_month, exclude_applied: 0}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [정부지원금 결제와 신차구매 청구(환급) 할인 전표는 할인에서 빠진다]
+    limits:
+      - {key: integrated, per: month, amount: 50000}
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: base-0-2
+        title: 국내외 가맹점 0.2% 청구할인
+        source: page
+        evidence: [그 외 가맹점 | 모임 영역 외 국내외 가맹점 | 0.2%, '통합 월 할인한도 : 5만원', 전월 실적 조건 없음]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.2}
+        limits:
+          - {shared: integrated}
+      - key: moim-dining-0-4
+        title: 모임 영역 음식점 0.4% 청구할인
+        source: page
+        evidence: ['음식점 | 한식, 일식, 중식, 양식, 뷔페, 패스트푸드, 패밀리레스토랑, 일반음식점, 휴게음식점 업종', '음식점, 커피, 편의점 영역은 오프라인 결제 건에 한하며, 백화점/대형마트 등 일부 입점 매장 제외']
+        target:
+          categories: [restaurant.fastfood, restaurant.general]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 0.4}
+        limits:
+          - {shared: integrated}
+      - key: moim-cafe-0-4
+        title: 모임 영역 커피전문점 0.4% 청구할인
+        source: page
+        evidence: [커피 | 커피전문점 업종, 오프라인 결제 건에 한함]
+        target:
+          categories: [cafe]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 0.4}
+        limits:
+          - {shared: integrated}
+      - key: moim-convenience-0-4
+        title: 모임 영역 CU·GS25 0.4% 청구할인
+        source: page
+        evidence: ['편의점 | CU, GS25', 오프라인 결제 건에 한함]
+        target:
+          merchants: [cu, gs25]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 0.4}
+        limits:
+          - {shared: integrated}
+      - key: moim-golf-0-4
+        title: 모임 영역 골프장 0.4% 청구할인
+        source: page
+        evidence: ['스포츠 | 종합스포츠센터, 골프(연습)장, 수영장, 테니스장, 볼링장, 당구장, 스키장, 스포츠용품점, 레저용품점 업종']
+        target:
+          categories: [sports.golf]
+        reward: {type: billing_discount, rate: 0.4}
+        limits:
+          - {shared: integrated}
+      - key: moim-openmarket-0-4
+        title: 모임 영역 G마켓·옥션·11번가 KB Pay 0.4% 청구할인
+        source: page
+        evidence: ['오픈마켓 (KB Pay) | G마켓, 옥션, 11번가 (KB Pay 이용 건만 할인)', '오픈마켓 영역은 상품권, 여행, 항공권, 티켓, 도서, 별도 팝업 사이트 제외']
+        target:
+          merchants: [auction, eleven_st, gmarket]
+        when:
+          - payment: [kb_pay]
+        reward: {type: billing_discount, rate: 0.4}
+        limits:
+          - {shared: integrated}
+        unmodeled: [오픈마켓의 여행·항공권·티켓·도서 결제와 별도 팝업 사이트 결제는 0.4% 할인에서 빠진다]
+    unmodeled: [모임 영역의 골프 외 스포츠 업종(종합스포츠센터·수영장·테니스장·볼링장·당구장·스키장·스포츠용품점·레저용품점)과 스터디카페(독서실 업종)는 담을 업종이 없어 0.2%로 계산한다, 연간 결제실적 300만원 이상이면 포인트리 7천점을 주는 연간 리워드는 연간 누적이라 계산하지 않는다, 할인 한도는 본인회원 기준이고 가족카드 이용분과 함께 쓴다]
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 전월 실적 조건이 없는 카드라 구간은 하나다. 모임 영역 0.4%는 그 외 가맹점 0.2%를 대신한다. 출시일 2023.06.28은 부가서비스 변경 안내 문장에서 옮겼다.
