@@ -1,0 +1,66 @@
+schema_version: 2
+id: shinhan-plad43
+issuer: shinhan
+name: 신한카드 플리
+short_name: 신한 플리
+search_names: [플리]
+kind: credit
+product_codes:
+  - '202211280002'
+  - PLAD43
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1220329_2207.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=202211280002', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-03-22
+    source: page
+    tiers: [0, 400000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.gas]
+    new_card: {tier: 400000}
+    benefit_exclusions:
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.gas]
+      unmodeled: [포인트 사용 거래의 포인트 금액은 할인하지 않는다, 플리로 신한카드 할인 서비스(이벤트 포함)를 받은 거래는 금액 전체를 할인하지 않는다, 신차판매와 제약회사 업종은 실적과 할인에서 빠진다]
+    stacks:
+      - {key: daily}
+    benefits:
+      - key: daily-solpay
+        title: 국내 신한 SOL페이 결제 0.9% 결제일 할인
+        source: page
+        evidence: ['신한 SOL페이를 통한 결제 시: 국내 신판(일시불+할부) 이용금액 0.9% 결제일 할인', 전월 이용금액 조건/할인 한도 없음, '신한 SOL페이를 통한 결제: 신한 SOL페이·슈퍼SOL로 결제(터치결제, QR·바코드 결제, NFC결제 포함. 단, ARS결제, 일반결제, Smart결제는 서비스 제외)']
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - payment: [shinhan_sol_pay]
+        reward: {type: billing_discount, rate: 0.9}
+        stack: daily
+        unmodeled: ['신한 SOL페이의 ARS결제, 일반결제, Smart결제는 0.5%로 본다']
+      - key: daily-domestic
+        title: 국내 0.5% 결제일 할인
+        source: page
+        evidence: ['신한 SOL페이가 아닌 방식으로 결제 시: 국내 신판(일시불+할부) 이용금액 0.5% 결제일 할인', 전월 이용금액 조건/할인 한도 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+        stack: daily
+      - key: daily-overseas
+        title: 해외 일시불 0.5% 결제일 할인
+        source: page
+        evidence: [해외 일시불 이용금액 0.5% 결제일 할인, 해외 일시불 거래 후 할부로 전환하는 경우는 제외됩니다., 해외 이용금액 할인 서비스는 해외겸용 카드 발급 후 이용 시 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: billing_discount, rate: 0.5}
+        stack: daily
+        unmodeled: [해외 서비스 수수료를 포함한 원화 청구금액으로 할인한다]
+    unmodeled: ['Weekly 할인 쿠폰(월 3천원 1회, 1천원 3회, 전월 40만원 이상, 5천원 이상)은 매주 신한 SOL페이에서 쿠폰 받기를 해야 해서 계산하지 않는다. 쿠폰이 적용된 거래는 Daily 할인을 받지 않는다', 'Monthly 단골 적립(전월 최다 이용 오프라인 가맹점의 월 3, 6, 9번째 이용에 1천 포인트)은 가맹점이 지난달 이용으로 자동 선택되어 계산하지 않는다', '교통카드 이용금액은 실물 전전월, 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다', 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2022.05.18이고 카드사 공통 규칙 시작일을 시작일로 둔다, assumed: '2024-03-22'}
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2022.05.18. 연회비 국내 1.5만원, 해외겸용 1.8만원. Daily 할인은 전월 실적과 한도 없이 국내 SOL페이 0.9%, 그 밖 0.5%, 해외 일시불 0.5%. Weekly 쿠폰과 Monthly 단골 적립은 전월 40만원 이상, 신규 회원은 등록월 다음 달 말까지 실적과 관계없이 제공.
