@@ -1,0 +1,140 @@
+schema_version: 2
+id: shinhan-aebc6s
+issuer: shinhan
+name: 신한투자증권 CMA R+ 신한카드 Love 체크
+short_name: 신한투자증권 CMA R+ Love 체크
+search_names: [CMA 러브, 러브 체크]
+kind: check
+product_codes:
+  - '201503090003'
+  - AEBC6S
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1187977_2206.html', fetched_at: 2026-10-12}
+  - {id: api, kind: api, url: 'https://shapi.shinhancard.com/card-apply/search/v1.0/getCardProductsInformation?entryId=201503090003', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2024-03-22
+    source: page
+    tiers: [0, 200000, 300000, 500000, 800000]
+    spend:
+      exclude_categories: [annual_fee, gift_card.prepaid_card, prepaid_charge]
+      exclude_applied: 1
+    new_card: {tier: 200000}
+    limits:
+      - key: integrated
+        per: month
+        amount: {200000: 5000, 300000: 10000, 500000: 20000, 800000: 30000}
+      - {key: department-day, per: day, count: 1}
+      - {key: department-month, per: month, count: 2}
+      - {key: mart-day, per: day, count: 1}
+      - {key: mart-month, per: month, count: 2}
+      - {key: family-restaurant, per: month, count: 2}
+    benefits:
+      - key: fuel-40
+        title: GS칼텍스 리터당 40원 캐시백
+        source: page
+        evidence: [GS칼텍스 주유시 리터당 40원 캐시백, '1일 2회, 1회 10만원(할인 전 승인금액), 월 30만원까지 할인 가능', '휘발유,등유,경유에 한하며, LPG는 제외됩니다.', 주유 서비스는 정유사가 통보한 휘발유 표준 고시유가 기준]
+        target:
+          merchants: [gs_caltex]
+        reward: {type: cashback, per_liter: 40}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 2}
+          - {per: month, base: 300000}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [리터는 정유사 휘발유 표준 고시유가로 환산한다, LPG는 제외한다]
+      - key: department-5
+        title: 4대 백화점 5% 캐시백
+        source: page
+        evidence: [4대 백화점(롯데, 현대, 신세계, 갤러리아) 5% 캐시백, '4대 백화점 통합 일 1회, 월 2회(월 1일~말일), 1회 10만원(할인 전 승인금액 기준, 1회 최대 5천원까지 할인)', 온라인매장 및 상품권 구매시에는 서비스 적용이 제외됩니다.]
+        target:
+          merchants: [galleria, hyundai_department, lotte_department, shinsegae_department]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: department-day}
+          - {shared: department-month}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: mart-5
+        title: 3대 할인점 5% 캐시백
+        source: page
+        evidence: [3대 할인점(이마트, 홈플러스, 롯데마트) 5% 캐시백, '3대 할인점 통합 일1회, 월 2회(월 1일~말일), 1회 10만원(할인 전 승인금액 기준, 1회 최대 5천원까지 할인)', 온라인 매장 및 상품권 구매시에는 서비스 적용이 제외됩니다., 이마트 에브리데이·메트로/홈플러스익스프레스/롯데슈퍼 등 슈퍼마켓(SSM) 매장에서는 서비스가 적용되지 않습니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: mart-day}
+          - {shared: mart-month}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: gs-shop-5
+        title: GS샵 5% 캐시백
+        source: page
+        evidence: [GS샵(GS SHOP) 5% 캐시백, '일 1회, 월2회(월 1일~말일), 1회 10만원(할인 전 승인금액 기준, 1회 최대 5천원까지 할인)', 타 쿠폰 및 타 카드와 중복 할인이 불가합니다.]
+        target:
+          merchants: [gs_shop]
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 100000}
+          - {per: day, count: 1}
+          - {per: month, count: 2}
+          - {shared: integrated}
+        tiers: {from: 200000}
+      - key: outback-20
+        title: 아웃백 20% 현장 할인
+        source: page
+        evidence: [아웃백 20% 현장 할인, '패밀리 레스토랑, 월 2회(월 1일~말일), 1회 10만원(할인 전 승인금액 기준, 1회 최대 2만원 까지 할인)']
+        target:
+          merchants: [outback]
+        when:
+          - {channel: offline}
+        reward: {type: onsite_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: family-restaurant}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [단품 메뉴만 할인하고 세트와 행사 메뉴는 제외한다]
+      - key: paris-croissant-20
+        title: 파리크라상 20% 현장 할인
+        source: page
+        evidence: [파리크라상 20% 현장 할인, '패밀리 레스토랑, 월 2회(월 1일~말일), 1회 10만원(할인 전 승인금액 기준, 1회 최대 2만원 까지 할인)', 매장 자체 행사와는 중복 할인 불가하며 ‘스마트’ 매장에서 할인 제외됩니다.]
+        target:
+          merchants: [paris_croissant]
+        when:
+          - {channel: offline}
+        reward: {type: onsite_discount, rate: 20}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: family-restaurant}
+          - {shared: integrated}
+        tiers: {from: 200000}
+        unmodeled: [스마트 매장과 세븐스프링스 코엑스점은 할인하지 않는다]
+      - key: starbucks-20
+        title: 스타벅스 20% 캐시백
+        source: page
+        evidence: [스타벅스 20% 캐시백, '1일 1회, 월 5회(월 1일~말일), 1회 1만원(할인 전 승인금액 기준, 1회 최대 2천원 할인)', 스타벅스 상품권 구매 및 선불카드 구매 또는 충전 시 서비스 적용 불가]
+        target:
+          merchants: [starbucks]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 10000}
+          - {per: day, count: 1}
+          - {per: month, count: 5}
+          - {shared: integrated}
+        tiers: {from: 200000}
+    unmodeled: [서가앤쿡 30% 할인(패밀리 레스토랑 통합 월 2회)은 공통 가맹점이 없어 계산하지 않는다, CGV·메가박스 영화 최대 7천원 할인은 금액 기준이 원문에 없어 계산하지 않는다, 롯데월드·서울랜드 50% 할인은 직전 3개월 누적 30만원 조건이라 계산하지 않는다, CMA 추가 금리와 이체·출금 수수료 면제는 결제 혜택이 아니라 계산하지 않는다, 할인 적용 후 금액으로 실적을 더하는데 할인액만 뺄 수 없어 할인 받은 결제 전체를 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 대형 백화점·할인점·쇼핑몰 입점 매장은 식음료 할인에서 제외한다, 다른 쿠폰이나 카드 할인과 중복으로 받을 수 없다, 해외 이용금액은 매입일 기준으로 실적 달을 정한다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: '원문 실적 제외는 연회비, 각종수수료, 이자, 거래취소, 선불카드 충전, 기프트카드 구매 "등"이다. 나머지 항목을 알 수 없다', assumed: 'annual_fee, gift_card.prepaid_card, prepaid_charge'}
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날을 찾지 못했다. 카드 출시는 2015.03.09이고 카드사 공통 규칙 시작일을 시작일로 둔다, assumed: '2024-03-22'}
+notes: 신한카드 상품 페이지와 상품 API 기준. 카드 출시 2015.03.09. 연회비 없음. 전월 이용금액 20만/30만/50만/80만원 이상 구간마다 쇼핑·주유·외식·영화 통합 할인한도 5천/1만/2만/3만원. 신규 회원은 등록월 다음 달 말까지 한도 5천원, 전월 30만원 이상이면 실적 구간 한도. 교통카드 이용실적은 전전월 기준. 패밀리 레스토랑(아웃백, 파리크라상, 서가앤쿡)은 통합 월 2회 현장 할인.
