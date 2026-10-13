@@ -1,0 +1,65 @@
+schema_version: 2
+id: shinhan-plbcy4
+issuer: shinhan
+name: 신한카드 플리(체크)
+short_name: 신한 플리 체크
+kind: check
+product_codes: [PLBCY4, PLBD46]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1216831_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2022-05-18
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.gas, utility.water]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - payment: [kakao_pay, naver_pay, payco, toss_pay]
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility.electricity, utility.gas, utility.water]
+      unmodeled: [포인트로 결제한 금액과 플리 서비스 이외의 프로모션 할인이 적용된 거래는 할인하지 않는다, 신차판매와 제약회사 업종은 할인하지 않는다]
+    benefits:
+      - key: daily-sol-0-3
+        title: 신한 SOL페이 국내 0.3% 할인
+        source: page
+        evidence: ['신한 SOL페이를 통한 결제 시: 국내 신판(일시불+할부) 이용금액 0.3% 할인', '신한 SOL페이·슈퍼SOL로 결제(터치결제, QR·바코드 결제, NFC결제 포함. 단, ARS결제, 일반결제, Smart결제는 서비스 제외)', 전월 이용금액 조건/할인 한도 없음, 할인된 금액은 고객님의 결제일에 결제계좌로 캐시백됩니다.]
+        target: {all: true}
+        when:
+          - {region: domestic}
+          - payment: [shinhan_sol_pay]
+        reward: {type: cashback, rate: 0.3}
+        unmodeled: [신한 SOL페이의 ARS결제, 일반결제, Smart결제는 0.2%만 받는다]
+      - key: daily-0-2
+        title: 국내 0.2% 할인
+        source: page
+        evidence: ['신한 SOL페이가 아닌 방식으로 결제 시: 국내 신판(일시불+할부) 이용금액 0.2% 할인', 전월 이용금액 조건/할인 한도 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: cashback, rate: 0.2}
+      - key: overseas-0-2
+        title: 해외 일시불 0.2% 할인
+        source: page
+        evidence: [해외 일시불 이용금액 0.2% 할인, 해외 일시불 거래 후 할부로 전환하는 경우는 제외됩니다., 해외 이용금액 할인 서비스는 해외겸용 카드 발급 후 이용 시 제공됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: cashback, rate: 0.2}
+        unmodeled: [해외겸용 Mastercard로 발급한 경우만 받는다]
+    unmodeled: ['Weekly 할인 쿠폰(매월 8~14일과 22일~말일에 1천원 쿠폰 각 1장, 전월 30만원 이상, 1만원 이상 국내 거래)은 신한 SOL페이에서 쿠폰 받기를 해야 적용되어 계산하지 않는다. 쿠폰이 적용된 거래는 Daily 할인 대신 쿠폰을 받는다', 'Monthly 단골 적립(전월 최다 이용 오프라인 가맹점의 월 3, 6, 9번째 1만원 이상 이용 건에 1천 포인트)은 단골 가맹점과 이용 횟수를 셀 수 없어 계산하지 않는다', 교통카드 이용금액은 전전월 금액이 전월 실적에 반영되고 모바일 후불교통은 전월 금액이 반영되는데 결제수단별 반영월을 담을 수 없어 시내버스와 지하철을 실적에서 뺐다. 실적이 실제보다 적게 잡힌다, 신차판매와 제약회사 업종 이용금액은 전월 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].spend.cancellation', question: 취소 금액을 어느 달 실적에서 빼는지 상품 페이지에 없다. 신한카드 기본값을 따랐다, assumed: cancel_month}
+notes: '신한카드 상품 페이지 기준. 연회비는 국내전용과 Mastercard 모두 없음. Daily 할인은 전월 실적과 한도 없이 신한 SOL페이 국내 0.3%, 그 밖의 국내 0.2%, 해외 일시불 0.2%이고 결제일에 결제계좌로 캐시백된다. 두 국내 할인은 같은 묶음이라 큰 쪽 하나만 받는다. 플리 체크(산리오캐릭터즈) PLBD46은 혜택이 같은 디자인 상품이라 상품 코드를 더했다. 실적 제외: 연회비, 현금서비스, 카드론, 수수료, 이자, 기프트카드와 선불카드, 상품권과 선불전자지급수단, 국세, 지방세, 수도, 4대보험, 초중고 납입금, 대학등록금, 관리비, 도시가스, 전기, 취소, 신차판매와 제약회사 업종.'
