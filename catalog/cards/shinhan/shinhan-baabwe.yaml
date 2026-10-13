@@ -1,0 +1,85 @@
+schema_version: 2
+id: shinhan-baabwe
+issuer: shinhan
+name: 카카오페이 신한 체크카드
+short_name: 카카오페이 신한 체크
+kind: check
+product_codes: [BAABWE]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.shinhancard.com/pconts/html/card/apply/check/1187963_2206.html', fetched_at: 2026-10-12}
+checked_at: 2026-10-12
+revisions:
+  - effective_from: 2019-07-02
+    source: page
+    tiers: [0, 300000, 500000, 700000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [gift_card, prepaid_charge, transit.bus_city, transit.subway]
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any: []
+      categories: [annual_fee, apartment_fee, education.primary_secondary_fee, gift_card, insurance.social, prepaid_charge, tax, utility]
+      unmodeled: [포인트로 결제한 금액과 신한카드 할인이 적용된 거래는 국내 적립에서 빠진다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 5000, 500000: 7000, 700000: 10000, 1000000: 13000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [transit-3, telecom-3, kakaopay-2, overseas-1]
+    benefits:
+      - key: kakaopay-2
+        title: 카카오페이 결제 2% 적립
+        source: page
+        evidence: [카카오페이 결제 시 2% 적립, 전월 이용금액 관계없이 적용, 월간 적립한도 1만원, 카카오페이(온/오프라인) 가맹점에서 카카오페이(pay) 간편결제 시 적용]
+        target: {all: true}
+        when:
+          - payment: [kakao_pay]
+          - {region: domestic}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+      - key: transit-3
+        title: 대중교통 버스·지하철 3% 적립
+        source: page
+        evidence: [대중교통 3% 적립(버스/지하철), 전월 이용금액 30만원 이상 시 제공, '통합 적립한도 적용, 월 최대 5천원까지 적립', 국내이용 서비스가 중복일 경우 교통/통신/영화 서비스부터 적용되며 중복 적립은 불가합니다.]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        when:
+          - billing: [postpaid_transit]
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: telecom-3
+        title: 이동통신요금 자동이체 3% 적립
+        source: page
+        evidence: [이동통신요금 자동 이체 시 3% 적립, 건당 5만원이상 청구 시, 전월 이용금액 30만원 이상 시 제공, '통합 적립한도 적용, 월 최대 5천원까지 적립', '약정금액 대납, 지점을 통한 월납, 알뜰폰 적립 제외']
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 50000}
+        reward: {type: cashback, rate: 3}
+        limits:
+          - {per: month, amount: 5000}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: overseas-1
+        title: 해외 1% 적립
+        source: page
+        evidence: [해외 전가맹점(온라인 포함) 이용금액에 1% 적립, 일/월/한도 제한 없음, 전월 이용금액 관계없이 적용]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 1}
+    unmodeled: [CGV 영화 최대 3천원 적립(월 1회)은 적립률이나 최소 금액이 원문에 없어 계산하지 않는다, 해외 ATM 인출 1건당 US $3 적립은 결제가 아니라 계산하지 않는다, 적립은 카카오페이머니로 받고 카카오페이에 가입하지 않았으면 마이신한포인트로 받는다, 교통카드 이용금액은 실물 전전월 모바일 후불교통 전월 실적에 반영되지만 계산은 실적에서 뺀다, 카카오페이에서 삼성페이 같은 제휴 간편결제로 결제하면 카카오페이 적립에서 빠진다]
+notes: 카카오페이 신한 체크카드 상품 페이지 기준. 연회비 없음. 카카오페이 결제 2%는 실적과 관계없이 월 1만원까지 준다. 버스·지하철 후불교통 3%와 이동통신 자동이체 3%는 전월 30만원 이상에서 각각 월 5천원, 구간별 통합 5천, 7천, 1만, 1만3천원 안에서 준다. 교통과 통신이 카카오페이 적립보다 먼저 적용되고 겹치지 않는다. 해외는 1% 한도 없음. 적립은 카카오페이머니라 캐시백으로 담았다. 이 카드는 카카오페이 결제가 핵심이라 카드사 기본값의 간편결제 제외를 덮었다. 신규 발급 회원은 등록월 다음 달 말까지 통합 5천원이라 30만 구간으로 두었다.
