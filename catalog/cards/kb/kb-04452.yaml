@@ -1,0 +1,155 @@
+schema_version: 2
+id: kb-04452
+issuer: kb
+name: KB국민 골든라이프 티타늄카드
+short_name: KB 골든라이프 티타늄
+kind: credit
+product_codes:
+  - '04452'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: mastercard, amount: 40000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04452', fetched_at: '2026-10-12', review_no: 제2021-C1a-02186호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2021-03-19'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: medical-5
+        title: 병원·약국·동물병원 5% 청구할인
+        source: page
+        evidence: ['병원/약국 : 종합병원, 일반병원, 한방병원, 치과병원, 한의원, 동물병원 업종/약국 업종', '병원/약국 | 5% | 1만원 | 2만원 | (일 할인한도 : 1만원)']
+        target:
+          categories: [hospital, pet.vet, pharmacy]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: day, amount: 10000}
+          - per: month
+            amount: {300000: 10000, 600000: 20000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: fuel-60
+        title: 주유소·충전소 리터당 60원 청구할인
+        source: page
+        evidence: ['주유 : 주유소, 충전소 업종', '주유소, 충전소 업종 | 리터당 60원 | 일 10만원, 월 20만원 이용금액', '기준유가 : GS칼텍스 본사 고시 휘발유가 기준(경유, 등유, LPG는 휘발유가로 환산하여 할인율 적용)']
+        target:
+          categories: [fuel]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: day, base: 100000}
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [리터는 GS칼텍스 본사 고시 휘발유가로 환산한다. 앱은 공통 기름값 기준값으로 환산한다]
+      - key: mart-5
+        title: 이마트·롯데마트·홈플러스 5% 청구할인
+        source: page
+        evidence: ['이마트 롯데마트 홈플러스 | 5% | 5천원 | 1만원 | (일 할인한도 : 5천원)', '온라인쇼핑몰, 상품권 구매, 건물내 임대매장, SSM(이마트 에브리데이, 홈플러스 익스프레스, 롯데슈퍼) 이용금액 할인 제외']
+        target:
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: day, amount: 5000}
+          - per: month
+            amount: {300000: 5000, 600000: 10000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [대형마트 건물 안 임대매장은 할인에서 빠진다]
+      - key: golf-1
+        title: 골프장·골프연습장 1% 포인트리 적립
+        source: page
+        evidence: [골프 | 골프장 골프연습장 업종 | 일반적립률 1% | 우대적립률 2%, 6대 영역 포인트리 적립서비스는 전월 이용실적 30만원 이상 시 제공, 6대 영역 포인트리 적립서비스는 각 영역별 월 20만원 이용금액까지 제공]
+        target:
+          categories: [sports.golf]
+        reward: {type: points, program: kb_pointree, rate: 1}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+      - key: travel-1
+        title: 여행사·호텔 1% 포인트리 적립
+        source: page
+        evidence: ['여행 | 여행사 호텔, 펜션 업종 | 1% | 2%', 6대 영역 포인트리 적립서비스는 각 영역별 월 20만원 이용금액까지 제공]
+        target:
+          categories: [travel.agency, travel.hotel]
+        reward: {type: points, program: kb_pointree, rate: 1}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+      - key: homeshopping-1
+        title: 3대 홈쇼핑 1% 포인트리 적립
+        source: page
+        evidence: ['쇼핑 | 3대 홈쇼핑 (CJ, GS, 현대) | 1% | 2%', 6대 영역 포인트리 적립서비스는 각 영역별 월 20만원 이용금액까지 제공]
+        target:
+          merchants: [cj_onstyle, gs_shop, hyundai_homeshopping]
+        reward: {type: points, program: kb_pointree, rate: 1}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+      - key: transit-1
+        title: 지하철·버스·택시 1% 포인트리 적립
+        source: page
+        evidence: ['대중교통 | 지하철, 버스, 택시(시외버스, 고속버스 제외) | 1% | 2%', 지하철/버스 요금 적립은 실제 카드 사용일이 아닌 이용대금명세서상 기재된 이용일을 기준으로 제공]
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        reward: {type: points, program: kb_pointree, rate: 1}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+        unmodeled: [버스·지하철은 실제 사용일이 아니라 명세서에 적힌 이용일 기준으로 적립한다]
+      - key: telecom-1
+        title: 이동통신 자동납부 1% 포인트리 적립
+        source: page
+        evidence: ['이동통신 | SKT, KT Olleh LG U+ 자동납부 | 1% | 2%', 이동통신요금 적립서비스는 KB국민 골든라이프티타늄카드로 자동납부 등록 시 제공]
+        target:
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 1}
+        limits:
+          - {per: month, base: 200000}
+        tiers: {from: 300000}
+      - key: food-5
+        title: 음식점 1만원 이상 5% 청구할인
+        source: page
+        evidence: [음식 | 5% | 5천원, '음식업종 : 한식, 일식, 중식, 양식, 뷔페, 주점(일반,단란,유흥), 일반음식점기타, 휴게음식점', 음식업종 청구할인의 경우 건당 1만원 이상 결제시 할인이 제공됩니다.]
+        target:
+          categories: [pub, restaurant.general]
+        when:
+          - amount: {min: 10000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        unmodeled: [휴게음식점 가운데 패스트푸드·제과로 기록된 결제는 계산하지 않는다]
+      - key: overseas-2
+        title: 해외 이용금액 2% 캐시백
+        source: page
+        evidence: [해외 이용금액 2% 할인 캐시백, '월 할인 캐시백 한도 : 1만원', 해외이용 할인 캐시백 서비스는 전월 이용실적 30만원 이상 시 제공, 해외이용금액은 일시불 매입완료된 금액 기준]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - {lump_sum: true}
+        reward: {type: cashback, rate: 2}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+    unmodeled: [6대 영역 적립은 결제계좌를 KB골든라이프 연금우대통장으로 등록하면 2%인데 1%로만 계산한다, 6대 영역 중 건강관리(종합스포츠센터·레포츠클럽)는 담을 업종이 없어 계산하지 않는다, 골든라이프 드림투어·국카mall 10% 할인은 담을 가맹점이 없어 계산하지 않는다, 반려동물 업종(펫샵·동물검사소·약품·장례) 10% 할인은 공통 업종이 동물병원과 나뉘지 않아 계산하지 않는다, 연간 결제납부실적 700만원 이상이면 포인트리 1만점을 주는 연간 리워드는 연간 누적이라 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 실적 없이 1구간 혜택을 주는 신규 특례는 계산하지 않는다, 공항 라운지·발레파킹 같은 티타늄 서비스는 계산하지 않는다, 정부지원금과 무승인전표는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날짜를 찾지 못해 상품설명서 심의일로 두었다. 원문 출시일은 2016.01.29이다., assumed: '2021-03-19'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 대중교통 이용 등 무승인전표 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 병원·약국과 주유·대형마트 할인을 받은 결제는 금액 전체가 실적에서 빠진다. 연회비는 기본 7천원과 제휴 3만3천원이다. 포인트리 1점은 1원이다.
