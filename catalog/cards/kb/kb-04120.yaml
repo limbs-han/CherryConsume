@@ -1,0 +1,227 @@
+schema_version: 2
+id: kb-04120
+issuer: kb
+name: KB국민 나라사랑카드(일반형)
+short_name: KB 나라사랑 체크
+kind: check
+product_codes:
+  - '04120'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04120', fetched_at: '2026-10-12', review_no: 260406-01115-PIF}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2015-12-21'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 100000, 200000, 300000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [transit.bus_city, transit.subway]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: integrated
+        per: month
+        amount: {100000: 5000, 200000: 10000, 300000: 20000, 500000: 30000, 1000000: 50000}
+      - {key: transit, per: month, base: 50000}
+      - {key: px, per: month, amount: 50000}
+    stacks:
+      - {key: main, pick: best}
+    benefits:
+      - key: px-under-30k
+        title: 군마트(PX) 3만원 미만 10% 할인
+        source: page
+        evidence: ['군마트 및 GS해군마트 환급할인 | 3만원 미만 | 10% | 1회 1천원까지, 월 2회', 전월 이용실적 관계없이 할인혜택 제공]
+        target:
+          merchants: [px]
+        when:
+          - amount: {below: 30000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, count: 2}
+          - {shared: px}
+      - key: px-30k
+        title: 군마트(PX) 3만원 이상 5% 할인
+        source: page
+        evidence: [3만원 이상 | 5% | 월 최대 5만원, 전월 이용실적 관계없이 할인혜택 제공]
+        target:
+          merchants: [px]
+        when:
+          - amount: {min: 30000, below: 70000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {shared: px}
+      - key: px-70k
+        title: 군마트(PX) 7만원 이상 10% 할인
+        source: page
+        evidence: [7만원 이상 | 10%, 월 최대 5만원]
+        target:
+          merchants: [px]
+        when:
+          - amount: {min: 70000, below: 100000}
+        reward: {type: cashback, rate: 10}
+        limits:
+          - {shared: px}
+      - key: px-100k
+        title: 군마트(PX) 10만원 이상 20% 할인
+        source: page
+        evidence: [10만원 이상 | 20%, 월 최대 5만원]
+        target:
+          merchants: [px]
+        when:
+          - amount: {min: 100000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: px}
+      - key: transit-city-20
+        title: 시내버스·지하철 20% 청구할인
+        source: page
+        evidence: [후불교통(시내버스/지하철) 20% 청구할인, 교통이용금액 월 5만원까지 할인 적용(최대 할인액 10, 000원), 후불교통 요금할인은 실제 카드 사용일이 아닌 이메일 이용대금명세서 내역상 기재된 이용일 기준으로 적용]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: transit}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [버스·지하철은 실제 사용일이 아니라 명세서에 적힌 이용일 기준으로 할인한다]
+      - key: transit-intercity-20
+        title: 고속·시외버스 20% 환급할인
+        source: page
+        evidence: [고속/시외버스 20% 환급할인, 교통이용금액 월 5만원까지 할인 적용(최대 할인액 10, 000원)]
+        target:
+          categories: [transit.bus_express, transit.bus_intercity]
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {shared: transit}
+          - {shared: integrated}
+        tiers: {from: 100000}
+      - key: cgv-35
+        title: CGV 35% 환급할인
+        source: page
+        evidence: [CGV 35% 환급할인, 건당 이용금액 1만원 이상 시 건당 최대 이용금액 2만원까지 할인 적용(최대 할인액 7, 000원), 상품권 구매 및 매점 이용분은 제외]
+        target:
+          merchants: [cgv]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 35}
+        limits:
+          - {per: txn, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [인터넷 예매는 CGV 직영 홈페이지와 앱 결제만 할인한다. 매점 결제는 빠진다]
+      - key: starbucks-20
+        title: 스타벅스 20% 환급할인
+        source: page
+        evidence: [스타벅스 20% 환급할인, 건당 이용금액 1만원 이상 시 건당 최대 이용금액 2만원까지 할인 적용(최대 할인액 4, 000원), 상품권 구매 및 스타벅스 카드 충전 시 할인 적용 제외]
+        target:
+          merchants: [starbucks]
+        when:
+          - amount: {min: 10000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 20000}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [백화점·대형마트 입점 스타벅스는 할인에서 빠질 수 있다]
+      - key: family-restaurant-20
+        title: 아웃백·VIPS 20% 환급할인
+        source: page
+        evidence: ['아웃백스테이크하우스, VIPS 20% 환급할인', 건당 이용금액 3만원 이상 시 건당 최대 이용금액 5만원까지 할인 적용(최대 할인액 10, 000원), '상품권 구매 및 백화점, 대형할인점 입점 매장은 할인 적용 제외']
+        target:
+          merchants: [outback, vips]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [백화점·대형할인점 입점 매장은 할인에서 빠진다]
+      - key: amusement-50
+        title: 에버랜드·롯데월드 현장예매 50% 환급할인
+        source: page
+        evidence: ['에버랜드, 롯데월드 현장예매 50% 환급할인', 건당 이용금액 3만원 이상 시 건당 최대 이용금액 5만원까지 할인 적용(최대 할인액 25, 000원)]
+        target:
+          merchants: [everland, lotte_world]
+        when:
+          - {channel: offline}
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 50}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [현장 매표 결제만 할인한다. 매점과 식당 결제는 빠질 수 있다]
+      - key: kyobo-5
+        title: 교보문고 5% 환급할인
+        source: page
+        evidence: [교보문고 5% 환급할인, 건당 이용금액 2만원 이상 시 건당 최대 이용금액 5만원까지 할인 적용(최대 할인액 2, 500원), '교보문고를 이용한 경우만 할인 적용되며, 핫트랙스는 제외']
+        target:
+          merchants: [kyobo_book]
+        when:
+          - amount: {min: 20000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 100000}
+      - key: exam-2000
+        title: TOEIC·JPT 온라인 접수 2,000원 환급할인
+        source: page
+        evidence: ['어학시험 할인 온라인 접수 시 2,000원 환급할인', 'TOEIC, JPT 정기접수 및 특별 추가접수 응시료', '월 1회, 연 6회 적용']
+        target:
+          merchants: [jpt, toeic]
+        when:
+          - {channel: online}
+        reward: {type: cashback, fixed: 2000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [단체 요청으로 따로 운영되는 특별시험 응시료는 빠진다]
+      - key: telecom-2500
+        title: 이동통신 자동이체 5만원 이상 2,500원 환급할인
+        source: page
+        evidence: ['이동통신 자동납부 건당 금액이 5만원 이상 시 2,500원 환급할인(월 1회)', 유무선 통신요금 통합청구금액 자동이체 시에는 할인 제외, 'SKT, KT Olleh, LG U+에 한하여 할인 적용']
+        target:
+          exclude_categories: [telecom.internet_tv]
+          merchants: [kt, lg_uplus, skt]
+        when:
+          - amount: {min: 50000}
+          - billing: [autopay]
+        reward: {type: cashback, fixed: 2500}
+        limits:
+          - {per: month, count: 1}
+          - {shared: integrated}
+        tiers: {from: 100000}
+        unmodeled: [유무선 통신요금 통합청구 자동이체는 할인에서 빠진다]
+      - key: shopping-5
+        title: GS홈쇼핑·CJ홈쇼핑·G마켓·옥션 5% 환급할인
+        source: page
+        evidence: ['GS홈쇼핑, CJ홈쇼핑, G마켓, 옥션 5% 환급할인', 건당 이용금액 3만원 이상 시 건당 최대 이용금액 5만원까지 할인 적용(최대 할인액 2, 500원)]
+        target:
+          merchants: [auction, cj_onstyle, gmarket, gs_shop]
+        when:
+          - amount: {min: 30000}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: integrated}
+        tiers: {from: 100000}
+    unmodeled: [군 KT공중전화 요금 자동이체 10% 할인은 담을 가맹점이 없어 계산하지 않는다, GS리테일 POP 서비스와 KB손해보험 단체보험·경조사·금융수수료 면제는 계산하지 않는다, 최초 사용등록일부터 다음 달 말일까지 통합할인한도 1만원 안에서 할인하는 신규 특례는 계산하지 않는다, 무승인 거래(철도반환수수료 등)와 해외이용금액과 정부지원금은 실적에서 빠진다, 통합할인한도와 실적은 나라사랑 일반형·ROTC형 같은 계열 카드와 합산한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 혜택이 시작된 날짜를 찾지 못해 출시일 2015.12.21로 두었다., assumed: '2015-12-21'}
+  - {path: 'revisions[0].limits[px]', question: 원문 표가 3만원 이상 구간들에 월 최대 5만원을 적었다. 덜 주는 쪽으로 3만원 미만 구간도 같은 5만원 한도를 함께 쓴다고 두었다, assumed: shared}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 후불교통이용금액 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 만 18세 이상 남성으로 징병검사를 받은 사람이 발급받는 병역 의무자용 체크카드다. 군마트(PX) 할인은 전월 실적과 통합할인한도와 관계없다. 시내버스·지하철은 청구할인이고 나머지는 환급할인이다.
