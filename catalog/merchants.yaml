@@ -1264,3 +1264,31 @@
   name: 경동나비엔 구독
   category: other
   aliases: [경동나비엔 구독, 나비엔 구독, 경동나비엔]
+- key: ridi
+  name: 리디
+  category: streaming
+  aliases: [리디, RIDI, 리디북스]
+- key: speedmate
+  name: 스피드메이트
+  category: car.car_repair
+  aliases: [스피드메이트, SPEEDMATE]
+- key: lg_bestshop
+  name: LG전자 베스트샵
+  category: other
+  aliases: [LG전자 베스트샵, LG베스트샵, LGE.COM, 엘지전자 온라인몰]
+- key: claude
+  name: Claude
+  category: streaming
+  aliases: [Claude, CLAUDE.AI, ANTHROPIC]
+- key: top_mart
+  name: 탑마트
+  category: grocery_mart
+  aliases: [탑마트, TOP마트]
+- key: aliexpress
+  name: 알리익스프레스
+  category: online_shopping
+  aliases: [알리익스프레스, AliExpress, aliexpress.com]
+- key: don_quijote
+  name: 돈키호테
+  category: other
+  aliases: [돈키호테, DON QUIJOTE, ドン・キホーテ]
