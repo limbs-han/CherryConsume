@@ -1,0 +1,99 @@
+schema_version: 2
+id: woori-102719
+issuer: woori
+name: 카드의정석 DON CHECK
+kind: check
+product_codes:
+  - '102719'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102719', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-05'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 50000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 50000, from: registration}
+    benefit_exclusions:
+      categories: [apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_express, utility]
+      unmodeled: [정부지원금, 각종 수수료와 이자, 매출취소금액]
+    limits:
+      - key: don-month
+        per: month
+        amount: {50000: 3000}
+    benefits:
+      - key: do-eat-convenience
+        title: DO EAT 편의점 5% 적립
+        source: page
+        evidence: [DON 5% 적립, DO EAT 편의점 배달의민족, 전월 국내가맹점 이용실적 50, 000원 이상, 매출 건당 최대 1, 000포인트까지 적립, 통합 월 적립한도 3, 000포인트]
+        target:
+          categories: [convenience]
+        when:
+          - {channel: offline}
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: woori_moa_point, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: don-month}
+        tiers: {from: 50000}
+        unmodeled: [오프라인 일반 결제만. 백화점·대형할인점·면세점·공항·미군부대 등 일부 입점 매장 제외]
+      - key: do-eat-baemin
+        title: DO EAT 배달의민족 5% 적립
+        source: page
+        evidence: [DON 5% 적립, DO EAT 편의점 배달의민족, 매출 건당 최대 1, 000포인트까지 적립, 통합 월 적립한도 3, 000포인트]
+        target:
+          merchants: [baemin]
+        when:
+          - {channel: online}
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: woori_moa_point, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: don-month}
+        tiers: {from: 50000}
+        unmodeled: [공식 앱과 홈페이지 결제만. 가맹점 직접 결제와 상품권 구매 제외]
+      - key: do-buy
+        title: DO BUY 쿠팡·무신사 5% 적립
+        source: page
+        evidence: [DON 5% 적립, DO BUY 쿠팡 무신사, 매출 건당 최대 1, 000포인트까지 적립, 통합 월 적립한도 3, 000포인트]
+        target:
+          merchants: [coupang, musinsa]
+        when:
+          - {channel: online}
+          - payment_not: [baemin_pay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: woori_moa_point, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: don-month}
+        tiers: {from: 50000}
+        unmodeled: [쿠팡 멤버십 정기 결제 제외. 무신사는 공식 앱과 홈페이지 결제만]
+      - key: do-play
+        title: DO PLAY 구글플레이·앱스토어 5% 적립
+        source: page
+        evidence: [DON 5% 적립, DO PLAY 구글 Play스토어 애플 App Store, 매출 건당 최대 1, 000포인트까지 적립, 통합 월 적립한도 3, 000포인트]
+        target:
+          merchants: [app_store, google_play]
+        when:
+          - {region: domestic}
+          - payment_not: [baemin_pay, coupay, kakao_pay, l_pay, naver_pay, payco, smile_pay, ssg_pay, toss_pay]
+        reward: {type: points, program: woori_moa_point, rate: 5}
+        limits:
+          - {per: txn, amount: 1000}
+          - {shared: don-month}
+        tiers: {from: 50000}
+        unmodeled: [우리카드 전산상 국내 매출로 분류된 경우만. 유튜브 관련 결제 제외]
+    unmodeled: [우리WON페이를 제외한 간편결제로 결제하면 적립 제외. 쿠폰 할인 등 다른 프로모션과 중복되지 않는다. 우리WON멤버스 회원은 우리WON꿀머니로 적립된다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 전체 혜택의 정확한 시작일을 확인하지 못해 공식 원문 수집일로 두었다. 상품출시일은 2023-12-13이다., assumed: '2026-10-05'}
+notes: 2026-10-13 공식 상품 페이지 대조. 1포인트 1원. 포인트 모두 통합 월 3,000포인트 한도를 함께 쓴다.
