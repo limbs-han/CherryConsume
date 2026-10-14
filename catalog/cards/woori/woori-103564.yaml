@@ -1,0 +1,75 @@
+schema_version: 2
+id: woori-103564
+issuer: woori
+name: E1 우리카드
+kind: credit
+product_codes:
+  - '103564'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=103564', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2025-07-18'
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefit_exclusions:
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·대형할인점·면세점·공항·미군부대·리조트 등 일부 입점 매장은 할인 제외, PG 업체나 일부 간편결제로 결제하면 할인 제외]
+    limits:
+      - key: e1-charging
+        per: month
+        amount: {400000: 10000, 800000: 20000}
+      - {key: e1-cvs, per: month, amount: 5000}
+      - {key: e1-coffee, per: month, amount: 5000}
+    benefits:
+      - key: e1-charging-10
+        title: E1 충전소 10% 청구할인
+        source: page
+        evidence: [E1 충전소 10% 청구할인, 'E1 충전소 (LPG, 수소, 전기) | 40만원 이상 ~ 80만원 미만 | 10,000원', '80만원 이상 | 20,000원', ※ 전월 국내외 가맹점 이용실적 40만원 이상 시 혜택이 제공됩니다.]
+        target:
+          merchants: [e1_charging]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: e1-charging}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: e1-cvs-10
+        title: 편의점 10% 청구할인
+        source: page
+        evidence: [편의점 업종 10% 청구할인, '40만원 이상 | 5,000원', ※ 오프라인 일반 결제 건에 한함]
+        target:
+          categories: [convenience]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: e1-cvs}
+        tiers: {from: 400000}
+        exclude_applied: 1
+      - key: e1-coffee-10
+        title: 커피 10% 청구할인
+        source: page
+        evidence: [커피 업종 10% 청구할인, '40만원 이상 | 5,000원', ※ 오프라인 일반 결제 건에 한함, ※ 커피브랜드의 상품권, 선불카드 구입/충전 등의 이용금액은 할인 제외]
+        target:
+          categories: [cafe]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: e1-coffee}
+        tiers: {from: 400000}
+        exclude_applied: 1
+    unmodeled: [E1 오렌지 포인트는 E1 자체 멤버십이라 계산하지 않는다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 공공임대료와 국가·공공기관 가맹점 이용금액은 실적에서 빠진다, 할인은 거래 매입 순서대로 적용된다, 가족카드는 발급되지 않는다]
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2025-07-18. 연회비 20,000원. 전월 국내외 40만 이상 E1 충전소 10% 월 1만원, 80만 이상 월 2만원. 편의점과 커피 오프라인 10% 월 각 5천원. 할인받은 이용금액 전체는 실적에서 뺀다. 신규 발급은 다음 달 말까지 40만 구간.
