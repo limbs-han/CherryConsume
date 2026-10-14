@@ -1,0 +1,99 @@
+schema_version: 2
+id: kb-09180
+issuer: kb
+name: 롯데마트 KB국민카드
+short_name: KB 롯데마트
+kind: credit
+product_codes:
+  - '09180'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 10000}
+  - {scope: global, brand: amex, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09180', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000, 700000, 900000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 결제대행 가맹점과 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠진다]
+    benefits:
+      - key: mart-online-10
+        title: 롯데마트몰 평일 10% 청구할인
+        source: page
+        evidence: [건당 5만원 이상 이용 시 롯데마트 할인, '1구간 (30만원 이상) | 10% | 10,000원 | 10,000원 | 20,000원', '2구간 (50만원 이상) | 15,000원 | 15,000원 | 30,000원', '3구간 (70만원 이상) | 20,000원 | 20,000원 | 40,000원', '4구간 (90만원 이상) | 25,000원 | 25,000원 | 50,000원', '롯데마트 인터넷몰은 평일(월~금)에 롯데마트 매장은 주말 (토,일에 한함/평일 공휴일 제회)에 한하여 할인이 적용됩니다.']
+        target:
+          merchants: [lotte_mart]
+        when:
+          - channel: online
+            amount: {min: 50000}
+            day:
+              in: [mon, tue, wed, thu, fri]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {300000: 10000, 500000: 15000, 700000: 20000, 900000: 25000}
+        tiers: {from: 300000}
+      - key: mart-offline-10
+        title: 롯데마트 매장 주말 10% 청구할인
+        source: page
+        evidence: [건당 5만원 이상 이용 시 롯데마트 할인, '1구간 (30만원 이상) | 10% | 10,000원 | 10,000원 | 20,000원', '주말(토,일에 한함/평일 공휴일 제회)']
+        target:
+          merchants: [lotte_mart]
+        when:
+          - channel: offline
+            amount: {min: 50000}
+            day:
+              in: [sat, sun]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - per: month
+            amount: {300000: 10000, 500000: 15000, 700000: 20000, 900000: 25000}
+        tiers: {from: 300000}
+      - key: cafe-5
+        title: 커피 업종 5% 청구할인
+        source: page
+        evidence: [30만원 이상 | 5% | 1만원, 커피업종 5% 청구할인]
+        target:
+          categories: [cafe]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+      - key: taxi-5
+        title: 택시 5% 청구할인
+        source: page
+        evidence: [30만원 이상 | 5% | 1만원, 택시 이용 시 5% 청구할인]
+        target:
+          categories: [taxi]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 300000}
+      - key: movie-3500
+        title: CGV·메가박스 온라인 예매 3,500원 청구할인
+        source: page
+        evidence: [CGV/메가박스 온라인 영화 예매 시 승인건당 3, 500원 청구할인, '할인한도: 1일 2회, 월 4회, 연 10회 이내']
+        target:
+          merchants: [cgv, megabox]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, fixed: 3500}
+        limits:
+          - {per: day, count: 2}
+          - {per: month, count: 4}
+          - {per: year, count: 10}
+        tiers: {from: 300000}
+    unmodeled: ['놀이공원 현장할인(롯데월드 어드벤처 종합이용권 50%, 에버랜드 페스티벌월드 자유이용권 50%, 캐리비안베이 30%)은 이용권 매수 제한이 있어 계산하지 않는다', 최초 사용등록일부터 다음 달 말일까지 실적 없이 할인을 주는 신규 특례는 생애 최초 본인 발급만 받으므로 계산하지 않는다, 할인은 전표 매입 순서대로 월 한도에서 차감한다, '무승인전표(항공기 내 이용 등)와 정부지원금, 수수료·이자는 실적에서 빠진다', 기본 포인트리는 적립되지 않는다, 본인과 가족카드 실적을 합산한다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 연회비는 K-WORLD 1만원(기본 7천원과 제휴 3천원), 국내외겸용 아멕스 1만5천원이다. 롯데마트몰 평일 한도와 매장 주말 한도는 따로다.
