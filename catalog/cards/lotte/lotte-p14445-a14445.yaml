@@ -1,0 +1,46 @@
+schema_version: 2
+id: lotte-p14445-a14445
+issuer: lotte
+name: KT DC PLUS 롯데카드
+kind: credit
+product_codes: [P14445-A14445]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P14445-A14445', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2023-A00022_20250707_10004.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, telecom, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 400000, from: registration}
+    benefits:
+      - key: kt-telecom-discount
+        title: KT 통신요금 자동납부 결제일 할인
+        source: page
+        evidence: [KT유무선 통신료 할인 실적 충족 시 KT 통신요금 할인 월 10, 000원 ~13, 000원 결제일 할인, '40만원 이상~80만원 미만 10,000원 80만원 이상 13,000원', 결제일 할인은 자동납부건만 할인 혜택이 제공됩니다., 결제일 할인 금액이 청구금액보다 큰 경우 청구금액까지만 할인 적용됩니다., 지난달 이용 실적이 40만원 미만인 경우는 결제일 할인 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [kt]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {400000: 10000, 800000: 13000}
+        tiers: {from: 400000}
+    unmodeled: ['2023-10-01 이후 발급 회원은 KT 유무선 통신료가 실적에서 빠진다. 가맹점 단위 실적 제외가 없어 통신요금 업종 전체를 실적에서 뺐다. SKT, LG유플러스 요금도 실적에 넣지 않아 실제보다 적게 잡힌다', 2023-10-01 이전 발급 회원은 KT 통신료가 실적에 들어가지만 계산하지 않는다, '오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 포인트 충전, 현금서비스·카드론·이자·수수료는 실적에서 빠진다', KT DC PLUS 롯데카드가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 가족카드 이용금액과 할인한도는 본인카드와 합산한다, 롯데카드의 다른 결제일 할인과 겹치면 할인 금액이 큰 혜택 하나만 준다, 할인은 승인 시점 기준 남은 한도 안에서 준다, 이 카드로 결제하면 롯데카드가 주는 L.POINT 적립은 없다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2023-07-14이고 설명서는 2025년 6월 기준이다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품 페이지와 상품설명서 대조. KT 통신요금 자동납부 건을 청구금액까지 할인하므로 100% 할인에 월 한도로 적었다. 신규 발급 특례는 사용 등록일부터 다음 달 말일까지 10,000원 한도라 40만 구간으로 넣었다.
