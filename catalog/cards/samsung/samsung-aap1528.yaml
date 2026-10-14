@@ -1,0 +1,189 @@
+schema_version: 2
+id: samsung-aap1528
+issuer: samsung
+name: 삼성카드 taptap I
+short_name: taptap I
+search_names: [삼성 taptap I, 삼성카드 taptap I, 탭탭 아이]
+kind: credit
+product_codes: [AAP1528]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 49000}
+  - {scope: global, brand: mastercard, amount: 49000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1528', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtghgJUC%2Fvp2aQfUObuNpARs%3D&sn=2', fetched_at: 2026-10-13, review_no: 제2019-C1a-11242호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2017-07-25'
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - payment: [mobile_tmoney]
+      categories: [car.toll, education.tuition, gift_card, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [다이어트할부와 삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '문자알림서비스, 스마트오토서비스 이용금액은 할인하지 않는다']
+    options:
+      - key: package
+        title: 라이프스타일 패키지
+        choices:
+          - {key: daily, title: '일상 패키지 슈퍼마켓·백화점·온라인몰 3%, 커피·제과 30%, 음식점·마켓컬리 20%, 영화관과 서점·동물병원 정액 할인'}
+          - {key: leisure, title: '여가 패키지 해외·여행 3%, 철도 5,000원, 공항 라운지. 연 3개월만 제공돼 이 앱은 계산하지 않는다'}
+        default: null
+        change: next_month
+    limits:
+      - {key: super-3, per: month, amount: 10000}
+      - {key: coffee-30, per: month, amount: 10000}
+      - {key: food-20, per: month, amount: 10000}
+    stacks:
+      - {key: discount, pick: best, spill: none}
+    benefits:
+      - key: daily-super-3
+        title: 일상 패키지 슈퍼마켓·아울렛·백화점·세탁소 3% 할인
+        source: manual
+        evidence: [슈퍼마켓·프리미엄 아울렛·온라인 쇼핑몰·백화점·세탁소·프리미엄 가구 3% 결제일할인(청구할인), '통합 월 할인한도는 10,000원입니다.', 전월 일시불 및 할부 이용금액 50만원 이상 시 제공됩니다., '슈퍼마켓(오프라인) 이마트 에브리데이, 롯데슈퍼, GS수퍼마켓', 프리미엄 아울렛 신세계사이먼 프리미엄 아울렛(여주점/파주점/부산점/시흥점), '백화점(오프라인) 신세계/롯데/현대/갤러리아/동아/대구백화점, AK플라자, NC 대전 유성점', 세탁소(오프라인) 세탁소, '백화점, 쇼핑몰 등 임대매장 결제건은 제외됩니다.']
+        target:
+          categories: [laundry]
+          merchants: [ak_plaza, daegu_department, dong_a_department, emart_everyday, galleria, hyundai_department, lotte_department, lotte_super, nc_daejeon_yuseong, shinsegae_department, shinsegae_simon]
+        when:
+          - option:
+              package: [daily]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: super-3}
+        tiers: {from: 500000}
+        stack: discount
+        unmodeled: [임대매장은 할인하지 않는다, GS수퍼마켓과 프리미엄 가구 카레클린트는 가맹점이 없어 담지 않았다]
+      - key: daily-online-3
+        title: 일상 패키지 온라인 쇼핑몰 3% 할인
+        source: manual
+        evidence: ['온라인 쇼핑몰 SSG.COM, 엘롯데, 롯데마트몰, 더현대닷컴', '통합 월 할인한도는 10,000원입니다.', 전월 일시불 및 할부 이용금액 50만원 이상 시 제공됩니다.]
+        target:
+          merchants: [ssg_com, the_hyundai_com]
+        when:
+          - option:
+              package: [daily]
+          - {channel: online}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: super-3}
+        tiers: {from: 500000}
+        stack: discount
+        unmodeled: [엘롯데와 롯데마트몰은 가맹점이 없어 담지 않았다]
+      - key: daily-coffee-30
+        title: 일상 패키지 커피전문점·제과점 30% 할인
+        source: manual
+        evidence: [10대 커피전문점·제과점 30% 결제일할인(청구할인), '커피전문점 스타벅스, 투썸플레이스, 카페베네, 탐앤탐스, 커피빈, 엔제리너스, 할리스커피, 파스쿠찌, 아티제, 폴 바셋 제과점 파리크라상', '통합 월 할인한도는 10,000원입니다.', 전월 일시불 및 할부 이용금액 50만원 이상 시 제공됩니다., '전월 이용금액 산정 시, 할인 혜택이 적용된 이용금액은 제외됩니다.', '오프라인 매장(가두매장) 결제건에 한하며, 백화점, 쇼핑몰 등 임대매장 결제건은 제외됩니다.']
+        target:
+          merchants: [angel_in_us, artisee, cafe_bene, coffee_bean, hollys, paris_croissant, pascucci, paul_bassett, tom_n_toms, twosome]
+        when:
+          - option:
+              package: [daily]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: coffee-30}
+        tiers: {from: 500000}
+        stack: discount
+        exclude_applied: 1
+        unmodeled: [임대매장은 할인하지 않는다]
+      - key: daily-starbucks-30
+        title: 일상 패키지 스타벅스 30% 할인
+        source: manual
+        evidence: [스타벅스의 경우 사이렌 오더 결제건도 혜택이 제공됩니다., '통합 월 할인한도는 10,000원입니다.']
+        target:
+          merchants: [starbucks]
+        when:
+          - option:
+              package: [daily]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: coffee-30}
+        tiers: {from: 500000}
+        stack: discount
+        exclude_applied: 1
+        unmodeled: [임대매장은 할인하지 않는다]
+      - key: daily-food-20
+        title: 일상 패키지 음식점 20% 할인
+        source: manual
+        evidence: [음식점·신선식품 배송 20% 결제일할인(청구할인), '음식점 생어거스틴, 발재반점', '통합 월 할인한도는 10,000원입니다.', 전월 일시불 및 할부 이용금액 50만원 이상 시 제공됩니다., '오프라인 매장(가두매장) 결제건에 한하며, 백화점, 쇼핑몰 등 임대매장 결제건은 제외됩니다.']
+        target:
+          merchants: [saint_augustin]
+        when:
+          - option:
+              package: [daily]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: food-20}
+        tiers: {from: 500000}
+        stack: discount
+        exclude_applied: 1
+        unmodeled: [임대매장은 할인하지 않는다, 발재반점은 가맹점이 없어 담지 않았다]
+      - key: daily-fresh-20
+        title: 일상 패키지 신선식품 배송 20% 할인
+        source: manual
+        evidence: [음식점·신선식품 배송 20% 결제일할인(청구할인), 신선식품 배송 마켓컬리, '통합 월 할인한도는 10,000원입니다.', 전월 일시불 및 할부 이용금액 50만원 이상 시 제공됩니다.]
+        target:
+          merchants: [kurly]
+        when:
+          - option:
+              package: [daily]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {shared: food-20}
+        tiers: {from: 500000}
+        stack: discount
+        exclude_applied: 1
+      - key: daily-movie-6000
+        title: 일상 패키지 영화관 6,000원 할인
+        source: manual
+        evidence: ['모든 영화관에서 건별 6,000원 이상 결제 시 6,000원 결제일할인(청구할인)', '통합 월 1회, 연 6회 제공됩니다.(연 기준 : 1.1~12.31)', 전월 일시불 및 할부 이용금액 50만원 이상 시 제공됩니다., '전월 이용금액 산정 시, 할인 혜택이 적용된 이용금액은 제외됩니다.']
+        target:
+          categories: [movie]
+        when:
+          - option:
+              package: [daily]
+          - amount: {min: 6000}
+        reward: {type: billing_discount, fixed: 6000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+        tiers: {from: 500000}
+        stack: discount
+        exclude_applied: 1
+        unmodeled: ['CGV, 롯데시네마, 메가박스는 현장 결제와 공식 홈페이지·앱 예매만 할인하고 그 밖의 영화관은 현장 결제만 할인한다', 예매 대행 사이트 결제는 할인하지 않는다]
+      - key: daily-etc-10000
+        title: 일상 패키지 서점·인터파크 티켓·동물병원 10,000원 할인
+        source: manual
+        evidence: ['서점·인터파크 티켓·동물병원에서 건별 50,000원 이상 결제 시 10,000원 결제일할인(청구할인)', '통합 월 1회, 연 6회 제공됩니다.(연 기준 : 1.1~12.31)', 전월 일시불 및 할부 이용금액 50만원 이상 시 제공됩니다., 서점·동물병원의 경우 오프라인 매장(가두매장) 결제건에 한하며, '결제금액 1건 기준으로 적용되며, 합산금액 기준으로는 적용되지 않습니다.']
+        target:
+          categories: [pet.vet]
+          merchants: [interpark_ticket, kyobo_book, youngpoong_book]
+        when:
+          - option:
+              package: [daily]
+          - amount: {min: 50000}
+        reward: {type: billing_discount, fixed: 10000}
+        limits:
+          - {per: month, count: 1}
+          - {per: year, count: 6}
+        tiers: {from: 500000}
+        stack: discount
+        exclude_applied: 1
+        unmodeled: [서점과 동물병원은 오프라인 매장 결제만 할인하고 임대매장은 제외한다, 서점은 교보문고와 영풍문고만 담았다]
+    unmodeled: ['여가 패키지(해외·여행 3%, 철도 5,000원, 해외 공항 라운지)는 연 3개월까지만 제공돼 계산하지 않는다', 국내외 연간 누적 이용금액 1, 500만원당 30, 000원 캐시백은 계산하지 않는다, '전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 안내장의 전월 이용금액 제외 항목에 대중교통과 택시가 없어 실적에 넣었다, assumed: 대중교통과 택시를 실적에 포함}
+  - {path: status, question: 상품 페이지가 자바스크립트로 그려져 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-13 상품안내장(2019.12 심의, 2024.5판 표기, 심의필 제2019-C1a-11242호) 확인. 2017-07-25 출시. 연회비 49,000원이고 해외겸용은 Mastercard다. 일상 패키지는 전월 50만원 이상일 때 슈퍼마켓·백화점 등 3% 월 10,000원, 커피·제과 30% 월 10,000원, 음식점·마켓컬리 20% 월 10,000원, 영화관 6,000원과 서점·티켓·동물병원 10,000원 월 1회 연 6회다. 커피·제과, 음식점, 영화관, 서점 할인을 받은 이용금액은 실적에서 빠진다. 안내장이 2019년 심의판이라 이후 개정은 확인하지 못했다.
