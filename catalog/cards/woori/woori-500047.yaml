@@ -1,0 +1,52 @@
+schema_version: 2
+id: woori-500047
+issuer: woori
+name: ZEROSE 우리카드
+kind: credit
+product_codes:
+  - '500047'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500047', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-06-08'
+    source: page
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, childcare, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: plus-chat
+        per: month
+        amount: {300000: 5000, 600000: 12000, 900000: 18000}
+    benefits:
+      - key: plus-chat
+        title: ZB1 Plus Chat 정기결제 청구할인
+        source: page
+        evidence: [Plus Chat 청구할인 서비스, '30만원 이상 ~ 60만원 미만 | 5,000원', '60만원 이상 ~ 90만원 미만 | 12,000원', '90만원 이상 | 18,000원', ZB1 Plus Chat 구독형 정기결제 상품을 ZEROSE 우리카드로 결제한 경우에만 할인이 적용됩니다, 월 할인한도보다 정기결제 승인금액이 적을 경우 승인금액 만큼만 할인이 적용됩니다]
+        target:
+          merchants: [zb1_plus_chat]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {shared: plus-chat}
+        tiers: {from: 300000}
+    unmodeled: [Mnet Plus Merch 20% 청구할인은 월 2회와 연 최대 6회 제한이 있는데 연 횟수의 기준이 발급일인지 달력 연도인지 원문에 없어 담지 않았다, 가족카드 없음, PG·간편결제 전용 가맹점 승인 건은 할인 제외, 교통카드와 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 넣는다, 국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: Mnet Plus Merch 20% 청구할인의 연 6회 한도 기준일이 원문에 없다, assumed: 혜택을 담지 않음}
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 연회비 국내전용과 해외겸용(Mastercard) 3만원. 제로베이스원 공식 팬클럽 카드. 할인받은 이용금액 전체는 전월실적에서 빠진다.
