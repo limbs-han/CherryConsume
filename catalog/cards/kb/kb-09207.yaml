@@ -1,0 +1,270 @@
+schema_version: 2
+id: kb-09207
+issuer: kb
+name: 페퍼저축은행 KB국민 톡톡 my living카드
+short_name: KB 톡톡 my living
+kind: credit
+product_codes:
+  - '09207'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 12000}
+  - {scope: global, brand: mastercard, amount: 12000}
+  - {scope: domestic, brand: local, form: mobile, amount: 6000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 6000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09207', fetched_at: '2026-10-12', review_no: 2022-C1a-06628호}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 600000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [PG 전용 가맹점 결제와 KB Pay가 아닌 일부 간편결제 전용 가맹점번호로 승인된 결제는 적립에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    options:
+      - key: select
+        title: my living 선택서비스
+        choices:
+          - {key: a, title: A팩 온라인쇼핑·대형마트·렌탈/이동통신}
+          - {key: b, title: B팩 학원·식품/배달·제과}
+        default: null
+        change: next_month
+    stacks:
+      - {key: main, pick: best}
+      - {key: kbpay, pick: best}
+    benefits:
+      - key: a-online-10
+        title: '[A팩] 11번가·G마켓·옥션·SSG.COM·롯데ON·인터파크 10% 포인트리 적립'
+        source: page
+        evidence: [my living A팩 | 온라인 쇼핑 | 10% | 1만점 | 2만점, '온라인쇼핑 : 네이버쇼핑, 11번가, G마켓, 옥션, SSG.COM, 롯데ON, 인터파크', '상품권(선물하기 등), 여행, 항공권, 티켓, 도서 등 별도 팝업사이트 제외', '실적 유예기간 : 최초 카드 사용등록일로부터 다음달 말일(실적 유예기간)까지 실적이 없는 경우에도 1구간(30만원 이상) 서비스가 제공됩니다.']
+        target:
+          merchants: [auction, eleven_st, gmarket, interpark, lotte_on, ssg_com]
+        when:
+          - option:
+              select: [a]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 10000, 300000: 10000, 600000: 20000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [네이버쇼핑 결제도 대상이지만 담을 가맹점이 분명하지 않아 계산하지 않는다, 상품권·여행·항공권·티켓·도서 같은 별도 팝업사이트 결제는 적립에서 빠진다]
+      - key: a-online-10-extra
+        title: '[B팩 120만원 이상] 11번가·G마켓·옥션·SSG.COM·롯데ON·인터파크 10% 포인트리 적립'
+        source: page
+        evidence: [my living A팩 | 온라인 쇼핑 | 10% | 1만점 | 2만점, '온라인쇼핑 : 네이버쇼핑, 11번가, G마켓, 옥션, SSG.COM, 롯데ON, 인터파크', '상품권(선물하기 등), 여행, 항공권, 티켓, 도서 등 별도 팝업사이트 제외', 페퍼저축은행 KB국민 톡톡 my living카드 선택 서비스팩은 전월 이용실적 120만원 이상 시 미선택한 선택 서비스팩의 2구간 서비스가 추가 제공됩니다.]
+        target:
+          merchants: [auction, eleven_st, gmarket, interpark, lotte_on, ssg_com]
+        when:
+          - option:
+              select: [b]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {per: month, amount: 20000}
+        tiers: {from: 1200000}
+        unmodeled: [네이버쇼핑 결제도 대상이지만 담을 가맹점이 분명하지 않아 계산하지 않는다, 상품권·여행·항공권·티켓·도서 같은 별도 팝업사이트 결제는 적립에서 빠진다]
+      - key: a-mart-10
+        title: '[A팩] 이마트·롯데마트·홈플러스·농협하나로마트 10% 포인트리 적립'
+        source: page
+        evidence: [my living A팩 | 대형마트 | 10% | 5천점 | 1만점, '대형마트 : 이마트, 롯데마트, 홈플러스, 농협하나로마트', '온라인(PG가맹점) 결제, 상품권 구매 및 임대매장, SSM(이마트에브리데이, 롯데슈퍼, 홈플러스익스프레스 등) 제외', '실적 유예기간 : 최초 카드 사용등록일로부터 다음달 말일(실적 유예기간)까지 실적이 없는 경우에도 1구간(30만원 이상) 서비스가 제공됩니다.']
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - option:
+              select: [a]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 5000, 300000: 5000, 600000: 10000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [대형마트 임대매장은 적립에서 빠진다]
+      - key: a-mart-10-extra
+        title: '[B팩 120만원 이상] 이마트·롯데마트·홈플러스·농협하나로마트 10% 포인트리 적립'
+        source: page
+        evidence: [my living A팩 | 대형마트 | 10% | 5천점 | 1만점, '대형마트 : 이마트, 롯데마트, 홈플러스, 농협하나로마트', '온라인(PG가맹점) 결제, 상품권 구매 및 임대매장, SSM(이마트에브리데이, 롯데슈퍼, 홈플러스익스프레스 등) 제외', 페퍼저축은행 KB국민 톡톡 my living카드 선택 서비스팩은 전월 이용실적 120만원 이상 시 미선택한 선택 서비스팩의 2구간 서비스가 추가 제공됩니다.]
+        target:
+          merchants: [emart, homeplus, lotte_mart, nh_hanaro_mart]
+        when:
+          - option:
+              select: [b]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 1200000}
+        unmodeled: [대형마트 임대매장은 적립에서 빠진다]
+      - key: a-rental-telecom-10
+        title: '[A팩] 청호나이스·코웨이·SK매직·SKT·KT·LG U+·Liiv M 10% 포인트리 적립'
+        source: page
+        evidence: [my living A팩 | 렌탈/이동통신 요금 자동결제 | 10% | 5천점 | 1만점, '렌탈/이동통신 : 청호나이스, 코웨이, SK매직, LG렌탈, SKT, LG U+, KT, KB Liiv M', '렌탈/이동통신 요금 자동결제 시 제공, 알뜰폰(SKT, LG U+, KT) 제외', '실적 유예기간 : 최초 카드 사용등록일로부터 다음달 말일(실적 유예기간)까지 실적이 없는 경우에도 1구간(30만원 이상) 서비스가 제공됩니다.']
+        target:
+          merchants: [chungho_rental, coway, coway_rental, kt, lg_uplus, liiv_m, sk_magic, skt]
+        when:
+          - option:
+              select: [a]
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 5000, 300000: 5000, 600000: 10000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [LG렌탈 자동결제도 대상이지만 담을 가맹점이 분명하지 않아 계산하지 않는다, SKT·KT·LG U+ 망을 쓰는 알뜰폰 요금은 적립에서 빠진다]
+      - key: a-rental-telecom-10-extra
+        title: '[B팩 120만원 이상] 청호나이스·코웨이·SK매직·SKT·KT·LG U+·Liiv M 10% 포인트리 적립'
+        source: page
+        evidence: [my living A팩 | 렌탈/이동통신 요금 자동결제 | 10% | 5천점 | 1만점, '렌탈/이동통신 : 청호나이스, 코웨이, SK매직, LG렌탈, SKT, LG U+, KT, KB Liiv M', '렌탈/이동통신 요금 자동결제 시 제공, 알뜰폰(SKT, LG U+, KT) 제외', 페퍼저축은행 KB국민 톡톡 my living카드 선택 서비스팩은 전월 이용실적 120만원 이상 시 미선택한 선택 서비스팩의 2구간 서비스가 추가 제공됩니다.]
+        target:
+          merchants: [chungho_rental, coway, coway_rental, kt, lg_uplus, liiv_m, sk_magic, skt]
+        when:
+          - option:
+              select: [b]
+          - billing: [autopay]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 1200000}
+        unmodeled: [LG렌탈 자동결제도 대상이지만 담을 가맹점이 분명하지 않아 계산하지 않는다, SKT·KT·LG U+ 망을 쓰는 알뜰폰 요금은 적립에서 빠진다]
+      - key: b-academy-10
+        title: '[B팩] 학원 업종 10% 포인트리 적립'
+        source: page
+        evidence: [my living B팩 | 학원/서점 업종 | 10% | 1만점 | 2만점, '학원/서점 업종 : 기술/사무/가정계학원, 예체능계학원, 문리계학원, 외국어학원, 자동차학원, 기타학원, 서점 업종', '당사에 등록된 가맹점 업종기준 제공, 온라인 결제(PG가맹점) 제외', '실적 유예기간 : 최초 카드 사용등록일로부터 다음달 말일(실적 유예기간)까지 실적이 없는 경우에도 1구간(30만원 이상) 서비스가 제공됩니다.']
+        target:
+          categories: [education.academy]
+        when:
+          - option:
+              select: [b]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 10000, 300000: 10000, 600000: 20000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [서점 업종도 대상이지만 담을 업종이 없어 계산하지 않는다]
+      - key: b-academy-10-extra
+        title: '[A팩 120만원 이상] 학원 업종 10% 포인트리 적립'
+        source: page
+        evidence: [my living B팩 | 학원/서점 업종 | 10% | 1만점 | 2만점, '학원/서점 업종 : 기술/사무/가정계학원, 예체능계학원, 문리계학원, 외국어학원, 자동차학원, 기타학원, 서점 업종', '당사에 등록된 가맹점 업종기준 제공, 온라인 결제(PG가맹점) 제외', 페퍼저축은행 KB국민 톡톡 my living카드 선택 서비스팩은 전월 이용실적 120만원 이상 시 미선택한 선택 서비스팩의 2구간 서비스가 추가 제공됩니다.]
+        target:
+          categories: [education.academy]
+        when:
+          - option:
+              select: [a]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {per: month, amount: 20000}
+        tiers: {from: 1200000}
+        unmodeled: [서점 업종도 대상이지만 담을 업종이 없어 계산하지 않는다]
+      - key: b-food-delivery-10
+        title: '[B팩] 마켓컬리·쿠팡·배달의민족·쿠팡이츠·요기요 10% 포인트리 적립'
+        source: page
+        evidence: [my living B팩 | 식품/배달 업체 | 10% | 5천점 | 1만점, '식품/배달 : 마켓컬리, 쿠팡, 배달의민족, 쿠팡이츠, 요기요', 상품권(선물하기 등) 및 선불카드(선불전자지급수단 포함) 충전 제외, '실적 유예기간 : 최초 카드 사용등록일로부터 다음달 말일(실적 유예기간)까지 실적이 없는 경우에도 1구간(30만원 이상) 서비스가 제공됩니다.']
+        target:
+          merchants: [baemin, coupang, coupang_eats, kurly, yogiyo]
+        when:
+          - option:
+              select: [b]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 5000, 300000: 5000, 600000: 10000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+      - key: b-food-delivery-10-extra
+        title: '[A팩 120만원 이상] 마켓컬리·쿠팡·배달의민족·쿠팡이츠·요기요 10% 포인트리 적립'
+        source: page
+        evidence: [my living B팩 | 식품/배달 업체 | 10% | 5천점 | 1만점, '식품/배달 : 마켓컬리, 쿠팡, 배달의민족, 쿠팡이츠, 요기요', 상품권(선물하기 등) 및 선불카드(선불전자지급수단 포함) 충전 제외, 페퍼저축은행 KB국민 톡톡 my living카드 선택 서비스팩은 전월 이용실적 120만원 이상 시 미선택한 선택 서비스팩의 2구간 서비스가 추가 제공됩니다.]
+        target:
+          merchants: [baemin, coupang, coupang_eats, kurly, yogiyo]
+        when:
+          - option:
+              select: [a]
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 1200000}
+      - key: b-bakery-10
+        title: '[B팩] 제과 업종 10% 포인트리 적립'
+        source: page
+        evidence: ['my living B팩 | 슈퍼마켓, 제과/아이스크림 업종 | 10% | 5천점 | 1만점', '당사에 등록된 가맹점 업종기준 제공, 온라인 결제(PG가맹점) 제외', '실적 유예기간 : 최초 카드 사용등록일로부터 다음달 말일(실적 유예기간)까지 실적이 없는 경우에도 1구간(30만원 이상) 서비스가 제공됩니다.']
+        target:
+          categories: [restaurant.bakery]
+        when:
+          - option:
+              select: [b]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - per: month
+            amount: {0: 5000, 300000: 5000, 600000: 10000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [슈퍼마켓 업종도 대상이지만 공통 마트 업종이 대형마트까지 넓어 계산하지 않는다, 아이스크림 업종은 제과 업종에 들지 않으면 계산하지 않는다]
+      - key: b-bakery-10-extra
+        title: '[A팩 120만원 이상] 제과 업종 10% 포인트리 적립'
+        source: page
+        evidence: ['my living B팩 | 슈퍼마켓, 제과/아이스크림 업종 | 10% | 5천점 | 1만점', '당사에 등록된 가맹점 업종기준 제공, 온라인 결제(PG가맹점) 제외', 페퍼저축은행 KB국민 톡톡 my living카드 선택 서비스팩은 전월 이용실적 120만원 이상 시 미선택한 선택 서비스팩의 2구간 서비스가 추가 제공됩니다.]
+        target:
+          categories: [restaurant.bakery]
+        when:
+          - option:
+              select: [a]
+          - {channel: offline}
+        reward: {type: points, program: kb_pointree, rate: 10}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 1200000}
+        unmodeled: [슈퍼마켓 업종도 대상이지만 공통 마트 업종이 대형마트까지 넓어 계산하지 않는다, 아이스크림 업종은 제과 업종에 들지 않으면 계산하지 않는다]
+      - key: kbpay-5
+        title: KB Pay 결제 5% 포인트리 적립
+        source: page
+        evidence: [KB Pay 결제 시 | 5% | 3천점, 국내 온/오프라인 가맹점 결제 시 제공, 'KB Pay 결제서비스 적립 제외대상 무이자할부 이용금액, 취소금액, 단기카드대출(현금서비스), 장기카드대출(카드론), 상품권 및 선불카드(선불전자지급수단 포함) 구입/충전금액, 아파트관리비, 초/중/고 학교납입금 전체, 정부지원금(보육료/유치원보조비/바우처 이용금액 등), 대학(원)등록금, 각종 세금, 공과금(전기/수도), 4대 사회보험료(건강/연금/고용/산재), 각종 수수료 및 이자, 연체료, 연회비, 신차구매청구(환급) 할인전표 전체, 해외이용전표 전체']
+        target:
+          exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, insurance.social, tax, utility.electricity, utility.water]
+          all: true
+        when:
+          - payment: [kb_pay]
+          - {region: domestic}
+        reward: {type: points, program: kb_pointree, rate: 5}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        stack: kbpay
+        unmodeled: [정부지원금 결제와 신차구매청구(환급)할인 전표는 적립에서 빠진다]
+    unmodeled: [최초 사용등록일부터 다음 달 말일까지 실적 없이 1구간을 주는 유예는 선택서비스에만 있고 KB Pay 적립에는 없다, 월 적립한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, '정부지원금과 무승인전표(자판기, 터널통행료, 항공기내 이용)는 실적에서 빠진다', 적립 한도는 이용 순서대로 채운다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 원문은 2022.08.10 출시와 심의필만 적었다. 현재 규칙 시작일을 몰라 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지로 대조했다. A팩과 B팩 중 하나를 고르고, 전월 120만원 이상이면 고르지 않은 팩의 2구간 적립도 더 준다. 고르지 않은 팩의 추가 적립은 -extra 혜택으로 따로 두었다. 적립받은 결제는 금액 전체가 실적에서 빠진다.
