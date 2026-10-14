@@ -1,0 +1,103 @@
+schema_version: 2
+id: samsung-aap1434
+issuer: samsung
+name: 글로벌쇼핑 삼성카드 5 V2
+short_name: 글로벌쇼핑 5 V2
+search_names: [글로벌쇼핑 삼성카드, 글로벌쇼핑 삼성카드 5 V2, 삼성카드 5 글로벌쇼핑]
+kind: credit
+product_codes: [AAP1434]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 18000}
+  - {scope: global, brand: mastercard, amount: 18000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1434', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qthnuDbdVtn7iyBdTTla9Ohc%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2017-C1a-02598호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2015-05-29'
+    source: manual
+    tiers: [0, 300000, 500000, 600000, 900000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [car.toll, education.tuition, gift_card, insurance.social, prepaid_charge, tax, taxi, transit.bus_city, transit.bus_express, transit.subway, utility]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 적립하지 않는다, '문자알림서비스, 스마트오토서비스 이용금액은 적립하지 않는다']
+    limits:
+      - {key: coffee, per: month, amount: 5000}
+      - key: education
+        per: month
+        amount: {300000: 5000, 600000: 10000, 900000: 20000}
+      - key: overseas-extra
+        per: month
+        amount: {500000: 5000, 1000000: 10000}
+    stacks:
+      - {key: extra}
+    benefits:
+      - key: coffee-bakery-10
+        title: 커피·제과 10% 할인
+        source: manual
+        evidence: ['커피전문점, 파리바게뜨, 배스킨라빈스, 던킨도너츠 10% 결제일할인(청구할인)', 전월 일시불 및 할부 이용금액 30만원 이상 시, '통합 월 할인한도는 5,000원입니다.']
+        target:
+          categories: [cafe]
+          merchants: [baskin_robbins, dunkin, paris_baguette]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: coffee}
+        tiers: {from: 300000}
+      - key: education-5
+        title: 교육 5% 할인
+        source: manual
+        evidence: ['서점, 학습지 등 5% 결제일할인(청구할인)', '오프라인 서점, 온라인 서점(YES24, 인터파크 도서, 알라딘), 학습지(씽크빅, 교원, 대교, 한솔교육), 유치원, 놀이방, 어린이집, 문화센터', '전월 이용금액 30만원 이상 5,000원, 60만원 이상 10,000원, 90만원 이상 20,000원', 전월 이용금액에서 할인이 적용된 교육 업종 이용금액은 제외됩니다.]
+        target:
+          categories: [childcare, education.kindergarten]
+          merchants: [aladin, daekyo, hansol_education, interpark_book, kyobo_book, kyowon, woongjin_thinkbig, yes24, youngpoong_book]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: education}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [문화센터와 놀이방은 업종이 없어 담지 않았다, 백화점·할인점 내 문화센터와 온라인 결제건은 할인하지 않을 수 있다]
+      - key: special-1
+        title: 백화점·할인점·온라인쇼핑몰·홈쇼핑·병원·약국 1% 빅포인트 적립
+        source: manual
+        evidence: ['백화점, 할인점, 온라인 쇼핑몰, 홈쇼핑, 병원, 약국 1% 빅포인트 적립', 전월 이용금액에 관계없이 적립한도 없이 적립, '백화점 신세계·롯데·현대·갤러리아·동아·대구백화점, AK플라자, NC 대전 유성점', '할인점 이마트(에브리데이, 트레이더스 포함), 홈플러스, 롯데마트, 빅마켓', '온라인 쇼핑몰 G마켓, 옥션, 신세계몰, GS SHOP, CJ온스타일, 롯데i몰, 현대Hmall, 인터파크, 11번가', '홈쇼핑 GS SHOP, CJ온스타일, 롯데홈쇼핑, 현대홈쇼핑', 병원·약국 양방 병원(내과·외과·치과·피부과 포함) 및 약국]
+        target:
+          categories: [hospital, pharmacy]
+          merchants: [ak_plaza, auction, cj_onstyle, daegu_department, dong_a_department, eleven_st, emart, emart_everyday, galleria, gmarket, gs_shop, homeplus, hyundai_department, hyundai_homeshopping, interpark, lotte_department, lotte_homeshopping, lotte_mart, nc_daejeon_yuseong, shinsegae_department, traders]
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        unmodeled: [이마트 에브리데이 상품공급점 결제건은 적립하지 않는다, 빅마켓과 신세계몰, 롯데i몰은 가맹점이 없어 담지 않았다, 병원은 양방 병원만 적립하는데 한방 병원도 업종에 들어 있다]
+      - key: overseas-1
+        title: 해외 직구·해외 이용 1% 빅포인트 적립
+        source: manual
+        evidence: [해외 직구 및 해외 이용금액의 1% 빅포인트 적립, 전월 이용금액에 관계없이 적립한도 없이 적립]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+      - key: overseas-extra-1
+        title: 해외 특별 1% 빅포인트 추가 적립
+        source: manual
+        evidence: [해외 직구 및 해외 이용금액의 1% 빅포인트 추가 적립, '전월 국내 일시불 및 할부 이용금액 50만원 이상 5,000원, 100만원 이상 10,000원 월 적립한도']
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: points, program: samsung_bigpoint, rate: 1}
+        limits:
+          - {shared: overseas-extra}
+        tiers: {from: 500000}
+        stack: extra
+    unmodeled: ['직전 3개월 월평균 30만원 이상 때 주는 CGV 영화 3,000원 할인, 놀이공원·워터파크 할인, 어린이 직업체험 할인과 연 1회 아이포터 배송비 US$20 할인은 계산하지 않는다', 해외 이용 때 국제브랜드 수수료(1%) 면제와 아이포터 배송비 5% 할인은 계산하지 않는다, 전월 이용금액에서 해외 결제는 세지 않는다. 해외 특별 적립의 전월 국내 이용금액 기준에 맞추려고 국내만 세어 해외 이용이 많으면 구간이 낮게 잡힌다, 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다]
+open_questions:
+  - {path: 'revisions[0].spend.exclude_categories', question: 상품안내장이 전월 이용금액에서 빼는 항목을 교육 할인 적용분만 적고 공통 제외 항목은 적지 않았다. 삼성카드 공통 기준으로 4대보험과 공과금과 학교납입금과 등록금과 아파트 관리비와 임대료와 기프트·선불카드와 상품권과 대중교통과 택시를 뺐다, assumed: 삼성카드 공통 제외}
+  - {path: 'revisions[0].benefits', question: 안내장에 일반 가맹점 기본 적립률이 적혀 있지 않아 기본 적립을 넣지 않았다, assumed: no base}
+  - {path: status, question: 상품 페이지가 자바스크립트로 그려져 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-13 상품안내장(2017.1판, 심의필 제2017-C1a-02598호) 확인. 2015-05-29 출시. 연회비 해외겸용 Mastercard 18,000원이고 국내전용은 삼성카드 5 V2로 발급되며 같은 18,000원이다. 커피·제과 10%는 전월 30만원 이상 월 5,000원, 교육 5%는 30만원 이상 5,000원, 60만원 이상 10,000원, 90만원 이상 20,000원 한도다. 특별 적립 1%와 해외 1%는 실적과 한도 없이 주고 해외 특별 1%는 전월 국내 50만원 이상 5,000P, 100만원 이상 10,000P 한도다. 안내장이 2017년판이라 이후 개정은 확인하지 못했다.
