@@ -1,0 +1,36 @@
+schema_version: 2
+id: lotte-1666
+issuer: lotte
+name: LOCA Lite
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 1000}
+  - {scope: global, brand: mastercard, amount: 1000}
+  - {scope: global, brand: amex, amount: 1000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2020-A00031_20211101_10005.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2020-09-25'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: original_month}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['오토·스마트 캐시백 신청 이용금액, 포인트 충전, 장애인 고용부담금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료는 할인에서 빠진다']
+    benefits:
+      - key: all-0-7
+        title: 국내외 가맹점 0.7% 결제일 할인
+        source: manual
+        evidence: [국내외 가맹점 0.7% 결제일 할인, 지난달 실적조건 없이 할인한도 없이 제공됩니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.7}
+    unmodeled: [롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다, 시외버스는 원문이 대중교통(버스)라고만 적어 덜 주는 쪽으로 할인에서 뺐다]
+open_questions:
+  - {path: status, question: 상품 페이지와 상품 코드를 찾지 못했고 공시 설명서가 2021년 11월 것이 마지막이다. 판매 중인지 확인이 필요하다, assumed: on_sale}
+notes: 2026-10-12 상품설명서(2021년 9월 기준) 대조. 출시일 2020-09-25. 실적 조건과 한도 없이 국내외 0.7% 할인. 연회비 1,000원.
