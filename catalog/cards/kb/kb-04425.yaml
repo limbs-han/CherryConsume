@@ -1,0 +1,48 @@
+schema_version: 2
+id: kb-04425
+issuer: kb
+name: LG전자 KB국민카드
+short_name: KB LG전자
+kind: credit
+product_codes:
+  - '04425'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04425', fetched_at: '2026-10-12', review_no: 제2025-C1a-05907호}
+  - {id: manual, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/04425__prdctOpmn_20250512.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 800000]
+    spend:
+      exclude_categories: [annual_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행 가맹점, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    benefits:
+      - key: subscription-autopay
+        title: LG전자 구독(렌탈)요금 자동이체 월 1만원·1만5천원 청구할인
+        source: page
+        evidence: [30만원 이상 ~ 80만원 미만 | 1만원 | 1만원, 80만원 이상 | 1만 5천원 | 1만 5천원, 할인금액보다 자동이체 승인금액이 작을 경우 승인금액만큼 할인적용됩니다., LG전자 구독(렌탈)요금 자동이체 승인건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인됩니다.]
+        target:
+          merchants: [lg_appliance_subscription]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 10000, 800000: 15000}
+        tiers: {from: 300000}
+    unmodeled: [LG전자 베스트샵 라이트할부(24·36개월) 월 1만원·1만5천원 할인은 전월 말 할부 잔액으로 정해져 계산하지 않는다. 라이트할부 할인과 구독 요금 할인은 함께 받지 못한다, 최초 사용등록일부터 다음 달 말일까지 실적 없이 1구간 할인을 주는 신규 특례는 계산하지 않는다, LG전자 고객센터에 이 카드로 자동이체를 따로 신청해야 할인된다, 무승인전표(대중교통·자판기·터널이용료·항공기내 이용)와 정부지원금은 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 수집일을 잠정 적용 시작일로 둔다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지와 상품설명서 PDF를 받아 대조했다. 실적 제외 목록은 상품설명서에서 옮겼다. 구독 요금 할인받은 이용금액 전체가 실적에서 빠진다. 연회비는 기본 7천원과 제휴 8천원을 더한 1만5천원이다.
