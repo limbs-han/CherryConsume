@@ -1,0 +1,20 @@
+card: lotte-p13248-a13248
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 80만 구간 SKT 자동납부 13,000원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 65000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {skt-billing-discount: 13000}
+  calc: 80만 구간 월 13000
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 65000, merchant: skt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만 미만

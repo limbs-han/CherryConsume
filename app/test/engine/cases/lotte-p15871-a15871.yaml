@@ -1,0 +1,46 @@
+card: lotte-p15871-a15871
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 한도와 할인받은 결제 실적 제외
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 30000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {co-lease-discount: 8000}
+    counted: 0
+  calc: 최저 구간 한도 8000원. 할인받은 결제 전체가 실적에서 빠짐
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 30000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만원 미만이라 할인 없음
+- name: 160만 구간 한도
+  prev_month_spend: 1600000
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 30000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {co-lease-discount: 24000}
+  calc: 한도 24000원
+- name: 신규 발급 특례
+  prev_month_spend: 0
+  holder: {started_on: '2026-10-15'}
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 30000, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {co-lease-discount: 8000}
+  calc: 10월 발급이라 11월 말까지 40만 구간 8000원
+- name: 자동납부가 아니면 할인 없음
+  prev_month_spend: 1600000
+  payments:
+  - {at: 2026-11-20T10:00, merchant: coway_rental, amount: 30000, billing: normal}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 자동납부 연결 시에만 할인

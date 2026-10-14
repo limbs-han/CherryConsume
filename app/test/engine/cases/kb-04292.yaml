@@ -1,0 +1,43 @@
+card: kb-04292
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 G마켓 KB Pay 10%와 5% 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {online-10: 4000, online-kbpay-5: 2000}, counted: 0}
+  calc: 40,000원 × 10% = 4,000원, KB Pay 추가 5% = 2,000원
+- name: 다른 간편결제는 온라인 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 타 간편결제는 할인 제외
+- name: 경계 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 미만은 할인 없음
+- name: 70만 구간 홈플러스 매장 5% 한도 1만원
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: homeplus, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {offline-5: 10000}}
+  calc: 15,000원 중 월 한도 10,000원
+- name: 통신·OTT·영화
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 13500, merchant: netflix, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 14000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-5: 3000}}
+  - {payment: 1, benefits: {ott-30: 4050}}
+  - {payment: 2, benefits: {movie-20: 2800}}
+  calc: 60,000원 × 5% = 3,000원. 13,500원 × 30% = 4,050원. 14,000원 × 20% = 2,800원

@@ -1,0 +1,39 @@
+card: kb-09118
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 전기차 충전 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: car.ev_charging, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ev-charging-10: 3000}}
+  calc: 30,000원의 10% = 3,000P
+- name: 경계 직전 399999 적립 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, category: car.ev_charging, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만은 적립 없음
+- name: 80만 구간 철도 15만원 한도 1만원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 150000, category: transit.rail, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {rail-10: 10000}}
+  calc: 10% 15,000P이지만 2구간 한도 1만원
+- name: 120만 구간 초록마을 20%
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: chorokmaeul, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {chorokmaeul-20: 10000}}
+  calc: 50,000원의 20% = 10,000P, 3구간 한도 1만5천원 안
+- name: 넷플릭스 정기결제 1천점
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 13500, merchant: netflix, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {streaming-1000: 1000}}
+  calc: 건당 5천원 이상 월 1회 1,000P

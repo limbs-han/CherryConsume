@@ -40,7 +40,7 @@ cases:
 - name: 해외 30만원 이상 2%
   prev_month_spend: 300000
   payments:
-  - {at: 2026-11-04T12:00, amount: 300000, category: shopping, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 300000, category: online_shopping, region: overseas, payment_method: physical_card}
   expect:
   - payment: 0
     benefits: {overseas-2: 6000}
@@ -48,7 +48,7 @@ cases:
 - name: 해외 1만원 미만은 없음
   prev_month_spend: 300000
   payments:
-  - {at: 2026-11-04T12:00, amount: 9999, category: shopping, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 9999, category: online_shopping, region: overseas, payment_method: physical_card}
   expect:
   - payment: 0
     benefits: {}
@@ -96,7 +96,7 @@ cases:
 - name: 해외 1만원 1%
   prev_month_spend: 300000
   payments:
-  - {at: 2026-11-04T12:00, amount: 10000, category: shopping, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 10000, category: online_shopping, region: overseas, payment_method: physical_card}
   expect:
   - payment: 0
     benefits: {overseas-1: 100}

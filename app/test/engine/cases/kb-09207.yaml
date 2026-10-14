@@ -1,0 +1,104 @@
+card: kb-09207
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: select, choice: a, effective_from: 2026-01-01}
+cases:
+- name: A팩 30만 구간 11번가 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: eleven_st, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-online-10: 5000}, counted: 0}
+  calc: 50,000원 × 10% = 5,000포인트. 적립받은 결제는 실적 제외
+- name: A팩 30만 경계 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: eleven_st, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만은 적립 없음
+- name: A팩 60만 구간 마트 한도 1만점
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-mart-10: 10000}}
+  calc: 20,000포인트 중 2구간 한도 10,000점
+- name: A팩 렌탈 자동결제
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: coway, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-rental-telecom-10: 3000}}
+  calc: 30,000원 × 10% = 3,000포인트
+- name: A팩 B팩 혜택 없음
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: baemin, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 120만 미만이면 고르지 않은 팩은 적립 없음
+- name: A팩 120만 구간 B팩 2구간 추가
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, merchant: baemin, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-food-delivery-10-extra: 10000}}
+  calc: 20,000포인트 중 B팩 2구간 한도 10,000점
+- name: B팩 학원 신규 유예
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+    options:
+    - {option: select, choice: b, effective_from: 2026-10-15}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 200000, category: education.academy, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-academy-10: 10000}}
+  calc: 유예기간 1구간 한도 10,000점
+- name: KB Pay 5% 추가 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: restaurant.general, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {kbpay-5: 1000}, counted: 0}
+  calc: 20,000원 × 5% = 1,000포인트
+- name: B팩 120만 구간 A팩 추가 세 가지
+  prev_month_spend: 1200000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: select, choice: b, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gmarket, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 10000, merchant: homeplus, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {a-online-10-extra: 1000}}
+  - {payment: 1, benefits: {a-mart-10-extra: 1000}}
+  - {payment: 2, benefits: {a-rental-telecom-10-extra: 1000}}
+  calc: 각 10,000원 × 10% = 1,000포인트
+- name: B팩 식품 배달과 제과
+  prev_month_spend: 300000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: select, choice: b, effective_from: 2026-01-01}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: kurly, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 10000, category: restaurant.bakery, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-food-delivery-10: 1000}}
+  - {payment: 1, benefits: {b-bakery-10: 1000}}
+  calc: 각 10,000원 × 10% = 1,000포인트
+- name: A팩 120만 구간 B팩 학원과 제과 추가
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: education.academy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 10000, category: restaurant.bakery, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {b-academy-10-extra: 1000}}
+  - {payment: 1, benefits: {b-bakery-10-extra: 1000}}
+  calc: 각 10,000원 × 10% = 1,000포인트

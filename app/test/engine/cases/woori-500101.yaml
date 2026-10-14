@@ -1,0 +1,78 @@
+card: woori-500101
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 20만 구간 쿠팡 건당 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: coupang, amount: 50000, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-5: 1000}
+  calc: 5만 x 5% 2500이 건당 1000원에 걸림
+- name: 20만 직전은 혜택 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, merchant: coupang, amount: 10000, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 구간 미달
+- name: 스타벅스 사이렌오더
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: starbucks, amount: 10000, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {eat-5: 500}
+  calc: 1만 x 5% 500
+- name: 쇼핑 통합 한도 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: coupang, amount: 50000, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, merchant: musinsa, amount: 50000, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, merchant: zigzag, amount: 50000, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-5: 1000}
+  - payment: 1
+    benefits: {shopping-5: 1000}
+  - payment: 2
+    benefits: {}
+  calc: 건당 1000원씩 2건 뒤 통합 한도 2000원 소진
+- name: 해외 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, category: restaurant.general, amount: 10000, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-5: 500}
+  calc: 1만 x 5% 500
+- name: 배달 OTT 티켓 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: baemin, amount: 10000, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, merchant: netflix, amount: 10000, billing: subscription, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, merchant: ticketlink, amount: 10000, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-5: 500}
+  - payment: 1
+    benefits: {ott-5: 500}
+  - payment: 2
+    benefits: {ticket-5: 500}
+  calc: 1만 x 5% 500씩
+- name: 후불교통 이동통신 어학시험 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, category: transit.bus_city, amount: 1500, billing: postpaid_transit, payment_method: physical_card}
+  - {at: 2026-11-05T10:00, merchant: skt, amount: 10000, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, merchant: toeic, amount: 10000, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-5: 75}
+  - payment: 1
+    benefits: {telecom-5: 500}
+  - payment: 2
+    benefits: {language-test-5: 500}
+  calc: 1500 x 5% 75, 1만 x 5% 500씩

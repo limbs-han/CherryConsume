@@ -1,0 +1,55 @@
+card: samsung-aap1434
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 커피 10% 30만 구간 하한
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-bakery-10: 1000}, counted: 10000}
+  calc: 10,000 × 10% = 1,000원. 월 한도 5,000원 안
+- name: 실적 30만 직전은 커피 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T09:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 299,999원은 0 구간이라 할인 없음
+- name: 교육 5% 90만 구간 한도
+  prev_month_spend: 900000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 500000, merchant: kyobo_book, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {education-5: 20000}, counted: 0}
+  calc: 500,000 × 5% = 25,000이나 90만 구간 한도 20,000원. 할인 적용 교육 업종 금액은 실적 제외
+- name: 교육 5% 30만 구간
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 200000, merchant: kyowon, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {education-5: 5000}, counted: 0}
+  calc: 200,000 × 5% = 10,000이나 30만 구간 한도 5,000원
+- name: 특별 적립 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 10000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 20000, category: hospital, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {special-1: 100}, counted: 10000}
+  - {payment: 1, benefits: {special-1: 200}, counted: 20000}
+  calc: 10,000 × 1% = 100P, 20,000 × 1% = 200P
+- name: 해외 1%와 특별 1% 추가 50만 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000, overseas-extra-1: 1000}}
+  calc: 100,000 × 1% = 1,000P 두 번. 추가 적립 한도 5,000P 안
+- name: 해외 특별 적립은 50만 직전에 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}}
+  calc: 499,999원은 300000 구간이라 추가 적립 없음

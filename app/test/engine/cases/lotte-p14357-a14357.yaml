@@ -1,0 +1,30 @@
+card: lotte-p14357-a14357
+holder:
+  started_on: '2026-01-01'
+  facts: {carbus_plan_unused: true}
+cases:
+- name: 30만 구간 1% 결제일 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, category: restaurant.general, amount: 55500, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-1: 555}
+  calc: 55500 x 1% = 555
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, category: restaurant.general, amount: 55500, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만
+- name: 플랜할인을 쓰면 할인 없음
+  prev_month_spend: 300000
+  holder: {started_on: '2026-01-01', facts: {carbus_plan_unused: false}}
+  payments:
+  - {at: 2026-11-05T12:00, category: restaurant.general, amount: 55500, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 플랜할인 이용 중에는 1% 할인 없음

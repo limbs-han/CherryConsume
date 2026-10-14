@@ -1,0 +1,88 @@
+card: kb-09124
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: first, choice: mart, effective_from: '2026-01-01'}
+  - {option: second, choice: couple, effective_from: '2026-01-01'}
+cases:
+- name: 이마트 5% 40만 구간 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {first-mart-5: 5000}, counted: 0}
+  - {payment: 1, benefits: {first-mart-5: 3000}, counted: 0}
+  calc: 5,000. 다음 5,000 중 한도 8,000의 남은 3,000. 할인받은 결제는 실적 제외
+- name: 경계 직전 399999
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 40만 미만 할인 없음
+- name: 마트 건당 3만원 미만
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 29999, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 3만원 미만 제외
+- name: 음식점 5%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {first-dining-fuel-5: 2000}}
+  calc: 40,000 × 5% = 2,000
+- name: 커피 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {second-couple-10: 1000}}
+  calc: 10,000 × 10% = 1,000
+- name: 5월 2nd 한도 두 배
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-05-05T10:00, amount: 400000, category: car.parking, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {second-couple-10: 30000}}
+  calc: 40,000 중 200만 구간 15,000의 두 배 30,000
+- name: 통신 자동납부 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-10: 5000}}
+  calc: 6,000 중 한도 5,000
+- name: 동네중심 세탁소
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: first, choice: neighborhood, effective_from: '2026-01-01'}
+    - {option: second, choice: kids, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: laundry, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 50000, category: education.academy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 10000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {first-neighborhood-5: 1000}}
+  - {payment: 1, benefits: {second-kids-academy-10: 5000}}
+  - {payment: 2, benefits: {second-kids-other-10: 1000}}
+  calc: 1,000. 학원 5,000. 편의점 1,000. 2nd 한도 7,000 안
+- name: 돌봄중심 병원
+  prev_month_spend: 400000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: first, choice: department, effective_from: '2026-01-01'}
+    - {option: second, choice: care, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: hospital, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {second-care-10: 5000}}
+  - {payment: 1, benefits: {first-department-5: 5000}}
+  calc: 5,000과 5,000

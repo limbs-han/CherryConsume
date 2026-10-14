@@ -1,0 +1,46 @@
+card: kb-09167
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 국내 기본 0.3%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-base-0-3: 300}, counted: 100000}
+  calc: 100,000원의 0.3% = 300P
+- name: 20만 구간 쿠팡 추가 0.7%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-base-0-3: 300, shopping-0-7: 700}, counted: 0}
+  calc: 0.3% 300P와 0.7% 700P. 추가 적립 받은 건은 실적 제외
+- name: 경계 직전 199999 쿠팡 기본만
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-base-0-3: 300}, counted: 100000}
+  calc: 20만원 미만은 추가 적립 없음
+- name: 20만 구간 항공사 추가 0.7%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: travel.airline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {domestic-base-0-3: 300, travel-0-7: 700}}
+  calc: 0.3% 300P와 0.7% 700P
+- name: 20만 구간 해외 기본과 추가
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-base-1: 1000, overseas-extra-1: 1000}}
+  calc: 1%씩 1,000P
+- name: 50만 구간 해외 60만원 특별 적립은 50만원까지
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 600000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-base-1: 6000, overseas-extra-1: 6000, overseas-special-1: 5000}}
+  calc: 기본 1% 6,000P, 추가 1% 6,000P, 특별 1%는 50만원까지 5,000P

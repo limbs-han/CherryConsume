@@ -1,0 +1,25 @@
+card: kb-04324
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 알뜰폰 자동이체 승인금액 전액 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9900, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {mvno-autopay: 9900}, counted: 0}
+  calc: 승인금액 9,900원이 월 할인금액 12,000원보다 작아 9,900원 할인. 할인받은 결제는 실적 제외
+- name: 70만 구간 월 한도
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: media_log, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {mvno-autopay: 17000}}
+  calc: 70만 이상 월 17,000원까지
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9900, merchant: kt_m_mobile, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9900}
+  calc: 30만 미만이면 할인 없음

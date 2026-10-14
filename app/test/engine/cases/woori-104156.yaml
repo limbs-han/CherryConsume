@@ -1,0 +1,32 @@
+card: woori-104156
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: KREAM 10% 50만 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: kream, channel: online}
+  expect:
+  - {payment: 0, benefits: {kream-10: 10000}, counted: 0}
+  calc: 10만원의 10% 1만원. 할인받은 금액은 실적 제외
+- name: 50만 직전은 혜택 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: kream, channel: online}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 50만 미만
+- name: 50만 구간 통합 한도 2만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 300000, merchant: kream, channel: online}
+  expect:
+  - {payment: 0, benefits: {kream-10: 20000}, counted: 0}
+  calc: 3만원이 한도 2만원에 걸린다
+- name: 해외 3%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, category: restaurant, region: overseas, channel: offline}
+  expect:
+  - {payment: 0, benefits: {overseas-3: 3000}, counted: 100000}
+  calc: 10만원의 3% 3천원

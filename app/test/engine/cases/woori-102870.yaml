@@ -1,0 +1,60 @@
+card: woori-102870
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 기본 0.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-0-5pct: 500}
+  calc: 100,000원 x 0.5% = 500원
+- name: 대중교통 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1400, category: transit.subway, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-10pct: 140}
+  calc: 1,400원 x 10% = 140원이고 기본 0.5%는 같은 묶음이라 받지 않는다
+- name: 스타벅스 건당 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: starbucks, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-10pct: 1000}
+  calc: 20,000원 x 10% = 2,000원이 건당 1,000원 한도에 걸림
+- name: 실적 직전 교통
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1400, category: transit.subway, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-0-5pct: 7}
+  calc: 30만원 미만이라 기본 0.5%만 받아 1,400원 x 0.5% = 7원
+- name: 주유 60원 구간
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-discount-60: 1614}
+  calc: 50,000원 x 60 / 1,858 = 1,614원
+- name: 주유 80원 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-discount-80: 2152}
+  calc: 50,000원 x 80 / 1,858 = 2,152원
+- name: 주유 100원 구간
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: s_oil, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-discount-100: 2691}
+  calc: 50,000원 x 100 / 1,858 = 2,691원

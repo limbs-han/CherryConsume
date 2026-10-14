@@ -1,0 +1,55 @@
+card: kb-07986
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 스타벅스 1만원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 1000}}
+  calc: 10,000 × 10% = 1,000원
+- name: 30만 구간 PC방 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: pc_room, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {play-pc-10: 1000}}
+  calc: 10,000 × 10% = 1,000원
+- name: 경계 직전 299999 PC방 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: pc_room, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: Play 혜택은 30만원 이상
+- name: 30만 구간 패스트푸드 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.fastfood, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {play-fastfood-1000: 1000}}
+  calc: 건당 1만원 이상 1,000원
+- name: 20만 구간 일상 혜택과 통합한도
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: google_play, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 10000, merchant: interpark, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T13:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T14:00, amount: 13500, merchant: netflix, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T15:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T16:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-05T17:00, amount: 15000, merchant: cgv, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T18:00, amount: 50000, merchant: everland, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mobile-10: 1000}}
+  - {payment: 1, benefits: {culture-10: 1000}}
+  - {payment: 2, benefits: {beauty-5: 500}}
+  - {payment: 3, benefits: {convenience-5: 500}}
+  - {payment: 4, benefits: {subscription-1000: 1000}}
+  - {payment: 5, benefits: {delivery-1000: 1000}}
+  - {payment: 6, benefits: {telecom-2500: 2500}}
+  - {payment: 7, benefits: {movie-4000: 4000}}
+  - {payment: 8, benefits: {amusement-15000: 8500}}
+  calc: 앞 여덟 건 합 11,500원. 통합한도 20,000원 중 남은 8,500원만 놀이공원에 준다

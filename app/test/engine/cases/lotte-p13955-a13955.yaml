@@ -1,0 +1,34 @@
+card: lotte-p13955-a13955
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 쿠팡 60%와 편의점 통합 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-shop-60: 6000}, counted: 0}
+  - {payment: 1, benefits: {convenience-60: 7000}, counted: 0}
+  calc: 10,000 × 60% = 6,000. 20,000 × 60% = 12,000 중 통합 한도 13,000의 남은 7,000. 할인받은 결제는 실적 제외
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 10000}
+  calc: 40만 미만이라 할인 없음
+- name: 미용실 60%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: beauty.salon, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {salon-60: 12000}}
+  calc: 20,000 × 60% = 12,000. 한도 13,000 안
+- name: 멤버십 60%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 7890, merchant: coupang_wow, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {membership-60: 4734}}
+  calc: 7,890 × 60% = 4,734

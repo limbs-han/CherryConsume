@@ -1,0 +1,30 @@
+card: lotte-p14447-a14447
+holder:
+  started_on: '2026-06-10'
+cases:
+- name: 1~24개월 70만 구간 한도 15000
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-20T10:00, amount: 33000, merchant: toss_mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {toss-mobile-telecom: 15000}
+  calc: 발급 다섯째 달 70만 구간 월 한도 15,000
+- name: 실적 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, amount: 33000, merchant: toss_mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 할인 없음
+- name: 25개월부터는 150만 구간이어도 7000
+  prev_month_spend: 1500000
+  holder:
+    started_on: '2024-06-10'
+  payments:
+  - {at: 2026-11-20T10:00, amount: 33000, merchant: toss_mobile, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {toss-mobile-telecom-after24: 7000}
+  calc: 발급월부터 29개월째라 일괄 7,000

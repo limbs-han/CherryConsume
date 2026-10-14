@@ -1,0 +1,43 @@
+card: samsung-aap1594
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 영화 12,000원 이상 5,000원 할인과 월 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 12000, category: movie, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 15000, category: movie, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {movie-5000: 5000}}
+  - {payment: 1, benefits: {base-0-5: 75}}
+  calc: 12,000원 이상이면 5,000원. 월 1회라 둘째는 국내 0.5% 15,000 × 0.5% = 75P
+- name: 실적 30만원 직전이면 영화 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 12000, category: movie, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-5: 60}}
+  calc: 299,999원은 0 구간. 12,000 × 0.5% = 60P
+- name: 이동통신 5만원 이상 자동납부 2,000원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mobile-2000: 2000}}
+  calc: 50,000원 이상 자동납부 2,000원
+- name: 할인점 1.5%와 음식점 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T19:00, amount: 30000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-fuel-online-1-5: 1500}}
+  - {payment: 1, benefits: {food-1: 300}}
+  calc: 100,000 × 1.5% = 1,500P. 30,000 × 1% = 300P
+- name: 해외 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T12:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}}
+  calc: 100,000 × 1% = 1,000P

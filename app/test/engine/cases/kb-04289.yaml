@@ -1,0 +1,39 @@
+card: kb-04289
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 랭킹닭컴 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: ranking_dak, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {rankingdak-20: 10000}, counted: 0}
+  calc: 50,000원 × 20% = 10,000원. 할인건은 실적 제외
+- name: 경계 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: ranking_dak, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만 할인 없음
+- name: 60만 구간 골프 10%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: sports.golf, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {golf-10: 10000}, counted: 0}
+  calc: 100,000원 × 10% = 10,000원
+- name: 넷플릭스 10%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-10: 1700}, counted: 0}
+  calc: 17,000원 × 10% = 1,700원
+- name: 30만 구간 골프 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: sports.golf, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {golf-5: 5000}, counted: 0}
+  calc: 100,000원 × 5% = 5,000원

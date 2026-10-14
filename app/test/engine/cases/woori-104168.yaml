@@ -1,0 +1,48 @@
+card: woori-104168
+holder:
+  started_on: '2026-01-01'
+  facts: {first-issuance-eligible: true}
+cases:
+- name: 40만 구간 처음 36개월 8천원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {kt-autopay: 8000}
+  calc: 50,000원 청구를 8,000원 한도까지 할인
+- name: 실적 직전 399999
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 40만원보다 1원 적어 0원
+- name: 120만 구간 18000원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {kt-autopay: 18000}
+  calc: 한도 18,000원
+- name: 청구액이 한도보다 적으면 청구액
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 7000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {kt-autopay: 7000}
+  calc: 7,000원 청구는 7,000원까지
+- name: 37개월 이후 5천원
+  holder:
+    started_on: '2022-01-01'
+    facts: {first-issuance-eligible: true}
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: kt, billing: autopay}
+  expect:
+  - payment: 0
+    benefits: {kt-autopay: 5000}
+  calc: 37개월 이후는 구간과 관계없이 한도 5,000원

@@ -1,0 +1,61 @@
+card: woori-834645
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 일반 가맹점 0.8%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {base-0-8: 160}, counted: 20000}
+  calc: 2만원의 0.8% 160원
+- name: 30만 직전은 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, category: restaurant, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 20000}
+  calc: 30만 미만
+- name: 1만원 미만은 적립 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 9000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {}, counted: 9000}
+  calc: 결제건당 1만원 미만 제외
+- name: 이동통신 자동납부 3%, 커피 3%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, category: telecom.mobile, billing: autopay}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: starbucks, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-telecom-3: 1800}, counted: 60000}
+  - {payment: 1, benefits: {special-coffee-movie-3: 600}, counted: 20000}
+  calc: 60,000원 x 3% 1,800원, 20,000원 x 3% 600원
+- name: 대중교통 3%와 통합 월 1만점 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 340000, category: transit.subway}
+  - {at: 2026-11-30T10:00, amount: 50000, category: transit.bus_city}
+  expect:
+  - {payment: 0, benefits: {special-transit-3: 10000}, counted: 340000}
+  - {payment: 1, benefits: {}, counted: 50000}
+  calc: 340,000원 x 3% 10,200원이 30만 구간 통합 한도 1만점에 걸리고 남은 한도가 없다
+- name: 백화점·온라인·해외 1%
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: lotte_department, channel: offline}
+  - {at: 2026-11-06T10:00, amount: 100000, merchant: coupang, channel: online}
+  - {at: 2026-11-07T10:00, amount: 100000, category: restaurant, region: overseas, channel: offline}
+  expect:
+  - {payment: 0, benefits: {special-shopping-offline-1: 1000}, counted: 100000}
+  - {payment: 1, benefits: {special-online-1: 1000}, counted: 100000}
+  - {payment: 2, benefits: {special-overseas-1: 1000}, counted: 0}
+  calc: 각 1,000원. 해외는 실적 제외
+- name: 간편결제 3% 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 20000, category: restaurant, channel: offline, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {base-0-8: 160, pay-3: 600}, counted: 20000}
+  calc: 기본 160원과 추가 600원

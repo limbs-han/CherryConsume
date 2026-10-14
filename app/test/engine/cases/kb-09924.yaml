@@ -1,0 +1,106 @@
+card: kb-09924
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: first, choice: mart, effective_from: '2026-01-01'}
+  - {option: second, choice: duo, effective_from: '2026-01-01'}
+cases:
+- name: 마트중심 40만 구간 이마트 5만원
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-5: 2500}, counted: 0}
+  calc: 50,000원의 5% = 2,500원. 할인받은 건은 실적 제외
+- name: 마트중심 이마트 3만원 미만은 할인 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 29000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 29000}
+  calc: 건당 3만원 이상만 할인
+- name: 경계 직전 399999 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 40만원 미만은 할인 없음
+- name: 마트중심 200만 구간 음식점 한도 3만원
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 800000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {restaurant-fuel-5: 30000}}
+  calc: 5% 40,000원이지만 200만 구간 한도 30,000원
+- name: 둘이중심 커피 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: cafe, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {duo-10: 2000}}
+  calc: 20,000원의 10% = 2,000원
+- name: 둘이중심 영화관 현장 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: cgv, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {duo-movie-10: 3000}}
+  calc: 30,000원의 10% = 3,000원
+- name: 이동통신 자동납부 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 70000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-10: 5000}}
+  calc: 10% 7,000원이지만 한도 5,000원
+- name: 백화점중심 현대백화점 5%
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: first, choice: department, effective_from: '2026-01-01'}
+    - {option: second, choice: kids, effective_from: '2026-01-01'}
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: hyundai_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {department-5: 5000}}
+  calc: 100,000원의 5% = 5,000원
+- name: 자녀중심 학원 10%
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: first, choice: department, effective_from: '2026-01-01'}
+    - {option: second, choice: kids, effective_from: '2026-01-01'}
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: education.academy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {kids-academy-10: 5000}}
+  calc: 10% 5,000원, 한도 7,000원 안
+- name: 자녀중심 GS25 10%
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: first, choice: department, effective_from: '2026-01-01'}
+    - {option: second, choice: kids, effective_from: '2026-01-01'}
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {kids-daily-10: 1000}}
+  calc: 10,000원의 10% = 1,000원
+- name: 동네중심 약국과 돌봄중심 병원
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: first, choice: local, effective_from: '2026-01-01'}
+    - {option: second, choice: care, effective_from: '2026-01-01'}
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: pharmacy, payment_method: physical_card}
+  - {at: 2026-11-04T13:00, amount: 50000, category: hospital, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {local-5: 1000}}
+  - {payment: 1, benefits: {care-10: 5000}}
+  calc: 약국 5% 1,000원, 병원 10% 5,000원

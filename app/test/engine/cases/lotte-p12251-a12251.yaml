@@ -1,0 +1,28 @@
+card: lotte-p12251-a12251
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈료 할인 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-20T10:00, merchant: chungho_rental, amount: 50000, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {rental-discount: 13000}
+  calc: 30만 구간 한도 13000원
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-20T10:00, merchant: chungho_rental, amount: 50000, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만
+- name: 120만 구간 렌탈료가 한도보다 적으면 렌탈료만큼
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-20T10:00, merchant: chungho_rental, amount: 19900, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {rental-discount: 19900}
+  calc: 한도 23000원보다 렌탈료가 적어 19900원

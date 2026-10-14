@@ -1,0 +1,39 @@
+card: lotte-p14837-a14837
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 배민 2만원 이상 3천원 할인
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, merchant: baemin, amount: 25000, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {baemin-3000: 3000}
+  calc: 30만 구간, 2만원 이상 건당 3000원
+- name: 2만원 미만은 할인 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T19:00, merchant: baemin, amount: 19999, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 최소 2만원 미달
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T19:00, merchant: baemin, amount: 25000, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만
+- name: 하루 1회
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, merchant: baemin, amount: 25000, payment_method: physical_card}
+  - {at: 2026-11-05T19:00, merchant: baemin, amount: 25000, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {baemin-3000: 3000}
+  - payment: 1
+    benefits: {}
+  calc: 같은 날 두 번째는 할인 없음

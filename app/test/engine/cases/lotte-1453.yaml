@@ -1,0 +1,28 @@
+card: lotte-1453
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 아울렛 7%가 통합 한도 15,000원에 막힘
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, merchant: lotte_outlet, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {lotte-outlet-7: 15000}
+  calc: 300000 x 7% = 21000, 30만 구간 한도 15000
+- name: 택시 5%
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-taxi-5: 1000}
+  calc: 20000 x 5% = 1000
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만 미만

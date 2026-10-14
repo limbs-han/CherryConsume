@@ -1,0 +1,32 @@
+card: lotte-1472
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 리터당 150원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {sk-fuel-150: 4036}, counted: 0}
+  calc: 50,000 ÷ 1,858 × 150 = 4,036.6, 버림 4,036. 할인받은 매출 실적 제외
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 50만 미만
+- name: 150만 구간 1회 10만원까지
+  prev_month_spend: 1500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {sk-fuel-300: 16146}}
+  calc: 100,000 ÷ 1,858 × 300 = 16,146.4, 버림 16,146
+- name: 100만 구간 리터당 200원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {sk-fuel-200: 5382}}
+  calc: 50,000 ÷ 1,858 × 200 = 5,382.1, 버림 5,382

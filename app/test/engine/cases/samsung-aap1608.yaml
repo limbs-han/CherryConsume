@@ -1,0 +1,72 @@
+card: samsung-aap1608
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 영역별 1회 할인
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: insurance.private, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T13:00, amount: 10000, category: pharmacy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T14:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {insurance-monthly: 3000}}
+  - {payment: 1, benefits: {fuel-3000: 3000}}
+  - {payment: 2, benefits: {mart-2000: 2000}}
+  - {payment: 3, benefits: {medical-1000: 1000}}
+  - {payment: 4, benefits: {movie-5000: 5000}}
+  calc: 40만원 구간 보험 3,000, 주유 3,000, 할인점 2,000, 의료 1,000, 영화 5,000 각각 1회
+- name: 40만 구간은 영역별 두 번째 결제에 없다
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-10T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-3000: 3000}}
+  - {payment: 1, benefits: {}}
+  calc: 40만원 구간 주유는 월 1회
+- name: 70만 구간 보험 5천원과 주유 2회
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 50000, category: insurance.private, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-10T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-17T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {insurance-monthly: 5000}}
+  - {payment: 1, benefits: {fuel-3000: 3000}}
+  - {payment: 2, benefits: {fuel-3000: 3000}}
+  - {payment: 3, benefits: {}}
+  calc: 70만원 구간 보험 5,000. 주유는 월 2회까지라 세 번째는 0
+- name: 최소 결제 금액 직전은 할인 없음
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T10:00, amount: 9999, category: insurance.private, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 29999, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-03T12:00, amount: 29999, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T13:00, amount: 2999, category: pharmacy, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T14:00, amount: 11999, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {}}
+  - {payment: 2, benefits: {}}
+  - {payment: 3, benefits: {}}
+  - {payment: 4, benefits: {}}
+  calc: 보험 1만원, 주유 3만원, 할인점 3만원, 의료 3천원, 영화 1만2천원 미만이라 모두 0
+- name: 실적 399999면 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 40000}
+  calc: 40만원 미만은 구간 0
+- name: 신규 발급 다음 달까지 40만 구간
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+  payments:
+  - {at: 2026-11-03T11:00, amount: 40000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-3000: 3000}}
+  calc: 10월 발급이라 11월 말까지 40만 구간

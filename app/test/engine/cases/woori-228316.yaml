@@ -1,0 +1,25 @@
+card: woori-228316
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 패밀리레스토랑 10%와 건당 10만원 상한
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 150000, merchant: outback, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {family-restaurant-10pct: 10000}, counted: 150000}
+  calc: 10만원까지만 할인하므로 1만원
+- name: 30만 직전은 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: outback, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 50000}
+  calc: 30만 미만
+- name: 커피 20%는 건당 5천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-20pct: 5000}, counted: 30000}
+  calc: 6천원이 건당 5천원에 걸린다

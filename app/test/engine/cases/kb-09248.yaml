@@ -1,0 +1,57 @@
+card: kb-09248
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 스타벅스 5% 30만 구간 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 30000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {food-5: 1000}, counted: 20000}
+  - {payment: 1, benefits: {food-5: 1000}}
+  calc: 20,000 × 5% = 1,000. 다음 1,500 중 남은 한도 1,000
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만 미만 혜택 없음
+- name: 건당 1만원 미만
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 건당 1만원 이상만
+- name: 올리브영 5% 100만 구간
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: olive_young, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 5000}}
+  calc: 100,000 × 5% = 5,000. 한도 10,000 안
+- name: 이마트와 통신 생활 한도 공유
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 80000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {life-mart-fuel-5: 4000}}
+  - {payment: 1, benefits: {life-telecom-5: 1000}}
+  calc: 80,000 × 5% = 4,000. 통신 2,500 중 생활 한도 5,000의 남은 1,000
+- name: 쿠팡 5% 50만 구간
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {shopping-5: 3000}}
+  calc: 5,000 중 50만 구간 한도 3,000
+- name: 후불교통 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 0}
+  calc: 지하철은 실적 제외

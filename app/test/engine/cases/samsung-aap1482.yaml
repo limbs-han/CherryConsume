@@ -1,0 +1,29 @@
+card: samsung-aap1482
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 주유 2천원과 일 1회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 60000, merchant: gs_caltex, payment_method: physical_card}
+  - {at: 2026-11-03T18:00, amount: 60000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-2000: 2000}, counted: 0}
+  - {payment: 1, benefits: {base-1: 600}, counted: 60000}
+  calc: 하루 1회라 두 번째 주유는 할인이 없고 기본 1% 600
+- name: 실적 직전이면 기본 적립만
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T09:00, amount: 60000, merchant: gs_caltex, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 600}, counted: 60000}
+  - {payment: 1, benefits: {base-1: 100}, counted: 10000}
+  calc: 50만원 미만이라 주유 할인이 없다. 빅포인트 1%
+- name: 5만원 미만 주유는 할인 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 49999, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 499}, counted: 49999}
+  calc: 49,999 × 1% = 499.99 버림

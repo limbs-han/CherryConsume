@@ -1,0 +1,25 @@
+card: kb-04420
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 제주항공 24만원 4,000포인트
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 240000, merchant: jeju_air, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {jpoint-base: 2000, jpoint-jeju-air: 2000}}
+  calc: 원문 예시. 240,000 ÷ 1,200 = 200단위 × 10P를 두 번 받아 4,000P
+- name: 일반 가맹점 1만원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {jpoint-base: 80}}
+  calc: 10,000 ÷ 1,200 = 8단위 × 10P = 80P. 남는 400원은 원문도 반올림에서 버린다
+- name: 무이자할부는 적립 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 120000, category: online_shopping, installment_months: 3, interest_free: true, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 무이자할부 적립 제외

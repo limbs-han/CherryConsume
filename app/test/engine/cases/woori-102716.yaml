@@ -1,0 +1,100 @@
+card: woori-102716
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 쿠팡 5% 건당 천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 건당 한도 1천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-5: 1000}
+  calc: 2,500원이지만 건당 1,000원
+- name: 실적 직전 199999
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 20만원보다 1원 적어 0원
+- name: 해외 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: online_shopping, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 간편결제 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, channel: online, region: domestic, payment_method: naver_pay}
+  expect:
+  - payment: 0
+    benefits: {pay-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 스타벅스 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: starbucks, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 배달 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: baemin, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: OTT 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: netflix, billing: subscription, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {ott-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 공연티켓 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: interpark_ticket, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {ticket-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 후불 지하철 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: transit.subway, billing: postpaid_transit, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 통신 자동납부 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: skt, billing: autopay, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {telecom-5: 500}
+  calc: 10,000원 x 5% = 500원
+- name: 어학시험 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: toeic, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {exam-5: 500}
+  calc: 10,000원 x 5% = 500원

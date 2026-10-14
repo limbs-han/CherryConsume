@@ -1,0 +1,46 @@
+card: woori-500003
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 편의점 10만 이상 3%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-high: 900}, counted: 30000}
+  calc: 3만원의 3% 900원
+- name: 편의점 10만 미만 1%
+  prev_month_spend: 99999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-low: 300}, counted: 30000}
+  calc: 3만원의 1% 300원
+- name: 커피 영역 한도 2천원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 100000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-high: 2000}, counted: 100000}
+  calc: 3천원이 영역 한도 2천원에 걸린다
+- name: 패스트푸드 3%
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: mcdonalds, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fastfood-high: 300}, counted: 10000}
+  calc: 1만원의 3% 300원
+- name: 커피 10만 미만 1%
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: starbucks, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-low: 100}, counted: 10000}
+  calc: 1만원의 1% 100원
+- name: 패스트푸드 10만 미만 1%
+  prev_month_spend: 50000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 10000, merchant: mcdonalds, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fastfood-low: 100}, counted: 10000}
+  calc: 1만원의 1% 100원

@@ -1,0 +1,128 @@
+card: kb-09243
+holder:
+  started_on: '2026-01-01'
+  options: [{option: pick, choice: coffee, effective_from: '2026-01-01'}]
+cases:
+- name: 50만 구간 G마켓 10만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {easy-internet_delivery: 5000}}
+  calc: 5% 5,000점, 50만 구간 한도 5,000점
+- name: 경계 직전 499999 적립 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: gmarket, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만 미만은 적립 없음
+- name: 100만 구간 배민 카드결제 1만원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {easy-baemin: 500}}
+  calc: 10,000 × 5% = 500점
+- name: 50만 구간 이마트 오프라인 4만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {easy-mart: 2000}}
+  calc: 40,000 × 5% = 2,000점
+- name: 50만 구간 SK주유소 4만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: sk_energy, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {easy-fuel: 2000}}
+  calc: 40,000 × 5% = 2,000점
+- name: 50만 구간 스타벅스 1만원 커피 선택
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pick-coffee: 500}}
+  calc: 10,000 × 5% = 500점
+- name: 50만 구간 지하철 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {basic-transit: 500}}
+  calc: 10,000 × 5% = 500점
+- name: 50만 구간 SKT 자동납부 5만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {basic-telecom: 2500}}
+  calc: 50,000 × 5% = 2,500점
+- name: 50만 구간 G마켓 KB Pay 4만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: gmarket, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {easy-internet_delivery: 2000, basic-kbpay-online: 2000}}
+  calc: Easy 5% 2,000점과 KB Pay 5% 2,000점 따로
+- name: Pick social 선택 양수
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: social, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: coupang, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pick-social: 2000}}
+  calc: 40,000원 × 5% = 2,000점
+- name: Pick online_book 선택 양수
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: online_book, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: yes24, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pick-online-book: 2000}}
+  calc: 40,000원 × 5% = 2,000점
+- name: Pick homeshopping 선택 양수
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: homeshopping, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: gs_shop, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pick-homeshopping: 2000}}
+  calc: 40,000원 × 5% = 2,000점
+- name: Pick department 선택 양수
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: department, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pick-department: 2000}}
+  calc: 40,000원 × 5% = 2,000점
+- name: Pick bakery 선택 양수
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: bakery, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, category: restaurant.bakery, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pick-bakery: 2000}}
+  calc: 40,000원 × 5% = 2,000점
+- name: Pick convenience 선택 양수
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options: [{option: pick, choice: convenience, effective_from: '2026-01-01'}]
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {pick-convenience: 2000}}
+  calc: 40,000원 × 5% = 2,000점

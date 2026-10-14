@@ -1,0 +1,18 @@
+card: lotte-p13561-a13561
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 로카코인 1%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, merchant: emart, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {loca-coin-1: 500}}
+  calc: 50,000 × 1% = 500P. 앱이 0.5원으로 환산
+- name: 택시는 적립 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 택시는 적립 제외

@@ -1,0 +1,44 @@
+card: woori-102724
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 300000원 구간 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: nexen_tire_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {autopay-discount: 10000}
+  calc: 100,000원 자동납부가 300000원 구간 월 한도 10000원에 걸림
+- name: 700000원 구간 한도
+  prev_month_spend: 700000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: nexen_tire_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {autopay-discount: 15000}
+  calc: 100,000원 자동납부가 700000원 구간 월 한도 15000원에 걸림
+- name: 1200000원 구간 한도
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: nexen_tire_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {autopay-discount: 20000}
+  calc: 100,000원 자동납부가 1200000원 구간 월 한도 20000원에 걸림
+- name: 실적 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, merchant: nexen_tire_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 최저 구간보다 1원 적어 할인 0원
+- name: 승인금액이 한도보다 작음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 8000, merchant: nexen_tire_rental, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {autopay-discount: 8000}
+  calc: 승인금액 8,000원이 한도보다 작아 8,000원 할인

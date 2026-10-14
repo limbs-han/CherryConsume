@@ -1,0 +1,28 @@
+card: woori-102496
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 1% 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {domestic-1pct: 1000}
+  calc: 100,000원 x 1% = 1,000점
+- name: 해외는 적립 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 국내 가맹점만 적립
+- name: 상품권은 적립 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: gift_card, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 상품권 구매는 적립 제외

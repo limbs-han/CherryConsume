@@ -1,0 +1,53 @@
+card: lotte-p13870-a13870
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 기본 0.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {domestic-0-5: 500}
+  calc: 100,000원 × 0.5% = 500원
+- name: 50만 직전 넷플릭스는 기본 0.5%만
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {domestic-0-5: 85}
+  calc: 50만원 미만이라 스트리밍 할인 없음. 17,000원 × 0.5% = 85원
+- name: 50만 구간 스트리밍 50% 한도 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {streaming-50: 8500}
+  - payment: 1
+    benefits: {streaming-50: 1500}
+  calc: 17,000원 × 50% = 8,500원. 다음 결제는 남은 한도 1,500원이 0.5% 85원보다 커서 1,500원
+- name: 배달 5%와 쇼핑 5%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: baemin, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {delivery-5: 1500}
+  - payment: 1
+    benefits: {shopping-5: 2500}
+  calc: 30,000원 × 5% = 1,500원. 50,000원 × 5% = 2,500원
+- name: 해외 온라인 5%와 해외 오프라인 0.2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: online_shopping, region: overseas, channel: online, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, category: restaurant.general, region: overseas, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-online-5: 2500}
+  - payment: 1
+    benefits: {overseas-0-2: 200}
+  calc: 50,000원 × 5% = 2,500원. 100,000원 × 0.2% = 200원

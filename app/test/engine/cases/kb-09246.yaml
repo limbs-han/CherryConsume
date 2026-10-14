@@ -1,0 +1,64 @@
+card: kb-09246
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 정비 5% 50만 구간 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: car.car_repair, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 200000, category: car.car_repair, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {car-care-5: 5000}, counted: 100000}
+  - {payment: 1, benefits: {car-care-5: 5000}}
+  calc: 100,000 × 5% = 5,000. 다음 10,000 중 남은 한도 5,000
+- name: 경계 직전 499999는 0.2%만
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: car.car_repair, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {all-0-2: 200}}
+  calc: 50만 미만은 기본 0.2%만. 100,000 × 0.2% = 200
+- name: 영화 3,000점 월 1회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: cgv, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {movie-3000: 3000}}
+  - {payment: 1, benefits: {all-0-2: 30}}
+  calc: 첫 건 3,000점. 둘째는 횟수 소진으로 0.2% 30점
+- name: 편의점 1만원 미만은 0.2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9999, merchant: cu, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {all-0-2: 19}}
+  calc: 1만원 미만. 9,999 × 0.2% = 19.998 버림 19
+- name: 편의점 1,000점
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {conv-oliveyoung-1000: 1000}}
+  calc: 1,000점
+- name: 지하철 실적 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {all-0-2: 20}, counted: 0}
+  calc: 0.2% 20점. 후불교통 실적 제외
+- name: SK 주유 리터당 150점
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 92900, merchant: sk_energy, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-150: 7500}}
+  calc: 92,900 / 기준유가 1,858 = 50L × 150점 = 7,500점. 한도 1만점 안
+- name: 제과 2,000점
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: restaurant.bakery, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {bakery-2000: 2000}}
+  calc: 건당 1만원 이상 2,000점

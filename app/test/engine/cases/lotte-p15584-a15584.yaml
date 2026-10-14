@@ -1,0 +1,33 @@
+card: lotte-p15584-a15584
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 건당 금액 구간
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 99999, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 300000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-08T10:00, amount: 500000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {under-100k-0-5: 499}}
+  - {payment: 1, benefits: {100k-1: 1000}}
+  - {payment: 2, benefits: {300k-1-5: 4500}}
+  - {payment: 3, benefits: {500k-2: 10000}}
+  calc: 99,999 × 0.5% = 499.995 버림 499. 100,000 × 1% = 1,000. 300,000 × 1.5% = 4,500. 500,000 × 2% = 10,000
+- name: 월 통합 한도 10만원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 4990000, category: restaurant.general, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 1000000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {500k-2: 99800}}
+  - {payment: 1, benefits: {500k-2: 200}}
+  calc: 4,990,000 × 2% = 99,800. 다음 20,000 중 남은 한도 200
+- name: 택시는 없음
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 택시는 할인 제외

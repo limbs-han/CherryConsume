@@ -1,0 +1,20 @@
+card: lotte-1766
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 이상 1% 트래블포인트
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 23500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {travel-point-1: 230}
+  calc: 23 x 10 = 230
+- name: 실적 1원 모자라면 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 23500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만 미만

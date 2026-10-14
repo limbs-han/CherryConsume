@@ -1,0 +1,52 @@
+card: samsung-aap1741
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 아울렛 10% 40만 구간 하한
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: shinsegae_simon, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {outlet-10: 10000}, counted: 100000}
+  calc: 100,000 × 10% = 10,000원. 월 한도 15,000원 안
+- name: 실적 40만 직전은 아울렛 할인 없음
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: shinsegae_simon, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 399,999원은 0 구간이라 할인 없음
+- name: 이마트 7%와 한도
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 100000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {mart-7: 3500}, counted: 50000}
+  - {payment: 1, benefits: {mart-7: 3500}, counted: 100000}
+  calc: 50,000 × 7% = 3,500원. 다음 결제는 100,000 × 7% = 7,000이나 남은 한도 3,500원
+- name: 커피 배달앱 10%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 5000, merchant: ediya, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T19:00, amount: 20000, merchant: baemin, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-starbucks-10: 1000}, counted: 10000}
+  - {payment: 1, benefits: {coffee-10: 500}, counted: 5000}
+  - {payment: 2, benefits: {delivery-10: 2000}, counted: 20000}
+  calc: 10,000 × 10% = 1,000원, 5,000 × 10% = 500원, 20,000 × 10% = 2,000원
+- name: 온라인 간편결제 1% 실적 없이
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 10000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  expect:
+  - {payment: 0, benefits: {simplepay-1: 100}, counted: 10000}
+  calc: 10,000 × 1% = 100원
+- name: 해외 1.5%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1-5: 1500}, counted: 100000}
+  calc: 100,000 × 1.5% = 1,500원

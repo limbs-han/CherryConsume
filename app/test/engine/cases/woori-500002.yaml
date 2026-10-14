@@ -1,0 +1,53 @@
+card: woori-500002
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없어도 기본 0.2%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T10:00, merchant: coupang, amount: 50000, channel: online}
+  expect:
+  - payment: 0
+    benefits: {basic-0-2: 100}
+  calc: 30만 미달이라 기본 0.2%
+- name: 30만 1원 모자라면 기본 0.2%
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, merchant: s_oil, amount: 100000, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {basic-0-2: 200}
+  calc: 특별캐시백 미달
+- name: 특별캐시백 0.5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: coupang, amount: 100000, channel: online}
+  - {at: 2026-11-05T10:00, merchant: cu, amount: 20000, channel: offline}
+  - {at: 2026-11-06T10:00, category: pharmacy, amount: 20000, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {special-online-0-5: 500}
+  - payment: 1
+    benefits: {special-life-0-5: 100}
+  - payment: 2
+    benefits: {special-medical-0-5: 100}
+  calc: 10만 x 0.5% 500, 2만 x 0.5% 100씩
+- name: 특별캐시백 1% 주유
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: s_oil, amount: 100000, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {special-fuel-1: 1000}
+  calc: 10만 x 1% 1000
+- name: 한도 남은 금액보다 기본 0.2%가 크면 기본
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, merchant: s_oil, amount: 1990000, channel: offline}
+  - {at: 2026-11-05T10:00, merchant: s_oil, amount: 1000000, channel: offline}
+  expect:
+  - payment: 0
+    benefits: {special-fuel-1: 19900}
+  - payment: 1
+    benefits: {basic-0-2: 2000}
+  calc: 199만 x 1% 19900. 남은 한도 100원보다 100만 x 0.2% 2000이 커서 기본

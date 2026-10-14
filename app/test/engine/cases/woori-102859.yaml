@@ -1,0 +1,32 @@
+card: woori-102859
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 구독료 자동납부 30만 구간 한도 1만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {intellix-autopay: 10000}, counted: 0}
+  calc: 한도 1만원까지 할인
+- name: 청구액이 한도보다 적으면 청구액만
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 8000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {intellix-autopay: 8000}, counted: 0}
+  calc: 8천원 전액
+- name: 120만 구간 한도 2만원
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-05T12:00, amount: 50000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {intellix-autopay: 20000}, counted: 0}
+  calc: 한도 2만원
+- name: 30만 직전은 혜택 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T12:00, amount: 30000, merchant: sk_intellix, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 30만 미만

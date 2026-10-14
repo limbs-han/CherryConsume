@@ -1,0 +1,34 @@
+card: kb-04417
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 렌탈료 1만1천원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: wells, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {wells-rental: 11000}, counted: 0}
+  calc: 월 한도 11,000원. 할인받은 결제는 실적 제외
+- name: 100만 구간 렌탈료 2만원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: wells, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {wells-rental: 20000}}
+  calc: 월 한도 20,000원
+- name: 경계 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: wells, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 30만 미만은 할인 없음
+- name: 패밀리레스토랑 20%와 영화
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: outback, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: cgv, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {family-restaurant-20: 20000}, counted: 0}
+  - {payment: 1, benefits: {movie-3500: 3500}, counted: 15000}
+  calc: 100,000원 × 20% = 20,000원, 실적 제외. 영화는 실적 포함

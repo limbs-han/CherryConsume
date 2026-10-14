@@ -1,0 +1,49 @@
+card: kb-02219
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 두산베어스 티켓 50%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: doosan_bears_ticket, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {bears-ticket-goods-50: 10000}, counted: 0}
+  calc: 30,000원 × 50% = 15,000원 중 월 한도 10,000원. 할인받은 결제는 실적 제외
+- name: 80만 구간 넷플릭스 30%
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-30: 5100}}
+  calc: 17,000원 × 30% = 5,100원. 80만 구간 한도 10,000원 안
+- name: CU 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: cu, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-5: 500}}
+  calc: 10,000원 × 5% = 500원
+- name: 배달의민족 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: baemin, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {delivery-5: 1000}}
+  calc: 20,000원 × 5% = 1,000원
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: doosan_bears_ticket, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 30000}
+  calc: 30만 미만은 할인 없음
+- name: 실적 유예기간 한도 50%
+  prev_month_spend: 0
+  holder:
+    started_on: '2026-10-15'
+    facts: {first_personal_issue: true}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: doosan_bears_ticket, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {bears-ticket-goods-50: 5000}}
+  calc: 유예기간은 30만 구간 한도 10,000원의 50%인 5,000원

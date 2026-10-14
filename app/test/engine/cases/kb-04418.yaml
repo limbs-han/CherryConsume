@@ -1,0 +1,34 @@
+card: kb-04418
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 구독료 30만 구간 11,000
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 35900, merchant: sk_intellix, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {intellix-subscription: 11000}, counted: 0}
+  calc: 30만 구간 11,000원. 할인받은 결제는 실적 제외
+- name: 경계 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 35900, merchant: sk_intellix, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 35900}
+  calc: 30만 미만 할인 없음
+- name: 100만 구간 여러 건 합산
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: sk_intellix, billing: autopay, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 15000, merchant: sk_intellix, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {intellix-subscription: 15000}}
+  - {payment: 1, benefits: {intellix-subscription: 5000}}
+  calc: 첫 건 승인금액만큼 15,000. 둘째는 한도 20,000의 남은 5,000
+- name: 자동이체 아니면 없음
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 35900, merchant: sk_intellix, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 자동이체만 대상

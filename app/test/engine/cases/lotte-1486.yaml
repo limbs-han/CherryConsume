@@ -1,0 +1,37 @@
+card: lotte-1486
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 15% 한도 3만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-10T14:00, merchant: lotte_department, amount: 300000, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {deptstore-billing-15: 30000}
+    counted: 0
+  calc: 300000 x 15% = 45000이나 50만 구간 한도 30000. 롯데백화점 이용은 실적에서 빠짐
+- name: 실적 1원 모자라면 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-10T14:00, merchant: lotte_department, amount: 100000, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만이라 할인 없음
+- name: 30만 구간 한도 안 15%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-10T14:00, merchant: lotte_department, amount: 100000, channel: offline, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {deptstore-billing-15: 15000}
+  calc: 100000 x 15% = 15000, 한도 20000 안
+- name: 온라인 결제는 할인 없음
+  prev_month_spend: 2000000
+  payments:
+  - {at: 2026-11-10T14:00, merchant: lotte_department, amount: 100000, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 오프라인 매장만 대상

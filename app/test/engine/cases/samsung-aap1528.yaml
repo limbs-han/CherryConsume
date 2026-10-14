@@ -1,0 +1,53 @@
+card: samsung-aap1528
+holder:
+  started_on: '2026-01-01'
+  options: [{option: package, choice: daily, effective_from: '2026-01-01'}]
+cases:
+- name: 백화점 3% 50만 구간 하한
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-super-3: 3000}, counted: 100000}
+  calc: 100,000 × 3% = 3,000원. 월 한도 10,000원 안. 3% 건은 실적에 들어간다
+- name: 실적 50만 직전은 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: lotte_department, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 499,999원은 0 구간이라 할인 없음
+- name: 온라인 쇼핑몰 3%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: ssg_com, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-online-3: 1500}, counted: 50000}
+  calc: 50,000 × 3% = 1,500원
+- name: 커피 30%와 한도
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T09:00, amount: 20000, merchant: starbucks, payment_method: physical_card}
+  - {at: 2026-11-04T09:00, amount: 30000, merchant: twosome, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-starbucks-30: 6000}, counted: 0}
+  - {payment: 1, benefits: {daily-coffee-30: 4000}, counted: 0}
+  calc: 20,000 × 30% = 6,000원. 30,000 × 30% = 9,000이나 남은 한도 4,000원. 할인 받은 금액은 실적 제외
+- name: 음식점과 마켓컬리 20%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 20000, merchant: saint_augustin, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: kurly, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-food-20: 4000}, counted: 0}
+  - {payment: 1, benefits: {daily-fresh-20: 4000}, counted: 0}
+  calc: 20,000 × 20% = 4,000원씩 두 번. 합계 8,000원이라 통합 한도 10,000원 안
+- name: 영화관과 서점 정액 할인
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 15000, merchant: cgv, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 60000, merchant: kyobo_book, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {daily-movie-6000: 6000}, counted: 0}
+  - {payment: 1, benefits: {daily-etc-10000: 10000}, counted: 0}
+  calc: 영화 15,000원 결제에 6,000원, 서점 60,000원 결제에 10,000원. 영화와 서점은 한도가 따로

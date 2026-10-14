@@ -1,0 +1,20 @@
+card: lotte-p15630-a15630
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 40만 구간 1.2%
+  prev_month_spend: 400000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-1-2: 666}
+  calc: 55500 × 1.2% = 666
+- name: 40만원 미만 0.5%
+  prev_month_spend: 399999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-0-5: 277}
+  calc: 55500 × 0.5% = 277.5, 버림 277

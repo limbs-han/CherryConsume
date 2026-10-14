@@ -1,0 +1,41 @@
+card: lotte-p13586-a13586
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 75만 구간 오프라인 1%
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-1: 500}
+    counted: 50000
+  calc: 50,000 × 1% = 500
+- name: 실적 직전 749999는 0.5%
+  prev_month_spend: 749999
+  payments:
+  - {at: 2026-11-03T12:00, amount: 50000, merchant: lotte_mart, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {all-1: 250}
+  calc: 0 구간이라 50,000 × 0.5% = 250
+- name: 온라인 1.5%와 한도 소진 뒤 1%
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 600000, merchant: coupang, channel: online, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 100000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {online-1-5: 9000}
+  - payment: 1
+    benefits: {all-1: 1000}
+  calc: 600,000 × 1.5% = 9,000. 남은 한도 1,000은 100,000 × 1% = 1,000과 같아 둘 중 큰 쪽 1,000. 동점이면 어느 쪽이든 1,000
+- name: 택시는 할인과 실적에서 빠진다
+  prev_month_spend: 750000
+  payments:
+  - {at: 2026-11-03T22:00, amount: 20000, merchant: kakao_t, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+    counted: 0
+  calc: 택시는 할인 제외이자 실적 제외

@@ -1,0 +1,25 @@
+card: kb-04425
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 구독요금 1만원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 35000, merchant: lg_appliance_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {subscription-autopay: 10000}, counted: 0}
+  calc: 35,000원 중 월 한도 10,000원 할인. 할인받은 결제는 실적 제외
+- name: 80만 구간 1만5천원
+  prev_month_spend: 800000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 35000, merchant: lg_appliance_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {subscription-autopay: 15000}, counted: 0}
+  calc: 35,000원 중 월 한도 15,000원
+- name: 경계 직전 299999는 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 35000, merchant: lg_appliance_subscription, billing: autopay}
+  expect:
+  - {payment: 0, benefits: {}, counted: 35000}
+  calc: 30만 미만 구간은 할인 없음

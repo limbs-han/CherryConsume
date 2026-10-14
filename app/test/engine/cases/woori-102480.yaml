@@ -1,0 +1,68 @@
+card: woori-102480
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 기본 0.7%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {basic-0-7: 700}
+  calc: 100,000원 x 0.7% = 700원
+- name: 건당 100만원 이상 1.0%
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1000000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {basic-1-0: 10000}
+  calc: 1,000,000원 x 1.0% = 10,000원
+- name: 30만 구간 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-60: 1937}
+  calc: 60,000원 / 1,858원 x 60원 = 1,937원
+- name: 실적 직전 299999 주유
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {basic-0-7: 420}
+  calc: 30만원보다 1원 적어 주유 할인 없이 기본 60,000원 x 0.7% = 420원
+- name: 50만 구간 주유 리터당 80원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-80: 2583}
+  calc: 60,000원 / 1,858원 x 80원 = 2,583원
+- name: 100만 구간 주유 리터당 100원
+  prev_month_spend: 1000000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 60000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {fuel-100: 3229}
+  calc: 60,000원 / 1,858원 x 100원 = 3,229원
+- name: 대중교통 10% 월 3천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: transit.subway, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {transit-10: 2000}
+  calc: 20,000원 x 10% = 2,000원
+- name: 스타벅스 10% 건당 1천원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {coffee-10: 1000}
+  calc: 20,000원 x 10% = 2,000원이 건당 1,000원에 걸림

@@ -1,0 +1,23 @@
+card: woori-103726
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내외 2% 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {points-2pct: 2000}
+  - payment: 1
+    benefits: {points-2pct: 2000}
+  calc: 100,000원 x 2% = 2,000점
+- name: 약국은 적립 제외
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: pharmacy, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 의약품 업종 적립 제외

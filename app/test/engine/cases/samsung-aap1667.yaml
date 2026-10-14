@@ -1,0 +1,128 @@
+card: samsung-aap1667
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 자동납부 0건 주유 리터당 60원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-30-0: 3229}, counted: 0}
+  calc: 100,000 / 1,858 x 60 = 3,229.28, 버림 3,229. 주유 할인 건은 실적 제외
+- name: 30만 구간 자동납부 1건 리터당 80원
+  prev_month_spend: 300000
+  holder:
+    facts: {autopay_ge1: true}
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-30-1: 4305}}
+  calc: 100,000 / 1,858 x 80 = 4,305.7, 버림 4,305
+- name: 30만 구간 자동납부 2건 리터당 100원 건당 10만원까지
+  prev_month_spend: 300000
+  holder:
+    facts: {autopay_ge1: true, autopay_ge2: true}
+  payments:
+  - {at: 2026-11-03T20:00, amount: 150000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-30-2: 5382}}
+  calc: 건당 10만원까지만 해당해 100,000 / 1,858 x 100 = 5,382.1, 버림 5,382
+- name: 60만 구간 자동납부 0건 리터당 80원
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-60-0: 4305}}
+  calc: 60만원 구간 자동납부 0건은 80원이라 4,305
+- name: 60만 구간 자동납부 1건 리터당 100원
+  prev_month_spend: 600000
+  holder:
+    facts: {autopay_ge1: true}
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-60-1: 5382}}
+  calc: 100원이라 5,382
+- name: 60만 구간 자동납부 2건 리터당 120원
+  prev_month_spend: 600000
+  holder:
+    facts: {autopay_ge1: true, autopay_ge2: true}
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-60-2: 6458}}
+  calc: 100,000 / 1,858 x 120 = 6,458.5, 버림 6,458
+- name: 90만 구간 자동납부 0건 리터당 100원
+  prev_month_spend: 900000
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-90-0: 5382}}
+  calc: 리터당 100원 5,382
+- name: 90만 구간 자동납부 1건 리터당 120원
+  prev_month_spend: 900000
+  holder:
+    facts: {autopay_ge1: true}
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-90-1: 6458}}
+  calc: 리터당 120원 6,458
+- name: 90만 구간 자동납부 2건 리터당 150원
+  prev_month_spend: 900000
+  holder:
+    facts: {autopay_ge1: true, autopay_ge2: true}
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-90-2: 8073}}
+  calc: 100,000 / 1,858 x 150 = 8,073.2, 버림 8,073
+- name: 주유 월 1만5천원 한도
+  prev_month_spend: 900000
+  holder:
+    facts: {autopay_ge1: true, autopay_ge2: true}
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-04T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  - {at: 2026-11-05T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {fuel-90-2: 8073}}
+  - {payment: 1, benefits: {fuel-90-2: 6927}}
+  - {payment: 2, benefits: {}}
+  calc: 8,073 뒤 남은 한도 15,000 - 8,073 = 6,927. 다음은 0
+- name: 편의점 커피 10% 통합 월 5천원 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-03T08:00, amount: 20000, merchant: cu, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T09:00, amount: 20000, merchant: ediya, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-03T10:00, amount: 20000, merchant: starbucks, channel: online, payment_method: physical_card}
+  - {at: 2026-11-03T11:00, amount: 20000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {convenience-10: 2000}, counted: 0}
+  - {payment: 1, benefits: {coffee-10: 2000}, counted: 0}
+  - {payment: 2, benefits: {starbucks-10: 1000}, counted: 0}
+  - {payment: 3, benefits: {}, counted: 20000}
+  calc: 2,000 + 2,000 후 남은 한도 1,000. 스타벅스 사이렌오더도 대상. 한도 소진 뒤 건은 할인 없고 실적 인정
+- name: 온라인 간편결제 1% 실적 무관
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 50000, merchant: gmarket, channel: online, payment_method: naver_pay}
+  - {at: 2026-11-04T20:00, amount: 50000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {online-pay-1: 500}, counted: 50000}
+  - {payment: 1, benefits: {online-mall-1: 500}, counted: 50000}
+  calc: 네이버페이 온라인 50,000 x 1% = 500. 쿠팡 직접 결제도 쇼핑몰 1% 500
+- name: 해외 1.5% 월 50만원 한도
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, category: restaurant, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1-5: 1500}, counted: 100000}
+  calc: 100,000 x 1.5% = 1,500
+- name: 실적 299999면 주유 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-03T20:00, amount: 100000, merchant: s_oil, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}, counted: 100000}
+  calc: 30만원 미만 구간이라 주유 할인 없음. 실적은 인정

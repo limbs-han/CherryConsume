@@ -1,0 +1,28 @@
+card: woori-103687
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 통신요금 한도 이하
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 1500, merchant: woori_won_mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {telecom-cashback: 1500}
+  calc: 통신요금 1,500원이 월 한도 2,000원보다 작아 1,500원 전액 캐시백
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: woori_won_mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 캐시백 0원
+- name: 120만 구간 한도 7000
+  prev_month_spend: 1200000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: woori_won_mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {telecom-cashback: 7000}
+  calc: 통신요금 30,000원이 월 한도 7,000원에 걸림

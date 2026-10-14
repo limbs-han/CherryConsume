@@ -1,0 +1,53 @@
+card: kb-01998
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 이마트 3만원 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 60, mart-0-8: 240}}
+  calc: 기본 30,000 × 0.2% = 60점, 추가 30,000 × 0.8% = 240점. 원문 예시 1%
+- name: 경계 직전 299999 마트 기본만
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 30000, merchant: emart, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 60}}
+  calc: 30만 미만은 마트 추가 적립 없음
+- name: 10만 구간 카페 1만원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20, cafe-bakery-0-2: 20}}
+  calc: 10,000 × 0.2% 두 번
+- name: 통신 자동이체
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100, telecom-0-2: 100}}
+  calc: 50,000 × 0.2% 두 번
+- name: GS25 1만원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: gs25, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20, gs25-0-2: 20}}
+  calc: 10,000 × 0.2% 두 번
+- name: 택시 1만원
+  prev_month_spend: 100000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 20, transit-taxi-0-2: 20}}
+  calc: 10,000 × 0.2% 두 번
+- name: GS칼텍스 5만원
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100, gs-caltex-0-8: 400}}
+  calc: 기본 100점, 추가 50,000 × 0.8% = 400점

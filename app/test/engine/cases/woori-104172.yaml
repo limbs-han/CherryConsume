@@ -1,0 +1,28 @@
+card: woori-104172
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 50만 구간 관리비 자동납부 한도 이하
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 6000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {apt-fee: 6000}
+  calc: 관리비 6,000원이 월 한도 7,000원보다 작아 6,000원 전액 할인
+- name: 실적 직전 499999
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 50000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 50만원보다 1원 적어 할인 0원
+- name: 160만 구간 한도 16000
+  prev_month_spend: 1600000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 200000, category: apartment_fee, billing: autopay, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {apt-fee: 16000}
+  calc: 관리비 200,000원이 월 한도 16,000원에 걸림

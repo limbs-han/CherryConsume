@@ -29,7 +29,7 @@ cases:
 - name: 해외 5%
   prev_month_spend: 200000
   payments:
-  - {at: 2026-11-04T12:00, amount: 10000, category: shopping, region: overseas, payment_method: physical_card}
+  - {at: 2026-11-04T12:00, amount: 10000, category: online_shopping, region: overseas, payment_method: physical_card}
   expect:
   - payment: 0
     benefits: {overseas-5: 500}

@@ -1,0 +1,76 @@
+card: woori-100860
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 대형마트 오프라인 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 40000, merchant: emart, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-5pct: 2000}
+  calc: 40,000원 x 5% = 2,000원
+- name: 온라인쇼핑 5%와 건당 5만원 상한
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 80000, merchant: coupang, channel: online, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-online-5pct: 2500}
+  calc: 결제 건당 할인 대상 5만원 x 5% = 2,500원
+- name: 이동통신 자동납부 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 30000, merchant: skt, billing: autopay, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {shopping-recurring-5pct: 1500}
+  calc: 30,000원 x 5% = 1,500원
+- name: 약국 7%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, category: pharmacy, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {care-7pct: 1400}
+  calc: 20,000원 x 7% = 1,400원
+- name: 영상 구독 20%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 10000, merchant: netflix, billing: subscription, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {untact-20pct: 2000}
+  calc: 10,000원 x 20% = 2,000원
+- name: 영상 구독 월 한도
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: netflix, billing: subscription, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {untact-20pct: 3000}
+  calc: 20,000원 x 20% = 4,000원이 30만 구간 영역 한도 3,000원에 걸림
+- name: 해외 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-1pct: 1000}
+  calc: 10만원 x 1% = 1,000원
+- name: 해외 30만원 이상 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 400000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {overseas-2pct: 8000}
+  calc: 40만원 x 2% = 8,000원
+- name: 실적 직전
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 40000, merchant: emart, channel: offline, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원 미만이라 할인 0원

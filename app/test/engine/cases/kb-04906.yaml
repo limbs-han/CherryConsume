@@ -1,0 +1,60 @@
+card: kb-04906
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 일반 가맹점 기본 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {hpoint-base: 100}}
+  calc: 50,000원의 0.2% = 100P
+- name: 경계 직전 299999 적립 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 유예기간이 아니면 30만원 미만은 적립 없음
+- name: 현대백화점 기본과 추가 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: hyundai_department, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {hpoint-base: 200, hpoint-hyundai: 500}}
+  calc: 0.2% 200P와 0.5% 500P
+- name: 50만 구간 파리바게뜨 5% 한도 3천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, merchant: paris_baguette, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {paris-baguette-5: 3000}}
+  calc: 5% 5,000원이지만 월 한도 3,000원. 기본 적립 200P보다 커서 할인만
+- name: 30만 구간 스타벅스 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {starbucks-5: 500}}
+  calc: 10,000원의 5% = 500원
+- name: CGV 1만원 미만은 할인 없이 기본 적립
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 9000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {hpoint-base: 18}}
+  calc: 건당 1만원 미만이라 할인 없음. 0.2% = 18P
+- name: 올리브영 2만원 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: olive_young, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {olive-young-5: 1000}}
+  calc: 20,000원의 5% = 1,000원, 1구간 한도 1,000원
+- name: CGV 2만원 5%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 20000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cgv-5: 1000}}
+  calc: 20,000원의 5% = 1,000원

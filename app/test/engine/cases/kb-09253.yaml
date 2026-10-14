@@ -1,0 +1,67 @@
+card: kb-09253
+holder:
+  started_on: '2026-01-01'
+  options:
+  - {option: select, choice: online-cafe, effective_from: '2026-01-01'}
+cases:
+- name: 50만 구간 통신 자동납부 5만9천원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 59000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-1500: 7000}}
+  calc: 1만원 단위 5개 × 1,500 = 7,500원 중 50만 구간 한도 7,000원
+- name: 경계 직전 499999 할인 없음
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 59000, merchant: skt, category: telecom.mobile, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만 미만은 혜택 없음
+- name: 선택 온라인 쿠팡
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 40000, merchant: coupang, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {select-online-5: 2000}}
+  calc: 40,000 × 5% = 2,000원
+- name: 선택 카페
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 10000, category: cafe, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {select-cafe-5: 500}}
+  calc: 10,000 × 5% = 500원
+- name: 고르지 않은 마트와 주유는 없음
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 50000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  - {payment: 1, benefits: {}}
+  calc: 온라인과 카페를 골랐다
+- name: 마트 주유 고른 경우
+  prev_month_spend: 500000
+  holder:
+    started_on: '2026-01-01'
+    options:
+    - {option: select, choice: mart-fuel, effective_from: '2026-01-01'}
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: emart, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 50000, merchant: gs_caltex, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {select-mart-5: 2500}}
+  - {payment: 1, benefits: {select-fuel-5: 2500}}
+  calc: 각 50,000 × 5% = 2,500원
+- name: Easy ring+ 영화 음원 배달
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-05T11:00, amount: 10900, merchant: melon, billing: subscription, channel: online, payment_method: physical_card}
+  - {at: 2026-11-05T12:00, amount: 25000, merchant: yogiyo, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {plus-movie-3000: 3000}}
+  - {payment: 1, benefits: {plus-music-1000: 2000}}
+  - {payment: 2, benefits: {plus-delivery-2000: 2000}}
+  calc: 영화 3천원, 음원 5천원 단위 2 × 1천원, 배달 2천원

@@ -1,0 +1,20 @@
+card: woori-500096
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 국내 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: domestic, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-0-3pct: 300}
+  calc: 100,000원 x 0.3% = 300점
+- name: 해외 적립
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-04T12:00, amount: 100000, category: restaurant.general, region: overseas, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {base-0-3pct: 300}
+  calc: 해외도 0.3%

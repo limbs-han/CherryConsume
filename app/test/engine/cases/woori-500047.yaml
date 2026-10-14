@@ -1,0 +1,28 @@
+card: woori-500047
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 Plus Chat 정기결제 전액
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 4400, merchant: zb1_plus_chat, billing: subscription, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {plus-chat: 4400}
+  calc: 정기결제 4,400원이 월 한도 5,000원보다 작아 4,400원 전액 할인
+- name: 실적 직전 299999
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T12:00, amount: 4400, merchant: zb1_plus_chat, billing: subscription, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {}
+  calc: 30만원보다 1원 적어 할인 0원
+- name: 60만 구간 한도 12000
+  prev_month_spend: 600000
+  payments:
+  - {at: 2026-11-04T12:00, amount: 20000, merchant: zb1_plus_chat, billing: subscription, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {plus-chat: 12000}
+  calc: 20,000원 전액이 월 한도 12,000원에 걸림

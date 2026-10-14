@@ -1,0 +1,56 @@
+card: kb-09486
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 실적 없이 스타벅스 10% 월 3천원
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: starbucks, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {coffee-10: 3000}, counted: 50000}
+  calc: 50,000원 × 10% = 5,000원 중 월 한도 3,000원
+- name: 20만 구간 CGV 4천원과 GS25 5%
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: gs25, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {cgv-4000: 4000}, counted: 15000}
+  - {payment: 1, benefits: {cvs-5: 1000}, counted: 20000}
+  calc: CGV 1만원 이상 4,000원. GS25 20,000원 × 5% = 1,000원
+- name: 경계 직전 199999는 CGV 할인 없음
+  prev_month_spend: 199999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 15000, merchant: cgv, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 20만 미만은 커피만
+- name: 통신 자동이체 월 한도 2천원
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 60000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {telecom-2500: 2000}}
+  calc: 2,500원 중 덜 주는 월 한도 2,000원
+- name: 30만 구간 해외 2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-2: 2000}}
+  calc: 100,000원 × 2% = 2,000원
+- name: 정액과 정률 혜택
+  prev_month_spend: 200000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 17000, merchant: netflix, payment_method: physical_card}
+  - {at: 2026-11-06T10:00, amount: 20000, merchant: baemin, payment_method: physical_card}
+  - {at: 2026-11-07T10:00, amount: 20000, merchant: app_store, payment_method: physical_card}
+  - {at: 2026-11-08T10:00, amount: 30000, category: beauty.salon, payment_method: physical_card}
+  - {at: 2026-11-09T10:00, amount: 30000, merchant: interpark_ticket, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {ott-1000: 1000}}
+  - {payment: 1, benefits: {delivery-1000: 1000}}
+  - {payment: 2, benefits: {mobile-10: 2000}}
+  - {payment: 3, benefits: {beauty-5: 1500}}
+  - {payment: 4, benefits: {ticket-10: 3000}}
+  calc: 정액 1,000원 둘, 앱스토어 2,000원, 미용실 1,500원, 인터파크 티켓 3,000원

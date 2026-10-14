@@ -1,0 +1,12 @@
+card: lotte-c00041-a00041
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 0.2% 적립 1천원 단위
+  prev_month_spend: 0
+  payments:
+  - {at: 2026-11-05T10:00, amount: 55500, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - payment: 0
+    benefits: {lotte-lpoint-0-2: 110}
+  calc: 1천원 단위 55개 × 2P = 110P

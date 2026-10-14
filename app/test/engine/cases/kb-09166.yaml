@@ -1,0 +1,46 @@
+card: kb-09166
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 30만 구간 평일 일반 가맹점 0.2%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: online_shopping, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 200}}
+  calc: 100,000원의 0.2% = 200원
+- name: 경계 직전 299999 할인 없음
+  prev_month_spend: 299999
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: online_shopping, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 30만원 미만은 할인 없음
+- name: 토요일 음식점 기본·주말·음식 합계
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-07T12:00, amount: 50000, category: restaurant.general, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100, weekend-0-2: 100, food-cafe-0-2: 100}}
+  calc: 각 0.2% 100원
+- name: 평일 택시 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 20000, category: taxi, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 40, taxi-0-2: 40}}
+  calc: 각 0.2% 40원
+- name: 이동통신 자동납부 추가
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 50000, merchant: skt, billing: autopay, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-0-2: 100, telecom-0-2: 100}}
+  calc: 각 0.2% 100원
+- name: 해외 이용 1%
+  prev_month_spend: 300000
+  payments:
+  - {at: 2026-11-04T10:00, amount: 100000, category: other, region: overseas, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {overseas-1: 1000}}
+  calc: 원문 예시. 해외 100,000원이면 1,000원

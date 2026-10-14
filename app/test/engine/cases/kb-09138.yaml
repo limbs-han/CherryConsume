@@ -1,0 +1,62 @@
+card: kb-09138
+holder:
+  started_on: '2026-01-01'
+cases:
+- name: 일반 가맹점 1%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 1000}, counted: 100000}
+  calc: 100,000 × 1% = 1,000
+- name: 경계 직전 499999
+  prev_month_spend: 499999
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: other, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {}}
+  calc: 50만 미만 할인 없음
+- name: 음식점 1.2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 100000, category: restaurant.general, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 1000, special-offline-0-2: 200}}
+  calc: 기본 1,000 + 추가 200
+- name: 쿠팡 KB Pay 1.2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 50000, merchant: coupang, channel: online, payment_method: kb_pay}
+  expect:
+  - {payment: 0, benefits: {base-1: 500, special-online-0-2: 100}}
+  calc: 500 + 100
+- name: 학원 1.2%
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: education.academy, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 3000, special-other-0-2: 600}}
+  calc: 3,000 + 600
+- name: 호텔 Flex 분기 1회
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 300000, category: travel.hotel, channel: offline, payment_method: physical_card}
+  - {at: 2026-11-20T10:00, amount: 300000, category: travel.hotel, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 3000, flex-offline-10000: 10000}, counted: 0}
+  - {payment: 1, benefits: {base-1: 3000}, counted: 300000}
+  calc: 첫 건 1만원과 기본 3,000. 둘째는 분기 1회 소진. Flex 받은 결제는 실적 제외
+- name: 대한항공 온라인 Flex
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 500000, merchant: korean_air, channel: online, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 5000, flex-online-10000: 10000}}
+  calc: 5,000 + 10,000
+- name: 주차 10% 월 1만원
+  prev_month_spend: 500000
+  payments:
+  - {at: 2026-11-05T10:00, amount: 150000, category: car.parking, channel: offline, payment_method: physical_card}
+  expect:
+  - {payment: 0, benefits: {base-1: 1500, car-life-10: 10000}}
+  calc: 15,000 중 한도 10,000. 기본 1,500
