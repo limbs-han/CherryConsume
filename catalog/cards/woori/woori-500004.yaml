@@ -1,0 +1,49 @@
+schema_version: 2
+id: woori-500004
+issuer: woori
+name: 코웨이 ICON 우리카드
+kind: credit
+product_codes:
+  - '500004'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 25000}
+  - {scope: global, brand: mastercard, amount: 25000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500004', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-02-01'
+    source: page
+    tiers: [0, 300000, 800000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    limits:
+      - key: coway-rental
+        per: month
+        amount: {300000: 13000, 800000: 17000, 1500000: 23000}
+    benefits:
+      - key: coway-rental-discount
+        title: 코웨이 렌탈요금 자동납부 청구할인
+        source: page
+        evidence: [코웨이 렌탈요금 청구할인 서비스, 30만원 이상 13, 000원 80만원 이상 17, 000원 150만원 이상 23, 000원, 코웨이 렌탈요금 자동납부 필수, 월 자동납부 승인금액이 월 할인한도보다 적으면 승인금액만큼만 할인]
+        target:
+          merchants: [coway]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {shared: coway-rental}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [코웨이 렌탈요금 자동납부만. 1회성 일반결제와 자동납부가 청구되지 않거나 끝난 경우 제외. 카드 재발급 뒤 자동납부 재신청 필요. 가족카드는 할인 없음]
+    unmodeled: [고속버스 차내단말기와 앱 결제, 정부지원금, 공공임대료와 부동산임대료, 각종 수수료와 이자는 실적에서 제외한다, 해외 이용금액과 교통카드와 통신료 자동납부는 매출표 접수일 기준으로 반영한다, 취소 매출표가 1~2일 접수되면 전월 실적에서 뺀다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 상품출시일 대신 상품 페이지의 혜택 개정일을 확인하지 못했다., assumed: '2026-02-01'}
+notes: 2026-10-13 공식 상품 페이지 대조. 할인액은 자동납부 승인금액과 구간 한도 중 작은 값이라 비율 100과 월 한도로 담았다.
