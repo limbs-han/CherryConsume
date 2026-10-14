@@ -1,0 +1,44 @@
+schema_version: 2
+id: woori-104137
+issuer: woori
+name: 수호천사 동양생명 우리카드
+kind: credit
+product_codes:
+  - '104137'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104137', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-04-01'
+    source: page
+    tiers: [0, 300000, 800000, 1500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: autopay-discount
+        title: 동양생명 보험료 자동납부 청구할인
+        source: page
+        evidence: ['30만원 이상 ~ 80만원 미만 | 13,000원 | 동양생명 보험료 자동납부 필수', '80만원 이상 ~ 150만원 미만 | 18,000원', '150만원 이상 | 23,000원', 동양생명 보험료 자동납부 이용 시에만 적용되며 자동납부가 아닌 일반 결제는 할인이 적용되지 않습니다]
+        target:
+          merchants: [dongyang_life]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 13000, 800000: 18000, 1500000: 23000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [가족카드는 청구할인을 받지 못한다]
+    unmodeled: [가족카드 전월 이용실적은 본인카드와 합산한다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내가맹점 취소 매출이 매월 1~2일에 접수되면 전월 실적에서 뺀다, 정부지원금과 공공임대료와 부동산임대료와 국가·공공기관 가맹점 이용금액과 수수료·이자·대출은 실적에서 빠진다, 할인은 거래 매입 순서대로 적용된다]
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2026-04-01. 연회비 20,000원, 가족카드 없음. 전월 국내외 30만/80만/150만 이상 월 할인한도 13,000/18,000/23,000원. 할인받을 금액보다 승인금액이 적으면 승인금액만큼 할인한다. 수호천사 동양생명 우리카드로 할인받은 이용금액 전체는 실적에서 빠진다. 신규 발급 다음 달 말까지 최저 구간.
