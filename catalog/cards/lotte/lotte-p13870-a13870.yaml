@@ -1,0 +1,97 @@
+schema_version: 2
+id: lotte-p13870-a13870
+issuer: lotte
+name: 하나은행 밀리언달러 카드
+kind: credit
+product_codes: [P13870-A13870]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13870-A13870', fetched_at: '2026-10-12'}
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2021-A00034_20241031_10003.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2021-07-01'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, car.toll, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+    benefits:
+      - key: domestic-0-5
+        title: 국내 가맹점 0.5% 결제일 할인
+        source: manual
+        evidence: [기본 할인 | 국내 일반 가맹점 | 0.5% | 없음 | 없음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+      - key: streaming-50
+        title: 스트리밍 정기결제 50% 결제일 할인
+        source: manual
+        evidence: ['스트로밍 할인 | 넷플릭스, 유튜브 프리미엄, 왓챠, 멜론 | 50% | 1만원 | 50만원', 공식 홈페이지 및 앱을 통해 직접 신청한 정기결제(자동납부) 이용 건만 혜택이 적용]
+        target:
+          merchants: [melon, netflix, watcha, youtube_premium]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: delivery-5
+        title: 배달앱 5% 결제일 할인
+        source: manual
+        evidence: ['배달앱 할인 | 배달의 민족, 요기요, 쿠팡이츠 | 5% | 5천원', 공식 홈페이지 및 앱을 통한 결제 시 할인 혜택이 제공되며, 가맹점 직접 결제 건은 할인 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+      - key: shopping-5
+        title: 온라인 쇼핑 5% 결제일 할인
+        source: manual
+        evidence: ['온라인 쇼핑 할인 | 쿠팡, SSG닷컴, 롯데ON, 마켓컬리 | 5% | 5천원', 일부 PG(결제대행)업체를 통해 결제 시 할인이 제공되지 않습니다.]
+        target:
+          merchants: [coupang, kurly, lotte_on, ssg_com]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+      - key: overseas-online-5
+        title: 해외 온라인 가맹점 5% 캐시백
+        source: manual
+        evidence: [캐시백 | 해외 온라인 가맹점 | 5% | 5천원 | 50만원, 해외 온라인 가맹점 캐시백 혜택은 롯데카드 매입 기준 '해외 온라인' 이용 건에만 적용됩니다.]
+        target: {all: true}
+        when:
+          - {region: overseas, channel: online}
+        reward: {type: cashback, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+      - key: overseas-0-2
+        title: 해외 가맹점 0.2% 캐시백
+        source: manual
+        evidence: [해외 일반 가맹점 | 0.2% | 없음 | 없음]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: cashback, rate: 0.2}
+    unmodeled: ['해외 이용 시 국제브랜드 수수료 1.1%, 해외서비스 수수료 0.2%, 해외 ATM 출금 수수료 3달러를 면제한다. 결제 혜택 금액에 넣지 않는다', 원화와 하나은행 외화 결제계좌를 함께 지정해야 하고 해외 결제는 외화 계좌의 달러로 출금된다, 스트리밍은 공식 홈페이지나 앱에서 직접 신청한 정기결제만 받는다. 앱마켓 결제와 통신요금 합산 청구는 빠진다, '무승인전표, 관세, 벌금, 과태료, 민원 수수료, 인지세, 송달료, 장애인 고용부담금, 오토·스마트 캐시백 신청 금액은 실적과 혜택에서 빠진다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 출시일을 원문에서 찾지 못해 공시 파일 이름의 2021년으로 두었다, assumed: '2021-07-01'}
+  - {path: 'revisions[0].benefits', question: '기본 0.5% 할인과 스트리밍·배달·쇼핑 할인, 해외 5%와 0.2% 캐시백이 겹치는지 원문에 없어 같은 결제에는 큰 혜택 하나만 주는 쪽으로 두었다', assumed: 큰 혜택 하나}
+notes: 2026-10-12 상품설명서(2024년 10월 판) 대조. 연회비 국내전용과 해외겸용 1만5천원. 지난달 50만원 이상이면 해외 온라인 5%와 국내 스트리밍·배달앱·온라인 쇼핑 할인을 준다. 최초 발급 회원은 발급일부터 다음 달 말일까지 실적과 상관없이 준다.
