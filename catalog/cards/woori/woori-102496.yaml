@@ -1,0 +1,41 @@
+schema_version: 2
+id: woori-102496
+issuer: woori
+name: ROYAL BLUE M
+kind: credit
+product_codes:
+  - '102496'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 300000}
+  - {scope: global, brand: mastercard, amount: 300000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102496', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2024-02-29'
+    source: page
+    tiers: [0]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      unmodeled: [신차구매금액은 적립에서 빠진다, 이벤트 혜택을 적용받은 매출은 적립에서 빠진다, 우편요금 과태료 벌금 여권발급비와 국가·공공기관 가맹점 이용금액은 적립에서 빠진다]
+    benefits:
+      - key: domestic-1pct
+        title: 국내 가맹점 1% 모아포인트
+        source: page
+        evidence: [국내 가맹점 1% 적립, 전월 이용실적 | 적립률 | 월 적립한도, 없음 | 1% | 제한 없음, '적립/사용단위 : 1모아포인트 = 1꿀 = 1원']
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: points, program: woori_moa_point, rate: 1}
+    unmodeled: [당신을 위한 기프트 바우처는 연회비 약정기간 국내 이용 100만원 이상 때 20만원 상당 4종 중 1개를 연 1회 주는 혜택이라 계산하지 않는다, 공항라운지는 전월 50만원 이상 월 2회 연 4회 본인과 동반 1인이며 계산하지 않는다, 가족카드는 발급되지 않는다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다]
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 대조했다. 상품 출시일 2024-02-29. 연회비 300,000원. 국내 가맹점 1% 모아포인트 전월실적 조건과 월 한도 없음. 1모아포인트는 1원. 적립 제외 목록이 실적 제외 목록과 같아 그대로 옮겼다.
