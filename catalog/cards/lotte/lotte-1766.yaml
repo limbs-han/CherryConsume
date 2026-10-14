@@ -1,0 +1,44 @@
+schema_version: 2
+id: lotte-1766
+issuer: lotte
+name: 트래블엔로카
+kind: credit
+product_codes: []
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 50000}
+  - {scope: global, brand: visa, amount: 50000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2022-A00009_20220423_10001.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2022-03-15'
+    source: manual
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['장애인 고용부담금, 오토·스마트 캐시백 신청 이용금액, 포인트 충전, 고속도로 통행요금, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금, 과태료, 민원 발급 수수료, 관세, 인지세, 송달료, 이자와 각종 수수료는 실적과 적립에서 모두 빠진다']
+    benefits:
+      - key: travel-point-1
+        title: 국내외 모든 가맹점 트래블포인트 1% 적립
+        source: manual
+        evidence: [국내외 모든 가맹점 1% 적립, 적립한도 없이 혜택을 제공합니다., '지난달(1일~말일) 대상카드로 50만원 이상(본인,가족카드 합산) 이용 시 포인트가 적립됩니다.', 결제금액 1천원당 1% 적립률로 포인트 적립됩니다., 1 트래블포인트는 1원과 같으며 L.POINT로 전환은 되지 않습니다.]
+        target: {all: true}
+        reward:
+          type: points
+          program: travel_wallet_point
+          per_unit: {unit: 1000, amount: 10}
+        tiers: {from: 500000}
+    unmodeled: [포인트는 이번 달 적립대상 총 이용금액에 대해 다음 달 15영업일 안에 적립한다. 앱은 결제마다 1천원 미만을 버려 계산해 실제보다 조금 적을 수 있다, 결제일 할인을 받은 결제는 포인트를 적립하지 않는다, 트래블포인트는 트래블월렛 트래블페이에서만 쓸 수 있다, 트래블엔로카가 아닌 다른 롯데카드 이용금액은 실적에 넣지 않는다, 가족카드 이용금액은 본인 실적과 적립에 합산한다]
+open_questions:
+  - {path: product_codes, question: 롯데카드 판매 카드 목록에서 상품 코드를 찾지 못해 id를 공시 색인 번호로 두었다. 지금도 신규 발급하는지 확인한다, assumed: '[]'}
+notes: 2026-10-12 상품설명서(2022년 3월 기준, 여신금융협회 심의필 2022-C1a-03045호) 대조. 출시일 2022-03-15. 연회비 국내전용과 해외겸용(VISA) 50,000원, 가족카드 5,000원. 지난달 50만원 이상이면 국내외 1% 트래블포인트, 한도 없음. 신규 발급 특례는 발급일부터 다음 달 말일까지 실적 무관이라 50만 구간으로 넣었다. 대중교통(시내·광역·시외버스, 지하철), 택시, 고속버스는 실적에서 빠진다.
