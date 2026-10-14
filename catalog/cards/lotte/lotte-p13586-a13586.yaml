@@ -1,0 +1,65 @@
+schema_version: 2
+id: lotte-p13586-a13586
+issuer: lotte
+name: LOCA 100
+kind: credit
+product_codes: [P13586-A13586]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P13586-A13586', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 750000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 750000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    stacks:
+      - key: main
+        pick: best
+        order: [online-1-5, all-1]
+        spill: none
+    benefits:
+      - key: all-1
+        title: 국내외 모든 가맹점 0.5~1% 결제일 할인
+        source: page
+        evidence: ['지난달(1일~말일) 75만원 이상 이용 시 1.0% 결제일 할인을, 75만원 미만 이용 시 0.5% 결제일 할인을 제공합니다.', '모든 가맹점 할인은 국내·해외, 온·오프라인에서 할인한도 없이 혜택을 제공합니다.']
+        target:
+          exclude_categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, insurance.social, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+          all: true
+        reward:
+          type: billing_discount
+          rate: {0: 0.5, 750000: 1.0}
+      - key: online-1-5
+        title: 온라인 1.5% 결제일 할인
+        source: page
+        evidence: [지난달(1일~말일) 75만원 이상 이용 시 1.5% 결제일 할인을 제공합니다., 온라인 할인은 월 1만원 한도 내에서 혜택을 제공합니다., '모든 가맹점 할인과 중복으로 적용되지 않으며, 할인이 큰 혜택으로 적용됩니다.']
+        target:
+          categories: [online_shopping]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 750000}
+        unmodeled: [롯데카드 업종 분류의 온라인 가맹점이 대상이라 온라인 쇼핑 업종이 아닌 온라인 결제는 계산하지 않는다, 일부 PG(결제대행) 업체를 통한 결제는 할인하지 않는다]
+    unmodeled: [Flex Voucher는 발급 첫해 누적 이용 50만원·500만원 달성 시 3만원씩, 다음 해부터 지난해 누적 1, 200만원 달성 시 6만원을 100만원 이상 결제 건에 할인한다. 연간 누적 실적이라 계산하지 않는다, 'LOCA 100이 아닌 롯데카드 이용금액, 오토·스마트 캐시백 신청 이용금액, 장애인 고용부담금, 포인트 충전, 무승인전표(자판기, 터널통행료, 항공 기내 이용), 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 실적과 모든 가맹점 할인에서 빠진다', 할인 한도는 본인과 가족카드를 합산한다, 롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다, 해외 이용과 이동통신 자동납부는 롯데카드 접수일 기준으로 실적에 들어간다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2021-01-05다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품 페이지 대조. 연회비 국내전용과 해외겸용(MASTER, VISA, AMEX) 20,000원, 가족카드 없음. 지난달 75만원 미만 0.5%, 이상 1.0% 한도 없음, 온라인 1.5%는 75만원 이상 월 1만원 한도이고 둘 중 큰 할인 하나만 준다. 신규 발급 특례는 카드발급일부터 다음 달 말일까지 1%와 1.5%라 75만 구간이다. 대중교통(버스, 지하철), 택시, 고속버스, 고속도로 통행요금은 실적과 모든 가맹점 할인에서 빠진다.
