@@ -1,0 +1,68 @@
+schema_version: 2
+id: samsung-aap1686
+issuer: samsung
+name: SK인텔릭스 삼성카드
+short_name: SK인텔릭스 삼성
+search_names: [SK인텔릭스 삼성, SK인텔릭스카드, 에스케이인텔릭스 삼성카드]
+kind: credit
+product_codes: [AAP1686]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1686', fetched_at: 2026-10-13}
+  - {id: manual, kind: manual_pdf, url: 'https://www.samsungcard.com/filedownload.do?grpNo=1zPVy1PuFbwGC7xZyM4qtvyP8178a0yQl5%2BjKg5OKR0%3D&sn=1', fetched_at: 2026-10-13, review_no: 제2025-C1a-16538호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2025-11-13'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 0
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다]
+    benefits:
+      - key: subscription
+        title: SK인텔릭스 구독료 7,000~13,000원 할인
+        source: manual
+        evidence: [SK인텔릭스 구독료 7, 000원~13, 000원 결제일할인, '전월 이용금액대별 통합 월 할인금액 30만원 이상 7,000원, 70만원 이상 10,000원, 120만원 이상 13,000원', 통합 월 1회 제공, 'SK인텔릭스 월 구독료가 월 할인금액보다 적은 경우, 잔여 할인금액은 해당월 회원님의 카드 결제대금에서 자동 차감', SK인텔릭스 월 구독료 할인은 매월 3일에 적용]
+        target:
+          merchants: [sk_intellix]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, count: 1}
+          - per: month
+            amount: {300000: 7000, 700000: 10000, 1200000: 13000}
+        tiers: {from: 300000}
+        unmodeled: [구독료가 월 할인금액보다 적으면 남은 할인금액을 그달 카드 결제대금에서 빼 주지만 이 계산은 구독료까지만 깎는다]
+      - key: living-1000
+        title: 생활요금 자동납부 1,000원 할인
+        source: manual
+        evidence: ['생활요금 자동납부 결제건별 1,000원 결제일할인', '아파트 관리비, 4대 사회보험(건강보험, 국민연금, 고용보험, 산재보험)', '통신 SKT, SK브로드밴드, KT, LG U+ 이동통신/인터넷/유선전화요금', '통합 월 3회, 전월 이용금액 30만원 이상 시 제공', '자동납부건 중 10,000원 이상 결제된 건에 한함']
+        target:
+          categories: [apartment_fee, insurance.social]
+          merchants: [kt, lg_uplus, sk_broadband, skt]
+        when:
+          - billing: [autopay]
+          - amount: {min: 10000}
+        reward: {type: billing_discount, fixed: 1000}
+        limits:
+          - {per: month, count: 3}
+        tiers: {from: 300000}
+        unmodeled: ['통신의 결합상품요금, 사물인터넷 요금, 단말기 구매금액, 대리점 카드 결제는 할인하지 않는다']
+    unmodeled: ['할인과 실적은 승인 시점 기준이고 해외 결제와 무승인 결제(대중교통, 자동납부 등)는 매출전표 접수 시점 기준이다', 삼성카드의 다른 결제일할인 혜택과 겹치면 할인 금액이 큰 것 하나만 준다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: '현재 혜택의 시행일을 확인하지 못해 상품안내장 판(2025.11, 심의필 2025-11-13)의 날짜로 두었다. 출시일은 2020-09-29다', assumed: '2025-11-13'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 실적 제외의 대중교통 범위가 적혀 있지 않아 시내버스와 지하철로 두었다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-13 상품안내장(2025.11판, 심의필 2025-C1a-16538호) 대조. 출시 2020-09-29. 연회비 해외겸용 Mastercard·국내전용 모두 15,000원(기본 7,000+제휴 8,000). 구독료 할인은 매월 3일 적용되고 월 1회 구간별 정액이다. 이 계산은 구독료 결제에 구간별 금액까지 구독료를 깎는 것으로 옮겼다. 발급월+1개월까지는 30만 구간 혜택. 실적 제외는 무이자할부, 4대보험, 국세·지방세·공과금, 아파트 관리비, 임대료, 학교납입금, 등록금, 대중교통, 택시, 기프트·선불카드, 상품권이다. 할인받은 이용금액은 실적에 들어간다.
