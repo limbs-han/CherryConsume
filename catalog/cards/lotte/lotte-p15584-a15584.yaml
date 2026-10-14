@@ -1,0 +1,74 @@
+schema_version: 2
+id: lotte-p15584-a15584
+issuer: lotte
+name: 디지로카 Las Vegas
+kind: credit
+product_codes: [P15584-A15584]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+  - {scope: global, brand: amex, amount: 20000}
+sources:
+  - {id: manual, kind: manual_pdf, url: 'https://image.lottecard.co.kr/UploadFiles/cardProvisionPath/2024-A00018_20260928_10003.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: manual
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: original_month, exclude_applied: 0}
+    new_card: null
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility]
+      unmodeled: ['오토·스마트 캐시백 신청 이용금액, 오토 할부서비스 이용금액, 장애인 고용부담금, TV 수신료, 포인트 충전, 티머니 인증, 고속도로 통행요금, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 현금서비스·카드론·이자·수수료는 할인에서 빠진다']
+    limits:
+      - {key: integrated, per: month, amount: 100000}
+    benefits:
+      - key: under-100k-0-5
+        title: 건당 10만원 미만 0.5% 결제일 할인
+        source: manual
+        evidence: [건당 결제 금액 10만원 미만 0.5% 월 통합 할인한도 10만원, 실적조건 없이 혜택을 제공합니다.]
+        target: {all: true}
+        when:
+          - amount: {below: 100000}
+        reward: {type: billing_discount, rate: 0.5}
+        limits:
+          - {shared: integrated}
+      - key: 100k-1
+        title: 건당 10만원 이상 30만원 미만 1% 결제일 할인
+        source: manual
+        evidence: [10만원 이상 ~ 30만원 미만 1.0%]
+        target: {all: true}
+        when:
+          - amount: {min: 100000, below: 300000}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: integrated}
+      - key: 300k-1-5
+        title: 건당 30만원 이상 50만원 미만 1.5% 결제일 할인
+        source: manual
+        evidence: [30만원 이상 ~ 50만원 미만 1.5%]
+        target: {all: true}
+        when:
+          - amount: {min: 300000, below: 500000}
+        reward: {type: billing_discount, rate: 1.5}
+        limits:
+          - {shared: integrated}
+      - key: 500k-2
+        title: 건당 50만원 이상 2% 결제일 할인
+        source: manual
+        evidence: [50만원 이상 2.0%]
+        target: {all: true}
+        when:
+          - amount: {min: 500000}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: integrated}
+    unmodeled: [건당 결제 금액은 롯데카드에 접수된 건당 금액 기준이라 항공·철도처럼 결제 금액과 접수 금액이 다르면 구간이 달라질 수 있다, 디지로카 Las Vegas가 아닌 롯데카드 이용금액은 할인에서 빠진다, 본인카드와 가족카드의 월 할인한도는 합산된다, 롯데카드의 다른 결제일 할인과 겹치면 할인금액이 큰 혜택 하나만 준다, 할인은 승인 시점 기준 남은 한도 안에서 준다, '해외 이용금액은 현지 매출일자, 이동통신 등은 롯데카드 접수일 기준으로 혜택이 제공된다']
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현행 조건의 시행일을 찾지 못해 원문 확인일로 두었다. 카드 출시일은 2024-05-31이고 설명서는 2026년 8월 기준이다, assumed: '2026-10-12'}
+notes: 2026-10-12 상품설명서(2026년 8월 기준) 대조. 판매 카드 목록에 P15584-A15584로 있다. 실적 조건 없이 건당 결제 금액 구간별 0.5~2.0% 결제일 할인, 월 통합 한도 10만원. 가족카드 연회비는 13,000원이다.
