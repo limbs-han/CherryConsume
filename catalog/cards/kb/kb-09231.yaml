@@ -1,0 +1,71 @@
+schema_version: 2
+id: kb-09231
+issuer: kb
+name: KB국민 톡톡 Pay카드
+short_name: KB 톡톡 Pay
+kind: credit
+product_codes:
+  - '09231'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 20000}
+  - {scope: global, brand: mastercard, amount: 20000}
+  - {scope: global, brand: k_world_jcb, form: mobile, amount: 14000}
+  - {scope: global, brand: mastercard, form: mobile, amount: 14000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09231', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000, 800000]
+    spend:
+      exclude_categories: [annual_fee, education.primary_secondary_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [백화점·대형쇼핑몰·역사 입점 가맹점은 할인에서 빠질 수 있다]
+    benefits:
+      - key: pay
+        title: 간편결제 20%·40% 청구할인
+        source: page
+        evidence: [간편결제(Pay) 청구할인 | 20% | 40% | 7천원 | 1만5천원, '대상가맹점 : 온/오프라인에서 이용되는 모든 간편결제(Pay)', '예시 : KB Pay, 삼성페이, 네이버페이. 카카오페이 등', 일반결제(ISP) 이용금액은 서비스 제외, '1일 한도 : 5천원']
+        target: {all: true}
+        when:
+          - payment: [apple_pay, baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, samsung_pay, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+        reward:
+          type: billing_discount
+          rate: {400000: 20, 800000: 40}
+        limits:
+          - {per: day, amount: 5000}
+          - per: month
+            amount: {400000: 7000, 800000: 15000}
+        tiers: {from: 400000}
+      - key: transit-10
+        title: 버스·지하철 10% 청구할인
+        source: page
+        evidence: ['대중교통(버스, 지하철) 청구할인 | 10% | 7천원', '택시, 시외버스, 고속버스 제외', 버스/지하철 요금할인은 실제 카드 사용일이 아닌 이용대금명세서상 기재된 이용일을 기준으로 서비스 제공]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 7000}
+        tiers: {from: 400000}
+        unmodeled: [후불교통 할인은 이용대금명세서에 적힌 이용일 기준이다]
+      - key: cvs-10
+        title: GS25·CU 10% 청구할인
+        source: page
+        evidence: ['편의점(GS25, CU) 청구할인 | 10% | 5천원', '대상 : GS25, CU']
+        target:
+          merchants: [cu, gs25]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+    unmodeled: [간편결제 할인과 대중교통·편의점 할인을 한 결제에 겹쳐 주는지 원문에 없어 큰 쪽 하나만 계산한다, 최초 사용등록일부터 다음 달 말일까지 40만 구간을 주는 신규 특례는 생애 최초 본인 발급만 받으므로 계산하지 않는다, 모바일티머니 결제는 간편결제 할인에 넣지 않았다, '무승인전표(자판기·터널통행료·항공기 내 이용)와 정부지원금, 수수료·이자는 실적에서 빠진다', 할인 한도는 본인회원 기준이다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지를 직접 받아 대조했다. 연회비는 기본 7천원과 제휴 1만3천원, 모바일 단독은 기본 1천원과 제휴 1만3천원이다.
