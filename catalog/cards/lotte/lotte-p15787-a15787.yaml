@@ -1,0 +1,85 @@
+schema_version: 2
+id: lotte-p15787-a15787
+issuer: lotte
+name: 디지로카 Link
+kind: credit
+product_codes: [P15787-A15787]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 30000}
+  - {scope: global, brand: mastercard, amount: 30000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.lottecard.co.kr/app/LPCDADB_V100.lc?vtCdKndC=P15787-A15787', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2025-10-02'
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, gift_card, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility.gas]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: original_month
+    new_card: {until: next_month_end, tier: 500000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, car.toll, education.primary_secondary_fee, education.tuition, gift_card, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.bus_express, transit.bus_intercity, transit.subway, utility.gas]
+      unmodeled: ['TV 수신료, 오토·스마트 캐시백과 오토 할부서비스 이용금액, 장애인 고용부담금, 포인트 충전, 티머니 인증, 무승인전표, 벌금·과태료·민원 발급 수수료·관세·인지세·송달료, 공공기관·공공단체 가맹점 이용금액은 할인과 실적에서 빠진다']
+    limits:
+      - {key: cafe-cvs, per: month, amount: 5000}
+    benefits:
+      - key: base-0-5
+        title: 국내외 가맹점 0.5% 결제일 할인
+        source: page
+        evidence: [50만원 미만 | 0.5% | 없음 |, 월 할인한도 초과 시 0.5% 할인 혜택이 적용됩니다.]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.5}
+      - key: base-1-2
+        title: 국내외 가맹점 1.2% 결제일 할인
+        source: page
+        evidence: [50만원 이상 | 국내외 가맹점 | 1.2% | 1만원 |]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1.2}
+        limits:
+          - {per: month, amount: 10000}
+        tiers: {from: 500000}
+      - key: mart-3
+        title: 마트·슈퍼 3% 결제일 할인
+        source: page
+        evidence: ['50만원 이상 | 마트 | 이마트(트레이더스 홀세일클럽 포함) 롯데마트(MAXX 포함),농협 하나로마트 | 3% | 5천원 |', '슈퍼 | 이마트에브리데이, 롯데슈퍼, GS더프레시 |', 오프라인 결제 건만 할인이 제공되며 마트·슈퍼 내 입점한 임대매장에서 이용 시 혜택이 제공되지 않습니다.]
+        target:
+          merchants: [emart, emart_everyday, gs_the_fresh, lotte_mart, lotte_mart_max, lotte_super, nh_hanaro_mart, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 500000}
+        unmodeled: [마트·슈퍼 안 임대매장은 할인하지 않는다]
+      - key: cafe-5
+        title: 커피 5% 결제일 할인
+        source: page
+        evidence: ['커피 | 스타벅스, 투썸플레이스, 메가MGC커피, 할리스, 이디야커피 | 5% | 5천원 |', 커피 할인의 경우 백화점 할인점 쇼핑몰 등에 입점한 매장 이용금액은 할인혜택이 제공되지 않습니다., 지난달 디지로카 Link 이용실적이 50만원 미만인 경우 디지로카 Link 카드 이용회원수와 관계 없이 0.5% 할인혜택이 적용됩니다.]
+        target:
+          merchants: [ediya, hollys, mega_coffee, starbucks, twosome]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: cafe-cvs}
+        tiers: {from: 500000}
+        unmodeled: [백화점·할인점·쇼핑몰 안 커피 매장은 할인하지 않는다]
+      - key: cvs-5
+        title: 편의점 5% 결제일 할인
+        source: page
+        evidence: ['편의점 | CU, GS25, 세븐일레븐, 이마트24 |', 편의점 할인의 경우 오프라인 결제 시에만 할인혜택이 제공됩니다.]
+        target:
+          merchants: [cu, emart24, gs25, seven_eleven]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {shared: cafe-cvs}
+        tiers: {from: 500000}
+    unmodeled: ['Link 혜택(지난달 이 카드를 쓴 본인·가족회원 2명 이상이고 합산 100만원 이상이면 1.5%·5%·7%, 3명 이상 150만원 이상이면 2%·7%·10%)은 가족회원 이용을 알 수 없어 계산하지 않는다. 기본 혜택만 계산해 실제보다 적을 수 있다', '보너스 캐시백(연간 이용회원수와 연간 실적 4,000만·6,000만원 이상 시 5만·10만원)은 발급일 기준 연간 누적이라 계산하지 않는다', 일부 PG 결제는 커피·편의점 할인에서 빠진다, 결제일 할인은 겹치지 않고 할인 금액이 큰 혜택 하나만 준다, 롯데카드의 다른 결제일 할인과 겹치면 할인이 큰 혜택 하나만 준다, 본인과 가족회원의 이용금액과 할인한도가 합산된다, 해외 이용과 이동통신처럼 다음 달 청구되는 건은 롯데카드 접수일 기준으로 실적과 할인에 들어간다]
+notes: 2026-10-12 상품 페이지 대조. 출시일 2025-10-02. 상품설명서 PDF는 그림이라 글자를 뽑지 못해 페이지로 대조했다. 기본 혜택만 담았다. 지난달 50만원 이상이면 국내외 1.2%(월 1만원), 마트·슈퍼 3%(월 5천원), 커피·편의점 5%(월 5천원)이고 한도를 넘거나 50만원 미만이면 0.5%. 혜택끼리는 큰 쪽 하나만 받아 묶음 기본값 best와 none을 쓴다. 신규 발급 특례는 발급일부터 다음 달 말일까지 기본 혜택이라 50만 구간으로 넣었다.
