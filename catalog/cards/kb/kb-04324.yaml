@@ -1,0 +1,59 @@
+schema_version: 2
+id: kb-04324
+issuer: kb
+name: KB국민 알뜰폰HubⅡ카드
+short_name: KB 알뜰폰HubⅡ
+search_names: [알뜰폰 Hub Ⅱ 카드, 알뜰폰허브2]
+kind: credit
+product_codes:
+  - '04324'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+  - {scope: global, brand: jcb, amount: 15000}
+  - {scope: global, brand: mastercard, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04324', fetched_at: '2026-10-12', review_no: 제2021-C1a-01854호}
+  - {id: leaflet, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/04324__prdctOpmn_20220530.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 700000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [annual_fee, apartment_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 1
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [결제대행업체(PG)나 간편결제 전용 가맹점으로 승인된 결제는 할인에서 빠질 수 있다]
+    facts:
+      - {key: first_personal_issue, type: bool, scope: card, ask: '이 상품을 생애 처음 본인 명의로 발급받았나요? 가족카드만 발급받은 경우는 아니요를 고르세요.'}
+    benefits:
+      - key: mvno-autopay
+        title: 알뜰폰 통신료 자동이체 1만2천원·1만7천원 청구할인
+        source: page
+        evidence: [알뜰폰 통신료 자동이체 할인 | 1만2천원 | 1만7천원, 1구간(30만원 이상) 2구간(70만원 이상), 할인금액보다 자동이체 승인금액이 적을 경우 승인금액만큼 할인 적용됩니다., 통신료 자동이체 승인 건이 여러 건인 경우 합산하여 월 할인금액 내에서 할인 됩니다., 최초 카드 사용 등록일로부터 다음달 말일까지는 알뜰폰 Hub Ⅱ 카드 실적이 없는 경우에도 1구간(전월 이용실적 30만원 이상)에 해당하는 12, 000원 청구할인 서비스가 적용됩니다.]
+        target:
+          merchants: [hello_mobile, kt_m_mobile, media_log, sk_telink, toss_mobile, woori_won_mobile]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {0: 12000, 300000: 12000, 700000: 17000}
+        tiers:
+          from: 300000
+          waived_when:
+            fact: first_personal_issue
+            card_month: {min: 0, max: 1}
+        unmodeled: [공통 가맹점에 없는 알뜰폰 사업자와 KT스카이라이프 알뜰폰은 계산하지 않는다, 알뜰폰 요금이 SKT·KT·LG U+ 청구서로 함께 나가면 그 청구요금과 합쳐 할인한다]
+    unmodeled: [월 할인한도는 본인회원 기준이라 가족카드 이용분과 함께 쓴다, 해외 이용금액은 매입 완료일 기준으로 실적 달을 나누고 일시불만 센다, 정부지원금 결제는 실적에서 빠진다, 자판기·터널이용료·항공기내·공항버스 같은 무승인 전표는 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 규칙의 시작일을 찾지 못했다. 원문은 2021.03.11 출시만 적었다, assumed: '2026-10-12'}
+  - {path: 'revisions[0].spend.exclude_categories', question: 원문의 무승인전표(대중교통) 실적 제외를 시내버스와 지하철 업종 제외로 옮겼다. 승인된 버스·지하철 결제도 실적에서 빠져 실적이 적게 잡힐 수 있다. 철도와 고속·시외버스는 실적에 남긴다, assumed: 'transit.bus_city, transit.subway'}
+notes: 2026-10-12 KB국민카드 상품 페이지와 상품설명서 PDF를 대조했다. 알뜰폰 자동이체 승인금액 전액을 월 할인금액까지 할인한다. 원문 대상은 모든 알뜰폰 사업자지만 공통 업종에 알뜰폰이 따로 없어 공통 가맹점에 있는 알뜰폰 사업자만 담았다. 알뜰폰 업종이나 리브엠 같은 사업자가 공통 파일에 들어오면 대상을 넓힌다.
