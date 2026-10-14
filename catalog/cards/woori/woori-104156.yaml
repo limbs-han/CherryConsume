@@ -1,0 +1,61 @@
+schema_version: 2
+id: woori-104156
+issuer: woori
+name: KREAM Platinum 우리카드
+kind: credit
+product_codes:
+  - '104156'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 22000}
+  - {scope: global, brand: visa, amount: 22000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=104156', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2025-10-30'
+    source: page
+    tiers: [0, 500000, 1000000, 2000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+    limits:
+      - key: base-cap
+        per: month
+        amount: {500000: 20000, 1000000: 30000, 2000000: 50000}
+    benefits:
+      - key: kream-10
+        title: KREAM 10% 청구할인
+        source: page
+        evidence: [KREAM 이용금액 10% 청구할인 전월 국내외 이용실적 50만원 이상 시 제공, 통합 월 할인한도 50만원 이상 20, 000원 100만원 이상 30, 000원 200만원 이상 50, 000원]
+        target:
+          merchants: [kream]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: base-cap}
+        tiers: {from: 500000}
+        exclude_applied: 1
+      - key: overseas-3
+        title: 해외 3% 청구할인
+        source: page
+        evidence: [해외 이용금액 3% 청구할인 전월 국내외 이용실적 50만원 이상 시 제공, 통합 월 할인한도 50만원 이상 20, 000원 100만원 이상 30, 000원 200만원 이상 50, 000원]
+        target: {all: true}
+        when:
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 3}
+        limits:
+          - {shared: base-cap}
+        tiers: {from: 500000}
+    unmodeled: [국내 고액 매출 1~2% 청구할인은 전월 KREAM과 해외 가맹점 이용실적 50만원 이상이 조건이라 담지 못해 뺐다, 백화점·마트·아울렛·복합 쇼핑몰·면세점 등 입점 KREAM 매장은 할인 제외, 전용 가맹점번호로 승인되는 일부 간편결제는 할인 제외, 해외 이용금액은 우리카드 전산상 해외 매출로 분류된 경우에 한하며 매출표 접수일 기준으로 반영한다, 가족카드 실적과 한도는 본인카드와 별도다, 해외가맹점·교통카드·통신료 자동납부 금액은 매출표 접수일 기준으로 그 달 실적에 넣는다, 국내가맹점 취소가 매월 1~2일에 접수되면 전월 실적에서 뺀다, 신규 특례는 최초 발급 카드에만 주고 시작일은 사용등록일과 사용개시일 중 빠른 날이다, 고속버스는 차내단말기와 앱 결제만 실적 제외인데 고속버스 전체를 뺐다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: 원 미만 처리 문구가 없다, assumed: floor}
+notes: 2026-10-13 공식 상품 페이지를 브라우저로 열어 확인했다. 상품 출시일 2025-10-30. 연회비는 본인 22,000원이며 국내전용과 해외겸용(VISA) 칸이 나뉘어 있으나 금액은 하나만 적혀 있다. KREAM 할인받은 매출 전체가 실적에서 빠진다.
