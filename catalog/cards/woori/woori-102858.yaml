@@ -1,0 +1,43 @@
+schema_version: 2
+id: woori-102858
+issuer: woori
+name: 바디프랜드 우리카드 Ⅱ
+kind: credit
+product_codes:
+  - '102858'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 15000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102858', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2023-12-11'
+    source: page
+    tiers: [0, 300000, 700000, 1200000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [apartment_fee, childcare, education.kindergarten, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefits:
+      - key: autopay-discount
+        title: 바디프랜드 렌탈요금 자동납부 청구할인
+        source: page
+        evidence: ['30만원 이상 ~ 70만원 미만 | 10,000원 | 렌탈요금 자동납부 또는 제품구매 장기할부 필수', '70만원 이상 ~ 120만원 미만 | 15,000원', '120만원 이상 | 20,000원', 자동납부 또는 장기할부가 아닌 일반결제는 할인 적용 불가]
+        target:
+          merchants: [bodyfriend_rental]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - per: month
+            amount: {300000: 10000, 700000: 15000, 1200000: 20000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [제품구매 24/36개월 장기할부 청구분도 할인 대상이지만 장기할부 결제는 계산하지 않는다, 가족카드는 청구할인을 받지 못한다]
+    unmodeled: [바디프랜드 장기할부 이용금액은 실적에서 빠진다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내 취소가 매월 1~2일 접수되면 전월 실적에서 뺀다, 정부지원금과 공공임대료와 국가·공공기관 가맹점 이용금액과 수수료·이자·대출은 실적에서 빠진다, 할인은 거래 매입 순서대로 적용된다]
+notes: 2026-10-13 공식 상품 페이지 대조. 출시일 2023-12-11. 연회비 15,000원. 전월 국내외 30만/70만/120만 이상 월 한도 1만/1만5천/2만원. 승인금액이 한도보다 작으면 승인금액만큼 할인한다. 바디프랜드 우리카드 Ⅱ로 할인받은 이용금액 전체는 실적에서 빠진다.
