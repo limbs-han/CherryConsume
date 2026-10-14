@@ -1,0 +1,52 @@
+schema_version: 2
+id: kb-09292
+issuer: kb
+name: 쿠팡 와우 카드
+short_name: KB 쿠팡 와우
+kind: credit
+product_codes:
+  - '09292'
+status: on_sale
+annual_fees:
+  - {scope: domestic, brand: local, amount: 20000}
+  - {scope: global, brand: visa, amount: 20000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09292', fetched_at: '2026-10-12', review_no: 제2023-C1a-07816호}
+  - {id: manual, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/_09292__prdctOpmn_20250702.pdf', fetched_at: '2026-10-12', review_no: 250605-02838-PIF}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0]
+    spend: {basis: none}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, tax, transit.bus_city, transit.subway, utility.electricity, utility.water]
+      unmodeled: ['PG 결제대행 가맹점, 호텔·백화점·대형마트·철도역사 입점 가맹점은 적립에서 빠질 수 있다', '정부지원금, 신차구매 청구할인 전표, 무승인전표(대중교통·공항버스·자판기·터널통행료·항공기내 이용)는 적립에서 빠진다']
+    benefits:
+      - key: coupang-2
+        title: 쿠팡·쿠팡이츠·쿠팡플레이 2% 쿠팡캐시 적립
+        source: page
+        evidence: ['쿠팡, 쿠팡이츠, 쿠팡플레이 이용금액 2% 쿠팡캐시 적립', '적립한도: 월 2만원(전월 실적 조건 없음)', 쿠팡캐시란 쿠팡, 쿠팡이츠, 쿠팡플레이 등에서 현금처럼 사용 가능한 결제 수단]
+        target:
+          merchants: [coupang, coupang_eats, coupang_play]
+        reward: {type: points, program: coupang_cash, rate: 2}
+        limits:
+          - {per: month, amount: 20000}
+      - key: base-0-2
+        title: 국내외 가맹점 0.2% 쿠팡캐시 적립
+        source: page
+        evidence: [국내외 가맹점 이용금액 0.2% 쿠팡캐시 적립, '쿠팡, 쿠팡이츠, 쿠팡플레이 이용금액은 적립 제외', '적립한도: 월 2천원(전월 실적 조건 없음)']
+        target:
+          all: true
+          exclude_merchants: [coupang, coupang_eats, coupang_play]
+        reward: {type: points, program: coupang_cash, rate: 0.2}
+        limits:
+          - {per: month, amount: 2000}
+    unmodeled: [쿠팡 와우 멤버십에 가입해야 발급된다. 발급 뒤 멤버십을 해지해도 적립은 유지된다, 기본 포인트리는 적립되지 않는다. KB국민카드 스타샵 가맹점 포인트리는 따로 적립된다, 가족카드는 발급되지 않는다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2023년 7월 20일 출시만 적었다., assumed: '2026-10-12'}
+  - {path: 'revisions[0].benefits[coupang-2].reward.program', question: 원문은 쿠팡캐시를 "현금처럼 사용 가능한 결제 수단"이라 하고 적립한도를 원으로 적었을 뿐 1캐시의 원화 가치를 따로 적지 않았다. 1캐시를 1원으로 보았다, assumed: coupang_cash 1원}
+notes: 2026-10-12 KB국민카드 상품 페이지와 상품설명서 PDF를 받아 대조했다. 전월 실적 조건이 없다. 연회비는 기본 7천원과 제휴 1만3천원을 더한 2만원이다. 적립 한도 금액은 원문이 원으로 적어 캐시 금액 한도로 옮겼다.
