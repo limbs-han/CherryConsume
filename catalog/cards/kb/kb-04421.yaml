@@ -1,0 +1,77 @@
+schema_version: 2
+id: kb-04421
+issuer: kb
+name: 교원 구몬 KB국민카드
+short_name: KB 교원 구몬
+kind: credit
+product_codes:
+  - '04421'
+status: on_sale
+annual_fees:
+  - {scope: global, brand: k_world_jcb, amount: 17000}
+  - {scope: global, brand: mastercard, amount: 17000}
+sources:
+  - {id: page, kind: product_page, url: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04421', fetched_at: '2026-10-12', review_no: 제2018-C1a-01729호}
+  - {id: manual, kind: manual_pdf, url: 'https://img2.kbcard.com/obj/card/download/04421__prdctOpmn_20220617.pdf', fetched_at: '2026-10-12'}
+checked_at: '2026-10-12'
+revisions:
+  - effective_from: '2026-10-12'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 400000]
+    spend:
+      exclude_categories: [annual_fee, apartment_fee, education.primary_secondary_fee, education.tuition, gift_card, prepaid_charge, tax, transit.bus_city, transit.subway, utility]
+      interest_free: exclude
+      exclude_applied: 0
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: ['PG 결제대행 가맹점, 호텔·백화점·대형마트·철도역사 입점 가맹점은 할인에서 빠질 수 있다']
+    benefits:
+      - key: kumon-autopay
+        title: 구몬학습지 자동납부 월 1만4천원 청구할인
+        source: page
+        evidence: [구몬 학습지 (자동납부) | 1만 4천원 | 40만원 이상, 할인금액보다 자동납부 이용금액이 작을 경우 이용금액만큼 할인, 학습지이용건이여러건인경우합산하여월할인금액내할인]
+        target:
+          merchants: [kumon]
+        when:
+          - billing: [autopay]
+        reward: {type: billing_discount, rate: 100}
+        limits:
+          - {per: month, amount: 14000}
+        tiers: {from: 400000}
+      - key: dept-mart-5
+        title: 백화점·이마트·롯데마트·홈플러스 5% 청구할인
+        source: page
+        evidence: ['백화점 업종 | 5% | 월 5천원, 건당 2,500원 | 롯데마트, 이마트, 홈플러스', 건당5만원이상결제시청구할인, '온라인몰, 건물내임대매장, SSM(이마트에브리데이, 홈플러스익스프레스, 롯데슈퍼등) 제외']
+        target:
+          categories: [department_store]
+          merchants: [emart, homeplus, lotte_mart]
+        when:
+          - channel: offline
+            amount: {min: 50000}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, amount: 2500}
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        exclude_applied: 1
+        unmodeled: [건물 안 임대매장은 빠진다]
+      - key: online-book-5
+        title: 교보문고·YES24 온라인 5% 청구할인
+        source: page
+        evidence: ['교보문고, YES24 | 5% | 월 5천원', '서점(교보문고,YES24) 홈페이지/APP에서결제시할인(오프라인매장제외)']
+        target:
+          merchants: [kyobo_book, yes24]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: month, amount: 5000}
+        tiers: {from: 400000}
+        exclude_applied: 1
+    unmodeled: ['롯데월드 종합이용권 50%, 에버랜드 자유이용권 50%, 캐리비안베이 입장권 30% 현장할인은 매수 제한이라 결제 금액으로 계산하지 않는다', 최초 사용등록일부터 다음 달 말일까지 실적 없이 할인을 주는 신규 특례는 계산하지 않는다, 전월 실적은 가족카드 이용을 포함한다, 무승인전표(대중교통·자판기·터널이용료·항공기내 이용)와 정부지원금은 실적에서 빠진다, 백화점·마트와 온라인서점 할인받은 이용건 전체가 실적에서 빠진다]
+open_questions:
+  - {path: 'revisions[0].effective_from', question: 현재 원문 규칙이 시작된 날짜를 찾지 못했다. 원문은 2018년 3월 2일 출시만 적었다., assumed: '2026-10-12'}
+notes: 2026-10-12 KB국민카드 상품 페이지와 상품설명서 PDF를 받아 대조했다. 실적 제외 목록은 상품설명서에서 옮겼다. 구몬학습지 할인 이용건은 실적 제외 목록에 없어 실적에 넣는다. 원문 백화점 업종은 공통 업종 department_store로 옮겼다.
