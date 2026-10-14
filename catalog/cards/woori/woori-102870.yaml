@@ -1,0 +1,112 @@
+schema_version: 2
+id: woori-102870
+issuer: woori
+name: 카드의정석 WELFARE+ (플러스)
+kind: credit
+product_codes:
+  - '102870'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 12000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102870', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-13'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000, 500000, 1000000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, childcare, education.kindergarten, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, utility]
+    limits:
+      - {key: fuel, per: month, amount: 7000}
+    stacks:
+      - key: main
+        pick: priority
+        order: [fuel-discount-60, fuel-discount-80, fuel-discount-100, transit-10pct, coffee-10pct, base-0-5pct]
+        spill: none
+    benefits:
+      - key: base-0-5pct
+        title: 국내 가맹점 0.5% 청구할인
+        source: page
+        evidence: [국내 가맹점 0.5% 청구할인 전월실적 조건 없음 할인 한도 없음, 기본 할인의 정석 혜택과 생활밀착 할인의 정석 혜택은 중복제공 하지 않음]
+        target: {all: true}
+        when:
+          - {region: domestic}
+        reward: {type: billing_discount, rate: 0.5}
+      - key: fuel-discount-60
+        title: S-OIL HD현대오일뱅크 주유 리터당 60원 청구할인
+        source: page
+        evidence: [30만원 이상 ~ 50만원 미만 60원/ℓ, 주유 매출 건당 할인 대상 금액 최대 10만원, 통합 월 7천원까지 할인]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 60}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 300000, to: 300000}
+        exclude_applied: 1
+        unmodeled: [LPG 충전소는 제외한다, 할인 기준은 각 정유사 휘발유 공시가라 기준값과 다를 수 있다]
+      - key: fuel-discount-80
+        title: S-OIL HD현대오일뱅크 주유 리터당 80원 청구할인
+        source: page
+        evidence: [50만원 이상 ~ 100만원 미만 80원/ℓ, 통합 월 7천원까지 할인]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 80}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 500000, to: 500000}
+        exclude_applied: 1
+        unmodeled: [LPG 충전소는 제외한다, 할인 기준은 각 정유사 휘발유 공시가라 기준값과 다를 수 있다]
+      - key: fuel-discount-100
+        title: S-OIL HD현대오일뱅크 주유 리터당 100원 청구할인
+        source: page
+        evidence: [100만원 이상 100원/ℓ, 통합 월 7천원까지 할인]
+        target:
+          merchants: [hd_oilbank, s_oil]
+        reward: {type: billing_discount, per_liter: 100}
+        limits:
+          - {per: txn, base: 100000}
+          - {shared: fuel}
+        tiers: {from: 1000000}
+        exclude_applied: 1
+        unmodeled: [LPG 충전소는 제외한다, 할인 기준은 각 정유사 휘발유 공시가라 기준값과 다를 수 있다]
+      - key: transit-10pct
+        title: 대중교통 10% 청구할인
+        source: page
+        evidence: [대중교통 10% 청구할인 통합 월 3천원까지, 명세서상에 교통-버스 교통-지하철 표시 매출, 고속버스 시외버스 공항버스 공항철도 이용금액 할인 제외]
+        target:
+          categories: [transit.bus_city, transit.subway]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: month, amount: 3000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+      - key: coffee-10pct
+        title: 스타벅스 폴바셋 10% 청구할인
+        source: page
+        evidence: [스타벅스 폴바셋 10% 청구할인 매출 건당 1천원까지 통합 월 5천원까지 할인, 스타벅스 공식 앱을 통한 사이렌오더 결제 건 포함]
+        target:
+          merchants: [paul_bassett, starbucks]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {per: txn, amount: 1000}
+          - {per: month, amount: 5000}
+        tiers: {from: 300000}
+        exclude_applied: 1
+        unmodeled: [커피 상품권과 선불카드 구입과 충전은 제외한다, 백화점 대형할인점 면세점 공항 미군부대 입점 매장은 제외한다]
+    unmodeled: [주유 교통 커피로 할인받은 전체 이용금액은 실적에서 빠진다, 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내 취소가 매월 1~2일 접수되면 전월 실적에서 뺀다, 정부지원금과 국가·공공기관 가맹점 이용금액과 수수료·이자·대출은 실적에서 빠진다, 신규 발급 특례는 생활밀착 할인에만 적용된다]
+notes: 2026-10-13 공식 상품 페이지 대조. 시행일은 페이지에 없어 확인일로 두고 추정 표시. 연회비 국내 10,000원 해외겸용 12,000원. 기본 0.5%와 생활밀착 혜택은 중복하지 않아 한 묶음 우선순위로 둔다. 생활밀착 한도를 넘으면 기본 0.5%로 넘어가는지 원문에 없어 넘기지 않는다.
