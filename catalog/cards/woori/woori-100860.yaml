@@ -1,0 +1,147 @@
+schema_version: 2
+id: woori-100860
+issuer: woori
+name: 국민행복카드S2
+kind: credit
+product_codes:
+  - '100860'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 0}
+  - {scope: global, brand: mastercard, amount: 0}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=100860', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2021-03-02'
+    source: page
+    tiers: [0, 300000, 600000, 900000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic]
+      exclude_categories: [apartment_fee, childcare, education.kindergarten, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 300000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+        - payment: [baemin_pay, coupay, eleven_pay, hana_pay, kakao_pay, kb_pay, l_pay, naver_pay, nh_pay, payco, shinhan_sol_pay, smile_pay, ssg_pay, toss_pay, woori_won_pay]
+      categories: [childcare, education.kindergarten, gift_card, prepaid_charge]
+      unmodeled: [우리카드의 다른 혜택을 적용받은 매출은 할인에서 빠진다, 정부지원금과 국가바우처 이용금액은 할인에서 빠진다]
+    limits:
+      - key: integrated
+        per: month
+        amount: {300000: 30000, 600000: 40000, 900000: 60000}
+      - key: shopping
+        per: month
+        amount: {300000: 4000, 600000: 8000, 900000: 16000}
+      - key: care
+        per: month
+        amount: {300000: 3000, 600000: 6000, 900000: 12000}
+      - key: untact
+        per: month
+        amount: {300000: 3000, 600000: 6000, 900000: 12000}
+      - {key: overseas, per: month, amount: 20000}
+    benefits:
+      - key: shopping-5pct
+        title: 쇼핑 생활 업종 5% 청구할인
+        source: page
+        evidence: [백화점 대형마트 온라인쇼핑 이동통신 생활월납 렌탈 5%, 결제 건당 최대 할인 대상 금액 5만원, 백화점 대형마트는 온라인 결제 임대매장 주차장 이용금액은 할인 제외, 이동통신 생활월납 렌탈은 정기결제 이용건에 한하여 할인 적용]
+        target:
+          merchants: [emart, galleria, hyundai_department, lotte_department, lotte_mart, lotte_mart_max, shinsegae_department, traders]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: shopping-online-5pct
+        title: 온라인쇼핑 5% 청구할인
+        source: page
+        evidence: [온라인쇼핑 쿠팡 11번가 롯데홈쇼핑 G마켓 옥션 인터파크 롯데ON 5%, 결제 건당 최대 할인 대상 금액 5만원]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, interpark, lotte_homeshopping, lotte_on]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: integrated}
+        tiers: {from: 300000}
+      - key: shopping-recurring-5pct
+        title: 이동통신 월납 렌탈 5% 청구할인
+        source: page
+        evidence: [이동통신 SKT KT LG U+ 휴대전화 요금 자동납부, 렌탈 코웨이 LG전자 가전구독 SK매직 쿠쿠홈시스 청호나이스 현대렌탈케어 바디프랜드 넥센타이어, 이동통신 생활월납 렌탈은 정기결제 이용건에 한하여 할인 적용]
+        target:
+          merchants: [bodyfriend_rental, chungho_rental, coway_rental, cuckoo_rental, hyundai_rental_care, kt, lg_appliance_subscription, lg_uplus, nexen_tire_rental, sk_magic, skt]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 5}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: shopping}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [인터넷과 집전화 결합상품은 제외한다, 도시가스요금과 전기요금 월납은 공공요금 업종이라 담지 못했다]
+      - key: care-7pct
+        title: 의료 보육 교육 업종 7% 청구할인
+        source: page
+        evidence: [병 의원 동물병원 산후조리원 약국 7%, 학습지 웅진 씽크빅 교원 빨간펜 대교눈높이 한솔교육, 서점 교보문고 영풍문고 알라딘중고서점, 결제 건당 최대 할인 대상 금액 5만원]
+        target:
+          categories: [hospital, pharmacy]
+          merchants: [aladin, daekyo, hansol_education, kyobo_book, kyowon, woongjin_thinkbig, youngpoong_book]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: care}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [어린이집 유치원 학원은 업종이 맞지 않아 담지 못했다, 윤선생 YES멤버스는 공통 가맹점에 없어 담지 못했다, 병 의원 약국 보육 이용금액은 정부지원금을 뺀 금액만 대상이다]
+      - key: untact-20pct
+        title: 언택트 라이프 업종 20% 청구할인
+        source: page
+        evidence: [영상 넷플릭스 웨이브 티빙 유튜브 프리미엄, 음원 멜론 지니뮤직, 전자도서 교보문고 SAM YES24 북클럽, 멤버십 네이버플러스 컬리멤버스, 정기결제 이용 건에 한하며 공식 홈페이지 앱을 통해 직접 신청한 건에 한함]
+        target:
+          merchants: [genie, kurly_members, kyobo_sam, melon, naver_plus_membership, netflix, tving, wavve, yes24_crema_club, youtube_premium]
+        when:
+          - billing: [subscription]
+        reward: {type: billing_discount, rate: 20}
+        limits:
+          - {per: txn, base: 50000}
+          - {shared: untact}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [넷플릭스는 Basic Standard Premium 요금제만 대상이다, 유튜브 뮤직은 공통 가맹점에 없어 담지 못했다, 앱마켓 결제와 1회성 구매는 제외한다]
+      - key: overseas-1pct
+        title: 해외가맹점 1만원 이상 30만원 미만 1% 청구할인
+        source: page
+        evidence: [해외가맹점 해외직구 포함 이용금액 결제건당 1만원 이상 30만원 미만 1%, 이용횟수 제한 없이 월 최대 2만원까지 청구할인]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 10000, below: 300000}
+        reward: {type: billing_discount, rate: 1}
+        limits:
+          - {shared: overseas}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [Mastercard 브랜드만 제공하고 국내전용 BC 브랜드는 제공하지 않는다, 해외 이용금액은 우리카드 전산상 해외가맹점 매출 기준이며 매출표 접수일 기준으로 반영된다]
+      - key: overseas-2pct
+        title: 해외가맹점 30만원 이상 2% 청구할인
+        source: page
+        evidence: [해외가맹점 해외직구 포함 이용금액 결제건당 30만원 이상 시 2%, 이용횟수 제한 없이 월 최대 2만원까지 청구할인]
+        target: {all: true}
+        when:
+          - {region: overseas}
+          - amount: {min: 300000}
+        reward: {type: billing_discount, rate: 2}
+        limits:
+          - {shared: overseas}
+          - {shared: integrated}
+        tiers: {from: 300000}
+        unmodeled: [Mastercard 브랜드만 제공하고 국내전용 BC 브랜드는 제공하지 않는다]
+    unmodeled: [국가 바우처 결제와 프리미엄 투어 서비스는 계산하지 않는다, 해외 이용금액은 실적에 포함되지 않는다, 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내 취소가 매월 1~2일 접수되면 전월 실적에서 뺀다, 정부지원금과 공공요금과 국가·공공기관 가맹점 이용금액과 수수료·이자·대출은 실적에서 빠진다, 할인은 거래 매입 순서대로 적용된다, 가족카드는 발급되지 않는다]
+notes: 2026-10-13 공식 상품 페이지 대조. 출시일 2021-03-02. 연회비 없음. 영역별 월 한도와 통합 월 한도는 30만/60만/90만 구간별. 해외 한도 2만원은 구간과 상관없다. 간편결제로 승인된 매출은 할인 제외라 간편결제 결제수단을 제외했다. 도시가스와 전기요금 월납 5%는 공공요금 업종이 실적 제외 업종이라 담지 않았다.
