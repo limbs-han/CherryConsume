@@ -1,0 +1,36 @@
+schema_version: 2
+id: woori-500008
+issuer: woori
+name: 카드의정석2 SIMPLE
+kind: credit
+product_codes:
+  - '500008'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 7000}
+  - {scope: global, brand: mastercard, amount: 7000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=500008', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-02-20'
+    source: page
+    tiers: [0]
+    spend: {basis: none, installment: full_at_purchase, cancellation: cancel_month, exclude_applied: 0}
+    new_card: null
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      unmodeled: [정부지원금, 환금성 업종, 신차구매금액, 의약품 전용몰과 제약회사 업종, 각종 수수료와 이자, 대출, 매출취소금액, 우편요금·여권발급비용·벌금·공공기관 이용금액은 제외한다, 쿠폰과 다른 프로모션과 중복 적용 불가]
+    benefits:
+      - key: general-08pct
+        title: 국내외 0.8% 청구할인
+        source: page
+        evidence: [SIMPLE 할인 서비스, 국내외 가맹점 0.8% 청구할인, 전월실적 조건 없음, 할인 한도 제한 없음]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 0.8}
+    unmodeled: [Two-in-One 결제서비스 국내 체크 매출 0.3% 청구할인은 기본 0.8%에 더해지는지 대신하는지 알 수 없어 담지 않았다]
+open_questions:
+  - {path: 'revisions[0].benefits', question: Two-in-One 결제서비스 국내 체크 매출 0.3% 청구할인이 0.8%와 중복되는지, assumed: 담지 않음}
+notes: 2026-10-13 공식 상품 페이지 대조. 상품출시일 2026-02-20.
