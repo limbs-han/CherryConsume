@@ -1,0 +1,196 @@
+schema_version: 2
+id: samsung-aap1742
+issuer: samsung
+name: 모니모카드
+short_name: 모니모
+search_names: [monimo, 모니모 카드, 모니모카드, 삼성 모니모카드]
+kind: credit
+product_codes: [AAP1742]
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 10000}
+  - {scope: global, brand: mastercard, amount: 10000}
+sources:
+  - {id: page, kind: product_page, url: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1742', fetched_at: 2026-10-13, review_no: 제2026-C1h-00722호}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-01-19'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 300000]
+    spend:
+      basis: prev_calendar_month
+      exclude_categories: [apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, taxi, transit.bus_city, transit.subway, utility]
+      interest_free: count
+      installment: full_at_purchase
+      cancellation: cancel_month
+      exclude_applied: 1
+    new_card: {until: next_month_end, tier: 300000, from: issue}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [gift_card, prepaid_charge]
+      unmodeled: [삼성카드 할인이 적용된 일시불·할부 이용금액은 할인하지 않는다, '자체 가맹점번호로 승인되는 일부 결제(간편결제, 키오스크 등)는 할인하지 않는다']
+    options:
+      - key: needs
+        title: 옵션 서비스 1 (Needs & Identity Option)
+        choices:
+          - {key: fashion, title: 온라인패션·오늘의집 30% 할인}
+          - {key: culture, title: '스타벅스 50%, 교보문고·스트리밍 30% 할인'}
+        default: null
+        change: next_month
+      - key: shopping
+        title: 옵션 서비스 2 (My Shopping Option)
+        choices:
+          - {key: online, title: 온라인쇼핑몰 7% 할인}
+          - {key: cvs, title: 편의점·다이소·올리브영 7% 할인}
+          - {key: overseas, title: 해외 7% 할인}
+        default: null
+        change: next_month
+    limits:
+      - {key: life, per: month, amount: 5000}
+      - {key: fashion, per: month, amount: 10000}
+      - {key: culture, per: month, amount: 10000}
+      - {key: online, per: month, amount: 5000}
+      - {key: cvs, per: month, amount: 5000}
+      - {key: overseas, per: month, amount: 5000}
+    stacks:
+      - {key: discount, pick: best, spill: none}
+    benefits:
+      - key: bill-10
+        title: 이동통신요금·아파트 관리비 10% 할인
+        source: page
+        evidence: [이동통신요금·아파트 관리비 정기결제 시 10% 결제일할인, '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, 발급월 + 1개월까지는 전월 이용금액 30만원 미만 시에도 제공, '이동통신의 경우 결합상품요금, 휴대전화 등 단말기 구매금액 및 대리점 카드 결제건 제외']
+        target:
+          categories: [apartment_fee]
+          merchants: [hello_mobile, kt, kt_m_mobile, kt_skylife, lg_uplus, media_log, sk_telink, skt]
+        when:
+          - billing: [autopay, subscription]
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        stack: discount
+        unmodeled: [이동통신의 결합상품요금과 단말기 구매금액과 대리점 카드 결제는 할인하지 않는다]
+      - key: transit-taxi-10
+        title: 대중교통·택시 10% 할인
+        source: page
+        evidence: [대중교통·택시 10% 결제일할인, '대중교통 버스, 지하철 택시 택시', '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, '대중교통은 오프라인 결제건에 한하며, 시외·고속버스는 제외']
+        target:
+          categories: [taxi, transit.bus_city, transit.subway]
+        when:
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        stack: discount
+      - key: delivery-10
+        title: 배달앱 10% 할인
+        source: page
+        evidence: [배달앱 10% 결제일할인, '배달의민족, 요기요, 쿠팡이츠', '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, '공식 홈페이지·앱을 통한 결제건에 한하며, 가맹점 직접 결제건은 제외']
+        target:
+          merchants: [baemin, coupang_eats, yogiyo]
+        when:
+          - {channel: online}
+        reward: {type: billing_discount, rate: 10}
+        limits:
+          - {shared: life}
+        tiers: {from: 300000}
+        stack: discount
+        unmodeled: [가맹점에 직접 결제한 건은 할인하지 않는다]
+      - key: fashion-30
+        title: 온라인패션·오늘의집 30% 할인
+        source: page
+        evidence: [온라인패션·오늘의집 30% 결제일할인, '온라인패션 무신사, W컨셉, Nike.com, SSF 오늘의집 오늘의집', '통합 월 할인한도 : 10,000원', 전월 이용금액 30만원 이상 시 제공, 공식 홈페이지·앱을 통한 결제건에 한함]
+        target:
+          merchants: [musinsa, nike_com, ohouse, ssf_shop, wconcept]
+        when:
+          - option:
+              needs: [fashion]
+          - {channel: online}
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: fashion}
+        tiers: {from: 300000}
+        stack: discount
+      - key: starbucks-50
+        title: 스타벅스 50% 할인
+        source: page
+        evidence: ['스타벅스 50%, 교보문고·스트리밍 30% 결제일할인', '통합 월 할인한도 : 10,000원', 전월 이용금액 30만원 이상 시 제공]
+        target:
+          merchants: [starbucks]
+        when:
+          - option:
+              needs: [culture]
+        reward: {type: billing_discount, rate: 50}
+        limits:
+          - {shared: culture}
+        tiers: {from: 300000}
+        stack: discount
+      - key: kyobo-streaming-30
+        title: 교보문고·스트리밍 30% 할인
+        source: page
+        evidence: [교보문고 교보문고 온라인 결제건, '스트리밍 넷플릭스, 웨이브, 티빙, 왓챠, 멜론, FLO 정기결제건', 교보문고는 공식 홈페이지·앱을 통한 결제건에 한함, 스트리밍은 앱스토어를 통한 결제건(인앱 결제) 제외]
+        target:
+          merchants: [flo, kyobo_book, melon, netflix, tving, watcha, wavve]
+        when:
+          - option:
+              needs: [culture]
+          - billing: [autopay, normal, subscription]
+        reward: {type: billing_discount, rate: 30}
+        limits:
+          - {shared: culture}
+        tiers: {from: 300000}
+        stack: discount
+        unmodeled: [교보문고는 온라인 결제만 할인한다, 스트리밍은 정기결제만 할인하고 앱스토어 인앱 결제는 제외한다]
+      - key: online-7
+        title: 온라인쇼핑몰 7% 할인
+        source: page
+        evidence: [온라인쇼핑몰 7% 결제일할인, '쿠팡, 티몬, 위메프, SSG.COM, G마켓, 옥션, 11번가, 삼성카드 쇼핑', '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공]
+        target:
+          merchants: [auction, coupang, eleven_st, gmarket, samsung_card_shopping, ssg_com, tmon, wemakeprice]
+        when:
+          - option:
+              shopping: [online]
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {shared: online}
+        tiers: {from: 300000}
+        stack: discount
+      - key: cvs-7
+        title: 편의점·다이소·올리브영 7% 할인
+        source: page
+        evidence: [편의점·다이소·올리브영 7% 결제일할인, '편의점 CU, GS25, 세븐일레븐, 미니스톱, 이마트24 다이소 다이소 올리브영 올리브영', '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, '오프라인 결제건에 한하며, 백화점, 할인점, 쇼핑몰 등의 임대매장은 제외']
+        target:
+          merchants: [cu, daiso, emart24, gs25, ministop, olive_young, seven_eleven]
+        when:
+          - option:
+              shopping: [cvs]
+          - {channel: offline}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {shared: cvs}
+        tiers: {from: 300000}
+        stack: discount
+        unmodeled: [백화점·할인점·쇼핑몰 임대매장은 할인하지 않는다]
+      - key: overseas-7
+        title: 해외 7% 할인
+        source: page
+        evidence: [해외 7% 결제일할인, 해외 가맹점 및 해외 직접구매 이용건, '통합 월 할인한도 : 5,000원', 전월 이용금액 30만원 이상 시 제공, 해외겸용카드에 한해 제공]
+        target: {all: true}
+        when:
+          - option:
+              shopping: [overseas]
+          - {region: overseas}
+        reward: {type: billing_discount, rate: 7}
+        limits:
+          - {shared: overseas}
+        tiers: {from: 300000}
+        stack: discount
+    unmodeled: ['전월 이용금액은 승인일 기준이고 해외 결제와 무승인 결제(대중교통, 정기결제 등)는 매출전표 접수일 기준이다', 삼성카드의 다른 결제일할인과 중복되지 않고 큰 금액만 적용한다, 이 카드는 모니모 앱에서만 신청할 수 있다]
+open_questions:
+  - {path: 'revisions[0].limits', question: 이동통신·아파트 관리비와 대중교통·택시와 배달앱 10% 할인이 각각 통합 월 5000원이라고만 적혀 한도가 따로인지 합쳐서 5000원인지 알 수 없어 하나로 합쳤다, assumed: shared 5000}
+  - {path: 'revisions[0].effective_from', question: 상품 페이지에 출시일이 비어 있어 심의일 2026-01-19를 시행일로 두었다, assumed: '2026-01-19'}
+  - {path: status, question: 상품 페이지가 자바스크립트로 그려져 판매 상태를 다시 확인하지 못해 색인 값 on_sale을 두었다, assumed: on_sale}
+notes: 2026-10-13 상품 페이지 확인. 상품안내장 PDF 주소를 찾지 못해 페이지 안에 실린 서비스 안내를 옮겼다. 심의필 제2026-C1h-00722호. 연회비 해외겸용 Mastercard와 국내전용 모두 10,000원(기본 7,000+제휴 3,000). 공통 10% 할인 셋과 고르는 옵션 서비스 둘로 이루어지고 전월 30만원 이상이며 발급월+1개월까지는 미달해도 준다. 전월 이용금액 산정에서 할인 혜택이 제공된 이용금액은 제외한다.
