@@ -1,0 +1,43 @@
+schema_version: 2
+id: woori-102997
+issuer: woori
+name: 카드의정석2
+kind: credit
+product_codes:
+  - '102997'
+status: on_sale
+annual_fees:
+  - {scope: domestic, amount: 22000}
+sources:
+  - {id: page, kind: product_page, url: 'https://pc.wooricard.com/dcpc/yh1/crd/crd01/H1CRD101S02.do?cdPrdCd=102997', fetched_at: '2026-10-13'}
+checked_at: '2026-10-13'
+revisions:
+  - effective_from: '2026-10-13'
+    effective_from_estimated: true
+    source: page
+    tiers: [0, 500000]
+    spend:
+      basis: prev_calendar_month
+      regions: [domestic, overseas]
+      exclude_categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      interest_free: exclude
+      installment: full_at_purchase
+      cancellation: cancel_month
+    new_card: {until: next_month_end, tier: 500000, from: registration}
+    benefit_exclusions:
+      when_any:
+        - {interest_free: true}
+      categories: [annual_fee, apartment_fee, education.kindergarten, education.primary_secondary_fee, education.school_fee, education.tuition, gift_card, insurance.social, prepaid_charge, rent, tax, transit.bus_express, transit.bus_intercity, utility]
+      unmodeled: [신차구매금액과 의약품 전용몰과 제약회사 업종은 할인에서 빠진다, 정부지원금과 환금성 업종과 수수료·이자는 할인에서 빠진다]
+    benefits:
+      - key: base-1-2pct
+        title: 국내외 가맹점 1.2% 청구할인
+        source: page
+        evidence: [국내외 가맹점 1.2% 청구할인, 전월 국내외 가맹점 이용실적 50만원 이상 시 할인제공, 월 이용금액 최대 300만원까지 할인 제공 월 할인한도 최대 36000원]
+        target: {all: true}
+        reward: {type: billing_discount, rate: 1.2}
+        limits:
+          - {per: month, base: 3000000}
+        tiers: {from: 500000}
+    unmodeled: [분기별 추가 할인은 분기 이용실적 300만/600만/900만원 이상이고 분기 내 매월 10만원 이상 이용해야 5천/1만/1만5천원이라 계산하지 않는다, 해외 이용금액과 교통카드 이용금액과 통신료 자동납부 금액은 매출표 접수일 기준으로 실적에 들어간다, 국내 취소가 매월 1~2일 접수되면 전월 실적에서 뺀다]
+notes: 2026-10-13 공식 상품 페이지 대조. 시행일은 페이지에 없어 확인일로 두고 추정 표시. 연회비 22,000원. 전월 국내외 50만원 이상 1.2% 월 이용 300만원까지. 신규 발급 다음 달 말까지 조건 없이 제공해 50만 구간으로 둔다. 분기별 추가 할인은 계산하지 않아 실제보다 작게 계산한다.
