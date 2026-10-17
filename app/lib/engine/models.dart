@@ -130,6 +130,7 @@ class Payment {
     this.cancelledAmount = 0,
     DateTime? cancelledAt,
     this.timeKnown = true,
+    this.spendExcluded = false,
     this.benefits,
   }) : paidAt = paidAt.toUtc(),
        cancelledAt = cancelledAt?.toUtc() {
@@ -166,6 +167,9 @@ class Payment {
 
   /// 시각을 아는가. 엑셀에 날짜만 있으면 그날 12시로 두고 거짓이다. 시각 조건이 모름이 된다. E57
   final bool timeKnown;
+
+  /// 사용자가 실적에서 뺀 결제. 직접 만든 카드에서만 켠다. E65
+  final bool spendExcluded;
   final List<AppliedBenefit>? benefits;
 
   /// 업종, 결제수단, 취소 시각, 혜택은 null을 넘기면 비운다. 넘기지 않은 칸은 그대로다
@@ -176,6 +180,7 @@ class Payment {
     int? cancelledAmount,
     Object? cancelledAt = _keep,
     bool? timeKnown,
+    bool? spendExcluded,
     Object? benefits = _keep,
   }) => Payment(
     id: id,
@@ -197,6 +202,7 @@ class Payment {
         ? this.cancelledAt
         : cancelledAt as DateTime?,
     timeKnown: timeKnown ?? this.timeKnown,
+    spendExcluded: spendExcluded ?? this.spendExcluded,
     benefits: identical(benefits, _keep)
         ? this.benefits
         : benefits as List<AppliedBenefit>?,

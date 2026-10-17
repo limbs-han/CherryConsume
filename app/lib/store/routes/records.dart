@@ -252,6 +252,11 @@ Json edit(Store s, String tid, Json raw) {
       cancelledAt: oldCancelled,
       // 시각을 모르던 결제는 시각을 바꿔야 안다. 다른 칸만 고치면 12시가 진짜 시각이 되지 않는다. E57
       timeKnown: old['time_known'] == 1 || f.paidAt != oldPaid,
+      spendExcluded: spendExcludedFor(
+        rows[newCard]!,
+        body,
+        old: old['spend_excluded'] == 1,
+      ),
     );
     final a = monthOf(localDay(oldPaid)), b = monthOf(localDay(p.paidAt));
     final start = a.isBefore(b) ? a : b;
@@ -296,7 +301,7 @@ Json edit(Store s, String tid, Json raw) {
         'update transactions set user_card_id = ?, amount = ?, merchant_name = ?, merchant_key = ?, '
         'category_code = ?, paid_at = ?, time_known = ?, installment_months = ?, interest_free_installment = ?, '
         'channel = ?, region = ?, payment_method = ?, billing = ?, revision_from = ?, revision_sha = ?, '
-        'updated_at = ? where id = ?',
+        'spend_excluded = ?, updated_at = ? where id = ?',
         [
           newCard,
           p.amount,
@@ -313,6 +318,7 @@ Json edit(Store s, String tid, Json raw) {
           p.billing,
           revFrom,
           revSha,
+          p.spendExcluded ? 1 : 0,
           ms(now),
           tid,
         ],

@@ -345,6 +345,14 @@ void main() {
     expect(
       {for (final t in tables) t: table(j, t)['columns']},
       {
+        // 작업 019 설계 4절. 직접 만든 카드의 이름, 실적 구간, 혜택이다
+        'custom_cards': [
+          'id',
+          'card_json',
+          'input_json',
+          'created_at',
+          'updated_at',
+        ],
         'user_cards': [
           'id',
           'card_id',
@@ -391,6 +399,8 @@ void main() {
           'created_at',
           'updated_at',
           'deleted_at',
+          // 작업 019. 직접 만든 카드 결제의 실적 제외. E65
+          'spend_excluded',
         ],
         'transaction_benefits': [
           'transaction_id',

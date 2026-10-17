@@ -23,6 +23,8 @@ const tables = {
   'merchant_categories',
   // 카드 칸 값과 보유 카드의 짝. 작업 017 설계 3절
   'import_card_codes',
+  // 직접 만든 카드. 작업 019 설계 1.1
+  'custom_cards',
 };
 
 Set<String> tablesIn(Database db) => {

@@ -29,6 +29,7 @@ Payment toPayment(Map<String, Object?> row, List<AppliedBenefit> benefits) =>
           ? null
           : fromMs(row['cancelled_at'] as int),
       timeKnown: row['time_known'] == 1,
+      spendExcluded: row['spend_excluded'] == 1,
       benefits: benefits,
     );
 

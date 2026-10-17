@@ -173,6 +173,18 @@ const migrations = <String>[
     updated_at integer not null,
     primary key (format, code)
   ) strict''',
+  // 7. 사용자가 직접 만든 카드와 결제마다 실적 제외. 카드는 카탈로그 카드 줄과 규칙을 한 벌로 담은 JSON이고, 입력은
+  // 고치기 화면을 다시 채우는 값이다. 실적 제외는 직접 만든 카드의 결제에서만 켠다. 작업 019 설계 1절, E65
+  '''
+  create table custom_cards (
+    id text primary key check (id like 'custom-%'),
+    card_json text not null,
+    input_json text not null,
+    created_at integer not null,
+    updated_at integer not null
+  ) strict;
+  alter table transactions add column spend_excluded integer not null default 0
+    check (spend_excluded in (0, 1));''',
 ];
 
 /// 날짜 칸의 모양. YYYY-MM-DD 글자라 글자 순서가 날짜 순서와 같다

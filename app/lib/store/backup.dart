@@ -11,6 +11,7 @@ import 'dart:typed_data';
 import 'package:sqlite3/sqlite3.dart';
 
 import '../api.dart' show ApiError;
+import '../catalog/models.dart' show CatalogCard;
 import 'answers.dart';
 import 'db.dart';
 import 'imports.dart' show importSources;
@@ -29,8 +30,9 @@ const firstSchema = 2;
 /// 기록 표마다 표나 칸이 마지막으로 바뀐 표 정의 번호. 이 번호 이상의 파일은 그 표와 칸이 지금과 같아 빠지면 깨진
 /// 파일이다. 더 낮은 파일에는 그 표나 칸이 없을 수 있다. 표 정의 3번은 기록이 아닌 앱 상태 표만, 4번은 카드 규칙 파일
 /// 표만 더했다. 5번은 가게 이름별 업종 표를 더했다. 기록 표나 칸을 바꾸면 그 표의 번호를 올린다. 작업 012 위험 검토
-/// 중간 1, 작업 014 단계 3, 작업 016 설계 6절
+/// 중간 1, 작업 014 단계 3, 작업 016 설계 6절. 7번은 직접 만든 카드 표와 결제의 실적 제외 칸이다. 작업 019
 const changedAt = {
+  'custom_cards': 7,
   'user_cards': 2,
   'import_batches': 2,
   'transactions': 2,
@@ -42,9 +44,17 @@ const changedAt = {
   'merchant_categories': 5,
 };
 
+/// 표가 생긴 뒤 더한 칸과 그 표 정의 번호. 이보다 낮은 번호 파일에는 그 칸이 없고 표 정의의 기본값이 된다. 표 번호를
+/// 올리면 옛 파일의 다른 칸 검사가 느슨해져 칸마다 둔다. 작업 019
+const columnAddedAt = {
+  'transactions': {'spend_excluded': 7},
+};
+
 /// 담는 표. 외래 키를 지키는 넣는 순서다. 받아 둔 카탈로그와 엑셀 열 짝은 담지 않는다. 열 짝 지문은 머리 줄의
 /// sha256뿐이라 파일을 가진 사람이 머리 줄 글자를 대입해 되찾을 수 있다. 2026-10-03 사용자가 정했다
 const tables = [
+  // 직접 만든 카드. 보유 카드가 가리켜 먼저 넣는다. 작업 019 설계 4절
+  'custom_cards',
   'user_cards',
   'import_batches',
   'transactions',
@@ -154,7 +164,11 @@ Map<String, int> importAll(Store s, Uint8List data) {
         list is! List ||
         columns.any((c) => c is! String || !known.contains(c)) ||
         columns.toSet().length != columns.length ||
-        (exact(t) && columns.length != known.length) ||
+        // 그 번호 파일에 있어야 하는 칸이 다 있어야 한다. 뒤에 더한 칸은 있어도 된다
+        (exact(t) &&
+            !known
+                .where((c) => (columnAddedAt[t]?[c] ?? 0) <= schema)
+                .every(columns.contains)) ||
         list.any((r) => r is! List || r.length != columns.length)) {
       throw notOurs;
     }
@@ -176,7 +190,13 @@ Map<String, int> importAll(Store s, Uint8List data) {
         (r) => r[col] == null || (r[col] is String && has(r[col] as String)),
       );
   final cat = s.catalog;
-  if (!inCatalog('user_cards', 'card_id', cat.cards.containsKey) ||
+  // 직접 만든 카드는 파일에 함께 든 것이면 된다. 작업 019 설계 4절
+  final custom = {for (final r in rows['custom_cards']!) r['id']};
+  if (!inCatalog(
+        'user_cards',
+        'card_id',
+        (id) => cat.cards.containsKey(id) || custom.contains(id),
+      ) ||
       !inCatalog(
         'user_cards',
         'last_payment_method',
@@ -222,6 +242,7 @@ Map<String, int> importAll(Store s, Uint8List data) {
   }
   // 가져온 결제보다 새 결제 id가 크게. 앱을 다시 켜지 않아도 같은 시각 결제의 순서가 뒤집히지 않는다
   seenIds(s.db);
+  s.reloadCustom();
   return {for (final t in tables) t: rows[t]!.length};
 }
 
@@ -235,6 +256,11 @@ void _readable(Store s, ApiError broken) {
       [maxSpend],
     ).isNotEmpty) {
       throw broken;
+    }
+    // 직접 만든 카드는 카드 줄과 규칙으로 읽혀야 한다. 규칙의 뜻은 앱이 만든 값이라 다시 보지 않는다. 작업 019
+    for (final r in s.db.select('select id, card_json from custom_cards')) {
+      final card = CatalogCard.fromJson(jsonDecode(r['card_json'] as String));
+      if (card.id != r['id'] || card.revisions.length != 1) throw broken;
     }
     final cards = [
       for (final r in s.db.select('select * from user_cards')) rowMap(r),

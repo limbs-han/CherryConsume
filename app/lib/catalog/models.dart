@@ -441,9 +441,12 @@ class OpenQuestion {
 
 /// 카드 규칙 파일 하나. 개정과 확인 필요 항목이다. 작업 014 설계 1절
 class CardRules {
-  CardRules.fromJson(Json j)
-    : openQuestions = _list(j['open_questions'], OpenQuestion.fromJson),
-      revisions = _list(j['revisions'], Revision.fromJson);
+  CardRules.fromJson(this.json)
+    : openQuestions = _list(json['open_questions'], OpenQuestion.fromJson),
+      revisions = _list(json['revisions'], Revision.fromJson);
+
+  /// 읽은 원래 JSON. 직접 만들 카드가 비슷한 카드의 규칙과 혜택을 그대로 복사한다. 작업 019 설계 1.3
+  final Json json;
 
   /// 카드 하나의 규칙 파일. 형식 번호와 카드 id가 맞아야 읽는다
   factory CardRules.fromFile(Json j, String id) {
@@ -538,6 +541,11 @@ class CatalogCard {
   bool get rulesRead => _rules != null;
 
   List<OpenQuestion> get openQuestions => _loaded.openQuestions;
+
+  /// 개정마다 규칙의 원래 JSON. [revisions]와 같은 차례다. 작업 019
+  List<Json> get rulesJson => [
+    for (final r in _loaded.json['revisions'] as List) r['rules'] as Json,
+  ];
 
   /// 시행일 오름차순
   List<Revision> get revisions => _loaded.revisions;

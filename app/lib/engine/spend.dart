@@ -42,6 +42,14 @@ List<List<String>> _sortedNeeds(Set<String> needs) => [
   final s = rules.spend;
   final paidMonth = monthOf(localDay(p.paidAt));
   final category = ctx.category(p);
+  if (p.spendExcluded) {
+    return (
+      const [],
+      const [
+        Warn('not_counted_toward_spend', data: {'reason': 'user'}),
+      ],
+    );
+  }
   if (!s.regions.contains(p.region)) {
     return (
       const [],

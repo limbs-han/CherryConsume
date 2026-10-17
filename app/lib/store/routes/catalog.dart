@@ -16,7 +16,10 @@ final _space = RegExp(r'\s+');
 String _key(String text) => text.replaceAll(_space, '').toLowerCase();
 
 /// 판매 중인 카드와 단종 카드를 새로 등록한다. 단종 카드도 유효기간까지 실적과 혜택이 그대로다. closed는 숨긴다. E19
+/// 직접 만든 카드는 만들면 바로 등록해 카드 추가 검색과 카드사 칩에 두지 않는다. 등록은 된다. 작업 019 설계 3절
 bool _listed(CatalogCard c) => c.status != 'closed';
+
+bool _custom(CatalogCard c) => c.id.startsWith('custom-');
 
 /// 검색 목록에서만 숨기는 카드. 이름이 다른 카드와 구분되지 않는다. 등록한 사람은 그대로 쓴다.
 /// 2026-10-17 사용자가 정했다. 카탈로그 이름을 고치면 지운다
@@ -101,7 +104,7 @@ List<int> shownTiers(List<int>? tiers) => [
 List<Json> issuers(Store s) {
   final selling = {
     for (final c in s.catalog.cards.values)
-      if (_listed(c)) c.issuer,
+      if (_listed(c) && !_custom(c)) c.issuer,
   };
   return [
     for (final i in s.catalog.issuers.values)
@@ -136,6 +139,7 @@ List<Json> cards(Store s, {String q = '', String? issuer}) {
   for (final c in s.catalog.cards.values) {
     final issuerName = s.catalog.issuers[c.issuer]!.name;
     if (!_listed(c) ||
+        _custom(c) ||
         _hidden.contains(c.id) ||
         (issuer != null && c.issuer != issuer)) {
       continue;

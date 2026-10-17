@@ -9,16 +9,26 @@ import '../catalog/cache.dart' show InUse;
 import '../catalog/models.dart';
 import '../engine/cond.dart';
 import '../engine/engine.dart';
+import 'custom.dart';
 import 'payments.dart';
 
 class Store {
-  Store(this.db, this.catalog, {DateTime Function()? clock})
-    : engine = Engine(catalog),
+  Store(this.db, Catalog catalog, {DateTime Function()? clock})
+    : catalog = withCustom(db, catalog),
+      engine = Engine(catalog),
       clock = clock ?? DateTime.now;
 
   final Database db;
   final Catalog catalog;
-  final Engine engine;
+
+  /// 직접 만든 카드를 만들거나 고치면 새로 만든다. 작업 019 설계 1.2
+  Engine engine;
+
+  /// 직접 만든 카드를 카탈로그에 다시 더하고 엔진을 새로 만든다
+  void reloadCustom() {
+    withCustom(db, catalog);
+    engine = Engine(catalog);
+  }
 
   /// 지금 시각. 시험은 서버 시험처럼 2026-09-15 21:00 한국 시간 시계를 넣는다
   final DateTime Function() clock;
@@ -95,7 +105,10 @@ DateTime? strictDay(Object? v) {
 /// 해지한 카드 이름을 카탈로그에서 읽고, 옛 결제를 고칠 때 그 결제수단을 카탈로그에서 찾는다. 받은 카탈로그와 담긴 카탈로그에 이것이 다 있어야 쓴다. 작업 006 설계 2절, 4절
 InUse inUse(Database db) => (
   cards: {
-    for (final r in db.select('select distinct card_id from user_cards'))
+    // 직접 만든 카드는 카탈로그 목록에 없다. 켤 때 고른 카탈로그에 더한다. E66
+    for (final r in db.select(
+      "select distinct card_id from user_cards where card_id not like 'custom-%'",
+    ))
       r['card_id'] as String,
   },
   merchants: {

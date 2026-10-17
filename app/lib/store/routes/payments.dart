@@ -48,7 +48,10 @@ class PaymentBody {
       amount = _int(b, 'amount', 1, maxSpend),
       userCardId = _text(b, 'user_card_id'),
       editing = _text(b, 'editing'),
-      fromRecommendation = _bool(b, 'from_recommendation') {
+      fromRecommendation = _bool(b, 'from_recommendation'),
+      spendExcluded = b['spend_excluded'] == null
+          ? null
+          : _bool(b, 'spend_excluded') {
     if (installmentMonths == 1 && interestFree) {
       throw _bad('일시불은 무이자할부가 아니다');
     }
@@ -64,6 +67,9 @@ class PaymentBody {
   final int installmentMonths;
   final int? amount;
   final bool interestFree, fromRecommendation;
+
+  /// 실적 제외. null이면 고치기는 그대로 두고 새 결제는 끈다. E65
+  final bool? spendExcluded;
 
   static String? _text(Json b, String key, {int? max}) {
     final v = b[key];
@@ -279,6 +285,19 @@ Map<String, Object?> mine(Store s, String tid) {
   return rowMap(found.first);
 }
 
+/// 결제의 실적 제외. 직접 만든 카드의 결제에서만 켠다. 카탈로그 카드로 옮긴 결제는 끈다. E65
+bool spendExcludedFor(
+  Map<String, Object?> row,
+  PaymentBody body, {
+  bool old = false,
+}) {
+  final custom = (row['card_id'] as String).startsWith('custom-');
+  if (body.spendExcluded == true && !custom) {
+    throw ApiError(422, '실적 제외는 직접 만든 카드의 결제에서만 켤 수 있다');
+  }
+  return custom && (body.spendExcluded ?? old);
+}
+
 Payment paymentOf(
   Map<String, Object?> row,
   PaymentBody body,
@@ -301,6 +320,7 @@ Payment paymentOf(
       row['last_payment_method'] as String? ??
       'physical_card',
   billing: f.billing,
+  spendExcluded: spendExcludedFor(row, body),
 );
 
 Json described(Store s, String cardId, DateTime at, PaymentResult result) {
@@ -501,8 +521,8 @@ Json save(Store s, Json raw) {
     s.db.execute(
       'insert into transactions (id, user_card_id, amount, merchant_name, merchant_key, category_code, paid_at, '
       'installment_months, interest_free_installment, channel, region, payment_method, billing, revision_from, '
-      "revision_sha, from_recommendation, source, created_at, updated_at) "
-      "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'manual', ?, ?)",
+      "revision_sha, from_recommendation, spend_excluded, source, created_at, updated_at) "
+      "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'manual', ?, ?)",
       [
         pid,
         cardId,
@@ -520,6 +540,7 @@ Json save(Store s, Json raw) {
         revFrom,
         revSha,
         body.fromRecommendation ? 1 : 0,
+        p.spendExcluded ? 1 : 0,
         ms(now),
         ms(now),
       ],
