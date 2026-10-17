@@ -1,7 +1,7 @@
 name: cherry_consume
 description: "체리컨슘 앱. 작업 005"
 publish_to: 'none'
-version: 0.1.0+2
+version: 0.1.0+3
 
 environment:
   sdk: ^3.12.2
