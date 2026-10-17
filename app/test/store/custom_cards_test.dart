@@ -9,6 +9,7 @@ import 'package:cherry_consume/store/custom.dart' show rewardTypes, simpleOf;
 import 'package:cherry_consume/store/routes/catalog.dart' show cards;
 import 'package:cherry_consume/store/routes/custom.dart';
 import 'package:cherry_consume/store/routes/me.dart';
+import 'package:cherry_consume/store/routes/payments.dart' show draft;
 import 'package:cherry_consume/store/routes/records.dart' show cancel;
 import 'package:cherry_consume/store/store.dart' show Store, inUse;
 import 'package:flutter_test/flutter_test.dart';
@@ -334,5 +335,29 @@ void main() {
       expect(issuers.skip(firstOther).contains('kb'), isFalse);
     }
     expect(similarBenefits(s, [], all: true), isNotEmpty);
+  });
+
+  test('고치는 결제의 저장 전 계산은 실적 제외를 그대로 두고, 비슷한 혜택은 고른 업종과 같은 업종만이다', () {
+    // 2차 위험 검토 높음 1, 중간 3
+    final (:s, clock: _) = fresh();
+    final card = make(s, cafe, prev: 300000);
+    final paid = pay(
+      s,
+      card,
+      20000,
+      null,
+      more: {'category': 'convenience', 'spend_excluded': true},
+    );
+    final d = draft(s, {
+      'amount': 20000,
+      'user_card_id': card,
+      'category': 'convenience',
+      'paid_at': '2026-09-15T21:00:00+09:00',
+      'editing': paid['id'],
+    });
+    expect((d['estimate'] as Map)['counted'], isFalse);
+    for (final f in similarBenefits(s, ['restaurant'])) {
+      expect((f['benefit'] as Map)['categories'], contains('restaurant'));
+    }
   });
 }

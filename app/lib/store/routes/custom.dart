@@ -265,7 +265,17 @@ Json customInput(Store s, String id) {
     id,
   ]);
   if (r.isEmpty) throw ApiError(404, '직접 만든 카드가 아니다');
-  return jsonDecode(r.first['input_json'] as String) as Json;
+  final input = jsonDecode(r.first['input_json'] as String) as Json;
+  // 고치기 화면이 복사한 혜택 이름을 보인다. 2차 위험 검토 낮음 6
+  final rules = s.catalog.cards[id]?.rulesJson.single;
+  final titles = {
+    for (final b in (rules?['benefits'] as List?) ?? const [])
+      b['key']: b['title'],
+  };
+  return {
+    ...input,
+    'copied_titles': [for (final k in input['copied'] as List) titles[k] ?? k],
+  };
 }
 
 /// 보유 카드의 카드 id
@@ -309,21 +319,39 @@ Json startFrom(Store s, String baseId) {
   };
 }
 
-/// 카탈로그 카드마다 오늘 개정의 단순한 혜택. 처음 부를 때 한 번 모든 카드 규칙을 읽는다. 작업 019 설계 2.5
-final _simple = Expando<List<Json>>();
+/// 카탈로그 카드마다 오늘 개정의 단순한 혜택. 처음 부를 때 한 번 모든 카드 규칙을 읽고 날이 바뀌면 다시 읽는다.
+/// 규칙 파일을 읽지 못하는 카드는 건너뛴다. 작업 019 설계 2.5, 2차 위험 검토 중간 5, 낮음 9
+///
+/// ponytail: 화면 스레드에서 읽는다. 에뮬레이터에서 0.2초였다. 싼 폰에서 멈추면 규칙 본문을 Isolate.run으로 넘긴다
+final _simple = Expando<(DateTime, List<Json>)>();
 
-List<Json> _simpleIndex(Store s) => _simple[s.catalog] ??= [
-  for (final c in s.catalog.cards.values)
-    if (!c.id.startsWith('custom-') && c.status != 'closed')
-      for (final b in _rulesToday(s, c.id)['benefits'] as List)
-        if (simpleOf(b as Json, _rulesToday(s, c.id)) case final one?)
-          {
-            'card': c.shortName ?? c.name,
-            'issuer': c.issuer,
-            // 필요한 구간은 그 카드의 구간이라 가져오지 않는다
-            'benefit': {...one}..remove('from_tier'),
-          },
-];
+List<Json> _simpleIndex(Store s) {
+  final today = s.today();
+  final cached = _simple[s.catalog];
+  if (cached != null && cached.$1 == today) return cached.$2;
+  final out = <Json>[];
+  for (final c in s.catalog.cards.values) {
+    if (c.id.startsWith('custom-') || c.status == 'closed') continue;
+    final Json rules;
+    try {
+      rules = _rulesToday(s, c.id);
+    } catch (_) {
+      continue;
+    }
+    for (final b in rules['benefits'] as List) {
+      if (simpleOf(b as Json, rules) case final one?) {
+        out.add({
+          'card': c.shortName ?? c.name,
+          'issuer': c.issuer,
+          // 필요한 구간은 그 카드의 구간이라 가져오지 않는다
+          'benefit': {...one}..remove('from_tier'),
+        });
+      }
+    }
+  }
+  _simple[s.catalog] = (today, out);
+  return out;
+}
 
 /// 고른 업종이나 모든 가맹점의 비슷한 혜택. 같은 카드사가 먼저이고 내용이 같은 것은 하나만, 5개까지다. 설계 2.5
 List<Json> similarBenefits(
@@ -334,10 +362,8 @@ List<Json> similarBenefits(
 }) {
   bool fits(Json b) => all
       ? b['all'] == true
-      : ((b['categories'] as List?) ?? const []).any(
-          (c) =>
-              categories.any((p) => c == p || (c as String).startsWith('$p.')),
-        );
+      // 고른 업종과 같은 업종만. 상위 업종을 고르고 하위 업종 혜택을 채우면 대상이 넓어진다. 2차 위험 검토 중간 3
+      : ((b['categories'] as List?) ?? const []).any(categories.contains);
   final hits = [
     for (final e in _simpleIndex(s))
       if (fits(e['benefit'] as Json)) e,

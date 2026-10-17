@@ -458,7 +458,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     // 실적 제외는 직접 만든 카드를 골랐을 때만 둔다. 다른 카드를 고르면 보내지 않는다. E65
     final custom =
         _home?.cards.where((c) => c.id == _cardId).firstOrNull?.custom ?? false;
-    if (!custom) _input.spendExcluded = null;
+    // 홈 정보를 받기 전에는 고치는 결제의 실적 제외를 지우지 않는다. 2차 위험 검토 높음 1
+    if (_home != null && !custom) _input.spendExcluded = null;
     final startsAt = est == null || est.value > 0 || _cardId == null
         ? null
         : _home?.startsAt(_cardId!);

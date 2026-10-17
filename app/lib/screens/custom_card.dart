@@ -192,6 +192,16 @@ class _CustomFormScreenState extends State<CustomFormScreen> {
     if (_name.text.trim().isEmpty) return _say('카드 이름을 적어 주세요');
     if (_issuer == null) return _say('카드사를 골라 주세요');
     final tiers = _tierValues;
+    // 저장소 검사와 같은 것을 먼저 사용자 말로 알린다. 2차 위험 검토 중간 4
+    if (tiers.toSet().length != tiers.length) {
+      return _say('같은 실적 구간이 두 번 있어요');
+    }
+    if (tiers.any((t) => t > 100000000)) {
+      return _say('실적 구간은 1억 원까지예요');
+    }
+    if ((amountOf(_fee.text) ?? 0) > 10000000) {
+      return _say('연회비는 1,000만 원까지예요');
+    }
     // 실적 구간을 지우면 그 구간이 필요한 혜택은 실적 무관이 되지 않게 막는다
     if (_benefits.any(
       (b) => b['from_tier'] != null && !tiers.contains(b['from_tier']),
@@ -241,8 +251,8 @@ class _CustomFormScreenState extends State<CustomFormScreen> {
         builder: (_) => RegisterSheet(api: widget.api, card: card),
       );
       if (mounted) Navigator.of(context).pop(added == true);
-    } on ApiError catch (e) {
-      _say(e.body);
+    } on ApiError {
+      _say('카드를 저장하지 못했어요. 입력한 값을 확인해 주세요');
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -281,13 +291,16 @@ class _CustomFormScreenState extends State<CustomFormScreen> {
             ),
             const SizedBox(height: 20),
             const _Label('카드 이름'),
-            TextField(
-              key: const Key('custom-name'),
-              controller: _name,
-              maxLength: 40,
-              decoration: const InputDecoration(
-                hintText: '예: 위시플러스',
-                counterText: '',
+            Semantics(
+              label: '카드 이름',
+              child: TextField(
+                key: const Key('custom-name'),
+                controller: _name,
+                maxLength: 40,
+                decoration: const InputDecoration(
+                  hintText: '예: 위시플러스',
+                  counterText: '',
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -483,17 +496,22 @@ class _BenefitSheetState extends State<BenefitSheet> {
   late final _cap = TextEditingController(
     text: _i?['month_cap'] == null ? '' : comma(_i!['month_cap'] as int),
   );
-  late int? _from = widget.tiers.contains(_i?['from_tier'])
-      ? _i!['from_tier'] as int
-      : null;
+  // 구간을 고쳐 지금 구간에 없어도 그대로 두고 넣을 때 다시 고르게 한다. 말없이 실적 무관이 되지 않게 한다. 2차
+  // 위험 검토 중간 2
+  late int? _from = _i?['from_tier'] as int?;
   String? _error;
   Future<List<Input>>? _found;
 
   /// 대상을 바꾸면 비슷한 혜택을 다시 찾는다
   void _target(VoidCallback change) => setState(() {
     change();
-    _found = (_all || _cats.isNotEmpty)
-        ? widget.suggest?.call([..._cats], _all)
+    final cats = [..._cats], all = _all;
+    // 칩이 먼저 바뀌어 보이게 한 박자 뒤에 찾는다. 처음에는 모든 카드 규칙을 읽는다
+    _found = (_all || _cats.isNotEmpty) && widget.suggest != null
+        ? Future.delayed(
+            const Duration(milliseconds: 50),
+            () => widget.suggest!(cats, all),
+          )
         : null;
   });
 
@@ -532,8 +550,17 @@ class _BenefitSheetState extends State<BenefitSheet> {
       error = '%는 0보다 크고 100 이하, 소수 둘째 자리까지예요';
     } else if (_won && (fixed == null || fixed <= 0)) {
       error = '혜택 금액을 적어 주세요';
+    } else if (_won && fixed! > 1000000) {
+      error = '혜택 금액은 100만 원까지예요';
     } else if (_won && (min == null || min < fixed!)) {
       error = '최소 결제액은 혜택 금액 이상이어야 해요';
+    } else if (_won && min! > 100000000) {
+      error = '최소 결제액은 1억 원까지예요';
+    } else if (amountOf(_cap.text) case final cap?
+        when cap <= 0 || cap > 100000000) {
+      error = '월 한도는 1원부터 1억 원까지예요';
+    } else if (_from != null && !widget.tiers.contains(_from)) {
+      error = '필요한 실적 구간을 다시 골라 주세요';
     }
     if (error != null) return setState(() => _error = error);
     Navigator.of(context).pop(<String, Object?>{
@@ -591,6 +618,12 @@ class _BenefitSheetState extends State<BenefitSheet> {
             FutureBuilder(
               future: _found,
               builder: (context, snap) {
+                if (snap.hasError) {
+                  return const Text(
+                    '비슷한 혜택을 찾지 못했어요',
+                    style: TextStyle(fontSize: 13, color: C.sub),
+                  );
+                }
                 if (!snap.hasData) {
                   return const Text(
                     '비슷한 혜택 찾는 중',
@@ -729,7 +762,11 @@ class _BenefitSheetState extends State<BenefitSheet> {
           ),
           if (_error != null) ...[
             const SizedBox(height: 12),
-            Text(_error!, style: const TextStyle(color: C.sub)),
+            // 낭독기가 바로 읽는다. 2차 위험 검토 낮음 10
+            Semantics(
+              liveRegion: true,
+              child: Text(_error!, style: const TextStyle(color: C.sub)),
+            ),
           ],
         ],
       ),

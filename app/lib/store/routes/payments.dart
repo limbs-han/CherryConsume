@@ -454,6 +454,17 @@ Json draft(Store s, Json raw) {
       editing ?? draftId,
       lenient: true,
     );
+    // 고치는 결제의 실적 제외는 화면이 보내지 않으면 그대로다. 저장과 같게 계산한다. 2차 위험 검토 높음 1
+    if (old != null && body.spendExcluded == null) {
+      p = p.copyWith(
+        spendExcluded: spendExcludedFor(
+          cards[uid]!,
+          body,
+          old: old['spend_excluded'] == 1,
+          lenient: true,
+        ),
+      );
+    }
     if (old != null && body.amount != null) {
       p = p.copyWith(
         cancelledAmount: old['cancelled_amount'] as int,
