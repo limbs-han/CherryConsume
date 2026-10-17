@@ -156,6 +156,9 @@ List<Json> rowsOf(
       'rank': i + 1,
       'user_card_id': r.userCardId,
       'name': cards[r.userCardId]!['name'],
+      'custom': (cards[r.userCardId]!['card_id'] as String).startsWith(
+        'custom-',
+      ),
       'value': r.value,
       'title': b?.title,
       'rewards': rewards,

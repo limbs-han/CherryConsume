@@ -85,12 +85,16 @@ class Spend {
 class HomeCard {
   HomeCard(Map<String, dynamic> j)
     : id = j['id'],
+      cardId = j['card_id'],
       name = j['name'],
       issuer = j['issuer'],
       tiers = List<int>.from(j['tiers']),
       headline = j['headline'],
       spend = Spend(j['spend']);
-  final String id, name;
+  final String id, cardId, name;
+
+  /// 직접 만든 카드. 작업 019 설계 3절
+  bool get custom => cardId.startsWith('custom-');
 
   /// 카드사 코드. 카드사 색 칸에 쓴다. 작업 011 설계 2절 H4
   final String? issuer;
@@ -138,6 +142,9 @@ class PaymentInput {
   /// 추천 결과에서 연 결제 기록이면 참. 저장할 때 "추천에서 기록함" 표시로 남는다. S4, 작업 006 설계 4절
   bool fromRecommendation = false;
 
+  /// 실적 제외. 직접 만든 카드에서만 보낸다. null이면 보내지 않는다. E65
+  bool? spendExcluded;
+
   /// 자동납부, 후불교통, 정기결제. 비우면 가맹점의 기본 청구 방식이다
   String? billing;
 
@@ -154,6 +161,7 @@ class PaymentInput {
     'region': overseas ? 'overseas' : 'domestic',
     'payment_method': paymentMethod,
     'billing': billing,
+    'spend_excluded': ?spendExcluded,
   };
 }
 
@@ -178,6 +186,7 @@ class RecRow {
           ),
       ],
       exhausted = j['exhausted'],
+      custom = j['custom'] == true,
       limited = j['limited'],
       provisional = j['provisional'],
       checks = List<String>.from(j['checks'] ?? const []);
@@ -190,6 +199,9 @@ class RecRow {
   /// 사실이나 옵션을 답하면 더 받는 금액. 사람 사실은 설정, 나머지는 카드 상세에서 답한다. 작업 005 설계 5e
   final List<({String kind, String? scope, String question, int extra})> asks;
   final bool exhausted, limited, provisional;
+
+  /// 직접 만든 카드. 작업 019 설계 3절
+  final bool custom;
 
   /// 결제 입력으로 가리지 못해 문장으로 남은 조건. E12
   final List<String> checks;
@@ -297,8 +309,12 @@ class RecordRow {
       installmentMonths = j['installment_months'],
       interestFree = j['interest_free'],
       paymentMethod = j['payment_method'],
-      billing = j['billing'];
+      billing = j['billing'],
+      spendExcluded = j['spend_excluded'] == true;
   final String id, userCardId, cardName, channel, region;
+
+  /// 직접 만든 카드의 결제를 실적에서 뺐다. E65
+  final bool spendExcluded;
   final DateTime paidAt;
   final DateTime? cancelledAt;
 
@@ -321,7 +337,8 @@ class RecordRow {
     ..interestFree = interestFree
     ..overseas = region == 'overseas'
     ..paymentMethod = paymentMethod
-    ..billing = billing;
+    ..billing = billing
+    ..spendExcluded = spendExcluded ? true : null;
 }
 
 class Records {
@@ -344,6 +361,7 @@ class Records {
 class CardDetail {
   CardDetail(Map<String, dynamic> j)
     : id = j['id'],
+      cardId = j['card_id'],
       name = j['name'],
       tiers = List<int>.from(j['tiers']),
       spend = Spend(j['spend']),
@@ -399,7 +417,10 @@ class CardDetail {
       revisionFrom = j['revision_from'],
       facts = [for (final q in j['questions']['facts']) FactQuestion(q)],
       options = [for (final q in j['questions']['options']) OptionQuestion(q)];
-  final String id, name;
+  final String id, cardId, name;
+
+  /// 직접 만든 카드. 작업 019 설계 3절
+  bool get custom => cardId.startsWith('custom-');
   final List<int> tiers;
   final Spend spend;
   final int? prevMonthCounted;

@@ -453,15 +453,26 @@ class CardRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      card.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: C.text,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            card.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: C.text,
+                            ),
+                          ),
+                        ),
+                        // 작업 019 설계 3절
+                        if (card.custom) ...[
+                          const SizedBox(width: 6),
+                          const Pill('직접 등록', fg: C.sub, bg: C.grey),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 4),
                     Text.rich(

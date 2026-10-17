@@ -190,6 +190,7 @@ Json records(Store s, {String? month, String? card}) {
       'card_name': uc['name'],
       'amount': p.amount,
       'cancelled_amount': p.cancelledAmount,
+      'spend_excluded': p.spendExcluded,
       'cancelled_at': p.cancelledAt?.toIso8601String(),
       // 엑셀에 날짜만 있던 결제는 시각을 모른다. 고치면 시각을 안다. E57
       'time_known': p.timeKnown,
@@ -256,7 +257,7 @@ Json edit(Store s, String tid, Json raw) {
         rows[newCard]!,
         body,
         old: old['spend_excluded'] == 1,
-        editing: true,
+        lenient: true,
       ),
     );
     final a = monthOf(localDay(oldPaid)), b = monthOf(localDay(p.paidAt));

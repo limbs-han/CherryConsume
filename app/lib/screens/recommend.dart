@@ -652,13 +652,24 @@ class _RankRow extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                row.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: C.text,
-                ),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      row.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: C.text,
+                      ),
+                    ),
+                  ),
+                  // 작업 019 설계 3절
+                  if (row.custom) ...[
+                    const SizedBox(width: 6),
+                    const Pill('직접 등록', fg: C.sub, bg: C.grey),
+                  ],
+                ],
               ),
             ),
             // 한도를 다 쓴 카드는 회색 알림으로 보인다. E10

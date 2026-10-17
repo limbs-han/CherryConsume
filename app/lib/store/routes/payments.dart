@@ -291,22 +291,24 @@ bool spendExcludedFor(
   Map<String, Object?> row,
   PaymentBody body, {
   bool old = false,
-  bool editing = false,
+  bool lenient = false,
 }) {
   final custom = (row['card_id'] as String).startsWith('custom-');
-  if (body.spendExcluded == true && !custom && !editing) {
+  if (body.spendExcluded == true && !custom && !lenient) {
     throw ApiError(422, '실적 제외는 직접 만든 카드의 결제에서만 켤 수 있다');
   }
   return custom && (body.spendExcluded ?? old);
 }
 
+/// lenient면 카탈로그 카드의 실적 제외를 막지 않고 끈다. 저장 전 결제는 모든 보유 카드로 계산해 본다. E65
 Payment paymentOf(
   Map<String, Object?> row,
   PaymentBody body,
   int amount,
   Filled f,
-  String pid,
-) => Payment(
+  String pid, {
+  bool lenient = false,
+}) => Payment(
   id: pid,
   userCardId: row['id'] as String,
   amount: amount,
@@ -322,7 +324,7 @@ Payment paymentOf(
       row['last_payment_method'] as String? ??
       'physical_card',
   billing: f.billing,
-  spendExcluded: spendExcludedFor(row, body),
+  spendExcluded: spendExcludedFor(row, body, lenient: lenient),
 );
 
 Json described(Store s, String cardId, DateTime at, PaymentResult result) {
@@ -444,7 +446,14 @@ Json draft(Store s, Json raw) {
 
   (Payment, PaymentResult) pricedOn(String uid) {
     // 고치는 결제는 저장 경로 edit처럼 그 결제의 id와 취소를 그대로 둔다. 같은 시각 결제와의 순서와 남은 금액이 같다
-    var p = paymentOf(cards[uid]!, body, amount, f, editing ?? draftId);
+    var p = paymentOf(
+      cards[uid]!,
+      body,
+      amount,
+      f,
+      editing ?? draftId,
+      lenient: true,
+    );
     if (old != null && body.amount != null) {
       p = p.copyWith(
         cancelledAmount: old['cancelled_amount'] as int,

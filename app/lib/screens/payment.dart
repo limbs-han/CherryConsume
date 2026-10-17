@@ -455,6 +455,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     final d = _draft;
     final est = d?.estimate;
+    // 실적 제외는 직접 만든 카드를 골랐을 때만 둔다. 다른 카드를 고르면 보내지 않는다. E65
+    final custom =
+        _home?.cards.where((c) => c.id == _cardId).firstOrNull?.custom ?? false;
+    if (!custom) _input.spendExcluded = null;
     final startsAt = est == null || est.value > 0 || _cardId == null
         ? null
         : _home?.startsAt(_cardId!);
@@ -636,6 +640,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ],
               ),
             ),
+          if (custom) ...[
+            const SizedBox(height: 12),
+            Material(
+              color: Colors.white,
+              borderRadius: r16,
+              clipBehavior: Clip.antiAlias,
+              child: SwitchListTile(
+                title: const Text('실적에서 빼기'),
+                subtitle: const Text('이 결제를 실적에 넣지 않아요'),
+                value: _input.spendExcluded ?? false,
+                onChanged: (v) => setState(() => _input.spendExcluded = v),
+              ),
+            ),
+          ],
           // 가게나 업종이 정해지기 전에는 채운 것이 없어 보이지 않는다
           if (d != null &&
               (_input.merchantName.isNotEmpty || d.category != null)) ...[

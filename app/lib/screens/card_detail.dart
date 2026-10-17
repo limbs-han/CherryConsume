@@ -11,6 +11,7 @@ import '../format.dart';
 import '../theme.dart';
 import '../ui.dart';
 import 'answer.dart';
+import 'custom_card.dart';
 import 'records.dart';
 
 class CardDetailScreen extends StatefulWidget {
@@ -59,6 +60,25 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
     });
   }
 
+  /// 직접 만든 카드 고치기. 저장하면 지난 결제를 다시 계산하고 몇 건이 바뀌었는지 알린다. S14, E67
+  Future<void> _edit(CardDetail d) async {
+    final input = await widget.api.customInput(d.cardId);
+    if (!mounted) return;
+    final n = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+        builder: (_) =>
+            CustomFormScreen(api: widget.api, input: input, editing: d.cardId),
+      ),
+    );
+    if (n == null || !mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('결제 $n건의 혜택을 다시 계산했어요.')));
+    setState(() {
+      _detail = widget.api.cardDetail(widget.id);
+    });
+  }
+
   /// 카드 해지. 결제와 기록은 남고 홈과 추천에서만 빠진다. S9
   Future<void> _remove(CardDetail d) async {
     final ok = await showDialog<bool>(
@@ -98,14 +118,25 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
       final d = snap.data;
       return Scaffold(
         appBar: AppBar(
-          title: Text(d?.name ?? ''),
+          title: Row(
+            children: [
+              Flexible(child: Text(d?.name ?? '')),
+              // 작업 019 설계 3절
+              if (d?.custom == true) ...[
+                const SizedBox(width: 8),
+                const Pill('직접 등록', fg: C.sub, bg: C.grey),
+              ],
+            ],
+          ),
           actions: [
             if (d != null)
               PopupMenuButton<String>(
                 icon: const Icon(Icons.more_horiz),
-                onSelected: (_) => _remove(d),
-                itemBuilder: (_) => const [
-                  PopupMenuItem(value: 'remove', child: Text('카드 해지')),
+                onSelected: (v) => v == 'edit' ? _edit(d) : _remove(d),
+                itemBuilder: (_) => [
+                  if (d.custom)
+                    const PopupMenuItem(value: 'edit', child: Text('카드 고치기')),
+                  const PopupMenuItem(value: 'remove', child: Text('카드 해지')),
                 ],
               ),
           ],

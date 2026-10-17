@@ -16,6 +16,7 @@ HomeCard card({
   String? headline,
 }) => HomeCard({
   'id': 'u1',
+  'card_id': 'shinhan-mrlife',
   'name': '신한카드 Mr.Life',
   'tiers': tiers,
   'headline': headline,
