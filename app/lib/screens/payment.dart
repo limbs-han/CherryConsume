@@ -112,6 +112,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Draft? _draft;
   bool _busy = false;
 
+  /// 구간 전 카드의 첫 구간을 읽는다. 혜택 0원의 까닭이다
+  Home? _home;
+
   /// 입력이 0.3초 멈추면 다시 계산한다
   Timer? _wait;
 
@@ -119,6 +122,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initState() {
     super.initState();
     _refresh();
+    widget.api.home().then((h) {
+      if (mounted) setState(() => _home = h);
+    });
   }
 
   @override
@@ -448,6 +454,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     final d = _draft;
     final est = d?.estimate;
+    final startsAt = est == null || est.value > 0 || _cardId == null
+        ? null
+        : _home?.startsAt(_cardId!);
     final top = d != null && d.ranking.isNotEmpty ? d.ranking.first : null;
     // 카드가 5장을 넘으면 앞의 두 장과 "다른 카드"만 둔다. 가게를 치면 혜택 순, 치기 전에는 홈 순서다. 5장 이하는 늘 홈
     // 순서라 치는 동안 칩 자리가 바뀌지 않는다. 바뀌는 사이에 누르면 다른 카드가 골린다. 작업 004 설계 3절, 작업 013 13-17
@@ -596,7 +605,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           '예상 혜택',
                           style: TextStyle(fontSize: 13, color: C.sub),
                         ),
-                        if (est.titles.isNotEmpty)
+                        if (startsAt != null)
+                          Text(
+                            '실적 ${man(startsAt)}부터 받아요',
+                            style: const TextStyle(fontSize: 13, color: C.sub),
+                          )
+                        else if (est.titles.isNotEmpty)
                           Text(
                             est.titles.join(', '),
                             style: const TextStyle(fontSize: 13, color: C.sub),
@@ -610,16 +624,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ],
                   Text(
                     won(est.value),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: C.green,
+                      // 0원은 받은 것처럼 보이지 않게 회색이다
+                      color: est.value > 0 ? C.green : C.sub,
                     ),
                   ),
                 ],
               ),
             ),
-          if (d != null) ...[
+          // 가게나 업종이 정해지기 전에는 채운 것이 없어 보이지 않는다
+          if (d != null &&
+              (_input.merchantName.isNotEmpty || d.category != null)) ...[
             const SizedBox(height: 12),
             Box(
               padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),

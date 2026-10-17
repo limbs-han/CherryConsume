@@ -294,4 +294,22 @@ void main() {
       ['convenience', null],
     );
   });
+  testWidgets('구간 전 카드의 0원은 회색이고 첫 구간을 알린다', (tester) async {
+    // 2026-10-17 사용자가 정했다. 지난달 쓴 금액을 비우면 이번 달은 구간 전이라 혜택이 0원이다
+    final (:api, :s) = app();
+    addCard(s, 'kb-09124');
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('결제 기록'));
+    await tester.pumpAndSettle();
+    // 가게를 넣기 전에는 자동으로 채운 정보 줄이 없다
+    expect(find.text('가게 이름으로 채웠어요'), findsNothing);
+    await tester.enterText(find.byKey(const Key('amount')), '15000');
+    await tester.enterText(find.byKey(const Key('merchant')), 'GS25');
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.text('가게 이름으로 채웠어요'), findsOneWidget);
+    expect(find.text('실적 40만부터 받아요'), findsOneWidget);
+    expect(tester.widget<Text>(find.text('0원')).style!.color, C.sub);
+  });
 }

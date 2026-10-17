@@ -439,13 +439,19 @@ class _PreviewText extends StatelessWidget {
       _ when tier == 0 => '이번 달은 혜택 구간 전이에요. ${man(p.tiers.first)}부터 받아요',
       _ => '이번 달은 ${man(tier)} 구간이 적용돼요',
     };
+    // 구간 전은 받는 것이 없어 체크 대신 안내 표시다. 2026-10-17 사용자가 정했다
+    final before = p.tiers.isNotEmpty && tier == 0 && p.benefits.isEmpty;
     final b = p.benefits;
     final more = b.length > 2 ? ' 외 ${b.length - 2}개' : '';
     // 시안처럼 체크 아이콘 옆에 구간을, 그 아래에 받는 혜택을 쓴다. 작업 011 설계 2절 A3
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(Icons.check, size: 20, color: C.blue),
+        Icon(
+          before ? Icons.info_outline : Icons.check,
+          size: 20,
+          color: C.blue,
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: Column(

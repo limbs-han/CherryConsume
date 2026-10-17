@@ -21,10 +21,13 @@ class RecommendScreen extends StatefulWidget {
 }
 
 class _RecommendScreenState extends State<RecommendScreen> {
-  late Future<(List<TopRow>, List<String>)> _data = _load();
+  late Future<(List<TopRow>, List<String>, Home)> _data = _load();
 
-  Future<(List<TopRow>, List<String>)> _load() async =>
-      (await widget.api.top(), await widget.api.recentMerchants());
+  Future<(List<TopRow>, List<String>, Home)> _load() async => (
+    await widget.api.top(),
+    await widget.api.recentMerchants(),
+    await widget.api.home(),
+  );
 
   void _reload() => setState(() {
     _data = _load();
@@ -87,7 +90,13 @@ class _RecommendScreenState extends State<RecommendScreen> {
         if (!snap.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
-        final (top, recent) = snap.data!;
+        final (top, recent, home) = snap.data!;
+        // 1순위가 0원인 까닭이 구간 전이면 카드마다 한 번만 알린다. 2026-10-17 사용자가 정했다
+        final before = <String, int>{
+          for (final t in top)
+            if (t.row.value == 0 && home.startsAt(t.row.userCardId) != null)
+              t.row.name: home.startsAt(t.row.userCardId)!,
+        };
         // E17. 카드가 없으면 추천할 것이 없다
         if (top.isEmpty) return _NoCards(onAdd: _addCard);
         // 업종 칸은 가장 긴 업종 이름의 폭이고 화면 폭의 35%를 넘지 않는다. 고정 폭이면 "일반음식점"처럼 다섯 글자 업종이
@@ -157,6 +166,14 @@ class _RecommendScreenState extends State<RecommendScreen> {
                 _Heading('1만 원 결제 기준 혜택'),
               ],
             ),
+            for (final MapEntry(key: name, value: at) in before.entries)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  '$name · 실적 ${man(at)}부터 혜택이 시작돼요',
+                  style: const TextStyle(fontSize: 13, color: C.sub),
+                ),
+              ),
             Box(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -208,10 +225,10 @@ class _RecommendScreenState extends State<RecommendScreen> {
                               const SizedBox(width: 8),
                               Text(
                                 won(t.row.value),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w800,
-                                  color: C.green,
+                                  color: t.row.value > 0 ? C.green : C.sub,
                                 ),
                               ),
                               const Icon(Icons.chevron_right, color: C.faint),
@@ -309,6 +326,15 @@ class _ResultScreenState extends State<ResultScreen> {
   final _amountText = TextEditingController();
   late Future<RecResult> _result = _ask();
   late final Future<List<Category>> _categories = widget.api.categories();
+  Home? _home;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.api.home().then((h) {
+      if (mounted) setState(() => _home = h);
+    });
+  }
 
   Future<RecResult> _ask() => widget.api.recommend(
     merchantName: widget.merchantName,
@@ -519,6 +545,7 @@ class _ResultScreenState extends State<ResultScreen> {
             _RankRow(
               rank: i + 1,
               row: row,
+              startsAt: row.value == 0 ? _home?.startsAt(row.userCardId) : null,
               onAsk: (scope) => _answerAt(row, scope),
             ),
           ],
@@ -533,10 +560,10 @@ class _ResultScreenState extends State<ResultScreen> {
         appBar: AppBar(
           title: Text(title),
           actions: [
-            if (r?.categoryName != null)
+            if (r?.categoryName != null && r!.categoryName != title)
               Padding(
                 padding: const EdgeInsets.only(right: 20),
-                child: Pill(r!.categoryName!, fg: C.sub, bg: C.grey),
+                child: Pill(r.categoryName!, fg: C.sub, bg: C.grey),
               ),
           ],
         ),
@@ -560,9 +587,17 @@ class _ResultScreenState extends State<ResultScreen> {
 }
 
 class _RankRow extends StatelessWidget {
-  const _RankRow({required this.rank, required this.row, this.onAsk});
+  const _RankRow({
+    required this.rank,
+    required this.row,
+    this.startsAt,
+    this.onAsk,
+  });
   final int rank;
   final RecRow row;
+
+  /// 구간 전이라 0원이면 첫 구간
+  final int? startsAt;
   final ValueChanged<String?>? onAsk;
 
   // 1순위는 코발트 테두리로 두드러지게 하고 번호는 검은 원이다. 작업 011 설계 2절 R4
@@ -615,14 +650,24 @@ class _RankRow extends StatelessWidget {
             else
               Text(
                 row.value > 0 ? '${won(row.value)} ${row.kind}' : won(0),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: C.green,
+                  color: row.value > 0 ? C.green : C.sub,
                 ),
               ),
           ],
         ),
+        if (startsAt != null) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 40),
+            child: Text(
+              '실적 ${man(startsAt!)}부터 받아요',
+              style: const TextStyle(fontSize: 13, color: C.sub),
+            ),
+          ),
+        ],
         // 2, 3순위도 혜택 이름을 보인다. 작업 011 설계 2절 R5
         if (row.title != null) ...[
           const SizedBox(height: 4),

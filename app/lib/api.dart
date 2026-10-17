@@ -106,6 +106,19 @@ class Home {
   final DateTime month;
   final int benefitTotal;
   final List<HomeCard> cards;
+
+  /// 이번 달 실적 구간 전인 카드의 첫 구간. 혜택 0원의 까닭을 한 줄로 알린다. 2026-10-17 사용자가 정했다
+  int? startsAt(String userCardId) {
+    for (final c in cards) {
+      if (c.id == userCardId &&
+          c.tiers.isNotEmpty &&
+          c.spend.tierSource != 'unsupported' &&
+          (c.spend.tier ?? 0) == 0) {
+        return c.tiers.first;
+      }
+    }
+    return null;
+  }
 }
 
 /// 결제 기록 화면의 입력. 저장 전 결제와 저장에 같은 칸을 보낸다. 작업 005 설계 5b절

@@ -163,4 +163,15 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('신한카드 Mr.Life 등록'), findsNothing);
   });
+
+  testWidgets('구간 전 안내는 체크가 아니라 안내 표시다', (tester) async {
+    // 체크는 됐다는 뜻이라 혜택을 못 받는 안내에 맞지 않는다. 2026-10-17 사용자가 정했다
+    final (:api, s: _) = app();
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await openSheet(tester);
+    expect(find.text('이번 달은 혜택 구간 전이에요. 30만부터 받아요'), findsOneWidget);
+    expect(find.byIcon(Icons.check), findsNothing);
+    expect(find.byIcon(Icons.info_outline), findsOneWidget);
+  });
 }

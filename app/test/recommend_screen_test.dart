@@ -165,4 +165,26 @@ void main() {
     );
     expect((dot.decoration! as BoxDecoration).color, C.text);
   });
+  testWidgets('구간 전 카드는 업종별 1순위 위에 한 번만 첫 구간을 알리고 결과에도 알린다', (tester) async {
+    // 2026-10-17 사용자가 정했다. 업종마다 같은 문장을 되풀이하지 않는다
+    final (:api, :s) = app();
+    addCard(s, 'kb-09124');
+    await tester.pumpWidget(CherryApp(api: api));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(of: find.byType(Tabs), matching: find.text('추천')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('KB YOU With · 실적 40만부터 혜택이 시작돼요'), findsOneWidget);
+    expect(tester.widget<Text>(find.text('0원').first).style!.color, C.sub);
+
+    await tester.tap(find.text('카페'));
+    await tester.pumpAndSettle();
+    expect(find.text('실적 40만부터 받아요'), findsOneWidget);
+    // 제목이 업종이면 같은 업종 배지를 또 달지 않는다
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('카페')),
+      findsOneWidget,
+    );
+  });
 }
