@@ -1,6 +1,8 @@
 /// 시안 보드 5 추천과 5b 추천 결과. 결제 직전에 고를 카드만 알려 준다. S4
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../api.dart';
@@ -328,6 +330,23 @@ class _ResultScreenState extends State<ResultScreen> {
   late final Future<List<Category>> _categories = widget.api.categories();
   Home? _home;
 
+  /// 금액 입력이 0.3초 멈추면 다시 계산한다. 결제 기록과 같다. 작업 018
+  Timer? _wait;
+
+  void _amountChanged(String v, {bool now = false}) {
+    _wait?.cancel();
+    void run() {
+      _amount = amountOf(v);
+      _refresh();
+    }
+
+    if (now) {
+      run();
+    } else {
+      _wait = Timer(const Duration(milliseconds: 300), run);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -369,6 +388,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   void dispose() {
+    _wait?.cancel();
     _amountText.dispose();
     super.dispose();
   }
@@ -433,7 +453,7 @@ class _ResultScreenState extends State<ResultScreen> {
           r.ranking.isNotEmpty &&
           snap.connectionState == ConnectionState.done;
       final children = <Widget>[
-        // 시안대로 한 줄 상자다. 금액을 비우면 1만 원 기준으로 계산한다. 작업 011 설계 2절 R3
+        // 시안대로 한 줄 상자다. 금액을 비우면 1만 원 기준으로 계산하고 순위 위 한 줄로 알린다. 작업 011 설계 2절 R3, 작업 018
         Container(
           constraints: const BoxConstraints(minHeight: 56),
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -470,15 +490,12 @@ class _ResultScreenState extends State<ResultScreen> {
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                   ),
-                  // 금액을 다 적고 확인을 누를 때만 다시 추천한다. 칠 때마다 다시 계산하면 순위가 계속 흔들린다
+                  // 칠 때마다 다시 계산하면 순위가 계속 흔들려 입력이 0.3초 멈추면 계산한다. 확인은 바로 계산한다
                   textInputAction: TextInputAction.done,
-                  onSubmitted: (v) {
-                    _amount = amountOf(v);
-                    _refresh();
-                  },
+                  onChanged: _amountChanged,
+                  onSubmitted: (v) => _amountChanged(v, now: true),
                 ),
               ),
-              if (_amount == null) const Pill('1만 원 기준'),
             ],
           ),
         ),

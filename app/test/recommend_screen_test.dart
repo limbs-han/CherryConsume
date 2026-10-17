@@ -152,9 +152,22 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('결제 금액'), findsOneWidget);
-    expect(find.text('1만 원 기준'), findsOneWidget);
+    // 1만 원 기준은 순위 위 한 줄로만 알린다. 2026-10-17 작업 018
+    expect(find.text('1만 원 기준'), findsNothing);
+    expect(find.text('1만 원 결제 기준'), findsOneWidget);
     await tester.enterText(find.byKey(const Key('amount')), '150000');
     expect(find.text('150,000'), findsOneWidget);
+    // 확인을 누르지 않아도 입력이 0.3초 멈추면 다시 계산한다
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('1만 원 결제 기준'), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 150));
+    await tester.pumpAndSettle();
+    expect(find.text('150,000원 결제 기준'), findsOneWidget);
+    // 지우면 1만 원 기준으로 돌아간다
+    await tester.enterText(find.byKey(const Key('amount')), '');
+    await tester.pump(const Duration(milliseconds: 350));
+    await tester.pumpAndSettle();
+    expect(find.text('1만 원 결제 기준'), findsOneWidget);
 
     final first = find.byKey(const Key('rank-1'));
     final box = tester.widget<Container>(first);
