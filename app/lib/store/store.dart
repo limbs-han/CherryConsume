@@ -122,6 +122,13 @@ InUse inUse(Database db) => (
       'select distinct category_code from transactions where category_code is not null',
     ))
       r['category_code'] as String,
+    // 직접 만든 카드의 혜택 업종. 새 카탈로그가 빼면 혜택이 말없이 맞지 않게 된다. 작업 019 위험 검토 낮음 13
+    if (db.userVersion >= 7)
+      for (final r in db.select(
+        "select distinct c.value v from custom_cards, json_each(input_json, '\$.benefits') b, "
+        "json_each(b.value, '\$.categories') c",
+      ))
+        r['v'] as String,
   },
   methods: {
     for (final r in db.select(

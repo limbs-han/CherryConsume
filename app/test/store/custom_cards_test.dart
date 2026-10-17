@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cherry_consume/store/backup.dart';
+import 'package:cherry_consume/store/custom.dart' show simpleOf;
 import 'package:cherry_consume/store/routes/catalog.dart' show cards;
 import 'package:cherry_consume/store/routes/custom.dart';
 import 'package:cherry_consume/store/routes/me.dart';
@@ -198,6 +199,117 @@ void main() {
     expect(
       pay(t, card, 30000, null, more: {'category': 'cafe'})['value'],
       2000,
+    );
+  });
+
+  test('입력 검사. 소수 셋째 자리 비율, 최소 결제액 없는 원 혜택, 비슷한 카드의 구간 바꾸기를 막는다', () {
+    // 위험 검토 높음 1, 중간 5, 중간 6
+    final (:s, clock: _) = fresh();
+    Map<String, Object?> one(Map<String, Object?> b) => {
+      ...cafe,
+      'benefits': [b],
+    };
+    for (final bad in [
+      one({'all': true, 'type': 'discount', 'rate': 33.333}),
+      one({'all': true, 'type': 'discount', 'rate': 1e-300}),
+      one({'all': true, 'type': 'discount', 'fixed': 5000}),
+      one({'all': true, 'type': 'discount', 'fixed': 5000, 'min_amount': 4999}),
+      {
+        ...cafe,
+        'copied': ['custom-1'],
+      },
+    ]) {
+      expect(() => createCustom(s, bad), throwsA(status(422)), reason: '$bad');
+    }
+    final start = startFrom(s, 'shinhan-mrlife');
+    expect(
+      () => createCustom(s, {
+        ...start,
+        'name': 'x',
+        'tiers': [123456],
+      }),
+      throwsA(status(422)),
+    );
+  });
+
+  test('건당 원 혜택은 최소 결제액보다 적은 결제에 주지 않는다', () {
+    // 위험 검토 중간 6. 1,000원 이상 결제에 500원
+    final (:s, clock: _) = fresh();
+    final card = make(s, {
+      ...everywhere,
+      'benefits': [
+        {'all': true, 'type': 'cashback', 'fixed': 500, 'min_amount': 1000},
+      ],
+    });
+    expect(pay(s, card, 999, 'GS25')['value'], 0);
+    expect(pay(s, card, 1000, 'GS25')['value'], 500);
+  });
+
+  test('손으로 고친 직접 만든 카드나 카탈로그 카드의 실적 제외가 든 기록 파일은 받지 않는다', () {
+    // 위험 검토 높음 2, 낮음 11
+    final (:s, clock: _) = fresh();
+    make(s, cafe, prev: 300000);
+    final [mr] = setup(s);
+    pay(s, mr, 10000, 'GS25');
+    final file = jsonDecode(exportAll(s)) as Map<String, dynamic>;
+    Uint8List edited(void Function(Map<String, dynamic>) f) {
+      final j = jsonDecode(jsonEncode(file)) as Map<String, dynamic>;
+      f(j);
+      return Uint8List.fromList(utf8.encode(jsonEncode(j)));
+    }
+
+    List<dynamic> rowOf(Map<String, dynamic> j, String t) =>
+        (j['tables'][t]['rows'] as List).first as List;
+    int col(Map<String, dynamic> j, String t, String c) =>
+        (j['tables'][t]['columns'] as List).indexOf(c);
+    final (s: t, clock: _) = fresh();
+    expect(
+      () => importAll(
+        t,
+        edited((j) {
+          final r = rowOf(j, 'custom_cards');
+          final at = col(j, 'custom_cards', 'card_json');
+          r[at] = (r[at] as String).replaceFirst('"rate":10', '"rate":90');
+        }),
+      ),
+      throwsA(status(422)),
+    );
+    expect(
+      () => importAll(
+        t,
+        edited((j) {
+          final rows = j['tables']['transactions']['rows'] as List;
+          (rows.last as List)[col(j, 'transactions', 'spend_excluded')] = 1;
+        }),
+      ),
+      throwsA(status(422)),
+    );
+    // 고치지 않은 파일은 받는다
+    importAll(t, edited((_) {}));
+  });
+
+  test('비슷한 카드 복사는 원 미만 처리나 실적 차감이 다른 혜택을 고칠 수 있는 줄로 바꾸지 않는다', () {
+    // 위험 검토 중간 4
+    final rules = {'stacks': [], 'new_card': null};
+    Map<String, Object?> b({Object? round, Object? exclude}) => {
+      'key': 'k',
+      'target': {'all': true},
+      'reward': {'type': 'cashback', 'rate': 1, 'round': ?round},
+      'exclude_applied': exclude,
+    };
+    expect(simpleOf(b(), rules), isNotNull);
+    expect(simpleOf(b(round: 'round'), rules), isNull);
+    expect(simpleOf(b(exclude: 1), rules), isNull);
+    expect(
+      simpleOf(b(), {
+        ...rules,
+        'stacks': [
+          {
+            'order': ['k'],
+          },
+        ],
+      }),
+      isNull,
     );
   });
 }

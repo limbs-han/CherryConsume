@@ -256,6 +256,7 @@ Json edit(Store s, String tid, Json raw) {
         rows[newCard]!,
         body,
         old: old['spend_excluded'] == 1,
+        editing: true,
       ),
     );
     final a = monthOf(localDay(oldPaid)), b = monthOf(localDay(p.paidAt));

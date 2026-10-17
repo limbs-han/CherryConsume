@@ -285,14 +285,16 @@ Map<String, Object?> mine(Store s, String tid) {
   return rowMap(found.first);
 }
 
-/// 결제의 실적 제외. 직접 만든 카드의 결제에서만 켠다. 카탈로그 카드로 옮긴 결제는 끈다. E65
+/// 결제의 실적 제외. 직접 만든 카드의 결제에서만 켠다. 고치기로 카탈로그 카드로 옮긴 결제는 화면이 켠 채 보내도
+/// 끈다. E65, 위험 검토 낮음 12
 bool spendExcludedFor(
   Map<String, Object?> row,
   PaymentBody body, {
   bool old = false,
+  bool editing = false,
 }) {
   final custom = (row['card_id'] as String).startsWith('custom-');
-  if (body.spendExcluded == true && !custom) {
+  if (body.spendExcluded == true && !custom && !editing) {
     throw ApiError(422, '실적 제외는 직접 만든 카드의 결제에서만 켤 수 있다');
   }
   return custom && (body.spendExcluded ?? old);

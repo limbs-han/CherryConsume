@@ -11,7 +11,8 @@ import 'dart:typed_data';
 import 'package:sqlite3/sqlite3.dart';
 
 import '../api.dart' show ApiError;
-import '../catalog/models.dart' show CatalogCard;
+import '../catalog/models.dart' show CatalogCard, Json;
+import 'routes/custom.dart' show reproducible;
 import 'answers.dart';
 import 'db.dart';
 import 'imports.dart' show importSources;
@@ -195,7 +196,10 @@ Map<String, int> importAll(Store s, Uint8List data) {
   if (!inCatalog(
         'user_cards',
         'card_id',
-        (id) => cat.cards.containsKey(id) || custom.contains(id),
+        // 직접 만든 카드는 파일에 든 것만 본다. 지금 폰의 직접 만든 카드는 가져오며 지워진다. 위험 검토 중간 3
+        (id) => id.startsWith('custom-')
+            ? custom.contains(id)
+            : cat.cards.containsKey(id),
       ) ||
       !inCatalog(
         'user_cards',
@@ -257,10 +261,26 @@ void _readable(Store s, ApiError broken) {
     ).isNotEmpty) {
       throw broken;
     }
-    // 직접 만든 카드는 카드 줄과 규칙으로 읽혀야 한다. 규칙의 뜻은 앱이 만든 값이라 다시 보지 않는다. 작업 019
-    for (final r in s.db.select('select id, card_json from custom_cards')) {
-      final card = CatalogCard.fromJson(jsonDecode(r['card_json'] as String));
-      if (card.id != r['id'] || card.revisions.length != 1) throw broken;
+    // 직접 만든 카드는 입력과 바탕 카드로 다시 만들어져야 한다. 손으로 고친 규칙은 엔진을 깰 수 있다. 실적 제외는
+    // 직접 만든 카드의 결제에만 있다. 작업 019 위험 검토 높음 2, 낮음 11
+    for (final r in s.db.select(
+      'select id, card_json, input_json from custom_cards',
+    )) {
+      final card = jsonDecode(r['card_json'] as String) as Json;
+      final input = jsonDecode(r['input_json'] as String);
+      if (input is! Json ||
+          !reproducible(s, r['id'] as String, card, input) ||
+          CatalogCard.fromJson(card).id != r['id']) {
+        throw broken;
+      }
+    }
+    if (s.db
+        .select(
+          'select 1 from transactions t join user_cards u on u.id = t.user_card_id '
+          "where t.spend_excluded = 1 and u.card_id not like 'custom-%' limit 1",
+        )
+        .isNotEmpty) {
+      throw broken;
     }
     final cards = [
       for (final r in s.db.select('select * from user_cards')) rowMap(r),
