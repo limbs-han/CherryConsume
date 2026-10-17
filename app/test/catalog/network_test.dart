@@ -36,6 +36,8 @@ const allowed = {
   // 앱 안 웹 화면은 열지 않게 LaunchMode.externalApplication만 쓴다. 2026-10-05 Android 소스에서 앱 안 웹 화면
   // 말고는 네트워크 호출이 없는 것을 봤다. 작업 012 설계 1.4, 6절
   'url_launcher',
+  // 화면 낭독기와 날짜, 시간 고르기 창을 한국어로. Flutter에 든 번역 묶음이라 네트워크 호출이 없다. 작업 018
+  'flutter_localizations',
 };
 
 /// import와 export 문 하나. 조건부 import는 문 안의 주소가 여럿이다

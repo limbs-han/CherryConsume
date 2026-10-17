@@ -63,3 +63,6 @@ List<String> haptics(WidgetTester tester) {
   );
   return log;
 }
+
+/// 앱 바의 뒤로 가기. 앱이 한국어라 `pageBack`이 찾는 영어 "Back"이 없다. 작업 018
+Future<void> back(WidgetTester tester) => tester.tap(find.byTooltip('뒤로').last);

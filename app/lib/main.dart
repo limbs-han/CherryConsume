@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sqlite3/sqlite3.dart' show Database;
 
 import 'api.dart';
@@ -97,6 +98,10 @@ class CherryApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
     title: '체리컨슘',
     theme: theme(),
+    // 한국어 앱이다. 화면 낭독기가 버튼을 한국어로 읽고 날짜, 시간 고르기 창도 한국어다. 작업 018
+    locale: const Locale('ko'),
+    supportedLocales: const [Locale('ko')],
+    localizationsDelegates: GlobalMaterialLocalizations.delegates,
     // Android 15부터 앱이 아래 막대 뒤까지 그린다. 3버튼 막대 뒤에는 Android가 반투명 바탕을 깔아 글자가 비치지
     // 않게 한다. 제스처 막대는 그대로 투명하다. 작업 011 설계 2절 Z3
     builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(

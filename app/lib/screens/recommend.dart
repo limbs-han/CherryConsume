@@ -133,7 +133,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
                 fillColor: Colors.white,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: r16,
-                  borderSide: BorderSide(color: C.line),
+                  borderSide: BorderSide(color: C.faint),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: r16,
@@ -460,7 +460,7 @@ class _ResultScreenState extends State<ResultScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: r16,
-            border: Border.all(color: C.line),
+            border: Border.all(color: C.faint),
           ),
           child: Row(
             children: [
@@ -749,12 +749,19 @@ class _RankRow extends StatelessWidget {
           ),
         for (final a in row.asks)
           Padding(
-            padding: const EdgeInsets.only(left: 40, top: 4),
+            padding: const EdgeInsets.only(left: 40),
             child: InkWell(
               onTap: onAsk == null ? null : () => onAsk!(a.scope),
-              child: Text(
-                '답하면 ${won(a.extra)} 더 받아요 · ${a.question}',
-                style: const TextStyle(fontSize: 13, color: C.blue),
+              // 글자는 작아도 누르는 범위는 48dp다. 작업 018
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 48),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '답하면 ${won(a.extra)} 더 받아요 · ${a.question}',
+                    style: const TextStyle(fontSize: 13, color: C.blue),
+                  ),
+                ),
               ),
             ),
           ),

@@ -55,7 +55,7 @@ void main() {
     await tester.tap(find.text('결제 기록'));
     await tester.pumpAndSettle();
     expect(faintOffWhite(tester), isEmpty, reason: '결제 기록');
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
     await tester.tap(find.text('카드 추가'));
     await tester.pumpAndSettle();

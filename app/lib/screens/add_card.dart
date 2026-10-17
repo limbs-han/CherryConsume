@@ -104,6 +104,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   borderRadius: r16,
                   borderSide: BorderSide.none,
                 ),
+                // 칸 테두리가 흰 바탕에서 4.6:1이다. 작업 018
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: r16,
+                  borderSide: BorderSide(color: C.faint),
+                ),
               ),
               onChanged: (v) {
                 _q = v;
@@ -357,6 +362,7 @@ class _RegisterSheetState extends State<RegisterSheet> {
                 AmountField(
                   key: const Key('prev'),
                   controller: _prevText,
+                  label: '지난달 이 카드로 쓴 금액',
                   hint: '예: 410,000',
                   maxDigits: 9,
                   onChanged: (v) {

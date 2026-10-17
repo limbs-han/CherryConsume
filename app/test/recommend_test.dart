@@ -89,11 +89,18 @@ void main() {
       '답하면 ${won(soldier['extra'] as int)} 더 받아요 · ${soldier['question']}',
     );
     expect(ask, findsOneWidget);
+    // 글자 링크도 누르는 범위가 48dp다. 작업 018
+    expect(
+      tester
+          .getSize(find.ancestor(of: ask, matching: find.byType(InkWell)).first)
+          .height,
+      greaterThanOrEqualTo(48),
+    );
     await tester.ensureVisible(ask);
     await tester.tap(ask);
     await tester.pumpAndSettle();
     expect(find.text('혜택 계산에 쓰는 답'), findsOneWidget);
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
     expect(ask, findsOneWidget);
   });

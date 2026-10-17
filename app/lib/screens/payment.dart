@@ -308,6 +308,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               AmountField(
                 key: const Key('cancel-amount'),
                 controller: text,
+                label: '취소 금액',
                 maxDigits: 9,
               ),
               const SizedBox(height: 12),
@@ -503,6 +504,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           AmountField(
             key: const Key('amount'),
             controller: _amountText,
+            label: '얼마 썼나요',
             size: 44,
             autofocus: true,
             maxDigits: 9,
@@ -525,7 +527,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: r16,
-                borderSide: BorderSide(color: C.line),
+                borderSide: BorderSide(color: C.faint),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: r16,

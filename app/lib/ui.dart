@@ -107,25 +107,29 @@ class ChoicePill extends StatelessWidget {
         HapticFeedback.selectionClick();
         onTap();
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        constraints: const BoxConstraints(minHeight: 44),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: selected ? C.text : Colors.white,
-          borderRadius: BorderRadius.circular(999),
-          border: selected ? null : Border.all(color: C.line),
-        ),
-        // 가운데에 두되 폭은 글자만큼이다. 폭이 정해진 줄에서 늘어나지 않는다
-        child: Center(
-          widthFactor: 1,
-          child: Text(
-            label,
-            maxLines: 1,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              color: selected ? Colors.white : C.sub,
+      // 보이는 알약은 44이고 누르는 범위는 위아래 2씩 넓혀 48이다. 작업 018
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          constraints: const BoxConstraints(minHeight: 44),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: selected ? C.text : Colors.white,
+            borderRadius: BorderRadius.circular(999),
+            border: selected ? null : Border.all(color: C.line),
+          ),
+          // 가운데에 두되 폭은 글자만큼이다. 폭이 정해진 줄에서 늘어나지 않는다
+          child: Center(
+            widthFactor: 1,
+            child: Text(
+              label,
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                color: selected ? Colors.white : C.sub,
+              ),
             ),
           ),
         ),
@@ -300,6 +304,7 @@ class AmountField extends StatelessWidget {
     this.size = 28,
     this.autofocus = false,
     this.hint,
+    this.label,
     this.maxDigits = 10,
   });
   final TextEditingController controller;
@@ -308,36 +313,43 @@ class AmountField extends StatelessWidget {
   final bool autofocus;
   final String? hint;
 
+  /// 화면 낭독기가 읽는 칸 이름. 위에 따로 쓴 제목이다. 작업 018
+  final String? label;
+
   /// 받는 자릿수. 10자리면 99억 원까지다
   final int maxDigits;
 
   @override
-  Widget build(BuildContext context) => TextField(
-    controller: controller,
-    autofocus: autofocus,
-    keyboardType: TextInputType.number,
-    inputFormatters: [ThousandsFormatter(maxDigits)],
-    onChanged: (t) => onChanged?.call(amountOf(t)),
-    style: TextStyle(
-      fontSize: size,
-      fontWeight: FontWeight.w800,
-      letterSpacing: -1,
-      color: C.text,
-    ),
-    decoration: InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(fontSize: size, color: C.line),
-      suffixText: '원',
-      suffixStyle: TextStyle(
-        fontSize: size / 2,
-        fontWeight: FontWeight.w700,
-        color: C.sub,
+  Widget build(BuildContext context) => Semantics(
+    label: label,
+    child: TextField(
+      controller: controller,
+      autofocus: autofocus,
+      keyboardType: TextInputType.number,
+      inputFormatters: [ThousandsFormatter(maxDigits)],
+      onChanged: (t) => onChanged?.call(amountOf(t)),
+      style: TextStyle(
+        fontSize: size,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -1,
+        color: C.text,
       ),
-      enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: C.line),
-      ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: C.blue, width: 2),
+      decoration: InputDecoration(
+        hintText: hint,
+        // 흐린 글자색이라 흰 바탕에서 4.6:1이다. 작업 018
+        hintStyle: TextStyle(fontSize: size, color: C.faint),
+        suffixText: '원',
+        suffixStyle: TextStyle(
+          fontSize: size / 2,
+          fontWeight: FontWeight.w700,
+          color: C.sub,
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: C.faint),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: C.blue, width: 2),
+        ),
       ),
     ),
   );

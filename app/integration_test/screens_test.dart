@@ -123,14 +123,14 @@ void main() {
     await tapIn(tester, find.textContaining('처음').last);
     await shot(tester, '2b-register-sheet');
     await closeSheet(tester);
-    await tester.pageBack();
+    await tester.tap(find.byTooltip('뒤로').last);
     await tester.pumpAndSettle();
 
     await tapIn(tester, find.textContaining('Mr.Life').first);
     await shot(tester, '6-card-detail');
     await reveal(tester, find.text('이 카드 결제 보기'));
     await shot(tester, '6b-card-detail-bottom');
-    await tester.pageBack();
+    await tester.tap(find.byTooltip('뒤로').last);
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('결제 기록'));
@@ -158,21 +158,21 @@ void main() {
     await shot(tester, '4b-details-bottom');
     await tester.tap(find.widgetWithText(FilledButton, '확인'));
     await tester.pumpAndSettle();
-    await tester.pageBack();
+    await tester.tap(find.byTooltip('뒤로').last);
     await tester.pumpAndSettle();
 
     await tester.tap(tab('추천'));
     await shot(tester, '5-recommend');
     await tapIn(tester, find.text('스타벅스 역삼점').first);
     await shot(tester, '5b-result');
-    await tester.pageBack();
+    await tester.tap(find.byTooltip('뒤로').last);
     await tester.pumpAndSettle();
 
     await tester.tap(tab('기록'));
     await shot(tester, '7-history');
     await tester.tap(find.text('가져오기'));
     await shot(tester, '8-import');
-    await tester.pageBack();
+    await tester.tap(find.byTooltip('뒤로').last);
     await tester.pumpAndSettle();
 
     // 파일 고르기 창은 시험이 누를 수 없어 같은 화면을 합성 CSV로 다시 연다. 열 이름은 사전에 있는 이름이라 짝짓기 없이
@@ -204,7 +204,7 @@ void main() {
     await shot(tester, '8b-import-preview');
     await reveal(tester, find.text('열 다시 짝짓기'));
     await shot(tester, '8c-import-preview-bottom');
-    await tester.pageBack();
+    await tester.tap(find.byTooltip('뒤로').last);
     await tester.pumpAndSettle();
 
     await tester.tap(tab('설정'));

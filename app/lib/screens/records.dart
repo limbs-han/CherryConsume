@@ -329,6 +329,8 @@ class _Row extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     won(net).replaceAll('원', ''),
+                    // 화면은 숫자만 쓰고 낭독기는 원까지 읽는다. 작업 018
+                    semanticsLabel: won(net),
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w800,

@@ -13,6 +13,9 @@ dependencies:
   file_picker: ^13.1.0
   flutter:
     sdk: flutter
+  # 화면 낭독기와 날짜, 시간 고르기 창을 한국어로. Flutter에 든 패키지다. 작업 018
+  flutter_localizations:
+    sdk: flutter
   html: ^0.15.7
   http: ^1.6.0
   sqlite3: ^3.5.2

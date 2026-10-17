@@ -169,7 +169,12 @@ void main() {
     await tester.pumpWidget(CherryApp(api: api));
     await tester.pumpAndSettle();
     await openPayment(tester, 30000, '이마트');
+    await tester.ensureVisible(find.text('바꾸기'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('바꾸기'));
+    await tester.pumpAndSettle();
+    // 칩이 48dp가 되어 시험 화면에서는 시트를 조금 밀어야 보인다. 작업 018
+    await tester.ensureVisible(find.text('온라인'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('온라인'));
     await tester.pumpAndSettle();

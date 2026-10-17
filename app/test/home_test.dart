@@ -34,7 +34,7 @@ void main() {
     final before = tester.state(find.byType(PayButton));
     await tester.tap(find.text('신한 Mr.Life'));
     await tester.pumpAndSettle();
-    await tester.pageBack();
+    await back(tester);
     for (var i = 0; i < 40; i++) {
       await tester.pump(const Duration(milliseconds: 16));
       expect(find.byType(FloatingActionButton), findsOneWidget, reason: '$i');
@@ -130,7 +130,7 @@ void main() {
     await tester.tap(fab);
     await tester.pumpAndSettle();
     expect(find.byType(PaymentScreen), findsOneWidget);
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
     await tester.tap(tab('설정'));
     await tester.pumpAndSettle();

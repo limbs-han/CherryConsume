@@ -153,7 +153,7 @@ void main() {
       s.db.select('select * from transactions where deleted_at is null'),
       isEmpty,
     );
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
     expect(find.text('이마트 성수점'), findsNothing);
   });

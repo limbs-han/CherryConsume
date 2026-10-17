@@ -201,6 +201,9 @@ void main() {
     await tester.enterText(find.byKey(const Key('merchant')), '이마트');
     await tester.pump(const Duration(milliseconds: 400));
     await tester.pumpAndSettle();
+    // 칩 누르는 범위가 48dp가 되어 시험 화면에서 요약 줄이 저장 버튼 아래로 내려간다. 작업 018
+    await tester.ensureVisible(find.text('바꾸기'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('바꾸기'));
     await tester.pumpAndSettle();
     expect(find.byType(DropdownButton<int>), findsNothing);

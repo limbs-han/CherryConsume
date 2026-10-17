@@ -12,6 +12,7 @@ import 'package:cherry_consume/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'app_helpers.dart' show back;
 import 'engine/helpers.dart' show realJson;
 import 'store/helpers.dart' show start;
 
@@ -56,7 +57,7 @@ void main() {
     await tester.tap(find.text('결제 기록'));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(ChoicePill, '신한 Mr.Life'), findsOneWidget);
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('신한 Mr.Life'));

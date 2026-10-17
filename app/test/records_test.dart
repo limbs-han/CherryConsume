@@ -97,7 +97,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('결제 고치기'), findsOneWidget);
     expect(find.text('430원'), findsOneWidget);
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('지난달'));
@@ -260,7 +260,7 @@ void main() {
         .first['choices']
         .firstWhere((ch) => ch['key'] == 'p4')['title'];
     expect(find.text('10월 1일부터 $p4'), findsOneWidget);
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('IBK 나라사랑'));
@@ -271,7 +271,7 @@ void main() {
     final facts = s.db.select('select key, value from user_card_facts').single;
     expect((facts['key'], facts['value']), ('salary_transfer', 'true'));
 
-    await tester.pageBack();
+    await back(tester);
     await tester.pumpAndSettle();
     await openTab(tester, '설정');
     expect(find.textContaining('쓰는 카드 · IBK 나라사랑'), findsOneWidget);
