@@ -78,6 +78,15 @@ void main() {
     expect(() => preview(s, 'shinhan-mrlife'), throwsA(status(404)));
   });
 
+  test('구분 말 없이 이름이 겹친 카드는 검색에서 숨기고 등록한 사람은 그대로 쓴다', () {
+    // 2026-10-17 사용자가 "KB YOU With 카드 (2)"를 숨기기로 했다. 카탈로그 이름을 고칠 때까지다
+    final (:s, clock: _) = fresh();
+    expect([
+      for (final r in cards(s, q: 'you with')) r['id'],
+    ], isNot(contains('kb-09924')));
+    expect(preview(s, 'kb-09924')['tier_source'], isNotNull);
+  });
+
   test('test_issuer_chips', () {
     final (:s, clock: _) = fresh();
     final chips = issuers(s);

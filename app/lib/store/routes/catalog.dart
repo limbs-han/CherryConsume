@@ -18,6 +18,10 @@ String _key(String text) => text.replaceAll(_space, '').toLowerCase();
 /// 판매 중인 카드와 단종 카드를 새로 등록한다. 단종 카드도 유효기간까지 실적과 혜택이 그대로다. closed는 숨긴다. E19
 bool _listed(CatalogCard c) => c.status != 'closed';
 
+/// 검색 목록에서만 숨기는 카드. 이름이 다른 카드와 구분되지 않는다. 등록한 사람은 그대로 쓴다.
+/// 2026-10-17 사용자가 정했다. 카탈로그 이름을 고치면 지운다
+const _hidden = {'kb-09924'};
+
 CatalogCard registrable(Store s, String cardId) {
   final card = s.catalog.cards[cardId];
   if (card == null || !_listed(card)) {
@@ -131,7 +135,9 @@ List<Json> cards(Store s, {String q = '', String? issuer}) {
   final out = <Json>[];
   for (final c in s.catalog.cards.values) {
     final issuerName = s.catalog.issuers[c.issuer]!.name;
-    if (!_listed(c) || (issuer != null && c.issuer != issuer)) {
+    if (!_listed(c) ||
+        _hidden.contains(c.id) ||
+        (issuer != null && c.issuer != issuer)) {
       continue;
     }
     if (want.isNotEmpty &&
