@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cherry_consume/store/backup.dart';
-import 'package:cherry_consume/store/custom.dart' show simpleOf;
+import 'package:cherry_consume/store/custom.dart' show rewardTypes, simpleOf;
 import 'package:cherry_consume/store/routes/catalog.dart' show cards;
 import 'package:cherry_consume/store/routes/custom.dart';
 import 'package:cherry_consume/store/routes/me.dart';
@@ -311,5 +311,28 @@ void main() {
       }),
       isNull,
     );
+  });
+
+  test('비슷한 혜택은 고른 업종의 단순한 카탈로그 혜택이고 같은 카드사가 먼저이며 5개까지다', () {
+    // 작업 019 설계 2.5
+    final (:s, clock: _) = fresh();
+    final found = similarBenefits(s, ['cafe'], issuer: 'kb');
+    expect(found, isNotEmpty);
+    expect(found.length, lessThanOrEqualTo(5));
+    for (final f in found) {
+      final cats = (f['benefit'] as Map)['categories'] as List;
+      expect(
+        cats.any((c) => c == 'cafe' || (c as String).startsWith('cafe.')),
+        isTrue,
+      );
+      // 고른 대로 바로 만들 수 있는 입력이다
+      expect(rewardTypes.containsKey((f['benefit'] as Map)['type']), isTrue);
+    }
+    final issuers = [for (final f in found) f['issuer']];
+    final firstOther = issuers.indexWhere((i) => i != 'kb');
+    if (firstOther >= 0) {
+      expect(issuers.skip(firstOther).contains('kb'), isFalse);
+    }
+    expect(similarBenefits(s, [], all: true), isNotEmpty);
   });
 }

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../api.dart';
 import '../format.dart';
-import '../store/custom.dart' show benefitTitle, otherIssuer, rateShape;
+import '../store/custom.dart'
+    show benefitTitle, otherIssuer, rateShape, rateText;
 import '../theme.dart';
 import '../ui.dart';
 import 'add_card.dart';
@@ -125,6 +126,12 @@ class _CustomFormScreenState extends State<CustomFormScreen> {
   late final Future<List<Category>> _categories = widget.api.categories();
   bool _busy = false;
 
+  /// 보이는 실적 구간 칸 수. 빈 칸을 늘어놓지 않고 "구간 더하기"로 늘린다. 시안 ③
+  late int _shown = [
+    1,
+    (_in['tiers'] as List).length,
+  ].reduce((a, b) => a > b ? a : b);
+
   bool get _fromBase => _in['base_card_id'] != null;
 
   List<int> get _tierValues => [
@@ -173,6 +180,8 @@ class _CustomFormScreenState extends State<CustomFormScreen> {
         categories: cats,
         tiers: _tierValues,
         initial: at == null ? null : _benefits[at],
+        suggest: (cats, all) =>
+            widget.api.similarBenefits(cats, all: all, issuer: _issuer),
       ),
     );
     if (out == null) return;
@@ -304,6 +313,7 @@ class _CustomFormScreenState extends State<CustomFormScreen> {
               controller: _fee,
               label: '연회비',
               hint: '없으면 비워 두세요',
+              size: 20,
               maxDigits: 8,
             ),
             const SizedBox(height: 20),
@@ -312,15 +322,24 @@ class _CustomFormScreenState extends State<CustomFormScreen> {
               _fromBase ? '비슷한 카드의 구간을 따라요' : '최대 3개. 비우면 실적과 상관없는 카드예요',
               style: const TextStyle(fontSize: 13, color: C.sub),
             ),
-            for (final (i, c) in _tiers.indexed)
+            for (final (i, c) in _tiers.take(_shown).indexed)
               AmountField(
                 key: Key('tier-$i'),
                 controller: c,
                 label: '실적 구간 ${i + 1}',
-                hint: i == 0 ? '예: 300,000' : null,
+                hint: i == 0 ? '예: 300,000' : '예: 500,000',
+                size: 20,
                 maxDigits: 9,
                 enabled: !_fromBase,
                 onChanged: (_) => setState(() {}),
+              ),
+            if (!_fromBase && _shown < 3)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  onPressed: () => setState(() => _shown++),
+                  child: const Text('구간 더하기'),
+                ),
               ),
             const SizedBox(height: 24),
             const _Label('혜택'),
@@ -431,10 +450,15 @@ class BenefitSheet extends StatefulWidget {
     required this.categories,
     required this.tiers,
     this.initial,
+    this.suggest,
   });
   final List<Category> categories;
   final List<int> tiers;
   final Input? initial;
+
+  /// 고른 대상의 비슷한 카탈로그 혜택. 작업 019 설계 2.5
+  final Future<List<Input>> Function(List<String> categories, bool all)?
+  suggest;
 
   @override
   State<BenefitSheet> createState() => _BenefitSheetState();
@@ -449,7 +473,9 @@ class _BenefitSheetState extends State<BenefitSheet> {
   late String _type = _i?['type'] as String? ?? 'discount';
   late bool _won = _i?['fixed'] != null;
   late final _size = TextEditingController(
-    text: _i?['rate']?.toString() ?? _i?['fixed']?.toString() ?? '',
+    text: _i?['rate'] != null
+        ? rateText(_i!['rate'] as num)
+        : _i?['fixed']?.toString() ?? '',
   );
   late final _min = TextEditingController(
     text: _i?['min_amount'] == null ? '' : comma(_i!['min_amount'] as int),
@@ -461,6 +487,27 @@ class _BenefitSheetState extends State<BenefitSheet> {
       ? _i!['from_tier'] as int
       : null;
   String? _error;
+  Future<List<Input>>? _found;
+
+  /// 대상을 바꾸면 비슷한 혜택을 다시 찾는다
+  void _target(VoidCallback change) => setState(() {
+    change();
+    _found = (_all || _cats.isNotEmpty)
+        ? widget.suggest?.call([..._cats], _all)
+        : null;
+  });
+
+  /// 비슷한 혜택을 고르면 방식, 크기, 최소 결제액, 월 한도를 채운다. 대상과 필요한 실적은 그대로다
+  void _fill(Input b) => setState(() {
+    _type = b['type'] as String;
+    _won = b['fixed'] != null;
+    _size.text = b['rate'] != null
+        ? rateText(b['rate'] as num)
+        : '${b['fixed']}';
+    _min.text = b['min_amount'] == null ? '' : comma(b['min_amount'] as int);
+    _cap.text = b['month_cap'] == null ? '' : comma(b['month_cap'] as int);
+    _error = null;
+  });
 
   @override
   void dispose() {
@@ -520,7 +567,7 @@ class _BenefitSheetState extends State<BenefitSheet> {
               ChoicePill(
                 '모든 가맹점',
                 selected: _all,
-                onTap: () => setState(() {
+                onTap: () => _target(() {
                   _all = !_all;
                   _cats.clear();
                 }),
@@ -529,7 +576,7 @@ class _BenefitSheetState extends State<BenefitSheet> {
                 ChoicePill(
                   c.name,
                   selected: _cats.contains(c.code),
-                  onTap: () => setState(() {
+                  onTap: () => _target(() {
                     _all = false;
                     if (!_cats.remove(c.code) && _cats.length < 3) {
                       _cats.add(c.code);
@@ -538,6 +585,62 @@ class _BenefitSheetState extends State<BenefitSheet> {
                 ),
             ],
           ),
+          if (_found != null) ...[
+            const SizedBox(height: 16),
+            const _Label('비슷한 혜택 가져오기'),
+            FutureBuilder(
+              future: _found,
+              builder: (context, snap) {
+                if (!snap.hasData) {
+                  return const Text(
+                    '비슷한 혜택 찾는 중',
+                    style: TextStyle(fontSize: 13, color: C.sub),
+                  );
+                }
+                if (snap.data!.isEmpty) {
+                  return const Text(
+                    '비슷한 혜택이 없어요',
+                    style: TextStyle(fontSize: 13, color: C.sub),
+                  );
+                }
+                final names = categoryNames(widget.categories);
+                return Column(
+                  children: [
+                    for (final (i, f) in snap.data!.indexed)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Material(
+                          color: C.blueSoft,
+                          borderRadius: r16,
+                          child: InkWell(
+                            key: Key('suggest-$i'),
+                            borderRadius: r16,
+                            onTap: () => _fill(f['benefit'] as Input),
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 48),
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              child: Text(
+                                '${benefitTitle(f['benefit'] as Input, names)} · '
+                                '${benefitSub({...f['benefit'] as Input, 'from_tier': null}).replaceAll(' · 실적 무관', '')} · '
+                                '${f['card']}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: C.blue,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+          ],
           const SizedBox(height: 16),
           const _Label('방식'),
           Row(

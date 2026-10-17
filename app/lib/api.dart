@@ -574,6 +574,18 @@ class Api {
   Future<Map<String, Object?>> customInput(String cardId) async =>
       custom_routes.customInput(store, cardId);
 
+  /// 혜택 한 줄 시트의 비슷한 혜택. 처음 한 번 모든 카드 규칙을 읽어 늦을 수 있다. 작업 019 설계 2.5
+  Future<List<Map<String, Object?>>> similarBenefits(
+    List<String> categories, {
+    bool all = false,
+    String? issuer,
+  }) async => custom_routes.similarBenefits(
+    store,
+    categories,
+    all: all,
+    issuer: issuer,
+  );
+
   /// 비슷한 카드에서 시작하는 입력
   Future<Map<String, Object?>> startFrom(String baseCardId) async =>
       custom_routes.startFrom(store, baseCardId);

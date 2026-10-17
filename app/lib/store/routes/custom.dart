@@ -308,3 +308,47 @@ Json startFrom(Store s, String baseId) {
     'base_card_id': baseId,
   };
 }
+
+/// 카탈로그 카드마다 오늘 개정의 단순한 혜택. 처음 부를 때 한 번 모든 카드 규칙을 읽는다. 작업 019 설계 2.5
+final _simple = Expando<List<Json>>();
+
+List<Json> _simpleIndex(Store s) => _simple[s.catalog] ??= [
+  for (final c in s.catalog.cards.values)
+    if (!c.id.startsWith('custom-') && c.status != 'closed')
+      for (final b in _rulesToday(s, c.id)['benefits'] as List)
+        if (simpleOf(b as Json, _rulesToday(s, c.id)) case final one?)
+          {
+            'card': c.shortName ?? c.name,
+            'issuer': c.issuer,
+            // 필요한 구간은 그 카드의 구간이라 가져오지 않는다
+            'benefit': {...one}..remove('from_tier'),
+          },
+];
+
+/// 고른 업종이나 모든 가맹점의 비슷한 혜택. 같은 카드사가 먼저이고 내용이 같은 것은 하나만, 5개까지다. 설계 2.5
+List<Json> similarBenefits(
+  Store s,
+  List<String> categories, {
+  bool all = false,
+  String? issuer,
+}) {
+  bool fits(Json b) => all
+      ? b['all'] == true
+      : ((b['categories'] as List?) ?? const []).any(
+          (c) =>
+              categories.any((p) => c == p || (c as String).startsWith('$p.')),
+        );
+  final hits = [
+    for (final e in _simpleIndex(s))
+      if (fits(e['benefit'] as Json)) e,
+  ];
+  final ordered = [
+    ...hits.where((e) => e['issuer'] == issuer),
+    ...hits.where((e) => e['issuer'] != issuer),
+  ];
+  final seen = <String>{};
+  return [
+    for (final e in ordered)
+      if (seen.add(jsonEncode(e['benefit']))) e,
+  ].take(5).toList();
+}

@@ -125,11 +125,14 @@ String benefitTitle(Json b, Map<String, String> categoryNames) {
             categoryNames[c] ?? c as String,
         ].join(' · ');
   final size = b['rate'] != null
-      ? '${b['rate']}%'
+      ? '${rateText(b['rate'] as num)}%'
       : '${_comma(b['fixed'] as int)}원';
   final kind = {'discount': '할인', 'points': '적립', 'cashback': '캐시백'}[b['type']];
   return '$target $size $kind';
 }
+
+/// 비율 글자. 5.0은 5로 쓴다
+String rateText(num r) => r % 1 == 0 ? '${r.toInt()}' : '$r';
 
 String _comma(int n) =>
     n.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (_) => ',');

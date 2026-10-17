@@ -105,4 +105,22 @@ void main() {
     expect(find.text('카드 이름을 적어 주세요'), findsOneWidget);
     expect(find.byType(RegisterSheet), findsNothing);
   });
+
+  testWidgets('혜택 시트에서 업종을 고르면 비슷한 혜택을 골라 채울 수 있다', (tester) async {
+    // 작업 019 설계 2.5, 성공 기준 3
+    await openAdd(tester);
+    await tester.tap(find.widgetWithText(TextButton, '직접 만들기').first);
+    await tester.pumpAndSettle();
+    await tapText(tester, '처음부터 만들기');
+    await tapText(tester, '혜택 더하기');
+    expect(find.text('비슷한 혜택 가져오기'), findsNothing);
+    await tapText(tester, '카페');
+    expect(find.text('비슷한 혜택 가져오기'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('suggest-0')));
+    await tester.pumpAndSettle();
+    final size = tester.widget<TextField>(
+      find.byKey(const Key('benefit-size')),
+    );
+    expect(size.controller!.text, isNotEmpty);
+  });
 }
