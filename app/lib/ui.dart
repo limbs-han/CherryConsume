@@ -306,6 +306,7 @@ class AmountField extends StatelessWidget {
     this.hint,
     this.label,
     this.maxDigits = 10,
+    this.enabled = true,
   });
   final TextEditingController controller;
   final ValueChanged<int?>? onChanged;
@@ -319,11 +320,15 @@ class AmountField extends StatelessWidget {
   /// 받는 자릿수. 10자리면 99억 원까지다
   final int maxDigits;
 
+  /// 꺼지면 값만 보이고 고칠 수 없다. 비슷한 카드에서 시작한 직접 만들 카드의 실적 구간이 쓴다. 작업 019
+  final bool enabled;
+
   @override
   Widget build(BuildContext context) => Semantics(
     label: label,
     child: TextField(
       controller: controller,
+      enabled: enabled,
       autofocus: autofocus,
       keyboardType: TextInputType.number,
       inputFormatters: [ThousandsFormatter(maxDigits)],

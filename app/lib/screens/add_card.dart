@@ -12,6 +12,7 @@ import '../format.dart';
 import '../theme.dart';
 import 'settings.dart' show OpenUrl, openInBrowser;
 import '../ui.dart';
+import 'custom_card.dart';
 
 String cardLine(CardHit c) {
   final kind = c.kind == 'credit' ? '신용' : '체크';
@@ -32,10 +33,14 @@ class AddCardScreen extends StatefulWidget {
     required this.api,
     this.requestUrl = cardRequestUrl,
     this.open = openInBrowser,
+    this.pickOnly = false,
   });
   final Api api;
   final String? requestUrl;
   final OpenUrl open;
+
+  /// 카드를 고르기만 하고 돌려준다. 직접 만들기의 비슷한 카드 찾기가 쓴다. 작업 019 설계 2.2
+  final bool pickOnly;
 
   @override
   State<AddCardScreen> createState() => _AddCardScreenState();
@@ -70,7 +75,19 @@ class _AddCardScreenState extends State<AddCardScreen> {
     }
   }
 
+  /// 직접 만들기. 만들고 등록까지 마치면 카드 추가도 닫는다. 작업 019 설계 2.1
+  Future<void> _make() async {
+    final added = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => CustomStartScreen(api: widget.api)),
+    );
+    if (added == true && mounted) Navigator.of(context).pop(true);
+  }
+
   Future<void> _pick(CardHit card) async {
+    if (widget.pickOnly) {
+      Navigator.of(context).pop(card);
+      return;
+    }
     final added = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -86,7 +103,17 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('카드 추가')),
+    appBar: AppBar(
+      title: Text(widget.pickOnly ? '비슷한 카드 찾기' : '카드 추가'),
+      // 배경 없는 파란 글자. 작업 019 설계 2.1
+      actions: [
+        if (!widget.pickOnly)
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: TextButton(onPressed: _make, child: const Text('직접 만들기')),
+          ),
+      ],
+    ),
     // 목록 마지막 줄이 아래 막대 위까지 올라온다. 작업 011 설계 2절 Z3
     body: SafeArea(
       top: false,
@@ -159,6 +186,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           '찾는 카드가 없어요.',
                           style: TextStyle(color: C.sub),
                         ),
+                        if (!widget.pickOnly)
+                          TextButton(
+                            onPressed: _make,
+                            child: const Text('직접 만들기'),
+                          ),
                         if (widget.requestUrl != null)
                           TextButton(
                             onPressed: _request,

@@ -9,6 +9,7 @@ import 'catalog/models.dart' show day;
 import 'store/backup.dart' as backup;
 import 'store/routes/answers.dart' as answers;
 import 'store/routes/catalog.dart' as catalog_routes;
+import 'store/routes/custom.dart' as custom_routes;
 import 'store/routes/imports.dart' as import_routes;
 import 'store/routes/me.dart' as me;
 import 'store/routes/payments.dart' as payments;
@@ -561,6 +562,21 @@ class Api {
     for (final r in catalog_routes.issuers(store))
       (code: r['code'] as String, name: r['name'] as String),
   ];
+
+  /// 직접 만든 카드를 만들고 카드 id를 돌려준다. 작업 019, S13
+  Future<String> createCustom(Map<String, Object?> input) async =>
+      custom_routes.createCustom(store, input)['card_id'] as String;
+
+  /// 직접 만든 카드를 고치고 혜택이 바뀐 결제 수를 돌려준다. S14, E67
+  Future<int> updateCustom(String cardId, Map<String, Object?> input) async =>
+      custom_routes.updateCustom(store, cardId, input)['repriced'] as int;
+
+  Future<Map<String, Object?>> customInput(String cardId) async =>
+      custom_routes.customInput(store, cardId);
+
+  /// 비슷한 카드에서 시작하는 입력
+  Future<Map<String, Object?>> startFrom(String baseCardId) async =>
+      custom_routes.startFrom(store, baseCardId);
 
   Future<List<CardHit>> searchCards({String q = '', String? issuer}) async => [
     for (final r in catalog_routes.cards(store, q: q, issuer: issuer))
